@@ -3,7 +3,7 @@
     <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
     <artifactId>matching-parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.0</version>
+    <version>1.9-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -40,8 +40,8 @@
     <!--deploy with: mvn clean source:jar javadoc:jar deploy -->
     
     <scm>
-        <developerConnection>scm:git:git@github.com:dwslab/melt.git</developerConnection>
-        <tag>matching-parent-2.0</tag>
+        <developerConnection>scm:git:https://github.com/dwslab/melt.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
     
     <build>
