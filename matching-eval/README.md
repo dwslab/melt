@@ -5,4 +5,3 @@ uses the [Jena](https://jena.apache.org/) library.
 
 ## Remarks Concerning Dependencies
 Note that `jena-arq` in at least version `3.10` is required in order for the evaluation framework to work.
-
