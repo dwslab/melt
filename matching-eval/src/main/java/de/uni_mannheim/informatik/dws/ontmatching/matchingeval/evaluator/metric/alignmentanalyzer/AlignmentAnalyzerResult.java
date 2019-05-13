@@ -170,7 +170,7 @@ public class AlignmentAnalyzerResult {
     }
 
     /**
-     * Returns a set of the different mapping relations (e.g. "=" or ">") that are used in the mapping.
+     * Returns a set of the different mapping relations (e.g. "=" or "&gt;") that are used in the mapping.
      * @return
      */
     public HashSet<CorrespondenceRelation> getRelationsUsed(){
