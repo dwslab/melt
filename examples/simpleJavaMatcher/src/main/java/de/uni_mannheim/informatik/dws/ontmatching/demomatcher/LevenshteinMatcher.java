@@ -7,6 +7,9 @@ import java.util.Properties;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
 
+/**
+ * A simple matcher using the Levenshtein similarity metric.
+ */
 public class LevenshteinMatcher extends MatcherYAAAJena {
     
     private double threshold;

@@ -9,6 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+/**
+ * This stub demonstrates how resources such as configuration files can be accessed in a matcher.
+ */
 public class LoadResourceMatcher extends MatcherURL{
 
     /** Accessing the resources:

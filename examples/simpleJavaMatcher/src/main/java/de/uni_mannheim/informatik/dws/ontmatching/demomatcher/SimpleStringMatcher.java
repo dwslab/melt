@@ -9,6 +9,9 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
+/**
+ * A simple string matcher using String equivalence as matching criterion.
+ */
 public class SimpleStringMatcher extends MatcherYAAAJena {
     
     @Override

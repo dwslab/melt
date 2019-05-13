@@ -8,7 +8,7 @@ SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-
 The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for 
 different tasks and that can be used as barebone project for specific applications.
 
-## Matcher Development
+## Matcher Development in Java
 
 ### TL;DR
 1. Pick a class to start with depending on your needs. If you start from scratch `MatcherYAAAJena` or `MatcherYAAAOwlApi` 
@@ -41,8 +41,17 @@ are displayed in the figure below.
 ![image](docu/matcher_hierarchy.png)
 
 
+## External Matcher Development
+MELT allows to develop a matcher in any other programming language and wrap it as a SEALS or HOBBIT package. 
+Therefore, class [`MatcherExternal`](/matching-external/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingexternal/MatcherExternal.java) 
+has to be extended. The interface for the external process is simple. It receives the input variables via the command 
+line and outputs the results via the standard output of the process - similar to many Unix command line tools. 
+All external resources have to be placed in a directory named `oaei-resources`. An example project for a 
+Python matcher can be found [here](/examples/externalPythonMatcher).
+
+
 ## Matcher Evaluation
-For a local evaluation within MELT multiple Metrics and Evaluators are available.
+For a local evaluation within MELT, multiple Metrics and Evaluators are available.
 
 ### TL;DR
 
@@ -104,9 +113,9 @@ MELT can calculate very specific evaluation statistics such as the residual prec
       - create a Personal Access Token (click on `Access Tokens` give it a name and choose only the `api` scope)
       - use this access token and you username and password to create the settings file (see the pom.xml)
 - adjust pom.xml to your needs
-    - definitly change the following:
-        - groupId and artifactId (only artifactId is used to identify the matcher -> make it unique)
-        - oaei.mainClass: set it to the fully qualified path to the matcher
+    - definitely change the following:
+        - `groupId` and `artifactId` (only artifactId is used to identify the matcher -> make it unique)
+        - `oaei.mainClass`: set it to the fully qualified path to the matcher
         - benchmarks: change the benchmarks to the ones your system can deal with
         - create a settings file with username, password and access_token
 - implement your matcher (see Matcher development)
