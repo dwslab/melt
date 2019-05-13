@@ -45,7 +45,7 @@ public class Executor {
      * Run a set of matchers on a set of test cases.
      *
      * @param testCases The test cases on which all the specified matchers shall be run.
-     * @param matchers  A map of matchers in the form <unique_name> -> matcher instance.
+     * @param matchers  A map of matchers from unique_name to matcher instance.
      * @return The result as {@link ExecutionResultSet} instance.
      */
     public static ExecutionResultSet run(List<TestCase> testCases, Map<String, IOntologyMatchingToolBridge> matchers) {

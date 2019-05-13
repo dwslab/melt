@@ -43,7 +43,7 @@ public class EvaluatorUtil {
      * Divides an execution result into multiple execution results according to the type of the objects (classes, properties, instances).
      * This operation can be used, to calculate metrics on a fine-granular level, for instance.
      * @param executionResult Execution result that shall be divided into classes, properties, and instances
-     * @return A Map of form {@link ConfusionMatrixType} -> {@link ExecutionResult} where the execution results
+     * @return A Map of form {@link ConfusionMatrixType} to {@link ExecutionResult} where the execution results
      * contain only a subset of the data according to the type.
      */
     public static Map<ConfusionMatrixType, ExecutionResult> divideIntoClassPropertyInstance(ExecutionResult executionResult){

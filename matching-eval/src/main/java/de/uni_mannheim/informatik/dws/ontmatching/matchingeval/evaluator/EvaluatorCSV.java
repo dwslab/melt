@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  * This evaluator is capable of persisting the results of the matching process in a CSV file (which can be consumed
- * in excel, for example). <br/>
+ * in excel, for example).
  * It divides mappings into certain groups, namely: classes, properties, instances, and allConfusionMatrix.
  *
  * @author Jan Portisch
