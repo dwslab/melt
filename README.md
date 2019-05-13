@@ -11,8 +11,9 @@ different tasks and that can be used as barebone project for specific applicatio
 ## Matcher Development
 
 ### TL;DR
-1. Pick a class to start with depending on your needs. If you start from scratch `MatcherYAAAJena` or `MatcherYAAAOwlApi` are the best fit 
-   depending on which library you prefer.
+1. Pick a class to start with depending on your needs. If you start from scratch `MatcherYAAAJena` or `MatcherYAAAOwlApi` 
+are the best fit depending on whether your prefer [Jena](https://jena.apache.org) or the [OWL API](http://owlcs.github.io/owlapi/). 
+Classes that can be extended for matcher implementation:
     * `MatcherURL`
     * `MatcherYAA`
     * `MatcherYAAAJena`
@@ -28,8 +29,8 @@ classes.
 In the `matching-yaaa` package we set the alignment library to YAAA. All matchers implementing interfaces from this 
 package have to use the library and get at the same time an easier to handle interface of correspondences.
 In further specializations we also set the semantic framework which is used to represent the ontologies.
-For a better usability, the two  most well-known frameworks are integrated into MELT: [`Apache Jena`](https://jena.apache.org) (`MatcherYAAAJena`) 
-and the [`OWL API`](http://owlcs.github.io/owlapi/) (`MatcherYAAAOwlApi`). 
+For a better usability, the two  most well-known frameworks are integrated into MELT: [Apache Jena](https://jena.apache.org) (`MatcherYAAAJena`) 
+and the [OWL API](http://owlcs.github.io/owlapi/) (`MatcherYAAAOwlApi`). 
 As the latter two classes are organized as separate maven projects, only the libraries which are actually 
 required for the matcher are loaded. In addition, further services were implemented such as an ontology cache 
 which ensures that ontologies are parsed only once. This is helpful, for instance, when the matcher accesses an 
@@ -162,4 +163,4 @@ Contains a wrapper for HOBBIT platform (implements the interface used in HOBBIT 
 Maven Plugin for creating a container for the [HOBBIT platform](https://project-hobbit.eu/outcomes/hobbit-platform/).
 
 ### demo-benchmark
-Tool for submitting a Track/Testcase in HOBBIT (only interesting for Track organizers).
+Tool for submitting a Track/Testcase in HOBBIT (only interesting for OAEI track organizers).
