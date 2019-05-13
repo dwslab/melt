@@ -40,7 +40,7 @@
     <!--deploy with: mvn clean source:jar javadoc:jar deploy -->
     
     <scm>
-        <developerConnection>scm:git:https://gitlab.dws.informatik.uni-mannheim.de/shertlin/ontMatching.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/dwslab/melt.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     

@@ -49,7 +49,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.14</version>
+            <version>1.18</version>
         </dependency>
         
         <!-- for parsing the maven settings xml -->
