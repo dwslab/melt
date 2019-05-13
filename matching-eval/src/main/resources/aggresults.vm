@@ -1,0 +1,159 @@
+#macro( cmvalue $first, $second )$numberTool.format("0.00",$first, $locale) ($numberTool.format("0.00",$second, $locale))#end
+#macro( cmvalueone $first )$numberTool.format("0.00",$first, $locale)#end
+
+<table border="2" frame="sides" rules="groups" align="center">
+<colgroup align="center"/>
+<colgroup align="center"/>
+<colgroup align="center"/>
+<colgroup align="center" span="4" />
+<colgroup align="center" span="4" />
+<colgroup align="center" span="4" />
+<thead valign="top">
+
+<tr>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th colspan="4">class</th>
+  <th colspan="4">property</th>
+  <th colspan="4">instance</th>
+  <th colspan="4">overall</th>
+</tr>
+
+<tbody>
+<tr class="header">
+    <th>System</td>
+    <th>Time</td>
+    <th>#tracks</td>
+    #foreach ( $i in [0..3])
+    <th>Size</th><th>Prec.</th><th>F-m.</th><th>Rec.</th>
+    #end
+</tr>
+#set($counter = 0)  
+#foreach( $matcher in $matchers )
+#if($counter % 2 == 0)  
+<tr class="even">##
+#else  
+<tr class="odd">##
+#end
+#set($counter = $counter + 1)
+#set($overall = $results[$matcher].getOverall()) 
+<td>$matcher</td>##
+<td align="right">$Double.valueOf($overall.getAggregated().getRuntime()).intValue()</td>##
+<td>$overall.numberNotEmpty()</td>##
+#foreach( $mode in ["class", "property", "instance", "overall"] )
+#set($element = $results[$matcher].getCMAggByType($mode))
+<td>$numberTool.format("0.0",$element.getAggregated().getSystemSize(), $locale)</td>##
+<td>#cmvalue($element.getAggregated().getPrecision() $element.getAggregatedWithoutEmpty().getPrecision())</td>##
+<td>#cmvalue($element.getAggregated().getFmeasure() $element.getAggregatedWithoutEmpty().getFmeasure())</td>##
+<td>#cmvalue( $element.getAggregated().getRecall() $element.getAggregatedWithoutEmpty().getRecall())</td>##
+#end
+</tr>
+#end
+</tbody>
+<caption>
+Aggregated results per matcher, divided into class, property, instance an overall mappings. 
+Time is measured in seconds. #tracks indicates the number of tracks where the tool is able to generate (non empty) alignments.
+Size indicates the average of the number of generated correspondences for the tracks where an (non empty) alignment has been generated.
+Two kinds of results are reported : those do not distinguishing empty and erroneous (or not generated) alignments and those -- indicated between parenthesis -- 
+considering only non empty generated alignments.
+</caption>
+</table>
+
+
+
+
+#foreach( $mode in ["class", "property", "instance", "overall"] )
+
+$mode
+
+<table border="2" frame="sides" rules="groups" align="center">
+
+<colgroup align="center"/>
+#foreach( $matcher in $matchers )
+<colgroup align="center" span="4" />
+#end
+<thead valign="top">
+
+<tr><th></th>##
+  #foreach( $matcher in $matchers )
+<th colspan="4">$matcher</th>##
+   #end
+</tr>
+
+<tbody>
+<tr class="header">
+    <th></td>##
+    #foreach( $matcher in $matchers )
+<th>Size</th>##
+<th>Prec.</th>##
+<th>F-m.</th>##
+<th>Rec.</th>##
+#end
+</tr>
+
+#set($counter = 0)  
+#foreach( $tcase in $testCases )
+    #if($counter % 2 == 0)  
+    <tr class="even">##
+    #else  
+    <tr class="odd">##
+    #end
+    #set($counter = $counter + 1)
+<td>$tcase</td>##
+#foreach( $matcher in $matchers )
+#set($element = $results[$matcher].getCMAggByType($mode).getCM($tcase))
+<td align="right">$Double.valueOf($element.getSystemSize()).intValue()</td>##
+<td>#cmvalueone($element.getPrecision())</td>##
+<td>#cmvalueone($element.getFmeasure())</td>##
+<td>#cmvalueone($element.getRecall())</td>##
+#end
+    </tr>
+#end
+</tbody>
+</table>
+
+
+#end
+
+
+
+time:
+<table border="2" frame="sides" rules="groups" align="center">
+<colgroup align="center"/>
+#foreach( $matcher in $matchers )
+<colgroup align="center" span="1" />
+#end
+<thead valign="top">
+
+<tr><th></th>##
+  #foreach( $matcher in $matchers )
+<th colspan="1">$matcher</th>##
+   #end
+</tr>
+
+<tbody>
+<tr class="header">
+    <th></td>##
+    #foreach( $matcher in $matchers )
+<th>Time</th>
+#end
+</tr>
+
+#set($counter = 0)
+#foreach( $tcase in $testCases )
+    #if($counter % 2 == 0)  
+    <tr class="even">##
+    #else  
+    <tr class="odd">##
+    #end
+    #set($counter = $counter + 1)
+<td align="right">$tcase</td>##
+#foreach( $matcher in $matchers )
+#set($element = $results[$matcher].getCMAggByType("class").getCM($tcase))
+<td align="right">$Double.valueOf($element.getRuntime()).intValue()</td>##
+#end
+    </tr>
+#end
+</tbody>
+</table>

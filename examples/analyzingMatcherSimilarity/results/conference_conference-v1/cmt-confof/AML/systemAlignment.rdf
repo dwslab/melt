@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rdf:RDF xmlns='http://knowledgeweb.semanticweb.org/heterogeneity/alignment'
+	 xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' 
+	 xmlns:xsd='http://www.w3.org/2001/XMLSchema#' 
+	 alignmentSource='AgreementMakerLight'>
+
+<Alignment>
+	<xml>yes</xml>
+	<level>0</level>
+	<type>11</type>
+	<onto1>http://cmt</onto1>
+	<onto2>http://confOf</onto2>
+	<uri1>http://cmt</uri1>
+	<uri2>http://confOf</uri2>
+	<map>
+		<Cell>
+			<entity1 rdf:resource="http://cmt#Administrator"/>
+			<entity2 rdf:resource="http://confOf#Administrator"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.99</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
+
+	<map>
+		<Cell>
+			<entity1 rdf:resource="http://cmt#Person"/>
+			<entity2 rdf:resource="http://confOf#Person"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.99</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
+
+	<map>
+		<Cell>
+			<entity1 rdf:resource="http://cmt#Paper"/>
+			<entity2 rdf:resource="http://confOf#Paper"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9848</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
+
+	<map>
+		<Cell>
+			<entity1 rdf:resource="http://cmt#Conference"/>
+			<entity2 rdf:resource="http://confOf#Conference"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9801</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
+
+	<map>
+		<Cell>
+			<entity1 rdf:resource="http://cmt#Author"/>
+			<entity2 rdf:resource="http://confOf#Author"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9801</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
+
+	<map>
+		<Cell>
+			<entity1 rdf:resource="http://cmt#ConferenceMember"/>
+			<entity2 rdf:resource="http://confOf#Member"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9603</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
+
+	<map>
+		<Cell>
+			<entity1 rdf:resource="http://cmt#email"/>
+			<entity2 rdf:resource="http://confOf#hasEmail"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.8036</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
+
+	<map>
+		<Cell>
+			<entity1 rdf:resource="http://cmt#ProgramCommitteeMember"/>
+			<entity2 rdf:resource="http://confOf#Member_PC"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.66</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
+
+	<map>
+		<Cell>
+			<entity1 rdf:resource="http://cmt#ProgramCommitteeChair"/>
+			<entity2 rdf:resource="http://confOf#Chair_PC"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.66</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
+
+	<map>
+		<Cell>
+			<entity1 rdf:resource="http://cmt#SubjectArea"/>
+			<entity2 rdf:resource="http://confOf#Topic"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.6075</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
+
+</Alignment>
+</rdf:RDF>

@@ -1,0 +1,129 @@
+@prefix hobbit: <http://w3id.org/hobbit/vocab#> .
+@prefix bench: <http://w3id.org/bench#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+
+bench:timePerformance
+        a           hobbit:KPI ;
+        rdfs:label  "timePerformance" ;
+        rdfs:range  xsd:double .
+
+bench:instances_fmeasure
+        a           hobbit:KPI ;
+        rdfs:label  "instances_fmeasure" ;
+        rdfs:range  xsd:double .
+
+bench:properties_precision
+        a           hobbit:KPI ;
+        rdfs:label  "properties_precision" ;
+        rdfs:range  xsd:double .
+
+bench:knowledgegraphTask
+        a                    hobbit:ConfigurableParameter , hobbit:FeatureParameter , hobbit:Parameter ;
+        rdfs:comment         "The name of the task within the track. Options: [All, marvel-heykidscomics, memory-alpha-stexpanded, memory-alpha-memory-beta, marvel-dc, runescape-darkscape, darkscape-oldschoolrunescape, runescape-oldschoolrunescape, memory-beta-stexpanded, heykidscomics-dc]" ;
+        rdfs:domain          hobbit:Challenge , hobbit:Experiment ;
+        rdfs:label           "The name of the task within the track." ;
+        rdfs:range           bench:SubTask ;
+        hobbit:defaultValue  bench:darkscape-oldschoolrunescape .
+
+bench:instances_size  a  hobbit:KPI ;
+        rdfs:label  "instances_size" ;
+        rdfs:range  xsd:double .
+
+bench:SubTask  a  owl:Class , rdfs:Class .
+
+bench:instances_precision
+        a           hobbit:KPI ;
+        rdfs:label  "instances_precision" ;
+        rdfs:range  xsd:double .
+
+bench:memory-beta-stexpanded
+        a           bench:SubTask ;
+        rdfs:label  "memory-beta-stexpanded" .
+
+bench:runescape-oldschoolrunescape
+        a           bench:SubTask ;
+        rdfs:label  "runescape-oldschoolrunescape" .
+
+bench:class_fmeasure  a  hobbit:KPI ;
+        rdfs:label  "class_fmeasure" ;
+        rdfs:range  xsd:double .
+
+bench:marvel-dc  a  bench:SubTask ;
+        rdfs:label  "marvel-dc" .
+
+bench:instances_recall
+        a           hobbit:KPI ;
+        rdfs:label  "instances_recall" ;
+        rdfs:range  xsd:double .
+
+bench:class_recall  a  hobbit:KPI ;
+        rdfs:label  "class_recall" ;
+        rdfs:range  xsd:double .
+
+bench:properties_fmeasure
+        a           hobbit:KPI ;
+        rdfs:label  "properties_fmeasure" ;
+        rdfs:range  xsd:double .
+
+bench:All  a        bench:SubTask ;
+        rdfs:label  "All" .
+
+bench:class_precision
+        a           hobbit:KPI ;
+        rdfs:label  "class_precision" ;
+        rdfs:range  xsd:double .
+
+bench:properties_size
+        a           hobbit:KPI ;
+        rdfs:label  "properties_size" ;
+        rdfs:range  xsd:double .
+
+bench:class_size  a  hobbit:KPI ;
+        rdfs:label  "class_size" ;
+        rdfs:range  xsd:double .
+
+bench:memory-alpha-stexpanded
+        a           bench:SubTask ;
+        rdfs:label  "memory-alpha-stexpanded" .
+
+bench:properties_recall
+        a           hobbit:KPI ;
+        rdfs:label  "properties_recall" ;
+        rdfs:range  xsd:double .
+
+bench:runescape-darkscape
+        a           bench:SubTask ;
+        rdfs:label  "runescape-darkscape" .
+
+bench:darkscape-oldschoolrunescape
+        a           bench:SubTask ;
+        rdfs:label  "darkscape-oldschoolrunescape" .
+
+bench:memory-alpha-memory-beta
+        a           bench:SubTask ;
+        rdfs:label  "memory-alpha-memory-beta" .
+
+bench:knowledgegraph  a  hobbit:API .
+
+bench:knowledgegraph_benchmark
+        a                    hobbit:Benchmark ;
+        rdfs:comment         "OAEI Knowledgegraph benchmark" ;
+        rdfs:label           "OAEI Knowledgegraph benchmark" ;
+        hobbit:hasAPI        bench:knowledgegraph ;
+        hobbit:hasParameter  bench:knowledgegraphTask ;
+        hobbit:imageName     "git.project-hobbit.eu:4567/oaei_knowledgegraph/controller" ;
+        hobbit:measuresKPI   bench:class_recall , bench:properties_size , bench:instances_recall , bench:properties_recall , bench:instances_precision , bench:instances_size , bench:class_precision , bench:instances_fmeasure , bench:properties_fmeasure , bench:properties_precision , bench:class_size , bench:class_fmeasure , bench:timePerformance ;
+        hobbit:usesImage     "git.project-hobbit.eu:4567/oaei_knowledgegraph/datagenerator" , "git.project-hobbit.eu:4567/oaei_knowledgegraph/controller" , "git.project-hobbit.eu:4567/oaei_knowledgegraph/evaluationmodule" , "git.project-hobbit.eu:4567/oaei_knowledgegraph/taskgenerator" ;
+        hobbit:version       "V1.0" .
+
+bench:heykidscomics-dc
+        a           bench:SubTask ;
+        rdfs:label  "heykidscomics-dc" .
+
+bench:marvel-heykidscomics
+        a           bench:SubTask ;
+        rdfs:label  "marvel-heykidscomics" .

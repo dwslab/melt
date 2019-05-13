@@ -1,0 +1,5 @@
+Type,Precision (P),Recall (R),Residual Recall (R+),F1,"# of TP","# of FP","# of FN",Time
+ALL,0.0,0.0,0.0,NaN,0,1,15,0
+CLASSES,0.0,0.0,0.0,NaN,0,1,12,-
+PROPERTIES,0.0,0.0,0.0,NaN,0,0,3,-
+INSTANCES,0.0,0.0,0.0,NaN,0,0,0,-

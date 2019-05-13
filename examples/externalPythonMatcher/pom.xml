@@ -1,0 +1,98 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+    <artifactId>external-python-matcher</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
+    <packaging>jar</packaging>
+    <version>1.0</version><!-- version appearing in descriptor file of seals package and system.ttl file in hobbit -->
+    <description>External Python matcher demo</description><!-- description appearing in descriptor file of seals package and system.ttl file in hobbit -->
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <oaei.mainClass>de.uni_mannheim.informatik.dws.ontmatching.demomatcher.DemoPythonMatcher</oaei.mainClass><!-- mandatory: this class has to implement IOntologyMatchingToolBridge -->
+        <oaei.copyright>(C) Mannheim, 2018</oaei.copyright> <!--optional copyright appearing in the seals descriptor file -->
+        <oaei.license>GNU Lesser General Public License 2.1 or above</oaei.license> <!--optional license appearing in the seals descriptor file -->
+
+        <maven.deploy.skip>true</maven.deploy.skip><!-- needed to call mvn deploy without having a distributionManagement -->
+        <matching.version>1.9-SNAPSHOT</matching.version> <!-- version for all matching related packages -->
+    </properties>
+    
+    
+    <dependencies>
+        <!-- dependency for jena matchers - for other matchers you can replace it with artifactId: matching-base -->
+        <dependency>
+            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <artifactId>matching-external</artifactId>
+            <version>${matching.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <artifactId>matching-eval</artifactId>
+            <version>${matching.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- the following plugin will generate a seals assemably -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+                        <artifactId>seals-assembly</artifactId>
+                        <version>${matching.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>single</goal></goals>
+                        <!-- there exists three descriptors:
+                        1) "seals" - removes all dependencies available in seals client regardless of their version.#
+                        2) "seals_all_deps" - adds all dependencies of your project (please note that this can cause problems when using jena for example)
+                        3) "seals_external" - creates a wrapper around the matcher so that no inference with seals happens -->
+                        <configuration><descriptorRefs><descriptorRef>seals</descriptorRef></descriptorRefs></configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>maven.mannheim.releases</id>
+            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
+        </repository>
+    </repositories>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven.mannheim.releases</id>
+            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
+        </pluginRepository>
+    </pluginRepositories>
+    
+</project>

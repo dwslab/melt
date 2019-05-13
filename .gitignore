@@ -1,0 +1,56 @@
+# Maven 
+target/
+
+# IntelliJ project files 
+*.iml
+*.iws
+*.ipr
+.idea/
+
+# eclipse project file
+.settings/
+.classpath
+.project
+
+# NetBeans specific
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# benchmark
+benchmarkCache
+trackCache
+results
+matching-eval/results/
+current_result.rdf
+result.rdf
+
+#java
+*.log
+
+#bin folder
+bin/
+
+#logs
+log.txt
+matching-eval/log.txt
+
+
+**/datasets/*.xml
+
+#latex
+*.aux
+*.bbl
+*.blg
+*.synctex.gz
+*.out
+*.dvi
+paper/*.pdf
+
+
+#include example results
+!examples/analyzingMatcherSimilarity/results*

@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+        <artifactId>matching-parent</artifactId>
+        <version>1.9-SNAPSHOT</version>
+    </parent>
+    <artifactId>matching-jena</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-arq</artifactId>
+            <version>3.1.0</version> <!--3.4.0-->
+        </dependency>
+        <dependency>
+            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <artifactId>matching-yaaa</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Just for logging, remove later -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

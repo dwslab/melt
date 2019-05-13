@@ -1,0 +1,68 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>seals_all_deps</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <!-- add containerDescriptorHandler to postprocess descriptor.xml (dependencies) -->
+    <containerDescriptorHandlers>
+        <containerDescriptorHandler>
+            <handlerName>sealsdescriptorhandler</handlerName>
+            <configuration>
+                <id>${project.artifactId}</id>
+                <version>${project.version}</version>
+                <description>${project.description}</description>
+                <copyright>${oaei.copyright}</copyright>
+                <license>${oaei.license}</license>
+                <mainclass>${oaei.mainClass}</mainclass>
+                <projectjar>${project.build.finalName}.${project.packaging}</projectjar>
+            </configuration>
+        </containerDescriptorHandler>
+    </containerDescriptorHandlers>
+    <includeBaseDirectory>false</includeBaseDirectory>
+        
+    <fileSets>        
+        <!-- copy all files from {projectDirectory}/oaei-resources to conf/oaei-resources folder.
+        Because IDE makes {projectDirectory} to the current working directory, the resources can be accessed in the very same way.
+        new File("oaei-resources/...")-->
+        <fileSet>
+            <directory>${project.basedir}/oaei-resources</directory>
+            <outputDirectory>conf/oaei-resources</outputDirectory>
+        </fileSet>
+        <!-- ensure conf folder is created (in case of missing oaei-resources folder)-->
+        <fileSet>
+            <directory>.</directory>
+            <outputDirectory>conf</outputDirectory>
+            <excludes>
+                <exclude>*/**</exclude>
+            </excludes>
+        </fileSet>
+        <!-- create empty lib folder -->
+        <fileSet>
+            <directory>.</directory>
+            <outputDirectory>lib</outputDirectory>
+            <excludes>
+                <exclude>*/**</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+        
+    <dependencySets>
+        <!-- copy all dependencies to bin/lib folder -->
+        <dependencySet>
+            <outputDirectory>bin/lib</outputDirectory>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>runtime</scope>
+        </dependencySet>
+        
+        <!--copy project artifact to bin -->
+        <dependencySet>
+            <outputDirectory>bin</outputDirectory>
+            <useProjectArtifact>true</useProjectArtifact>
+            <includes>
+                <include>${project.groupId}:${project.artifactId}</include>
+            </includes>
+            <outputFileNameMapping>${project.build.finalName}.${project.packaging}</outputFileNameMapping>
+        </dependencySet>
+    </dependencySets>
+</assembly>

@@ -1,0 +1,381 @@
+package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Track repository which lists all different tracks in possibly multiple versions.
+ * @author Sven Hertling
+ */
+public class TrackRepository{
+    private static final Logger logger = LoggerFactory.getLogger(TrackRepository.class);
+    
+    /**
+     * Anatomy track.
+     * The anatomy real world case is about matching the Adult Mouse Anatomy (2744 classes) and the NCI Thesaurus (3304 classes) describing the human anatomy.
+     */
+    public static class Anatomy {
+        /** Default Anatomy Testsuite which is used all the time. */
+        public static Track Default = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "anatomy_track", "anatomy_track-default");
+    }
+    
+    /**
+     * Conference  track.
+     * The goal of the track is to find alignments within a collection of ontologies describing the domain of organising conferences. 
+     * Additionally, 'complex correspondences' are also very welcome. 
+     * Alignments will be evaluated automatically against reference alignments also considering its uncertain version presented at ISWC 2014. 
+     * Summary results along with detail performance results for each ontology pair (test case) and comparison with tools' performance from last years will be provided.
+     */
+    public static class Conference {
+        /** Conference Testsuite V1 which is used all the time. */
+        public static Track V1 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1");
+    }
+    
+    public static class Multifarm {
+        private static Set<String> languagePairs = new HashSet<String>(Arrays.asList( //all in all: 45
+            "ar-cn", "ar-cz", "ar-de", "ar-en", "ar-es", "ar-fr", "ar-nl", "ar-pt", "ar-ru", 
+            "cn-cz", "cn-de", "cn-en", "cn-es", "cn-fr", "cn-nl", "cn-pt", "cn-ru", 
+            "cz-de", "cz-en", "cz-es", "cz-fr", "cz-nl", "cz-pt", "cz-ru", 
+            "de-en", "de-es", "de-fr", "de-nl", "de-pt", "de-ru",
+            "en-es", "en-fr", "en-nl", "en-pt", "en-ru", 
+            "es-fr", "es-nl", "es-pt", "es-ru", 
+            "fr-nl", "fr-pt", "fr-ru", 
+            "nl-pt", "nl-ru",
+            "pt-ru"
+        ));
+        private static Track getTrackByLanguagePair(String languagePair){
+            return new SealsTrack("http://repositories.seals-project.eu/tdrs/", languagePair, languagePair+"-v2", "repositories.seals-project.eu_multifarm");
+        }
+
+        public static List<Track> ALL = calculateAllMultifarmTracks();
+        private static List<Track> calculateAllMultifarmTracks(){
+            List<Track> benchmarks = new LinkedList<>();
+            for(String languagePair : languagePairs){
+                benchmarks.add(getTrackByLanguagePair(languagePair));
+            }
+            return benchmarks;
+        }
+
+        public static Track getSpecificMultifarmTrack(String languagePair){
+            if(languagePairs.contains(languagePair))
+                return getTrackByLanguagePair(languagePair);
+            logger.warn("Language Pair is not found - returning null Track");
+            return null;
+        }
+
+        public static Track getSpecificMultifarmTrack(String firstLanguage, String secondLanguage){
+            return getSpecificMultifarmTrack(firstLanguage + "-" + secondLanguage);
+        }
+
+    }
+    
+    /**
+     * Complex track.
+     * This track evaluates the detection of complex correspondences between ontologies of four different domains: 
+     * conference, hydrography, geography and species taxonomy. Each dataset has its particularities and evaluation modalities.
+     */
+    public static class Complex {
+        /** This dataset is based on the OntoFarm dataset [1] used in the Conference track of the OAEI campaigns. */
+        public static Track Conference  = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1");
+        
+        /**The hydrography dataset is composed of four source ontologies (Hydro3, HydrOntology_native, HydrOntology_translated, and Cree) that each should be aligned to a single target Surface Water Ontology (SWO).**/
+        public static Track Hydrography  = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "hydrography", "hydrography-v1");
+        
+        /**This dataset is from the GeoLink project, which was funded under the U.S. National Science Foundation's EarthCube initiative.**/
+        public static Track GeoLink  = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "geolink", "geolink-v1");
+    }
+
+    /**
+     * Large Biomedical Ontologies.
+     * This track consists of finding alignments between the Foundational Model of Anatomy (FMA), SNOMED CT, and the National Cancer Institute Thesaurus (NCI).
+     * These ontologies are semantically rich and contain tens of thousands of classes. UMLS Metathesaurus has been selected as the basis for the track reference alignments.
+     */
+    public static class Largebio {
+        
+        /** 2016 version of Large Biomedical Ontologies - these are also used for 2017 and 2018. */
+        public static class V2016 {
+            
+            /** With the this benchmark all 6 largebio matching tasks are executed. For individual matching tasks refer to other benchmarks. */
+            public static Track ALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-all_tasks_2016");
+            
+            /**
+             * Task 1: FMA-NCI small fragments:
+             * This task consists of matching two (relatively) small fragments of FMA and NCI. 
+             * The FMA fragment contains 3,696 classes (5% of FMA), while the NCI fragment contains 6,488 classes (10% of NCI).
+             * Together 10,184 classes
+             */
+            public static Track FMA_NCI_SMALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_nci_small_2016");
+
+            /**
+             * Task 2: FMA-NCI whole ontologies.
+             * This task consists of matching the whole FMA and NCI ontologies, which contains 78,989 and 66,724 classes, respectively.
+             * Together 145,713 classes
+             */
+            public static Track FMA_NCI_WHOLE = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_nci_whole_2016");
+            
+            /**
+             * Task 3: FMA-SNOMED small fragments.
+             * This task consists of matching two (relatively) small fragments of FMA and SNOMED. 
+             * The FMA fragment contains 10,157 classes (13% of FMA), while the SNOMED fragment contains 13,412 classes (5% of SNOMED).
+             * Together 23,569 classes
+             */
+            public static Track FMA_SNOMED_SMALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_snomed_small_2016");
+            
+            /**
+             * Task 4: FMA whole ontology.
+             * This task consists of matching the whole FMA that contains 78,989 classes with a large SNOMED fragment that contains 122,464 classes (40% of SNOMED).
+             * Together 201,453 classes.
+             */
+            public static Track FMA_SNOMED_WHOLE = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_snomed_whole_2016");
+            
+            /**
+             * Task 5: SNOMED-NCI small fragments. 
+             * This task consists of matching two (relatively) small fragments of SNOMED and NCI. 
+             * The SNOMED fragment contains 51,128 classes (17% of SNOMED), while the NCI fragment contains 23,958 classes (36% of NCI).
+             * Together 75,086 classes.
+             */
+            public static Track SNOMED_NCI_SMALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-snomed_nci_small_2016");
+            
+            /**
+             * Task 6: NCI whole ontology with SNOMED large fragment.
+             * This task consists of matching the whole NCI that contains 66,724 classes with a large SNOMED fragment that contains 122,464 classes (40% of SNOMED).
+             * Together 189,188 classes.
+             */
+            public static Track SNOMED_NCI_WHOLE = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-snomed_nci_whole_2016");
+        }
+        
+        /** 2015 version of Large Biomedical Ontologies. */
+        public static class V2015 {
+            
+            /**
+             * Task 1: FMA-NCI small fragments:
+             * This task consists of matching two (relatively) small fragments of FMA and NCI. 
+             * The FMA fragment contains 3,696 classes (5% of FMA), while the NCI fragment contains 6,488 classes (10% of NCI).
+             * Together 10,184 classes
+             */
+            public static Track FMA_NCI_SMALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_nci_small_2015");
+
+            /**
+             * Task 1: FMA-NCI small fragments:
+             * This task consists of matching two (relatively) small fragments of FMA and NCI. 
+             * The FMA fragment contains 3,696 classes (5% of FMA), while the NCI fragment contains 6,488 classes (10% of NCI).
+             * Together 10,184 classes
+             * With incoherence-causing mappings in the alignment flagged as "?" (unknown).
+             */
+            public static Track FMA_NCI_SMALL_FLAGGED = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_nci_small_flagged_2015");
+            
+            /**
+             * Task 2: FMA-NCI whole ontologies.
+             * This task consists of matching the whole FMA and NCI ontologies, which contains 78,989 and 66,724 classes, respectively.
+             * Together 145,713 classes
+             */
+            public static Track FMA_NCI_WHOLE = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_nci_whole_2015");
+            
+            /**
+             * Task 2: FMA-NCI whole ontologies.
+             * This task consists of matching the whole FMA and NCI ontologies, which contains 78,989 and 66,724 classes, respectively.
+             * Together 145,713 classes
+             * With incoherence-causing mappings in the alignment flagged as "?" (unknown). 
+             */
+            public static Track FMA_NCI_WHOLE_FLAGGED = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_nci_whole_flagged_2015");
+            
+            /**
+             * Task 3: FMA-SNOMED small fragments.
+             * This task consists of matching two (relatively) small fragments of FMA and SNOMED. 
+             * The FMA fragment contains 10,157 classes (13% of FMA), while the SNOMED fragment contains 13,412 classes (5% of SNOMED).
+             * Together 23,569 classes
+             */
+            public static Track FMA_SNOMED_SMALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_snomed_small_2015");
+            
+            /**
+             * Task 3: FMA-SNOMED small fragments.
+             * This task consists of matching two (relatively) small fragments of FMA and SNOMED. 
+             * The FMA fragment contains 10,157 classes (13% of FMA), while the SNOMED fragment contains 13,412 classes (5% of SNOMED).
+             * Together 23,569 classes
+             * With incoherence-causing mappings in the alignment flagged as "?" (unknown).
+             */
+            public static Track FMA_SNOMED_SMALL_FLAGGED = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_snomed_small_flagged_2015");
+                        
+            /**
+             * Task 4: FMA whole ontology.
+             * This task consists of matching the whole FMA that contains 78,989 classes with a large SNOMED fragment that contains 122,464 classes (40% of SNOMED).
+             * Together 201,453 classes.
+             */
+            public static Track FMA_SNOMED_WHOLE = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_snomed_whole_2015");
+            
+            /**
+             * Task 4: FMA whole ontology.
+             * This task consists of matching the whole FMA that contains 78,989 classes with a large SNOMED fragment that contains 122,464 classes (40% of SNOMED).
+             * Together 201,453 classes.
+             * With incoherence-causing mappings in the alignment flagged as "?" (unknown).
+             */
+            public static Track FMA_SNOMED_WHOLE_FLAGGED = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_snomed_whole_flagged_2015");
+            
+            
+            /**
+             * Task 5: SNOMED-NCI small fragments. 
+             * This task consists of matching two (relatively) small fragments of SNOMED and NCI. 
+             * The SNOMED fragment contains 51,128 classes (17% of SNOMED), while the NCI fragment contains 23,958 classes (36% of NCI).
+             * Together 75,086 classes.
+             */
+            public static Track SNOMED_NCI_SMALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-snomed_nci_small_2015");
+            
+            /**
+             * Task 5: SNOMED-NCI small fragments. 
+             * This task consists of matching two (relatively) small fragments of SNOMED and NCI. 
+             * The SNOMED fragment contains 51,128 classes (17% of SNOMED), while the NCI fragment contains 23,958 classes (36% of NCI).
+             * Together 75,086 classes.
+             * With incoherence-causing mappings in the alignment flagged as "?" (unknown).
+             */
+            public static Track SNOMED_NCI_SMALL_FLAGGED = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-snomed_nci_small_flagged_2015");
+            
+            
+            /**
+             * Task 6: NCI whole ontology with SNOMED large fragment.
+             * This task consists of matching the whole NCI that contains 66,724 classes with a large SNOMED fragment that contains 122,464 classes (40% of SNOMED).
+             * Together 189,188 classes.
+             */
+            public static Track SNOMED_NCI_WHOLE = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-snomed_nci_whole_2015");
+            
+            /**
+             * Task 6: NCI whole ontology with SNOMED large fragment.
+             * This task consists of matching the whole NCI that contains 66,724 classes with a large SNOMED fragment that contains 122,464 classes (40% of SNOMED).
+             * Together 189,188 classes.
+             * With incoherence-causing mappings in the alignment flagged as "?" (unknown).
+             */
+            public static Track SNOMED_NCI_WHOLE_FLAGGED = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-snomed_nci_whole_flagged_2015");
+        }
+    }
+    
+        /**
+     * Disease and Phenotype track.
+     * The Pistoia Alliance Ontologies Alignment project team organises and sponsors this track based on a real use case where it is required to find alignments between disease and phenotype ontologies.
+     * Specifically, the selected ontologies are:
+     * <ul>
+     * <li>Human Phenotype Ontology (HP)</li>
+     * <li>Mammalian Phenotype Ontology (MP)</li>
+     * <li>Human Disease Ontology (DOID)</li>
+     * <li>Orphanet and Rare Diseases Ontology (ORDO)</li>
+     * <li>Medical Subject Headings Ontology (MESH)</li>
+     * <li>Online Mendelian Inheritance in Man Ontology (OMIM)</li>
+     * </ul>
+     */
+    public static class Phenotype {
+        /** 2016 version of DiseasePhenotype Track */
+        public static class V2016 {
+            /** This task consists of matching the HP (11,828 entities) and MP (11,752 entities) ontologies. The BioPortal-based alignment contains 639 mappings. */
+            public static Track HP_MP = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-hp-mp-baseline");
+            
+            /** This task consists of matching the DOID (9,301 entities) and ORDO (12,974) ontologies. The BioPortal-based alignment contains 1,018 mappings. */
+            public static Track DOID_ORDO = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-doid-ordo-baseline");
+        }
+        /** 2017 version of DiseasePhenotype Track (HP_MP and DOID_ORDO also used in 2018) */
+        public static class V2017 {
+            
+            /** This task consists of matching the HP (31,034 classes) and MP (30,273 entities) ontologies. The BioPortal-based alignment contains 696 mappings. */
+            public static Track HP_MP = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-hp-mp-2017-bioportal");
+            
+            /** This task consists of matching the DOID (38,240 classes) and ORDO (13,504) ontologies. The BioPortal-based alignment contains 1,237 mappings. */
+            public static Track DOID_ORDO = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-doid-ordo-2017-bioportal");
+            
+            /** This task consists of matching the HP (31,034 classes) and MESH (305,349) ontologies. The BioPortal-based alignment contains 2,466 mappings. Not used in 2018*/
+            public static Track HP_MESH = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-hp-mesh-2017-bioportal");
+            
+            /** This task consists of matching the HP (31,034 classes) and OMIM (93,048) ontologies. The BioPortal-based alignment contains 3,768 mappings. Not used in 2018*/
+            public static Track HP_OMIM = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-hp-omim-2017-bioportal");
+        }        
+    }
+    
+    
+    /**
+     * Biodiv track.
+     * The goal of the track is to find pairwise alignments between the Environment Ontology (ENVO) and 
+     * the Semantic Web for Earth and Environment Technology Ontology (SWEET), and between the Plant Trait Ontology (PTO) and 
+     * the Flora Phenotype Ontology (FLOPO). These ontologies are particularly useful for biodiversity and ecology research and are being used in various projects. 
+     * They have been developed in parallel and are very overlapping. They are semantically rich and contain tens of thousands of classes.
+     */
+    public static class Biodiv {
+        /** Default Testsuite which is used all the time. */
+        public static Track Default = new BioDivTrack("http://oaei.ontologymatching.org/2018/biodiv/data/biodiv.zip", "biodiv", "2018");
+    }
+    
+    /**
+     * HOBBIT Spimbench
+     * The goal of this track is to determine when two OWL instances describe the same Creative Work. The datasets are generated and transformed using 
+     * SPIMBENCH by altering a set of original data through value-based, structure-based, and semantics-aware transformations (simple combination of transformations).
+     */
+    public static class Spimbench {
+        
+    }
+    
+    /**
+     * HOBBIT Link Discovery.
+     * In this track two benchmark generators are proposed to deal with link discovery for spatial data where spatial data are represented as trajectories (i.e., sequences of longitude, latitude pairs).
+     * This new track is based on the HOBBIT platform and it requires to follow different intructions from the SEALS-based tracks.
+     */
+    public static class Link {
+        /** The default HOBBIT Link Discovery Task*/
+        public static Track Default = new LinkTrack("http://islab.di.unimi.it/content/im_oaei/2017/data/FORTH_sandbox.tar.gz", "link", "2017", "Tbox1.nt", "Tbox2.nt", "refalign.rdf");
+    }
+    
+    
+    /**
+     * IIMB track.
+     * IIMB is an OWL-based dataset that is automatically generated by introducing a set of controlled transformations in an initial OWL Abox, 
+     * in order i) to provide an evaluation dataset for various kinds of data transformations, 
+     * including value transformations, structural transformations, and logical transformations, 
+     * and ii) to cover a wide spectrum of possible techniques and tools.
+     */
+    public static class IIMB {
+        
+    }
+    
+    /**
+     * Doremus track.
+     * The DOREMUS track is based on data from the DOREMUS project describing musical works from the catalogs 
+     * of two French cultural institutions: La Bibliothque Nationale de France (BnF) and La Philharmonie de Paris (PP).
+     */
+    public static class Doremus {
+        
+    }
+    
+    
+    /**
+     * Knowledgegraph track.
+     * The Knowledge Graph Track contains nine isolated knowledge graphs with instance and schema data. 
+     * The goal of the task is to match both the instances and the schema.
+     */
+    public static class Knowledgegraph {
+        /**The Knowledge Graph Track contains nine isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
+        public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v1", true);
+        
+        /**The Knowledge Graph Track contains nine isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
+        public static Track V2 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v2", true);
+    }
+    
+    public static class SystematicBenchmark {
+        public static class Biblio {
+            public static class V2016 {
+                public static Track R1 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-biblio", "2016benchmarks-biblio-r1");
+                public static Track R2 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-biblio", "2016benchmarks-biblio-r2");
+                public static Track R3 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-biblio", "2016benchmarks-biblio-r3");
+                public static Track R4 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-biblio", "2016benchmarks-biblio-r4");
+                public static Track R5 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-biblio", "2016benchmarks-biblio-r5");
+            }
+        }
+         public static class Film {
+             public static class V2016 {
+                public static Track R1 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-film", "2016benchmarks-film-r1");
+                public static Track R2 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-film", "2016benchmarks-film-r2");
+                public static Track R3 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-film", "2016benchmarks-film-r3");
+                public static Track R4 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-film", "2016benchmarks-film-r4");
+                public static Track R5 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-film", "2016benchmarks-film-r5");
+            }
+         }
+    }
+}

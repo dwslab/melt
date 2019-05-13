@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rdf:RDF xmlns="http://knowledgeweb.semanticweb.org/heterogeneity/alignment" 
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+<Alignment>
+  <xml>yes</xml>
+  <level>0</level>
+  <type>11</type>
+
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://confOf#Conference"/>
+        <entity2 rdf:resource="http://sigkdd#Conference"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9965732514446258</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://confOf#Person"/>
+        <entity2 rdf:resource="http://sigkdd#Person"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9906452422444014</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://confOf#Author"/>
+        <entity2 rdf:resource="http://sigkdd#Author"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9789475667774812</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://confOf#Paper"/>
+        <entity2 rdf:resource="http://sigkdd#Paper"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9760164035168671</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://confOf#Reviewing_event"/>
+        <entity2 rdf:resource="http://sigkdd#Review"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.7635970971218273</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+  </Alignment>
+</rdf:RDF>

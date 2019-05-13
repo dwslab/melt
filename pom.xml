@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+    <artifactId>matching-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>1.9-SNAPSHOT</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    
+    <modules>
+        <module>hobbit-assembly</module>
+        <module>hobbit-maven-plugin</module>
+        <module>hobbit-wrapper</module>
+        <module>matching-base</module>
+        <module>matching-eval</module>
+        <module>matching-external</module>
+        <module>matching-jena</module>
+        <module>matching-owlapi</module>
+        <module>matching-yaaa</module>
+        <module>seals-assembly</module>
+        <module>yet-another-alignment-api</module>
+    </modules>
+
+
+    <distributionManagement>
+        <repository>
+            <name>LSKI Releases Repository</name>
+            <id>lski-releases</id>
+            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <name>LSKI Snapshot Repository</name>
+            <id>lski-snapshots</id>
+            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <!--deploy with: mvn clean source:jar javadoc:jar deploy -->
+    
+    <scm>
+        <developerConnection>scm:git:https://gitlab.dws.informatik.uni-mannheim.de/shertlin/ontMatching.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <goals>deploy</goals>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>

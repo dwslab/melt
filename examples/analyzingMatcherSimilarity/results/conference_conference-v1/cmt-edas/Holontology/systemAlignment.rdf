@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<rdf:RDF xmlns="http://knowledgeweb.semanticweb.org/heterogeneity/alignment" 
+		 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+		 xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+    <Alignment>
+        <xml>yes</xml>
+        <level>0</level>
+        <type>??</type>
+        <onto1><Ontology rdf:about="http://source.owl"><location>source.owl</location></Ontology></onto1>
+        <onto2><Ontology rdf:about="http://target.owl"><location>target.owl</location></Ontology></onto2>
+        <map>
+            <Cell>
+                <entity1 rdf:resource="http://cmt#Document"/>
+                <entity2 rdf:resource="http://edas#Document"/>
+                <measure rdf:datatype="xsd:float">1.0</measure>
+                <relation>=</relation>
+            </Cell>
+        </map>        <map>
+            <Cell>
+                <entity1 rdf:resource="http://cmt#Review"/>
+                <entity2 rdf:resource="http://edas#Review"/>
+                <measure rdf:datatype="xsd:float">1.0</measure>
+                <relation>=</relation>
+            </Cell>
+        </map>        <map>
+            <Cell>
+                <entity1 rdf:resource="http://cmt#Reviewer"/>
+                <entity2 rdf:resource="http://edas#Reviewer"/>
+                <measure rdf:datatype="xsd:float">1.0</measure>
+                <relation>=</relation>
+            </Cell>
+        </map>        <map>
+            <Cell>
+                <entity1 rdf:resource="http://cmt#ConferenceChair"/>
+                <entity2 rdf:resource="http://edas#ConferenceChair"/>
+                <measure rdf:datatype="xsd:float">1.0</measure>
+                <relation>=</relation>
+            </Cell>
+        </map>        <map>
+            <Cell>
+                <entity1 rdf:resource="http://cmt#Conference"/>
+                <entity2 rdf:resource="http://edas#Conference"/>
+                <measure rdf:datatype="xsd:float">1.0</measure>
+                <relation>=</relation>
+            </Cell>
+        </map>        <map>
+            <Cell>
+                <entity1 rdf:resource="http://cmt#Person"/>
+                <entity2 rdf:resource="http://edas#Person"/>
+                <measure rdf:datatype="xsd:float">1.0</measure>
+                <relation>=</relation>
+            </Cell>
+        </map>        <map>
+            <Cell>
+                <entity1 rdf:resource="http://cmt#Author"/>
+                <entity2 rdf:resource="http://edas#Author"/>
+                <measure rdf:datatype="xsd:float">1.0</measure>
+                <relation>=</relation>
+            </Cell>
+        </map>        <map>
+            <Cell>
+                <entity1 rdf:resource="http://cmt#Paper"/>
+                <entity2 rdf:resource="http://edas#Paper"/>
+                <measure rdf:datatype="xsd:float">1.0</measure>
+                <relation>=</relation>
+            </Cell>
+        </map>    </Alignment>
+</rdf:RDF>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>300</x>
+      <y>480</y>
+      <w>630</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>Seals
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>370</x>
+      <y>540</y>
+      <w>530</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>Matching-external
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>430</x>
+      <y>610</y>
+      <w>360</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>Seals-external
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>480</x>
+      <y>660</y>
+      <w>240</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Matcher
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>440</x>
+      <y>550</y>
+      <w>200</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;
+interprocess communication</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>300</x>
+      <y>60</y>
+      <w>630</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>Hobbit
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>340</x>
+      <y>100</y>
+      <w>560</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>Hobbit-Wrapper
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>470</x>
+      <y>230</y>
+      <w>240</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Matcher
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

@@ -1,0 +1,115 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+    <artifactId>demo-benchmark</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <matching.version>1.7</matching.version>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.hobbit</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0.9</version><!--do not increase version otherwise it will not work with the default evalstorage -->
+            <!-- maven.aksw.org/repository/internal/org/hobbit/core/ -->
+        </dependency>
+        <dependency>
+            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <artifactId>yet-another-alignment-api</artifactId>
+            <version>${matching.version}</version>
+        </dependency>      
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.26.0</version>
+                <configuration>
+                    <!-- further machine configuration options: https://dmp.fabric8.io/#docker-machine -->
+                    <machine><name>default</name></machine>
+                    <!-- inline authConfig not recommended but possible - better use settings xml (one example is shown at the end of the file 
+                         see also https://dmp.fabric8.io/#authentication
+                    <authConfig>
+                        <username>{username}</username>
+                        <password>{password}</password>
+                    </authConfig>  -->
+                    <images>
+                        <image>
+                            <name>git.project-hobbit.eu:4567/oaei_knowledgegraph/controller</name>
+                            <build>
+                                <from>openjdk:8-jre-alpine</from>
+                                <assembly><descriptorRef>artifact-with-dependencies</descriptorRef></assembly>
+                                <cmd><shell>java -cp "./*" org.hobbit.core.run.ComponentStarter org.hobbit.oaeibenchmark.BenchmarkController</shell></cmd>
+                                <workdir>/maven</workdir>
+                            </build>
+                        </image>
+                        <image>
+                            <name>git.project-hobbit.eu:4567/oaei_knowledgegraph/datagenerator</name>
+                            <build>
+                                <from>openjdk:8-jre-alpine</from>
+                                <assembly><descriptorRef>artifact-with-dependencies</descriptorRef></assembly>
+                                <cmd><shell>java -cp "./*" org.hobbit.core.run.ComponentStarter org.hobbit.oaeibenchmark.DataGenerator</shell></cmd>
+                                <workdir>/maven</workdir>
+                            </build>
+                        </image>
+                        <image>
+                            <name>git.project-hobbit.eu:4567/oaei_knowledgegraph/evaluationmodule</name>
+                            <build>
+                                <from>openjdk:8-jre-alpine</from>
+                                <assembly><descriptorRef>artifact-with-dependencies</descriptorRef></assembly>
+                                <cmd><shell>java -cp "./*" org.hobbit.core.run.ComponentStarter org.hobbit.oaeibenchmark.EvaluationModule</shell></cmd>
+                                <workdir>/maven</workdir>
+                            </build>
+                        </image>
+                        <image>
+                            <name>git.project-hobbit.eu:4567/oaei_knowledgegraph/taskgenerator</name>
+                            <build>
+                                <from>openjdk:8-jre-alpine</from>
+                                <assembly><descriptorRef>hobbit</descriptorRef></assembly>
+                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter org.hobbit.oaeibenchmark.TaskGenerator</shell></cmd>
+                                <workdir>/maven</workdir>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+                        <artifactId>hobbit-assembly</artifactId>
+                        <version>${matching.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions><execution><goals><goal>build</goal><!--install phase--><goal>push</goal><!--deploy phase--></goals></execution></executions>
+            </plugin>
+            
+        </plugins>
+    </build>
+
+    
+    <repositories>
+        <repository>
+            <id>maven.aksw.internal</id>
+            <name>University Leipzig, AKSW Maven2 Repository</name>
+            <url>http://maven.aksw.org/repository/internal</url>
+        </repository>
+        <repository>
+            <id>maven.mannheim.releases</id>
+            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
+        </repository>
+    </repositories>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven.mannheim.releases</id>
+            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
+        </pluginRepository>
+    </pluginRepositories>
+</project>

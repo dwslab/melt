@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rdf:RDF xmlns="http://knowledgeweb.semanticweb.org/heterogeneity/alignment" 
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+<Alignment>
+  <xml>yes</xml>
+  <level>0</level>
+  <type>11</type>
+
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Main_office"/>
+        <entity2 rdf:resource="http://sigkdd#Main_office"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Place"/>
+        <entity2 rdf:resource="http://sigkdd#Place"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.999601291140199</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Person"/>
+        <entity2 rdf:resource="http://sigkdd#Person"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9991762374266724</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Deadline"/>
+        <entity2 rdf:resource="http://sigkdd#Deadline"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9991538647880174</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Review"/>
+        <entity2 rdf:resource="http://sigkdd#Review"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9988928069522793</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Fee"/>
+        <entity2 rdf:resource="http://sigkdd#Fee"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9984500471644118</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Registration_fee"/>
+        <entity2 rdf:resource="http://sigkdd#Registration_fee"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9981111283004593</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Author"/>
+        <entity2 rdf:resource="http://sigkdd#Author"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9977423361142714</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Listener"/>
+        <entity2 rdf:resource="http://sigkdd#Listener"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9977202373246485</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Document"/>
+        <entity2 rdf:resource="http://sigkdd#Document"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9976650186666449</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Speaker"/>
+        <entity2 rdf:resource="http://sigkdd#Speaker"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9975911560018539</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Conference_hall"/>
+        <entity2 rdf:resource="http://sigkdd#Conference_hall"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9969812514209365</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Student_registration_fee"/>
+        <entity2 rdf:resource="http://sigkdd#Registration_Student"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.8922867360910075</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Submissions_deadline"/>
+        <entity2 rdf:resource="http://sigkdd#Deadline_Paper_Submission"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.8523378338488641</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Hotel_fee"/>
+        <entity2 rdf:resource="http://sigkdd#Hotel"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.7991120538442045</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Conference_hotel"/>
+        <entity2 rdf:resource="http://sigkdd#Conference"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.7674534220065534</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#Deadline_for_notification_of_acceptance"/>
+        <entity2 rdf:resource="http://sigkdd#Deadline_Author_notification"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.7365105931597451</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#pay"/>
+        <entity2 rdf:resource="http://sigkdd#pay"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9990645115504633</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#obtain"/>
+        <entity2 rdf:resource="http://sigkdd#obtain"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9986903872558606</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#is_designed_for"/>
+        <entity2 rdf:resource="http://sigkdd#design"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.8147379993550001</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#is_dated_on"/>
+        <entity2 rdf:resource="http://sigkdd#Date"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.8054396109397373</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+    <map>
+      <Cell>
+        <entity1 rdf:resource="http://iasted#is_present"/>
+        <entity2 rdf:resource="http://sigkdd#presentation"/>
+        <measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.7748309273976426</measure>
+        <relation>=</relation>
+      </Cell>
+    </map>
+  </Alignment>
+</rdf:RDF>

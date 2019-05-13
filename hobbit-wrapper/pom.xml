@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+        <artifactId>matching-parent</artifactId>
+        <version>1.9-SNAPSHOT</version>
+    </parent>
+    <artifactId>hobbit-wrapper</artifactId>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.hobbit</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0.9</version>
+            <!--do not increase version because all oaei benchmarks rely on this version and starting from version 1.1.0 they changed the communication format -->
+            <!-- maven.aksw.org/repository/internal/org/hobbit/core/ -->
+        </dependency>
+        <dependency>
+            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <artifactId>matching-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+    </dependencies>
+
+    
+    <repositories>
+        <repository>
+            <id>maven.aksw.internal</id>
+            <name>University Leipzig, AKSW Maven2 Repository</name>
+            <url>http://maven.aksw.org/repository/internal</url>
+        </repository>
+        <repository>
+            <id>maven.aksw.snapshots</id>
+            <name>University Leipzig, AKSW Maven2 Repository</name>
+            <url>http://maven.aksw.org/repository/snapshots</url>
+        </repository>
+    </repositories>
+    
+</project>

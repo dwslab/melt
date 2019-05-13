@@ -1,0 +1,141 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>seals</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <!-- add containerDescriptorHandler to postprocess descriptor.xml (dependencies) -->
+    <containerDescriptorHandlers>
+        <containerDescriptorHandler>
+            <handlerName>sealsdescriptorhandler</handlerName>
+            <configuration>
+                <id>${project.artifactId}</id>
+                <version>${project.version}</version>
+                <description>${project.description}</description>
+                <copyright>${oaei.copyright}</copyright>
+                <license>${oaei.license}</license>
+                <mainclass>${oaei.mainClass}</mainclass>
+                <projectjar>${project.build.finalName}.${project.packaging}</projectjar>
+            </configuration>
+        </containerDescriptorHandler>
+    </containerDescriptorHandlers>
+    <includeBaseDirectory>false</includeBaseDirectory>
+        
+    <fileSets>        
+        <!-- copy all files from {projectDirectory}/oaei-resources to conf/oaei-resources folder.
+        Because IDE makes {projectDirectory} to the current working directory, the resources can be accessed in the very same way.
+        new File("oaei-resources/...")-->
+        <fileSet>
+            <directory>${project.basedir}/oaei-resources</directory>
+            <outputDirectory>conf/oaei-resources</outputDirectory>
+        </fileSet>
+        <!-- ensure conf folder is created (in case of missing oaei-resources folder)-->
+        <fileSet>
+            <directory>.</directory>
+            <outputDirectory>conf</outputDirectory>
+            <excludes>
+                <exclude>*/**</exclude>
+            </excludes>
+        </fileSet>
+        <!-- create empty lib folder -->
+        <fileSet>
+            <directory>.</directory>
+            <outputDirectory>lib</outputDirectory>
+            <excludes>
+                <exclude>*/**</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+    
+    <dependencySets>
+        <!-- copy all dependencies (excluding the ones from seals) to bin/lib folder -->
+        <dependencySet>
+            <outputDirectory>bin/lib</outputDirectory>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>runtime</scope>
+            <excludes>
+                <exclude>alignment-api:align</exclude><!--4.1-->
+                <exclude>alignment-api:ontosim</exclude><!--4.1-->
+                <exclude>alignment-api:ontowrap</exclude><!--4.1-->
+                <exclude>alignment-api:procalign</exclude><!--4.1-->
+                <exclude>cglib:cglib-nodep</exclude><!--2.2-->
+                <exclude>com.fasterxml.jackson.core:jackson-annotations</exclude><!--2.3.0-->
+                <exclude>com.fasterxml.jackson.core:jackson-core</exclude><!--2.3.3-->
+                <exclude>com.fasterxml.jackson.core:jackson-databind</exclude><!--2.3.3-->
+                <exclude>com.github.andrewoma.dexx:collection</exclude><!--0.6-->
+                <exclude>com.github.jsonld-java:jsonld-java</exclude><!--0.7.0-->
+                <exclude>com.hp.hpl.jena:iri</exclude><!--0.8-->
+                <exclude>com.hp.hpl.jena:jena</exclude><!--2.6.4-->
+                <exclude>com.ibm.icu:icu4j</exclude><!--3.4.4-->
+                <exclude>com.noelios.restlet:com.noelios.restlet.ext.servlet</exclude><!--1.1.7-->
+                <exclude>com.noelios.restlet:com.noelios.restlet.ext.simple</exclude><!--1.1.7-->
+                <exclude>com.noelios.restlet:com.noelios.restlet</exclude><!--1.1.7-->
+                <exclude>com.sun.xml.bind:jaxb-impl</exclude><!--2.1.13-->
+                <exclude>commons-cli:commons-cli</exclude><!--1.3.1-->
+                <exclude>commons-codec:commons-codec</exclude><!--1.2-->
+                <exclude>commons-fileupload:commons-fileupload</exclude><!--1.2.1-->
+                <exclude>commons-httpclient:commons-httpclient</exclude><!--3.1-->
+                <exclude>commons-io:commons-io</exclude><!--1.4-->
+                <exclude>commons-logging:commons-logging</exclude><!--1.2-->
+                <exclude>dk.brics.automaton:automaton</exclude><!--1.11.2-->
+                <exclude>eu.sealsproject.domain.omt.metadata:omt-metadata</exclude><!--2.0-->
+                <exclude>eu.sealsproject.platform.repos:rrs-client</exclude><!--1.1-->
+                <exclude>eu.sealsproject.platform.repos:tdrs-client</exclude><!--1.1-b-->
+                <exclude>eu.sealsproject.platform.res:res-domain-api</exclude><!--1.1.1-->
+                <exclude>eu.sealsproject.platform.res:res-domain-impl</exclude><!--1.1.1-->
+                <exclude>eu.sealsproject.platform.res:res-resources</exclude><!--1.1.1-->
+                <exclude>eu.sealsproject.platform.res:res-tool-api</exclude><!--1.1.1-->
+                <exclude>eu.sealsproject.platform.res:res-tool-bundle-api</exclude><!--1.1.1-->
+                <exclude>eu.sealsproject.platform.res:res-tool-bundle-factory</exclude><!--1.1.1-->
+                <exclude>eu.sealsproject.platform.res:res-tool-bundle-loader</exclude><!--1.1.1-->
+                <exclude>eu.sealsproject.platform.res:res-tool-bundle-validator</exclude><!--1.1.1-->
+                <exclude>eu.sealsproject.platform.res:res-tool-impl</exclude><!--1.1.1-->
+                <exclude>eu.sealsproject.platform.res:res-tool-utils-core</exclude><!--1.1.1-->
+                <exclude>javax.activation:activation</exclude><!--1.1-->
+                <exclude>javax.xml.bind:jaxb-api</exclude><!--2.1-->
+                <exclude>javax.xml.stream:stax-api</exclude><!--1.0-2-->
+                <exclude>log4j:log4j</exclude><!--1.2.17-->
+                <exclude>org.apache.commons:commons-csv</exclude><!--1.0-->
+                <exclude>org.apache.commons:commons-lang3</exclude><!--3.3.2-->
+                <exclude>org.apache.httpcomponents:httpclient-cache</exclude><!--4.2.6-->
+                <exclude>org.apache.httpcomponents:httpclient</exclude><!--4.2.6-->
+                <exclude>org.apache.httpcomponents:httpcore</exclude><!--4.2.5-->
+                <exclude>org.apache.jena:jena-arq</exclude><!--3.1.0-->
+                <exclude>org.apache.jena:jena-base</exclude><!--3.1.0-->
+                <exclude>org.apache.jena:jena-core</exclude><!--3.1.0-->
+                <exclude>org.apache.jena:jena-iri</exclude><!--3.1.0-->
+                <exclude>org.apache.jena:jena-shaded-guava</exclude><!--3.1.0-->
+                <exclude>org.apache.jena:jena-tdb</exclude><!--3.1.0-->
+                <exclude>org.apache.lucene:lucene-core</exclude><!--2.3.1-->
+                <exclude>org.apache.thrift:libthrift</exclude><!--0.9.2-->
+                <exclude>org.apache.tika:tika-core</exclude><!--0.7-->
+                <exclude>org.codehaus.woodstox:wstx-asl</exclude><!--3.2.9-->
+                <exclude>org.objenesis:objenesis</exclude><!--1.1-->
+                <exclude>org.restlet:org.restlet.ext.fileupload</exclude><!--1.1.8-->
+                <exclude>org.restlet:org.restlet</exclude><!--1.1.7-->
+                <exclude>org.simpleframework:org.simpleframework</exclude><!--3.1.3-->
+                <exclude>org.slf4j:jcl-over-slf4j</exclude><!--1.7.20-->
+                <exclude>org.slf4j:slf4j-api</exclude><!--1.7.20-->
+                <exclude>org.slf4j:slf4j-jdk14</exclude><!--1.7.20-->
+                <exclude>org.slf4j:slf4j-log4j12</exclude><!--1.7.20-->
+                <exclude>org.slf4j:slf4j-simple</exclude><!--1.7.20-->
+                <exclude>org.xeustechnologies:jcl-core</exclude><!--2.2.1-->
+                <exclude>org.zenframework.z8.dependencies.servlet:servlet-api-2.5</exclude><!--2.0-->
+                <exclude>stax:stax-api</exclude><!--1.0.1-->
+                <exclude>xerces:xercesImpl</exclude><!--2.11.0-->
+                <exclude>xml-apis:xml-apis</exclude><!--1.4.01-->
+                <exclude>xml-resolver:xml-resolver</exclude><!--1.2-->
+            </excludes>
+        </dependencySet>
+        
+        <!--copy project artifact to bin -->
+        <dependencySet>
+            <outputDirectory>bin</outputDirectory>
+            <useProjectArtifact>true</useProjectArtifact>
+            <includes>
+                <include>${project.groupId}:${project.artifactId}</include>
+            </includes>
+            <outputFileNameMapping>${project.build.finalName}.${project.packaging}</outputFileNameMapping>
+        </dependencySet>
+    </dependencySets>
+</assembly>

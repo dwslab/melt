@@ -1,0 +1,29 @@
+package de.uni_mannheim.informatik.dws.ontmatching.matchingjena;
+
+import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
+
+import java.util.List;
+import java.util.Properties;
+import org.apache.jena.ontology.OntModel;
+
+/**
+ * Better use MatcherYAAAPipeline because it can combine matchers which use different APIS like Jena and OWLAPI etc
+ */
+public abstract class MatcherPipelineYAAAJena extends MatcherYAAAJena{
+    protected List<MatcherYAAAJena> matchers = initializeMatchers();
+    
+    protected abstract List<MatcherYAAAJena> initializeMatchers();    
+    
+    @Override
+    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties p) throws Exception {
+        for(MatcherYAAAJena matcher : this.matchers){
+             inputAlignment = matcher.match(source, target, inputAlignment, p);
+        }
+        return inputAlignment;
+    }
+
+    public List<MatcherYAAAJena> getMatchers() {
+        return matchers;
+    }
+    
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns="http://knowledgeweb.semanticweb.org/heterogeneity/alignment" 
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+<Alignment>
+<xml>yes</xml>
+<level>0</level>
+	<type>11</type>	<onto1>http://cmt</onto1>	<onto2>http://iasted</onto2>	<uri1>http://cmt</uri1>	<uri2>http://iasted</uri2>	<map>		<Cell>			<entity1 rdf:resource="http://cmt#Document"/>			<entity2 rdf:resource="http://iasted#Document"/>			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</measure>			<relation>=</relation>		</Cell>	</map>	<map>		<Cell>			<entity1 rdf:resource="http://cmt#Review"/>			<entity2 rdf:resource="http://iasted#Review"/>			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</measure>			<relation>=</relation>		</Cell>	</map>	<map>		<Cell>			<entity1 rdf:resource="http://cmt#Author"/>			<entity2 rdf:resource="http://iasted#Author"/>			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</measure>			<relation>=</relation>		</Cell>	</map>	<map>		<Cell>			<entity1 rdf:resource="http://cmt#Reviewer"/>			<entity2 rdf:resource="http://iasted#Reviewer"/>			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</measure>			<relation>=</relation>		</Cell>	</map>	<map>		<Cell>			<entity1 rdf:resource="http://cmt#Person"/>			<entity2 rdf:resource="http://iasted#Person"/>			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</measure>			<relation>=</relation>		</Cell>	</map>
+</Alignment>
+</rdf:RDF>

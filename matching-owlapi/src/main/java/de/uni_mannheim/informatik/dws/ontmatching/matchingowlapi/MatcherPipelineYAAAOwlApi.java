@@ -1,0 +1,29 @@
+package de.uni_mannheim.informatik.dws.ontmatching.matchingowlapi;
+
+import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
+
+import java.util.List;
+import java.util.Properties;
+import org.semanticweb.owlapi.model.OWLOntology;
+
+/**
+ * Better use MatcherYAAAPipeline because it can combine matchers which use different APIS like Jena and OWLAPI etc
+ */
+public abstract class MatcherPipelineYAAAOwlApi extends MatcherYAAAOwlApi{
+    protected List<MatcherYAAAOwlApi> matchers = initializeMatchers();
+    
+    protected abstract List<MatcherYAAAOwlApi> initializeMatchers();    
+    
+    @Override
+    public Alignment match(OWLOntology source, OWLOntology target, Alignment inputAlignment, Properties p) throws Exception {
+        for(MatcherYAAAOwlApi matcher : this.matchers){
+             inputAlignment = matcher.match(source, target, inputAlignment, p);
+        }
+        return inputAlignment;
+    }
+
+    public List<MatcherYAAAOwlApi> getMatchers() {
+        return matchers;
+    }
+    
+}
