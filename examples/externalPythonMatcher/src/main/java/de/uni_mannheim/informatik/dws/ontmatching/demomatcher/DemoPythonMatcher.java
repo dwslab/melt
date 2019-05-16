@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.uni_mannheim.informatik.dws.ontmatching.demomatcher;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingexternal.MatcherExternal;
@@ -13,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
+ * Wrapper for the external Python matcher.
  * @author Sven Hertling
  */
 public class DemoPythonMatcher extends MatcherExternal {

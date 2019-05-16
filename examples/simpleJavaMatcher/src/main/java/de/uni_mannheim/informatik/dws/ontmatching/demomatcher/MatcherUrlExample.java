@@ -3,6 +3,9 @@ package de.uni_mannheim.informatik.dws.ontmatching.demomatcher;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingbase.MatcherURL;
 import java.net.URL;
 
+/**
+ * You can also implement a matcher that is not based on YAAA if you want to.
+ */
 public class MatcherUrlExample extends MatcherURL{
 
     @Override

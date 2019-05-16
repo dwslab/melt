@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.uni_mannheim.informatik.dws.ontmatching.demomatcher;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingbase.MatcherURL;
@@ -14,6 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+/**
+ * This stub demonstrates how resources such as configuration files can be accessed in a matcher.
+ */
 public class LoadResourceMatcher extends MatcherURL{
 
     /** Accessing the resources:
