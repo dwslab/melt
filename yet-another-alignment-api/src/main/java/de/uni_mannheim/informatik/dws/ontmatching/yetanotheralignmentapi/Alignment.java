@@ -1,9 +1,10 @@
 package de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi;
 
 import com.googlecode.cqengine.ConcurrentIndexedCollection;
-import com.googlecode.cqengine.attribute.Attribute;
 import com.googlecode.cqengine.index.hash.HashIndex;
+import com.googlecode.cqengine.index.navigable.NavigableIndex;
 import com.googlecode.cqengine.query.QueryFactory;
+import static com.googlecode.cqengine.query.QueryFactory.noQueryOptions;
 import com.googlecode.cqengine.resultset.ResultSet;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -40,10 +43,10 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     protected OntoInfo onto1;
     protected OntoInfo onto2;
     
-    protected boolean indexSource = false;
-    protected boolean indexTarget = false;
-    protected boolean indexRelation = false;
-    protected boolean indexConfidence = false;
+    protected HashIndex<String, Correspondence> indexSource = null;
+    protected HashIndex<String, Correspondence> indexTarget = null;
+    protected HashIndex<CorrespondenceRelation, Correspondence> indexRelation = null;
+    protected NavigableIndex<Double, Correspondence> indexConfidence = null;
 
     /**
      * Extended attributes.
@@ -51,45 +54,45 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     protected HashMap<String, String> extensions;
 
     public Alignment() {
-        init(true, true, true);
+        init(true, true, true, true);
     }
         
-    public Alignment(boolean indexSource, boolean indexTarget, boolean indexRelation){
-        init(indexSource, indexTarget, indexRelation);
+    public Alignment(boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence){
+        init(indexSource, indexTarget, indexRelation, indexConfidence);
     }
     
     public Alignment(URL url) throws SAXException, IOException{
-	this(AlignmentParser.getInputStreamFromURL(url), true, true, true);
+	this(AlignmentParser.getInputStreamFromURL(url), true, true, true, true);
     }
     
-    public Alignment(URL url, boolean indexSource, boolean indexTarget, boolean indexRelation) throws SAXException, IOException{
-	this(AlignmentParser.getInputStreamFromURL(url), indexSource, indexTarget, indexRelation);
+    public Alignment(URL url, boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence) throws SAXException, IOException{
+	this(AlignmentParser.getInputStreamFromURL(url), indexSource, indexTarget, indexRelation, indexConfidence);
     }
     
     public Alignment(File f) throws SAXException, IOException{
-	this(new FileInputStream(f), true, true, true);
+	this(new FileInputStream(f), true, true, true, true);
     }
     
-    public Alignment(File f, boolean indexSource, boolean indexTarget, boolean indexRelation) throws SAXException, IOException{
-	this(new FileInputStream(f), indexSource, indexTarget, indexRelation);
+    public Alignment(File f, boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence) throws SAXException, IOException{
+	this(new FileInputStream(f), indexSource, indexTarget, indexRelation, indexConfidence);
     }
     
     public Alignment(InputStream s) throws SAXException, IOException{
-        init(true, true, true);
+        init(true, true, true, true);
         AlignmentParser.parse(s, this);
     }
     
-    public Alignment(InputStream s, boolean indexSource, boolean indexTarget, boolean indexRelation) throws SAXException, IOException{
-        init(indexSource, indexTarget, indexRelation);
+    public Alignment(InputStream s, boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence) throws SAXException, IOException{
+        init(indexSource, indexTarget, indexRelation, indexConfidence);
         AlignmentParser.parse(s, this);
     }
     
     public Alignment(Alignment alignment) {
-        init(alignment.indexSource, alignment.indexTarget, alignment.indexRelation);
+        init(alignment.indexSource != null, alignment.indexTarget != null, alignment.indexRelation != null, alignment.indexConfidence != null);
         addAll(alignment);
     }
     
-    private void init(boolean indexSource, boolean indexTarget, boolean indexRelation){
+    private void init(boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence){
         this.method = "";
         this.type = "11";
         this.onto1 = new OntoInfo();
@@ -101,7 +104,21 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
             this.assertIndexOnTarget();
         if(indexRelation)
             this.assertIndexOnRelation();
-        //TODO: check for assertConfidence
+        if(indexConfidence)
+            this.assertIndexOnConfidence();
+    }
+    
+    
+    /**
+     * Creates a new {@link Correspondence} and adds it to this mapping.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param confidence The confidence of the mapping.
+     * @param relation The relation that holds between the two entities.
+     * @param extensions extenions
+     */
+    public void add(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String,String> extensions) {
+        add(new Correspondence(entityOne, entityTwo, confidence, relation, extensions));
     }
 
     /**
@@ -256,8 +273,31 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     public void serialize(File f) throws IOException{
         AlignmentSerializer.serialize(this, f);
     }
-
-
+    
+    /**
+     * Returns a new alignment which contains only correspondences above or equal the given threshold (it will not modify the current object).
+     * @param threshold threshold for cutting
+     * @return a new alignment with filtered correspondences
+     */
+    public Alignment cut(double threshold ){
+        assertIndexOnConfidence();
+        Alignment m = new Alignment(this.indexSource != null, this.indexTarget != null, this.indexRelation != null, this.indexConfidence != null);
+        ResultSet<Correspondence> result = this.retrieve(QueryFactory.greaterThanOrEqualTo(Correspondence.CONFIDENCE, threshold));
+        //m.addAll(result.stream().collect(Collectors.toList()));  //makes an arraylist 
+        //List<Correspondence> list = new ArrayList<>(result.size());
+        //for(Correspondence c : result){
+        //    list.add(c);
+        //}
+        //m.addAll(list);        
+        for(Correspondence c : result){
+            m.add(c);
+        }
+        return m;
+    }
+    
+    
+    
+    
     /**
      * Create the intersection between the two given alignments.
      * @param alignment_1 Set 1.
@@ -337,45 +377,72 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     public List<Correspondence> getConfidenceOrderedMapping(){
-        ArrayList<Correspondence> list = new ArrayList(this);
+        ArrayList<Correspondence> list = new ArrayList<>(this);
         list.sort(new CorrespondenceConfidenceComparator());
         return list;
     }
     
     public void assertIndexOnSource(){
-        if(this.indexSource == false){
-            this.indexSource = true;
-            assertIndexOnAtrribute(Correspondence.SOURCE);
+        if(this.indexSource == null){
+            this.indexSource = HashIndex.onAttribute(Correspondence.SOURCE);
+            this.addIndex(this.indexSource);
         }
     }
     
     public void assertIndexOnTarget(){
-        if(this.indexTarget == false){
-            this.indexTarget = true;
-            assertIndexOnAtrribute(Correspondence.TARGET);
+        if(this.indexTarget == null){
+            this.indexTarget = HashIndex.onAttribute(Correspondence.TARGET);
+            this.addIndex(this.indexTarget);
         }
     }
     
     public void assertIndexOnRelation(){
-        if(this.indexRelation == false){
-            this.indexRelation = true;
-            assertIndexOnAtrribute(Correspondence.RELATION);
+        if(this.indexRelation == null){
+            this.indexRelation = HashIndex.onAttribute(Correspondence.RELATION);
+            this.addIndex(this.indexRelation);
         }
     }
     
     public void assertIndexOnConfidence(){
-        if(this.indexConfidence == false){
-            this.indexConfidence = true;
-            assertIndexOnAtrribute(Correspondence.CONFIDENCE);
+        if(this.indexConfidence == null){
+            this.indexConfidence = NavigableIndex.onAttribute(Correspondence.CONFIDENCE);
+            this.addIndex(this.indexConfidence);
         }
     }
     
-    private void assertIndexOnAtrribute(Attribute a){
-        try{
-            this.addIndex(HashIndex.onAttribute(a));
-        }catch(IllegalStateException e){}
+    public Iterable<String> getDistinctSources(){
+        if(this.indexSource == null){
+            return this.stream().map(c -> c.entityOne).collect(Collectors.toSet());
+        }else{
+            return this.indexSource.getDistinctKeys(noQueryOptions());
+        }
     }
-
+    
+    public Iterable<String> getDistinctTargets(){
+        if(this.indexTarget == null){
+            return this.stream().map(c -> c.entityTwo).collect(Collectors.toSet());
+        }else{
+            return this.indexTarget.getDistinctKeys(noQueryOptions());
+        }
+    }
+    
+    public Iterable<CorrespondenceRelation> getDistinctRelations(){
+        if(this.indexRelation == null){
+            return this.stream().map(c -> c.relation).collect(Collectors.toSet());
+        }else{
+            return this.indexRelation.getDistinctKeys(noQueryOptions());
+        }
+    }
+    
+    
+    public Iterable<Double> getDistinctConfidences(){
+        if(this.indexConfidence == null){
+            return this.stream().map(c -> c.confidence).collect(Collectors.toSet());
+        }else{
+            return this.indexConfidence.getDistinctKeys(noQueryOptions());
+        }
+    }
+    
 
     /**
      * Obtain the value of an extension.

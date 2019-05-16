@@ -12,7 +12,7 @@ public class TestCqEngine {
     
 
     public static void main(String[] args){
-       Alignment m = new Alignment(false, false, false);
+       Alignment m = new Alignment(false, false, false, false);
        m.add("http://exampleLeftWithALongURI/13245", "http://exampleRightWithALongURI/13245");
         for(int i = 0; i < 50000; i++){
             int left = randomObj.nextInt(Integer.MAX_VALUE);

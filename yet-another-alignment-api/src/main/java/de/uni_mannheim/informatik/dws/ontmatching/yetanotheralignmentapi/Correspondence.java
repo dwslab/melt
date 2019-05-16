@@ -5,7 +5,10 @@ import com.googlecode.cqengine.attribute.SimpleAttribute;
 import com.googlecode.cqengine.query.option.QueryOptions;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Correspondence contains a relation that holds between two elements from two different ontologies.
@@ -15,12 +18,14 @@ import java.util.Objects;
  * @author Jan Portisch
  */
 public class Correspondence {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Correspondence.class);
+    
     protected String entityOne;
     protected String entityTwo;
     protected double confidence;
     protected CorrespondenceRelation relation;
     protected String identifier;
-    protected HashMap<String, String> extensions;
+    protected Map<String, String> extensions;
 
 
     /**
@@ -30,14 +35,55 @@ public class Correspondence {
      * @param confidence The confidence of the mapping.
      * @param relation The relation that holds between the two entities.
      * @param identifier The unique identifier for the mapping.
+     * @param extensions extensions in the form of a map
      */
-    public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, String identifier) {
+    public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String, String> extensions, String identifier) {
         this.entityOne = entityOne;
         this.entityTwo = entityTwo;
         this.confidence = confidence;
         this.relation = relation;
+        this.extensions = extensions;
         this.identifier = identifier;
     }
+    
+    /**
+     * Constructor
+     * The identifier is set to null by default.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param confidence The confidence of the mapping.
+     * @param relation The relation that holds between the two entities.
+     * @param extensions extensions in key1, value1, key2, value2, ... format
+     */
+    public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, String... extensions) {
+        this(entityOne, entityTwo, confidence, relation, parseExtensions(extensions), null);
+    }
+    
+     /**
+     * Constructor
+     * The identifier is set to null by default.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param confidence The confidence of the mapping.
+     * @param relation The relation that holds between the two entities.
+     * @param extensions extensions as a map of key to value (both strings)
+     */
+    public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String, String> extensions) {
+        this(entityOne, entityTwo, confidence, relation, extensions, null);
+    }
+    
+    /**
+     * Constructor
+     * The identifier is set to null by default.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param confidence The confidence of the mapping.
+     * @param extensions extensions in key1, value1, key2, value2, ... format
+     */
+    public Correspondence(String entityOne, String entityTwo, double confidence, String... extensions) {
+        this(entityOne, entityTwo, confidence, CorrespondenceRelation.EQUIVALENCE, parseExtensions(extensions));
+    }
+
 
     /**
      * Constructor
@@ -48,7 +94,7 @@ public class Correspondence {
      * @param relation The relation that holds between the two entities.
      */
     public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation) {
-        this(entityOne, entityTwo, confidence, relation, null);
+        this(entityOne, entityTwo, confidence, relation, new HashMap<>(), null);
     }
 
     /**
@@ -91,6 +137,18 @@ public class Correspondence {
     Correspondence() {
         this("", "", 1.0);
     }
+    
+    private static Map<String,String> parseExtensions(String[] arr){
+        Map<String, String> map = new HashMap<>();
+        for (int i = 0; i < arr.length; i+=2) {
+            if(i+1 >= arr.length){
+                LOGGER.error("Uneven number of extension arguments. Exepect are Key1, Value1, Key2, Value2, ....->Discard last extension");
+                break;
+            }
+            map.put(arr[i], arr[i + 1]);
+        }
+        return map;
+    }
 
     /**
      * This method returns a NEW correspondence with a reversed relation.
@@ -98,7 +156,7 @@ public class Correspondence {
      * @return New reversed correspondence.
      */
     public Correspondence reverse(){
-        return new Correspondence(entityTwo, entityOne, confidence, relation.reverse(), identifier);
+        return new Correspondence(entityTwo, entityOne, confidence, relation.reverse(), extensions, identifier);
     }
 
     /**
@@ -121,7 +179,7 @@ public class Correspondence {
         extensions.put(extensionUri, extensionValue);
     }
 
-    public HashMap<String, String> getExtensions() { return this.extensions; }
+    public Map<String, String> getExtensions() { return this.extensions; }
 
     public String getEntityOne() {
         return entityOne;

@@ -44,6 +44,16 @@
         <tag>HEAD</tag>
     </scm>
     
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.5.0-M1</version>
+            <scope>test</scope>
+        </dependency>        
+    </dependencies>
+
+    
     <build>
         <plugins>
             <plugin>
@@ -54,6 +64,11 @@
                     <goals>deploy</goals>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
             </plugin>
         </plugins>
     </build>

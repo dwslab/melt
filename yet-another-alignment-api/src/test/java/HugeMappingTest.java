@@ -10,8 +10,8 @@ public class HugeMappingTest {
     private static Random randomObj = new Random(1990);
     
    
-    private static Alignment generateMapping(int numberConceptsLeft, int numberConceptsRight, int numberOfMappings, boolean indexSource, boolean indexTarget, boolean indexRelation){
-        Alignment m = new Alignment(indexSource, indexTarget, indexRelation);
+    private static Alignment generateMapping(int numberConceptsLeft, int numberConceptsRight, int numberOfMappings, boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence){
+        Alignment m = new Alignment(indexSource, indexTarget, indexRelation, indexConfidence);
         for(int i = 0; i < numberOfMappings; i++){
             int left = randomObj.nextInt(numberConceptsLeft);
             int right = randomObj.nextInt(numberConceptsRight);            
@@ -25,7 +25,7 @@ public class HugeMappingTest {
         int numberOfConcepts = 800000;
         
         long startTime = System.nanoTime();
-        Alignment test = generateMapping(numberOfConcepts,numberOfConcepts,numberOfConcepts*2, true, false, false);
+        Alignment test = generateMapping(numberOfConcepts,numberOfConcepts,numberOfConcepts*2, true, false, false, false);
         //Alignment m = generateMapping(numberOfConcepts,numberOfConcepts,numberOfConcepts*2);
         long endTime = System.nanoTime();
         System.out.println("TIME: " + (endTime - startTime) / 1000000 + " ms");
