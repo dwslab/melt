@@ -1,4 +1,6 @@
 # MELT - Matching EvaLuation Toolkit
+[![Build Status](https://travis-ci.org/dwslab/melt.svg?branch=master)](https://travis-ci.org/dwslab/melt)
+
 Melt is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.
 It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the 
 SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.
