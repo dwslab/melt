@@ -69,7 +69,7 @@ MELT can manage all the data. Just have a look at the `TrackRepository`, you wil
 MELT defines a workflow for matcher execution and evaluation. Therefore, it utilizes the vocabulary used by the OAEI: A 
 matcher can be evaluated on a `TestCase`, i.e. a single ontology matching task. One or more test cases are summarized in 
 a `Track`. MELT contains a built-in `TrackRepository` which allows to access all OAEI tracks and test cases at design time 
-without actually downloading them from the OAEI Web page. At runtime `TrackRepository` checks whether the required 
+without actually downloading them from the OAEI Web page. At runtime `TrackRepository` (see *Further Services* for details) checks whether the required 
 ontologies and alignmens are available in the internal buffer; if data is missing, it is automatically downloading and 
 caching it for the next access. The caching mechanism is an advantage over the SEALS platform which downloads all ontologies 
 again at runtime which slows down the evaluation process if run multiple times in a row.
@@ -160,7 +160,22 @@ System.out.println(TestCaseValidationService.analzye(testCase));
 ```
 
 ### OAEI Track Repository
-TODO
+The [`TrackRepository`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/tracks/TrackRepository.java) 
+checks whether the required ontologies and alignmens are available in the internal buffer; if data is missing, it is automatically downloading and 
+caching it for the next access.
+
+Exemplary call using the `TrackRepository`:
+
+```
+// access the Anatomy track
+TrackRepository.Anatomy.Default;
+
+// access all Conference test cases
+TrackRepository.Conference.V1.getTestCases();
+```
+
+The resulting instances can be directly used by the Executor or any other MELT functionality that requires tracks or
+test cases.
 
 ## Modules Overview
 The ontology matching framework is grouped into multiple maven modules which are described in the following.
