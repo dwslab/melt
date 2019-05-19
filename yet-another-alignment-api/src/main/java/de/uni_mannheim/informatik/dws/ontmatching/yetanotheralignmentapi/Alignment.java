@@ -296,8 +296,6 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     
-    
-    
     /**
      * Create the intersection between the two given alignments.
      * @param alignment_1 Set 1.

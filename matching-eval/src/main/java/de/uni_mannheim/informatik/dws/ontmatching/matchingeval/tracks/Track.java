@@ -131,14 +131,15 @@ public abstract class Track {
     //TODO: extract all file / layout related methods to extra class
     
     /**
-     * Does not close the inputstream
-     * @param in
-     * @param file
+     * Writes an input stream to a file.
+     * Developer remark: Does not close the input stream.
+     * @param inputStream Input stream to write.
+     * @param file File to write input stream into.
      */
-    protected void saveToFile(InputStream in, File file){
+    protected void saveToFile(InputStream inputStream, File file){
         file.getParentFile().mkdirs();
 
-        ReadableByteChannel rbc = Channels.newChannel(in);
+        ReadableByteChannel rbc = Channels.newChannel(inputStream);
         try {
             FileOutputStream fos = new FileOutputStream(file);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
@@ -193,8 +194,7 @@ public abstract class Track {
                 saveToFile(in, file);
         }
     }
-    
-    
+
     
     protected void saveInDefaultLayout(InputStream in, String testCaseName, TestCaseType type){
         if(this.useDuplicateFreeStorageLayout){

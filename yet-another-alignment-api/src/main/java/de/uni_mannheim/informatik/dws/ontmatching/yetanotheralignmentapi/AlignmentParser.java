@@ -51,7 +51,14 @@ public class AlignmentParser {
             return parser;
         }
     };
-    
+
+    /**
+     * Reference the alignment file to be parsed using a String URI.
+     * @param uri URI as String.
+     * @return Parsed alignment instance.
+     * @throws SAXException Parsing exception.
+     * @throws IOException IO exception.
+     */
     public static Alignment parse(String uri) throws SAXException, IOException{
         try {
             return parse(new URL(uri));
@@ -60,7 +67,14 @@ public class AlignmentParser {
             return parse(new File(uri));
         }
     }
-    
+
+    /**
+     * Reference the alignment file to be parsed using a String URI.
+     * @param uri URI as String.
+     * @return Parsed alignment instance.
+     * @throws SAXException Parsing exception.
+     * @throws IOException IO exception.
+     */
     public static Alignment parse(URI uri) throws SAXException, IOException{
         return parse(uri.toURL());
     }

@@ -33,9 +33,16 @@ import org.slf4j.LoggerFactory;
 public class Executor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Executor.class);
 
+    /**
+     * This method runs the specified matcher on the specified track.
+     * @param track Track on which the matcher shall be run.
+     * @param matcher The matcher to be run.
+     * @return An {@link ExecutionResultSet} instance.
+     */
     public static ExecutionResultSet run(Track track, IOntologyMatchingToolBridge matcher) {
         return run(track, matcher, getMatcherName(matcher));
     }
+
 
     public static ExecutionResultSet run(Track track, IOntologyMatchingToolBridge matcher, String matcherName) {
         return run(track.getTestCases(), matcher, matcherName);
@@ -99,7 +106,7 @@ public class Executor {
      *
      * @param testCase    Test case to be evaluated.
      * @param matcher     Matcher to be evaluated.
-     * @param matcherName
+     * @param matcherName The name of the matcher.
      * @return Single Execution Result
      */
     public static ExecutionResult runSingle(TestCase testCase, IOntologyMatchingToolBridge matcher, String matcherName) {

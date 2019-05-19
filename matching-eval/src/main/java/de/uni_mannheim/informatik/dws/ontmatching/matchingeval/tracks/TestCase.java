@@ -25,8 +25,16 @@ public class TestCase {
     private Track track;
     
     private Alignment parsedReference;
-    
 
+
+    /**
+     * Constructor
+     * @param name Name of the test case.
+     * @param source URI to the source ontology.
+     * @param target URI to the target ontology.
+     * @param reference URI to the alignment reference file.
+     * @param track The track to which the test case belongs.
+     */
     public TestCase(String name, URI source, URI target, URI reference, Track track) {
         this.name = name;
         this.source = source;
@@ -94,8 +102,13 @@ public class TestCase {
             return null;
         }
     }
-    
-    
+
+
+    /**
+     * This method parses the reference alignment and returns it.
+     * If called again, a cached parsed instance will be returned.
+     * @return Parsed reference {@link Alignment}.
+     */
     public Alignment getParsedReferenceAlignment() {
         if(parsedReference == null){
             try {
@@ -106,11 +119,8 @@ public class TestCase {
         }
         return parsedReference;
     }
-    
-    
-    
-    //override hascode and equals: a testcase is equal when name and track is equal
-    
+
+
     @Override
     public int hashCode() {
         int hash = 3;

@@ -18,7 +18,10 @@ import org.slf4j.LoggerFactory;
 
 public class SealsDownloadHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(SealsDownloadHelper.class);
+    /**
+     * Default logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SealsDownloadHelper.class);
 
     private static final String HAS_SUITE_ITEM = "http://www.seals-project.eu/ontologies/SEALSMetadata.owl#hasSuiteItem";
     private static final String IDENTIFIER = "http://purl.org/dc/terms/identifier";

@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * @author Sven Hertling
  */
 public class TrackRepository{
-    private static final Logger logger = LoggerFactory.getLogger(TrackRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrackRepository.class);
     
     /**
      * Anatomy track.
@@ -35,7 +35,12 @@ public class TrackRepository{
         /** Conference Testsuite V1 which is used all the time. */
         public static Track V1 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1");
     }
-    
+
+    /**
+     * Mutifarm track.
+     * The goal of this track is to evaluate the ability of systems to deal with ontologies in different natural languages.
+     * It serves the purpose of evaluating the strengths and the weaknesses of matchers and measuring their progress, with a focus on multilingualism.
+     */
     public static class Multifarm {
         private static Set<String> languagePairs = new HashSet<String>(Arrays.asList( //all in all: 45
             "ar-cn", "ar-cz", "ar-de", "ar-en", "ar-es", "ar-fr", "ar-nl", "ar-pt", "ar-ru", 
@@ -64,14 +69,13 @@ public class TrackRepository{
         public static Track getSpecificMultifarmTrack(String languagePair){
             if(languagePairs.contains(languagePair))
                 return getTrackByLanguagePair(languagePair);
-            logger.warn("Language Pair is not found - returning null Track");
+            LOGGER.warn("Language Pair is not found - returning null Track");
             return null;
         }
 
         public static Track getSpecificMultifarmTrack(String firstLanguage, String secondLanguage){
             return getSpecificMultifarmTrack(firstLanguage + "-" + secondLanguage);
         }
-
     }
     
     /**
@@ -332,7 +336,7 @@ public class TrackRepository{
      * and ii) to cover a wide spectrum of possible techniques and tools.
      */
     public static class IIMB {
-        
+        // TODO implement
     }
     
     /**
@@ -341,7 +345,7 @@ public class TrackRepository{
      * of two French cultural institutions: La Bibliothque Nationale de France (BnF) and La Philharmonie de Paris (PP).
      */
     public static class Doremus {
-        
+        // TODO implement
     }
     
     

@@ -141,6 +141,27 @@ MELT can calculate very specific evaluation statistics such as the residual prec
     - more information at [the  hobbit wiki page 'Experiments' ](https://github.com/hobbit-project/platform/wiki/Experiments)
 
 
+## Further Services
+
+### TestCase/Track Validation Service
+Creating new tracks and test case can be very cumbersome. The MELT validation service allows you to check whether your 
+test cases:
+1. Contain parseable ontologies.
+2. Contain a parseable reference alignment.
+3. Mention only URIs in the reference alignment that also appear in the corresponding source and target ontologies.
+
+Exemplary call using the `TestCaseValidationService`:
+```
+File sourceOntologyFile = new File("<path to source ontology>");
+File targetOntologyFile = new File("<path to target ontology>");
+File referenceAlignment = new File("<path to reference alignemntfile>");
+TestCase testCase = new TestCase("FSDM", sourceOntologyFile.toURI(), targetOntologyFile.toURI(), referenceAlignment.toURI(), null);
+System.out.println(TestCaseValidationService.analzye(testCase));
+```
+
+### OAEI Track Repository
+TODO
+
 ## Modules Overview
 The ontology matching framework is grouped into multiple maven modules which are described in the following.
 
@@ -175,3 +196,12 @@ Maven Plugin for creating a container for the [HOBBIT platform](https://project-
 
 ### demo-benchmark
 Tool for submitting a Track/Testcase in HOBBIT (only interesting for OAEI track organizers).
+
+## Frequently Asked Questions (FAQs)
+
+**I have a muliple SEALS packages and I want to use MELT's group evaluation functionalities. What is the simplest way 
+to do so?**<br/>
+SEALS packages were wrapped for the SEALS platform. If the matchers were not developed using MELT or you are not sure 
+whether they were developed with MELT, the easiest was is to create the alignment files by executing the matchers 
+using the SEALS client. Afterwards, you can read the alignment files (e.g. method `loadFromFolder` of class 
+[`Executor`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/Executor.java)).

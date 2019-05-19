@@ -114,15 +114,25 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         }
         return result;
     }
-       
 
+
+    /**
+     * Obtain the distinct matcher names in this execution result set.
+     * @return Iterable over distinct matcher names.
+     */
     public Iterable<String> getDistinctMatchers(){
         //see https://github.com/npgall/cqengine/issues/168
         return this.matcherIndex.getDistinctKeys(noQueryOptions());
     }
-    
-    public Iterable<String> getDistinctMatchers(Track t){
-        return this.retrieve(query(t))
+
+
+    /**
+     * Obtain the distinct matcher names in this execution result set that were ran on the specified track.
+     * @param track The track on which the matcher ran.
+     * @return Iterable over distinct matcher names.
+     */
+    public Iterable<String> getDistinctMatchers(Track track){
+        return this.retrieve(query(track))
                 .stream()
                 .map(ExecutionResult::getMatcherName)
                 .collect(Collectors.toSet());
@@ -223,5 +233,4 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
     private static Query<ExecutionResult> query(TestCase testCase){
         return QueryFactory.equal(ExecutionResult.TEST_CASE, testCase);
     }
-    
 }

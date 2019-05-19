@@ -26,7 +26,6 @@ public class AlignmentAnalyzerResult {
     AlignmentAnalyzerResult(ExecutionResult executionResult, double minimumConfidence,
                             double maximumConfidence, HashMap<CorrespondenceRelation, Integer> frequenciesOfRelations,
                             boolean isHomogenousAlingment, HashMap<String, Integer> frequenciesOfMappingTypes){
-
         this.executionResult = executionResult;
         this.minimumConfidence = minimumConfidence;
         this.maximumConfidence = maximumConfidence;
@@ -77,10 +76,9 @@ public class AlignmentAnalyzerResult {
     private HashMap<String, Integer> frequenciesOfMappingTypes;
 
 
-
     /**
      * Get a textual report of the alignment as String.
-     * @return
+     * @return Textual report.
      */
     public String getReportForAlignment() {
 
@@ -130,7 +128,7 @@ public class AlignmentAnalyzerResult {
 
     /**
      * Get the minimum confidence score of the alignment.
-     * @return
+     * @return Minimum confidence as double.
      */
     public double getMinimumConfidence() {
         return this.minimumConfidence;
@@ -138,7 +136,7 @@ public class AlignmentAnalyzerResult {
 
     /**
      * Get the maximum confidence score of the alignment
-     * @return
+     * @return Maximum confidence as double.
      */
     public double getMaximumConfidence() {
         return this.maximumConfidence;
@@ -158,7 +156,7 @@ public class AlignmentAnalyzerResult {
 
     /**
      * Returns true if each cell in the mapping uses the equivalence relation.
-     * If multiple reltions are used, false will be returned.
+     * If multiple relations are used, false will be returned.
      * @return
      */
     public boolean isAlwaysEqualityRelation() {
@@ -171,7 +169,7 @@ public class AlignmentAnalyzerResult {
 
     /**
      * Returns a set of the different mapping relations (e.g. "=" or "&gt;") that are used in the mapping.
-     * @return
+     * @return Mapping relations used as set.
      */
     public HashSet<CorrespondenceRelation> getRelationsUsed(){
         return new HashSet<CorrespondenceRelation>(frequenciesOfRelations.keySet());
@@ -179,7 +177,7 @@ public class AlignmentAnalyzerResult {
 
     /**
      * Returns a set of different mapping types (e.g. CLASS-CLASS) that are used in the mapping
-     * @return
+     * @return Mapping types used as set.
      */
     public HashSet<String> getMappingTypesUsed(){
         return new HashSet<>(frequenciesOfMappingTypes.keySet());
@@ -197,7 +195,7 @@ public class AlignmentAnalyzerResult {
     /**
      * Returns true if the alignment is heterogenous, i.e., whether any resource types can be
      * matched with each other e.g. object properties with classes.
-     * @return
+     * @return True if heterogenous else false.
      */
     public boolean isHeterogenousAlignment() {
         return !isHomogenousAlignment();
@@ -215,6 +213,7 @@ public class AlignmentAnalyzerResult {
     /**
      * Returns frequencies of relations in the given mapping.
      * Example: EQUIVALENCE → 40
+     * @return Mapping of type {@code relation → frequency}.
      */
     public HashMap<CorrespondenceRelation, Integer> getFrequenciesOfRelations(){
         return this.frequenciesOfRelations;

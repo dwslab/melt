@@ -55,11 +55,11 @@ public class EvaluatorCSV extends Evaluator {
      */
     private Logger LOGGER = LoggerFactory.getLogger(EvaluatorCSV.class);
 
-    ConfusionMatrixMetric confusionMatrixMetric;
-    TypeRefiner classRefiner;
-    TypeRefiner propertyRefiner;
-    TypeRefiner instanceRefiner;
-    ResidualRefiner residualRefiner;
+    private ConfusionMatrixMetric confusionMatrixMetric;
+    private TypeRefiner classRefiner;
+    private TypeRefiner propertyRefiner;
+    private TypeRefiner instanceRefiner;
+    private ResidualRefiner residualRefiner;
 
     /**
      * Analytical Store for all alignments.
