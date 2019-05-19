@@ -152,10 +152,10 @@ test cases:
 
 Exemplary call using the `TestCaseValidationService`:
 ```
-File sourceOntologyFile = new File("<path to source ontology>");
-File targetOntologyFile = new File("<path to target ontology>");
-File referenceAlignment = new File("<path to reference alignemntfile>");
-TestCase testCase = new TestCase("FSDM", sourceOntologyFile.toURI(), targetOntologyFile.toURI(), referenceAlignment.toURI(), null);
+URI sourceUri = new File("<path to source ontology file>").toURI();
+URI targetUri = new File("<path to target ontology file>").toURI();
+URI referenceUri = new File("<path to reference alignment file>").toURI();
+TestCase testCase = new TestCase("FSDM", sourceUri, targetUri, referenceUri, null);
 System.out.println(TestCaseValidationService.analzye(testCase));
 ```
 

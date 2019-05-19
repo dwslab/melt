@@ -7,6 +7,7 @@ import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Corresp
 import org.apache.jena.ontology.OntModel;
 
 import java.io.File;
+import java.net.URI;
 import java.util.HashSet;
 
 /**
