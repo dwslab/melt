@@ -150,7 +150,7 @@ test cases:
 2. Contain a parseable reference alignment.
 3. Mention only URIs in the reference alignment that also appear in the corresponding source and target ontologies.
 
-Exemplary call using the `TestCaseValidationService`:
+Exemplary call using the [`TestCaseValidationService`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/validationServices/TestCaseValidationService.java):
 ```
 URI sourceUri = new File("<path to source ontology file>").toURI();
 URI targetUri = new File("<path to target ontology file>").toURI();

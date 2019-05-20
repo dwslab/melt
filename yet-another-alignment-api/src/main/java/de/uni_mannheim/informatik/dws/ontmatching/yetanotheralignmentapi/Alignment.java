@@ -193,22 +193,27 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
 
     /**
-     * Obtain an iterator for all mappins where the given source is involved.
+     * Obtain an iterator for all correspondences where the given source is involved.
      * @param source The source that shall be looked up.
      * @return Iterable over {@link Correspondence}. Note: If there is no match, the iterable is not null.
      */
     public Iterable<Correspondence> getCorrespondencesSource(String source) {
         return this.retrieve(QueryFactory.equal(Correspondence.SOURCE, source));
     }
-    
+
+    /**
+     * Check whether the specified {@code source} is contained in this alignment instance.
+     * @param source The source to be looked up.
+     * @return True if source is contained, else false.
+     */
     public boolean isSourceContained(String source) {
         return getCorrespondencesSource(source).iterator().hasNext();
     }
 
     /**
-     *
-     * @param source
-     * @param relation
+     * Obtain an iterator for all correspondences where the given source and the given relation are involved.
+     * @param source The source that shall be looked up.
+     * @param relation The relation that shall hold between the specified source and an arbitrary target.
      * @return Iterable over {@link Correspondence}.
      */
     public Iterable<Correspondence> getCorrespondencesSourceRelation(String source, CorrespondenceRelation relation) {
@@ -219,7 +224,13 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
                 )
         );
     }
-    
+
+    /**
+     * Check whether the given source and the given relation are contained in this alignment.
+     * @param source The source that shall be looked up.
+     * @param relation The relation that shall hold between the specified source and an arbitrary target.
+     * @return True if correspondence with the specified criteria could be found, else false.
+     */
     public boolean isSourceRelationContained(String source, CorrespondenceRelation relation) {
         return getCorrespondencesSourceRelation(source, relation).iterator().hasNext();
     }
@@ -227,11 +238,22 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     public Iterable<Correspondence> getCorrespondencesTarget(String target) {
         return this.retrieve(QueryFactory.equal(Correspondence.TARGET, target));
     }
-    
+
+    /**
+     * Check whether the specified {@code target} is contained in this alignment instance.
+     * @param target The target to be looked up.
+     * @return True if target is contained, else false.
+     */
     public boolean isTargetContained(String target) {
         return getCorrespondencesTarget(target).iterator().hasNext();
     }
-    
+
+    /**
+     * Obtain an iterator for all correspondences where the given target and the given relation are involved.
+     * @param target The target that shall be looked up.
+     * @param relation The relation that shall hold between the specified target and an arbitrary source.
+     * @return Iterable over {@link Correspondence}.
+     */
     public Iterable<Correspondence> getCorrespondencesTargetRelation(String target, CorrespondenceRelation relation) {
         return this.retrieve(
                 QueryFactory.and(
@@ -240,7 +262,13 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
                 )
         );
     }
-    
+
+    /**
+     * Check whether the given target and the given relation are contained in this alignment.
+     * @param target The target that shall be looked up.
+     * @param relation The relation that shall hold between the specified target and an arbitrary source.
+     * @return True if correspondence with the specified criteria could be found, else false.
+     */
      public boolean isTargetRelationContained(String target, CorrespondenceRelation relation) {
         return getCorrespondencesTargetRelation(target, relation).iterator().hasNext();
     }
@@ -267,19 +295,19 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     /**
      * Serialize this mapping directly to a given file.
      * This also works if the alignment is huge.
-     * @param f The file for writing the mapping.
+     * @param file The file for writing the mapping.
      * @throws IOException 
      */
-    public void serialize(File f) throws IOException{
-        AlignmentSerializer.serialize(this, f);
+    public void serialize(File file) throws IOException{
+        AlignmentSerializer.serialize(this, file);
     }
     
     /**
      * Returns a new alignment which contains only correspondences above or equal the given threshold (it will not modify the current object).
-     * @param threshold threshold for cutting
-     * @return a new alignment with filtered correspondences
+     * @param threshold Threshold for cutting (correspondences greater than or equal the threshold will be added).
+     * @return A new alignment with filtered correspondences. This alignment stays untouched from the operation.
      */
-    public Alignment cut(double threshold ){
+    public Alignment cut(double threshold){
         assertIndexOnConfidence();
         Alignment m = new Alignment(this.indexSource != null, this.indexTarget != null, this.indexRelation != null, this.indexConfidence != null);
         ResultSet<Correspondence> result = this.retrieve(QueryFactory.greaterThanOrEqualTo(Correspondence.CONFIDENCE, threshold));
