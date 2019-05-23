@@ -1,5 +1,7 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingjena;
 
+import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +14,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Cache and reader for Jena ontologies.
- * @author Sven Hertling, Jan Portisch
+ * @author Sven Hertling
+ * @author Jan Portisch
  */
 public class OntologyCacheJena {
 
@@ -31,21 +34,7 @@ public class OntologyCacheJena {
      * The internal cache for ontologies that is dependent on the OntModelSpec.
      */
     private static Map<String, OntModel> ontologyCache = new HashMap<>();
-    
-    
-    /**
-     * Just for testing purposes.
-     * TODO delete
-     *
-     * @param args
-     */
-    /*
-    public static void main(String[] args) {
-        OntologyCacheJena.get("C:\\Users\\D060249\\OneDrive - SAP SE\\Documents\\Mannheim\\Master_Thesis\\OAEI\\Datasets\\Anatomy_2017\\mouse.owl", OntModelSpec.OWL_MEM, true);
-        OntologyCacheJena.get("C:\\Users\\D060249\\OneDrive - SAP SE\\Documents\\Mannheim\\Master_Thesis\\OAEI\\Datasets\\Anatomy_2017\\mouse.owl", OntModelSpec.OWL_MEM, true);
-        System.out.println("DONE");
-    }
-    */
+
 
     /**
      * Returns the OntModel for the given uri using a cache if indicated to do so.
@@ -74,7 +63,13 @@ public class OntologyCacheJena {
             return readOntModel(uri, spec);
         }
     }
-    
+
+    /**
+     * Read and parse an ontology.
+     * @param uri URI from which shall be read.
+     * @param spec Jena Ontology Model specification.
+     * @return OntModel instance that was read.
+     */
     private static OntModel readOntModel(String uri, OntModelSpec spec){
         OntModel model = ModelFactory.createOntologyModel(spec);
         model.read(uri);
@@ -90,9 +85,35 @@ public class OntologyCacheJena {
     public static OntModel get(String uri, OntModelSpec spec) {
         return get(uri, spec, true);
     }
-    
+
+    /**
+     * Returns the OntModel for the given uri using a cache by default.
+     * @param url The URI of the ontology that shall be cached.
+     * @param spec The specification of the ontology.
+     * @return OntModel reference.
+     */
     public static OntModel get(URL url, OntModelSpec spec) {
         return get(url.toString(), spec, true);
+    }
+
+    /**
+     * Returns the OntModel for the given uri using a cache by default.
+     * @param uri The URI of the ontology that shall be cached.
+     * @param spec The specification of the ontology.
+     * @return OntModel reference.
+     */
+    public static OntModel get(URI uri, OntModelSpec spec) {
+        return get(uri.toString(), spec, true);
+    }
+
+    /**
+     * Returns the OntModel for the given uri using a cache by default.
+     * @param file The File of the ontology that shall be cached.
+     * @param spec The specification of the ontology.
+     * @return OntModel reference.
+     */
+    public static OntModel get(File file, OntModelSpec spec) {
+        return get(file.toURI().toString(), spec, true);
     }
 
     /**
@@ -103,12 +124,34 @@ public class OntologyCacheJena {
     public static OntModel get(String uri){
         return get(uri, DEFAULT_JENA_ONT_MODEL_SPEC, true);
     }
-    
+
+    /**
+     * Returns the OntModel for the given uri using a cache by default and the default OntModelSpec.
+     * @param uri The URI of the ontology that shall be cached.
+     * @return OntModel reference.
+     */
+    public static OntModel get(URI uri){
+        return get(uri.toString(), DEFAULT_JENA_ONT_MODEL_SPEC, true);
+    }
+
+    /**
+     * Returns the OntModel for the given uri using a cache by default and the default OntModelSpec.
+     * @param url The URL of the ontology that shall be cached.
+     * @return OntModel reference.
+     */
     public static OntModel get(URL url){
         return get(url.toString(), DEFAULT_JENA_ONT_MODEL_SPEC, true);
     }
 
-    
+    /**
+     * Returns the OntModel for the given uri using a cache by default and the default OntModelSpec.
+     * @param file The File of the ontology that shall be cached.
+     * @return OntModel reference.
+     */
+    public static OntModel get(File file){
+        return get(file.toURI().toString(), DEFAULT_JENA_ONT_MODEL_SPEC, true);
+    }
+
 
     /**
      * Empties the cache.

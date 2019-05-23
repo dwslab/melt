@@ -222,7 +222,8 @@ public class TestCaseValidationResult {
 
     @Override
     public String toString(){
-        String result =  "Analysis for test case: " + testCase.getName() + "\n" +
+        String result = "----------------------\nVALIDATION INFORMATION\n----------------------\n" +
+                "Analysis for test case: " + testCase.getName() + "\n" +
                 "Source Ontology parseable: " + isParseableByJenaSourceOntology + "\n" +
                 "Target Ontology parseable: " + isParseableByJenaTargetOntology + "\n" +
                 "Reference Alignment parseable: " + isReferenceAlignmentParseable + "\n";
@@ -252,6 +253,20 @@ public class TestCaseValidationResult {
                 }
             }
         }
+
+        result = "\n" + result + "\n-----------------------\nSTATISTICAL INFORMATION\n-----------------------\n";
+
+        // soruce mappings
+        result = result + "Analysis for test case: " + testCase.getName() + "\n" +
+                "All source classes mapped: " + isSourceClassesFullyMapped() + "\n" +
+                "All source datatype properties mapped: " + isSourceDatatypePropertiesFullyMapped() + "\n" +
+                "All source object properties mappes: " + isSourceObjectPropertiesFullyMapped() + "\n";
+
+        // target mappings
+        result = result + "All target classes mapped: " + isTargetClassesFullyMapped() + "\n" +
+                "All target datatype properties mapped: " + isTargetDatatypePropertiesFullyMapped() + "\n" +
+                "All target object properties mappes: " + isTargetObjectPropertiesFullyMapped() + "\n";
+
         return result;
     }
 
