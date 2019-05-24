@@ -16,9 +16,7 @@ class TrackRepositoryTest {
     @Test
     public void testTracks(){
         // tests downloading process and implementation
-
-        // TODO uncomment as soon as SEALS servers are up again
-        //assertTrue(TrackRepository.Anatomy.Default.getTestCases().size() > 0);
+        assertTrue(TrackRepository.Anatomy.Default.getTestCases().size() > 0);
     }
 
 }
