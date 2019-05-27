@@ -10,6 +10,8 @@ import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignme
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -61,6 +63,7 @@ public class ExecutionResult {
         if(refinements != null) this.refinements = refinements;
         else this.refinements = new HashSet<>();
     }
+
     
     /**
      * Constructor used by tests to check if metrics compute correctly.
@@ -84,6 +87,7 @@ public class ExecutionResult {
     public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, IOntologyMatchingToolBridge matcher) {
         this(testCase, matcherName, originalSystemAlignment, runtime, silentlyParseAlignment(originalSystemAlignment), testCase.getParsedReferenceAlignment(), matcher, new HashSet());
     }
+
     
     /**
      * Copies all members except the mappings from the given execution result (like a copy constructor).
@@ -122,6 +126,23 @@ public class ExecutionResult {
             return AlignmentParser.parse(url);
         } catch (SAXException | IOException ex) {
             LOGGER.error("Could not initialize Execution result because system alignment given by following URL could not be parsed: " + url.toString(), ex);
+            return null;
+        }
+    }
+
+    /**
+     * Helper method to parse an alignment from an URL and log a possible error.
+     * This method will not throw any exceptions.
+     * Used by one contructor of this class.
+     * @param uri URI which represents the alignment
+     * @return
+     */
+    private static Alignment silentlyParseAlignment(URI uri){
+        try {
+            URL url = uri.toURL();
+            return AlignmentParser.parse(url);
+        } catch (SAXException | IOException ex) {
+            LOGGER.error("Could not initialize Execution result because system alignment given by following URL could not be parsed: " + uri.toString(), ex);
             return null;
         }
     }
