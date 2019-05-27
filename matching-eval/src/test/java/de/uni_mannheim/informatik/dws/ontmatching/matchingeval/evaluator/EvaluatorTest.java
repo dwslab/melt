@@ -14,13 +14,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class EvaluatorTest {
 
     /**
-     * Note that a network connection might be required.
+     * Development remark: Note that a network connection is required and the SEALS repository must be up and running.
      */
     @Test
     void getResultsDirectoryTrackMatcher() {
-
-        // TODO uncomment as soon as SEALS servers are up again
-        /*
         try {
             ExecutionResult result = new ExecutionResult(TrackRepository.Conference.V1.getTestCases().get(0), "myMatcher", null, null);
             ExecutionResultSet results = new ExecutionResultSet();
@@ -33,9 +30,6 @@ class EvaluatorTest {
         } catch (IOException ioe){
             ioe.printStackTrace();
         }
-        */
-
     }
-
 
 }

@@ -70,9 +70,10 @@ MELT defines a workflow for matcher execution and evaluation. Therefore, it util
 matcher can be evaluated on a `TestCase`, i.e. a single ontology matching task. One or more test cases are summarized in 
 a `Track`. MELT contains a built-in `TrackRepository` which allows to access all OAEI tracks and test cases at design time 
 without actually downloading them from the OAEI Web page. At runtime `TrackRepository` (see *Further Services* for details) checks whether the required 
-ontologies and alignmens are available in the internal buffer; if data is missing, it is automatically downloading and 
+ontologies and alignments are available in the internal buffer; if data is missing, it is automatically downloading and 
 caching it for the next access. The caching mechanism is an advantage over the SEALS platform which downloads all ontologies 
-again at runtime which slows down the evaluation process if run multiple times in a row.
+again at runtime which slows down the evaluation process if run multiple times in a row. If a local data set shall be
+evaluated, class `LocalTrack` can be instantiated.
 
 One or more matchers are given, together with the track or test case on which they shall be run, to an `Executor`. The 
 Executor runs a matcher or a list of matchers on a single test case, a list of test cases, or a track. The `run()` method 

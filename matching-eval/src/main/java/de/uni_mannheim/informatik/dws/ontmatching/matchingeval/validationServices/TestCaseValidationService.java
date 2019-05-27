@@ -21,8 +21,8 @@ public class TestCaseValidationService {
     /**
      * Perform an analysis on the level of a test case.
      *
-     * @param testCase
-     * @return
+     * @param testCase The test case to be validated and analyzed.
+     * @return Validation result instance.
      */
     public static TestCaseValidationResult analzye(TestCase testCase) {
 

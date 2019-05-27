@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * @author Sven Hertling
  */
 public abstract class Track {
-    private static final Logger logger = LoggerFactory.getLogger(Track.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Track.class);
     
     static {
         //TODO: check whats better because a global store is maybe preferable, but does the user know where to look?
@@ -54,9 +54,9 @@ public abstract class Track {
     
     /**
      * Constructor
-     * @param remoteLocation
-     * @param name
-     * @param version
+     * @param remoteLocation The remote location.
+     * @param name The test case name.
+     * @param version The test case version.
      */
     protected Track(String remoteLocation, String name, String version){
         this(remoteLocation, name, version, false);
@@ -69,18 +69,22 @@ public abstract class Track {
         this.useDuplicateFreeStorageLayout = useDuplicateFreeStorageLayout;
         this.testCases = null;//initialized lazily
     }
-    
-    public static void setCacheFolder(File dir){
-        if (dir == null) {
-            throw new IllegalArgumentException("CacheFolder in class Track should not be null");
+
+    /**
+     * Folder where the tracks and the corresponding test cases shall be cached.
+     * @param directory Target directory.
+     */
+    public static void setCacheFolder(File directory){
+        if (directory == null) {
+            throw new IllegalArgumentException("CacheFolder in class Track should not be null.");
         }
-        if(!dir.exists()) {
-            dir.mkdirs();
+        if(!directory.exists()) {
+            directory.mkdirs();
         }
-        if(dir.isDirectory() == false){
+        if(directory.isDirectory() == false){
             throw new IllegalArgumentException("CacheFolder should be a directory.");
         }
-        cacheFolder = dir;
+        cacheFolder = directory;
     }
     
     public static void setSkipTestCasesWithoutRefAlign(boolean skip){
@@ -98,7 +102,11 @@ public abstract class Track {
     public String getVersion() {
         return version;
     }
-    
+
+    /**
+     * Return all test cases of the track.
+     * @return A list of {@link TestCase} instances belonging to this track.
+     */
     public List<TestCase> getTestCases(){
         if(testCases == null){
             testCases = readFromCache();
@@ -108,13 +116,18 @@ public abstract class Track {
             try {
                 downloadToCache();
             } catch (Exception ex) {
-                logger.error("Couldn't download test cases and store them in cache folder", ex);
+                LOGGER.error("Couldn't download test cases and store them in cache folder", ex);
             }
             testCases = readFromCache();
         }
         return testCases;
     }
-    
+
+    /**
+     * Obtain a test case using a specified name.
+     * @param name Name of the test case.
+     * @return Test case.
+     */
     public TestCase getTestCase(String name){
         for(TestCase c : getTestCases()){
             if(c.getName().equals(name)){
@@ -124,11 +137,9 @@ public abstract class Track {
         return null;
     }
     
-    protected List<TestCase> readFromCache(){ return readFromDefaultLayout(); } // can be overriden if download does not use default layout
+    protected List<TestCase> readFromCache(){ return readFromDefaultLayout(); } // can be overwritten if download does not use default layout
 
     protected abstract void downloadToCache() throws Exception;
-    
-    //TODO: extract all file / layout related methods to extra class
     
     /**
      * Writes an input stream to a file.
@@ -144,7 +155,7 @@ public abstract class Track {
             FileOutputStream fos = new FileOutputStream(file);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
         } catch (IOException ex) {
-            logger.error("Cannot write inputstream to file.", ex);
+            LOGGER.error("Cannot write inputstream to file.", ex);
         }
     }
     
@@ -152,7 +163,7 @@ public abstract class Track {
         try {
             return URLEncoder.encode(s, "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            logger.error("Cannot encode location, name and version of track.", ex);
+            LOGGER.error("Cannot encode location, name and version of track.", ex);
             return s;
         }
     }
@@ -208,7 +219,7 @@ public abstract class Track {
         try (InputStream is = url.openStream()){
             saveInDefaultLayout(is, testCaseName, type);
         } catch (IOException ex) {
-            logger.error("Cannot download from inputstream.", ex);
+            LOGGER.error("Cannot download from inputstream.", ex);
         }
     }
     
@@ -216,11 +227,17 @@ public abstract class Track {
         try (InputStream is = new FileInputStream(f)){
             saveInDefaultLayout(is, testCaseName, type);
         } catch (IOException ex) {
-            logger.error("File to copy not found", ex);
+            LOGGER.error("File to copy not found", ex);
         }
     }
-    
-    
+
+
+    /**
+     * Reads and parses test cases.
+     * Test Case Layout: Test is a directory with source.rdf, target.rdf, reference.rdf.
+     *
+     * @return Parsed TestCase list.
+     */
     protected List<TestCase> readFromTestCaseLayout(){
         List<TestCase> testCases = new ArrayList<>();        
         File file = Paths.get(
@@ -239,7 +256,7 @@ public abstract class Track {
             File reference_file = new File(f, TestCaseType.REFERENCE.toFileName());
             
             if(source_file.exists() == false || target_file.exists() == false){
-                logger.error("Cache is corrupted - source or target file is not there - continue (to solve it, delete the cache folder)");
+                LOGGER.error("Cache is corrupted - source or target file is not there - continue (to solve it, delete the cache folder)");
                 continue;
             }
             
@@ -254,7 +271,16 @@ public abstract class Track {
         }
         return testCases;
     }
-    
+
+    /**
+     * Reads and parses test cases.
+     * Duplicate Free Layout:
+     * - Folder references holding reference files with style source_name-target_name.rdf.
+     * - Folder ontologies holding the ontologies whose names were specified in the reference file names. Ontologies
+     * end with ".rdf".
+     *
+     * @return Parsed TestCase list.
+     */
     protected List<TestCase> readFromDuplicateFreeLayout(){
         File referenceFolder = Paths.get(
                     cacheFolder.getAbsolutePath(),
@@ -268,14 +294,14 @@ public abstract class Track {
             return new ArrayList<>();
         }
         if(skipTestsWithoutRefAlign == false)
-            logger.warn("Using DuplicateFreeLayout for storing the testcases. returning testcase without reference alignment is not possible here.");
+            LOGGER.warn("Using DuplicateFreeLayout for storing the testcases. returning testcase without reference alignment is not possible here.");
         
         List<TestCase> testCases = new ArrayList<>(); 
         for(File referenceFile : referenceFiles){
             String fileNameWithoutExtension = FilenameUtils.removeExtension(referenceFile.getName());
             String[] sourceTargetName = fileNameWithoutExtension.split("-");
             if(sourceTargetName.length != 2){
-                logger.error("A file in references folder of track cache has more splits than expected.");
+                LOGGER.error("A file in references folder of track cache has more splits than expected.");
                 continue;
             }
             File sourceFile = Paths.get(cacheFolder.getAbsolutePath(),
@@ -286,7 +312,7 @@ public abstract class Track {
                     "ontologies", sourceTargetName[1] + ".rdf").toFile();
             
             if(sourceFile.exists() == false || targetFile.exists() == false || referenceFile.exists() == false){
-                logger.error("Cache is corrupted - source, target or reference file is not there - continue (to solve it, delete the cache folder)");
+                LOGGER.error("Cache is corrupted - source, target or reference file is not there - continue (to solve it, delete the cache folder)");
                 continue;
             }
             testCases.add(new TestCase(fileNameWithoutExtension,
