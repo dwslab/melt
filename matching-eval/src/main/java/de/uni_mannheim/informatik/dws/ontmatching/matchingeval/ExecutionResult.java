@@ -9,8 +9,8 @@ import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignme
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.AlignmentParser;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Comparator;
@@ -40,6 +40,17 @@ public class ExecutionResult {
     private Alignment referenceAlignment;
     private IOntologyMatchingToolBridge matcher;
     private Set<Refiner> refinements;
+
+    /**
+     * Reference to the log message file of the matcher.
+     */
+    File matcherLog;
+
+    /**
+     * File reference to the error log of the matcher.
+     */
+    File matcherErrorLog;
+
 
     /**
      * Base constructor which needs all parameters
@@ -75,7 +86,8 @@ public class ExecutionResult {
     public ExecutionResult(TestCase testCase, String matcherName, Alignment systemAlignment, Alignment referenceAlignment) {
         this(testCase, matcherName, null, 0, systemAlignment, referenceAlignment, null, new HashSet<>());
     }
-    
+
+
     /**
      * Constructor used by ExecutionRunner for initializing a execution result from a matcher run
      * @param testCase Test case on which the matcher was run which produced this particular result.
@@ -103,13 +115,13 @@ public class ExecutionResult {
     
     /**
      * Helper method to create a new refinement set and add a new refinement to it.
-     * Used by one contructor of this class.
-     * @param r
-     * @param newRefinement
-     * @return 
+     * Used by one constructor of this class. This method returns a NEW refinement set.
+     * @param initialRefinement The original refinement, all data will also be found in the newly created refinement set.
+     * @param newRefinement Data that will be added.
+     * @return New Refinement Set.
      */
-    private static Set<Refiner> addRefinementToNewSet(Set<Refiner> r, Refiner newRefinement){
-        Set<Refiner> s = new HashSet(r);
+    private static Set<Refiner> addRefinementToNewSet(Set<Refiner> initialRefinement, Refiner newRefinement){
+        Set<Refiner> s = new HashSet(initialRefinement);
         s.add(newRefinement);
         return s;
     }
@@ -117,16 +129,16 @@ public class ExecutionResult {
     /**
      * Helper method to parse an alignment from an URL and log a possible error.
      * This method will not throw any exceptions.
-     * Used by one contructor of this class.
+     * Used by one constructor of this class.
      * @param url url which represents the alignment
      * @return 
      */
     private static Alignment silentlyParseAlignment(URL url){
         try {
             return AlignmentParser.parse(url);
-        } catch (SAXException | IOException ex) {
-            LOGGER.error("Could not initialize Execution result because system alignment given by following URL could not be parsed: " + url.toString(), ex);
-            return null;
+        } catch (SAXException | IOException | NullPointerException ex) {
+            LOGGER.error("The system alignment given by following URL could not be parsed: " + url.toString(), ex);
+            return new Alignment();
         }
     }
 
@@ -142,8 +154,8 @@ public class ExecutionResult {
             URL url = uri.toURL();
             return AlignmentParser.parse(url);
         } catch (SAXException | IOException ex) {
-            LOGGER.error("Could not initialize Execution result because system alignment given by following URL could not be parsed: " + uri.toString(), ex);
-            return null;
+            LOGGER.error("The system alignment given by following URL could not be parsed: " + uri.toString(), ex);
+            return new Alignment();
         }
     }
         
@@ -176,6 +188,21 @@ public class ExecutionResult {
         return originalSystemAlignment;
     }
 
+    public File getMatcherLog() {
+        return matcherLog;
+    }
+
+    public void setMatcherLog(File matcherLog) {
+        this.matcherLog = matcherLog;
+    }
+
+    public File getMatcherErrorLog() {
+        return matcherErrorLog;
+    }
+
+    public void setMatcherErrorLog(File matcherErrorLog) {
+        this.matcherErrorLog = matcherErrorLog;
+    }
 
     /**
      * Sets a new system alignment. Be aware of what you are doing.

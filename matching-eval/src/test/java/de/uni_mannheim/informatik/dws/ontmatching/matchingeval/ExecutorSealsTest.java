@@ -10,4 +10,10 @@ class ExecutorSealsTest {
     void surroundWithDoubleQuotes() {
         assertEquals("\"test\"", ExecutorSeals.surroundWithDoubleQuotes("test"));
     }
+
+    @Test
+    void testIsDirectoryRunnableInSeals() {
+        assertTrue(ExecutorSeals.isDirectoryRunnableInSeals("./src/test/resources/sealsCompliantDirectory"));
+        assertFalse(ExecutorSeals.isDirectoryRunnableInSeals("./src/test/resources/sealsNonCompliantDirectory"));
+    }
 }

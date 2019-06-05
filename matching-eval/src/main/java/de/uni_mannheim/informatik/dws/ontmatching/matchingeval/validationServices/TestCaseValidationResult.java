@@ -93,6 +93,14 @@ public class TestCaseValidationResult {
         } else return true;
     }
 
+    public boolean isOneToNMapping(){
+        if(
+                (nSourceMappings.size() == 0 && nTargetMappings.size() > 0) ||
+                        (nSourceMappings.size() > 0 && nTargetMappings.size() == 0)
+        ) return true;
+        else return false;
+    }
+
     /**
      * Classes of the source ontology that do not appear in the reference mapping.
      */
@@ -102,6 +110,36 @@ public class TestCaseValidationResult {
      * Classes of the target ontology that do not appear in the reference mapping.
      */
     HashSet<String> targetClassesNotMapped = new HashSet<>();
+
+    /**
+     * Number of Classes in the source ontology.
+     */
+    int numberOfSourceClasses = 0;
+
+    /**
+     * Number of datatype properties in the source ontology.
+     */
+    int numberOfSourceDatatypeProperties = 0;
+
+    /**
+     * Number of object properties in the source ontology.
+     */
+    int numberOfSourceObjectProperties = 0;
+
+    /**
+     * Number of Classes in the target ontology.
+     */
+    int numberOfTargetClasses = 0;
+
+    /**
+     * Number of datatype properties in the target ontology.
+     */
+    int numberOfTargetDatatypeProperties = 0;
+
+    /**
+     * Number of object properties in the target ontology.
+     */
+    int numberOfTargetObjectProperties = 0;
 
     /**
      * Indicates whether all source classes appear in the mapping.
@@ -254,10 +292,21 @@ public class TestCaseValidationResult {
             }
         }
 
-        result = "\n" + result + "\n-----------------------\nSTATISTICAL INFORMATION\n-----------------------\n";
+        result = "\n" + result + "\n---------------------------------\nSTATISTICAL INFORMATION ALIGNMENT\n---------------------------------\n";
 
         // soruce mappings
         result = result + "Analysis for test case: " + testCase.getName() + "\n" +
+                "Number of mappings: " + testCase.getParsedReferenceAlignment().size() + "\n";
+
+        if(isOneToOneMapping()){
+            result = result + "Mapping Type: 1:1\n";
+        } else if(isOneToNMapping()) {
+            result = result + "Mapping Type: 1:n\n";
+        } else {
+            result = result + "Mapping Type: n:n\n";
+        }
+
+        result = result +
                 "All source classes mapped: " + isSourceClassesFullyMapped() + "\n" +
                 "All source datatype properties mapped: " + isSourceDatatypePropertiesFullyMapped() + "\n" +
                 "All source object properties mappes: " + isSourceObjectPropertiesFullyMapped() + "\n";
@@ -266,6 +315,18 @@ public class TestCaseValidationResult {
         result = result + "All target classes mapped: " + isTargetClassesFullyMapped() + "\n" +
                 "All target datatype properties mapped: " + isTargetDatatypePropertiesFullyMapped() + "\n" +
                 "All target object properties mappes: " + isTargetObjectPropertiesFullyMapped() + "\n";
+
+        result = "\n" + result + "\n----------------------------------\nSTATISTICAL INFORMATION ONTOLOGIES\n----------------------------------\n";
+
+        result = result + "Source Ontology\n";
+        result = result + "# of Classes: " + this.numberOfSourceClasses + "\n";
+        result = result + "# of Datatype Properties: " + this.numberOfSourceDatatypeProperties+ "\n";
+        result = result + "# of Object Properties: " + this.numberOfSourceObjectProperties+ "\n\n";
+
+        result = result + "Target Ontology\n";
+        result = result + "# of Classes: " + this.numberOfTargetClasses+ "\n";
+        result = result + "# of Datatype Properties: " + this.numberOfTargetDatatypeProperties+ "\n";
+        result = result + "# of Object Properties: " + this.numberOfTargetObjectProperties;
 
         return result;
     }

@@ -67,6 +67,20 @@ public class EvaluatorCSV extends Evaluator {
     private AlignmentsCube alignmentsCube;
 
     /**
+     * Printer which can be used to print an individual matcher performance for a test case
+     * (e.g. precision, recall, f1).
+     */
+    private CSVPrinter testCasePerformanceCubePrinter;
+
+
+    /**
+     * Printer which can be used to print an individual matcher performance for a track
+     * (e.g. macro-precision, micro-precision).
+     */
+    private CSVPrinter trackPerformanceCubePrinter;
+
+
+    /**
      * Constructor
      *
      * @param results The execution results for which an evaluation shall be performed.
@@ -97,24 +111,59 @@ public class EvaluatorCSV extends Evaluator {
         alignmentsCube.setResourceExplainers(resourceExplainers);
     }
 
+
     @Override
     public void write(File baseDirectory) {
-        // evaluation per matcher
+        initializePrinters(baseDirectory);
         for (String matcher : this.results.getDistinctMatchers()) {
-
             // individual evaluation per test case
             for (TestCase testCase : this.results.getDistinctTestCases(matcher)) {
                 writeOverviewFileMatcherTestCase(testCase, matcher, baseDirectory);
             }
-
-            // aggregated evaluation per track
             for (Track track : this.results.getDistinctTracks(matcher)) {
                 writeAggregatedFileMatcherTrack(track, matcher, baseDirectory);
             }
         }
-        alignmentsCube.write(baseDirectory);
+        closePrinters();
     }
 
+
+    /**
+     * This method initializes global writers for the performance KPI CSV files.
+     *
+     * @param baseDirectory The base directory to which the CSV files shall be written to.
+     */
+    private void initializePrinters(File baseDirectory) {
+        if(!baseDirectory.exists()) baseDirectory.mkdir();
+        try {
+            testCasePerformanceCubePrinter = new CSVPrinter(new FileWriter(new File(baseDirectory, "testCasePerformanceCube.csv"), false), CSVFormat.DEFAULT);
+            testCasePerformanceCubePrinter.printRecord(getHeaderTestCasePerformanceCube());
+            trackPerformanceCubePrinter = new CSVPrinter(new FileWriter(new File(baseDirectory, "trackPerformanceCube.csv"), false), CSVFormat.DEFAULT);
+            trackPerformanceCubePrinter.printRecord(getHeaderTrackPerformanceCube());
+        } catch (IOException ioe) {
+            LOGGER.error("Could not initialize CSV Printers for performance cubes.");
+        }
+    }
+
+
+
+    /**
+     * This method flushes and closes global printers.
+     */
+    private void closePrinters() {
+        try {
+            testCasePerformanceCubePrinter.flush();
+            testCasePerformanceCubePrinter.close();
+        } catch (IOException ioe) {
+            LOGGER.error("Coud not flush and close testCasePerformanceCubePrinter.", ioe);
+        }
+        try {
+            trackPerformanceCubePrinter.flush();
+            trackPerformanceCubePrinter.close();
+        } catch (IOException ioe) {
+            LOGGER.error("Coud not flush and close trackPerformanceCubePrinter.", ioe);
+        }
+    }
 
     /**
      * Write the aggregated overview file, i.e. KPIs such as recall or precision, for a matcher on a particular track.
@@ -145,18 +194,21 @@ public class EvaluatorCSV extends Evaluator {
         ConfusionMatrix macroPropertiesResidualCm = confusionMatrixMetric.getMacroAveragesForResults(this.results.getGroup(track, matcher, propertyRefiner, residualRefiner));
         ConfusionMatrix macroInstancesResidualCm = confusionMatrixMetric.getMacroAveragesForResults(this.results.getGroup(track, matcher, instanceRefiner, residualRefiner));
 
-
         File fileToBeWritten = new File(getResultsDirectoryTrackMatcher(baseDirectory, track), "/" + matcher + "/aggregatedPerformance.csv");
-        if (fileToBeWritten.getParentFile().mkdirs()) {
+        if (fileToBeWritten.getParentFile().mkdirs())
             LOGGER.info("Results directory created because it did not exist.");
-        }
+
         try {
             CSVPrinter printer = new CSVPrinter(new FileWriter(fileToBeWritten, false), CSVFormat.DEFAULT);
             printer.printRecord(getHeaderAggregated());
             printer.printRecord("ALL", macroAllCm.getPrecision(), macroAllCm.getRecall(), macroAllResidualCm.getRecall(), macroAllCm.getF1measure(), microAllCm.getPrecision(), microAllCm.getRecall(), microAllResidualCm.getRecall(), microAllCm.getF1measure(), macroAllCm.getTruePositiveSize(), macroAllResidualCm.getTruePositiveSize(), macroAllCm.getFalsePositiveSize(), macroAllCm.getFalseNegativeSize(), "-");
+            trackPerformanceCubePrinter.printRecord(track.getName(), matcher, "ALL", macroAllCm.getPrecision(), macroAllCm.getRecall(), macroAllResidualCm.getRecall(), macroAllCm.getF1measure(), microAllCm.getPrecision(), microAllCm.getRecall(), microAllResidualCm.getRecall(), microAllCm.getF1measure(), macroAllCm.getTruePositiveSize(), macroAllResidualCm.getTruePositiveSize(), macroAllCm.getFalsePositiveSize(), macroAllCm.getFalseNegativeSize(), "-");
             printer.printRecord("CLASSES", macroClassesCm.getPrecision(), macroClassesCm.getRecall(), macroClassesResidualCm.getRecall(), macroClassesCm.getF1measure(), microClassesCm.getPrecision(), microClassesCm.getRecall(), microClassesResidualCm.getRecall(), microClassesCm.getF1measure(), macroClassesCm.getTruePositiveSize(), macroClassesResidualCm.getTruePositiveSize(), macroClassesCm.getFalsePositiveSize(), macroClassesCm.getFalseNegativeSize(), "-");
+            trackPerformanceCubePrinter.printRecord(track.getName(), matcher, "CLASSES", macroClassesCm.getPrecision(), macroClassesCm.getRecall(), macroClassesResidualCm.getRecall(), macroClassesCm.getF1measure(), microClassesCm.getPrecision(), microClassesCm.getRecall(), microClassesResidualCm.getRecall(), microClassesCm.getF1measure(), macroClassesCm.getTruePositiveSize(), macroClassesResidualCm.getTruePositiveSize(), macroClassesCm.getFalsePositiveSize(), macroClassesCm.getFalseNegativeSize(), "-");
             printer.printRecord("PROPERTIES", macroPropertiesCm.getPrecision(), macroPropertiesCm.getRecall(), macroPropertiesResidualCm.getRecall(), macroPropertiesCm.getF1measure(), microPropertiesCm.getPrecision(), microPropertiesCm.getRecall(), microPropertiesResidualCm.getRecall(), microPropertiesCm.getF1measure(), macroPropertiesCm.getTruePositiveSize(), macroPropertiesResidualCm.getTruePositiveSize(), macroPropertiesCm.getFalsePositiveSize(), macroPropertiesCm.getFalseNegativeSize(), "-");
+            trackPerformanceCubePrinter.printRecord(track.getName(), matcher, "PROPERTIES", macroPropertiesCm.getPrecision(), macroPropertiesCm.getRecall(), macroPropertiesResidualCm.getRecall(), macroPropertiesCm.getF1measure(), microPropertiesCm.getPrecision(), microPropertiesCm.getRecall(), microPropertiesResidualCm.getRecall(), microPropertiesCm.getF1measure(), macroPropertiesCm.getTruePositiveSize(), macroPropertiesResidualCm.getTruePositiveSize(), macroPropertiesCm.getFalsePositiveSize(), macroPropertiesCm.getFalseNegativeSize(), "-");
             printer.printRecord("INSTANCES", macroInstancesCm.getPrecision(), macroInstancesCm.getRecall(), macroInstancesResidualCm.getRecall(), macroInstancesCm.getF1measure(), microInstancesCm.getPrecision(), microInstancesCm.getRecall(), microInstancesResidualCm.getRecall(), microInstancesCm.getF1measure(), macroInstancesCm.getTruePositiveSize(), macroInstancesResidualCm.getTruePositiveSize(), macroInstancesCm.getFalsePositiveSize(), macroInstancesCm.getFalseNegativeSize(), "-");
+            trackPerformanceCubePrinter.printRecord(track.getName(), matcher, "INSTANCES", macroInstancesCm.getPrecision(), macroInstancesCm.getRecall(), macroInstancesResidualCm.getRecall(), macroInstancesCm.getF1measure(), microInstancesCm.getPrecision(), microInstancesCm.getRecall(), microInstancesResidualCm.getRecall(), microInstancesCm.getF1measure(), macroInstancesCm.getTruePositiveSize(), macroInstancesResidualCm.getTruePositiveSize(), macroInstancesCm.getFalsePositiveSize(), macroInstancesCm.getFalseNegativeSize(), "-");
             printer.flush();
             printer.close();
         } catch (IOException ex) {
@@ -176,7 +228,7 @@ public class EvaluatorCSV extends Evaluator {
     private void writeOverviewFileMatcherTestCase(TestCase testCase, String matcher, File baseDirectory) {
 
         // write alignment file
-        File targetFileForCopyAction = new File(getResultsFolderTrackTestcaseMatcher(baseDirectory,  results.get(testCase, matcher)), "systemAlignment.rdf");
+        File targetFileForCopyAction = new File(getResultsFolderTrackTestcaseMatcher(baseDirectory, results.get(testCase, matcher)), "systemAlignment.rdf");
         targetFileForCopyAction.getParentFile().mkdirs();
         EvaluatorUtil.copySystemAlignment(results.get(testCase, matcher), targetFileForCopyAction);
 
@@ -192,13 +244,18 @@ public class EvaluatorCSV extends Evaluator {
         ConfusionMatrix instanceResidualCm = confusionMatrixMetric.compute(results.get(testCase, matcher, instanceRefiner, residualRefiner));
 
         // evaluation result
-        if(allCm.getTruePositive() != null) alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allCm.getTruePositive(), AnalyticalAlignmentInformation.DefaultFeatures.EVALUATION_RESULT.toString(), "true positive");
-        if(allCm.getFalsePositive() != null) alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allCm.getFalsePositive(), AnalyticalAlignmentInformation.DefaultFeatures.EVALUATION_RESULT.toString(), "false positive");
-        if(allCm.getFalseNegative() != null) alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allCm.getFalseNegative(), AnalyticalAlignmentInformation.DefaultFeatures.EVALUATION_RESULT.toString(), "false negative");
+        if (allCm.getTruePositive() != null)
+            alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allCm.getTruePositive(), AnalyticalAlignmentInformation.DefaultFeatures.EVALUATION_RESULT.toString(), "true positive");
+        if (allCm.getFalsePositive() != null)
+            alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allCm.getFalsePositive(), AnalyticalAlignmentInformation.DefaultFeatures.EVALUATION_RESULT.toString(), "false positive");
+        if (allCm.getFalseNegative() != null)
+            alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allCm.getFalseNegative(), AnalyticalAlignmentInformation.DefaultFeatures.EVALUATION_RESULT.toString(), "false negative");
 
         // residuals
-        if(allResidualCm.getTruePositive() != null) alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allResidualCm.getTruePositive(), AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString(), "true");
-        if(allResidualCm.getFalseNegative() != null) alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allResidualCm.getFalseNegative(), AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString(), "true");
+        if (allResidualCm.getTruePositive() != null)
+            alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allResidualCm.getTruePositive(), AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString(), "true");
+        if (allResidualCm.getFalseNegative() != null)
+            alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allResidualCm.getFalseNegative(), AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString(), "true");
 
         try {
             File fileToBeWritten = new File(super.getResultsFolderTrackTestcaseMatcher(baseDirectory, allExecutionResult), "performance.csv");
@@ -206,9 +263,13 @@ public class EvaluatorCSV extends Evaluator {
             CSVPrinter printer = new CSVPrinter(new FileWriter(fileToBeWritten, false), CSVFormat.DEFAULT);
             printer.printRecord(getHeaderIndividual());
             printer.printRecord("ALL", allCm.getPrecision(), allCm.getRecall(), allResidualCm.getRecall(), allCm.getF1measure(), allCm.getTruePositiveSize(), allCm.getFalsePositiveSize(), allCm.getFalseNegativeSize(), allExecutionResult.getRuntime());
+            testCasePerformanceCubePrinter.printRecord(testCase.getTrack().getName(), testCase.getName(), matcher, "ALL", allCm.getPrecision(), allCm.getRecall(), allResidualCm.getRecall(), allCm.getF1measure(), allCm.getTruePositiveSize(), allCm.getFalsePositiveSize(), allCm.getFalseNegativeSize(), allExecutionResult.getRuntime());
             printer.printRecord("CLASSES", classCm.getPrecision(), classCm.getRecall(), classResidualCm.getRecall(), classCm.getF1measure(), classCm.getTruePositiveSize(), classCm.getFalsePositiveSize(), classCm.getFalseNegativeSize(), "-");
+            testCasePerformanceCubePrinter.printRecord(testCase.getTrack().getName(), testCase.getName(), matcher, "CLASSES", classCm.getPrecision(), classCm.getRecall(), classResidualCm.getRecall(), classCm.getF1measure(), classCm.getTruePositiveSize(), classCm.getFalsePositiveSize(), classCm.getFalseNegativeSize(), "-");
             printer.printRecord("PROPERTIES", propertiesCm.getPrecision(), propertiesCm.getRecall(), propertiesResidualCm.getRecall(), propertiesCm.getF1measure(), propertiesCm.getTruePositiveSize(), propertiesCm.getFalsePositiveSize(), propertiesCm.getFalseNegativeSize(), "-");
+            testCasePerformanceCubePrinter.printRecord(testCase.getTrack().getName(), testCase.getName(), matcher, "PROPERTIES", propertiesCm.getPrecision(), propertiesCm.getRecall(), propertiesResidualCm.getRecall(), propertiesCm.getF1measure(), propertiesCm.getTruePositiveSize(), propertiesCm.getFalsePositiveSize(), propertiesCm.getFalseNegativeSize(), "-");
             printer.printRecord("INSTANCES", instanceCm.getPrecision(), instanceCm.getRecall(), instanceResidualCm.getRecall(), instanceCm.getF1measure(), instanceCm.getTruePositiveSize(), instanceCm.getFalsePositiveSize(), instanceCm.getFalseNegativeSize(), "-");
+            testCasePerformanceCubePrinter.printRecord(testCase.getTrack().getName(), testCase.getName(), matcher, "INSTANCES", instanceCm.getPrecision(), instanceCm.getRecall(), instanceResidualCm.getRecall(), instanceCm.getF1measure(), instanceCm.getTruePositiveSize(), instanceCm.getFalsePositiveSize(), instanceCm.getFalseNegativeSize(), "-");
             printer.flush();
             printer.close();
         } catch (IOException ioe) {
@@ -216,8 +277,6 @@ public class EvaluatorCSV extends Evaluator {
             ioe.printStackTrace();
         }
     }
-
-
 
 
     //-------------------------------------------------------------------------------------------
@@ -243,6 +302,21 @@ public class EvaluatorCSV extends Evaluator {
         return result;
     }
 
+
+    /**
+     * Get the header row for the individual statistics in the overall CSV file.
+     *
+     * @return CSV header row in the form of a String-List.
+     */
+    private List<String> getHeaderTrackPerformanceCube() {
+        List<String> result = new ArrayList<>();
+        result.add("Track");
+        result.add("Matcher");
+        result.addAll(getHeaderAggregated());
+        return result;
+    }
+
+
     /**
      * Get the header row for the aggregated results on a per matcher basis.
      *
@@ -266,6 +340,22 @@ public class EvaluatorCSV extends Evaluator {
         result.add("Total Runtime");
         return result;
     }
+
+
+    /**
+     * Get the header row for the individual statistics in the overall CSV file.
+     *
+     * @return CSV header row in the form of a String-List.
+     */
+    private List<String> getHeaderTestCasePerformanceCube() {
+        List<String> result = new ArrayList<>();
+        result.add("Track");
+        result.add("Test Case");
+        result.add("Matcher");
+        result.addAll(getHeaderIndividual());
+        return result;
+    }
+
 
     /**
      * Given a confusion matrix, this method returns a line as list that can be written.

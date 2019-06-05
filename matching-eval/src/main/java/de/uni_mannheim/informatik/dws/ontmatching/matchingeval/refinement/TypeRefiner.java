@@ -83,7 +83,7 @@ public class TypeRefiner implements Refiner {
                 if(targetType == type){
                     refinedAlignment.add(correspondence);
                 } else if(targetType == ResourceType.UNKNOWN){
-                    LOGGER.warn("Could not determine resource typ from source nor target: " + correspondence.toString() +
+                    LOGGER.warn("Could not determine resource type neither from source nor target: " + correspondence.toString() +
                             " (Source Ontology: " + originalAlignment.getOnto1().getOntoID() +  "; Target Ontology: " + originalAlignment.getOnto2().getOntoID() + "). " +
                             "Ignore it silently. Have a look at the Alignment - some URIs might be wrong and do not appear in the ontology or the reasoner is not expressive enough.");
                 }

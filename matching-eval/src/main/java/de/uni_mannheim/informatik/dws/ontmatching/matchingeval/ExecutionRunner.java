@@ -31,7 +31,7 @@ class ExecutionRunner implements Callable<ExecutionResult> {
     }
 
     @Override
-    public ExecutionResult call() throws Exception {
+    public ExecutionResult call() {
         return runMatcher(testCase, matcher, matcherName);
     }
 
@@ -44,7 +44,7 @@ class ExecutionRunner implements Callable<ExecutionResult> {
      */
     public static ExecutionResult runMatcher(TestCase testCase, IOntologyMatchingToolBridge matcher, String matcherName){
         LOGGER.info("Running matcher " + matcherName + ".");
-        long runTime = 0;
+        long runTime;
         URL resultingAlignment = null;
         long startTime = System.nanoTime();
         try {
@@ -63,7 +63,8 @@ class ExecutionRunner implements Callable<ExecutionResult> {
             try {
                 new File(resultingAlignment.toURI()).deleteOnExit();
             }catch (URISyntaxException | IllegalArgumentException ex) {
-                LOGGER.error("Original system alignment does not point to a file and thus cannot be deleted on eval exit. Use Executor.deleteOriginalSystemResults", ex);
+                LOGGER.error("Original system alignment does not point to a file and thus cannot be deleted on evaluation exit. " +
+                        "Use Executor.deleteOriginalSystemResults", ex);
             }
             return new ExecutionResult(testCase, matcherName, resultingAlignment, runTime, matcher);
         }

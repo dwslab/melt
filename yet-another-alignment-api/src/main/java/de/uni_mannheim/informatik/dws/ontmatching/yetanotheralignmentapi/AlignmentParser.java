@@ -88,14 +88,6 @@ public class AlignmentParser {
     }
     
     public static Alignment parse(InputStream s) throws SAXException, IOException {
-        /*
-        mapping = new Alignment();
-        cell = new Correspondence();
-        currentOntoInfo =  new OntoInfo();
-        content = null;
-	parser.parse(s, this);
-        return this.mapping;
-        */
         Alignment m = new Alignment();
         AlignmentHandler p = new AlignmentHandler(m);
         threadLocal.get().parse(s, p);
