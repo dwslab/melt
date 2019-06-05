@@ -26,7 +26,6 @@ class TestCaseValidationServiceTest {
         assertTrue(result1.isAllTargetReferenceEntitiesFound());
         assertEquals(0, result1.getNotFoundInSourceOntology().size());
         assertEquals(0, result1.getNotFoundInTargetOntology().size());
-        assertTrue(result1.isOneToOneMapping());
         assertFalse(result1.isSourceClassesFullyMapped());
         assertFalse(result1.isTargetClassesFullyMapped());
         assertFalse(result1.getSourceClassesNotMapped().contains("http://cmt#Conference"));
@@ -55,7 +54,6 @@ class TestCaseValidationServiceTest {
         assertEquals(0, result2.getNotFoundInSourceOntology().size());
         assertEquals(1, result2.getNotFoundInTargetOntology().size());
         assertTrue(result2.getNotFoundInTargetOntology().contains("http://conference#DoesNotExist"));
-        assertTrue(result2.isOneToOneMapping());
         assertFalse(result2.isSourceClassesFullyMapped());
         assertFalse(result2.getSourceClassesNotMapped().contains("http://cmt#Conference"));
         assertFalse(result2.getTargetClassesNotMapped().contains("http://conference#Conference_volume"));

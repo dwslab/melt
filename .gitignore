@@ -54,3 +54,7 @@ paper/*.pdf
 
 #include example results
 !examples/analyzingMatcherSimilarity/results*
+
+#exclude playgrounds
+Spielewiese.java
+Playground.java

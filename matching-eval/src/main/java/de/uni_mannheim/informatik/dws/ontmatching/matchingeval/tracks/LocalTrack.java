@@ -40,7 +40,6 @@ public class LocalTrack extends Track {
     }
 
 
-
     @Override
     protected void downloadToCache() throws Exception {
         // intentionally kept empty

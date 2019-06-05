@@ -177,7 +177,8 @@ public class Executor {
 
 
     /**
-     * Load raw results from a folder with the structure used by the <a href="http://oaei.ontologymatching.org/2018/results/anatomy/index.html">Anatomy Track</a>of the OAEI.
+     * Load raw results from a folder with the structure used by the <a href="http://oaei.ontologymatching.org/2018/results/anatomy/index.html">Anatomy Track</a>
+     * of the OAEI.
      */
     public static ExecutionResultSet loadFromAnatomyResultsFolder(String pathToFolder) {
         return loadFromFolder(pathToFolder, TrackRepository.Anatomy.Default.getTestCases().get(0));
@@ -185,7 +186,8 @@ public class Executor {
 
 
     /**
-     * Load raw results from a folder with the structure used by the <a href="http://oaei.ontologymatching.org/2018/results/conference/">Conference Track</a> of the OAEI.
+     * Load raw results from a folder with the structure used by the <a href="http://oaei.ontologymatching.org/2018/results/conference/">Conference Track</a>
+     * of the OAEI.
      *
      * @param pathToFolder The path to the folder where the alignments of the conference folder reside.
      */

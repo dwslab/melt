@@ -77,6 +77,8 @@ public class TestCaseValidationService {
             } else targetElementsMapped.add(correspondence.getEntityTwo());
         }
 
+        result.nSourceMappings = nSourceMappings;
+        result.nTargetMappings = nTargetMappings;
 
         // Part 5: (statistical) Check whether all ontology elements are mapped
         for(OntClass resource : sourceOntology.listClasses().toSet()){
@@ -85,6 +87,8 @@ public class TestCaseValidationService {
                 result.sourceClassesNotMapped.add(resource.toString());
             }
         }
+
+
         for(OntClass resource : targetOntology.listClasses().toSet()){
             if(resource.isAnon()) continue;
             if(!reference.isTargetContained(resource.toString())){
@@ -123,6 +127,16 @@ public class TestCaseValidationService {
                 result.targetDatatypePropertiesNotMapped.add(property.toString());
             }
         }
+
+        // part 8: (statistical) simple report on sizes of ontologies
+        result.numberOfSourceClasses = sourceOntology.listClasses().toSet().size();
+        result.numberOfSourceDatatypeProperties = sourceOntology.listDatatypeProperties().toSet().size();
+        result.numberOfSourceObjectProperties = sourceOntology.listObjectProperties().toSet().size();
+
+        result.numberOfTargetClasses = targetOntology.listClasses().toSet().size();
+        result.numberOfTargetDatatypeProperties = targetOntology.listDatatypeProperties().toSet().size();
+        result.numberOfTargetObjectProperties = targetOntology.listObjectProperties().toSet().size();
+
         return result;
     }
 
