@@ -23,9 +23,11 @@ import java.util.Map;
  */
 public class MatcherSimilarityLatexPlotWriter {
 
-    // TODO: delete:
+
+    // exemplary usage
+    /*
     public static void main(String[] args) {
-        final String pathToAnatomyResultFiles = "C:\\Users\\shertlin\\Desktop\\oaei2018-anatomy-alignments\\";
+        final String pathToAnatomyResultFiles = "C:\\...\\results";
         final TestCase testCase = TrackRepository.Anatomy.Default.getTestCases().get(0);
 
         //----------------------------
@@ -41,6 +43,7 @@ public class MatcherSimilarityLatexPlotWriter {
         } catch (FileNotFoundException ex) {
         }
     }
+    */
 
 
     /**

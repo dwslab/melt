@@ -218,6 +218,19 @@ Tool for submitting a Track/Testcase in HOBBIT (only interesting for OAEI track 
 **I have a muliple SEALS packages and I want to use MELT's group evaluation functionalities. What is the simplest way 
 to do so?**<br/>
 SEALS packages were wrapped for the SEALS platform. If the matchers were not developed using MELT or you are not sure 
-whether they were developed with MELT, the easiest was is to create the alignment files by executing the matchers 
+whether they were developed with MELT, one option is to create the alignment files by executing the matchers 
 using the SEALS client. Afterwards, you can read the alignment files (e.g. method `loadFromFolder` of class 
-[`Executor`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/Executor.java)).
+[`Executor`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/Executor.java)).<br/>
+Alternatively (and more easily), you can install the SEALS client and run the SEALS packages from within MELT using 
+[`ExecutorSeals`]((/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/Executor.java)). This executor 
+will start the evaluation in SEALS directly from the framework and can be used to conveniently evaluate one or more
+matchers. Like the default `Executor`, `ExecutorSeals` will return an `ExecutionResultSet` that can then be further processed by 
+any evaluator. When calling `run()`, system alignment files and any output will also be stored on disk and can be reused at 
+a later point in time. You can also set the maximum time you want MELT to allocate to a particular matcher. If the matcher
+does not finish within the given time limit, MELT will stop the process and proceed with the next test case or matcher.
+`ExecutorSeals` can read zipped, unzipped (or a mix of both) SEALS packages.<br/>
+
+**Is there more documentation?**<br/>
+MELT is far more powerful than documented here. This `reamde` is intended to give an overview of the framework.
+For specific code snippets, have a look at the examples. Note that classes, interfaces, and methods are extensively documented in
+JavaDoc.

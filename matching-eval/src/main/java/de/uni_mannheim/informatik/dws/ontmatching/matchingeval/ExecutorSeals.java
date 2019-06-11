@@ -214,7 +214,7 @@ public class ExecutorSeals {
     public ExecutionResult runIndividualSealsEvaluationTestCase(File matcherDirectory, TestCase testCase) {
 
         // results folder
-        File resultsFolder = new File(matcherDirectory.getParent() + "/results_aml_cdmpdm/" + testCase.getName());
+        File resultsFolder = new File(matcherDirectory.getParent() + "/results/" + testCase.getName());
         if (!resultsFolder.exists()) resultsFolder.mkdir();
 
         File systemAlignmentToBeWritten = new File(resultsFolder + "/" + matcherDirectory.getName() + ".rdf");

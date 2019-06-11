@@ -129,11 +129,11 @@ public class TestCaseValidationService {
         }
 
         // part 8: (statistical) simple report on sizes of ontologies
-        result.numberOfSourceClasses = sourceOntology.listClasses().toSet().size();
+        result.numberOfSourceClasses = sourceOntology.listNamedClasses().toSet().size();
         result.numberOfSourceDatatypeProperties = sourceOntology.listDatatypeProperties().toSet().size();
         result.numberOfSourceObjectProperties = sourceOntology.listObjectProperties().toSet().size();
 
-        result.numberOfTargetClasses = targetOntology.listClasses().toSet().size();
+        result.numberOfTargetClasses = targetOntology.listNamedClasses().toSet().size();
         result.numberOfTargetDatatypeProperties = targetOntology.listDatatypeProperties().toSet().size();
         result.numberOfTargetObjectProperties = targetOntology.listObjectProperties().toSet().size();
 

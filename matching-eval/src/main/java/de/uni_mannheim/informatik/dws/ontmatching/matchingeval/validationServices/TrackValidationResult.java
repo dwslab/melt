@@ -56,11 +56,6 @@ public class TrackValidationResult {
         return individualTrackValidationResults;
     }
 
-    public static void main(String[] args) {
-        LocalTrack localTrack = new LocalTrack("sap_fsdp", "0.1",new File("C:\\Users\\D060249\\OneDrive - SAP SE\\Documents\\PhD\\SAP_Mappings\\track4semantics\\2019-05-29"));
-        System.out.println(TrackValidationService.analzye(localTrack));
-    }
-
 }
 
 

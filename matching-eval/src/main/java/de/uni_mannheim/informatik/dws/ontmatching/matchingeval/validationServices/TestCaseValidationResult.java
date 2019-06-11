@@ -294,7 +294,7 @@ public class TestCaseValidationResult {
 
         result = "\n" + result + "\n---------------------------------\nSTATISTICAL INFORMATION ALIGNMENT\n---------------------------------\n";
 
-        // soruce mappings
+        // source mappings
         result = result + "Analysis for test case: " + testCase.getName() + "\n" +
                 "Number of mappings: " + testCase.getParsedReferenceAlignment().size() + "\n";
 
@@ -317,6 +317,8 @@ public class TestCaseValidationResult {
                 "All target object properties mappes: " + isTargetObjectPropertiesFullyMapped() + "\n";
 
         result = "\n" + result + "\n----------------------------------\nSTATISTICAL INFORMATION ONTOLOGIES\n----------------------------------\n";
+
+        result = result + "Analysis for test case: " + testCase.getName() + "\n";
 
         result = result + "Source Ontology\n";
         result = result + "# of Classes: " + this.numberOfSourceClasses + "\n";
