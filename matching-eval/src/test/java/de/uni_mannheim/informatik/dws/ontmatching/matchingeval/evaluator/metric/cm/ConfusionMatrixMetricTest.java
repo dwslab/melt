@@ -1,6 +1,9 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.cm;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResult;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.Executor;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
 import org.junit.jupiter.api.Test;
@@ -12,12 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * ConfusionMatrixMetric TestCase
  * Note: When executing this test case, multiple parsing errors will be thrown. This is intended and ok if the tests pass.
+ *
  * @author Jan Portisch
  */
 class ConfusionMatrixMetricTest {
 
     @Test
-    void computeExample_1() throws Exception{
+    void computeExample_1() throws Exception {
         ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
 
         Alignment referenceAlignment = new Alignment();
@@ -37,8 +41,8 @@ class ConfusionMatrixMetricTest {
         System.out.println("Recall: " + confusionMatrix.getRecall());
         System.out.println("F1: " + confusionMatrix.getF1measure());
 
-        double precision = 2.0/3.0;
-        double recall = 2.0/4.0;
+        double precision = 2.0 / 3.0;
+        double recall = 2.0 / 4.0;
         double f1 = (2 * precision * recall) / (precision + recall);
 
         assertEquals(precision, confusionMatrix.getPrecision());
@@ -48,7 +52,7 @@ class ConfusionMatrixMetricTest {
 
 
     @Test
-    void computeExample_2() throws Exception{
+    void computeExample_2() throws Exception {
         ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
 
         Alignment referenceAlignment = new Alignment();
@@ -69,8 +73,8 @@ class ConfusionMatrixMetricTest {
         System.out.println("Recall: " + confusionMatrix.getRecall());
         System.out.println("F1: " + confusionMatrix.getF1measure());
 
-        double precision = 2.0/4.0;
-        double recall = 2.0/4.0;
+        double precision = 2.0 / 4.0;
+        double recall = 2.0 / 4.0;
         double f1 = (2 * precision * recall) / (precision + recall);
 
         assertEquals(precision, confusionMatrix.getPrecision());
@@ -79,7 +83,7 @@ class ConfusionMatrixMetricTest {
     }
 
     @Test
-    void getMicroAverages() throws Exception{
+    void getMicroAverages() throws Exception {
         ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
 
         Alignment referenceAlignment1 = new Alignment();
@@ -114,16 +118,16 @@ class ConfusionMatrixMetricTest {
         ConfusionMatrix confusionMatrix2 = metric.compute(executionResult2);
 
         // testing matrix 1
-        double precision_1 = 2.0/4.0;
-        double recall_1 = 2.0/4.0;
+        double precision_1 = 2.0 / 4.0;
+        double recall_1 = 2.0 / 4.0;
         double f1_1 = (2 * precision_1 * recall_1) / (precision_1 + recall_1);
         assertEquals(precision_1, confusionMatrix1.getPrecision());
         assertEquals(recall_1, confusionMatrix1.getRecall());
         assertEquals(f1_1, confusionMatrix1.getF1measure());
 
         // testing matrix 2
-        double precision_2 = 2.0/3.0;
-        double recall_2 = 2.0/4.0;
+        double precision_2 = 2.0 / 3.0;
+        double recall_2 = 2.0 / 4.0;
         double f1_2 = (2 * precision_2 * recall_2) / (precision_2 + recall_2);
         assertEquals(precision_2, confusionMatrix2.getPrecision());
         assertEquals(recall_2, confusionMatrix2.getRecall());
@@ -133,7 +137,7 @@ class ConfusionMatrixMetricTest {
         ArrayList<ConfusionMatrix> confusionMatrices = new ArrayList<>();
         confusionMatrices.add(confusionMatrix1);
         confusionMatrices.add(confusionMatrix2);
-        double precisionMicro = 4.0 / ( 4 + 3 );
+        double precisionMicro = 4.0 / (4 + 3);
         double recallMicro = 4.0 / (4 + 4);
         double f1Micro = (2 * precisionMicro * recallMicro) / (precisionMicro + recallMicro);
 
@@ -144,7 +148,7 @@ class ConfusionMatrixMetricTest {
     }
 
     @Test
-    void getMacroAverages() throws Exception{
+    void getMacroAverages() throws Exception {
         ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
 
         Alignment referenceAlignment1 = new Alignment();
@@ -180,16 +184,16 @@ class ConfusionMatrixMetricTest {
         ConfusionMatrix confusionMatrix2 = metric.compute(executionResult2);
 
         // testing matrix 1
-        double precision_1 = 2.0/4.0;
-        double recall_1 = 2.0/4.0;
+        double precision_1 = 2.0 / 4.0;
+        double recall_1 = 2.0 / 4.0;
         double f1_1 = (2 * precision_1 * recall_1) / (precision_1 + recall_1);
         assertEquals(precision_1, confusionMatrix1.getPrecision());
         assertEquals(recall_1, confusionMatrix1.getRecall());
         assertEquals(f1_1, confusionMatrix1.getF1measure());
 
         // testing matrix 2
-        double precision_2 = 2.0/3.0;
-        double recall_2 = 2.0/4.0;
+        double precision_2 = 2.0 / 3.0;
+        double recall_2 = 2.0 / 4.0;
         double f1_2 = (2 * precision_2 * recall_2) / (precision_2 + recall_2);
         assertEquals(precision_2, confusionMatrix2.getPrecision());
         assertEquals(recall_2, confusionMatrix2.getRecall());
@@ -207,6 +211,33 @@ class ConfusionMatrixMetricTest {
         assertEquals(precisionMacro, confusionMatrixMicro.getPrecision());
         assertEquals(recallMacro, confusionMatrixMicro.getRecall());
         assertEquals(f1Macro, confusionMatrixMicro.getF1measure());
+    }
+
+
+    /**
+     * This tests uses the 2018 alignment files for DOME and ALOD2Vec and evaluates them on the OAEI Anatomy data set
+     * and compares the MELT results with those given on the Web Page (http://oaei.ontologymatching.org/2018/results/anatomy/index.html).
+     **/
+    @Test
+    void realTest() {
+        TestCase testCase = TrackRepository.Anatomy.Default.getTestCases().get(0);
+        ExecutionResultSet resultSet = Executor.loadFromFolder("./src/test/resources/externalAlignmentForEvaluation", testCase);
+        ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
+        ExecutionResult alodResult = resultSet.get(testCase, "ALOD2Vec");
+        ExecutionResult domeResult = resultSet.get(testCase, "DOME");
+
+        assertNotNull(alodResult);
+        assertNotNull(domeResult);
+
+        ConfusionMatrix confusionMatrix1Alod = metric.compute(alodResult);
+        assertEquals(0.785, confusionMatrix1Alod.getF1measure(), 0.001);
+        //assertEquals(0.996, confusionMatrix1Alod.getPrecision(), 0.001);
+        assertEquals(0.648, confusionMatrix1Alod.getRecall(), 0.001);
+
+        ConfusionMatrix confusionMatrix1Dome = metric.compute(domeResult);
+        assertEquals(0.761, confusionMatrix1Dome.getF1measure(), 0.001);
+        //assertEquals(0.997, confusionMatrix1Dome.getPrecision(), 0.001);
+        assertEquals(0.615, confusionMatrix1Dome.getRecall(), 0.001);
     }
 
 }
