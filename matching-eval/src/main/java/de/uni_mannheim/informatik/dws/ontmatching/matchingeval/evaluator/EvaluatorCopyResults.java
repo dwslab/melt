@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * @author Sven Hertling
  */
 public class EvaluatorCopyResults extends Evaluator {
-    private static final Logger logger = LoggerFactory.getLogger(EvaluatorCopyResults.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorCopyResults.class);
 
     public EvaluatorCopyResults(ExecutionResultSet results) {
         super(results);

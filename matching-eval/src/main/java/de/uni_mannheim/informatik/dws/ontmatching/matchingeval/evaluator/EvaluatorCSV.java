@@ -64,7 +64,7 @@ public class EvaluatorCSV extends Evaluator {
     /**
      * Analytical Store for all alignments.
      */
-    private AlignmentsCube alignmentsCube;
+    AlignmentsCube alignmentsCube;
 
     /**
      * Printer which can be used to print an individual matcher performance for a test case

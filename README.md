@@ -232,5 +232,5 @@ does not finish within the given time limit, MELT will stop the process and proc
 
 **Is there more documentation?**<br/>
 MELT is far more powerful than documented here. This `reamde` is intended to give an overview of the framework.
-For specific code snippets, have a look at the examples. Note that classes, interfaces, and methods are extensively documented in
-JavaDoc.
+For specific code snippets, have a look at the examples. Note that classes, interfaces, and methods are extensively 
+documented using JavaDoc.
