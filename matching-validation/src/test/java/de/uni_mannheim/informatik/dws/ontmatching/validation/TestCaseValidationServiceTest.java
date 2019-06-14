@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.validationServices;
+package de.uni_mannheim.informatik.dws.ontmatching.validation;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import org.junit.jupiter.api.Test;
@@ -14,9 +14,9 @@ class TestCaseValidationServiceTest {
         //----------------------------------------------
         // Test 1: Correct Alignment
         //----------------------------------------------
-        File sourceOntologyFile = new File("./src/test/resources/cmt.owl");
-        File targetOntologyFile = new File("./src/test/resources/conference.owl");
-        File referenceAlignment = new File("./src/test/resources/cmt-conference.rdf");
+        File sourceOntologyFile = new File("src/test/resources/cmt.owl");
+        File targetOntologyFile = new File("src/test/resources/conference.owl");
+        File referenceAlignment = new File("src/test/resources/cmt-conference.rdf");
         TestCase testCase1 = new TestCase("test_case_1", sourceOntologyFile.toURI(), targetOntologyFile.toURI(), referenceAlignment.toURI(), null);
         TestCaseValidationResult result1 = TestCaseValidationService.analzye(testCase1);
         assertTrue(result1.isParseableByJenaSourceOntology());
@@ -43,7 +43,7 @@ class TestCaseValidationServiceTest {
         // Same data set as for test 1 but an additional URI has been added to the alignment that is not contained in
         // any ontology ("http://conference#DoesNotExist").
         //----------------------------------------------
-        referenceAlignment = new File("./src/test/resources/cmt-conference-corrputed.rdf");
+        referenceAlignment = new File("src/test/resources/cmt-conference-corrputed.rdf");
         TestCase testCase2 = new TestCase("test_case_2", sourceOntologyFile.toURI(), targetOntologyFile.toURI(), referenceAlignment.toURI(), null);
         TestCaseValidationResult result2 = TestCaseValidationService.analzye(testCase2);
         assertTrue(result2.isParseableByJenaSourceOntology());

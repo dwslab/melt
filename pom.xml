@@ -8,6 +8,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <junit.version>5.5.0-M1</junit.version>
     </properties>
     
     <modules>
@@ -19,6 +20,7 @@
         <module>matching-external</module>
         <module>matching-jena</module>
         <module>matching-owlapi</module>
+        <module>matching-validation</module>
         <module>matching-yaaa</module>
         <module>seals-assembly</module>
         <module>yet-another-alignment-api</module>
@@ -48,7 +50,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.5.0-M1</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>        
     </dependencies>

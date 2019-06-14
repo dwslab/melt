@@ -19,10 +19,14 @@
             <version>${project.version}</version>
         </dependency>
         
-        <!--temporary for testing-->
         <dependency>
             <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
             <artifactId>matching-jena</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <artifactId>matching-owlapi</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!--dependency>

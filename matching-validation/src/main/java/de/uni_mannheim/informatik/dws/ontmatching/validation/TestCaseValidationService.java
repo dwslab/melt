@@ -1,12 +1,9 @@
-package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.validationServices;
+package de.uni_mannheim.informatik.dws.ontmatching.validation;
 
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Correspondence;
-import org.apache.jena.ontology.OntClass;
-import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntProperty;
 
 
 import java.util.HashSet;
@@ -23,9 +20,9 @@ public class TestCaseValidationService {
      *
      * @param testCase The test case to be validated and analyzed.
      * @return Validation result instance.
-     */
+     **/
     public static TestCaseValidationResult analzye(TestCase testCase) {
-
+        /*
         TestCaseValidationResult result = new TestCaseValidationResult(testCase);
 
         // Part 1: Ontologies parseable in Jena.
@@ -138,6 +135,8 @@ public class TestCaseValidationService {
         result.numberOfTargetObjectProperties = targetOntology.listObjectProperties().toSet().size();
 
         return result;
+        */
+        return null;
     }
 
 }

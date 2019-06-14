@@ -1,11 +1,13 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingjena.OntologyCacheJena;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingowlapi.OntologyCacheOwlApi;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.Objects;
 import org.apache.jena.ontology.OntModel;
+import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -80,6 +82,8 @@ public class TestCase {
         if(clazz == OntModel.class){
             // return ontology model using default specification and cache
             return (T) OntologyCacheJena.get(getSource().toString());
+        }else if(clazz == OWLOntology.class){
+            return (T) OntologyCacheOwlApi.get(getSource().toString());
         } else {
             LOGGER.error("Cannot get source ontology for the class type provided.");
             return null;

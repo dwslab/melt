@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.validationServices;
+package de.uni_mannheim.informatik.dws.ontmatching.validation;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 
