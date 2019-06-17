@@ -7,6 +7,13 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This test ensures a correct implementation of the validation services themselves.
+ * The tests executed here are not track-specific - they do not test or validate a particular track.
+ *
+ * Due to the <a href="http://www.mojohaus.org/templating-maven-plugin/">Templating Maven Plugin</a>, this test has
+ * to be executed in maven and might fail when run within the IDE.
+ */
 class TestCaseValidationServiceTest {
 
     @Test
@@ -18,9 +25,11 @@ class TestCaseValidationServiceTest {
         File targetOntologyFile = new File("src/test/resources/conference.owl");
         File referenceAlignment = new File("src/test/resources/cmt-conference.rdf");
         TestCase testCase1 = new TestCase("test_case_1", sourceOntologyFile.toURI(), targetOntologyFile.toURI(), referenceAlignment.toURI(), null);
-        TestCaseValidationResult result1 = TestCaseValidationService.analzye(testCase1);
-        assertTrue(result1.isParseableByJenaSourceOntology());
-        assertTrue(result1.isParseableByJenaTargetOntology());
+        TestCaseValidationService result1 = new TestCaseValidationService(testCase1);
+        assertTrue(result1.sourceJenaOntologyValidationService.isOntologyParseable());
+        assertTrue(result1.targetJenaOntologyValidationService.isOntologyParseable());
+        assertTrue(result1.sourceOwlApiOntologyValidationService.isOntologyParseable());
+        assertTrue(result1.targetOwlApiOntologyValidationService.isOntologyParseable());
         assertTrue(result1.isReferenceAlignmentParseable());
         assertTrue(result1.isAllSourceReferenceEntitiesFound());
         assertTrue(result1.isAllTargetReferenceEntitiesFound());
@@ -45,9 +54,11 @@ class TestCaseValidationServiceTest {
         //----------------------------------------------
         referenceAlignment = new File("src/test/resources/cmt-conference-corrputed.rdf");
         TestCase testCase2 = new TestCase("test_case_2", sourceOntologyFile.toURI(), targetOntologyFile.toURI(), referenceAlignment.toURI(), null);
-        TestCaseValidationResult result2 = TestCaseValidationService.analzye(testCase2);
-        assertTrue(result2.isParseableByJenaSourceOntology());
-        assertTrue(result2.isParseableByJenaTargetOntology());
+        TestCaseValidationService result2 = new TestCaseValidationService(testCase2);
+        assertTrue(result2.sourceJenaOntologyValidationService.isOntologyParseable());
+        assertTrue(result2.targetJenaOntologyValidationService.isOntologyParseable());
+        assertTrue(result2.sourceOwlApiOntologyValidationService.isOntologyParseable());
+        assertTrue(result2.targetOwlApiOntologyValidationService.isOntologyParseable());
         assertTrue(result2.isReferenceAlignmentParseable());
         assertTrue(result2.isAllSourceReferenceEntitiesFound());
         assertFalse(result2.isAllTargetReferenceEntitiesFound());

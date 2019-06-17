@@ -151,7 +151,7 @@ test cases:
 2. Contain a parseable reference alignment.
 3. Mention only URIs in the reference alignment that also appear in the corresponding source and target ontologies.
 
-Exemplary call using the [`TestCaseValidationService`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/validationServices/TestCaseValidationService.java):
+Exemplary call using the [`TestCaseValidationService`](/matching-validation/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/validation/TestCaseValidationService.java):
 ```
 URI sourceUri = new File("<path to source ontology file>").toURI();
 URI targetUri = new File("<path to target ontology file>").toURI();
@@ -197,6 +197,10 @@ such as caching of source and target ontologies.
 ### matching-owlapi
 Contains OWL-API-based classes related to matcher development as well as additional services  such as caching of 
 source and target ontologies.  
+
+### matching-validation
+Contains various validation services to validate new tracks and test cases. Validation includes parseability by
+multiple libraries using different releases and furhter checks.
 
 ### seals-assembly
 Maven Plugin for creating a ZIP-file for the [SEALS platform](http://www.seals-project.eu/).

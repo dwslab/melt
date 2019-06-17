@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.ontmatching.validation;
 
+import java.io.File;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +17,23 @@ import org.semanticweb.owlapi.model.OWLRestriction;
 public class OwlApiOntologyValidationService extends OntologyValidationService<OWLOntology> {
     
     private static OWLOntologyManager man = OWLManager.createOWLOntologyManager();
+
+    /**
+     * Constructor
+     * @param ontologyFile File reference to the ontology to be validated.
+     */
+    public OwlApiOntologyValidationService(File ontologyFile){
+        super(ontologyFile);
+    }
+
+    /**
+     * Constructor
+     * @param ontologyUri URI reference to the ontology to be validated.
+     */
+    public OwlApiOntologyValidationService(URI ontologyUri){
+        super(ontologyUri);
+    }
+
 
     protected Set<String> getURIs(Set<? extends OWLNamedObject> set){
         Set<String> result = new HashSet<>();
