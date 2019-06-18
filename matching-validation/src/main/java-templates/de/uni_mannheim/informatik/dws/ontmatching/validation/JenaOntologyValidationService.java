@@ -13,6 +13,9 @@ import ${jenaPrefix}rdf.model.ModelFactory;
 import ${jenaPrefix}vocabulary.OWL;
 import ${jenaPrefix}vocabulary.RDF;
 
+/**
+ * Jena implementation of OntologyValidationService.
+ */
 public class JenaOntologyValidationService extends OntologyValidationService<OntModel> {
 
     /**

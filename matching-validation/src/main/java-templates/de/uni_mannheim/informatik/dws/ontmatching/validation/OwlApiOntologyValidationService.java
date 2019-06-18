@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.ArrayList;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -13,7 +14,9 @@ import org.semanticweb.owlapi.model.OWLNamedObject;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLRestriction;
 
-
+/**
+ * OWL API implementation of OntologyValidationService.
+ */
 public class OwlApiOntologyValidationService extends OntologyValidationService<OWLOntology> {
     
     private static OWLOntologyManager man = OWLManager.createOWLOntologyManager();
@@ -45,6 +48,10 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
     
     @Override
     protected OWLOntology parseOntology(URI ontUri) throws Exception {
+        ArrayList<OWLOntology> ontologiesToBeDeleted = new ArrayList<>(man.getOntologies());
+        for(OWLOntology ontology : ontologiesToBeDeleted){
+            man.removeOntology(ontology);
+        }
         return man.loadOntologyFromOntologyDocument(IRI.create(ontUri));
     }
 

@@ -1,5 +1,5 @@
 # MELT - Matching EvaLuation Toolkit
-<!--[![Build Status](https://travis-ci.org/dwslab/melt.svg?branch=master)](https://travis-ci.org/dwslab/melt)-->
+[![Build Status](https://travis-ci.org/dwslab/melt.svg?branch=master)](https://travis-ci.org/dwslab/melt)
 
 Melt is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.
 It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the 
@@ -157,8 +157,10 @@ URI sourceUri = new File("<path to source ontology file>").toURI();
 URI targetUri = new File("<path to target ontology file>").toURI();
 URI referenceUri = new File("<path to reference alignment file>").toURI();
 TestCase testCase = new TestCase("FSDM", sourceUri, targetUri, referenceUri, null);
-System.out.println(TestCaseValidationService.analzye(testCase));
+TestCaseValidationService validator = new TestCaseValidationService(testCase)
+System.out.println(validator);
 ```
+
 
 ### OAEI Track Repository
 The [`TrackRepository`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/tracks/TrackRepository.java) 
@@ -235,6 +237,6 @@ does not finish within the given time limit, MELT will stop the process and proc
 `ExecutorSeals` can read zipped, unzipped (or a mix of both) SEALS packages.<br/>
 
 **Is there more documentation?**<br/>
-MELT is far more powerful than documented here. This `reamde` is intended to give an overview of the framework.
+MELT is far more powerful than documented here. This `README` is intended to give an overview of the framework.
 For specific code snippets, have a look at the examples. Note that classes, interfaces, and methods are extensively 
 documented using JavaDoc.
