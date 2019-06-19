@@ -5,6 +5,11 @@ Melt is a helpful maven framework for developing, tuning, evaluating, and packag
 It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the 
 SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.
 
+**How to Cite?** <br/>
+```
+Hertling, Sven; Portisch, Jan; Paulheim, Heiko. MELT - Matching EvaLuation Toolkit. SEMANTICS. Karlsruhe. 2019.
+```
+
 
 ## Code Examples
 The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for 
@@ -160,6 +165,10 @@ TestCase testCase = new TestCase("FSDM", sourceUri, targetUri, referenceUri, nul
 TestCaseValidationService validator = new TestCaseValidationService(testCase)
 System.out.println(validator);
 ```
+You can also test your track on different versions of Jena and the OWL API automatically
+by adapting the [`TrackValidationServiceTest`](/matching-validation/src/test/java/de/uni_mannheim/informatik/dws/ontmatching/validation/TrackValidationServiceTest.java) 
+and running `runAll.cmd` in the Windows shell. The release versions to be tested can be edited in the corresponding
+[`pom.xml`](/matching-validation/pom.xml).
 
 
 ### OAEI Track Repository

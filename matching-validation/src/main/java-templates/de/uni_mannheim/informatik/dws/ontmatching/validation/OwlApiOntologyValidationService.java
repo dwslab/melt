@@ -48,6 +48,8 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
     
     @Override
     protected OWLOntology parseOntology(URI ontUri) throws Exception {
+        // Required to avoid errors on older OWL API releases with tracks that reuse one ontology in multiple test
+        // cases.
         ArrayList<OWLOntology> ontologiesToBeDeleted = new ArrayList<>(man.getOntologies());
         for(OWLOntology ontology : ontologiesToBeDeleted){
             man.removeOntology(ontology);
