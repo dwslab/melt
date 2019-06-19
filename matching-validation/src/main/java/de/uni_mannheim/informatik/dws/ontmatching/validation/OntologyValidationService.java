@@ -11,8 +11,16 @@ import java.util.jar.Manifest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * An OntologyValidationService allows to validate a single ontology, i.e., make sure that the ontology is parseable.
+ * In addition the service calculates statistics about the ontology.
+ * @param <T> The class which represents the ontology such as OWLOntology in case of the OWL API.
+ */
 public abstract class OntologyValidationService<T> {
-    
+
+    /**
+     * Default logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(OntologyValidationService.class);
     
     private Set<String> classes = new HashSet<>();
@@ -23,33 +31,58 @@ public abstract class OntologyValidationService<T> {
     private int numberOfRestrictions = 0;
     private int numberOfStatements = 0;
     private boolean ontologyDefined = false;
-    private boolean ontParseable = false;
+    private boolean ontologyParseable = false;
     private String libName = "";
     private String libVersion = "";
     protected T ontology = null;
-    private URI ontUri = null;
-    
+    private URI ontologyUri = null;
 
-    public void loadOntology(File ontFile){
-        loadOntology(ontFile.toURI());        
+
+    /**
+     * Constructor
+     * @param ontologyUri URI of the ontology to be validated.
+     */
+    public OntologyValidationService(URI ontologyUri){
+        this.ontologyUri = ontologyUri;
+        loadOntology(this.ontologyUri);
     }
-    public void loadOntology(URI ontUri){
-        this.ontUri = ontUri;
+
+
+    /**
+     * Constructor
+     * @param ontologyFile Ontology File to be validated.
+     */
+    public OntologyValidationService(File ontologyFile){
+        this(ontologyFile.toURI());
+    }
+
+
+    /**
+     * Loads the ontology as specified by the URI.
+     * @param ontologyUri The URI to the corresponding ontology.
+     */
+    private void loadOntology(URI ontologyUri){
+        this.ontologyUri = ontologyUri;
         try {
-            this.ontology = parseOntology(ontUri);
+            this.ontology = parseOntology(ontologyUri);
             if(this.ontology == null)
                 throw new Exception("Ontology is null");
-            this.ontParseable = true;
+            this.ontologyParseable = true;
             setVersion(getClassForVersionSpecification());
             LOGGER.info("Run OntologyValidationService with \"{}\", version: \"{}\"", this.libName, this.libVersion);
             computeStatistics(this.ontology);            
         } catch (Exception ex) {
             this.ontology = null;
-            this.ontParseable = false;
+            this.ontologyParseable = false;
             LOGGER.warn("Ontology not parsable", ex);
         }
     }
-    
+
+
+    /**
+     * Set local statistics variables.
+     * @param ontology The ontologies for which the statistics shall be computed and set.
+     */
     protected void computeStatistics(T ontology){
         this.classes = retrieveClasses(ontology);
         this.datatypeProperties = retrieveDatatypeProperties(ontology);
@@ -96,8 +129,19 @@ public abstract class OntologyValidationService<T> {
             this.libVersion = libFileName;
         }        
     }
-    
-    
+
+    /**
+     * Returns all class-, property- and instance-URIs.
+     * @return A large set of all resources.
+     */
+    public Set<String> getAllResources() {
+        Set<String> result = new HashSet<>();
+        if(classes != null) result.addAll(classes);
+        if(datatypeProperties != null) result.addAll(datatypeProperties);
+        if(objectProperties != null) result.addAll(objectProperties);
+        if(instances != null) result.addAll(instances);
+        return result;
+    }
 
     public Set<String> getClasses() {
         return classes;
@@ -146,8 +190,8 @@ public abstract class OntologyValidationService<T> {
         return ontologyDefined;
     }
 
-    public boolean isOntParseable() {
-        return ontParseable;
+    public boolean isOntologyParseable() {
+        return ontologyParseable;
     }
 
     public String getLibName() {
@@ -162,12 +206,12 @@ public abstract class OntologyValidationService<T> {
         return ontology;
     }
 
-    public URI getOntUri() {
-        return ontUri;
+    public URI getOntologyUri() {
+        return ontologyUri;
     }
 
     @Override
     public String toString() {
-        return "OntologyValidationService{" + "numberOfStatements=" + numberOfStatements + ", ontologyDefined=" + ontologyDefined + ", ontParseable=" + ontParseable + ", libName=" + libName + ", libVersion=" + libVersion + ", ontUri=" + ontUri + '}';
+        return "OntologyValidationService{" + "numberOfStatements=" + numberOfStatements + ", ontologyDefined=" + ontologyDefined + ", ontologyParseable=" + ontologyParseable + ", libName=" + libName + ", libVersion=" + libVersion + ", ontologyUri=" + ontologyUri + '}';
     }
 }

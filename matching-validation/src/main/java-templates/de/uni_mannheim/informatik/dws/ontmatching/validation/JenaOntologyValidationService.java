@@ -1,9 +1,10 @@
 package de.uni_mannheim.informatik.dws.ontmatching.validation;
 
+import java.io.File;
 import java.net.URI;
-import java.util.Iterator;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Iterator; // keep even though some IDEs might flag this as not necessary
 
 import ${jenaPrefix}ontology.OntModel;
 import ${jenaPrefix}ontology.OntModelSpec;
@@ -12,7 +13,26 @@ import ${jenaPrefix}rdf.model.ModelFactory;
 import ${jenaPrefix}vocabulary.OWL;
 import ${jenaPrefix}vocabulary.RDF;
 
+/**
+ * Jena implementation of OntologyValidationService.
+ */
 public class JenaOntologyValidationService extends OntologyValidationService<OntModel> {
+
+    /**
+     * Constructor
+     * @param ontologyFile File reference to the ontology to be validated.
+     */
+    public JenaOntologyValidationService(File ontologyFile){
+        super(ontologyFile);
+    }
+
+    /**
+     * Constructor
+     * @param ontologyUri URI reference to the ontology to be validated.
+     */
+    public JenaOntologyValidationService(URI ontologyUri){
+        super(ontologyUri);
+    }
 
     @Override
     protected OntModel parseOntology(URI ontUri) throws Exception {
