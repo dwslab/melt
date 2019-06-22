@@ -173,7 +173,7 @@ and running `runAll.cmd` in the Windows shell. The release versions to be tested
 
 ### OAEI Track Repository
 The [`TrackRepository`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/tracks/TrackRepository.java) 
-checks whether the required ontologies and alignmens are available in the internal buffer; if data is missing, it is automatically downloading and 
+checks whether the required ontologies and alignments are available in the internal buffer; if data is missing, it is automatically downloading and 
 caching it for the next access.
 
 Exemplary call using the `TrackRepository`:
@@ -211,7 +211,7 @@ source and target ontologies.
 
 ### matching-validation
 Contains various validation services to validate new tracks and test cases. Validation includes parseability by
-multiple libraries using different releases and furhter checks.
+multiple libraries using different releases and further checks.
 
 ### seals-assembly
 Maven Plugin for creating a ZIP-file for the [SEALS platform](http://www.seals-project.eu/).
