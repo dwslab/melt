@@ -27,7 +27,22 @@ Classes that can be extended for matcher implementation:
     * `MatcherYAAAOwlApi`
 1. Implement the `match()` method.
 
-### In more detail
+### In More Detail
+
+#### Yet Another Alignment API (YAAA)
+MELT introduces a simple API for matcher development. In the following, the most important classes are
+explained: 
+- `Correspondence`<br/>A Correspondence contains a relation (`CorrespondenceRelation`) that holds between two elements from two different ontologies. 
+In the literature, it is also known as "Mapping Cell" or "Cell". Optionally, a correspondence might have a confidence value,
+and an identifier. Note that a correspondence can be extended with further attributes. For usability, class `DefaultExtensions`
+contains the most common extensions. 
+- `Alignment`<br/>An alignment is a collection of multiple `Correspondence` instances. In the literature, it is also 
+known as "mapping" or "mappings".
+
+Class `AlignmentSerializer` can be used to persist an alignment to a file and class `AlignmentParser` can parse an alignment
+file directly into a Java object. 
+
+#### Development Options
 In order to develop a matcher in Java with MELT, the first step is to decide which matching interface to implement.
 The most general interface is encapsulated in class`MatcherURL` which receives two URLs of the ontologies to be matched 
 together with a URL referencing an input alignment. The return value should be a URL representing a file with 
@@ -70,7 +85,7 @@ your own metric - it might already be there.
 * If you know the OAEI and want to use its data: Good. You will never have to download anything from the Web site or fiddle around with file paths. 
 MELT can manage all the data. Just have a look at the `TrackRepository`, you will find everything you need there.
 
-### In more detail
+### In More Detail
 MELT defines a workflow for matcher execution and evaluation. Therefore, it utilizes the vocabulary used by the OAEI: A 
 matcher can be evaluated on a `TestCase`, i.e. a single ontology matching task. One or more test cases are summarized in 
 a `Track`. MELT contains a built-in `TrackRepository` which allows to access all OAEI tracks and test cases at design time 
@@ -107,7 +122,7 @@ MELT can calculate very specific evaluation statistics such as the residual prec
     - if you execute ```mvn package``` only seals zip will be created
 1. the seals zip can be found in the target folder and the hobbit docker image in the local docker repository
 
-### In more detail
+### In More Detail
 - for Hobbit submission
     - Prerequisites for Hobbit is a working docker installation ([download docker](https://www.docker.com/get-docker))
     - create a user account
