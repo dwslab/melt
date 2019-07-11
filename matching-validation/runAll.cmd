@@ -1,59 +1,64 @@
+@echo off
+
+rem SET ADD_COMMAND="-Dtest=TestLocalFile"
+SET ADD_COMMAND=
+
 SET P1_RESULT=TRUE
-call mvn clean test -P1
+call mvn clean test -P1 %ADD_COMMAND%
 IF %ERRORLEVEL% NEQ 0 (
   SET P1_RESULT=FALSE
 )
 
 SET P2_RESULT=TRUE
-call mvn clean test -P2
+call mvn clean test -P2 %ADD_COMMAND%
 IF %ERRORLEVEL% NEQ 0 (
   SET P2_RESULT=FALSE
 )
 
 SET P3_RESULT=TRUE
-call mvn clean test -P3
+call mvn clean test -P3 %ADD_COMMAND%
 IF %ERRORLEVEL% NEQ 0 (
   SET P3_RESULT=FALSE
 )
 
 SET P4_RESULT=TRUE
-call mvn clean test -P4
+call mvn clean test -P4 %ADD_COMMAND%
 IF %ERRORLEVEL% NEQ 0 (
   SET P4_RESULT=FALSE
 )
 
 SET P5_RESULT=TRUE
-call mvn clean test -P5
+call mvn clean test -P5 %ADD_COMMAND%
 IF %ERRORLEVEL% NEQ 0 (
   SET P5_RESULT=FALSE
 )
 
 SET P6_RESULT=TRUE
-call mvn clean test -P6
+call mvn clean test -P6 %ADD_COMMAND%
 IF %ERRORLEVEL% NEQ 0 (
   SET P6_RESULT=FALSE
 )
 
 SET P7_RESULT=TRUE
-call mvn clean test -P7
+call mvn clean test -P7 %ADD_COMMAND%
 IF %ERRORLEVEL% NEQ 0 (
   SET P7_RESULT=FALSE
 )
 
 SET P8_RESULT=TRUE
-call mvn clean test -P8
+call mvn clean test -P8 %ADD_COMMAND%
 IF %ERRORLEVEL% NEQ 0 (
   SET P8_RESULT=FALSE
 )
 
 SET P9_RESULT=TRUE
-call mvn clean test -P9
+call mvn clean test -P9 %ADD_COMMAND%
 IF %ERRORLEVEL% NEQ 0 (
   SET P9_RESULT=FALSE
 )
 
 SET P10_RESULT=TRUE
-call mvn clean test -P10
+call mvn clean test -P10 %ADD_COMMAND%
 IF %ERRORLEVEL% NEQ 0 (
   SET P10_RESULT=FALSE
 )

@@ -11,7 +11,7 @@
         <jenaVersion>3.12.0</jenaVersion>
         <owlapiVersion>5.1.11</owlapiVersion>
         <jenaPrefix>org.apache.jena.</jenaPrefix>
-        <owlapiAdd>.get()</owlapiAdd>
+        <owlapiAdd>.orElse(null)</owlapiAdd>
     </properties>
     
 
@@ -102,7 +102,7 @@
                 <jenaVersion>3.0.1</jenaVersion>
                 <owlapiVersion>4.0.2</owlapiVersion>
                 <jenaPrefix>org.apache.jena.</jenaPrefix>
-                <owlapiAdd>.get()</owlapiAdd>
+                <owlapiAdd>.orNull()</owlapiAdd>
             </properties>
         </profile>
         <profile>
@@ -111,7 +111,7 @@
                 <jenaVersion>3.2.0</jenaVersion>
                 <owlapiVersion>4.1.4</owlapiVersion>
                 <jenaPrefix>org.apache.jena.</jenaPrefix>
-                <owlapiAdd>.get()</owlapiAdd>
+                <owlapiAdd>.orNull()</owlapiAdd>
             </properties>
         </profile>
         <profile>
@@ -120,7 +120,7 @@
                 <jenaVersion>3.4.0</jenaVersion>
                 <owlapiVersion>4.2.9</owlapiVersion>
                 <jenaPrefix>org.apache.jena.</jenaPrefix>
-                <owlapiAdd>.get()</owlapiAdd>
+                <owlapiAdd>.orNull()</owlapiAdd>
             </properties>
         </profile>
         <profile>
@@ -129,7 +129,7 @@
                 <jenaVersion>3.6.0</jenaVersion>
                 <owlapiVersion>4.3.2</owlapiVersion>
                 <jenaPrefix>org.apache.jena.</jenaPrefix>
-                <owlapiAdd>.get()</owlapiAdd>
+                <owlapiAdd>.orNull()</owlapiAdd>
             </properties>
         </profile>
         <profile>
@@ -138,7 +138,7 @@
                 <jenaVersion>3.8.0</jenaVersion>
                 <owlapiVersion>4.5.13</owlapiVersion>
                 <jenaPrefix>org.apache.jena.</jenaPrefix>
-                <owlapiAdd>.get()</owlapiAdd>
+                <owlapiAdd>.orNull()</owlapiAdd>
             </properties>
         </profile>
         <profile>
@@ -147,7 +147,7 @@
                 <jenaVersion>3.10.0</jenaVersion>
                 <owlapiVersion>5.0.5</owlapiVersion>
                 <jenaPrefix>org.apache.jena.</jenaPrefix>
-                <owlapiAdd>.get()</owlapiAdd>
+                <owlapiAdd>.orElse(null)</owlapiAdd>
             </properties>
         </profile>
         <profile>
@@ -156,7 +156,7 @@
                 <jenaVersion>3.12.0</jenaVersion>
                 <owlapiVersion>5.1.11</owlapiVersion>
                 <jenaPrefix>org.apache.jena.</jenaPrefix>
-                <owlapiAdd>.get()</owlapiAdd>
+                <owlapiAdd>.orElse(null)</owlapiAdd>
             </properties>
         </profile>        
         
