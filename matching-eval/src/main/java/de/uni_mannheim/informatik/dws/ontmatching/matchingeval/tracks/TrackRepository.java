@@ -360,6 +360,9 @@ public class TrackRepository{
         
         /**The Knowledge Graph Track contains nine isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
         public static Track V2 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v2", true);
+        
+         /**The Knowledge Graph Track contains isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
+        public static Track V3 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3", true);
     }
     
     public static class SystematicBenchmark {

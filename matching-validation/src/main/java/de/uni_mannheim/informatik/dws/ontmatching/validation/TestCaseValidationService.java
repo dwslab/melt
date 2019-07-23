@@ -21,8 +21,9 @@ public class TestCaseValidationService {
      * Constructor
      * @param testCase Test case on which the analysis was performed on.
      */
-    TestCaseValidationService(TestCase testCase){
+    public TestCaseValidationService(TestCase testCase, SemanticWebLibrary semanticWebLibrary){
         this.testCase = testCase;
+        this.semanticWebLibrary = semanticWebLibrary;
         analzye();
     }
 
@@ -30,6 +31,11 @@ public class TestCaseValidationService {
      * Test case on which the analysis was performed on.
      */
     private TestCase testCase;
+    
+    /**
+     * Semantic web library to use like Jena or Owl API
+     */
+    private SemanticWebLibrary semanticWebLibrary;
 
     //-------------------------------------------------------------------------
     // Hard Validation Fields
@@ -64,9 +70,10 @@ public class TestCaseValidationService {
      * @return True if error free, else false.
      */
     public boolean isOK(){
-        return sourceJenaOntologyValidationService.isOntologyParseable() && sourceOwlApiOntologyValidationService.isOntologyParseable()
-                && targetJenaOntologyValidationService.isOntologyParseable() && targetOwlApiOntologyValidationService.isOntologyParseable()
-                && isReferenceAlignmentParseable && allReferenceEntitiesFound();
+        return  sourceOntologyValidationService.isOntologyParseable() && 
+                targetOntologyValidationService.isOntologyParseable() && 
+                isReferenceAlignmentParseable && 
+                allReferenceEntitiesFound();
     }
 
     //-------------------------------------------------------------------------
@@ -112,20 +119,16 @@ public class TestCaseValidationService {
     HashSet<String> targetClassesNotMapped = new HashSet<>();
 
 
-    JenaOntologyValidationService sourceJenaOntologyValidationService;
+    OntologyValidationService sourceOntologyValidationService;
 
-    JenaOntologyValidationService targetJenaOntologyValidationService;
-
-    OwlApiOntologyValidationService sourceOwlApiOntologyValidationService;
-
-    OwlApiOntologyValidationService targetOwlApiOntologyValidationService;
+    OntologyValidationService targetOntologyValidationService;
 
     /**
      * Indicates whether all source classes appear in the mapping.
      * @return True if all source elements appear in the mapping, else false.
      */
     public boolean isSourceClassesFullyMapped(){
-        return sourceClassesNotMapped.size() == 0;
+        return sourceClassesNotMapped.isEmpty();
     }
 
     /**
@@ -133,7 +136,7 @@ public class TestCaseValidationService {
      * @return True if all target elements appear in the mapping, else false.
      */
     public boolean isTargetClassesFullyMapped(){
-        return targetClassesNotMapped.size() == 0;
+        return targetClassesNotMapped.isEmpty();
     }
 
     /**
@@ -159,7 +162,7 @@ public class TestCaseValidationService {
      * @return True if all source object properties appear in the mapping, else false.
      */
     public boolean isSourceObjectPropertiesFullyMapped(){
-        return sourceObjectPropertiesNotMapped.size() == 0;
+        return sourceObjectPropertiesNotMapped.isEmpty();
     }
 
     /**
@@ -167,7 +170,7 @@ public class TestCaseValidationService {
      * @return True if all target object properties appear in the mapping, else false.
      */
     public boolean isTargetObjectPropertiesFullyMapped(){
-        return targetObjectPropertiesNotMapped.size() == 0;
+        return targetObjectPropertiesNotMapped.isEmpty();
     }
 
     /**
@@ -194,7 +197,7 @@ public class TestCaseValidationService {
      * @return True if all source object properties appear in the mapping, else false.
      */
     public boolean isSourceDatatypePropertiesFullyMapped(){
-        return sourceDatatypePropertiesNotMapped.size() == 0;
+        return sourceDatatypePropertiesNotMapped.isEmpty();
     }
 
     /**
@@ -202,7 +205,7 @@ public class TestCaseValidationService {
      * @return True if all target data type properties appear in the mapping, else false.
      */
     public boolean isTargetDatatypePropertiesFullyMapped(){
-        return targetDatatypePropertiesNotMapped.size() == 0;
+        return targetDatatypePropertiesNotMapped.isEmpty();
     }
 
     /**
@@ -241,10 +244,8 @@ public class TestCaseValidationService {
     public String toString(){
         String result = "----------------------\nVALIDATION INFORMATION\n----------------------\n" +
                 "Analysis for test case: " + testCase.getName() + "\n" +
-                "Source Ontology parseable( " + sourceJenaOntologyValidationService.getLibName() + ", " + sourceJenaOntologyValidationService.getLibVersion() + "): " + sourceJenaOntologyValidationService.isOntologyParseable() + "\n" +
-                "Source Ontology parseable( " + sourceOwlApiOntologyValidationService.getLibName() + ", " + sourceOwlApiOntologyValidationService.getLibVersion() + "): " + sourceOwlApiOntologyValidationService.isOntologyParseable() + "\n" +
-                "Target Ontology parseable( " + targetJenaOntologyValidationService.getLibName() + ", " + targetJenaOntologyValidationService.getLibVersion() + "): " + targetJenaOntologyValidationService.isOntologyParseable() + "\n" +
-                "Target Ontology parseable( " + targetOwlApiOntologyValidationService.getLibName() + ", " + targetOwlApiOntologyValidationService.getLibVersion() + "): " + targetOwlApiOntologyValidationService.isOntologyParseable() + "\n" +
+                "Source Ontology parseable( " + sourceOntologyValidationService.getLibName() + ", " + sourceOntologyValidationService.getLibVersion() + "): " + sourceOntologyValidationService.isOntologyParseable() + "\n" +
+                "Target Ontology parseable( " + targetOntologyValidationService.getLibName() + ", " + targetOntologyValidationService.getLibVersion() + "): " + targetOntologyValidationService.isOntologyParseable() + "\n" +
                 "Reference Alignment parseable: " + isReferenceAlignmentParseable + "\n";
 
         // reference: source
@@ -301,25 +302,15 @@ public class TestCaseValidationService {
 
         result = result + "Analysis for test case: " + testCase.getName() + "\n";
 
-        result = result + "Source Ontology Jena (" + this.sourceOwlApiOntologyValidationService.getLibName() + ", " + sourceOwlApiOntologyValidationService.getLibVersion() + ")" +  "\n";
-        result = result + "# of Classes: " + this.sourceJenaOntologyValidationService.getNumberOfClasses() + "\n";
-        result = result + "# of Datatype Properties: " + this.sourceJenaOntologyValidationService.getNumberOfDatatypeProperties() + "\n";
-        result = result + "# of Object Properties: " + this.sourceJenaOntologyValidationService.getNumberOfObjectProperties() + "\n\n";
+        result = result + "Source Ontology (" + this.sourceOntologyValidationService.getLibName() + ", " + sourceOntologyValidationService.getLibVersion() + ")" +  "\n";
+        result = result + "# of Classes: " + this.sourceOntologyValidationService.getNumberOfClasses() + "\n";
+        result = result + "# of Datatype Properties: " + this.sourceOntologyValidationService.getNumberOfDatatypeProperties() + "\n";
+        result = result + "# of Object Properties: " + this.sourceOntologyValidationService.getNumberOfObjectProperties() + "\n\n";
 
-        result = result + "Target Ontology Jena (" + this.targetJenaOntologyValidationService.getLibName() + ", " + targetJenaOntologyValidationService.getLibVersion() + ")" +  "\n";
-        result = result + "# of Classes: " + this.targetJenaOntologyValidationService.getNumberOfClasses() + "\n";
-        result = result + "# of Datatype Properties: " + this.targetJenaOntologyValidationService.getNumberOfDatatypeProperties() + "\n";
-        result = result + "# of Object Properties: " + this.targetJenaOntologyValidationService.getNumberOfObjectProperties() + "\n\n";
-
-        result = result + "Source Ontology OWL API (" + this.sourceOwlApiOntologyValidationService.getLibName() + ", " + sourceOwlApiOntologyValidationService.getLibVersion() + ")" +  "\n";
-        result = result + "# of Classes: " + this.sourceOwlApiOntologyValidationService.getNumberOfClasses() + "\n";
-        result = result + "# of Datatype Properties: " + this.sourceOwlApiOntologyValidationService.getNumberOfDatatypeProperties() + "\n";
-        result = result + "# of Object Properties: " + this.sourceOwlApiOntologyValidationService.getNumberOfObjectProperties() + "\n\n";
-
-        result = result + "Target Ontology OWL API (" + this.targetOwlApiOntologyValidationService.getLibName() + ", " + targetOwlApiOntologyValidationService.getLibVersion() + ")" +  "\n";
-        result = result + "# of Classes: " + this.targetOwlApiOntologyValidationService.getNumberOfClasses() + "\n";
-        result = result + "# of Datatype Properties: " + this.targetOwlApiOntologyValidationService.getNumberOfDatatypeProperties() + "\n";
-        result = result + "# of Object Properties: " + this.targetOwlApiOntologyValidationService.getNumberOfObjectProperties() + "\n\n";
+        result = result + "Target Ontology (" + this.targetOntologyValidationService.getLibName() + ", " + targetOntologyValidationService.getLibVersion() + ")" +  "\n";
+        result = result + "# of Classes: " + this.targetOntologyValidationService.getNumberOfClasses() + "\n";
+        result = result + "# of Datatype Properties: " + this.targetOntologyValidationService.getNumberOfDatatypeProperties() + "\n";
+        result = result + "# of Object Properties: " + this.targetOntologyValidationService.getNumberOfObjectProperties() + "\n\n";
 
         return result;
     }
@@ -332,12 +323,12 @@ public class TestCaseValidationService {
         return testCase;
     }
 
-        public boolean isSourceOntologyParseable() {
-            return this.sourceJenaOntologyValidationService.isOntologyParseable() && this.sourceOwlApiOntologyValidationService.isOntologyParseable();
-        }
+    public boolean isSourceOntologyParseable() {
+        return this.sourceOntologyValidationService.isOntologyParseable();
+    }
 
-        public boolean isTargetOntologyParseable() {
-            return this.targetJenaOntologyValidationService.isOntologyParseable() && this.targetOwlApiOntologyValidationService.isOntologyParseable();
+    public boolean isTargetOntologyParseable() {
+        return this.targetOntologyValidationService.isOntologyParseable();
     }
 
     public boolean isReferenceAlignmentParseable() {
@@ -353,11 +344,11 @@ public class TestCaseValidationService {
     }
 
     public boolean isAllSourceReferenceEntitiesFound() {
-        return notFoundInSourceOntology.size() == 0;
+        return notFoundInSourceOntology.isEmpty();
     }
 
     public boolean isAllTargetReferenceEntitiesFound() {
-        return notFoundInTargetOntology.size() == 0;
+        return notFoundInTargetOntology.isEmpty();
     }
 
     public HashSet<String> getnSourceMappings() {
@@ -392,6 +383,16 @@ public class TestCaseValidationService {
         return targetDatatypePropertiesNotMapped;
     }
 
+    public OntologyValidationService getSourceOntologyValidationService() {
+        return sourceOntologyValidationService;
+    }
+
+    public OntologyValidationService getTargetOntologyValidationService() {
+        return targetOntologyValidationService;
+    }
+    
+    
+
     /**
      * Perform an analysis on the level of a test case.
      *
@@ -399,13 +400,16 @@ public class TestCaseValidationService {
     private void analzye() {
 
         // part1 parse ontologies
-        this.sourceJenaOntologyValidationService = new JenaOntologyValidationService(this.testCase.getSource());
-        this.targetJenaOntologyValidationService = new JenaOntologyValidationService(this.testCase.getTarget());
-        this.sourceOwlApiOntologyValidationService = new OwlApiOntologyValidationService(this.testCase.getSource());
-        this.targetOwlApiOntologyValidationService = new OwlApiOntologyValidationService(this.testCase.getTarget());
+        if(this.semanticWebLibrary == SemanticWebLibrary.JENA){
+            this.sourceOntologyValidationService = new JenaOntologyValidationService(this.testCase.getSource());
+            this.targetOntologyValidationService = new JenaOntologyValidationService(this.testCase.getTarget());
+        }else{
+            this.sourceOntologyValidationService = new OwlApiOntologyValidationService(this.testCase.getSource());
+            this.targetOntologyValidationService = new OwlApiOntologyValidationService(this.testCase.getTarget());
+        }
 
-        Set<String> sourceResources = sourceJenaOntologyValidationService.getAllResources();
-        Set<String> targetResources = targetJenaOntologyValidationService.getAllResources();
+        Set<String> sourceResources = sourceOntologyValidationService.getAllResources();
+        Set<String> targetResources = targetOntologyValidationService.getAllResources();
 
         // Part 2: Check whether alignment file is parseable.
         Alignment reference = testCase.getParsedReferenceAlignment();
@@ -443,14 +447,14 @@ public class TestCaseValidationService {
         this.nTargetMappings = nTargetMappings;
 
         // Part 5: (statistical) Check whether all ontology elements are mapped
-        for(String resource : sourceJenaOntologyValidationService.getClasses()){
+        for(String resource : (Set<String>)sourceOntologyValidationService.getClasses()){
             if(!reference.isSourceContained(resource.toString())){
                 this.sourceClassesNotMapped.add(resource.toString());
             }
         }
 
 
-        for(String resource : targetJenaOntologyValidationService.getClasses()){
+        for(String resource : (Set<String>)targetOntologyValidationService.getClasses()){
             if(!reference.isTargetContained(resource.toString())){
                 this.targetClassesNotMapped.add(resource.toString());
             }
@@ -458,13 +462,13 @@ public class TestCaseValidationService {
 
 
         // Part 6: (statistical) Check whether all ontology object properties are mapped
-        for(String property : sourceJenaOntologyValidationService.getObjectProperties()){
+        for(String property : (Set<String>)sourceOntologyValidationService.getObjectProperties()){
             if(!reference.isSourceContained(property.toString())){
                 this.sourceObjectPropertiesNotMapped.add(property.toString());
             }
         }
 
-        for(String property : targetJenaOntologyValidationService.getObjectProperties()){
+        for(String property : (Set<String>)targetOntologyValidationService.getObjectProperties()){
             if(!reference.isTargetContained(property.toString())){
                 this.targetObjectPropertiesNotMapped.add(property.toString());
             }
@@ -472,13 +476,13 @@ public class TestCaseValidationService {
 
 
         // Part 7: (statistical) Check whether all ontology datatype properties are mapped
-        for(String property : sourceJenaOntologyValidationService.getDatatypeProperties()){
+        for(String property : (Set<String>)sourceOntologyValidationService.getDatatypeProperties()){
             if(!reference.isSourceContained(property.toString())){
                 this.sourceDatatypePropertiesNotMapped.add(property.toString());
             }
         }
 
-        for(String property : targetJenaOntologyValidationService.getDatatypeProperties()){
+        for(String property : (Set<String>)targetOntologyValidationService.getDatatypeProperties()){
             if(!reference.isTargetContained(property.toString())){
                 this.targetDatatypePropertiesNotMapped.add(property.toString());
             }

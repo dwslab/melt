@@ -16,20 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class TestCaseValidationServiceTest {
 
-    @Test
-    void analzye() {
-        //----------------------------------------------
-        // Test 1: Correct Alignment
-        //----------------------------------------------
-        File sourceOntologyFile = new File("src/test/resources/cmt.owl");
-        File targetOntologyFile = new File("src/test/resources/conference.owl");
-        File referenceAlignment = new File("src/test/resources/cmt-conference.rdf");
-        TestCase testCase1 = new TestCase("test_case_1", sourceOntologyFile.toURI(), targetOntologyFile.toURI(), referenceAlignment.toURI(), null);
-        TestCaseValidationService result1 = new TestCaseValidationService(testCase1);
-        assertTrue(result1.sourceJenaOntologyValidationService.isOntologyParseable());
-        assertTrue(result1.targetJenaOntologyValidationService.isOntologyParseable());
-        assertTrue(result1.sourceOwlApiOntologyValidationService.isOntologyParseable());
-        assertTrue(result1.targetOwlApiOntologyValidationService.isOntologyParseable());
+    void analzyePositiveCase(TestCaseValidationService result1) {
+        assertTrue(result1.isSourceOntologyParseable());
+        assertTrue(result1.isTargetOntologyParseable());
         assertTrue(result1.isReferenceAlignmentParseable());
         assertTrue(result1.isAllSourceReferenceEntitiesFound());
         assertTrue(result1.isAllTargetReferenceEntitiesFound());
@@ -46,19 +35,11 @@ class TestCaseValidationServiceTest {
         assertFalse(result1.isSourceFullyMapped());
         assertFalse(result1.isTargetFullyMapped());
         assertTrue(result1.isOK());
-
-        //----------------------------------------------
-        // Test 2: Incorrect Alignment
-        // Same data set as for test 1 but an additional URI has been added to the alignment that is not contained in
-        // any ontology ("http://conference#DoesNotExist").
-        //----------------------------------------------
-        referenceAlignment = new File("src/test/resources/cmt-conference-corrputed.rdf");
-        TestCase testCase2 = new TestCase("test_case_2", sourceOntologyFile.toURI(), targetOntologyFile.toURI(), referenceAlignment.toURI(), null);
-        TestCaseValidationService result2 = new TestCaseValidationService(testCase2);
-        assertTrue(result2.sourceJenaOntologyValidationService.isOntologyParseable());
-        assertTrue(result2.targetJenaOntologyValidationService.isOntologyParseable());
-        assertTrue(result2.sourceOwlApiOntologyValidationService.isOntologyParseable());
-        assertTrue(result2.targetOwlApiOntologyValidationService.isOntologyParseable());
+    }
+    
+    void analzyeNegativeCase(TestCaseValidationService result2) {
+        assertTrue(result2.isSourceOntologyParseable());
+        assertTrue(result2.isTargetOntologyParseable());
         assertTrue(result2.isReferenceAlignmentParseable());
         assertTrue(result2.isAllSourceReferenceEntitiesFound());
         assertFalse(result2.isAllTargetReferenceEntitiesFound());
@@ -76,5 +57,28 @@ class TestCaseValidationServiceTest {
         assertFalse(result2.isSourceFullyMapped());
         assertFalse(result2.isTargetFullyMapped());
         assertFalse(result2.isOK());
+    }
+    
+    @Test
+    void analzye() {
+        //----------------------------------------------
+        // Test 1: Correct Alignment
+        //----------------------------------------------
+        File sourceOntologyFile = new File("src/test/resources/cmt.owl");
+        File targetOntologyFile = new File("src/test/resources/conference.owl");
+        File referenceAlignment = new File("src/test/resources/cmt-conference.rdf");
+        TestCase testCase1 = new TestCase("test_case_1", sourceOntologyFile.toURI(), targetOntologyFile.toURI(), referenceAlignment.toURI(), null);
+        analzyePositiveCase(new TestCaseValidationService(testCase1, SemanticWebLibrary.JENA));
+        analzyePositiveCase(new TestCaseValidationService(testCase1, SemanticWebLibrary.OWLAPI));
+        
+        //----------------------------------------------
+        // Test 2: Incorrect Alignment
+        // Same data set as for test 1 but an additional URI has been added to the alignment that is not contained in
+        // any ontology ("http://conference#DoesNotExist").
+        //----------------------------------------------
+        referenceAlignment = new File("src/test/resources/cmt-conference-corrputed.rdf");
+        TestCase testCase2 = new TestCase("test_case_2", sourceOntologyFile.toURI(), targetOntologyFile.toURI(), referenceAlignment.toURI(), null);
+        analzyeNegativeCase(new TestCaseValidationService(testCase2, SemanticWebLibrary.JENA));
+        analzyeNegativeCase(new TestCaseValidationService(testCase2, SemanticWebLibrary.OWLAPI));
     }
 }
