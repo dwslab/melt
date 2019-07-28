@@ -137,9 +137,10 @@ public abstract class OntologyValidationService<T> {
     public Set<String> getAllResources() {
         Set<String> result = new HashSet<>();
         if(classes != null) result.addAll(classes);
-        if(datatypeProperties != null) result.addAll(datatypeProperties);
-        if(objectProperties != null) result.addAll(objectProperties);
         if(instances != null) result.addAll(instances);
+        if(properties != null) result.addAll(properties);
+        if(datatypeProperties != null) result.addAll(datatypeProperties);        
+        if(objectProperties != null) result.addAll(objectProperties);        
         return result;
     }
 
