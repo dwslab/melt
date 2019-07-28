@@ -212,6 +212,19 @@ public abstract class OntologyValidationService<T> {
 
     @Override
     public String toString() {
-        return "OntologyValidationService{" + "numberOfStatements=" + numberOfStatements + ", ontologyDefined=" + ontologyDefined + ", ontologyParseable=" + ontologyParseable + ", libName=" + libName + ", libVersion=" + libVersion + ", ontologyUri=" + ontologyUri + '}';
+        return "OntologyValidationService{" + 
+                "statements=" + this.getNumberOfStatements() + 
+                ", classes=" + this.getNumberOfClasses() + 
+                ", instances=" + this.getNumberOfInstances() + 
+                ", properties=" + this.getNumberOfProperties() + 
+                ", datatypeProperties=" + this.getNumberOfDatatypeProperties() + 
+                ", objectProperties=" + this.getNumberOfObjectProperties() +                 
+                ", restrictions=" + this.getNumberOfRestrictions() + 
+                ", ontologyDefined=" + ontologyDefined + 
+                ", ontologyParseable=" + ontologyParseable + 
+                ", libName=" + libName + 
+                ", libVersion=" + libVersion + 
+                ", ontologyUri=" + ontologyUri + '}';
     }
+    
 }
