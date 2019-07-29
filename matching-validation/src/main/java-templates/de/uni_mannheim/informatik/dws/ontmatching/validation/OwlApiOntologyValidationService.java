@@ -74,9 +74,10 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
 
     @Override
     protected Set<String> retrieveProperties(OWLOntology ontology) {
-        Set<String> union = retrieveDatatypeProperties(ontology);
-        union.addAll(retrieveObjectProperties(ontology));
-        return union;
+        return getURIs(ontology.getAnnotationPropertiesInSignature());
+        //Set<String> union = retrieveDatatypeProperties(ontology);
+        //union.addAll(retrieveObjectProperties(ontology));
+        //return union;
     }
 
     @Override
