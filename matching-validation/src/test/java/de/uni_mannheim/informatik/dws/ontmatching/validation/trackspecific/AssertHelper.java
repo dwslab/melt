@@ -81,7 +81,7 @@ public class AssertHelper {
     
     public static Stream<DynamicTest> assertDynamicTrack(Track t, SemanticWebLibrary lib){
         return t.getTestCases().stream().map((testCase) -> 
-            DynamicTest.dynamicTest("Test " + testCase.getName(), () -> AssertHelper.assertTestCase(testCase))
+            DynamicTest.dynamicTest("Test " + testCase.getName(), () -> AssertHelper.assertTestCase(testCase, lib))
         );
     }
     
