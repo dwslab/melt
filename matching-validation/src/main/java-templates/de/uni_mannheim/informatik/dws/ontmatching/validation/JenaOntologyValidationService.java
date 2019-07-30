@@ -69,7 +69,7 @@ public class JenaOntologyValidationService extends OntologyValidationService<Ont
 
     @Override
     protected Set<String> retrieveProperties(OntModel ontology) {
-        return getURIs(ontology.listOntProperties());
+        return getURIs(ontology.listAllOntProperties());
     }
 
     @Override
