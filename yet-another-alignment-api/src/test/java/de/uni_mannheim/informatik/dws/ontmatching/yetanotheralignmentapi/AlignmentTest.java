@@ -1,8 +1,6 @@
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Correspondence;
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.CorrespondenceRelation;
-import org.junit.jupiter.api.Test;
+package de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi;
 
+import org.junit.jupiter.api.Test;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,7 +77,7 @@ public class AlignmentTest {
         assertFalse(m.getCorrespondencesSource("shouldNotFindSourceInEmptyMapping").iterator().hasNext());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void intersection() {
         Alignment alignment_1 = new Alignment();
         alignment_1.add("http://www.left.com/e1", "http://www.right.com/e1");
@@ -94,7 +92,7 @@ public class AlignmentTest {
         assertTrue(result.contains(new Correspondence("http://www.left.com/e1", "http://www.right.com/e1")), "Intersecting correspondence not contained in result.");
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void union() {
         Alignment alignment_1 = new Alignment();
         alignment_1.add("http://www.left.com/e1", "http://www.right.com/e1");

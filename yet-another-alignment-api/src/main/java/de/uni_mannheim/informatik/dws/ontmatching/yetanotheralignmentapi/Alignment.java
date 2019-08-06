@@ -293,16 +293,6 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
-     * Serialize this mapping directly to a given file.
-     * This also works if the alignment is huge.
-     * @param file The file for writing the mapping.
-     * @throws IOException 
-     */
-    public void serialize(File file) throws IOException{
-        AlignmentSerializer.serialize(this, file);
-    }
-    
-    /**
      * Returns a new alignment which contains only correspondences above or equal the given threshold (it will not modify the current object).
      * @param threshold Threshold for cutting (correspondences greater than or equal the threshold will be added).
      * @return A new alignment with filtered correspondences. This alignment stays untouched from the operation.
@@ -362,6 +352,16 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         return AlignmentSerializer.serialize(this);
     }
     
+    /**
+     * Serialize this mapping directly to a given file.
+     * This also works if the alignment is huge.
+     * @param file The file for writing the mapping.
+     * @throws IOException 
+     */
+    public void serialize(File file) throws IOException{
+        AlignmentSerializer.serialize(this, file);
+    }
+    
     public String getMethod() {
         return method;
     }
@@ -403,6 +403,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     public List<Correspondence> getConfidenceOrderedMapping(){
+        //slower
+        //ResultSet<Correspondence> rs = this.retrieve(QueryFactory.all(Correspondence.class), 
+        //      QueryFactory.queryOptions(QueryFactory.orderBy(QueryFactory.descending(Correspondence.CONFIDENCE))));
         ArrayList<Correspondence> list = new ArrayList<>(this);
         list.sort(new CorrespondenceConfidenceComparator());
         return list;
