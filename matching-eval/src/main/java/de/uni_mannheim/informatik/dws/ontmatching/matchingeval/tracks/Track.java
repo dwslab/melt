@@ -15,7 +15,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -298,7 +297,7 @@ public abstract class Track {
         
         List<TestCase> testCases = new ArrayList<>(); 
         for(File referenceFile : referenceFiles){
-            String fileNameWithoutExtension = FilenameUtils.removeExtension(referenceFile.getName());
+            String fileNameWithoutExtension = removeExtension(referenceFile.getName());
             String[] sourceTargetName = fileNameWithoutExtension.split("-");
             if(sourceTargetName.length != 2){
                 LOGGER.error("A file in references folder of track cache has more splits than expected.");
@@ -332,6 +331,13 @@ public abstract class Track {
         }
     }
     
+    
+    private String removeExtension(String filename){
+        int extensionPos = filename.lastIndexOf('.');
+        if (extensionPos == -1)
+            return filename;
+        return filename.substring(0, extensionPos);
+    }
             
     
     protected static String getNiceRemoteLocation(String url){
