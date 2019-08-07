@@ -15,9 +15,9 @@ public abstract class MatcherPipelineYAAAJena extends MatcherYAAAJena{
     protected abstract List<MatcherYAAAJena> initializeMatchers();    
     
     @Override
-    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties p) throws Exception {
+    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         for(MatcherYAAAJena matcher : this.matchers){
-             inputAlignment = matcher.match(source, target, inputAlignment, p);
+             inputAlignment = matcher.match(source, target, inputAlignment, properties);
         }
         return inputAlignment;
     }

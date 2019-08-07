@@ -9,7 +9,6 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 
 
-
 /**
  * A matcher template for matchers that are based on Apache Jena.
  */
@@ -32,14 +31,14 @@ public abstract class MatcherYAAAJena extends MatcherYAAA {
     }
          
     @Override
-    public Alignment match(URL source, URL target, Alignment inputAlignment, Properties p) throws Exception {
+    public Alignment match(URL source, URL target, Alignment inputAlignment, Properties properties) throws Exception {
         OntModel jena_source = readOntology(source, getModelSpec());
         OntModel jena_target = readOntology(target, getModelSpec());
         
         inputAlignment.setOnto1(new OntoInfo(jena_source.getNsPrefixURI(""), source.toString()));
         inputAlignment.setOnto2(new OntoInfo(jena_target.getNsPrefixURI(""), target.toString()));
                
-        return this.match(jena_source, jena_target, inputAlignment, p);
+        return this.match(jena_source, jena_target, inputAlignment, properties);
     }
 
      /**
@@ -52,10 +51,10 @@ public abstract class MatcherYAAAJena extends MatcherYAAA {
      * @param source this OntModel represents the source ontology
      * @param target this OntModel represents the target ontology
      * @param inputAlignment this mapping represents the input alignment
-     * @param p additional properties
+     * @param properties additional properties
      * @return The resulting mapping of the matching process.
      * @throws Exception
      */
-    public abstract Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties p) throws Exception ;
+    public abstract Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception ;
 
 }

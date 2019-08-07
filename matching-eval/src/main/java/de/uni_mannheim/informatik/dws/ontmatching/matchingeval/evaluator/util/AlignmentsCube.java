@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -172,6 +173,97 @@ public class AlignmentsCube {
             ioe.printStackTrace();
         }
     }
+
+
+    /**
+     * Same logic/code as in {@link AlignmentsCube#write(File)} but worse memory behavior (that's why the code cannot
+     * be better modularized).
+     * @return Large String.
+     */
+    @Override
+    public String toString(){
+
+        try {
+            StringWriter writer = new StringWriter();
+            CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+            printer.printRecord(getHeader());
+
+            for (HashMap.Entry<TestCaseMatcher, AnalyticalAlignmentInformation> cubeComponent : this.alignmentDataCube.entrySet()) {
+                String trackName = cubeComponent.getKey().testCase.getTrack().getName();
+                String testCaseName = cubeComponent.getKey().testCase.getName();
+                String matcherName = (cubeComponent.getKey().matcher);
+                LOGGER.info("Writing " + trackName + " | " + testCaseName + " | " + matcherName);
+
+                for (HashMap.Entry<Correspondence, HashMap<String, String>> mappingInformationEntry : cubeComponent.getValue().getMappingInformation().entrySet()) {
+                    List<String> record = new LinkedList<>();
+                    record.add(trackName);
+                    record.add(testCaseName);
+                    record.add(matcherName);
+
+                    // resource feature uri1
+                    for (IExplainerResource explainer : resourceExplainers) {
+                        if (explainer instanceof IExplainerResourceWithJenaOntology) {
+                            ((IExplainerResourceWithJenaOntology) explainer).setOntModel(cubeComponent.getKey().testCase.getSourceOntology(OntModel.class));
+                            Map<String, String> resourceFeatures = explainer.getResourceFeatures(mappingInformationEntry.getKey().getEntityOne());
+                            if (resourceFeatures == null) {
+                                LOGGER.warn("No resource features for " + mappingInformationEntry.getKey().getEntityOne());
+                            } else {
+                                for (String resourceFeatureName : explainer.getResourceFeatureNames()) {
+                                    String feature = resourceFeatures.get(resourceFeatureName);
+                                    if (feature == null) {
+                                        LOGGER.info("Could not find feature " + resourceFeatureName + " ignoring it.");
+                                        record.add("");
+                                    } else record.add(feature);
+                                }
+                            }
+                        }
+                    }
+
+                    record.add(mappingInformationEntry.getKey().getEntityOne());
+                    record.add(mappingInformationEntry.getKey().getRelation().toString());
+                    record.add(Double.toString(mappingInformationEntry.getKey().getConfidence()));
+                    record.add(mappingInformationEntry.getKey().getEntityTwo());
+
+                    // resource feature uri2
+                    for (IExplainerResource explainer : resourceExplainers) {
+                        if (explainer instanceof IExplainerResourceWithJenaOntology) {
+                            ((IExplainerResourceWithJenaOntology) explainer).setOntModel(cubeComponent.getKey().testCase.getTargetOntology(OntModel.class));
+                            Map<String, String> resourceFeatures = explainer.getResourceFeatures(mappingInformationEntry.getKey().getEntityTwo());
+                            if (resourceFeatures == null) {
+                                LOGGER.warn("No resource features for " + mappingInformationEntry.getKey().getEntityTwo());
+                            } else {
+                                for (String resourceFeatureName : explainer.getResourceFeatureNames()) {
+                                    String feature = resourceFeatures.get(resourceFeatureName);
+                                    if (feature == null) {
+                                        LOGGER.info("Could not find feature " + resourceFeatureName + " ignoring it.");
+                                        record.add("");
+                                    } else record.add(feature);
+                                }
+                            }
+                        }
+                    }
+
+                    // add feature values
+                    for (String featureName : getFeatureNames()) {
+                        String featureValue = mappingInformationEntry.getValue().get(featureName);
+                        if (featureValue == null) {
+                            record.add("");
+                        } else record.add(featureValue);
+                    }
+                    printer.printRecord(record);
+                } // end of loop over mapping information entry
+            } // end of loop over mapping information entries a.k.a. cubeComponent
+
+            // note: writer does not have to be closed.
+            return writer.toString();
+        } catch (IOException ioe){
+            LOGGER.error("Could not transform AlignmentsCube to String.", ioe);
+            return null;
+        }
+    }
+
+
 
     /**
      * Get the header of the cube, i.e. all describing attributes.
