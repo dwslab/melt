@@ -6,12 +6,17 @@ import com.googlecode.cqengine.query.Query;
 import com.googlecode.cqengine.query.QueryFactory;
 import static com.googlecode.cqengine.query.QueryFactory.noQueryOptions;
 import com.googlecode.cqengine.resultset.ResultSet;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.baselineMatchers.BaselineStringMatcher;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
+
+import java.io.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.Refiner;
@@ -22,7 +27,7 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.Refine
  * @author Sven Hertling
  * @author Jan Portisch
  */
-public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionResult> {
+public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionResult> implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionResultSet.class);
     
     private HashIndex matcherIndex;
@@ -30,22 +35,24 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
     private HashIndex trackIndex;
     private HashIndex refinementSetIndex;
 
+
     /**
      * Constructor
      */
     public ExecutionResultSet(){
         this.matcherIndex = HashIndex.onAttribute(ExecutionResult.MATCHER);
         this.addIndex(matcherIndex);
-        
+
         this.testCaseIndex = HashIndex.onAttribute(ExecutionResult.TEST_CASE);
         this.addIndex(testCaseIndex);
-        
+
         this.trackIndex = HashIndex.onAttribute(ExecutionResult.TRACK);
         this.addIndex(trackIndex);
-        
+
         this.refinementSetIndex = HashIndex.onAttribute(ExecutionResult.REFINEMENT_SET);
         this.addIndex(refinementSetIndex);
     }
+
 
     /**
      * Get a specific {@link ExecutionResult} which fulfills the specified parameters (testCase, matcherName) from
@@ -73,27 +80,32 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         this.add(er);
         return er;
     }
-    
+
+
     public Set<ExecutionResult> getGroup(TestCase testCase, Refiner... refinements){
         ResultSet<ExecutionResult> basisResults = this.retrieve(query(testCase, EMPTY_REFINEMENT));
         return getGroup(basisResults, refinements);
     }
+
     
     public Set<ExecutionResult> getGroup(String matcher, Refiner... refinements){
         ResultSet<ExecutionResult> basisResults = this.retrieve(query(matcher, EMPTY_REFINEMENT));
         return getGroup(basisResults, refinements);
     }
-    
+
+
     public Set<ExecutionResult> getGroup(Track track, Refiner... refinements){
         ResultSet<ExecutionResult> basisResults = this.retrieve(query(track, EMPTY_REFINEMENT));
         return getGroup(basisResults, refinements);
     }
-    
+
+
     public Set<ExecutionResult> getGroup(Track track, String matcher, Refiner... refinements){
         ResultSet<ExecutionResult> basisResults = this.retrieve(query(track, matcher, EMPTY_REFINEMENT));
         return getGroup(basisResults, refinements);
     }
-    
+
+
     public Set<ExecutionResult> getGroup(ResultSet<ExecutionResult> basisResults, Refiner... refinements){
         if(refinements.length == 0){
             return basisResults.stream().collect(Collectors.toSet());
@@ -138,6 +150,7 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
                 .collect(Collectors.toSet());
     }
 
+
     /**
      * Given a distinct test case, return the distinct names of matchers that were run on this particular test case.
      * @param testCase The test case for which the matchers that were run shall be retrieved.
@@ -149,6 +162,7 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
                 .map(ExecutionResult::getMatcherName)
                 .collect(Collectors.toSet());
     }
+
 
     /**
      * Get the distinct test cases that used in this ExecutionResultSet.
@@ -164,20 +178,32 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
                 .map(ExecutionResult::getTestCase)
                 .collect(Collectors.toSet());
     }
-    
-    public Iterable<TestCase> getDistinctTestCases(Track t){
-        return this.retrieve(query(t))
+
+    /**
+     * Get the distinct test cases that used in this ExecutionResultSet for the specified track.
+     * @param track The track for which the test cases shall be retrieved.
+     * @return An iterable over the resulting test cases for the specified track.
+     */
+    public Iterable<TestCase> getDistinctTestCases(Track track){
+        return this.retrieve(query(track))
                 .stream()
                 .map(ExecutionResult::getTestCase)
                 .collect(Collectors.toSet());
     }
-    
-    public Iterable<TestCase> getDistinctTestCases(Track t, String matcher){
-        return this.retrieve(query(t, matcher))
+
+    /**
+     * Get the distinct test cases that used in this ExecutionResultSet for the specified track.
+     * @param track The track for which the test cases shall be retrieved.
+     * @param matcher The matcher for which the test cases shall be retrieved.
+     * @return An iterable over the resulting test cases for the specified track.
+     */
+    public Iterable<TestCase> getDistinctTestCases(Track track, String matcher){
+        return this.retrieve(query(track, matcher))
                 .stream()
                 .map(ExecutionResult::getTestCase)
                 .collect(Collectors.toSet());
     }
+
 
     /**
      * Get the distinct tracks that used in this ExecutionResultSet.
@@ -186,13 +212,19 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
     public Iterable<Track> getDistinctTracks(){
         return this.trackIndex.getDistinctKeys(noQueryOptions());
     }
-    
+
+    /**
+     * The distinct tracks on which the specified matcher was run.
+     * @param matcher The matcher for which the tracks shall be obtained.
+     * @return An iterable over the tracks on which the specified matcher was run.
+     */
     public Iterable<Track> getDistinctTracks(String matcher){
        return this.retrieve(query(matcher))
                 .stream()
                 .map(ExecutionResult::getTrack)
                 .collect(Collectors.toSet());
     }
+
 
     /**
      * Constant for an empty refinement.
