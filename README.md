@@ -113,14 +113,14 @@ MELT can calculate very specific evaluation statistics such as the residual prec
 ## Packaging Matchers for SEALS and HOBBIT
 
 ### TL;DR
-1. have a look at examples/simpleJavaMatcher
-1. create hobbit account and gitlab access token
-1. adjust settings in pom.xml to your needs
-1. implement your matcher (see Matcher development)
-1. execute ```mvn deploy``` to create seals zip and deploy docker image to hobbit server
+1. Have a look at [examples/simpleJavaMatcher](/examples/simpleJavaMatcher)
+1. Create hobbit account and gitlab access token
+1. Adjust settings in pom.xml to your needs
+1. Implement your matcher (see Matcher development)
+1. Execute ```mvn deploy``` to create seals zip and deploy docker image to hobbit server
     - if you only execute ```mvn install``` it will create seals zip and hobbit docker image locally
     - if you execute ```mvn package``` only seals zip will be created
-1. the seals zip can be found in the target folder and the hobbit docker image in the local docker repository
+1. The seals zip can be found in the target folder and the hobbit docker image in the local docker repository
 
 ### In More Detail
 - for Hobbit submission
