@@ -136,6 +136,17 @@ public abstract class Track {
         return null;
     }
     
+    /**
+     * Obtain an example test case (the first one).
+     * @return Test case.
+     */
+    public TestCase getFirstTestCase(){
+        for(TestCase c : getTestCases()){
+            return c;
+        }
+        return null;
+    }
+    
     protected List<TestCase> readFromCache(){ return readFromDefaultLayout(); } // can be overwritten if download does not use default layout
 
     protected abstract void downloadToCache() throws Exception;

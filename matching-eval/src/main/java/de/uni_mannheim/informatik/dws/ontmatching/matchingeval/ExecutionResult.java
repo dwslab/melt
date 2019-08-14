@@ -3,14 +3,15 @@ package de.uni_mannheim.informatik.dws.ontmatching.matchingeval;
 import com.googlecode.cqengine.attribute.Attribute;
 import com.googlecode.cqengine.attribute.SimpleAttribute;
 import com.googlecode.cqengine.query.option.QueryOptions;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.baselineMatchers.BaselineStringMatcher;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.AlignmentParser;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.util.Comparator;
@@ -28,7 +29,7 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.Refine
  * @author Sven Hertling
  * @author Jan Portisch
  */
-public class ExecutionResult {
+public class ExecutionResult implements Serializable {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionResult.class);
     
@@ -40,6 +41,7 @@ public class ExecutionResult {
     private Alignment referenceAlignment;
     private IOntologyMatchingToolBridge matcher;
     private Set<Refiner> refinements;
+
 
     /**
      * Reference to the log message file of the matcher.
@@ -158,7 +160,7 @@ public class ExecutionResult {
             return new Alignment();
         }
     }
-        
+
 
     public TestCase getTestCase() {
         return testCase;

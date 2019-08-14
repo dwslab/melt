@@ -1,10 +1,7 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +39,7 @@ public class TrackRepository{
      * It serves the purpose of evaluating the strengths and the weaknesses of matchers and measuring their progress, with a focus on multilingualism.
      */
     public static class Multifarm {
+
         private static Set<String> languagePairs = new HashSet<String>(Arrays.asList( //all in all: 45
             "ar-cn", "ar-cz", "ar-de", "ar-en", "ar-es", "ar-fr", "ar-nl", "ar-pt", "ar-ru", 
             "cn-cz", "cn-de", "cn-en", "cn-es", "cn-fr", "cn-nl", "cn-pt", "cn-ru", 
@@ -53,11 +51,13 @@ public class TrackRepository{
             "nl-pt", "nl-ru",
             "pt-ru"
         ));
+
         private static Track getTrackByLanguagePair(String languagePair){
             return new SealsTrack("http://repositories.seals-project.eu/tdrs/", languagePair, languagePair+"-v2", "repositories.seals-project.eu_multifarm");
         }
 
         public static List<Track> ALL = calculateAllMultifarmTracks();
+
         private static List<Track> calculateAllMultifarmTracks(){
             List<Track> benchmarks = new LinkedList<>();
             for(String languagePair : languagePairs){
@@ -66,14 +66,51 @@ public class TrackRepository{
             return benchmarks;
         }
 
+        /**
+         * Returns a specific track.
+         * @param languagePair Language pair in the form {@code<first_language>-<second_language>}.
+         *                     Valid options for {@code<first_language>} and for {@code<second_language>}:
+         *                     ar, cn cz, de, en, es, fr, nl, pt.
+         * @return The specified track if it exists.
+         */
         public static Track getSpecificMultifarmTrack(String languagePair){
+            languagePair = languagePair.trim().toLowerCase();
             if(languagePairs.contains(languagePair))
                 return getTrackByLanguagePair(languagePair);
             LOGGER.warn("Language Pair is not found - returning null Track");
             return null;
         }
 
+        /**
+         * This method returns all multifarm tracks in which the specified language is involved.
+         * @param language The language for which all tracks shall be returned.
+         *                 Available options: ar, cn cz, de, en, es, fr, nl, pt.
+         * @return A list of tracks which contain the specified language.
+         */
+        public static List<Track> getMultifarmTrackForLanguage(String language){
+            language = language.trim().toLowerCase();
+            ArrayList<String> resultTrackNames = new ArrayList<>();
+            ArrayList<Track> result = new ArrayList<>();
+            for(String languagePair : languagePairs){
+                if(languagePair.contains(language)){
+                    resultTrackNames.add(languagePair);
+                }
+            }
+            for(String trackName : resultTrackNames){
+                result.add(getSpecificMultifarmTrack(trackName));
+            }
+            return result;
+        }
+
+        /**
+         * Returns a specific track.
+         * @param firstLanguage The first language of the track. Available options: ar, cn cz, de, en, es, fr, nl, pt.
+         * @param secondLanguage The second language of the track. Available options: ar, cn cz, de, en, es, fr, nl, pt.
+         * @return The specified track if it exists.
+         */
         public static Track getSpecificMultifarmTrack(String firstLanguage, String secondLanguage){
+            firstLanguage = firstLanguage.trim().toLowerCase();
+            secondLanguage = secondLanguage.trim().toLowerCase();
             return getSpecificMultifarmTrack(firstLanguage + "-" + secondLanguage);
         }
     }

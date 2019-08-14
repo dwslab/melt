@@ -19,4 +19,33 @@ class TrackRepositoryTest {
         assertTrue(TrackRepository.Anatomy.Default.getTestCases().size() > 0);
     }
 
+    @Test
+    public void getMultifarmTrackForLanguage(){
+        assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("de").size() == 9);
+        assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("DE").size() == 9);
+        assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("en").size() == 9);
+        assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("EN").size() == 9);
+        assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("ENG").size() == 0);
+
+        boolean appears = false;
+        for(Track track : TrackRepository.Multifarm.getMultifarmTrackForLanguage("de")){
+            if(track.getName().equals("de-en")) appears = true;
+            assertFalse(track.getName().equals("ar-cn"));
+        }
+        assertTrue(appears, "The method does not return track de-en which should be contained when querying for 'de'.");
+    }
+
+    @Test
+    public void getSpecificMultifarmTrack(){
+        assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de-en").getName().equals("de-en"));
+        assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de-EN").getName().equals("de-en"));
+        assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("DE-EN").getName().equals("de-en"));
+        assertNull(TrackRepository.Multifarm.getSpecificMultifarmTrack("ABCXYZ"));
+
+        assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de", "en").getName().equals("de-en"));
+        assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de", "EN").getName().equals("de-en"));
+        assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("DE", "EN").getName().equals("de-en"));
+        assertNull(TrackRepository.Multifarm.getSpecificMultifarmTrack("ABC", "XYZ"));
+    }
+
 }
