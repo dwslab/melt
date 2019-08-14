@@ -74,6 +74,19 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         return er;
     }
     
+    public ExecutionResult get(ExecutionResult basisResult, Refiner... refinements){
+        return get(basisResult.getTestCase(), basisResult.getMatcherName(), refinements);
+    }
+    
+    public Set<ExecutionResult> getUnrefinedResults(){
+        ResultSet<ExecutionResult> basisResults = this.retrieve(query(EMPTY_REFINEMENT));        
+        Set<ExecutionResult> list = new HashSet<>(basisResults.size());
+        for(ExecutionResult c : basisResults){
+            list.add(c);
+        }        
+        return list;
+    }
+    
     public Set<ExecutionResult> getGroup(TestCase testCase, Refiner... refinements){
         ResultSet<ExecutionResult> basisResults = this.retrieve(query(testCase, EMPTY_REFINEMENT));
         return getGroup(basisResults, refinements);
