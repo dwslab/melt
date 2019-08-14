@@ -276,14 +276,18 @@ public class AlignmentsCube {
         header.add("TestCase");
         header.add("Matcher");
         for (IExplainerResource explainer : resourceExplainers) {
-            header.addAll(explainer.getResourceFeatureNames());
+            for(String featureName : explainer.getResourceFeatureNames()) {
+                header.add(featureName +" Left");
+            }
         }
-        header.add("URI");
+        header.add("URI Left");
         header.add("Relation");
         header.add("Confidence");
-        header.add("URI");
+        header.add("URI Right");
         for (IExplainerResource explainer : resourceExplainers) {
-            header.addAll(explainer.getResourceFeatureNames());
+            for(String featureName : explainer.getResourceFeatureNames()) {
+                header.add(featureName +" Right");
+            }
         }
         for (String featureName : getFeatureNames()) {
             header.add(featureName);
