@@ -282,7 +282,7 @@ public class AlignmentsCube {
         }
         header.add("URI Left");
         header.add("Relation");
-        header.add("Confidence");
+        header.add("Confidence (Matcher)");
         header.add("URI Right");
         for (IExplainerResource explainer : resourceExplainers) {
             for(String featureName : explainer.getResourceFeatureNames()) {

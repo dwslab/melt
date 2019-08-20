@@ -477,13 +477,40 @@ public class DefaultExtensions {
          */
         HAS_EVIDENCE("http://omv.ontoware.org/2007/05/mappingomv#hasEvidence");
 
-
         /**
          * The URI of the extension label.
          */
         private String uri;
 
         OmvMetadata(String uri){
+            this.uri = uri;
+        }
+
+        @Override
+        public String toString(){
+            return this.uri;
+        }
+    }
+
+
+    /**
+     * Additional vocabulary introduced with the MELT framework.
+     */
+    public enum MeltExtensions {
+        /**
+         * The confidence by the annotator of the gold standard for a particular correspondence.
+         * This is required because the confidence in the alignment/correspondence is ALWAYS set by the matcher (hence,
+         * 0 in the case of false positives). In order to also track the annotators confidence, this extension can
+         * be used.
+         */
+        GOLD_STANDARD_CONFIDENCE("http://melt.dws.uni-mannheim.de/vocabulary#gold-standard-confidence");
+
+        /**
+         * The URI of the extension label.
+         */
+        private String uri;
+
+        MeltExtensions(String uri){
             this.uri = uri;
         }
 

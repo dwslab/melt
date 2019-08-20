@@ -122,6 +122,9 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                 if(systemCell != null){
                     truePositives.add(systemCell);
                 } else {
+                    // Confidence is meant to be set by matcher. Hence, it is 0 because matcher did not find this
+                    // correspondence. If gold standard confidence is a requirement, this has to be achieved through an extension.
+                    referenceCell.setConfidence(0.0);
                     falseNegatives.add(referenceCell);
                 }
 
@@ -167,6 +170,7 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                     truePositives.add(systemCell);
                     falsePositives.remove(systemCell);
                 } else {
+                    referenceCell.setConfidence(0.0);
                     falseNegatives.add(referenceCell);
                 }
             }
