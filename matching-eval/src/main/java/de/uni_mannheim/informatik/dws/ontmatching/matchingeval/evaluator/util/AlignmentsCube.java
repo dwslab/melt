@@ -1,8 +1,12 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.util;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingbase.IExplainerResource;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.Executor;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.baselineMatchers.BaselineStringMatcher;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.EvaluatorCSV;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.explainer.IExplainerResourceWithJenaOntology;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Correspondence;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -49,12 +53,12 @@ public class AlignmentsCube {
     /**
      * Add analytical alignment information.
      *
-     * @param testCase                       Test case.
-     * @param matcher                        Matcher name.
+     * @param testCase Test case instance.
+     * @param matcherName Matcher name.
      * @param analyticalAlignmentInformation
      */
-    public AnalyticalAlignmentInformation putAnalyticalMappingInformation(TestCase testCase, String matcher, AnalyticalAlignmentInformation analyticalAlignmentInformation) {
-        return alignmentDataCube.put(new TestCaseMatcher(testCase, matcher), analyticalAlignmentInformation);
+    public AnalyticalAlignmentInformation putAnalyticalMappingInformation(TestCase testCase, String matcherName, AnalyticalAlignmentInformation analyticalAlignmentInformation) {
+        return alignmentDataCube.put(new TestCaseMatcher(testCase, matcherName), analyticalAlignmentInformation);
     }
 
 
@@ -63,7 +67,7 @@ public class AlignmentsCube {
      * This method will never return null. If the AnalyticalAlignmentInformation cannot be found, it will be initialized.
      *
      * @param testCase Test Case
-     * @param matcher  Matcher name.
+     * @param matcher Matcher name.
      * @return Analytical Alignment Information if exists
      */
     public AnalyticalAlignmentInformation getAnalyticalMappingInformation(TestCase testCase, String matcher) {
@@ -177,84 +181,47 @@ public class AlignmentsCube {
 
     /**
      * Same logic/code as in {@link AlignmentsCube#write(File)} but worse memory behavior (that's why the code cannot
+     * be better modularized). Similar to {@link AlignmentsCube#toString()} with the difference that URIs are
+     * shortened.
+     * @return Large String.
+     */
+    public String toShortString(){
+        try {
+            StringWriter writer = new StringWriter();
+            CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+            printer.printRecord(getHeader()); // shorter header
+
+            // determine main URI?
+
+            for(List<String> record : getRecordsToPrintForToStringMethods()){
+                // TODO shorten the records here
+                printer.printRecord(record);
+            }
+
+            // note: writer does not have to be closed.
+            return writer.toString();
+        } catch (IOException ioe){
+            LOGGER.error("Could not transform AlignmentsCube to String.", ioe);
+            return null;
+        }
+
+    }
+
+    /**
+     * Same logic/code as in {@link AlignmentsCube#write(File)} but worse memory behavior (that's why the code cannot
      * be better modularized).
      * @return Large String.
      */
     @Override
     public String toString(){
-
         try {
             StringWriter writer = new StringWriter();
             CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
-
             printer.printRecord(getHeader());
-
-            for (HashMap.Entry<TestCaseMatcher, AnalyticalAlignmentInformation> cubeComponent : this.alignmentDataCube.entrySet()) {
-                String trackName = cubeComponent.getKey().testCase.getTrack().getName();
-                String testCaseName = cubeComponent.getKey().testCase.getName();
-                String matcherName = (cubeComponent.getKey().matcher);
-                LOGGER.info("Writing " + trackName + " | " + testCaseName + " | " + matcherName);
-
-                for (HashMap.Entry<Correspondence, HashMap<String, String>> mappingInformationEntry : cubeComponent.getValue().getMappingInformation().entrySet()) {
-                    List<String> record = new LinkedList<>();
-                    record.add(trackName);
-                    record.add(testCaseName);
-                    record.add(matcherName);
-
-                    // resource feature uri1
-                    for (IExplainerResource explainer : resourceExplainers) {
-                        if (explainer instanceof IExplainerResourceWithJenaOntology) {
-                            ((IExplainerResourceWithJenaOntology) explainer).setOntModel(cubeComponent.getKey().testCase.getSourceOntology(OntModel.class));
-                            Map<String, String> resourceFeatures = explainer.getResourceFeatures(mappingInformationEntry.getKey().getEntityOne());
-                            if (resourceFeatures == null) {
-                                LOGGER.warn("No resource features for " + mappingInformationEntry.getKey().getEntityOne());
-                            } else {
-                                for (String resourceFeatureName : explainer.getResourceFeatureNames()) {
-                                    String feature = resourceFeatures.get(resourceFeatureName);
-                                    if (feature == null) {
-                                        LOGGER.info("Could not find feature " + resourceFeatureName + " ignoring it.");
-                                        record.add("");
-                                    } else record.add(feature);
-                                }
-                            }
-                        }
-                    }
-
-                    record.add(mappingInformationEntry.getKey().getEntityOne());
-                    record.add(mappingInformationEntry.getKey().getRelation().toString());
-                    record.add(Double.toString(mappingInformationEntry.getKey().getConfidence()));
-                    record.add(mappingInformationEntry.getKey().getEntityTwo());
-
-                    // resource feature uri2
-                    for (IExplainerResource explainer : resourceExplainers) {
-                        if (explainer instanceof IExplainerResourceWithJenaOntology) {
-                            ((IExplainerResourceWithJenaOntology) explainer).setOntModel(cubeComponent.getKey().testCase.getTargetOntology(OntModel.class));
-                            Map<String, String> resourceFeatures = explainer.getResourceFeatures(mappingInformationEntry.getKey().getEntityTwo());
-                            if (resourceFeatures == null) {
-                                LOGGER.warn("No resource features for " + mappingInformationEntry.getKey().getEntityTwo());
-                            } else {
-                                for (String resourceFeatureName : explainer.getResourceFeatureNames()) {
-                                    String feature = resourceFeatures.get(resourceFeatureName);
-                                    if (feature == null) {
-                                        LOGGER.info("Could not find feature " + resourceFeatureName + " ignoring it.");
-                                        record.add("");
-                                    } else record.add(feature);
-                                }
-                            }
-                        }
-                    }
-
-                    // add feature values
-                    for (String featureName : getFeatureNames()) {
-                        String featureValue = mappingInformationEntry.getValue().get(featureName);
-                        if (featureValue == null) {
-                            record.add("");
-                        } else record.add(featureValue);
-                    }
-                    printer.printRecord(record);
-                } // end of loop over mapping information entry
-            } // end of loop over mapping information entries a.k.a. cubeComponent
-
+            for(List<String> record : getRecordsToPrintForToStringMethods()){
+                printer.printRecord(record);
+            }
             // note: writer does not have to be closed.
             return writer.toString();
         } catch (IOException ioe){
@@ -263,6 +230,82 @@ public class AlignmentsCube {
         }
     }
 
+
+    /**
+     * This method returns the alignment cube in a way that it can be easily printed as String.
+     * This internal method is to be used by {@link AlignmentsCube#toString()} and {@link AlignmentsCube#toShortString()}.
+     * This method only contains the data (without the CSV header).
+     * @return List of the records to be printed.
+     */
+    private List<List<String>> getRecordsToPrintForToStringMethods(){
+        List<List<String>> result = new ArrayList<>();
+        for (HashMap.Entry<TestCaseMatcher, AnalyticalAlignmentInformation> cubeComponent : this.alignmentDataCube.entrySet()) {
+            String trackName = cubeComponent.getKey().testCase.getTrack().getName();
+            String testCaseName = cubeComponent.getKey().testCase.getName();
+            String matcherName = (cubeComponent.getKey().matcher);
+            LOGGER.info("Writing " + trackName + " | " + testCaseName + " | " + matcherName);
+
+            for (HashMap.Entry<Correspondence, HashMap<String, String>> mappingInformationEntry : cubeComponent.getValue().getMappingInformation().entrySet()) {
+                List<String> record = new LinkedList<>();
+                record.add(trackName);
+                record.add(testCaseName);
+                record.add(matcherName);
+
+                // resource feature uri1
+                for (IExplainerResource explainer : resourceExplainers) {
+                    if (explainer instanceof IExplainerResourceWithJenaOntology) {
+                        ((IExplainerResourceWithJenaOntology) explainer).setOntModel(cubeComponent.getKey().testCase.getSourceOntology(OntModel.class));
+                        Map<String, String> resourceFeatures = explainer.getResourceFeatures(mappingInformationEntry.getKey().getEntityOne());
+                        if (resourceFeatures == null) {
+                            LOGGER.warn("No resource features for " + mappingInformationEntry.getKey().getEntityOne());
+                        } else {
+                            for (String resourceFeatureName : explainer.getResourceFeatureNames()) {
+                                String feature = resourceFeatures.get(resourceFeatureName);
+                                if (feature == null) {
+                                    LOGGER.info("Could not find feature " + resourceFeatureName + " ignoring it.");
+                                    record.add("");
+                                } else record.add(feature);
+                            }
+                        }
+                    }
+                }
+
+                record.add(mappingInformationEntry.getKey().getEntityOne());
+                record.add(mappingInformationEntry.getKey().getRelation().toString());
+                record.add(Double.toString(mappingInformationEntry.getKey().getConfidence()));
+                record.add(mappingInformationEntry.getKey().getEntityTwo());
+
+                // resource feature uri2
+                for (IExplainerResource explainer : resourceExplainers) {
+                    if (explainer instanceof IExplainerResourceWithJenaOntology) {
+                        ((IExplainerResourceWithJenaOntology) explainer).setOntModel(cubeComponent.getKey().testCase.getTargetOntology(OntModel.class));
+                        Map<String, String> resourceFeatures = explainer.getResourceFeatures(mappingInformationEntry.getKey().getEntityTwo());
+                        if (resourceFeatures == null) {
+                            LOGGER.warn("No resource features for " + mappingInformationEntry.getKey().getEntityTwo());
+                        } else {
+                            for (String resourceFeatureName : explainer.getResourceFeatureNames()) {
+                                String feature = resourceFeatures.get(resourceFeatureName);
+                                if (feature == null) {
+                                    LOGGER.info("Could not find feature " + resourceFeatureName + " ignoring it.");
+                                    record.add("");
+                                } else record.add(feature);
+                            }
+                        }
+                    }
+                }
+
+                // add feature values
+                for (String featureName : getFeatureNames()) {
+                    String featureValue = mappingInformationEntry.getValue().get(featureName);
+                    if (featureValue == null) {
+                        record.add("");
+                    } else record.add(featureValue);
+                }
+                result.add(record);
+            } // end of loop over mapping information entry
+        } // end of loop over mapping information entries a.k.a. cubeComponent
+        return result;
+    }
 
 
     /**
@@ -365,7 +408,6 @@ public class AlignmentsCube {
     //-------------------------------------------------------------------------------------------
     // Getters and Setters
     //-------------------------------------------------------------------------------------------
-
 
     public List<IExplainerResource> getResourceExplainers() {
         return resourceExplainers;
