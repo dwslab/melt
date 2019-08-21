@@ -12,6 +12,9 @@ import java.util.Map.Entry;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.shared.PrefixMapping;
 
+/**
+ * This class represents a lookup service for Semantic Web prefixes.
+ */
 public class PrefixLookup {
 
     private static PrefixMapping mapping = initPrefixMapping();

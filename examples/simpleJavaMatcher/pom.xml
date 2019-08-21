@@ -76,7 +76,7 @@
     <build>
         <plugins>
 
-            <!-- the following plugin will generate a seals assemably -->
+            <!-- the following plugin will generate a seals assembly -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
