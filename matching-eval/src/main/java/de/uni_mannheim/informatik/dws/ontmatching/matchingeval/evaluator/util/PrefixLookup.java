@@ -2,6 +2,8 @@ package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.util;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,15 +60,35 @@ public class PrefixLookup {
     public static Map<String, String> getPrefixMap(){
         return mapping.getNsPrefixMap();
     }
-    public static String getPrefix(String uri){
-        return mapping.getNsURIPrefix(uri);
+    public static String getPrefix(String uriStr){
+        int idx = splitIdx(uriStr) ;
+        if (idx >= 0)
+        {
+            String x = uriStr.substring(0,idx+1);
+            String prefix = mapping.getNsURIPrefix(x);
+            if (prefix != null)
+            {
+                return prefix + ':' + uriStr.substring(idx+1);
+            }
+        }
+        return uriStr;
     }
     
-    public static void main(String[] args) { 
+    private static int splitIdx(String uriStr)
+    {
+        int idx = uriStr.lastIndexOf('#') ;
+        if ( idx >= 0 )
+            return idx ;
+        idx = uriStr.lastIndexOf('/') ;
+        return idx ;
+    }
+    
+    private static void analyseDefaultOAEIPrefixes(){
         List<TestCase> l = new ArrayList();
         l.addAll(TrackRepository.Anatomy.Default.getTestCases());
         l.addAll(TrackRepository.Conference.V1.getTestCases());
-        l.addAll(TrackRepository.Largebio.V2016.ALL.getTestCases());
+        l.addAll(TrackRepository.Largebio.V2016.FMA_NCI_SMALL.getTestCases());
+        l.addAll(TrackRepository.Largebio.V2016.FMA_SNOMED_SMALL.getTestCases());
         
         Map<String, String> prefixes = new HashMap<>();
         for(TestCase tc : l){
@@ -77,5 +99,11 @@ public class PrefixLookup {
         for(Entry<String, String> entry : prefixes.entrySet()){
             System.out.println(".setNsPrefix( \"" + entry.getKey() + "\",\"" + entry.getValue() + "\" )");
         }
-    }    
+    }
+    
+    /*
+    public static void main(String[] args) {
+        analyseDefaultOAEIPrefixes();
+    }
+    */
 }
