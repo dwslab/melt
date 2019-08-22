@@ -1,24 +1,17 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.visualization.web;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.EvaluatorCSV;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
