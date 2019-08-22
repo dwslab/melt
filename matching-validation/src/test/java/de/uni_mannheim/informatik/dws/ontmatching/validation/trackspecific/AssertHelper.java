@@ -25,6 +25,9 @@ public class AssertHelper {
         assertTrue(service.isSourceOntologyParseable(), "Source Ontology not parsable");
         assertTrue(service.isTargetOntologyParseable(), "Target Ontology not parsable");
         assertTrue(service.isReferenceAlignmentParseable(), "Reference alignment not parseable");
+        
+        assertTrue(service.getSourceOntologyValidationService().isOntologyDefined(), "The source ontology does not contain an ontology definition.");
+        assertTrue(service.getTargetOntologyValidationService().isOntologyDefined(), "The target ontology does not contain an ontology definition.");
 
 
         assertEquals(0, service.getNotFoundInSourceOntology().size(), 

@@ -18,6 +18,10 @@ public class LevenshteinMatcher extends MatcherYAAAJena {
         this.threshold = 1.0;
     }
     
+    public LevenshteinMatcher(double threshold) {
+        this.threshold = threshold;
+    }
+    
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties p) throws Exception {
         Alignment alignment = new Alignment();
