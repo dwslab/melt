@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>$title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--bootstrap-->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+
+        <!--dc.js (no integrity check because of underspecified/changing versions)-->
+        <script src="https://unpkg.com/d3@5/dist/d3.js"></script>
+        <script src="https://unpkg.com/crossfilter2@1.4/crossfilter.js"></script>
+        <script src="https://unpkg.com/dc@3/dc.js"></script>
+        <script src="https://rawgit.com/crossfilter/reductio/master/reductio.js"></script>
+        <script src="https://npmcdn.com/universe@latest/universe.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/dc@3/dc.css"/>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <h2>$title</h2>
+            </div>
+            <!--dc.js: anchor div for charts -->
+            #foreach( $row in $dcjsElements )
+            <div class="row">
+                #foreach( $element in $row )
+                <$element.tagName id="$element.name"#if($element.anchorClass) class="$element.anchorClass"#end#if($element.anchorStyle) style="$element.anchorStyle"#end>
+                    #if($element.title)
+                    <strong>$element.title</strong>
+                    #end
+                    #if($element.filterText)
+                    <span class="reset" style="visibility: hidden;">$element.filterText</span>
+                    #end
+                    #if($element.resetText)
+                    <a class="reset" href="javascript:${element.name}.filterAll();dc.redrawAll();" style="visibility: hidden;">$element.resetText</a>
+                    #end
+                    <div class="clearfix"></div>
+                </$element.tagName>
+                #end
+            </div>
+            #end
+        </div><!--container-->
+       <script type="text/javascript">
+            <!--dc.js: create chart objects: accessible at the global scope so that they can be modified or filtered by other page controls -->
+            #foreach( $row in $dcjsElements )
+            #foreach( $element in $row )
+            var $element.name;
+            #end
+            #end
+
+            #foreach( $fileName in $jsHelperFileNames )
+                #include("jsHelper/$fileName")
+
+
+            #end
+            
+            $(document).ready(function(){
+                dc.config.defaultColors(d3.schemeCategory10);
+                #if($remoteLocation)
+                d3.csv("$remoteLocation").then(function(experiments) {
+                #else
+                var experiments = d3.csvParse(d3.select('pre#data').text());
+                #end                
+                var ndx         = crossfilter(experiments);
+
+                //dimension 
+                #foreach( $def in $dimensionDefinition )
+                $def
+                #end
+
+                //group 
+                #foreach( $def in $groupDefinition )
+                $def
+                #end
+
+                //chart definition
+                #foreach( $row in $dcjsElements )
+                #foreach( $element in $row )
+                $element.name = ${element.chartType}('#${element.name}');
+                $element.name
+                    #foreach( $method in $element.jsMethods )
+                    .$method#if(!$foreach.hasNext);#end
+
+                    #end
+
+                #end
+                #end
+                
+                dc.renderAll();                
+                #if($remoteLocation)
+                });
+                #end                
+            });
+       </script>
+
+#if($csvData)
+<!--csv data-->
+<pre id="data" style="display: none;">
+$csvData
+</pre>
+#end
+    </body>
+</html>
