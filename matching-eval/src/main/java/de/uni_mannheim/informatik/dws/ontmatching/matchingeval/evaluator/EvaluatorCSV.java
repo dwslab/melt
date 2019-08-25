@@ -402,6 +402,20 @@ public class EvaluatorCSV extends Evaluator {
         return this.alignmentsCube.toString();
     }
 
+    /**
+     * Obtain an output stream that can be used to write the CSV file.
+     * @return
+     */
+    public String getAlignmentsCubeAsShortenedString(){
+        for (String matcher : this.results.getDistinctMatchers()) {
+            // individual evaluation per test case
+            for (TestCase testCase : this.results.getDistinctTestCases(matcher)) {
+                writeOverviewFileMatcherTestCase(testCase, matcher, null, true);
+            }
+        }
+        return this.alignmentsCube.toShortString();
+    }
+
 
     //-------------------------------------------------------------------------------------------
     // Getters and Setters

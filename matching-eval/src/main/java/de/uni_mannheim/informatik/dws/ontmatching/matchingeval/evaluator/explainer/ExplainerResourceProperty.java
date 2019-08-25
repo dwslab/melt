@@ -5,11 +5,13 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingbase.IExplainerResourc
 import java.util.*;
 import java.util.Map.Entry;
 
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.util.PrefixLookup;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +58,7 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
      * Retrieves the features for the given URI.
      *
      * @param uri the resource uri
-     * @return a map with key = featureName and value = featureValue.
+     * @return A map with key = featureName and value = featureValue.
      */
     @Override
     public Map<String, String> getResourceFeatures(String uri) {
@@ -74,15 +76,23 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
         }
 
         Map<String, String> result = new HashMap<>();
-        for (Entry<String, Property> p : properties.entrySet()) {
+        for (Entry<String, Property> property : properties.entrySet()) {
             StringJoiner joiner = new StringJoiner(",");
-            StmtIterator iter = resource.listProperties(p.getValue());
+            StmtIterator iter = resource.listProperties(property.getValue());
+            List<String> propertyValueList = new ArrayList<>();
             while (iter.hasNext()) {
-                Statement s = iter.nextStatement();
-                joiner.add(s.getObject().toString());
+                propertyValueList.add(iter.nextStatement().getObject().toString());
             }
+            Collections.sort(propertyValueList);
+
+            for(String string : propertyValueList){
+                if(property.getValue().equals(RDF.type)) {
+                    joiner.add(PrefixLookup.getPrefix(string));
+                } else joiner.add(string);
+            }
+
             String jsonArray = "[" + joiner.toString() + "]";
-            result.put(p.getKey(), jsonArray);
+            result.put(property.getKey(), jsonArray);
         }
         return result;
     }

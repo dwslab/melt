@@ -63,26 +63,39 @@ public class PrefixLookup {
     public static Map<String, String> getPrefixMap(){
         return mapping.getNsPrefixMap();
     }
-    public static String getPrefix(String uriStr){
-        int idx = splitIdx(uriStr) ;
+
+
+    /**
+     * Given a URI, this method returns the prefix as String. If the prefix is available in mapping, the short name will
+     * be returned (e.g. 'daml' rather than 'http://www.daml.org/2001/03/daml+oil#').
+     * @param uriString The URI of which the prefix shall be obtained.
+     * @return Prefix as String.
+     */
+    public static String getPrefix(String uriString){
+        int idx = splitIdx(uriString);
         if (idx >= 0)
         {
-            String x = uriStr.substring(0,idx+1);
-            String prefix = mapping.getNsURIPrefix(x);
+            String baseUriString = uriString.substring(0, idx + 1);
+            String prefix = mapping.getNsURIPrefix(baseUriString);
             if (prefix != null)
             {
-                return prefix + ':' + uriStr.substring(idx+1);
-            }
+                return prefix + ':' + uriString.substring(idx + 1);
+            } else return baseUriString;
         }
-        return uriStr;
+        return uriString;
     }
-    
-    private static int splitIdx(String uriStr)
+
+    /**
+     * Obtains the index of the hashkey or last slash in order to determine the fragment/prefix of a URI
+     * @param uriString URI string.
+     * @return Position of splitting character.
+     */
+    private static int splitIdx(String uriString)
     {
-        int idx = uriStr.lastIndexOf('#') ;
+        int idx = uriString.lastIndexOf('#') ;
         if ( idx >= 0 )
             return idx ;
-        idx = uriStr.lastIndexOf('/') ;
+        idx = uriString.lastIndexOf('/') ;
         return idx ;
     }
     
