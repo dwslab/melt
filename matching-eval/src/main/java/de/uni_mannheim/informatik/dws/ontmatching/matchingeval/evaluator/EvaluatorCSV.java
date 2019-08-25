@@ -16,6 +16,8 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.Residu
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.TypeRefiner;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
+import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
+import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Correspondence;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -28,6 +30,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -255,11 +258,23 @@ public class EvaluatorCSV extends Evaluator {
         if (allCm.getFalseNegative() != null)
             alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allCm.getFalseNegative(), AnalyticalAlignmentInformation.DefaultFeatures.EVALUATION_RESULT.toString(), "false negative");
 
-        // residuals
+        // residuals (true)
         if (allResidualCm.getTruePositive() != null)
             alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allResidualCm.getTruePositive(), AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString(), "true");
         if (allResidualCm.getFalseNegative() != null)
             alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allResidualCm.getFalseNegative(), AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString(), "true");
+
+        // residuals (false) -> all correspondences that are not true are false
+        HashMap<Correspondence, HashMap<String, String>> mappingInformation = alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).getMappingInformation();
+        List<Correspondence> nonResidualCorrespondence = new ArrayList<>();
+        for(HashMap.Entry<Correspondence, HashMap<String, String>> entry : mappingInformation.entrySet()){
+            if(!entry.getValue().containsKey(AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString())){
+                // non residual
+                nonResidualCorrespondence.add(entry.getKey());
+            }
+        }
+        alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(nonResidualCorrespondence, AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString(), "false");
+
 
         if(!onlyCalculateCube) {
             try {
