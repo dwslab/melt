@@ -152,9 +152,9 @@ public class PageBuilder {
         String group = e.createGroupDefinitionReduceField("ResultPerMatcherDimension", "Evaluation Result");
         String groupEmptyBins = e.createGroupDefinitionRemoveEmptyBins(group);
         
-        e.setGroupStacked(groupEmptyBins, "true positive");
-        e.addStack(groupEmptyBins, "false positive");
+        e.setGroupStacked(groupEmptyBins, "true positive");//check order -> important for same color
         e.addStack(groupEmptyBins, "false negative");
+        e.addStack(groupEmptyBins, "false positive");
         return addElement(e);
     }
     
@@ -176,8 +176,8 @@ public class PageBuilder {
         String groupEmptyBins = e.createGroupDefinitionRemoveEmptyBins(group);
         
         e.setGroupStacked(groupEmptyBins, "true positive");
-        e.addStack(groupEmptyBins, "false positive");
         e.addStack(groupEmptyBins, "false negative");
+        e.addStack(groupEmptyBins, "false positive");        
         return addElement(e);
     }
     
