@@ -62,20 +62,26 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
      */
     @Override
     public Map<String, String> getResourceFeatures(String uri) {
+        Map<String, String> result = new HashMap<>();
 
         if(uri == null){
-            LOGGER.debug("Given URI is null. Returning null.");
-            return null;
+            LOGGER.debug("Given URI is null. Returning feature set with empty values.");
+            for (Entry<String, Property> property : properties.entrySet()) {
+                result.put(property.getKey(), "[]");
+            }
+            return result;
         }
 
         OntResource resource = ontModel.getOntResource(uri);
 
         if (resource == null) {
-            LOGGER.debug("Could not find resource with uri: " + uri + ". Returning null.");
-            return null;
+            LOGGER.debug("Could not find resource with uri: " + uri + ". Returning feature set with empty values.");
+            for (Entry<String, Property> property : properties.entrySet()) {
+                result.put(property.getKey(), "[]");
+            }
+            return result;
         }
 
-        Map<String, String> result = new HashMap<>();
         for (Entry<String, Property> property : properties.entrySet()) {
             StringJoiner joiner = new StringJoiner(",");
             StmtIterator iter = resource.listProperties(property.getValue());

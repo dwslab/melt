@@ -69,7 +69,7 @@ public class TypeRefiner implements Refiner {
      * @param source The source ontology model.
      * @param target The target ontology model.
      * @param originalAlignment The original mapping before the refinement action.
-     * @return The refinde mapping.
+     * @return The refined mapping.
      */
     protected Alignment refineMapping(OntModel source, OntModel target, Alignment originalAlignment){
         Alignment refinedAlignment = new Alignment();

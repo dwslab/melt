@@ -29,6 +29,9 @@ matching-eval/results/
 current_result.rdf
 result.rdf
 
+#generated webpages
+dashboard.html
+
 #java
 *.log
 

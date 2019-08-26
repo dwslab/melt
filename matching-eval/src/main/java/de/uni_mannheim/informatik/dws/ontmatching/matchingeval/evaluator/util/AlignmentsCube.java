@@ -62,12 +62,6 @@ public class AlignmentsCube {
         return alignmentDataCube.put(new TestCaseMatcher(testCase, matcherName), analyticalAlignmentInformation);
     }
 
-    // TODO delete
-    public static void main(String[] args) {
-        ExecutionResultSet ers = Executor.run(TrackRepository.Anatomy.Default, new BaselineStringMatcher(), "Base");
-        EvaluatorCSV evaluator = new EvaluatorCSV(ers);
-        System.out.println(evaluator.getAlignmentsCubeAsShortenedString());
-    }
 
     /**
      * Get analytical mapping information for testcase and matcher name.
