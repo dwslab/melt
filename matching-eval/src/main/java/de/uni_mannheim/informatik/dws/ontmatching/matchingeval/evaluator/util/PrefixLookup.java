@@ -54,6 +54,18 @@ public class PrefixLookup {
             .setNsPrefix( "protege","http://protege.stanford.edu/plugins/owl/protege#" )
             .setNsPrefix( "daml","http://www.daml.org/2001/03/daml+oil#" )
             .setNsPrefix( "Thesaurus","http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#" )
+
+            // OAEI Track related:
+            .setNsPrefix("cmt", "http://cmt#")
+            .setNsPrefix("conference", "http://conference#")
+            .setNsPrefix("edas", "http://edas#")
+            .setNsPrefix("sigkdd", "http://sigkdd#")
+            .setNsPrefix("confof", "http://confOf#")
+            .setNsPrefix("ekaw", "http://ekaw#")
+            .setNsPrefix("iasted", "http://iasted#")
+            .setNsPrefix("mouse", "http://mouse.owl#")
+            .setNsPrefix("human", "http://human.owl#")
+
             .lock();
     }
     
@@ -66,8 +78,9 @@ public class PrefixLookup {
 
 
     /**
-     * Given a URI, this method returns the prefix as String. If the prefix is available in mapping, the short name will
-     * be returned (e.g. 'daml' rather than 'http://www.daml.org/2001/03/daml+oil#').
+     * Given a URI, this method returns the prefixed URI. If the prefix is available in mapping, the short name will
+     * be returned (e.g. 'daml:someConcept' rather than 'http://www.daml.org/2001/03/daml+oil#someConcept').
+     * If the prefix is not available in the mapping, the full string will be returned.
      * @param uriString The URI of which the prefix shall be obtained.
      * @return Prefix as String.
      */
@@ -80,10 +93,26 @@ public class PrefixLookup {
             if (prefix != null)
             {
                 return prefix + ':' + uriString.substring(idx + 1);
-            } else return baseUriString;
+            } else return uriString;
         }
         return uriString;
     }
+
+    /**
+     * Given a URI String, the base will be determined (in other word, the fragment will be cut).
+     * @param uriString URI of which the base shall be determined.
+     * @return The base URI as String.
+     */
+    public static String getBaseUri(String uriString){
+        int idx = splitIdx(uriString);
+        if (idx >= 0)
+        {
+            String baseUriString = uriString.substring(0, idx + 1);
+            return baseUriString;
+        }
+        return uriString;
+    }
+
 
     /**
      * Obtains the index of the hashkey or last slash in order to determine the fragment/prefix of a URI

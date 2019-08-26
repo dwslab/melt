@@ -29,12 +29,17 @@ import org.slf4j.LoggerFactory;
  * s.addAll(Executor.loadFromConferenceResultsFolder("..."));
  * PageBuilder pb = new PageBuilder(s);
  * pb.addDefaultDashboard();
- * pb.writetoFile(new File("dashboard.html"));
+ * pb.writeToFile(new File("dashboard.html"));
  * }
  * </pre>
  */
 public class PageBuilder {
-    
+
+
+    public static void main(String[] args) {
+
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PageBuilder.class);
     
     protected ExecutionResultSet executionResultSet;
@@ -288,12 +293,12 @@ public class PageBuilder {
      * This file can be opened directly by a browser.
      * @param htmlFile 
      */
-    public void writetoFile(File htmlFile){
+    public void writeToFile(File htmlFile){
         //in case the last row is not closed:
         newRow();
 
         VelocityContext context = prepareVelocityContext();
-        context.put("csvData", new EvaluatorCSV(this.executionResultSet).getAlignmentsCubeAsString().trim());
+        context.put("csvData", new EvaluatorCSV(this.executionResultSet).getAlignmentsCubeAsShortenedString().trim());
         /*context.put("csvData", "Track,TestCase,left_label,left_comment,left_explicit_type,left_uri,relation,confidence,right_uri,right_label,right_comment,right explicit type,result\n" +
 "conference,conference-sigkdd,[],[],[http://www.w3.org/2002/07/owl-Class],http://conference-Review,=,1.0,http://sigkdd-Review,[],[],[http://www.w3.org/2002/07/owl-Class],true positive\n" +
 "conference,conference-sigkdd,[],[],[http://www.w3.org/2002/07/owl-Class],http://conference-Committee,=,1.0,http://sigkdd-Committee,[],[],[http://www.w3.org/2002/07/owl-Class],true positive\n" +
@@ -307,10 +312,10 @@ public class PageBuilder {
         }
     }
     
-    public void writetoFile(File htmlFile, File csvFile){
+    public void writeToFile(File htmlFile, File csvFile){
         newRow();
         
-        try(Writer writer = new BufferedWriter(new FileWriter(csvFile));){                
+        try(Writer writer = new BufferedWriter(new FileWriter(csvFile))){
             writer.write(new EvaluatorCSV(this.executionResultSet).getAlignmentsCubeAsString().trim());
         } catch (IOException ex) {
             LOGGER.error("Could not write to file.", ex);

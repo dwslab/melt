@@ -210,27 +210,35 @@ public class AlignmentsCube {
                     explainerFeatures++;
                 }
             }
-            final int uri_1_typePosition = 3 + typePosition;
-            final int uri_2_typePosition = uri_1_typePosition + 3 + typePosition;
             final int uri_1_position = 3 + explainerFeatures;
             final int uri_2_position = uri_1_position + 3;
 
-
-            StringString mainUris = determineMainUris(records, uri_1_position, uri_2_position);
+            HashMap<String, StringString> mainUris = determineMainUrisPerTestCase(records, uri_1_position, uri_2_position);
 
             for(List<String> record : records){
-                String uri_1 = record.get(uri_1_position);
-                if(uri_1.contains(mainUris.string_1)){
-                    record.set(uri_1_position, uri_1.replace(mainUris.string_1, ":"));
-                } else record.set(uri_1_position, PrefixLookup.getPrefix(uri_1));
+                String uri_1_prefixed = PrefixLookup.getPrefix(record.get(uri_1_position));
+                String uri_2_prefixed = PrefixLookup.getPrefix(record.get(uri_2_position));
+                String key = record.get(0) + "_" + record.get(1);
 
-                String uri_2 = record.get(uri_2_position);
-                if(uri_2.contains(mainUris.string_2)){
-                    record.set(uri_2_position, uri_2.replace(mainUris.string_2, ":"));
-                } else record.set(uri_2_position, PrefixLookup.getPrefix(uri_2));
+                if(uri_1_prefixed.equals(record.get(uri_1_position))) {
+                    // there is no prefix -> simply cut most frequent base
+                    String uri_1 = record.get(uri_1_position);
+                    if (uri_1.contains(mainUris.get(key).string_1)) {
+                        record.set(uri_1_position, uri_1.replace(mainUris.get(key).string_1, ":"));
+                    } else record.set(uri_1_position, uri_1);
+                } else {
+                    record.set(uri_1_position, uri_1_prefixed);
+                }
 
-                //record.set(uri_1_typePosition, PrefixLookup.getPrefix(record.get(uri_1_typePosition)));
-                //record.set(uri_2_typePosition, PrefixLookup.getPrefix(record.get(uri_2_typePosition)));
+                if(uri_2_prefixed.equals(record.get(uri_2_position))) {
+                    // there is no prefix -> simply cut most frequent base
+                    String uri_2 = record.get(uri_2_position);
+                    if (uri_2.contains(mainUris.get(key).string_2)) {
+                        record.set(uri_2_position, uri_2.replace(mainUris.get(key).string_2, ":"));
+                    } else record.set(uri_2_position, PrefixLookup.getPrefix(uri_2));
+                } else {
+                    record.set(uri_2_position, uri_2_prefixed);
+                }
 
                 printer.printRecord(record);
             }
@@ -244,44 +252,68 @@ public class AlignmentsCube {
     }
 
     /**
-     * This methods determines the most frequent URIs in the set of records for ontology 1 and ontology 2.
+     * This methods determines the most frequent URIs per test case in the set of records for ontology 1 and ontology 2.
      * @param records The set of records of which the main URI shall be determined.
      * @param uri_1_position Position of URI 1.
      * @param uri_2_position Position of URI 2.
-     * @return The main URI as String.
+     * @return A map in the form <track>_<testcase> -> StringString where string1 = most frequent base in ontology 1
+     * and string2 = most frequent base in ontology 2.
      */
-    private StringString determineMainUris(List<List<String>> records, int uri_1_position, int uri_2_position) {
+    private HashMap<String, StringString> determineMainUrisPerTestCase(List<List<String>> records, int uri_1_position, int uri_2_position) {
+        HashMap<String, StringString> result = new HashMap<>();
+        if(records == null || records.size() == 0) return result;
 
-        HashMap<String, Integer> uriDistribution_1 = new HashMap<>();
-        HashMap<String, Integer> uriDistribution_2 = new HashMap<>();
+        HashMap<String, HashMap<String, Integer>> distribution_1 = new HashMap<>();
+        HashMap<String, HashMap<String, Integer>> distribution_2 = new HashMap<>();
 
-        for(List<String> record : records){
-            String uri_1_prefix = PrefixLookup.getPrefix(record.get(uri_1_position));
-            String uri_2_prefix = PrefixLookup.getPrefix(record.get(uri_2_position));
+        for(List<String> record : records) {
+            if (record.size() <= uri_2_position) {
+                LOGGER.error("Record is too small.", record);
+                continue;
+            }
 
-            if(uriDistribution_1.containsKey(uri_1_prefix)){
-                uriDistribution_1.put(uri_1_prefix, uriDistribution_1.get(uri_1_prefix) + 1);
-            } else uriDistribution_1.put(uri_1_prefix, 1);
+            String key = record.get(0) + "_" + record.get(1);
+            String uri_1_prefix = PrefixLookup.getBaseUri(record.get(uri_1_position));
+            String uri_2_prefix = PrefixLookup.getBaseUri(record.get(uri_2_position));
+            if (distribution_1.containsKey(key)) {
+                if (distribution_1.get(key).containsKey(uri_1_prefix)) {
+                    distribution_1.get(key).put(uri_1_prefix, distribution_1.get(key).get(uri_1_prefix) + 1);
+                } else distribution_1.get(key).put(uri_1_prefix, 1);
+            } else {
+                distribution_1.put(key, new HashMap<>());
+                distribution_1.get(key).put(uri_1_prefix, 1);
+            }
 
-            if(uriDistribution_2.containsKey(uri_2_prefix)){
-                uriDistribution_2.put(uri_2_prefix, uriDistribution_2.get(uri_2_prefix) + 1);
-            } else uriDistribution_2.put(uri_2_prefix, 1);
+            if(distribution_2.containsKey(key)) {
+                if (distribution_2.get(key).containsKey(uri_2_prefix)) {
+                    distribution_2.get(key).put(uri_2_prefix, distribution_2.get(key).get(uri_2_prefix) + 1);
+                } else distribution_2.get(key).put(uri_2_prefix, 1);
+            } else {
+                distribution_2.put(key, new HashMap<>());
+                distribution_2.get(key).put(uri_2_prefix, 1);
+            }
+        }
+
+        for(String key : distribution_1.keySet()){
+            result.put(key, new StringString(mostFrequent(distribution_1.get(key)), mostFrequent(distribution_2.get(key))));
         }
 
         // return string string
-        return new StringString(mostFrequent(uriDistribution_1), mostFrequent(uriDistribution_2));
+        return result;
     }
+
 
     /**
      * Internal data structure.
      */
     private class StringString {
-        String string_1;
-        String string_2;
+        String string_1 = "";
+        String string_2 = "";
         StringString(String s1, String s2){
             string_1 = s1;
             string_2 = s2;
         }
+        StringString(){}
     }
 
     /**
@@ -339,7 +371,6 @@ public class AlignmentsCube {
             String trackName = cubeComponent.getKey().testCase.getTrack().getName();
             String testCaseName = cubeComponent.getKey().testCase.getName();
             String matcherName = (cubeComponent.getKey().matcher);
-            LOGGER.info("Writing " + trackName + " | " + testCaseName + " | " + matcherName);
 
             for (HashMap.Entry<Correspondence, HashMap<String, String>> mappingInformationEntry : cubeComponent.getValue().getMappingInformation().entrySet()) {
                 List<String> record = new LinkedList<>();
@@ -354,6 +385,9 @@ public class AlignmentsCube {
                         Map<String, String> resourceFeatures = explainer.getResourceFeatures(mappingInformationEntry.getKey().getEntityOne());
                         if (resourceFeatures == null) {
                             LOGGER.warn("No resource features for " + mappingInformationEntry.getKey().getEntityOne());
+                            for (String resourceFeatureName : explainer.getResourceFeatureNames()) {
+                                record.add("");
+                            }
                         } else {
                             for (String resourceFeatureName : explainer.getResourceFeatureNames()) {
                                 String feature = resourceFeatures.get(resourceFeatureName);
@@ -378,6 +412,9 @@ public class AlignmentsCube {
                         Map<String, String> resourceFeatures = explainer.getResourceFeatures(mappingInformationEntry.getKey().getEntityTwo());
                         if (resourceFeatures == null) {
                             LOGGER.warn("No resource features for " + mappingInformationEntry.getKey().getEntityTwo());
+                            for (String resourceFeatureName : explainer.getResourceFeatureNames()) {
+                                record.add("");
+                            }
                         } else {
                             for (String resourceFeatureName : explainer.getResourceFeatureNames()) {
                                 String feature = resourceFeatures.get(resourceFeatureName);
