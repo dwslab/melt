@@ -64,6 +64,21 @@ public class Executor {
         }
         return r;
     }
+    
+    /**
+     * Run a set of matchers on a specific test cases.
+     *
+     * @param testCase One specific testcase on which all the specified matchers shall be run.
+     * @param matchers  A map of matchers from unique_name to matcher instance.
+     * @return The result as {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet run(TestCase testCase, Map<String, IOntologyMatchingToolBridge> matchers) {
+        ExecutionResultSet r = new ExecutionResultSet();
+        for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
+            r.add(ExecutionRunner.runMatcher(testCase, matcher.getValue(), matcher.getKey()));
+        }
+        return r;
+    }
 
     /**
      * Run a matcher on a set of test cases.

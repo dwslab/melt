@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Minimal D3 Example</title>
+<script src="http://d3js.org/d3.v5.min.js" charset="utf-8"></script>
+ 
+<style>
+.bar {
+  fill: steelblue;
+}
+ 
+.bar:hover {
+  fill: orange;
+}
+</style>
+</head>
+<body>
+<div id="my_dataviz"></div>
+<script type="text/javascript">// set the dimensions and margins of the graph
+var margin = {top: 20, right: 30, bottom: 30, left: 40},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0,1])
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0,1])
+    .range([ height, 0 ]);
+  svg.append("g")
+    .call(d3.axisLeft(y));
+    
+    
+
+    //https://observablehq.com/@d3/contours
+    //https://www.reddit.com/r/d3js/comments/7d9p5f/how_to_create_a_basic_contour_plot_like_these_in/
+    //https://github.com/hokiespurs/geocontour
+    
+    var values = new Array(width * height);
+    for (var prec = width, k = 0; prec > 0; --prec) {
+      for (var rec = 0; rec < height; ++rec, ++k) {
+        var newPrec = prec/width;
+        var newRec = rec/height;
+        if(newPrec + newRec == 0){
+            values[k] = 0;
+        }else{            
+            values[k] = (2 * newPrec * newRec) / (newPrec + newRec);
+        }
+      }
+    }
+    
+    var thresholds = d3.range(0.0, 1.0, 0.1);
+
+    var color = d3.scaleLinear()
+        .domain(d3.extent(thresholds))
+        .interpolate(d => d3.interpolateMagma)
+    
+   
+    
+    var contours = d3.contours()
+        .size([height, width])
+        .thresholds(thresholds)
+        (values);
+
+
+    
+
+  // Add the contour: several "path"
+  svg
+    .selectAll("path")
+    .data(contours)
+    .enter()
+    .append("path")
+      .attr("d", d3.geoPath())
+      .attr("fill",  d => color(d.value))
+      .attr("stroke", "#69b3a2")
+      .attr("stroke-linejoin", "round")
+
+</script>
+</body>
+</html>

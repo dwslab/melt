@@ -1,6 +1,7 @@
-package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.visualization.web;
+package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.visualization;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.Evaluator;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.EvaluatorCSV;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -33,16 +34,11 @@ import org.slf4j.LoggerFactory;
  * }
  * </pre>
  */
-public class PageBuilder {
+public class DashboardBuilder extends Evaluator {
 
-
-    public static void main(String[] args) {
-
-    }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PageBuilder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DashboardBuilder.class);
     
-    protected ExecutionResultSet executionResultSet;
+    protected EvaluatorCSV evaluatorCSV;
     
     protected Template template;
     
@@ -53,24 +49,34 @@ public class PageBuilder {
     protected Set<String> groupDefinitions;
     
     protected String title;
-        
-    public PageBuilder(ExecutionResultSet executionResultSet, String titleOfPage){
+    
+    public DashboardBuilder(EvaluatorCSV evaluatorCSV, String titleOfPage){
+        super(evaluatorCSV.getResults());
         Velocity.setProperty("resource.loader", "classpath");
         Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());        
         Velocity.init();
         
         template = Velocity.getTemplate("dcjsTemplate.vm");
-        this.executionResultSet = executionResultSet;
+        this.evaluatorCSV = evaluatorCSV;
         this.rows = new ArrayList<>();
         this.currentRow = new ArrayList<>();
         this.title = titleOfPage;
     }
+        
+    public DashboardBuilder(ExecutionResultSet executionResultSet, String titleOfPage){
+        this(new EvaluatorCSV(executionResultSet), titleOfPage);
+    }
     
-    public PageBuilder(ExecutionResultSet executionResultSet){
+    public DashboardBuilder(ExecutionResultSet executionResultSet){
         this(executionResultSet, "Analysis of mapping results");
     }
     
-    public PageBuilder addDefaultDashboard(){
+    
+    public DashboardBuilder(EvaluatorCSV evaluatorCSV){
+        this(evaluatorCSV, "Analysis of mapping results");
+    }
+    
+    public DashboardBuilder addDefaultDashboard(){
         this.addSelectMenu("trackSelection", "Track", "width:190px");
         this.addTrackTestcaseSunburst();
         this.addConfidenceBar();
@@ -81,8 +87,6 @@ public class PageBuilder {
         this.addPieChart("typeLeftChart", "Type Left");
         this.addPieChart("typeRightChart", "Type Right");
         this.addPieChart("residualChart", "Residual True Positive");
-        this.addPieChart("testCaseChart", "TestCase");
-        this.newRow();
         this.addResultPerTestCase();
         this.addResultPerMatcher();
         this.addMetricTable();
@@ -93,7 +97,7 @@ public class PageBuilder {
         return this;
     }
     
-    public PageBuilder addMetricTable(){
+    public DashboardBuilder addMetricTable(){
         DcjsElement e = new DcjsElement("dc.dataTable", "metricTable");        
         e.createDimensionDefinitionCsvFieldString("ResultPerTestCaseDimension", "TestCase");
         String group = e.createGroupDefinitionReduceField("ResultPerTestCaseDimension", "Evaluation Result");
@@ -109,7 +113,7 @@ public class PageBuilder {
         return addElement(e);
     }
     
-    public PageBuilder addDataCount(){
+    public DashboardBuilder addDataCount(){
         DcjsElement e = new DcjsElement("dc.dataCount", "dataCount");
         e.createGroupDefinition("allGroup", "ndx.groupAll();");
         e.addJsMethod(
@@ -123,7 +127,7 @@ public class PageBuilder {
         return addElement(e);
     }
     
-    public PageBuilder addConfusionHeatMap(){
+    public DashboardBuilder addConfusionHeatMap(){
         DcjsElement e = new DcjsElement("dc.heatMap", "confusionHeatmap");
         e.addJsHelperFileName("heatMap.js");//because of js functions getTrueCondition and getPredictedCondition
         e.createDimensionDefinition("heatDimension", 
@@ -140,7 +144,7 @@ public class PageBuilder {
         return addElement(e);
     }
     
-    public PageBuilder addResultPerMatcher(){
+    public DashboardBuilder addResultPerMatcher(){
         DcjsElement e = new DcjsElement("dc.barChart", "resultperMatcher");
         e.setTitle("Result per Matcher");
         e.setResetText("reset");
@@ -149,6 +153,7 @@ public class PageBuilder {
                 "xUnits(dc.units.ordinal)",
                 "elasticX(true)",
                 "elasticY(true)",
+                "yAxisLabel(\"\")",
                 //rotate x axis labels
                 "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-80)\").attr(\"dy\", \"-0.7em\").attr(\"dx\", \"-1em\");})"
         );
@@ -163,7 +168,7 @@ public class PageBuilder {
         return addElement(e);
     }
     
-    public PageBuilder addResultPerTestCase(){
+    public DashboardBuilder addResultPerTestCase(){
         DcjsElement e = new DcjsElement("dc.barChart", "resutPerTestcase");
         e.setTitle("Result per TestCase");
         e.setResetText("reset");
@@ -172,6 +177,7 @@ public class PageBuilder {
                 "xUnits(dc.units.ordinal)",
                 "elasticX(true)",
                 "elasticY(true)",
+                "yAxisLabel(\"\")",
                 //rotate x axis labels
                 "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-80)\").attr(\"dy\", \"-0.7em\").attr(\"dx\", \"-1em\");})"
         );
@@ -187,11 +193,11 @@ public class PageBuilder {
     }
     
     
-    public PageBuilder addRelationPieChart(){
+    public DashboardBuilder addRelationPieChart(){
         return addPieChart("relationPieChart", "relation");
     }
     
-    public PageBuilder addSelectMenu(String name, String csvField, String style){
+    public DashboardBuilder addSelectMenu(String name, String csvField, String style){
         DcjsElement e = new DcjsElement("dc.selectMenu", name);
         e.setTitle(csvField);
         e.setResetText("reset");
@@ -204,7 +210,7 @@ public class PageBuilder {
         return addElement(e);
     }
     
-    public PageBuilder addPieChart(String name, String csvField){
+    public DashboardBuilder addPieChart(String name, String csvField){
         DcjsElement e = new DcjsElement("dc.pieChart", name);
         e.setTitle(csvField);
         e.setResetText("reset");
@@ -215,7 +221,7 @@ public class PageBuilder {
         return addElement(e);
     }
     
-    public PageBuilder addTrackTestcaseSunburst(){
+    public DashboardBuilder addTrackTestcaseSunburst(){
         DcjsElement e = new DcjsElement("dc.sunburstChart", "selectTrackTestCase");
         
         e.createDimensionDefinitionCsvFieldMultiValue("TrackTestCaseDimension", "Track", "TestCase");
@@ -229,7 +235,7 @@ public class PageBuilder {
     }
     
     
-    public PageBuilder addConfidenceBar(){
+    public DashboardBuilder addConfidenceBar(){
         String stackFunction = "function(d) { if(d.key.split(':')[1] === \"%s\"){return d.value;} return 0; }";
         
         DcjsElement e = new DcjsElement("dc.barChart", "selectConfidence");
@@ -260,7 +266,7 @@ public class PageBuilder {
     
     
     
-    public PageBuilder addDataChart(){
+    public DashboardBuilder addDataChart(){
         DcjsElement e = new DcjsElement("dc.dataTable", "dataTable");
         String dimName = "MatcherDimension";
         e.createDimensionDefinitionCsvFieldString(dimName, "Matcher");
@@ -275,12 +281,12 @@ public class PageBuilder {
     }
     
     
-    public PageBuilder addElement(DcjsElement element){
+    public DashboardBuilder addElement(DcjsElement element){
         this.currentRow.add(element);
         return this;
     }
     
-    public PageBuilder newRow(){
+    public DashboardBuilder newRow(){
         if(this.currentRow.size() > 0){
             this.rows.add(this.currentRow);
             this.currentRow = new ArrayList<>();
@@ -288,9 +294,14 @@ public class PageBuilder {
         return this;
     }
     
+    @Override
+    public void write(File baseDirectory) {
+        writeToFile(new File(baseDirectory, "meltDashboard.html"));
+    }
+    
     /**
-     * Writes the whole HTML content to one file.
-     * This file can be opened directly by a browser.
+     * Writes the HTML content to one file. This includes also the data (csv) which is included in the HTML file.
+     * This HTML file can be opened directly by a browser.
      * @param htmlFile 
      */
     public void writeToFile(File htmlFile){
@@ -298,7 +309,7 @@ public class PageBuilder {
         newRow();
 
         VelocityContext context = prepareVelocityContext();
-        context.put("csvData", new EvaluatorCSV(this.executionResultSet).getAlignmentsCubeAsShortenedString().trim());
+        context.put("csvData", this.evaluatorCSV.getAlignmentsCubeAsShortenedString().trim());
         /*context.put("csvData", "Track,TestCase,left_label,left_comment,left_explicit_type,left_uri,relation,confidence,right_uri,right_label,right_comment,right explicit type,result\n" +
 "conference,conference-sigkdd,[],[],[http://www.w3.org/2002/07/owl-Class],http://conference-Review,=,1.0,http://sigkdd-Review,[],[],[http://www.w3.org/2002/07/owl-Class],true positive\n" +
 "conference,conference-sigkdd,[],[],[http://www.w3.org/2002/07/owl-Class],http://conference-Committee,=,1.0,http://sigkdd-Committee,[],[],[http://www.w3.org/2002/07/owl-Class],true positive\n" +
@@ -312,11 +323,16 @@ public class PageBuilder {
         }
     }
     
+    /**
+     * Writes the HTML content to htmlFile and the data (csv) to another file.
+     * This is for publishing the dashboard to a server.
+     * @param htmlFile 
+     */
     public void writeToFile(File htmlFile, File csvFile){
         newRow();
         
         try(Writer writer = new BufferedWriter(new FileWriter(csvFile))){
-            writer.write(new EvaluatorCSV(this.executionResultSet).getAlignmentsCubeAsString().trim());
+            writer.write(this.evaluatorCSV.getAlignmentsCubeAsString().trim());
         } catch (IOException ex) {
             LOGGER.error("Could not write to file.", ex);
         }    
@@ -396,4 +412,5 @@ public class PageBuilder {
     //https://stackoverflow.com/questions/28362475/crossfilter-calculating-percent-of-all-records-with-a-property
     //https://stackoverflow.com/questions/21519856/dc-js-how-to-get-the-average-of-a-column-in-data-set
     //https://stackoverflow.com/questions/45487174/can-i-filter-data-based-on-an-intersection-and-in-crossfilter-dc-js
+
 }

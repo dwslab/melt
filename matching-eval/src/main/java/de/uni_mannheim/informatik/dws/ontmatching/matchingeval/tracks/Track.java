@@ -137,6 +137,14 @@ public abstract class Track {
     }
     
     /**
+     * Obtain a test case using the index.
+     * @return Test case.
+     */
+    public TestCase getTestCase(int index){
+        return getTestCases().get(index);
+    }
+    
+    /**
      * Obtain an example test case (the first one).
      * @return Test case.
      */

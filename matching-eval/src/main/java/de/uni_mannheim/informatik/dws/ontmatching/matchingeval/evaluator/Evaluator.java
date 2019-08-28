@@ -109,4 +109,8 @@ public abstract class Evaluator {
             return Paths.get(baseDirectory.getAbsolutePath()).toFile();
         }
     }
+
+    public ExecutionResultSet getResults() {
+        return results;
+    }
 }
