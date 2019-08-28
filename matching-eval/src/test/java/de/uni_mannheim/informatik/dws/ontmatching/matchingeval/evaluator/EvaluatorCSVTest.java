@@ -27,7 +27,7 @@ class EvaluatorCSVTest {
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(resultSet);
         File baseDirectory = new File("./testBaseDirectory");
         baseDirectory.mkdir();
-        evaluatorCSV.write(baseDirectory);
+        evaluatorCSV.writeToDirectory(baseDirectory);
         assertTrue(baseDirectory.listFiles().length > 0);
         assertTrue(new File("./testBaseDirectory/trackPerformanceCube.csv").exists());
         assertTrue(new File("./testBaseDirectory/testCasePerformanceCube.csv").exists());

@@ -125,7 +125,7 @@ public class EvaluatorCSV extends Evaluator {
     }
 
     @Override
-    public void write(File baseDirectory) {
+    public void writeToDirectory(File baseDirectory) {
         initializePrinters(baseDirectory);
         for (String matcher : this.results.getDistinctMatchers()) {
             // individual evaluation per test case

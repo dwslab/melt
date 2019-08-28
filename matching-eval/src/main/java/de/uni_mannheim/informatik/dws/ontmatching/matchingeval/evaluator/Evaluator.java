@@ -64,15 +64,15 @@ public abstract class Evaluator {
     /**
      * Persist the results of the evaluator in the default directory.
      */
-    public void write(){
-        this.write(resultsDirectory);
+    public void writeToDirectory(){
+        this.writeToDirectory(resultsDirectory);
     }
 
     /**
      * Persist the results of the evaluator in the base directory.
      * @param baseDirectory The directory into which the evaluation results shall be written to.
      */
-    public abstract void write(File baseDirectory);
+    public abstract void writeToDirectory(File baseDirectory);
 
     /**
      * Given a base directory and a Execution result, the target directory will be returned to which results can be
