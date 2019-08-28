@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 /**
  * Store accessible to all matchers where variables and results can be persisted in.
+ * Available as local store and as global store.
  */
 public class DataStore {
 
@@ -44,15 +45,6 @@ public class DataStore {
     public void put(String key, Object value){
         centralStore.put(key, value);
     }
-
-    /**
-     * Get an object from the data store using a key.
-     * @param key Key used to retrieve object.
-     * @return Value stored for key.
-     */
-    //public Object get(String key){
-    //    return centralStore.get(key);
-    //}
 
     /**
      * Get an object from the data store using a key.

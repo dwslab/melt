@@ -9,10 +9,9 @@ class DataStoreTest {
     @Test
     void dataStoreTest(){
         DataStore ds = DataStore.getGlobal();
-        ds.put("Hello", new Integer(12345));
-        assertEquals(new Integer(12345), ds.get("Hello", Integer.class));
-
-        Integer i1 = ds.get("Hello");
+        ds.put("key", new Integer(12345));
+        assertEquals(new Integer(12345), ds.get("key", Integer.class));
+        Integer i1 = ds.get("key");
         assertEquals(12345, i1);
     }
 
