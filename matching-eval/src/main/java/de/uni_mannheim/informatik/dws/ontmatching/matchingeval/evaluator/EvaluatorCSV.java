@@ -87,12 +87,13 @@ public class EvaluatorCSV extends Evaluator {
      * Constructor
      *
      * @param results The execution results for which an evaluation shall be performed.
+     * @param metric The confusion matrix metric to be used.
      */
-    public EvaluatorCSV(ExecutionResultSet results) {
+    public EvaluatorCSV(ExecutionResultSet results, ConfusionMatrixMetric metric) {
         super(results);
 
         // metrics
-        confusionMatrixMetric = new ConfusionMatrixMetric();
+        this.confusionMatrixMetric = metric;
 
         // refiners
         classRefiner = new TypeRefiner(ResourceType.CLASS);
@@ -114,6 +115,14 @@ public class EvaluatorCSV extends Evaluator {
         alignmentsCube.setResourceExplainers(resourceExplainers);
     }
 
+    /**
+     * Constructor
+     *
+     * @param results The execution results for which an evaluation shall be performed.
+     */
+    public EvaluatorCSV(ExecutionResultSet results){
+       this(results, new ConfusionMatrixMetric());
+    }
 
     @Override
     public void write(File baseDirectory) {
@@ -450,5 +459,13 @@ public class EvaluatorCSV extends Evaluator {
 
     public void setBaselineMatcher(IOntologyMatchingToolBridge baselineMatcher) {
         this.baselineMatcher = baselineMatcher;
+    }
+
+    public ConfusionMatrixMetric getConfusionMatrixMetric() {
+        return confusionMatrixMetric;
+    }
+
+    public void setConfusionMatrixMetric(ConfusionMatrixMetric confusionMatrixMetric) {
+        this.confusionMatrixMetric = confusionMatrixMetric;
     }
 }

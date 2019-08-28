@@ -35,6 +35,10 @@ public class OntologyCacheJena {
      */
     private static Map<String, OntModel> ontologyCache = new HashMap<>();
 
+    /**
+     * This flag indicates whether the cache is to be used (i.e., ontologies are held in memory).
+     */
+    private static boolean isDeactivatedCache = false;
 
     /**
      * Returns the OntModel for the given uri using a cache if indicated to do so.
@@ -51,8 +55,10 @@ public class OntologyCacheJena {
                 // model not found in cache → read, put it there and return
                 LOGGER.info("Reading model into cache (" + uri + ")");
                 model = readOntModel(uri, spec);
-                ontologyCache.put(keyForCache, model);
-                return model;                
+                if(!isDeactivatedCache){
+                    ontologyCache.put(keyForCache, model);
+                }
+                return model;
             } else {
                 //LOGGER.info("Returning model from cache.");
                 return model;
@@ -158,5 +164,21 @@ public class OntologyCacheJena {
      */
     public static void emptyCache() {
         ontologyCache = new HashMap<>();
+    }
+
+    public boolean isDeactivatedCache() {
+        return isDeactivatedCache;
+    }
+
+    /**
+     * Deactivating the cache will also clear the cache.
+     * If an ontology is requested twice it is ready every time from disk.
+     * @param deactivatedCache true if cache is to be deactivated, else false.
+     */
+    public void setDeactivatedCache(boolean deactivatedCache) {
+        if(deactivatedCache){
+            this.emptyCache();
+        }
+        isDeactivatedCache = deactivatedCache;
     }
 }
