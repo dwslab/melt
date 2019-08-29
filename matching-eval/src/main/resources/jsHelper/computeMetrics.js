@@ -2,7 +2,7 @@
             function compute_metrics_for_group(source_group) {
                 return {
                     all:function () {
-                    console.log('compute');
+                        //console.log('compute');
                         var data = {
                             all_tp: 0, all_fp: 0, all_fn: 0,number_testcases: 0,
                             macro: {name: 'macro', precision: 0, recall: 0, f1: 0},

@@ -82,7 +82,7 @@ public class DashboardBuilder extends Evaluator {
         this.addConfidenceBar();
         this.addPieChart("relationChart", "Relation");
         this.addPieChart("matcherChart", "Matcher");
-        this.addPieChart("evalResultChart", "Evaluation Result");
+        this.addPieChartEvaluation();
         this.newRow();
         this.addPieChart("typeLeftChart", "Type Left");
         this.addPieChart("typeRightChart", "Type Right");
@@ -154,6 +154,7 @@ public class DashboardBuilder extends Evaluator {
                 "elasticX(true)",
                 "elasticY(true)",
                 "yAxisLabel(\"\")",
+                "colors(d3.scaleOrdinal(dc.config.defaultColors()))", //quick hack can be removed when fixed in dc.js https://github.com/dc-js/dc.js/issues/1564
                 //rotate x axis labels
                 "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-80)\").attr(\"dy\", \"-0.7em\").attr(\"dx\", \"-1em\");})"
         );
@@ -163,8 +164,8 @@ public class DashboardBuilder extends Evaluator {
         String groupEmptyBins = e.createGroupDefinitionRemoveEmptyBins(group);
         
         e.setGroupStacked(groupEmptyBins, "true positive");//check order -> important for same color
-        e.addStack(groupEmptyBins, "false negative");
         e.addStack(groupEmptyBins, "false positive");
+        e.addStack(groupEmptyBins, "false negative");        
         return addElement(e);
     }
     
@@ -178,6 +179,7 @@ public class DashboardBuilder extends Evaluator {
                 "elasticX(true)",
                 "elasticY(true)",
                 "yAxisLabel(\"\")",
+                "colors(d3.scaleOrdinal(dc.config.defaultColors()))", //quick hack can be removed when fixed in dc.js https://github.com/dc-js/dc.js/issues/1564
                 //rotate x axis labels
                 "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-80)\").attr(\"dy\", \"-0.7em\").attr(\"dx\", \"-1em\");})"
         );
@@ -186,17 +188,13 @@ public class DashboardBuilder extends Evaluator {
         String group = e.createGroupDefinitionReduceField("ResultPerTestCaseDimension", "Evaluation Result");
         String groupEmptyBins = e.createGroupDefinitionRemoveEmptyBins(group);
         
-        e.setGroupStacked(groupEmptyBins, "true positive");
-        e.addStack(groupEmptyBins, "false negative");
-        e.addStack(groupEmptyBins, "false positive");        
+        e.setGroupStacked(groupEmptyBins, "true positive");//reverse order
+        e.addStack(groupEmptyBins, "false positive");
+        e.addStack(groupEmptyBins, "false negative");        
         return addElement(e);
     }
     
-    
-    public DashboardBuilder addRelationPieChart(){
-        return addPieChart("relationPieChart", "relation");
-    }
-    
+       
     public DashboardBuilder addSelectMenu(String name, String csvField, String style){
         DcjsElement e = new DcjsElement("dc.selectMenu", name);
         e.setTitle(csvField);
@@ -207,6 +205,21 @@ public class DashboardBuilder extends Evaluator {
         e.setDimension(name + "Dimension");
         e.setGroup(e.createGroupDefinitionBasedOnDimension(name + "Dimension"));        
         e.addJsMethod("multiple(true)");
+        return addElement(e);
+    }
+    
+    public DashboardBuilder addPieChartEvaluation(){
+        String name = "evalResultChart";
+        String csvField = "Evaluation Result";
+        DcjsElement e = new DcjsElement("dc.pieChart", name);
+        e.setTitle(csvField);
+        e.setResetText("reset");
+        //e.setFilterText("<span class='filter'></span>");
+        e.addJsMethod("ordering(function(d){return getSortedEvaluationResult(d.key);})");
+        e.addJsHelperFileName("sortedEvalResult.js");
+        e.createDimensionDefinitionCsvFieldString(name + "Dimension", csvField);
+        e.setDimension(name + "Dimension");
+        e.setGroup(e.createGroupDefinitionBasedOnDimension(name + "Dimension"));
         return addElement(e);
     }
     
@@ -244,9 +257,12 @@ public class DashboardBuilder extends Evaluator {
         e.createDimensionDefinition(dimName, "function(d) {return (+d[\"Confidence (Matcher)\"]).toFixed(2) + ':' + d[\"Evaluation Result\"] }");
         e.setDimension(dimName);
         String group = e.createGroupDefinitionBasedOnDimension(dimName);
+        
         e.setGroupStacked(group, "true positive", String.format(stackFunction, "true positive"));
-        e.addStack(group, "false negative", "function(d) {return 0;}");
         e.addStack(group, "false positive", String.format(stackFunction, "false positive"));
+        e.addStack(group, "false negative", "function(d) {return 0;}");  
+        
+        
         e.setTitle("Confidence (Matcher)");
         e.setResetText("reset");
         e.setFilterText("range: <span class='filter'></span>");
@@ -258,6 +274,7 @@ public class DashboardBuilder extends Evaluator {
                 "yAxisLabel(\"\")",
                 "keyAccessor(function(p) {return p.key.split(':')[0];})",
                 //"legend(dc.legend())",
+                "colors(d3.scaleOrdinal(dc.config.defaultColors()))", //quick hack can be removed when fixed in dc.js https://github.com/dc-js/dc.js/issues/1564
                 "filterHandler(confidenceFilterHandler)");
         e.addJsHelperFileName("filterHandler.js");//becuase above confidenceFilterHandler is used.
         return addElement(e);
