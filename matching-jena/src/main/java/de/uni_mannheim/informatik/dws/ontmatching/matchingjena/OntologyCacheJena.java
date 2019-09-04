@@ -166,7 +166,7 @@ public class OntologyCacheJena {
         ontologyCache = new HashMap<>();
     }
 
-    public boolean isDeactivatedCache() {
+    public static boolean isDeactivatedCache() {
         return isDeactivatedCache;
     }
 
@@ -175,9 +175,9 @@ public class OntologyCacheJena {
      * If an ontology is requested twice it is ready every time from disk.
      * @param deactivatedCache true if cache is to be deactivated, else false.
      */
-    public void setDeactivatedCache(boolean deactivatedCache) {
+    public static void setDeactivatedCache(boolean deactivatedCache) {
         if(deactivatedCache){
-            this.emptyCache();
+            emptyCache();
         }
         isDeactivatedCache = deactivatedCache;
     }

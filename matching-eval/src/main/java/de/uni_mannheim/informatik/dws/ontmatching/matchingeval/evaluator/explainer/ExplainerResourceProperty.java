@@ -77,7 +77,7 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
         if (resource == null) {
             LOGGER.debug("Could not find resource with uri: " + uri + ". Returning feature set with empty values.");
             for (Entry<String, Property> property : properties.entrySet()) {
-                result.put(property.getKey(), "[]");
+                result.put(property.getKey(), "\"[]\"");
             }
             return result;
         }
@@ -93,8 +93,8 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
 
             for(String string : propertyValueList){
                 if(property.getValue().equals(RDF.type)) {
-                    joiner.add(PrefixLookup.getPrefix(string));
-                } else joiner.add(string);
+                    joiner.add("\"" + PrefixLookup.getPrefix(string) + "\"");
+                } else joiner.add("\"" + string + "\"");
             }
 
             String jsonArray = "[" + joiner.toString() + "]";
