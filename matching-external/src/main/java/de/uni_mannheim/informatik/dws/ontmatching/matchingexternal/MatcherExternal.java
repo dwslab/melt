@@ -12,12 +12,15 @@ import java.lang.ProcessBuilder.Redirect;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Matcher for running external matchers (require the subclass to create a command to execute).
  */
 public abstract class MatcherExternal extends MatcherURL {
     private static final String NEWLINE = System.getProperty("line.separator");
+    private static Pattern URL_PATTERN = Pattern.compile("(?:https?|ftp|file)://[^\\s]*",Pattern.CASE_INSENSITIVE);
     
     /**
      * if set to true, all logging should go to stderr and the result of the process (url or alignment api format) should go to stdout.
@@ -44,7 +47,7 @@ public abstract class MatcherExternal extends MatcherURL {
         
         int errCode = process.waitFor(); // wait for the matcher to finish
         if(errCode != 0){
-            System.err.println("Error code of external matcher is not equal to 0.");
+            System.err.println("External Matcher return with error code " + Integer.toString(errCode) + ". Continue....");
         }
         String resultOfProcess = getResultOfProcess(process);
         resultOfProcess = resultOfProcess.trim(); //remove all spaces and newline at the start or end of the string
@@ -56,11 +59,31 @@ public abstract class MatcherExternal extends MatcherURL {
         try {
             returnValue = new URL(resultOfProcess);
         } catch (MalformedURLException ex) {
-            System.err.println("Output of external matcher is not a URL try to use it as file content...");
-            returnValue = getUrlOfTempFileWithContent(resultOfProcess);
+            System.err.println("The external matcher did not return only a file URL. Probably configure your matcher to log all messages to std out or std err. Try now to find a URL in the result.");
+            returnValue = getLastUrlInString(resultOfProcess);
+            if(returnValue == null){
+                System.err.println("Did not find any URL in the result of the process. Backup is to use the result as file content. Be warned....");
+                returnValue = getUrlOfTempFileWithContent(resultOfProcess);
+            }
         }
         closeAllStreams(process);
         return returnValue;
+    }
+    
+    protected URL getLastUrlInString(String text){        
+        Matcher matcher = URL_PATTERN.matcher(text);
+        String urlString = null;
+        while (matcher.find()) {
+            urlString = matcher.group();
+        }        
+        if(urlString == null){
+            return null;
+        }
+        try {
+            return new URL(urlString);
+        } catch (MalformedURLException ex) {
+            return null;
+        }
     }
     
     protected URL getUrlOfTempFileWithContent(String content) throws IOException{

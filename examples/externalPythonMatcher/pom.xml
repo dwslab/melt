@@ -72,7 +72,7 @@
                         <!-- there exists three descriptors:
                         1) "seals" - removes all dependencies available in seals client regardless of their version.#
                         2) "seals_all_deps" - adds all dependencies of your project (please note that this can cause problems when using jena for example)
-                        3) "seals_external" - creates a wrapper around the matcher so that no inference with seals happens -->
+                        3) "seals_external" - creates a wrapper around the matcher so that no inference with seals happens (the matcher has to log to std err only).-->
                         <configuration><descriptorRefs><descriptorRef>seals</descriptorRef></descriptorRefs></configuration>
                     </execution>
                 </executions>
