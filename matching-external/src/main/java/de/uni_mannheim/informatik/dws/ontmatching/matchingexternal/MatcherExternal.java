@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  */
 public abstract class MatcherExternal extends MatcherURL {
     private static final String NEWLINE = System.getProperty("line.separator");
-    private static Pattern URL_PATTERN = Pattern.compile("(?:https?|ftp|file)://[^\\s]*",Pattern.CASE_INSENSITIVE);
+    private static Pattern URL_PATTERN = Pattern.compile("(?:https?|ftp|file)://?[^\\s]*",Pattern.CASE_INSENSITIVE);
     
     /**
      * if set to true, all logging should go to stderr and the result of the process (url or alignment api format) should go to stdout.
@@ -59,11 +59,14 @@ public abstract class MatcherExternal extends MatcherURL {
         try {
             returnValue = new URL(resultOfProcess);
         } catch (MalformedURLException ex) {
-            System.err.println("The external matcher did not return only a file URL. Probably configure your matcher to log all messages to std out or std err. Try now to find a URL in the result.");
+            System.err.println("The external matcher did not return solely a file URL. Probably configure your matcher to log all messages to std out or std err. Try now to find a URL in the result which is printed below:");
+            System.err.println(resultOfProcess);//printed because log messages are probably contained therein
             returnValue = getLastUrlInString(resultOfProcess);
             if(returnValue == null){
                 System.err.println("Did not find any URL in the result of the process. Backup is to use the result as file content. Be warned....");
                 returnValue = getUrlOfTempFileWithContent(resultOfProcess);
+            }else{
+                System.err.println("Found following URL: " + returnValue);
             }
         }
         closeAllStreams(process);
