@@ -38,12 +38,12 @@ public class ExecutorSeals {
     /**
      * Time out for a process.
      */
-    long timeout = 12;
+    private long timeout = 12;
 
     /**
      * Time unit for the process time out.
      */
-    TimeUnit timoutTimeUnit = TimeUnit.HOURS;
+    private TimeUnit timoutTimeUnit = TimeUnit.HOURS;
 
     /**
      * The parameters that appear between java [parameters] -jar.
@@ -350,7 +350,7 @@ public class ExecutorSeals {
      * @param toBeSurrounded String that is to be surrounded with double quotes.
      * @return String with pre- and post-appended double quotes.
      */
-    public static String surroundWithDoubleQuotes(String toBeSurrounded) {
+    protected String surroundWithDoubleQuotes(String toBeSurrounded) {
         return "\"" + toBeSurrounded + "\"";
     }
 
@@ -368,16 +368,16 @@ public class ExecutorSeals {
         boolean containsDescriptor = false;
 
         for(File file : directory.listFiles()){
-            if(file.isDirectory() && file.getName().equals("bin")){
-                containsBin = true;
-            }
-            if(file.isDirectory() && file.getName().equals("lib")){
-                containsLib = true;
-            }
-            if(file.isDirectory() && file.getName().equals("conf")){
-                containsConf = true;
-            }
-            if(file.isFile() && file.getName().equals("descriptor.xml")){
+            if(file.isDirectory()){
+                String name = file.getName();
+                if(name.equals("bin")){
+                    containsBin = true;
+                } else if(name.equals("lib")){
+                    containsLib = true;
+                } else if(name.equals("conf")){
+                    containsConf = true;
+                }
+            }else if(file.isFile() && file.getName().equals("descriptor.xml")){
                 containsDescriptor = true;
             }
         }
@@ -402,6 +402,14 @@ public class ExecutorSeals {
     public void setTimeout(long timeout, TimeUnit timoutTimeUnit) {
         this.timeout = timeout;
         this.timoutTimeUnit = timoutTimeUnit;
+    }
+
+    public long getTimeout() {
+        return timeout;
+    }
+
+    public TimeUnit getTimoutTimeUnit() {
+        return timoutTimeUnit;
     }
 
     public File getSealsClientJar() {
