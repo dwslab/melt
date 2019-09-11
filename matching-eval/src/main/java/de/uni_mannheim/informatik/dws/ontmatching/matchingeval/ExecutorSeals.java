@@ -226,16 +226,18 @@ public class ExecutorSeals {
             systemAlignmentToBeWritten.createNewFile();
 
             List<String> commands = new ArrayList<>();
+            //dont quote anything here; ProcessBuilder will already take care of.
+            //see https://blog.krecan.net/2008/02/09/processbuilder-and-quotes/
             commands.add("java");
             if (javaRuntimeParameters != null) commands.addAll(this.javaRuntimeParameters);
             commands.add("-jar");
             commands.add(this.sealsClientJar.getAbsolutePath());
-            commands.add(surroundWithDoubleQuotes(matcherDirectory.getCanonicalPath()));
+            commands.add(matcherDirectory.getCanonicalPath());
             commands.add("-o");
-            commands.add(surroundWithDoubleQuotes(testCase.getSource().toString()));
-            commands.add(surroundWithDoubleQuotes(testCase.getTarget().toString()));
+            commands.add(testCase.getSource().toString());
+            commands.add(testCase.getTarget().toString());
             commands.add("-f");
-            commands.add(surroundWithDoubleQuotes(systemAlignmentToBeWritten.getCanonicalPath().toString()));
+            commands.add(systemAlignmentToBeWritten.getCanonicalPath());
             commands.add("-z");
             ProcessBuilder builder = new ProcessBuilder(commands);
 
@@ -243,6 +245,8 @@ public class ExecutorSeals {
             builder.redirectOutput(errorFileToBeWritten);
             builder.directory(this.sealsHome);
 
+           
+            LOGGER.info("Run SEALS with command: " + String.join(" ", builder.command()));
             long startTime = java.lang.System.currentTimeMillis();
             Process process = builder.start();
 
@@ -342,19 +346,8 @@ public class ExecutorSeals {
         }
         return null;
     }
-
-
-    /**
-     * Surrounds the given String with double quotes (").
-     *
-     * @param toBeSurrounded String that is to be surrounded with double quotes.
-     * @return String with pre- and post-appended double quotes.
-     */
-    protected String surroundWithDoubleQuotes(String toBeSurrounded) {
-        return "\"" + toBeSurrounded + "\"";
-    }
-
-
+    
+    
     /**
      * Determines whether the specified directory is runnable in seals.
      * @param directory Path to the directory.
