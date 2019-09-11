@@ -84,28 +84,72 @@ public class DashboardBuilder extends Evaluator {
         this.addPieChart("matcherChart", "Matcher");
         this.addPieChartEvaluation();
         this.newRow();
-        this.addPieChart("typeLeftChart", "Type Left");
-        this.addPieChart("typeRightChart", "Type Right");
+        this.addPieChartMultiValue("typeLeftChart", "Type Left");
+        this.addPieChartMultiValue("typeRightChart", "Type Right");
         this.addPieChart("residualChart", "Residual True Positive");
         this.addResultPerTestCase();
         this.addResultPerMatcher();
-        this.addMetricTable();
+        //this.addMetricTable();
         //this.addConfusionHeatMap();
+        //this.addMetricTableOnlySelected();
+        this.newRow();
+        //this.addMetricTableSelectedAndMatcher();
+        //this.addMatcherMetricTableOnlyMatcher();
+        this.addMetricTableSelectedAndMatcher();
         this.newRow();
         this.addDataCount();
         this.addDataChart();
         return this;
     }
     
-    public DashboardBuilder addMetricTable(){
-        DcjsElement e = new DcjsElement("dc.dataTable", "metricTable");        
+    
+    public DashboardBuilder addMetricTableSelectedAndMatcher(){
+        DcjsElement e = new DcjsElement("dc.dataTable", "metricTableSelectedAndMatcher");
+        
+        e.createDimensionDefinitionCsvFieldString("ResultPerTestCaseDimension", "TestCase");
+        String group_testcase_result = e.createGroupDefinitionReduceField("ResultPerTestCaseDimension", "Evaluation Result");
+        
+        e.createDimensionDefinitionCsvFieldString("MetricTableMatcherDimension", "Matcher");
+        String group_matcher_testcase_result = e.createGroupDefinitionReduceTwoFields("MetricTableMatcherDimension", "TestCase", "Evaluation Result");
+        
+        e.addJsHelperFileName("computeMetrics.js"); //because compute_metrics_for_group is used in next line
+        String groupMetric = e.createGroupDefinition("metricGroup", String.format("compute_matcher_selected_metrics(%s, %s);", group_testcase_result,group_matcher_testcase_result));
+        e.setDimension(groupMetric);            
+       
+        e.addJsMethod(
+                "columns(['Name', 'Prec(micro)', 'Rec(micro)', 'F-m.(micro)', 'Prec(macro)', 'Rec(macro)', 'F-m.(macro)'])",
+                "showSections(false)"
+        );
+        e.setAnchorClass("table");
+        e.setAnchorStyle("width:700px");
+        return addElement(e);
+    }
+    
+    public DashboardBuilder addMetricTableOnlySelected(){
+        DcjsElement e = new DcjsElement("dc.dataTable", "metricTableSelected");        
         e.createDimensionDefinitionCsvFieldString("ResultPerTestCaseDimension", "TestCase");
         String group = e.createGroupDefinitionReduceField("ResultPerTestCaseDimension", "Evaluation Result");
         e.addJsHelperFileName("computeMetrics.js"); //because compute_metrics_for_group is used in next line
         String groupMetric = e.createGroupDefinition("metricGroup", String.format("compute_metrics_for_group(%s);", group));
         e.setDimension(groupMetric);                
         e.addJsMethod(
-                "columns(['name', 'precision', 'recall', 'f1'])",
+                "columns(['name', 'precision', 'recall', 'fmeasure'])",
+                "showSections(false)"
+        );
+        e.setAnchorClass("table");
+        e.setAnchorStyle("width:310px");
+        return addElement(e);
+    }
+    
+    public DashboardBuilder addMatcherMetricTableOnlyMatcher(){
+        DcjsElement e = new DcjsElement("dc.dataTable", "metricTableMatcher");
+        e.createDimensionDefinitionCsvFieldString("MetricTableMatcherDimension", "Matcher");
+        String group = e.createGroupDefinitionReduceTwoFields("MetricTableMatcherDimension", "TestCase", "Evaluation Result");
+        e.addJsHelperFileName("computeMetrics.js"); //because compute_matcher_metrics is used in next line
+        String groupMetric = e.createGroupDefinition("matcherMetricGroup", String.format("compute_matcher_metrics(%s);", group));
+        e.setDimension(groupMetric);                
+        e.addJsMethod(
+                "columns(['name', 'precision', 'recall', 'fmeasure'])",
                 "showSections(false)"
         );
         e.setAnchorClass("table");
@@ -159,7 +203,7 @@ public class DashboardBuilder extends Evaluator {
                 "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-80)\").attr(\"dy\", \"-0.7em\").attr(\"dx\", \"-1em\");})"
         );
         e.createDimensionDefinitionCsvFieldString("ResultPerMatcherDimension", "Matcher");
-        e.setDimension("MatcherDimension");
+        e.setDimension("ResultPerMatcherDimension");
         String group = e.createGroupDefinitionReduceField("ResultPerMatcherDimension", "Evaluation Result");
         String groupEmptyBins = e.createGroupDefinitionRemoveEmptyBins(group);
         
@@ -234,10 +278,21 @@ public class DashboardBuilder extends Evaluator {
         return addElement(e);
     }
     
+    public DashboardBuilder addPieChartMultiValue(String name, String csvField){
+        DcjsElement e = new DcjsElement("dc.pieChart", name);
+        e.setTitle(csvField);
+        e.setResetText("reset");
+        //e.setFilterText("<span class='filter'></span>");
+        e.createDimensionDefinitionCsvFieldJsonArray(name + "Dimension", csvField);
+        e.setDimension(name + "Dimension");
+        e.setGroup(e.createGroupDefinitionBasedOnDimension(name + "Dimension"));
+        return addElement(e);
+    }
+    
     public DashboardBuilder addTrackTestcaseSunburst(){
         DcjsElement e = new DcjsElement("dc.sunburstChart", "selectTrackTestCase");
         
-        e.createDimensionDefinitionCsvFieldMultiValue("TrackTestCaseDimension", "Track", "TestCase");
+        e.createDimensionDefinitionMultipleCsvFields("TrackTestCaseDimension", "Track", "TestCase");
         e.setDimension("TrackTestCaseDimension");
          e.setGroup(e.createGroupDefinitionBasedOnDimension("TrackTestCaseDimension"));        
         e.addJsMethod("innerRadius(50)");

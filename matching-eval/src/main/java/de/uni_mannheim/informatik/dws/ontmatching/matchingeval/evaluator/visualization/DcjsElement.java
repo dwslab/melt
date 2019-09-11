@@ -71,75 +71,21 @@ public class DcjsElement {
     public void createDimensionDefinitionCsvFieldNumber(String dimensionName, String csvFieldName){
         createDimensionDefinitionCsvField(dimensionName, csvFieldName, "0");
     }
+    public void createDimensionDefinitionCsvFieldJsonArray(String dimensionName, String csvFieldName){
+        createDimensionDefinition(dimensionName, String.format("function(d) {return JSON.parse(d[\"%s\"]) || [];}, true", csvFieldName));
+    }    
     
     public void createDimensionDefinitionCsvField(String dimensionName, String csvFieldName, String defaultValue){
         createDimensionDefinition(dimensionName, String.format("function(d) {return d[\"%s\"] || %s;}", csvFieldName, defaultValue));
     }
     
-    public void createDimensionDefinitionCsvFieldMultiValue(String dimensionName, String... csvFieldName){
+    public void createDimensionDefinitionMultipleCsvFields(String dimensionName, String... csvFieldName){
         List<String> fieldNameList = Arrays.asList(csvFieldName);
         String accessors = fieldNameList.stream()
                 .map(field -> String.format("d[\"%s\"] || \"\"", field))
                 .collect(Collectors.joining(","));
         createDimensionDefinition(dimensionName, String.format("function(d) {return [%s];}", accessors));
     }
-     
-    
-    
-    
-    
-    
-    
-    
-    
-    /*
-    private String getDimensionNameBasedOnCsvField(String csvFieldName){
-        return makeJsIdentifier(csvFieldName) + "Dimension";
-    }
-    
-    public String setDimensionDefinitionBasedOnCsvFieldPotentialUndefined(String csvFieldName){
-        return setDimensionDefinition(
-                getDimensionNameBasedOnCsvField(csvFieldName),  
-                String.format("function(d) {return d[\"%s\"];}", csvFieldName)
-        );
-    }
-    
-    public String setDimensionDefinitionBasedOnCsvFieldString(String csvFieldName){
-        return setDimensionDefinition(
-                getDimensionNameBasedOnCsvField(csvFieldName), 
-                String.format("function(d) {return d[\"%s\"] || \"\";}", csvFieldName)
-        );
-    }
-    
-    public String setDimensionDefinitionBasedOnCsvFieldNumber(String csvFieldName){
-        return setDimensionDefinition(
-                getDimensionNameBasedOnCsvField(csvFieldName), 
-                String.format("function(d) {return d[\"%s\"] || 0;}", csvFieldName)
-        );
-    }
-    
-    public String setDimensionDefinitionBasedOnCsvFieldStringMultiValue(String... csvFieldName){
-        List<String> fieldNameList = Arrays.asList(csvFieldName);
-        String accessors = fieldNameList.stream()
-                .map(field -> String.format("d[\"%s\"] || \"\"", field))
-                .collect(Collectors.joining(","));
-        //String dimName = "reduce" + fieldNameList.stream()
-        //        .map(field -> makeJsIdentifier(field))
-        //        .collect(Collectors.joining("")) + "Dimension";
-        String dimName = this.name + "Dimension";
-        return setDimensionDefinition(dimName, String.format("function(d) {return [%s];}", accessors));
-    }
-    
-    public String setDimensionDefinition(String dimensionName, String dimensionDefinition){
-        this.dimensionDefinition = String.format("var %s = ndx.dimension(%s);", dimensionName, dimensionDefinition);
-        this.addJsMethod(String.format("dimension(%s)",dimensionName));
-        return dimensionName;
-    }
-    
-    */
-    
-    
-    
     
     //Group Definition
     public void setGroup(String group){
@@ -164,10 +110,18 @@ public class DcjsElement {
     }
     
     public String createGroupDefinitionReduceField(String dimensionName, String reduceField){
-        this.jsHelperFileNames.add("reducerFunctions.js");
+        this.jsHelperFileNames.add("reduceField.js");
         return createGroupDefinition(removeDimensionText(dimensionName) + "Reduce" + makeJsIdentifier(reduceField) + "Group", 
-                String.format("%s.group().reduce(reduceAddGroup(\"%s\"), reduceRemoveGroup(\"%s\"), reduceInitGroup);", 
+                String.format("%s.group().reduce(reduceFieldAdd(\"%s\"), reduceFieldRemove(\"%s\"), reduceFieldInit());", 
                 dimensionName, reduceField, reduceField)
+        );
+    }
+    
+    public String createGroupDefinitionReduceTwoFields(String dimensionName, String reduceFieldOne, String reduceFieldTwo){
+        this.jsHelperFileNames.add("reduceTwoFields.js");
+        return createGroupDefinition(removeDimensionText(dimensionName) + "Reduce" + makeJsIdentifier(reduceFieldOne) + "And" + makeJsIdentifier(reduceFieldTwo) + "Group", 
+                String.format("%s.group().reduce(reduceTwoFielsdAdd(\"%s\", \"%s\"), reduceTwoFieldsRemove(\"%s\", \"%s\"), reduceTwoFieldsInit());", 
+                dimensionName, reduceFieldOne, reduceFieldTwo, reduceFieldOne, reduceFieldTwo)
         );
     }
     
@@ -175,68 +129,6 @@ public class DcjsElement {
         this.jsHelperFileNames.add("removeEmptyBins.js");
         return createGroupDefinition(groupName + "RemovedEmptyBins", String.format("remove_empty_bins(%s);", groupName));
     }
-    
-    /*
-    public String setGroupDefinitionBasedOnCsvField(String csvFieldName){
-        //no change of group -> name can be created out of it
-        String identifer = makeJsIdentifier(csvFieldName);
-        return setGroupDefinition(identifer + "Group", identifer + "Dimension");
-    }
-    
-    public String setGroupDefinitionBasedOnCsvField(String groupName, String csvFieldOfDimension, String groupModifier){
-        return setGroupDefinition(groupName, getDimensionNameBasedOnCsvField(csvFieldOfDimension), groupModifier);
-    }
-    
-    public String setGroupDefinitionBasedOnCsvField(String csvFieldOfDimension, String reduceCsvField){
-        String reduceCsvFieldJsID = makeJsIdentifier(reduceCsvField);
-        return setGroupDefinition(
-                makeJsIdentifier(csvFieldOfDimension) + "reduce" + reduceCsvFieldJsID + "Group", 
-                getDimensionNameBasedOnCsvField(csvFieldOfDimension), 
-                String.format("reduce(reduceAddGroup(\"%s\"), reduceRemoveGroup(\"%s\"), reduceInitGroup);", reduceCsvFieldJsID, reduceCsvFieldJsID)
-        );
-    }
-    
-    public String setGroupDefinitionStackedBasedOnCsvField(String csvFieldOfDimension, String reduceCsvField, String csvContentName){
-        return setGroupDefinitionStackedBasedOnCsvField(csvFieldOfDimension, reduceCsvField, csvContentName, String.format("function(d){return d.value[\"%s\"];}", csvContentName));
-    }
-    
-    public String setGroupDefinitionStackedBasedOnCsvField(String csvFieldOfDimension, String reduceCsvField, String stackName, String stackAccessor){
-        return setGroupDefinitionStacked(
-                makeJsIdentifier(csvFieldOfDimension) + "reduce" + makeJsIdentifier(reduceCsvField) + "Group",
-                getDimensionNameBasedOnCsvField(csvFieldOfDimension),
-                String.format("reduce(reduceAddGroup(\"%s\"), reduceRemoveGroup(\"%s\"), reduceInitGroup);", reduceCsvField, reduceCsvField),
-                stackName, stackAccessor
-        );
-    }
-    
-    public String setGroupDefinitionStackedBasedOnCsvField(String groupName, String csvFieldOfDimension, String groupModifier, String stackName, String stackAccessor){
-        return setGroupDefinitionStacked(groupName, getDimensionNameBasedOnCsvField(csvFieldOfDimension), groupModifier, stackName, stackAccessor);
-    }
-    
-    public String setGroupDefinitionStacked(String groupName, String dimensionName, String groupModifier, String stackName, String stackAccessor){
-        this.groupDefinition = "var " + groupName + " = " + dimensionName + ".group()." + groupModifier + ";";
-        this.addJsMethod("group(" + groupName + ", " + "\"" + stackName + "\", " + stackAccessor + ")");
-        return groupName;
-    }
-    
-    public String setGroupDefinitionStacked(String groupName, String dimensionName, String stackName, String stackAccessor){
-        this.groupDefinition = "var " + groupName + " = " + dimensionName + ".group();";
-        this.addJsMethod("group(" + groupName + ", " + "\"" + stackName + "\", " + stackAccessor + ")");
-        return groupName;
-    }
-    
-    public String setGroupDefinition(String groupName, String dimensionName, String groupModifier){
-        this.groupDefinition = "var " + groupName + " = " + dimensionName + ".group()." + groupModifier + ";";        
-        this.addJsMethod("group(" + groupName + ")");
-        return groupName;
-    }
-    
-    public String setGroupDefinition(String groupName, String dimensionName){
-        this.groupDefinition = "var " + groupName + " = " + dimensionName + ".group();";
-        this.addJsMethod("group(" + groupName + ")");
-        return groupName;
-    }
-    */   
     
     public void addStack(String groupName, String stackName, String stackAccessor){
         this.jsMethods.add("stack(" + groupName + ", \"" + stackName + "\", " + stackAccessor + ")");
