@@ -1,2 +1,0 @@
-The documentation of the whole MELT project is available in the [main README](/README.md).
-This folder holds only additional documentary resources such a UML diagrams (created with [UMLet](https://www.umlet.com)).
