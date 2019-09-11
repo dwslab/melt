@@ -8,7 +8,8 @@ class ExecutorSealsTest {
 
     @Test
     void surroundWithDoubleQuotes() {
-        assertEquals("\"test\"", ExecutorSeals.surroundWithDoubleQuotes("test"));
+        ExecutorSeals s = new ExecutorSeals("./seals.jar", "/home/seals/");
+        assertEquals("\"test\"", s.surroundWithDoubleQuotes("test"));
     }
 
     @Test
