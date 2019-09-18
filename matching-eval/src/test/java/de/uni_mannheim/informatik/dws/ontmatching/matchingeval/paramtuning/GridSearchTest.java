@@ -21,7 +21,7 @@ public class GridSearchTest {
                 .addParameter("one", Arrays.asList("a", "b", "c"))
                 .addParameter("two", Arrays.asList(1, 2, 3))
                 .addParameter("threshold", Arrays.asList(0.1, 0.5, 1.0))
-                .runGrid(tc);
+                .runGridParallel(tc);
         
         assertEquals(27, r.size());
         System.out.println(r);

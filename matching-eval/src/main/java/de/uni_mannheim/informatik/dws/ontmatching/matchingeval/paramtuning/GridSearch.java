@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.paramtuning;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.Executor;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutorParallel;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import eu.sealsproject.platform.res.tool.api.ToolBridgeException;
@@ -142,11 +143,11 @@ public class GridSearch {
     }
     
     
-    public ExecutionResultSet runGrid(TestCase tc){
-        return runGrid(tc, Runtime.getRuntime().availableProcessors());
+    public ExecutionResultSet runGridParallel(TestCase tc){
+        return runGridParallel(tc, Runtime.getRuntime().availableProcessors());
     }
 
-    public ExecutionResultSet runGrid(TestCase tc, int numberOfThreads){
+    public ExecutionResultSet runGridParallel(TestCase tc, int numberOfThreads){
         Map<String, IOntologyMatchingToolBridge> matchers = new HashMap<>();
         List<List<Object>> paramCombinations = cartesianProduct(0, this.paramValues);
         for(List<Object> paramSetting : paramCombinations){
@@ -157,8 +158,21 @@ public class GridSearch {
                 logger.error("Cannot instantiate new Matcher", ex);
             }
         }
-        return Executor.runParallel(new ArrayList(Arrays.asList(tc)), matchers, numberOfThreads);
-        //return Executor.run(new ArrayList(Arrays.asList(tc)), matchers);
+        return new ExecutorParallel(numberOfThreads).run(Arrays.asList(tc), matchers);
+    }
+    
+    public ExecutionResultSet runGridSequential(TestCase tc){
+        Map<String, IOntologyMatchingToolBridge> matchers = new HashMap<>();
+        List<List<Object>> paramCombinations = cartesianProduct(0, this.paramValues);
+        for(List<Object> paramSetting : paramCombinations){
+            Collections.reverse(paramSetting); //TODO: optimze
+            try {
+                matchers.put(getMatcherNameWithSettings(paramSetting), getInstantiatedMatcher(paramSetting));
+            } catch (InstantiationException|IllegalAccessException ex) {
+                logger.error("Cannot instantiate new Matcher", ex);
+            }
+        }
+        return Executor.run(Arrays.asList(tc), matchers);
     }
     
     protected String getMatcherNameWithSettings(List<Object> paramValue){

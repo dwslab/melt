@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ParalleExecution {
+public class ParallelExecution {
     
     class LongTimeMatcher extends MatcherURL{
         private URL url;
@@ -40,7 +40,7 @@ public class ParalleExecution {
         Map<String, IOntologyMatchingToolBridge> matchers = new HashMap<>();
         matchers.put("Test", new LongTimeMatcher(one));
         matchers.put("Test2", new LongTimeMatcher(two));
-        ExecutionResultSet er = Executor.runParallel(TrackRepository.Anatomy.Default.getTestCases(), matchers);
+        ExecutionResultSet er = new ExecutorParallel().run(TrackRepository.Anatomy.Default.getTestCases(), matchers);
         Set<URL> urls = er.stream().map(result->result.getOriginalSystemAlignment()).collect(Collectors.toSet());
         assertTrue(urls.contains(one));
         assertTrue(urls.contains(two));

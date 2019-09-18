@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Executor runs a matcher or a list of matchers on a single test case or a list of test cases.
- *
+ * Also have a look at other executors like ExecutorParallel or ExecutorSeals.
  * @author Sven Hertling
  * @author Jan Portisch
  */
@@ -294,42 +294,6 @@ public class Executor {
         if (name.trim().isEmpty())
             return FALLBACK_MATCHER_NAME;
         return name;
-    }
-
-    //to run in parallel use ExecutorService 
-    //https://stackoverflow.com/questions/21156599/javas-fork-join-vs-executorservice-when-to-use-which
-    //https://stackoverflow.com/questions/30585064/grid-search-better-performance-using-threads
-    //https://stackoverflow.com/questions/30646474/process-list-of-n-items-with-multiple-threads
-    //https://www.baeldung.com/java-executor-service-tutorial
-    //https://www.baeldung.com/java-executor-wait-for-threads
-    //https://stackoverflow.com/questions/46958118/synchronized-and-executorservice-on-java-8
-    //https://dzone.com/articles/basics-of-using-java-future-and-executor-service
-
-    public static ExecutionResultSet runParallel(List<TestCase> testCases, Map<String, IOntologyMatchingToolBridge> matchers) {
-        return runParallel(testCases, matchers, Runtime.getRuntime().availableProcessors());
-    }
-
-    public static ExecutionResultSet runParallel(List<TestCase> testCases, Map<String, IOntologyMatchingToolBridge> matchers, int numberOfThreads) {
-
-        ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
-
-        List<Future<ExecutionResult>> futures = new ArrayList<>(testCases.size() * matchers.size());
-        for (TestCase tc : testCases) {
-            for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
-                futures.add(exec.submit(new ExecutionRunner(tc, matcher.getValue(), matcher.getKey())));
-            }
-        }
-
-        ExecutionResultSet results = new ExecutionResultSet();
-        for (Future<ExecutionResult> f : futures) {
-            try {
-                results.add(f.get());// wait for a MatcherRunner to complete
-            } catch (InterruptedException | ExecutionException ex) {
-                LOGGER.warn("Error when waiting for parallel results of matcher execution.", ex);
-            }
-        }
-        exec.shutdown();
-        return results;
     }
 
     /**

@@ -29,7 +29,7 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.Refine
  * @author Sven Hertling
  * @author Jan Portisch
  */
-public class ExecutionResult implements Serializable {
+public class ExecutionResult {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionResult.class);
     
