@@ -35,8 +35,7 @@ public class ExecutorParallel {
      * Run the given matchers in parallel. Make sure the matcher can be run in parallel.
      * @param testCases the testcases on which the matcher should be run
      * @param matchers the matchers
-     * @param numberOfThreads number of threads
-     * @return 
+     * @return ExecutionResultSet
      */
     public ExecutionResultSet run(List<TestCase> testCases, Map<String, IOntologyMatchingToolBridge> matchers) {
 

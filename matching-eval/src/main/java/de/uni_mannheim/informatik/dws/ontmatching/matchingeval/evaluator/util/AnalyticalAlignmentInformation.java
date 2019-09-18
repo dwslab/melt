@@ -16,7 +16,7 @@ public class AnalyticalAlignmentInformation implements IExplainerMapping {
 
     /**
      * Core data structure where all the analytical mapping information is held.
-     * Cell -> Feature Map <FeatureName, FeatureValue></FeatureName,>
+     * Cell -&gt; Feature Map &lt;FeatureName, FeatureValue&gt;&lt;/FeatureName,&gt;
      */
     private HashMap<Correspondence, HashMap<String, String>> mappingInformation;
 

@@ -250,7 +250,7 @@ public class AlignmentsCube {
      * @param records The set of records of which the main URI shall be determined.
      * @param uri_1_position Position of URI 1.
      * @param uri_2_position Position of URI 2.
-     * @return A map in the form <track>_<testcase> -> StringString where string1 = most frequent base in ontology 1
+     * @return A map in the form &lt;track&gt;_&lt;testcase&gt; -&gt; StringString where string1 = most frequent base in ontology 1
      * and string2 = most frequent base in ontology 2.
      */
     private HashMap<String, StringString> determineMainUrisPerTestCase(List<List<String>> records, int uri_1_position, int uri_2_position) {

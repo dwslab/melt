@@ -25,13 +25,13 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
     private Logger LOGGER = LoggerFactory.getLogger(ConfusionMatrixMetric.class);
     
     /**
-     * Assume <a,b,=,1.0> in the reference alignment. All mappings with entity one not "a" and entity two equal "b" such as <c, b, =,1.0> are assumed to be wrong.
+     * Assume &lt;a,b,=,1.0&gt; in the reference alignment. All mappings with entity one not "a" and entity two equal "b" such as &lt;c, b, =,1.0&gt; are assumed to be wrong.
      * This means in knowledge base one there is no similar concept to b. Thus knowledge base one is duplicate free.
      */
     private boolean kbOneDuplicateFree;
 
     /**
-     * Assume <a,b,=,1.0> in the reference alignment. All mappings with entity one as "a" and entity two not "b" such as <a, c, =,1.0> are assumed to be wrong.
+     * Assume &lt;a,b,=,1.0&gt; in the reference alignment. All mappings with entity one as "a" and entity two not "b" such as &lt;a, c, =,1.0&gt; are assumed to be wrong.
      * This means in knowledge base two there is no similar concept to b. Thus knowledge base two is duplicate free.
      */
     private boolean kbTwoDuplicateFree;
