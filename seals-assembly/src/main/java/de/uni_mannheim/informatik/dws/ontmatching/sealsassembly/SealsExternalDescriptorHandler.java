@@ -47,7 +47,7 @@ public class SealsExternalDescriptorHandler extends SealsDescriptorHandler {
                 archiver.addFile(getFileFromText(this.externalCommand), "conf/external/external_command.txt");
             }else if(existsProperty(this.mainclass)){
                 //the wrapper accepts as first argument the class which implements the matching interface
-                String wrapperexternalCommand = "java -cp external{File.separator}" + wrapperJar + "{File.pathSeparator}external{File.separator}lib{File.separator}* " + this.wrapperMainclass + " " + this.mainclass;
+                String wrapperexternalCommand = "java {xmx} -cp external{File.separator}" + wrapperJar + "{File.pathSeparator}external{File.separator}lib{File.separator}* " + this.wrapperMainclass + " " + this.mainclass;
                 archiver.addFile(getFileFromText(wrapperexternalCommand), "conf/external/external_command.txt");
                 archiver.addFile(getFileFromResource(wrapperJar), "conf/external/" + wrapperJar);
             }else{

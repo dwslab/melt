@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingexternal;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -13,6 +14,19 @@ import java.util.List;
 public class MatcherExternalCommandFromFile extends MatcherExternal {
 
     protected Path filePath = Paths.get("external", "external_command.txt");
+    
+    protected static String xmx = "";
+    protected static String xms = "";
+    
+    static{
+        for(String s : ManagementFactory.getRuntimeMXBean().getInputArguments()){
+            if(s.toLowerCase().contains("xmx")){
+                xmx = s;
+            }else if(s.toLowerCase().contains("xms")){
+                xms = s;
+            }
+        }
+    }
     
     @Override
     protected List<String> getCommand(URL source, URL target, URL inputAlignment) throws Exception {
@@ -29,6 +43,8 @@ public class MatcherExternalCommandFromFile extends MatcherExternal {
         return s.replace("\r", "").replace("\n", "")
                 .replace("{File.pathSeparator}", File.pathSeparator)
                 .replace("{File.separator}", File.separator)
+                .replace("{xmx}", xmx)
+                .replace("{xms}", xms)
                 .trim();
     }
 }
