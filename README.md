@@ -13,7 +13,7 @@ Hertling, Sven; Portisch, Jan; Paulheim, Heiko. MELT - Matching EvaLuation Toolk
 
 ## Code Examples
 The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for 
-different tasks and that can be used as barebone project for specific applications.
+different tasks and that can be used as barebone project for specific applications. [Javadoc](https://dwslab.github.io/melt/) is also available.
 
 ## Matcher Development in Java
 
