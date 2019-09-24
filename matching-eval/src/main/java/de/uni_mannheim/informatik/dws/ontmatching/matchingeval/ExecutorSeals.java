@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.io.FileUtils;
@@ -28,6 +28,9 @@ import org.apache.commons.io.FileUtils;
  * @author Jan Portisch
  */
 public class ExecutorSeals {
+    
+    private static final String OS_NAME = System.getProperty("os.name");
+    private static final boolean isLinux = OS_NAME.startsWith("Linux") || OS_NAME.startsWith("LINUX");
 
     /**
      * Path to the JAR of the SEALS client.
@@ -303,6 +306,9 @@ public class ExecutorSeals {
         List<String> commands = new ArrayList<>();
         //dont quote anything here; ProcessBuilder will already take care of.
         //see https://blog.krecan.net/2008/02/09/processbuilder-and-quotes/
+        if(isLinux){
+            commands.add("setsid");
+        }
         commands.add("java");
         if (javaRuntimeParameters != null) commands.addAll(this.javaRuntimeParameters);
         commands.add("-jar");
@@ -341,7 +347,7 @@ public class ExecutorSeals {
         }
         // this is rather a heuristic: reading of ontologies is added, as well as starting of seals
         long matcherRuntime = java.lang.System.currentTimeMillis() - startTime;
-
+        terminateProcess(process);
         if(matcherFinishesInTime){
             LOGGER.info("Evaluation of matcher {} on test case {} completed within {} seconds.",matcherDirectory.getName(), testCase.getName(), matcherRuntime/1000);
             try (FileWriter logWriter = new FileWriter(logfileToBeWritten, true)) {
@@ -350,7 +356,7 @@ public class ExecutorSeals {
         }else{
             LOGGER.warn("Evaluation of matcher {} on test case {} did not finish within the given timeout of {}.", matcherDirectory.getName(), testCase.getName(), timeoutText);
             try (FileWriter errorWriter = new FileWriter(errorFileToBeWritten, true)) {
-                errorWriter.append("MELT: Matcher did not finish within timeout of " + timeoutText + ". Killig matching process.");
+                errorWriter.append("MELT: Matcher did not finish within timeout of " + timeoutText);
             } catch (IOException ex) { LOGGER.warn("Could not write to matcher error file.", ex); }
         }
         
@@ -365,6 +371,82 @@ public class ExecutorSeals {
         result.setMatcherLog(logfileToBeWritten);
         result.setMatcherErrorLog(errorFileToBeWritten);
         return result;
+    }
+    
+    private static void terminateProcess(Process p){
+        if(p == null)
+            return;
+        if(p.isAlive()){
+            LOGGER.info("Matcher process is still alive - MELT is now trying to kill it.");
+            if(isLinux){
+                Long pid = getPid(p);
+                if(pid == null){
+                    killProcessWithJava(p);
+                }else{
+                    killAllProcessesWithSameSessionId(pid);
+                    if(p.isAlive())
+                        killProcessWithJava(p);
+                }
+            }else{
+                killProcessWithJava(p);
+            }
+        }
+    }
+    
+    private static void killProcessWithJava(Process p){
+        LOGGER.info("MELT kills now the matcher process (with vanilla java which might introduce an orphan process)");
+        try {
+            p.destroyForcibly().waitFor();
+        } catch (InterruptedException ex) {
+            LOGGER.error("Interruption while forcibly terminating seals/matcher process.", ex);
+        }
+    }
+    
+    private static void killAllProcessesWithSameSessionId(Long pid){
+        //kill $(ps -s 12345 -o pid=)
+        //see https://unix.stackexchange.com/questions/124127/kill-all-descendant-processes
+        LOGGER.info("MELT kills all processes of seals matcher in session with sid {}", pid);
+        try {
+            //Send SIGTERM to all matcher processes
+            LOGGER.info("MELT sending SIGTERM to all processes with SID={}", pid);
+            Process p = new ProcessBuilder("/bin/bash", "-c", String.format("kill $(ps -s %s -o pid=)", pid)).start();
+            p.waitFor(10, TimeUnit.SECONDS);
+            if(p.isAlive())
+                p.destroyForcibly();
+            
+            // give 3 seconds to terminate the processes
+            Thread.sleep(3000);
+            
+            //send SIGKILL to all matcher processes
+            LOGGER.info("MELT sending SIGKILL to all processes with SID={}", pid);
+            p = new ProcessBuilder("/bin/bash", "-c", String.format("kill -9 $(ps -s %s -o pid=)", pid)).start();
+            p.waitFor(10, TimeUnit.SECONDS);
+            if(p.isAlive())
+                p.destroyForcibly();
+            //1 second to ensure termination really happend
+            Thread.sleep(1000);
+        } catch (IOException | InterruptedException ex) {
+            LOGGER.error("Could not destroy matcher child processes", ex);
+        }
+    }
+    
+    private static Long getPid(Process p){
+        if(isLinux == false)
+            return null;
+        Class<?> clazz = p.getClass();
+        if (clazz.getName().equals("java.lang.UNIXProcess")) {
+            try {
+                Field pidField = clazz.getDeclaredField("pid");
+                pidField.setAccessible(true);
+                Object value = pidField.get(p);
+                if (value instanceof Integer) {
+                    return ((Integer) value).longValue();
+                }
+            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+                LOGGER.error("Cannot get the PID of a Unix Process.", ex);
+            }
+        }
+        return null;
     }
 
 

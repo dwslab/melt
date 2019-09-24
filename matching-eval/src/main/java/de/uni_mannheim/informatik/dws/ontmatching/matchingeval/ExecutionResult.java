@@ -138,10 +138,13 @@ public class ExecutionResult {
     private static Alignment silentlyParseAlignment(URL url){
         try {
             return AlignmentParser.parse(url);
-        } catch (SAXException | IOException | NullPointerException ex) {
-            LOGGER.error("The system alignment given by following URL could not be parsed: " + url.toString(), ex);
-            return new Alignment();
+        }catch(FileNotFoundException ex){
+            LOGGER.error("The system alignment file with URL {} does not exist. Returning empty system alignment.", url);
         }
+        catch (SAXException | IOException | NullPointerException ex) {
+            LOGGER.error("The system alignment given by following URL could not be parsed: " + url.toString(), ex);
+        }
+        return new Alignment();
     }
 
     /**
