@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+old schema: http://www.seals-project.eu/schemas/2010-08-15/ToolPackageDescriptor.xsd
+new schema: http://www.seals-project.eu/resources/res/tools/bundle/v1
+-->
+
+<ns:package 	  
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:ns="http://www.seals-project.eu/resources/res/tools/bundle/v1"
+	id="DemoMatcher" 
+	version="1.0">
+	<ns:description>DemoMatcher is a matching tool developed for testpurpose.</ns:description>
+	<ns:endorsement>
+		<ns:copyright>Copyright information</ns:copyright>
+		<ns:license>Specification of license</ns:license>
+	</ns:endorsement>
+	<ns:wrapper>
+		<ns:management>
+			<ns:deploy>
+				<ns:executable xsi:type="ns:ShellScript">
+					<ns:script>deploy.bat</ns:script>
+					<ns:error-log>deploy-error.log</ns:error-log>
+				</ns:executable>
+			</ns:deploy>
+			<ns:start>
+				<ns:executable xsi:type="ns:ShellScript">
+					<ns:script>start.bat</ns:script>
+					<ns:error-log>start-error.log</ns:error-log>
+				</ns:executable>
+			</ns:start>
+			<ns:stop>
+				<ns:executable xsi:type="ns:ShellScript">
+					<ns:script>stop.bat</ns:script>
+					<ns:error-log>stop-error.log</ns:error-log>
+				</ns:executable>
+			</ns:stop>
+			<ns:undeploy>
+				<ns:executable xsi:type="ns:ShellScript">
+					<ns:script>undeploy.bat</ns:script>
+					<ns:error-log>undeploy-error.log</ns:error-log>
+				</ns:executable>
+			</ns:undeploy>
+		</ns:management>
+		<ns:bridge>
+			<!-- references relative to bin folder -->
+			<ns:class>de.unima.ki.demomatcher.seals.MatcherBridge</ns:class>
+			<ns:jar>demomatcher-bridge.jar</ns:jar>
+			<ns:dependencies>
+				<ns:lib>lib/demomatcher.jar</ns:lib>
+				<ns:lib>lib/owlapi.jar</ns:lib>
+				<ns:lib>lib/simmetrics.jar</ns:lib>
+			</ns:dependencies>
+		</ns:bridge>
+	</ns:wrapper>
+</ns:package>
+

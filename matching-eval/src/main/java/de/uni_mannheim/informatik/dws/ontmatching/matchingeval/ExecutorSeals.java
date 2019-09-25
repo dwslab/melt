@@ -8,16 +8,24 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.io.FileUtils;
@@ -221,14 +229,9 @@ public class ExecutorSeals {
     public ExecutionResultSet run(TestCase testCase, File matcher) {
         ExecutionResultSet resultSet = new ExecutionResultSet();
         
-        Set<File> matcherDirs = getMatcherDirectories(matcher);
-        List<File> sortedmatcherDirs = new ArrayList<>(matcherDirs.size());
-        sortedmatcherDirs.addAll(matcherDirs);
-        Collections.sort(sortedmatcherDirs);
-        
-        for(File matcherDir : sortedmatcherDirs){  
-            LOGGER.info("Run matcher {} on testcase {}", matcherDir, testCase);
-            resultSet.add(runUnzippedMatcher(testCase, matcherDir));
+        for(Entry<File, String> entry : getMatcherDirectories(matcher).entrySet()){  
+            LOGGER.info("Run matcher {} (directory: {}) on testcase {}", entry.getValue(), entry.getKey(), testCase);
+            resultSet.add(runUnzippedMatcher(testCase, entry.getKey(), entry.getValue()));
         }
         return resultSet;
     }
@@ -239,28 +242,29 @@ public class ExecutorSeals {
      * If it is a directory, it will check if this directory is a matcher.
      * If not, it will inspect the whole directory for matchers.
      * @param matcher the directoroy or file which represents a matcher or a directory of matchers.
-     * @return a set of ile which represent the possible matcher directories
+     * @return a map of the matcher directory and corresponding matcher name(file name)
      */
-    protected Set<File> getMatcherDirectories(File matcher){
-        Set<File> set = new HashSet<>();
+    protected Map<File, String> getMatcherDirectories(File matcher){
+        Map<File, String> map = new HashMap<>();
         if (!matcher.exists()) {
             LOGGER.error("The given matcher path does not exist. Returning no matchers.");
-            return set;
+            return map;
         }
         if (matcher.isDirectory()) {
             if(isDirectoryRunnableInSeals(matcher)){
-                set.add(matcher);
+                map.put(matcher, getMatcherNameFromSealsDescriptor(matcher));
             } else {
                 LOGGER.info("Inspect all direct subdirectories/subfiles(zip) in folder {}.", matcher);
                 for (File fileInMatcher : matcher.listFiles()) {
                     if(fileInMatcher.isDirectory()){
                         File sealsMatcherDir = getFirstSubDirectoryRunnableInSeals(fileInMatcher);
                         if(sealsMatcherDir != null)
-                            set.add(sealsMatcherDir);
+                            map.put(sealsMatcherDir, fileInMatcher.getName());
                     }else if(fileInMatcher.isFile() && fileInMatcher.getName().toLowerCase().endsWith(".zip")){
-                        File unzippedMatcher = getFirstSubDirectoryRunnableInSeals(unzip(fileInMatcher));
+                        File unzippedDir = unzip(fileInMatcher);
+                        File unzippedMatcher = getFirstSubDirectoryRunnableInSeals(unzippedDir);
                         if(unzippedMatcher != null){
-                            set.add(unzippedMatcher);
+                            map.put(unzippedMatcher, unzippedDir.getName());
                         }else{
                             LOGGER.error("Matcher folder is not runnable in SEALS: {}\n\tbased on zip file {}", unzippedMatcher, fileInMatcher);
                         }
@@ -268,24 +272,38 @@ public class ExecutorSeals {
                 }
             }
         } else if (matcher.getName().endsWith(".zip")) {
-            File unzippedMatcher = getFirstSubDirectoryRunnableInSeals(unzip(matcher));
+            File unzippedDir = unzip(matcher);
+            File unzippedMatcher = getFirstSubDirectoryRunnableInSeals(unzippedDir);
             if(unzippedMatcher != null){
-                set.add(unzippedMatcher);
+                map.put(unzippedMatcher, unzippedDir.getName());
             }else{
                 LOGGER.error("Matcher folder is not runnable in SEALS: {}\n\tbased on zip file {}", unzippedMatcher, matcher);
             }
         }
-        return set;
+        return map;
     }
     
+    
+    /**
+     * Evaluate a single matcher using the local SEALS client.
+     *
+     * @param matcherDirectory The directory containing the matcher
+     * @param testCase         The testCase on which the matcher shall be run.
+     * @return ExecutionResult
+     */
+    protected ExecutionResult runUnzippedMatcher(TestCase testCase, File matcherDirectory) {
+        return runUnzippedMatcher(testCase, matcherDirectory, matcherDirectory.getName());
+    }
 
     /**
      * Evaluate a single matcher using the local SEALS client.
      *
      * @param matcherDirectory The directory containing the matcher
      * @param testCase         The testCase on which the matcher shall be run.
+     * @param matcherName      Matcher name
+     * @return ExecutionResult
      */
-    protected ExecutionResult runUnzippedMatcher(TestCase testCase, File matcherDirectory) {
+    protected ExecutionResult runUnzippedMatcher(TestCase testCase, File matcherDirectory, String matcherName) {
 
         // results folder
         File resultsFolder = Paths.get(this.resultsDirectory.getAbsolutePath(), testCase.getName()).toFile();
@@ -299,9 +317,9 @@ public class ExecutorSeals {
         }
         this.sealsHome.mkdirs();
 
-        File systemAlignmentToBeWritten = new File(resultsFolder, matcherDirectory.getName() + ".rdf");
-        File logfileToBeWritten = new File(resultsFolder, matcherDirectory.getName() + "_log.txt");
-        File errorFileToBeWritten = new File(resultsFolder, matcherDirectory.getName() + "_error.txt");
+        File systemAlignmentToBeWritten = new File(resultsFolder, matcherName + ".rdf");
+        File logfileToBeWritten = new File(resultsFolder, matcherName + "_log.txt");
+        File errorFileToBeWritten = new File(resultsFolder, matcherName + "_error.txt");
 
         List<String> commands = new ArrayList<>();
         //dont quote anything here; ProcessBuilder will already take care of.
@@ -329,7 +347,7 @@ public class ExecutorSeals {
         String timeoutText = this.getTimeoutAsText();
 
         LOGGER.info("Run SEALS with command: {}",String.join(" ", builder.command()));
-        LOGGER.info("Waiting for completion of matcher {} on test case {} with a timeout of {}.",matcherDirectory.getName(), testCase.getName(), timeoutText);
+        LOGGER.info("Waiting for completion of matcher {} on test case {} with a timeout of {}.",matcherName, testCase.getName(), timeoutText);
         
         boolean matcherFinishesInTime = true;
         Process process;
@@ -349,12 +367,12 @@ public class ExecutorSeals {
         long matcherRuntime = java.lang.System.currentTimeMillis() - startTime;
         terminateProcess(process);
         if(matcherFinishesInTime){
-            LOGGER.info("Evaluation of matcher {} on test case {} completed within {} seconds.",matcherDirectory.getName(), testCase.getName(), matcherRuntime/1000);
+            LOGGER.info("Evaluation of matcher {} on test case {} completed within {} seconds.",matcherName, testCase.getName(), matcherRuntime/1000);
             try (FileWriter logWriter = new FileWriter(logfileToBeWritten, true)) {
                 logWriter.append("MELT: Matcher finished within " + matcherRuntime/1000 + " seconds.");
             } catch (IOException ex) { LOGGER.warn("Could not write to matcher log file.", ex); }
         }else{
-            LOGGER.warn("Evaluation of matcher {} on test case {} did not finish within the given timeout of {}.", matcherDirectory.getName(), testCase.getName(), timeoutText);
+            LOGGER.warn("Evaluation of matcher {} on test case {} did not finish within the given timeout of {}.", matcherName, testCase.getName(), timeoutText);
             try (FileWriter errorWriter = new FileWriter(errorFileToBeWritten, true)) {
                 errorWriter.append("MELT: Matcher did not finish within timeout of " + timeoutText);
             } catch (IOException ex) { LOGGER.warn("Could not write to matcher error file.", ex); }
@@ -367,7 +385,7 @@ public class ExecutorSeals {
             LOGGER.error("Could not transform originalSystemAlignment URI to URL.", ex);
         }
         
-        ExecutionResult result = new ExecutionResult(testCase, matcherDirectory.getName(), systemAlignmentURL, matcherRuntime, null);
+        ExecutionResult result = new ExecutionResult(testCase, matcherName, systemAlignmentURL, matcherRuntime, null);
         result.setMatcherLog(logfileToBeWritten);
         result.setMatcherErrorLog(errorFileToBeWritten);
         return result;
@@ -447,6 +465,47 @@ public class ExecutorSeals {
             }
         }
         return null;
+    }
+    
+    
+    private static final Pattern matcherNamePattern = Pattern.compile("<ns:package.*?id=\"(.*?)\"", Pattern.DOTALL); 
+    
+    /**
+     * Returns the matcher name in the seals descriptor.
+     * @param file File instance which points to a descriptor file or a matcher directory.
+     * @return name of the matcher or empty string if not available.
+     */
+    public static String getMatcherNameFromSealsDescriptor(File file){
+        File descriptorFile = null;
+        if(file.isFile() && file.getName().equals("descriptor.xml")){
+            descriptorFile = file;
+        }else if(file.isDirectory()){
+            descriptorFile = new File(file, "descriptor.xml");
+        }else{
+            LOGGER.info("Can not retrive matcher name because given parameter is not a diretory or a descriptor file.");
+            return "";
+        }
+        
+        if(descriptorFile.exists() == false){
+            LOGGER.info("Can not retrive matcher name because descriptor file does not exist.");
+            return "";
+        }
+        String text = "";
+        try {
+            text = new String(Files.readAllBytes(descriptorFile.toPath()), StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            LOGGER.info("Can not retrive matcher name because descriptor file can not be read.", ex);
+            return "";
+        }
+        
+        Matcher regex = matcherNamePattern.matcher(text);
+        if(regex.find() == false)
+            return "";
+        return regex.group(1);
+    }
+    
+    public static String getMatcherNameFromSealsDescriptor(String file){
+        return getMatcherNameFromSealsDescriptor(new File(file));
     }
 
 

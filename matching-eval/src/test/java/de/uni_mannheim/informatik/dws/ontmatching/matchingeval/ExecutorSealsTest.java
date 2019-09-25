@@ -11,4 +11,11 @@ class ExecutorSealsTest {
         assertTrue(ExecutorSeals.isDirectoryRunnableInSeals("./src/test/resources/sealsCompliantDirectory"));
         assertFalse(ExecutorSeals.isDirectoryRunnableInSeals("./src/test/resources/sealsNonCompliantDirectory"));
     }
+    
+    @Test
+    void testGetMatcherNameFromSealsDescriptor() {
+        assertEquals("DemoMatcher", ExecutorSeals.getMatcherNameFromSealsDescriptor("./src/test/resources/sealsCompliantDirectory"));
+        assertEquals("DemoMatcher", ExecutorSeals.getMatcherNameFromSealsDescriptor("./src/test/resources/sealsCompliantDirectory/descriptor.xml"));
+        assertEquals("", ExecutorSeals.getMatcherNameFromSealsDescriptor("./src/test/resources/sealsCompliantDirectory/notexistent.xml"));
+    }
 }
