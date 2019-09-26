@@ -320,5 +320,19 @@ public class Executor {
         }
         return allDeleted;
     }
+    
+    /**
+     * Deletes all matcher result files which starts with "alignment" and are stored in the tmp folder.
+     * Does not delete the whole tmp folder but onl files which are produced by oaei matchers.
+     */
+    public static void deleteTempFiles() {
+        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+        File[] toBeDeleted = tmpDir.listFiles((dir, name) -> {
+            return name.startsWith("alignment");
+        });        
+        for(File f : toBeDeleted){
+            f.delete();
+        }
+    }
 
 }

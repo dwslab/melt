@@ -77,6 +77,11 @@ public class ExecutorSeals {
     private File resultsDirectory;
     
     /**
+     *  If true, deletes files in tmp folder which starts with "alignment" before running a matcher
+     */
+    private boolean deleteTempFiles;
+    
+    /**
      * Constructor
      *
      * @param sealsClientJar        The path to the local SEALS client JAR file.
@@ -85,14 +90,16 @@ public class ExecutorSeals {
      * @param javaRuntimeParameters Runtime parameters such as ("-Xmx25g", "-Xms15g").
      * @param timeout               Timeout for one testcase as long.
      * @param timeoutTimeUnit       The unit of the timeout.
+     * @param deleteTempFiles       If true, deletes files in tmp folder which starts with "alignment" before running a matcher
      */
-    public ExecutorSeals(File sealsClientJar, File sealsHome, File resultsDirectory, List<String> javaRuntimeParameters, long timeout, TimeUnit timeoutTimeUnit) {
+    public ExecutorSeals(File sealsClientJar, File sealsHome, File resultsDirectory, List<String> javaRuntimeParameters, long timeout, TimeUnit timeoutTimeUnit, boolean deleteTempFiles) {
         this.sealsClientJar = sealsClientJar;
         this.sealsHome = sealsHome;
         this.resultsDirectory = resultsDirectory;
         this.javaRuntimeParameters = javaRuntimeParameters;
         this.timeout = timeout;
         this.timoutTimeUnit = timeoutTimeUnit;
+        this.deleteTempFiles = deleteTempFiles;
         
         if(this.sealsClientJar.exists() == false){
             LOGGER.error("Seals Client does not exists");
@@ -113,7 +120,7 @@ public class ExecutorSeals {
      * @param timeoutTimeUnit       The unit of the timeout.
      */
     public ExecutorSeals(File sealsClientJar, File sealsHome, List<String> javaRuntimeParameters, long timeout, TimeUnit timeoutTimeUnit) {
-        this(sealsClientJar, sealsHome, new File("sealsResults"), javaRuntimeParameters, timeout, timeoutTimeUnit);
+        this(sealsClientJar, sealsHome, new File("sealsResults"), javaRuntimeParameters, timeout, timeoutTimeUnit, true);
     }
 
     /**
@@ -316,6 +323,9 @@ public class ExecutorSeals {
             LOGGER.error("Could not delete SEALS_HOME folder " + this.sealsHome.toString(), ex);
         }
         this.sealsHome.mkdirs();
+        if(this.deleteTempFiles)
+            Executor.deleteTempFiles();
+        
 
         File systemAlignmentToBeWritten = new File(resultsFolder, matcherName + ".rdf");
         File logfileToBeWritten = new File(resultsFolder, matcherName + "_log.txt");
