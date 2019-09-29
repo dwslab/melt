@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.text.StringEscapeUtils;
@@ -123,7 +125,6 @@ public class AlignmentXmlRepair {
                     }
                     writer.newLine();
                 }
-                reader.close();
         } catch (IOException ex) {
             LOGGER.error("Can not repair xml of alignment file:", ex);
         }
@@ -134,5 +135,58 @@ public class AlignmentXmlRepair {
             .append("rdf:resource=\"")
             .append(StringEscapeUtils.ESCAPE_XML10.translate(attribute))
             .append("\"").toString();
+    }
+    
+    
+    
+    /**
+     * Copy all file from source to destionation directory.
+     * If a file within those directories ends with ".rdf", then this file is repaired with the repair function.
+     * @param srcDir a source directory which should contain some alignment files (for repairing)
+     * @param destDir a destination directory where all files will be copied to
+     */
+    public static void repairAlignmentFolder(File srcDir, File destDir){
+        if (!srcDir.isDirectory()) {
+            LOGGER.error("Source '" + srcDir + "' exists but is not a directory");
+            return;
+        }
+        
+        File[] srcFiles = srcDir.listFiles();
+        if (srcFiles == null){
+            LOGGER.error("Failed to list contents of " + srcDir);
+            return;
+        }
+        if (destDir.exists()) {
+            if (destDir.isDirectory() == false) {
+                LOGGER.error("Destination '" + destDir + "' exists but is not a directory");
+                return;
+            }
+        } else {
+            if (!destDir.mkdirs() && !destDir.isDirectory()) {
+                LOGGER.error("Destination '" + destDir + "' directory cannot be created");
+                return;
+            }
+        }
+        if (destDir.canWrite() == false) {
+            LOGGER.error("Destination '" + destDir + "' cannot be written to");
+            return;
+        }
+        for (final File srcFile : srcFiles) {
+            final File dstFile = new File(destDir, srcFile.getName());
+
+            if (srcFile.isDirectory()) {
+                repairAlignmentFolder(srcFile, dstFile);
+            } else {
+                if(srcFile.getName().endsWith(".rdf")){
+                    repair(srcFile, dstFile);
+                }else{
+                    try {
+                        Files.copy(srcFile.toPath(), dstFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException ex) {
+                        LOGGER.error("Could not copy a file from source to destination.", ex);
+                    }
+                }
+            }
+        }
     }
 }

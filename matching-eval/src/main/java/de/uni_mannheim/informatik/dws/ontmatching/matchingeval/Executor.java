@@ -4,10 +4,15 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
+import java.io.BufferedReader;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -174,8 +180,9 @@ public class Executor {
         ExecutionResultSet results = new ExecutionResultSet();
         for (File f : folder.listFiles()) {
             if (f.isFile() && f.getName().endsWith(".rdf")) {
+                long runtime = tryToGetRuntime(new File(f.getParentFile(), f.getName().substring(0, f.getName().length() - 4) + "_log.txt"));
                 try {
-                    results.add(new ExecutionResult(testCase, FilenameUtils.removeExtension(f.getName()), f.toURI().toURL(), 0, null));
+                    results.add(new ExecutionResult(testCase, FilenameUtils.removeExtension(f.getName()), f.toURI().toURL(), runtime, null));
                 } catch (MalformedURLException ex) {
                     LOGGER.error("Cannot convert file URI to URL.", ex);
                 }
@@ -183,9 +190,26 @@ public class Executor {
         }
         return results;
     }
-
-
-    /**
+    
+    private static Pattern timeRunning = Pattern.compile("MELT: Matcher finished within\\s*(\\d+)\\s*seconds");
+    private static long tryToGetRuntime(File logFile){
+        if(logFile.exists() == false)
+            return 0;
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))){
+            String line;
+            while ((line=reader.readLine()) != null) {
+                Matcher m = timeRunning.matcher(line);
+                if(m.find())
+                    return Long.parseLong(m.group(1));
+            }
+        } catch (IOException ex) {
+            LOGGER.error("Could not retive runtime. Return 0 as runtime.", ex);
+            return 0;
+        }
+        return 0;
+    }
+    
+     /**
      * Load results directly from a folder. The results have to be run on the same testCase.
      * Folder structure like:
      * folder
@@ -203,6 +227,56 @@ public class Executor {
         File folder = new File(pathToFolder);
         return loadFromFolder(folder, testCase);
     }
+    
+    /**
+     * Load raw results from folder structure like:
+     * folder
+     * - testcase name
+     *      - ALIGN.rdf
+     *      - LogMap.rdf
+     * File names are treated as matcher names and they are associated with the given testcase.
+     *
+     * @param folder   The folder where the system results can be found.
+     * @param track    Track with which the individual system results shall be associated.
+     * @return {@link ExecutionResultSet} instance with the loaded results.
+     */
+    public static ExecutionResultSet loadFromFolder(File folder, Track track) {
+        if (!folder.isDirectory()) {
+            LOGGER.error("The specified folder is not a directory. Returning null.");
+            return null;
+        }
+        ExecutionResultSet results = new ExecutionResultSet();
+        for (File f : folder.listFiles()) {
+            if(f.isDirectory()){
+                TestCase testcase = track.getTestCase(f.getName());
+                if(testcase == null){
+                    LOGGER.error("cannot read from folder {} because testcase doesn't exist in track {} .", f.getName(), track.getName());
+                    continue;
+                }
+                results.addAll(loadFromFolder(f, testcase));                
+            }
+        }
+        return results;
+    }
+    
+    /**
+     * Load raw results from folder structure like:
+     * folder
+     * - testcase name
+     *      - ALIGN.rdf
+     *      - LogMap.rdf
+     * File names are treated as matcher names and they are associated with the given testcase.
+     *
+     * @param folder   The folder where the system results can be found.
+     * @param track    Track with which the individual system results shall be associated.
+     * @return {@link ExecutionResultSet} instance with the loaded results.
+     */
+    public static ExecutionResultSet loadFromFolder(String folder, Track track) {
+        return loadFromFolder(new File(folder), track);
+    }
+
+
+   
 
 
     /**
