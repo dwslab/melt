@@ -6,7 +6,6 @@ import com.googlecode.cqengine.query.Query;
 import com.googlecode.cqengine.query.QueryFactory;
 import static com.googlecode.cqengine.query.QueryFactory.noQueryOptions;
 import com.googlecode.cqengine.resultset.ResultSet;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.baselineMatchers.BaselineStringMatcher;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
 
@@ -16,7 +15,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.Refiner;

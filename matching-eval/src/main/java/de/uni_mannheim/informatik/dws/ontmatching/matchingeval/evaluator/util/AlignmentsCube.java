@@ -245,6 +245,8 @@ public class AlignmentsCube {
         }
     }
 
+
+
     /**
      * This methods determines the most frequent URIs per test case in the set of records for ontology 1 and ontology 2.
      * @param records The set of records of which the main URI shall be determined.
