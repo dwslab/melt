@@ -6,7 +6,6 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSe
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ResourceType;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.baselineMatchers.BaselineStringMatcher;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.explainer.ExplainerResourceProperty;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.explainer.NamePropertyTuple;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.cm.ConfusionMatrix;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.cm.ConfusionMatrixMetric;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.util.AlignmentsCube;
@@ -16,7 +15,6 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.Residu
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.TypeRefiner;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Correspondence;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import org.apache.commons.csv.CSVFormat;
@@ -30,6 +28,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -83,7 +82,7 @@ public class EvaluatorCSV extends Evaluator {
     /**
      * The explainers to be used in the CSV that will be written.
      */
-    ArrayList<IExplainerResource> resourceExplainers;
+    List<IExplainerResource> resourceExplainers;
 
     /**
      * Printer which can be used to print an individual matcher performance for a track
@@ -118,14 +117,11 @@ public class EvaluatorCSV extends Evaluator {
         alignmentsCube = new AlignmentsCube();
 
         // resource explainers
-        ArrayList<NamePropertyTuple> propertiesList = new ArrayList<>();
-        propertiesList.add(new NamePropertyTuple("Label", RDFS.label));
-        propertiesList.add(new NamePropertyTuple("Comment", RDFS.comment));
-        propertiesList.add(new NamePropertyTuple("Type", RDF.type));
-        ExplainerResourceProperty explainerResourceProperty = new ExplainerResourceProperty(propertiesList);
-        resourceExplainers = new ArrayList<>();
-        resourceExplainers.add(explainerResourceProperty);
-        alignmentsCube.setResourceExplainers(resourceExplainers);
+        ExplainerResourceProperty explainerResourceProperty = new ExplainerResourceProperty();
+        explainerResourceProperty.add("Label", RDFS.label);
+        explainerResourceProperty.add("Comment", RDFS.comment);
+        explainerResourceProperty.add("Type", RDF.type);        
+        alignmentsCube.setResourceExplainers(Arrays.asList(explainerResourceProperty));
     }
 
 
@@ -509,11 +505,11 @@ public class EvaluatorCSV extends Evaluator {
         this.confusionMatrixMetric = confusionMatrixMetric;
     }
 
-    public ArrayList<IExplainerResource> getResourceExplainers() {
+    public List<IExplainerResource> getResourceExplainers() {
         return resourceExplainers;
     }
 
-    public void setResourceExplainers(ArrayList<IExplainerResource> resourceExplainers) {
+    public void setResourceExplainers(List<IExplainerResource> resourceExplainers) {
         this.resourceExplainers = resourceExplainers;
         alignmentsCube.setResourceExplainers(resourceExplainers);
     }
