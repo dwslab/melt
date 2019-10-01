@@ -210,8 +210,8 @@ public class AlignmentsCube {
             HashMap<String, StringString> mainUris = determineMainUrisPerTestCase(records, uri_1_position, uri_2_position);
 
             for(List<String> record : records){
-                String uri_1_prefixed = PrefixLookup.getPrefix(record.get(uri_1_position));
-                String uri_2_prefixed = PrefixLookup.getPrefix(record.get(uri_2_position));
+                String uri_1_prefixed = PrefixLookup.DEFAULT.getPrefix(record.get(uri_1_position));
+                String uri_2_prefixed = PrefixLookup.DEFAULT.getPrefix(record.get(uri_2_position));
                 String key = record.get(0) + "_" + record.get(1);
 
                 if(uri_1_prefixed.equals(record.get(uri_1_position))) {
@@ -229,7 +229,7 @@ public class AlignmentsCube {
                     String uri_2 = record.get(uri_2_position);
                     if (uri_2.contains(mainUris.get(key).string_2)) {
                         record.set(uri_2_position, uri_2.replace(mainUris.get(key).string_2, ":"));
-                    } else record.set(uri_2_position, PrefixLookup.getPrefix(uri_2));
+                    } else record.set(uri_2_position, PrefixLookup.DEFAULT.getPrefix(uri_2));
                 } else {
                     record.set(uri_2_position, uri_2_prefixed);
                 }

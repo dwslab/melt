@@ -9,6 +9,7 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.util.Pr
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.RDF;
@@ -92,25 +93,20 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
         }
 
         for (Entry<String, Property> property : properties.entrySet()) {
-            StringJoiner joiner = new StringJoiner(",");
             StmtIterator iter = resource.listProperties(property.getValue());
             List<String> propertyValueList = new ArrayList<>();
             while (iter.hasNext()) {
-                propertyValueList.add(iter.nextStatement().getObject().toString());
+                RDFNode n = iter.nextStatement().getObject();
+                if(n.isLiteral()){
+                    propertyValueList.add(n.asLiteral().getLexicalForm());
+                }else if(n.isURIResource()){
+                    propertyValueList.add(PrefixLookup.DEFAULT.getPrefix(n.asResource().getURI()));
+                }else{
+                    propertyValueList.add(n.asResource().toString());
+                }
             }
             Collections.sort(propertyValueList);
-
-            for(String string : propertyValueList){
-                if(property.getValue().equals(RDF.type)) {
-                    joiner.add("\"" + PrefixLookup.getPrefix(string) + "\"");
-                } else joiner.add("\"" + string + "\"");
-            }
-
-            String jsonArray = "[]";
-            if(joiner.length() != 0) {
-                jsonArray = "[" + joiner.toString() + "]";
-            }
-
+            String jsonArray = "[" + String.join(",", propertyValueList) + "]";
             result.put(property.getKey(), jsonArray);
         }
         return result;
