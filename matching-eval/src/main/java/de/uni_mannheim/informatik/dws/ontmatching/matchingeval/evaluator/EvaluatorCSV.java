@@ -132,7 +132,7 @@ public class EvaluatorCSV extends Evaluator {
      * @param metric The confusion matrix metric to be used.
      */
     public EvaluatorCSV(ExecutionResultSet results, ConfusionMatrixMetric metric) {
-        this(results, new ConfusionMatrixMetric(), true);
+        this(results, metric, true);
     }
 
 
