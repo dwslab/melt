@@ -49,7 +49,13 @@ public class DashboardBuilder extends Evaluator {
     protected Set<String> groupDefinitions;
     
     protected String title;
-    
+
+    /**
+     * Constructor
+     * @param evaluatorCSV The CSV evaluator to be used. The evaluator can be configured, e.g. in terms of the columns
+     *                     that should be printed.
+     * @param titleOfPage The title of the generated HTML page.
+     */
     public DashboardBuilder(EvaluatorCSV evaluatorCSV, String titleOfPage){
         super(evaluatorCSV.getResults());
         Velocity.setProperty("resource.loader", "classpath");
@@ -62,11 +68,20 @@ public class DashboardBuilder extends Evaluator {
         this.currentRow = new ArrayList<>();
         this.title = titleOfPage;
     }
-        
+
+    /**
+     * Constructor
+     * @param executionResultSet The execution result set to be evaluated and printed.
+     * @param titleOfPage The title of the generated HTML page.
+     */
     public DashboardBuilder(ExecutionResultSet executionResultSet, String titleOfPage){
         this(new EvaluatorCSV(executionResultSet), titleOfPage);
     }
-    
+
+    /**
+     * Consructor
+     * @param executionResultSet The execution result set to be evaluated and printed.
+     */
     public DashboardBuilder(ExecutionResultSet executionResultSet){
         this(executionResultSet, "Analysis of mapping results");
     }
@@ -384,7 +399,7 @@ public class DashboardBuilder extends Evaluator {
         newRow();
 
         VelocityContext context = prepareVelocityContext();
-        context.put("csvData", this.evaluatorCSV.getAlignmentsCubeAsShortenedString().trim());
+        context.put("csvData", this.evaluatorCSV.getAlignmentsCubeAsString().trim());
         /*context.put("csvData", "Track,TestCase,left_label,left_comment,left_explicit_type,left_uri,relation,confidence,right_uri,right_label,right_comment,right explicit type,result\n" +
 "conference,conference-sigkdd,[],[],[http://www.w3.org/2002/07/owl-Class],http://conference-Review,=,1.0,http://sigkdd-Review,[],[],[http://www.w3.org/2002/07/owl-Class],true positive\n" +
 "conference,conference-sigkdd,[],[],[http://www.w3.org/2002/07/owl-Class],http://conference-Committee,=,1.0,http://sigkdd-Committee,[],[],[http://www.w3.org/2002/07/owl-Class],true positive\n" +

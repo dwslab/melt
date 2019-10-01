@@ -65,6 +65,11 @@ public class EvaluatorCSV extends Evaluator {
     private ResidualRefiner residualRefiner;
 
     /**
+     * Indicates whether the CSV shall be printed with shortened strings. Default: true.
+     */
+    private boolean isPrintAsShortenedString = true;
+
+    /**
      * Analytical Store for all alignments.
      */
     AlignmentsCube alignmentsCube;
@@ -92,9 +97,13 @@ public class EvaluatorCSV extends Evaluator {
      *
      * @param results The execution results for which an evaluation shall be performed.
      * @param metric The confusion matrix metric to be used.
+     * @param isPrintAsShortenedString The CSV output will be written with shortened URIs.
      */
-    public EvaluatorCSV(ExecutionResultSet results, ConfusionMatrixMetric metric) {
+    public EvaluatorCSV(ExecutionResultSet results, ConfusionMatrixMetric metric, boolean isPrintAsShortenedString) {
         super(results);
+
+        // output configuration
+        this.isPrintAsShortenedString = isPrintAsShortenedString;
 
         // metrics
         this.confusionMatrixMetric = metric;
@@ -119,6 +128,18 @@ public class EvaluatorCSV extends Evaluator {
         alignmentsCube.setResourceExplainers(resourceExplainers);
     }
 
+
+    /**
+     * Constructor
+     *
+     * @param results The execution results for which an evaluation shall be performed.
+     * @param metric The confusion matrix metric to be used.
+     */
+    public EvaluatorCSV(ExecutionResultSet results, ConfusionMatrixMetric metric) {
+        this(results, new ConfusionMatrixMetric(), true);
+    }
+
+
     /**
      * Constructor
      *
@@ -126,6 +147,16 @@ public class EvaluatorCSV extends Evaluator {
      */
     public EvaluatorCSV(ExecutionResultSet results){
        this(results, new ConfusionMatrixMetric());
+    }
+
+    /**
+     * Constructor
+     *
+     * @param results The execution results for which an evaluation shall be performed.
+     * @param isPrintAsShortenedString The CSV output will be written with shortened URIs.
+     */
+    public EvaluatorCSV(ExecutionResultSet results, boolean isPrintAsShortenedString){
+        this(results, new ConfusionMatrixMetric(), isPrintAsShortenedString);
     }
 
     @Override
@@ -421,20 +452,25 @@ public class EvaluatorCSV extends Evaluator {
      * @return
      */
     public String getAlignmentsCubeAsString(){
-        for (String matcher : this.results.getDistinctMatchers()) {
-            // individual evaluation per test case
-            for (TestCase testCase : this.results.getDistinctTestCases(matcher)) {
-                writeOverviewFileMatcherTestCase(testCase, matcher, null, true);
+        if(!isPrintAsShortenedString) {
+            for (String matcher : this.results.getDistinctMatchers()) {
+                // individual evaluation per test case
+                for (TestCase testCase : this.results.getDistinctTestCases(matcher)) {
+                    writeOverviewFileMatcherTestCase(testCase, matcher, null, true);
+                }
             }
+            return this.alignmentsCube.toString();
+        } else {
+            // shortened string, default option
+            return getAlignmentsCubeAsShortenedString();
         }
-        return this.alignmentsCube.toString();
     }
 
     /**
      * Obtain an output stream that can be used to write the CSV file.
      * @return
      */
-    public String getAlignmentsCubeAsShortenedString(){
+    private String getAlignmentsCubeAsShortenedString(){
         for (String matcher : this.results.getDistinctMatchers()) {
             // individual evaluation per test case
             for (TestCase testCase : this.results.getDistinctTestCases(matcher)) {
@@ -480,5 +516,13 @@ public class EvaluatorCSV extends Evaluator {
     public void setResourceExplainers(ArrayList<IExplainerResource> resourceExplainers) {
         this.resourceExplainers = resourceExplainers;
         alignmentsCube.setResourceExplainers(resourceExplainers);
+    }
+
+    public boolean isPrintAsShortenedString() {
+        return isPrintAsShortenedString;
+    }
+
+    public void setPrintAsShortenedString(boolean printAsShortenedString) {
+        isPrintAsShortenedString = printAsShortenedString;
     }
 }
