@@ -209,7 +209,7 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
         for (ExecutionResult result : resultsForCalculation) {
             confusionMatrices.add(compute(result));
         }
-        return executeAggregation(confusionMatrices, ConfusionMatrixAggregationMode.MICRO);
+        return getMicroAverages(confusionMatrices);
     }
 
 
@@ -224,7 +224,45 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
         for (ExecutionResult result : resultsForCalculation) {
             confusionMatrices.add(compute(result));
         }
-        return executeAggregation(confusionMatrices, ConfusionMatrixAggregationMode.MACRO);
+        return getMacroAverages(confusionMatrices);
+    }
+    
+    /**
+     * Returns aggregated confusion matrices according to the macro average.
+     *
+     * @param resultsForCalculation The results for which an aggregated confusion matrix shall be computed.
+     * @param numberOfTestCases The number of testcases which should be used for the calculation
+     * @return Aggregated Confusion Matrices Aggregated Confusion Matrices
+     */
+    public ConfusionMatrix getMacroAveragesForResults(Iterable<ExecutionResult> resultsForCalculation, int numberOfTestCases) {
+        HashSet<ConfusionMatrix> confusionMatrices = new HashSet<>();
+        for (ExecutionResult result : resultsForCalculation) {
+            confusionMatrices.add(compute(result));
+        }
+        Alignment truePositive = new Alignment();
+        Alignment falsePositive = new Alignment();
+        Alignment falseNegative = new Alignment();
+
+        double precision = 0.0; // dummy init
+        double recall = 0.0; // dummy init
+
+        // for aggregation:
+        for (ConfusionMatrix individualConfusionMatrix : confusionMatrices) {
+            truePositive.addAll(individualConfusionMatrix.getTruePositive());
+            falsePositive.addAll(individualConfusionMatrix.getFalsePositive());
+            falseNegative.addAll(individualConfusionMatrix.getFalseNegative());
+        }
+        
+        double aggregatedPrecision = 0.0;
+        double aggregatedRecall = 0.0;
+        for (ConfusionMatrix individualConfusionMatrix : confusionMatrices) {
+            aggregatedPrecision = aggregatedPrecision + individualConfusionMatrix.getPrecision();
+            aggregatedRecall = aggregatedRecall + individualConfusionMatrix.getRecall();
+        }
+        precision = aggregatedPrecision / numberOfTestCases;
+        recall = aggregatedRecall / numberOfTestCases;
+                
+        return new ConfusionMatrix(truePositive, falsePositive, falseNegative, precision, recall);
     }
 
 

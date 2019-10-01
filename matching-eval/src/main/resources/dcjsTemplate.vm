@@ -17,7 +17,11 @@
         <script src="https://unpkg.com/dc@3/dc.js"></script>
         <script src="https://rawgit.com/crossfilter/reductio/master/reductio.js"></script>
         <script src="https://npmcdn.com/universe@latest/universe.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://unpkg.com/dc@3/dc.css"/>
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/dc@3/dc.css"/>        
+        #if($compressedRemoteLocation)
+
+        <script src="https://unpkg.com/pako@1.0.10/dist/pako.min.js"></script>
+        #end
     </head>
     <body>
         <div class="container-fluid">
@@ -64,9 +68,15 @@
                 dc.config.defaultColors(meltColors);//d3.schemeCategory10); 
                 #if($remoteLocation)
                 d3.csv("$remoteLocation").then(function(experiments) {
+                #elseif($compressedRemoteLocation)
+                $.ajax({url: "$compressedRemoteLocation", method: 'get', success: function(b64Data){
+                //from https://stackoverflow.com/questions/14620769/decompress-gzip-and-zlib-string-in-javascript
+                var charData = atob(b64Data).split('').map(function(x){return x.charCodeAt(0);});
+                var strData  = pako.inflate(new Uint8Array(charData), {to: 'string'});
+                var experiments = d3.csvParse(strData);
                 #else
                 var experiments = d3.csvParse(d3.select('pre#data').text());
-                #end                
+                #end
                 var ndx         = crossfilter(experiments);
 
                 //dimension 
@@ -95,7 +105,9 @@
                 dc.renderAll();                
                 #if($remoteLocation)
                 });
-                #end                
+                #elseif($compressedRemoteLocation)
+                }});
+                #end
             });
        </script>
 

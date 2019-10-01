@@ -4,15 +4,19 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSe
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.Evaluator;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.EvaluatorCSV;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.zip.GZIPOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -392,7 +396,7 @@ public class DashboardBuilder extends Evaluator {
     /**
      * Writes the HTML content to one file. This includes also the data (csv) which is included in the HTML file.
      * This HTML file can be opened directly by a browser.
-     * @param htmlFile 
+     * @param htmlFile the file where all html data should be written to
      */
     public void writeToFile(File htmlFile){
         //in case the last row is not closed:
@@ -416,7 +420,8 @@ public class DashboardBuilder extends Evaluator {
     /**
      * Writes the HTML content to htmlFile and the data (csv) to another file.
      * This is for publishing the dashboard to a server.
-     * @param htmlFile 
+     * @param htmlFile the file where all html code should be written to
+     * @param csvFile the file where all data should be written to
      */
     public void writeToFile(File htmlFile, File csvFile){
         newRow();
@@ -425,10 +430,34 @@ public class DashboardBuilder extends Evaluator {
             writer.write(this.evaluatorCSV.getAlignmentsCubeAsString().trim());
         } catch (IOException ex) {
             LOGGER.error("Could not write to file.", ex);
-        }    
+        }
         VelocityContext context = prepareVelocityContext();
         context.put("remoteLocation", csvFile.getName());
+        try(Writer writer = new FileWriter(htmlFile)){
+            template.merge( context, writer );
+        } catch (IOException ex) {
+            LOGGER.error("Could not write to file.", ex);
+        }
+    }
+    
+    /**
+     * Writes the HTML content to htmlFile and the data (csv) to another file.
+     * The data file is compressed by gzip and base64 encoded.
+     * This is for publishing the dashboard to a server.
+     * @param htmlFile the file where all html code should be written to
+     * @param csvFile the file where all data should be written to (compressed by gzip and base64 encoded)
+     */
+    public void writeToCompressedFile(File htmlFile, File csvFile){
+        newRow();
         
+        try(Writer writer = new BufferedWriter(new FileWriter(csvFile))){
+            String csv = this.evaluatorCSV.getAlignmentsCubeAsString().trim();
+            writer.write(Base64.getEncoder().encodeToString(getGzippedByteArray(csv)));
+        } catch (IOException ex) {
+            LOGGER.error("Could not write to file.", ex);
+        }
+        VelocityContext context = prepareVelocityContext();
+        context.put("compressedRemoteLocation", csvFile.getName());
         try(Writer writer = new FileWriter(htmlFile)){
             template.merge( context, writer );
         } catch (IOException ex) {
@@ -437,6 +466,18 @@ public class DashboardBuilder extends Evaluator {
     }
     
     //Private helper methods
+    
+    private byte[] getGzippedByteArray(String text){
+        try(ByteArrayOutputStream byteStream = new ByteArrayOutputStream()){            
+            try(GZIPOutputStream gzipStream = new GZIPOutputStream(byteStream)){
+                gzipStream.write(text.getBytes(StandardCharsets.UTF_8));
+            }            
+            return byteStream.toByteArray();
+        } catch (IOException ex) {
+            LOGGER.error("Could not create gzipped byte array", ex);
+            return new byte[0];
+        }
+    }
     
     private VelocityContext prepareVelocityContext(){
         VelocityContext context = new VelocityContext();
