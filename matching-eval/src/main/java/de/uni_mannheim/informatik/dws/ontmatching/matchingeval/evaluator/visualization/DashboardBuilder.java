@@ -70,8 +70,11 @@ public class DashboardBuilder extends Evaluator {
     public DashboardBuilder(ExecutionResultSet executionResultSet){
         this(executionResultSet, "Analysis of mapping results");
     }
-    
-    
+
+    /**
+     * Constructor
+     * @param evaluatorCSV
+     */
     public DashboardBuilder(EvaluatorCSV evaluatorCSV){
         this(evaluatorCSV, "Analysis of mapping results");
     }

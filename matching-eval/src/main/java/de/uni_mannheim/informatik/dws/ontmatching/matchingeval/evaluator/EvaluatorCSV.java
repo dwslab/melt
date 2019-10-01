@@ -75,6 +75,10 @@ public class EvaluatorCSV extends Evaluator {
      */
     private CSVPrinter testCasePerformanceCubePrinter;
 
+    /**
+     * The explainers to be used in the CSV that will be written.
+     */
+    ArrayList<IExplainerResource> resourceExplainers;
 
     /**
      * Printer which can be used to print an individual matcher performance for a track
@@ -110,7 +114,7 @@ public class EvaluatorCSV extends Evaluator {
         propertiesList.add(new NamePropertyTuple("Comment", RDFS.comment));
         propertiesList.add(new NamePropertyTuple("Type", RDF.type));
         ExplainerResourceProperty explainerResourceProperty = new ExplainerResourceProperty(propertiesList);
-        ArrayList<IExplainerResource> resourceExplainers = new ArrayList<>();
+        resourceExplainers = new ArrayList<>();
         resourceExplainers.add(explainerResourceProperty);
         alignmentsCube.setResourceExplainers(resourceExplainers);
     }
@@ -467,5 +471,14 @@ public class EvaluatorCSV extends Evaluator {
 
     public void setConfusionMatrixMetric(ConfusionMatrixMetric confusionMatrixMetric) {
         this.confusionMatrixMetric = confusionMatrixMetric;
+    }
+
+    public ArrayList<IExplainerResource> getResourceExplainers() {
+        return resourceExplainers;
+    }
+
+    public void setResourceExplainers(ArrayList<IExplainerResource> resourceExplainers) {
+        this.resourceExplainers = resourceExplainers;
+        alignmentsCube.setResourceExplainers(resourceExplainers);
     }
 }
