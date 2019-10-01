@@ -81,7 +81,13 @@ public class ConfusionMatrix {
     }
     
     public double getFbetaMeasure(double beta){
-        double betaSquared = Math.pow(beta, 2);        
-        return (1 + betaSquared) * (precision * recall) / ((betaSquared * precision) + recall);
+        double betaSquared = Math.pow(beta, 2);
+        double numerator = (1 + betaSquared) * (precision * recall);
+        double denominator = ((betaSquared * precision) + recall);
+        if(denominator == 0){
+            return 0;
+        }else{
+            return numerator / denominator;
+        }
     }
 }

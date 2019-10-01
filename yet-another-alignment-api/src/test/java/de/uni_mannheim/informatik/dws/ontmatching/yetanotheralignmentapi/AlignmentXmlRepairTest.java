@@ -14,7 +14,7 @@ import org.xml.sax.SAXParseException;
 public class AlignmentXmlRepairTest {
     
     @Test
-    public void testEmpty() throws IOException, SAXException{
+    public void testXmlRepair() throws IOException, SAXException{
         File unparsableAlignment = new File("src/test/resources/unparsable_alignment.rdf");
         
         assertThrows(SAXParseException.class, () -> {
@@ -24,10 +24,10 @@ public class AlignmentXmlRepairTest {
         String repaired = AlignmentXmlRepair.repair(unparsableAlignment);        
         InputStream stream = new ByteArrayInputStream(repaired.getBytes(StandardCharsets.UTF_8));        
         Alignment a = new Alignment(stream); // should not throw any error
-        assertEquals(2, a.size());
+        assertEquals(3, a.size());
 
         Alignment b = AlignmentXmlRepair.loadRepairedAlignment(unparsableAlignment);
-        assertEquals(2, b.size());
+        assertEquals(3, b.size());
     }
     
 }

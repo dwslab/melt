@@ -115,7 +115,7 @@ public class AlignmentXmlRepair {
                     if (found) {
                         StringBuffer sb = new StringBuffer();
                         do{
-                            m.appendReplacement(sb, repairXMLAttribute(m.group(1)));
+                            m.appendReplacement(sb, Matcher.quoteReplacement(repairXMLAttribute(m.group(1))));
                             found = m.find();
                         }while(found);
                         m.appendTail(sb);

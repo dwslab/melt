@@ -15,5 +15,13 @@
 		</Cell>
 	</map>
 	<map><Cell><entity1 rdf:resource="http://dbkwik.webdatacommons.org/memory-alpha.wikia.com/resource/Star_Trek_(A&BC)"/><entity2 rdf:resource="http://dbkwik.webdatacommons.org/stexpanded.wikia.com/resource/Star_Trek_(A&BC)"/><measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.8836</measure><relation>=</relation></Cell></map>
+        <map>
+		<Cell>
+			<entity1 rdf:resource="http://memory-alpha.wikia.com/wiki/Special:FilePath/this$that"/>
+			<entity2 rdf:resource = "http://stexpanded.wikia.com/wiki/Special:FilePath/this$that"/>
+			<measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9801</measure>
+			<relation>=</relation>
+		</Cell>
+	</map>
 </Alignment>
 </rdf:RDF>

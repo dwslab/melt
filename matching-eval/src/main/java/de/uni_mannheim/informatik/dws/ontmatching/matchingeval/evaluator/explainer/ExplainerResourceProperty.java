@@ -39,18 +39,27 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
      */
     private static Logger LOGGER = LoggerFactory.getLogger(ExplainerResourceProperty.class);
 
+    
+    public ExplainerResourceProperty() {
+        this.resourceFeatureNames = new ArrayList<>();
+        this.properties = new HashMap<>();
+    }
+    
     /**
      * Constructor
      *
      * @param properties Desired RDF properties together with their "feature names" in the order you desire.
      */
-    public ExplainerResourceProperty(ArrayList<NamePropertyTuple> properties) {
-        this.resourceFeatureNames = new ArrayList<>();
-        this.properties = new HashMap<>();
+    public ExplainerResourceProperty(List<NamePropertyTuple> properties) {
+        this();
         for (NamePropertyTuple npt : properties) {
-            resourceFeatureNames.add(npt.name);
-            this.properties.put(npt.name, npt.property);
+            add(npt.name, npt.property);
         }
+    }
+    
+    public void add(String name, Property property){
+        this.resourceFeatureNames.add(name);
+        this.properties.put(name, property);
     }
 
 
