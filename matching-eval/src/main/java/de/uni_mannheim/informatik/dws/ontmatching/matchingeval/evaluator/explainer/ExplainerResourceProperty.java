@@ -34,6 +34,8 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
      * Names of the resource features in a list. Not that there is an order.
      */
     private ArrayList<String> resourceFeatureNames;
+    
+    private PrefixLookup uriPrefixLookup;
 
     /**
      * default logger
@@ -44,6 +46,7 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
     public ExplainerResourceProperty() {
         this.resourceFeatureNames = new ArrayList<>();
         this.properties = new HashMap<>();
+        this.uriPrefixLookup = PrefixLookup.DEFAULT;
     }
     
     /**
@@ -105,7 +108,7 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
                 if(n.isLiteral()){
                     propertyValueList.add("\"" + n.asLiteral().getLexicalForm() + "\"");
                 }else if(n.isURIResource()){
-                    propertyValueList.add("\"" + PrefixLookup.DEFAULT.getPrefix(n.asResource().getURI()) + "\"");
+                    propertyValueList.add("\"" + this.uriPrefixLookup.getPrefix(n.asResource().getURI()) + "\"");
                 }else{
                     propertyValueList.add("\"" + n.asResource().toString() + "\"");
                 }
@@ -131,4 +134,14 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
     public void setOntModel(OntModel ontModel) {
         this.ontModel = ontModel;
     }
+
+    public PrefixLookup getUriPrefixLookup() {
+        return uriPrefixLookup;
+    }
+
+    public void setUriPrefixLookup(PrefixLookup uriPrefixLookup) {
+        this.uriPrefixLookup = uriPrefixLookup;
+    }
+    
+    
 }

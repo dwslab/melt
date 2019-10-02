@@ -1,24 +1,17 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.util;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
+import java.util.regex.Pattern;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.shared.PrefixMapping;
 
 /**
  * This class represents a lookup service for Semantic Web prefixes.
@@ -30,9 +23,12 @@ public class PrefixLookup {
      */
     public static PrefixLookup DEFAULT = new PrefixLookup(initPrefixMapping());
     
-    private PrefixMapping mapping;    
+    public static PrefixLookup EMPTY = new PrefixLookup(new HashMap<>());
+     
+    private Map<String,String> mapping;
+    //private Trie<String, String> mapping; // map from 
     
-    public PrefixLookup(PrefixMapping mapping){
+    public PrefixLookup(Map<String,String> mapping){
         this.mapping = mapping;
     }
     
@@ -52,7 +48,7 @@ public class PrefixLookup {
         this.mapping = getMappingFromOntModel(m);
     }
     
-    private PrefixMapping getMappingFromOntModel(OntModel m){
+    private Map<String,String> getMappingFromOntModel(OntModel m){
         Set<String> uris = new HashSet<>();
         ResIterator i =m.listSubjects();
         while(i.hasNext()){
@@ -61,83 +57,67 @@ public class PrefixLookup {
                 continue;
             uris.add(r.getURI());
         }
-        PrefixMapping mapping = initPrefixMapping();
-        mapping.setNsPrefixes(m);
+        Map<String, String> mapping = initPrefixMapping();
+        
+        mapping.putAll(m.getNsPrefixMap());
         return getMappingFromUris(uris, mapping);
     }
     
     
-    private PrefixMapping getMappingFromUris(Set<String> uris, PrefixMapping initialMapping){
-        Set<String> knownPrefixes = new HashSet<>(initialMapping.getNsPrefixMap().values());
-        HashMap<String, Integer> distribution = new HashMap<>();
-        for(String uri : uris){
-            String key = getBaseUri(uri);
-            if(knownPrefixes.contains(key) == false)
-                distribution.put(key, distribution.getOrDefault(key, 0) + 1);
+    private static Pattern splitBySlashOrHashtag = Pattern.compile("(?<=\\/|#)");
+    private Map<String,String> getMappingFromUris(Set<String> uris, Map<String, String> initialMapping){
+        Set<String> knownPrefixes = new HashSet<>(initialMapping.values());
+        
+        //map from possible prefixes to number of matched urls
+        Map<String, Integer> distribution = new HashMap<>();
+        for(String uri : uris){  
+            String[] splits = splitBySlashOrHashtag.split(uri);
+            StringBuilder prefixBuilder = new StringBuilder();
+            // do not use the last part of url because it is always specific to that url and not a prefix
+            for(int i=0; i<splits.length - 1; i++){ 
+                prefixBuilder.append(splits[i]);
+                String prefix = prefixBuilder.toString();
+                distribution.put(prefix, distribution.getOrDefault(prefix, 0) + 1);
+            }
+        }
+        distribution.remove("http://");
+        distribution.remove("http:/");
+        for(String s : knownPrefixes){
+            distribution.remove(s);
         }
         
-        List<Entry<String, Integer>> list = new ArrayList<>(distribution.entrySet());
-        list.sort(Comparator.comparing(Entry::getValue));
-        Collections.reverse(list);
-        
-        if(list.isEmpty()){
+        if(distribution.isEmpty())
             return initialMapping;
-        }
-        String commonPrefix = list.get(0).getKey();
-        for(Entry<String, Integer> s: list.subList(1, list.size())){
-            String newCommonPrefix = greatestCommonPrefix(commonPrefix, s.getKey());
-            if(newCommonPrefix.length() > 7){
-                commonPrefix = newCommonPrefix;
-            }
-        }
         
-        /*
-        Map<String, Integer> bestCommonPrefix = new HashMap<>();
-        for(Entry<String, Integer> entry : distribution.entrySet()){
-            
-            String[] entry.getKey().split("/")
-                    
-            for(int i=0; i<entry.getKey().length(); i++){
-                String key = entry.getKey().substring(0, i);
-                bestCommonPrefix.put(key, distribution.getOrDefault(key, 0) + entry.getValue());
-            }
-        }
+        Entry<String, Integer> maxPrefix = Collections.max(distribution.entrySet(), Comparator.comparing(Entry::getValue));
+        initialMapping.put("", maxPrefix.getKey());
         
-        int longestPrefix = distribution.keySet().stream().mapToInt(String::length).max().orElse(0);
-        int highestValue = bestCommonPrefix.values().stream().mapToInt(x->x).max().orElse(0);
-        double sweetSpot = 0;
-        for(Entry<String, Integer> entry : bestCommonPrefix.entrySet()){
-            
-            
-            for(int i=0; i<entry.getKey().length(); i++){
-                String key = entry.getKey().substring(0, i);
-                bestCommonPrefix.put(key, distribution.getOrDefault(key, 0) + entry.getValue());
-            }
-        }
-        */
-
-        mapping.setNsPrefix(":", commonPrefix);
+        //List<Entry<String, Integer>> l = new ArrayList<>(distribution.entrySet());
+        //l.sort(Comparator.comparing(Entry::getValue));
+        //Collections.reverse(l);
+        
+        //maybe also normalize         
+        //if(distribution.isEmpty())
+        //    return initialMapping;
+        //double longestPrefix = distribution.keySet().stream().mapToInt(String::length).max().orElse(0);
+        //double highestValue = Collections.max(distribution.values());
+        
+        //List<Entry<String, Double>> prefixOrder = new ArrayList();
+        //for(Entry<String, Integer> prefix : distribution.entrySet()){
+        //    double normalizedPrefixLength = prefix.getKey().length() / longestPrefix;
+        //    double normalizedValue = (double)prefix.getValue() / highestValue;
+        //    prefixOrder.add(new SimpleEntry(prefix.getKey(), 1.2 * normalizedPrefixLength + normalizedValue));
+        //}        
+        //prefixOrder.sort(Comparator.comparing(Entry::getValue));
+        //Collections.reverse(prefixOrder);
+        
+        
+        //mapping.setNsPrefix(":", commonPrefix);
+        return initialMapping;
+    }
+    
+    public Map<String,String> getPrefixMap(){
         return mapping;
-    }
-    
-    
-    private String greatestCommonPrefix(String a, String b) {
-        int minLength = Math.min(a.length(), b.length());
-        for (int i = 0; i < minLength; i++) {
-            if (a.charAt(i) != b.charAt(i)) {
-                return a.substring(0, i);
-            }
-        }
-        return a.substring(0, minLength);
-    }
-    
-    
-    public PrefixMapping getPrefixMapping(){
-        return mapping;
-    }
-    
-    public Map<String, String> getPrefixMap(){
-        return mapping.getNsPrefixMap();
     }
     
     
@@ -146,100 +126,67 @@ public class PrefixLookup {
      * be returned (e.g. 'daml:someConcept' rather than 'http://www.daml.org/2001/03/daml+oil#someConcept').
      * If the prefix is not available in the mapping, the full string will be returned.
      * @param uriString The URI of which the prefix shall be obtained.
-     * @return Prefix as String.
+     * @return Prefixed URI as String.
      */
     public String getPrefix(String uriString){
-        int idx = splitIdx(uriString);
-        if (idx >= 0)
-        {
-            String baseUriString = uriString.substring(0, idx + 1);
-            String prefix = mapping.getNsURIPrefix(baseUriString);
-            if (prefix != null)
-            {
-                return prefix + ':' + uriString.substring(idx + 1);
-            } else return uriString;
+        for(Entry<String,String> prefix : this.mapping.entrySet()){
+            if(uriString.startsWith(prefix.getValue())){
+                return uriString.replace(prefix.getValue(), prefix.getKey() + ":");
+            }
         }
         return uriString;
     }
     
-    /**
-     * Given a URI String, the base will be determined (in other word, the fragment will be cut).
-     * @param uriString URI of which the base shall be determined.
-     * @return The base URI as String.
-     */
-    public static String getBaseUri(String uriString){
-        int idx = splitIdx(uriString);
-        if (idx >= 0)
-        {
-            String baseUriString = uriString.substring(0, idx + 1);
-            return baseUriString;
-        }
-        return uriString;
-    }
-    
-    /**
-     * Obtains the index of the hashkey or last slash in order to determine the fragment/prefix of a URI
-     * @param uriString URI string.
-     * @return Position of splitting character.
-     */
-    private static int splitIdx(String uriString)
-    {
-        int idx = uriString.lastIndexOf('#') ;
-        if ( idx >= 0 )
-            return idx ;
-        idx = uriString.lastIndexOf('/') ;
-        return idx ;
-    }
-    
-    
-    private static PrefixMapping initPrefixMapping(){
-        return PrefixMapping.Factory.create()
-            //jena standard 
-            .setNsPrefix( "rdfs",  "http://www.w3.org/2000/01/rdf-schema#" )
-            .setNsPrefix( "rdf",   "http://www.w3.org/1999/02/22-rdf-syntax-ns#" )
-            .setNsPrefix( "dc",    "http://purl.org/dc/elements/1.1/" )
-            .setNsPrefix( "owl",   "http://www.w3.org/2002/07/owl#" )
-            .setNsPrefix( "xsd",   "http://www.w3.org/2001/XMLSchema#" )
-            //jena extended
-            .setNsPrefix( "rss",   "http://purl.org/rss/1.0/" )
-            .setNsPrefix( "vcard", "http://www.w3.org/2001/vcard-rdf/3.0#" )
-            .setNsPrefix( "ja",    "http://jena.hpl.hp.com/2005/11/Assembler#")
-            .setNsPrefix( "eg",    "http://www.example.org/" )
-            
-            //general prefixes
-            .setNsPrefix( "skos",  "http://www.w3.org/2004/02/skos/core#" )
-            .setNsPrefix( "prov",  "http://www.w3.org/ns/prov#" )
-            .setNsPrefix( "dbr",   "http://dbpedia.org/resource/" )
-            .setNsPrefix( "dbo",   "http://dbpedia.org/ontology/" )
-            .setNsPrefix( "wd",    "http://www.wikidata.org/entity/" )
-            .setNsPrefix( "dct",    "http://purl.org/dc/terms/" )
-            .setNsPrefix( "foaf",  "http://xmlns.com/foaf/0.1/" )
-            .setNsPrefix( "schema","http://schema.org/" )
-            .setNsPrefix( "dul",   "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#" )
-            
-            //OAEI related:
-            .setNsPrefix( "p1","http://www.owl-ontologies.com/assert.owl#" )
-            .setNsPrefix( "xsp","http://www.owl-ontologies.com/2005/08/07/xsp.owl#" )
-            .setNsPrefix( "oboInOwl","http://www.geneontology.org/formats/oboInOwl#" )
-            .setNsPrefix( "oboRel","http://www.obofoundry.org/ro/ro.owl#" )
-            .setNsPrefix( "snomed","http://www.ihtsdo.org/snomed#" )
-            .setNsPrefix( "swrlb","http://www.w3.org/2003/11/swrlb#" )
-            .setNsPrefix( "swrl","http://www.w3.org/2003/11/swrl#" )
-            .setNsPrefix( "protege","http://protege.stanford.edu/plugins/owl/protege#" )
-            .setNsPrefix( "daml","http://www.daml.org/2001/03/daml+oil#" )
-            .setNsPrefix( "Thesaurus","http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#" )
+    private static Map<String,String> initPrefixMapping(){
+        Map<String,String> map = new HashMap<>();
+                
+        //jena standard 
+        map.put( "rdfs",  "http://www.w3.org/2000/01/rdf-schema#" );
+        map.put( "rdf",   "http://www.w3.org/1999/02/22-rdf-syntax-ns#" );
+        map.put( "dc",    "http://purl.org/dc/elements/1.1/" );
+        map.put( "owl",   "http://www.w3.org/2002/07/owl#" );
+        map.put( "xsd",   "http://www.w3.org/2001/XMLSchema#" );
+        //jena extended
+        map.put( "rss",   "http://purl.org/rss/1.0/" );
+        map.put( "vcard", "http://www.w3.org/2001/vcard-rdf/3.0#" );
+        map.put( "ja",    "http://jena.hpl.hp.com/2005/11/Assembler#");
+        map.put( "eg",    "http://www.example.org/" );
 
-            // OAEI Track related:
-            .setNsPrefix("cmt", "http://cmt#")
-            .setNsPrefix("conference", "http://conference#")
-            .setNsPrefix("edas", "http://edas#")
-            .setNsPrefix("sigkdd", "http://sigkdd#")
-            .setNsPrefix("confof", "http://confOf#")
-            .setNsPrefix("ekaw", "http://ekaw#")
-            .setNsPrefix("iasted", "http://iasted#")
-            .setNsPrefix("mouse", "http://mouse.owl#")
-            .setNsPrefix("human", "http://human.owl#");
+        //general prefixes
+        map.put( "skos",  "http://www.w3.org/2004/02/skos/core#" );
+        map.put( "prov",  "http://www.w3.org/ns/prov#" );
+        map.put( "dbr",   "http://dbpedia.org/resource/" );
+        map.put( "dbo",   "http://dbpedia.org/ontology/" );
+        map.put( "wd",    "http://www.wikidata.org/entity/" );
+        map.put( "dct",    "http://purl.org/dc/terms/" );
+        map.put( "foaf",  "http://xmlns.com/foaf/0.1/" );
+        map.put( "schema","http://schema.org/" );
+        map.put( "dul",   "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#" );
 
+        //OAEI related:
+        map.put( "p1","http://www.owl-ontologies.com/assert.owl#" );
+        map.put( "xsp","http://www.owl-ontologies.com/2005/08/07/xsp.owl#" );
+        map.put( "oboInOwl","http://www.geneontology.org/formats/oboInOwl#" );
+        map.put( "oboRel","http://www.obofoundry.org/ro/ro.owl#" );
+        map.put( "snomed","http://www.ihtsdo.org/snomed#" );
+        map.put( "swrlb","http://www.w3.org/2003/11/swrlb#" );
+        map.put( "swrl","http://www.w3.org/2003/11/swrl#" );
+        map.put( "protege","http://protege.stanford.edu/plugins/owl/protege#" );
+        map.put( "daml","http://www.daml.org/2001/03/daml+oil#" );
+        map.put( "Thesaurus","http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#" );
+
+        // OAEI Track related:
+        map.put("cmt", "http://cmt#");
+        map.put("conference", "http://conference#");
+        map.put("edas", "http://edas#");
+        map.put("sigkdd", "http://sigkdd#");
+        map.put("confof", "http://confOf#");
+        map.put("ekaw", "http://ekaw#");
+        map.put("iasted", "http://iasted#");
+        map.put("mouse", "http://mouse.owl#");
+        map.put("human", "http://human.owl#");
+        
+        return map;
     }
     
     /*

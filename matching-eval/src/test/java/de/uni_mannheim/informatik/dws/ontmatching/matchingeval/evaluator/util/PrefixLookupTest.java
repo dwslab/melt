@@ -14,12 +14,4 @@ public class PrefixLookupTest {
         assertEquals("http://my-ontology-uri.com/vocabulary/concept", PrefixLookup.DEFAULT.getPrefix("http://my-ontology-uri.com/vocabulary/concept"));
     }
 
-    @Test
-    void getBaseUri() {
-        assertEquals("http://protege.stanford.edu/plugins/owl/protege#", PrefixLookup.getBaseUri("http://protege.stanford.edu/plugins/owl/protege#Test"));
-        assertEquals("http://www.w3.org/2002/07/owl#", PrefixLookup.getBaseUri("http://www.w3.org/2002/07/owl#Class"));
-        assertEquals("http://my-ontology-uri.com/vocabulary#", PrefixLookup.getBaseUri("http://my-ontology-uri.com/vocabulary#concept"));
-        assertEquals("http://my-ontology-uri.com/vocabulary/", PrefixLookup.getBaseUri("http://my-ontology-uri.com/vocabulary/concept"));
-    }
-
 }
