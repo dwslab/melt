@@ -57,7 +57,12 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
             add(npt.name, npt.property);
         }
     }
-    
+
+    /**
+     * Add an RDF feature.
+     * @param name Name of the RDF feature.
+     * @param property RDF property that shall be used to describe a resource.
+     */
     public void add(String name, Property property){
         this.resourceFeatureNames.add(name);
         this.properties.put(name, property);
@@ -98,11 +103,11 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
             while (iter.hasNext()) {
                 RDFNode n = iter.nextStatement().getObject();
                 if(n.isLiteral()){
-                    propertyValueList.add(n.asLiteral().getLexicalForm());
+                    propertyValueList.add("\"" + n.asLiteral().getLexicalForm() + "\"");
                 }else if(n.isURIResource()){
-                    propertyValueList.add(PrefixLookup.DEFAULT.getPrefix(n.asResource().getURI()));
+                    propertyValueList.add("\"" + PrefixLookup.DEFAULT.getPrefix(n.asResource().getURI()) + "\"");
                 }else{
-                    propertyValueList.add(n.asResource().toString());
+                    propertyValueList.add("\"" + n.asResource().toString() + "\"");
                 }
             }
             Collections.sort(propertyValueList);

@@ -8,5 +8,8 @@ This project has been used to derive the statistics and figures of the original 
 ## externalPythonMatcher
 This project shows exemplarily how a matcher can be implemented in Python and packed for SEALS/HOBBIT using MELT.
 
+## meltDashboard
+This project shows exemplarily how to generate dashboards for the OAEI 2019 results.
+
 ## simpleJavaMatcher
 This project contains different matchers that are implemented in Java and use the MELT framework.

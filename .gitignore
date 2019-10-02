@@ -38,10 +38,10 @@ dashboard.html
 #bin folder
 bin/
 
-#logs
+#Logging
 log.txt
 matching-eval/log.txt
-
+log4j.properties
 
 **/datasets/*.xml
 

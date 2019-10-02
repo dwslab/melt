@@ -282,6 +282,8 @@ public class Executor {
     /**
      * Load raw results from a folder with the structure used by the <a href="http://oaei.ontologymatching.org/2018/results/anatomy/index.html">Anatomy Track</a>
      * of the OAEI.
+     *
+     * @return {@link ExecutionResultSet} instance with the loaded results.
      */
     public static ExecutionResultSet loadFromAnatomyResultsFolder(String pathToFolder) {
         return loadFromFolder(pathToFolder, TrackRepository.Anatomy.Default.getTestCases().get(0));
@@ -293,6 +295,7 @@ public class Executor {
      * of the OAEI.
      *
      * @param pathToFolder The path to the folder where the alignments of the conference folder reside.
+     * @return {@link ExecutionResultSet} instance with the loaded results.
      */
     public static ExecutionResultSet loadFromConferenceResultsFolder(String pathToFolder){
         ExecutionResultSet results = new ExecutionResultSet();
@@ -333,6 +336,19 @@ public class Executor {
         LOGGER.info(results.size() + " results loaded.");
         return results;
     }
+
+
+    /**
+     * Load raw results from a folder with the structure used by the
+     * <a href="http://oaei.ontologymatching.org/2019/results/knowledgegraph/">Knowledge Graph Track</a>
+     * of the OAEI.
+     * @param pathToFolder The path to the unzipped folder where the folders of the knowledge graph track reside.
+     * @return {@link ExecutionResultSet} instance with the loaded results.
+     */
+    public static ExecutionResultSet loadFromKnowledgeGraphResultsFolder(String pathToFolder){
+        return loadFromFolder(pathToFolder, TrackRepository.Knowledgegraph.V3);
+    }
+
 
 
     private static final String FALLBACK_MATCHER_NAME = "default_matcher";
