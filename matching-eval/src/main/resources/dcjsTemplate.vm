@@ -27,6 +27,9 @@
         <div class="container-fluid">
             <div class="row">
                 <h2>$title</h2>
+                #if($additionalText)
+                <p>$additionalText</p>
+                #end
             </div>
             <!--dc.js: anchor div for charts -->
             #foreach( $row in $dcjsElements )

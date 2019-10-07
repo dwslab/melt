@@ -53,14 +53,16 @@ public class DashboardBuilder extends Evaluator {
     protected Set<String> groupDefinitions;
     
     protected String title;
+    protected String additionalText;
 
     /**
      * Constructor
      * @param evaluatorCSV The CSV evaluator to be used. The evaluator can be configured, e.g. in terms of the columns
      *                     that should be printed.
      * @param titleOfPage The title of the generated HTML page.
+     * @param additionalText additionalText
      */
-    public DashboardBuilder(EvaluatorCSV evaluatorCSV, String titleOfPage){
+    public DashboardBuilder(EvaluatorCSV evaluatorCSV, String titleOfPage, String additionalText){
         super(evaluatorCSV.getResults());
         Velocity.setProperty("resource.loader", "classpath");
         Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());        
@@ -71,15 +73,17 @@ public class DashboardBuilder extends Evaluator {
         this.rows = new ArrayList<>();
         this.currentRow = new ArrayList<>();
         this.title = titleOfPage;
+        this.additionalText = additionalText;
     }
 
     /**
      * Constructor
      * @param executionResultSet The execution result set to be evaluated and printed.
      * @param titleOfPage The title of the generated HTML page.
+     * @param additionalText additionalText
      */
-    public DashboardBuilder(ExecutionResultSet executionResultSet, String titleOfPage){
-        this(new EvaluatorCSV(executionResultSet), titleOfPage);
+    public DashboardBuilder(ExecutionResultSet executionResultSet, String titleOfPage, String additionalText){
+        this(new EvaluatorCSV(executionResultSet), titleOfPage, additionalText);
     }
 
     /**
@@ -87,7 +91,7 @@ public class DashboardBuilder extends Evaluator {
      * @param executionResultSet The execution result set to be evaluated and printed.
      */
     public DashboardBuilder(ExecutionResultSet executionResultSet){
-        this(executionResultSet, "Analysis of mapping results");
+        this(executionResultSet, "MELT Dashboard", "");
     }
 
     /**
@@ -95,7 +99,7 @@ public class DashboardBuilder extends Evaluator {
      * @param evaluatorCSV
      */
     public DashboardBuilder(EvaluatorCSV evaluatorCSV){
-        this(evaluatorCSV, "Analysis of mapping results");
+        this(evaluatorCSV, "MELT Dashboard", "");
     }
     
     public DashboardBuilder addDefaultDashboard(){
@@ -482,6 +486,7 @@ public class DashboardBuilder extends Evaluator {
     private VelocityContext prepareVelocityContext(){
         VelocityContext context = new VelocityContext();
         context.put("title", title);
+        context.put("additionalText", additionalText);
         context.put("dcjsElements", rows);
         context.put("dimensionDefinition", this.getAllDimensionDefinitions());
         context.put("groupDefinition", this.getAllGroupDefinitions());

@@ -419,31 +419,6 @@ public class EvaluatorCSV extends Evaluator {
 
 
     /**
-     * Given a confusion matrix, this method returns a line as list that can be written.
-     *
-     * @param systemConfusionMatrix   The system confusion matrix for which a line shall be written. Cannot be null.
-     * @param residualConfusionMatrix The residual confusion matrix, can be null.
-     * @param confusionMatrixType     Type of the confusion matrix e.g. CLASSES.
-     * @return The line to be written as List.
-     */
-    private List<String> getLineStatistics(ConfusionMatrix systemConfusionMatrix, ConfusionMatrix residualConfusionMatrix, EvaluatorUtil.ConfusionMatrixType confusionMatrixType) {
-        List<String> result = new ArrayList<>();
-        result.add(confusionMatrixType.toString()); // Type
-        result.add(Double.toString(systemConfusionMatrix.getPrecision())); // Precision
-        result.add(Double.toString(systemConfusionMatrix.getRecall())); // Recall
-        if (residualConfusionMatrix != null) {
-            result.add(Double.toString(residualConfusionMatrix.getRecall())); // Residual Recall
-        } else {
-            result.add("-");
-        }
-        result.add(Double.toString(systemConfusionMatrix.getF1measure())); // F1
-        result.add(Double.toString(systemConfusionMatrix.getTruePositiveSize())); // # of TP
-        result.add(Double.toString(systemConfusionMatrix.getFalsePositiveSize())); // # of FP
-        result.add(Double.toString(systemConfusionMatrix.getFalseNegativeSize())); // # of FN
-        return result;
-    }
-
-    /**
      * Obtain an output stream that can be used to write the CSV file.
      * @return
      */

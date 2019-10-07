@@ -6,8 +6,12 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Correspondence;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.CorrespondenceRelation;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +34,9 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
         OntModel sourceOntology = executionResult.getSourceOntology(OntModel.class);
         OntModel targetOntology = executionResult.getTargetOntology(OntModel.class);
         HashMap<String, Integer> frequenciesOfMappingTypes = new HashMap<>();
+        int urisCorrectPosition = 0;
+        int urisIncorrectPosition = 0;
+        List<String> urisNotFound = new ArrayList<>();
 
         for (Correspondence cell : alignment) {
 
@@ -63,10 +70,32 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
             if (isHomogenousAlingment && entity1type != entity2type) {
                 isHomogenousAlingment = false;
             }
+            
+            Resource entityOne = ResourceFactory.createResource(cell.getEntityOne());
+            if(sourceOntology.containsResource(entityOne)){
+                urisCorrectPosition++;
+            }
+            else if(targetOntology.containsResource(entityOne)){
+                urisIncorrectPosition++;
+            }else{
+                urisNotFound.add(cell.getEntityOne());
+            }
+
+            Resource entityTwo = ResourceFactory.createResource(cell.getEntityTwo());
+            if(targetOntology.containsResource(entityTwo)){
+                urisCorrectPosition++;
+            }
+            else if(sourceOntology.containsResource(entityTwo)){
+                urisIncorrectPosition++;
+            }else{
+                urisNotFound.add(cell.getEntityTwo());
+            }
 
         } // end of loop over cells
 
-        AlignmentAnalyzerResult result = new AlignmentAnalyzerResult(executionResult, minimumConfidence, maximumConfidence, frequenciesOfRelations, isHomogenousAlingment, frequenciesOfMappingTypes);
+        AlignmentAnalyzerResult result = new AlignmentAnalyzerResult(
+                executionResult, minimumConfidence, maximumConfidence, frequenciesOfRelations, 
+                isHomogenousAlingment, frequenciesOfMappingTypes, urisCorrectPosition, urisIncorrectPosition, urisNotFound);
         return result;
     }
 

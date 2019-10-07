@@ -51,7 +51,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     /**
      * Extended attributes.
      */
-    protected HashMap<String, String> extensions;
+    protected Map<String, String> extensions;
 
     public Alignment() {
         init(true, true, true, true);
@@ -89,6 +89,12 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     
     public Alignment(Alignment alignment) {
         init(alignment.indexSource != null, alignment.indexTarget != null, alignment.indexRelation != null, alignment.indexConfidence != null);
+        this.method = alignment.method;
+        this.type = alignment.type;
+        this.level = alignment.level;
+        this.onto1 = new OntoInfo(alignment.onto1);
+        this.onto2 = new OntoInfo(alignment.onto2);        
+        this.extensions = new HashMap<>(alignment.extensions);        
         addAll(alignment);
     }
     
@@ -315,7 +321,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     
     
     /**
-     * Create the intersection between the two given alignments.
+     * Create the intersection between the two given alignments. Only copies the alignment and not further infos like onto or extensions.
      * @param alignment_1 Set 1.
      * @param alignment_2 Set 2.
      * @return Intersection alignment.
@@ -330,7 +336,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
 
     /**
-     * Create the union between the two given alignments.
+     * Create the union between the two given alignments. Only copies the alignment and not further infos like onto or extensions.
      * @param alignment_1 Set 1.
      * @param alignment_2 Set 2.
      * @return Union alignment.
@@ -339,6 +345,23 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         Alignment result = new Alignment();
         result.addAll(alignment_1);
         result.addAll(alignment_2);
+        return result;
+    }
+    
+    
+    /**
+     * Switches sources with targets. Does not change the relation.
+     * This method is only for errneous alignments where a matcher switched the source with the target ontology.
+     * @param alignment
+     * @return 
+     */
+    public static Alignment switchSourceWithTarget(Alignment alignment) {
+        Alignment result = new Alignment(alignment);
+        for(Correspondence c: result){
+            String tmp = c.entityOne;
+            c.setEntityOne(c.entityTwo);
+            c.setEntityTwo(tmp);
+        }
         return result;
     }
 
@@ -494,5 +517,5 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         extensions.put(extensionUri, extensionValue);
     }
 
-    public HashMap<String, String> getExtensions() { return this.extensions; }
+    public Map<String, String> getExtensions() { return this.extensions; }
 }

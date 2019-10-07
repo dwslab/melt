@@ -5,47 +5,26 @@ import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Corresp
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The AlignmentAnalyzerResult is the output of the {@link AlignmentAnalyzerMetric}.
  * @author Jan Portisch
  */
 public class AlignmentAnalyzerResult {
-
     /**
-     * Constructor
-     * @param executionResult Execution result that was analyzed.
-     * @param minimumConfidence The minimum confidence score that is used in the given alignment.
-     * @param maximumConfidence The maximum confidence score that is used in the given alignment.
-     * @param frequenciesOfRelations The distribution of relations in the given mapping.
-     * @param isHomogenousAlingment Indicator on whether only resources of the same type are matched.
-     * @param frequenciesOfMappingTypes Frequency of different mapping types.
+     * Logger for this class.
      */
-    AlignmentAnalyzerResult(ExecutionResult executionResult, double minimumConfidence,
-                            double maximumConfidence, HashMap<CorrespondenceRelation, Integer> frequenciesOfRelations,
-                            boolean isHomogenousAlingment, HashMap<String, Integer> frequenciesOfMappingTypes){
-        this.executionResult = executionResult;
-        this.minimumConfidence = minimumConfidence;
-        this.maximumConfidence = maximumConfidence;
-        this.frequenciesOfRelations = frequenciesOfRelations;
-        this.isHomogenousAlingment = isHomogenousAlingment;
-        this.frequenciesOfMappingTypes = frequenciesOfMappingTypes;
-    }
+    private static Logger LOGGER = LoggerFactory.getLogger(AlignmentAnalyzerResult.class);
+    
 
 
     /**
      * Execution result that was analyzed.
      */
     private ExecutionResult executionResult;
-
-
-    /**
-     * Logger for this class.
-     */
-    private static Logger LOGGER = LoggerFactory.getLogger(AlignmentAnalyzerResult.class);
-
 
     /**
      * The minimum confidence score that is used in the given alignment.
@@ -61,7 +40,7 @@ public class AlignmentAnalyzerResult {
      * The distribution of relations in the given mapping.
      * Example: EQUIVALENCE → 40
      */
-    private HashMap<CorrespondenceRelation, Integer> frequenciesOfRelations;
+    private Map<CorrespondenceRelation, Integer> frequenciesOfRelations;
 
     /**
      * Indicates whether only resources of the same type are matched e.g. classes with
@@ -73,57 +52,136 @@ public class AlignmentAnalyzerResult {
      * This data structure keeps track of the frequency of different mapping types,
      * e.g. "class - class" → 55
      */
-    private HashMap<String, Integer> frequenciesOfMappingTypes;
+    private Map<String, Integer> frequenciesOfMappingTypes;
+    
+    /**
+     * How many URIs are in correct position which means entity one in correspondence is found in source ontology
+     * and entity two is found in target ontology.
+     */
+    private int urisCorrectPosition;
+    
+    /**
+     * How many URIs are NOT in correct position which means entity one in correspondence is found in target ontology
+     * and entity two is found in source ontology.
+     */
+    private int urisIncorrectPosition;
+    
+    /**
+     * Which URIs in the alignment are not found in source nor target ontology.
+     */
+    private List<String> urisNotFound;    
+    
+    /**
+     * Constructor
+     * @param executionResult Execution result that was analyzed.
+     * @param minimumConfidence The minimum confidence score that is used in the given alignment.
+     * @param maximumConfidence The maximum confidence score that is used in the given alignment.
+     * @param frequenciesOfRelations The distribution of relations in the given mapping.
+     * @param isHomogenousAlingment Indicator on whether only resources of the same type are matched.
+     * @param frequenciesOfMappingTypes Frequency of different mapping types.
+     */
+    AlignmentAnalyzerResult(ExecutionResult executionResult, double minimumConfidence,
+                            double maximumConfidence, Map<CorrespondenceRelation, Integer> frequenciesOfRelations,
+                            boolean isHomogenousAlingment, Map<String, Integer> frequenciesOfMappingTypes,
+                            int urisCorrectPosition, int urisIncorrectPosition, List<String> urisNotFound){
+        this.executionResult = executionResult;
+        this.minimumConfidence = minimumConfidence;
+        this.maximumConfidence = maximumConfidence;
+        this.frequenciesOfRelations = frequenciesOfRelations;
+        this.isHomogenousAlingment = isHomogenousAlingment;
+        this.frequenciesOfMappingTypes = frequenciesOfMappingTypes;
+        this.urisCorrectPosition = urisCorrectPosition;
+        this.urisIncorrectPosition = urisIncorrectPosition;
+        this.urisNotFound = urisNotFound;
+    }
+
+    @Override
+    public String toString() {
+        return getReportForAlignment();
+    }
 
 
+    public String getErroneousReport() {
+        StringBuilder sb = new StringBuilder();
+        if(this.isSwitchOfSourceTargetBetter()){
+            sb.append("Need switch: ").append(this.executionResult);
+        }
+            
+        if(this.getUrisNotFound().isEmpty() == false){
+            sb.append("Not found: ").append(this.getUrisNotFound());
+        }
+        return sb.toString();
+    }
+    
+    public void logReport() {
+        LOGGER.info(getReportForAlignment());
+    }
+
+    public void logErroneousReport() {
+       String error = getErroneousReport();
+       if(error.length() != 0)
+            LOGGER.error(error);
+    }
+    
     /**
      * Get a textual report of the alignment as String.
      * @return Textual report.
      */
     public String getReportForAlignment() {
-
+        StringBuilder result = new StringBuilder();
+        
         // header
-        String result = "Alignment Report for " + executionResult.getMatcherName() + " on "
-                + "track " + executionResult.getTestCase().getTrack().getName() + " "
-                + "for test case " + executionResult.getTestCase().getName() + "\n\n";
-
+        result.append(String.format("Alignment Report for %s on track %s for test case \n\n", 
+                executionResult.getMatcherName(),
+                executionResult.getTestCase().getTrack().getName(),
+                executionResult.getTestCase().getName()));
+        
         // base line
-        result = result + "Number of correspondences: " + this.getNumberOfCorrespondences() + "\n\n";
+        result.append("Number of correspondences: " + this.getNumberOfCorrespondences() + "\n\n");
 
         // heterogeneity
         if(this.isHomogenousAlingment) {
-            result = result + "The mapping is homogenous.\n\n";
+            result.append("The mapping is homogenous.\n\n");
         } else {
-            result = result + "The mapping is heterogenous.\n\n";
+            result.append("The mapping is heterogenous.\n\n");
         }
 
         // mapping type distribution
-        result = result + "Distribution of mapping types:\n";
+        result.append("Distribution of mapping types:\n");
         for (String key : this.getFrequenciesOfMappingTypes().keySet()) {
-            result = result + key + " (" + this.getFrequenciesOfMappingTypes().get(key) + ")\n";
+            result.append(key + " (" + this.getFrequenciesOfMappingTypes().get(key) + ")\n");
         }
-        result = result + "\n";
+        result.append("\n");
 
         // relations
         if(isAlwaysEqualityRelation()) {
-            result = result + "All correspondences are made up of equivalence relations.\n";
+            result.append("All correspondences are made up of equivalence relations.\n");
         } else {
-            result = result + "Distribution of mapping relations:\n";
+            result.append("Distribution of mapping relations:\n");
             for (CorrespondenceRelation key : this.getFrequenciesOfRelations().keySet()) {
-                result = result + key + " (" + this.getFrequenciesOfRelations().get(key) + ")\n";
+                result.append(key + " (" + this.getFrequenciesOfRelations().get(key) + ")\n");
             }
-            result = result + "\n";
+            result.append("\n");
         }
-        result = result + "\n";
+        result.append("\n");
 
         if(isConfidenceScoresAreAlwaysOne()){
-            result = result + "The confidence of all correspondences is 1.0.\n";
+            result.append("The confidence of all correspondences is 1.0.\n\n");
         } else {
-            result = result + "The minimum confidence is " + this.getMinimumConfidence() + "\n";
-            result = result + "The maximum confidence is " + this.getMaximumConfidence() + "\n";
+            result.append("The minimum confidence is " + this.getMinimumConfidence() + "\n");
+            result.append("The maximum confidence is " + this.getMaximumConfidence() + "\n\n");
         }
+        
+        if(this.urisNotFound.isEmpty()){
+            result.append("All URIs in the correspondence are found in source or target.");
+        } else {
+            result.append("The following URIs are not found in source nor target: " + this.urisNotFound);
+        }
+        if(this.isSwitchOfSourceTargetBetter()){
+            result.append("More left(entity one) in correspondence are found in target ontology. A switch of entity one and two in alignment makes sense!");
+        }        
 
-        return result;
+        return result.toString();
     }
 
     /**
@@ -205,7 +263,7 @@ public class AlignmentAnalyzerResult {
      * Returns the frequency of different mapping types.
      * e.g. "class - class" → 55
      */
-    public HashMap<String, Integer> getFrequenciesOfMappingTypes(){
+    public Map<String, Integer> getFrequenciesOfMappingTypes(){
         return frequenciesOfMappingTypes;
     }
 
@@ -215,7 +273,7 @@ public class AlignmentAnalyzerResult {
      * Example: EQUIVALENCE → 40
      * @return Mapping of type {@code relation → frequency}.
      */
-    public HashMap<CorrespondenceRelation, Integer> getFrequenciesOfRelations(){
+    public Map<CorrespondenceRelation, Integer> getFrequenciesOfRelations(){
         return this.frequenciesOfRelations;
     }
 
@@ -243,4 +301,40 @@ public class AlignmentAnalyzerResult {
         LOGGER.info("\n" + getReportForAlignment());
     }
 
+    /**
+     * Returns the number of URIs in correct position.
+     * This means entity one in correspondence is found in source ontology
+     * and entity two is found in target ontology.
+     * @return number of URIs in correct position
+     */
+    public int getUrisCorrectPosition() {
+        return urisCorrectPosition;
+    }
+
+    /**
+     * Returns the number of URIs NOT in correct position.
+     * This means entity one in correspondence is found in target ontology
+     * and entity two is found in source ontology.
+     * @return number of URIs NOT in correct position
+     */
+    public int getUrisIncorrectPosition() {
+        return urisIncorrectPosition;
+    }
+    
+    /**
+     * Tests if a switch of source and target URIs makes sense 
+     * e.g. more first entities of correspondnce are found in target ontology and not source ontology.
+     * @return true if a switch of source and target URIs makes sense 
+     */
+    public boolean isSwitchOfSourceTargetBetter() {
+        return urisCorrectPosition < urisIncorrectPosition;
+    }
+
+    /**
+     * Returns a list of URIs which are found not in source nor target ontology.
+     * @return List of URIs which are found not in source nor target ontology
+     */
+    public List<String> getUrisNotFound() {
+        return urisNotFound;
+    }
 }
