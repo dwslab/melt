@@ -1,0 +1,38 @@
+\documentclass[12pt]{article}
+\begin{document}
+
+\begin{table}[t]
+	\label{tab:results}
+	\centering
+	\caption{Aggregated results per matcher, divided into class, property, instance, and overall alignments. 
+Time is displayed as HH:MM:SS. Column \textit{\#testcases} indicates the number of testcases where the tool is able to generate (non empty) alignments.
+Column \textit{size} indicates the averaged number of system correspondences.
+Two kinds of results are reported: (1) those not distinguishing empty and erroneous (or not generated) alignments,
+and (2) those considering only non empty alignments (value between parenthesis).}
+
+	\begin{tabular}{|l|l|l|l|l|l|l|}
+		\hline
+		\textbf{System} & \textbf{Time} & \textbf{tracks} & \textbf{Size} & \textbf{Prec.} & \textbf{F-m.} & \textbf{Rec.} \\
+                \hline
+                #foreach ( $type in $util.getRefinementTypes())
+                \hline
+                \multicolumn{7}{|c|}{$type performance}\\
+                \hline
+                #foreach( $matcher in $util.getMatchers() )
+                #set($allTestCases = $util.getMatcherRefinement($matcher, "overall"))
+                #set($results = $util.getMatcherRefinement($matcher, $type))
+                #set($cm = $util.getAverageConfusionMatrix($results))
+                #set($cmAll = $util.getAverageConfusionMatrixOverAll($results))
+                $matcher&##
+$util.getSummedRuntime($allTestCases)&##
+$allTestCases.size()&##
+$util.getAvgSystemSize($results)&##
+$util.formatCmMeasure($cmAll.getPrecision()) ($util.formatCmMeasure($cm.getPrecision()))&##
+$util.formatCmMeasure($cmAll.getF1measure()) ($util.formatCmMeasure($cm.getF1measure()))&##
+$util.formatCmMeasure($cmAll.getRecall()) ($util.formatCmMeasure($cm.getRecall()))\\
+                #end
+                #end
+	\end{tabular}
+\end{table}
+
+\end{document}

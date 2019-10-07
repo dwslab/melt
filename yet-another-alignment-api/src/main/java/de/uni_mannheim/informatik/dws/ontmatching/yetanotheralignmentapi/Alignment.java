@@ -103,6 +103,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         this.type = "11";
         this.onto1 = new OntoInfo();
         this.onto2 = new OntoInfo();
+        this.extensions = new HashMap<>();   
 
         if(indexSource)
             this.assertIndexOnSource();

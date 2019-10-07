@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.visualization;
+package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.visualization.dashboard;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.Evaluator;
@@ -68,7 +68,7 @@ public class DashboardBuilder extends Evaluator {
         Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());        
         Velocity.init();
         
-        template = Velocity.getTemplate("dcjsTemplate.vm");
+        template = Velocity.getTemplate("templates/dashboard/dashboard.vm");
         this.evaluatorCSV = evaluatorCSV;
         this.rows = new ArrayList<>();
         this.currentRow = new ArrayList<>();

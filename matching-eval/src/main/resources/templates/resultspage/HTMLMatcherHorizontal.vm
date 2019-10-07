@@ -1,0 +1,132 @@
+#macro( oddEvenClass $number )#if($number % 2 == 0)even#{else}odd#end#end
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<table border="2" frame="sides" rules="groups" align="center">
+<colgroup align="center"/>
+<colgroup align="center"/>
+<colgroup align="center"/>
+#foreach ( $type in $util.getRefinementTypes())
+<colgroup align="center" span="4" />
+#end
+<thead valign="top">
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      #foreach ( $type in $util.getRefinementTypes())
+      <th colspan="4">$type</th>
+      #end
+    </tr>
+</thead>
+
+<tbody>
+    <tr class="header">
+        <th>System</td><th>Time</td><th>#testcases</td>
+        #foreach ( $type in $util.getRefinementTypes())
+        <th>Size</th><th>Prec.</th><th>F-m.</th><th>Rec.</th>
+        #end
+    </tr>
+    #foreach( $matcher in $util.getMatchers() )
+    #set($allTestCases = $util.getMatcherRefinement($matcher, "overall"))
+    <tr class="#oddEvenClass($foreach.count)">
+        <td>$matcher</td><td align="right">$util.getSummedRuntime($allTestCases)</td><td>$allTestCases.size()</td>
+        #foreach ( $type in $util.getRefinementTypes())
+        #set($results = $util.getMatcherRefinement($matcher, $type))
+        #set($cm = $util.getAverageConfusionMatrix($results))
+        #set($cmAll = $util.getAverageConfusionMatrixOverAll($results))
+<td>$util.getAvgSystemSize($results)</td>##
+<td>$util.formatCmMeasure($cmAll.getPrecision()) ($util.formatCmMeasure($cm.getPrecision()))</td>##
+<td>$util.formatCmMeasure($cmAll.getF1measure()) ($util.formatCmMeasure($cm.getF1measure()))</td>##
+<td>$util.formatCmMeasure($cmAll.getRecall()) ($util.formatCmMeasure($cm.getRecall()))</td>
+        #end
+    </tr>
+    #end
+</tbody>
+<caption>
+Aggregated results per matcher, divided into class, property, instance, and overall alignments. 
+Time is displayed as HH:MM:SS. Column <i>#testcases</i> indicates the number of testcases where the tool is able to generate (non empty) alignments.
+Column <i>size</i> indicates the averaged number of system correspondences.
+Two kinds of results are reported: (1) those not distinguishing empty and erroneous (or not generated) alignments,
+and (2) those considering only non empty alignments (value between parenthesis).
+</caption>
+</table>
+
+
+
+#foreach ( $type in $util.getRefinementTypes())
+$type
+
+<table border="2" frame="sides" rules="groups" align="center">
+<colgroup align="center"/>
+#foreach( $matcher in $util.getMatchers() )
+<colgroup align="center" span="4" />
+#end
+<thead valign="top">
+    <tr>
+        <th></th>
+        #foreach( $matcher in $util.getMatchers() )
+        <th colspan="4">$matcher</th>
+        #end
+    </tr>
+</thead>
+
+<tbody>
+    <tr class="header">
+        <th></th>
+        #foreach( $matcher in $util.getMatchers() )
+        <th>Size</th><th>Prec.</th><th>F-m.</th><th>Rec.</th>
+        #end
+    </tr>
+    #foreach( $testCase in $util.getTestCases() )
+    <tr class="#oddEvenClass($foreach.count)">
+        <td>$testCase.getName()</td>
+        #foreach( $matcher in $util.getMatchers() )
+        #set($result = $util.getMatcherRefinement($matcher,$testCase,$type))
+        #set($cm = $util.getConfusionMatrix($result))
+        <td>$util.getSystemSize($result)</td><td>$util.formatCmMeasure($cm.getPrecision())</td><td>$util.formatCmMeasure($cm.getF1measure())</td><td>$util.formatCmMeasure($cm.getRecall())</td>
+        #end
+    </tr>
+    #end
+</tbody>
+</table>
+
+
+#end
+
+
+
+time:
+<table border="2" frame="sides" rules="groups" align="center">
+
+<thead valign="top">
+    <tr>
+        <th></th>
+        #foreach( $matcher in $util.getMatchers() )
+        <th>$matcher</th>
+        #end
+    </tr>
+</thead>
+
+<tbody>
+    #foreach( $testCase in $util.getTestCases() )
+    <tr class="#oddEvenClass($foreach.count)">
+        <td>$matcher</td>
+        #foreach( $matcher in $util.getMatchers() )
+        <td>$util.getRuntime($util.getMatcherRefinement($matcher,$testCase,"overall"))</td>
+        #end
+    </tr>
+    #end
+</tbody>
+</table>
+
+
+
+
+</body>
+</html>

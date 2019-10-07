@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.visualization;
+package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.visualization.dashboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;

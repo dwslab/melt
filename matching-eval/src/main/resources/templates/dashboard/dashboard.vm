@@ -60,7 +60,7 @@
             #end
 
             #foreach( $fileName in $jsHelperFileNames )
-                #include("jsHelper/$fileName")
+                #include("templates/dashboard/jsHelper/$fileName")
 
 
             #end
