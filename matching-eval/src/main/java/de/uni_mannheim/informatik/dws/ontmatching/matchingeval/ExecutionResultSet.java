@@ -18,6 +18,10 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.Refiner;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * A collection of individual {@link ExecutionResult} instances that are typically returned by an {@link Executor}.
@@ -136,7 +140,7 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         }
         return result;
     }
-
+    
 
     /**
      * Obtain the distinct matcher names in this execution result set.
@@ -145,6 +149,14 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
     public Iterable<String> getDistinctMatchers(){
         //see https://github.com/npgall/cqengine/issues/168
         return this.matcherIndex.getDistinctKeys(noQueryOptions());
+    }
+    
+    /**
+     * Obtain the distinct matcher names in this execution result set in a sorted way.
+     * @return Iterable over distinct matcher names.
+     */
+    public List<String> getDistinctMatchersSorted(){
+        return getSortedList(getDistinctMatchers(), Comparator.comparing(x->x.toLowerCase()));
     }
 
 
@@ -159,6 +171,10 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
                 .map(ExecutionResult::getMatcherName)
                 .collect(Collectors.toSet());
     }
+    
+    public List<String> getDistinctMatchersSorted(Track track){
+        return getSortedList(getDistinctMatchers(track), Comparator.comparing(x->x.toLowerCase()));
+    }
 
 
     /**
@@ -172,6 +188,10 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
                 .map(ExecutionResult::getMatcherName)
                 .collect(Collectors.toSet());
     }
+    
+    public List<String> getDistinctMatchersSorted(TestCase testCase){
+        return getSortedList(getDistinctMatchers(testCase), Comparator.comparing(x->x.toLowerCase()));
+    }
 
 
     /**
@@ -182,11 +202,19 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         return this.testCaseIndex.getDistinctKeys(noQueryOptions());
     }
     
+    public List<TestCase> getDistinctTestCasesSorted(){
+        return getSortedList(getDistinctTestCases(), Comparator.comparing(tc->tc.getName().toLowerCase()));
+    }
+    
     public Iterable<TestCase> getDistinctTestCases(String matcher){
         return this.retrieve(query(matcher))
                 .stream()
                 .map(ExecutionResult::getTestCase)
                 .collect(Collectors.toSet());
+    }
+    
+    public List<TestCase> getDistinctTestCasesSorted(String matcher){
+        return getSortedList(getDistinctTestCases(matcher), Comparator.comparing(tc->tc.getName().toLowerCase()));
     }
 
     /**
@@ -199,6 +227,10 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
                 .stream()
                 .map(ExecutionResult::getTestCase)
                 .collect(Collectors.toSet());
+    }
+    
+    public List<TestCase> getDistinctTestCasesSorted(Track track){
+        return getSortedList(getDistinctTestCases(track), Comparator.comparing(tc->tc.getName().toLowerCase()));
     }
 
     /**
@@ -214,6 +246,9 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
                 .collect(Collectors.toSet());
     }
 
+    public List<TestCase> getDistinctTestCasesSorted(Track track, String matcher){
+        return getSortedList(getDistinctTestCases(track, matcher), Comparator.comparing(tc->tc.getName().toLowerCase()));
+    }
 
     /**
      * Get the distinct tracks that used in this ExecutionResultSet.
@@ -223,6 +258,10 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         return this.trackIndex.getDistinctKeys(noQueryOptions());
     }
 
+    public List<Track> getDistinctTracksSorted(){
+        return getSortedList(getDistinctTracks(), Comparator.comparing(t->t.getName().toLowerCase()));
+    }
+    
     /**
      * The distinct tracks on which the specified matcher was run.
      * @param matcher The matcher for which the tracks shall be obtained.
@@ -235,6 +274,25 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
                 .collect(Collectors.toSet());
     }
 
+    public List<Track> getDistinctTracksSorted(String matcher){
+        return getSortedList(getDistinctTracks(matcher), Comparator.comparing(t->t.getName().toLowerCase()));
+    }
+    
+    /**
+     * Helper method for all query distinct which needs sorted elements
+     * @param <T> Type of Iterable
+     * @param iter iterator
+     * @param c comparator (null if default sort order)
+     * @return sorted list
+     */
+    private <T> List<T> getSortedList(Iterable<T> iter, Comparator<? super T> c) {
+        List<T> list = new ArrayList<>();
+        for(T element : iter){
+            list.add(element);
+        }
+        list.sort(c);
+        return list;
+    }
 
     /**
      * Constant for an empty refinement.

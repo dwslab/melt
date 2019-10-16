@@ -290,6 +290,11 @@ public class ExecutionResult {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "ExecutionResult{testCase=" + testCase.getName() + ", matcherName=" + matcherName + ", refinements=" + refinements + '}';
+    }
+
 
     /**
      * Returns a comparator that can be used to sort multiple ExecutionResults by matcher name.

@@ -101,4 +101,11 @@ public class ResidualRefiner implements Refiner {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "ResidualRefiner()";
+    }
+
+    
+    
 }

@@ -94,7 +94,7 @@ public class TextGenerator extends MatcherYAAAJena{
                 continue;
             
                         
-            writer.write(r.getURI() + "," + StringEscapeUtils.escapeCsv(String.join(" ", resourceText)) + newline);
+            writer.write(StringEscapeUtils.escapeCsv(r.getURI()) + "," + StringEscapeUtils.escapeCsv(String.join(" ", resourceText)) + newline);
         }
     }
         

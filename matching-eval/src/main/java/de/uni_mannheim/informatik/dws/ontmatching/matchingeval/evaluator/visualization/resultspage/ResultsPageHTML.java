@@ -35,9 +35,16 @@ public class ResultsPageHTML extends Evaluator{
         velocityEngine.init();        
     }
     
+    public ResultsPageHTML(ExecutionResultSet results, ConfusionMatrixMetric confusionMatrixMetric, boolean isMicro) {
+        this(results, confusionMatrixMetric, isMicro, true);
+    }
+    
+    public ResultsPageHTML(ExecutionResultSet results, ConfusionMatrixMetric confusionMatrixMetric) {
+        this(results, confusionMatrixMetric, false);
+    }
     
     public ResultsPageHTML(ExecutionResultSet results) {
-        this(results, new ConfusionMatrixMetric(), false, true);
+        this(results, new ConfusionMatrixMetric());
     }
 
     @Override

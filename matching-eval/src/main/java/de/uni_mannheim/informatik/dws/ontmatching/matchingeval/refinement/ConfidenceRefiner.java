@@ -45,5 +45,9 @@ public class ConfidenceRefiner implements Refiner {
         }
         return true;
     }
-    
+
+    @Override
+    public String toString() {
+        return "ConfidenceRefiner(" + confidence + ')';
+    }
 }

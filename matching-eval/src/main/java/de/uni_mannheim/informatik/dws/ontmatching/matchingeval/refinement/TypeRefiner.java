@@ -135,5 +135,9 @@ public class TypeRefiner implements Refiner {
         }
         return true;
     }
-    
+
+    @Override
+    public String toString() {
+        return "TypeRefiner(" + type + ')';
+    }    
 }

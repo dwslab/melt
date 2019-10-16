@@ -1,14 +1,24 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.alignmentanalyzer;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResult;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ResourceType;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.Metric;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Correspondence;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.CorrespondenceRelation;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -23,6 +33,8 @@ import org.slf4j.LoggerFactory;
 public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
 
     private static Logger LOGGER = LoggerFactory.getLogger(AlignmentAnalyzerMetric.class);
+    
+    private static final String newline = System.getProperty("line.separator");
 
     @Override
     public AlignmentAnalyzerResult compute(ExecutionResult executionResult) {
@@ -97,6 +109,55 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
                 executionResult, minimumConfidence, maximumConfidence, frequenciesOfRelations, 
                 isHomogenousAlingment, frequenciesOfMappingTypes, urisCorrectPosition, urisIncorrectPosition, urisNotFound);
         return result;
+    }
+    
+    public static void writeAnalysisFile(ExecutionResultSet resultSet, File outFile){
+        AlignmentAnalyzerMetric metric = new AlignmentAnalyzerMetric();
+        
+        List<TestCase> testCases = resultSet.getDistinctTestCasesSorted();
+        
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8"))){
+            writer.write("matcher," + testCases.stream().map(TestCase::getName).collect(Collectors.joining(",")) + newline);
+            List<String> appendix = new ArrayList<>();
+            for(String matcher : resultSet.getDistinctMatchersSorted()){
+                writer.write(matcher + ",");
+                for(TestCase testcase : testCases){
+                    ExecutionResult r = resultSet.get(testcase, matcher);
+                    if(r == null){
+                        writer.write("No result,");
+                        continue;//result for matcher not available
+                    }
+                    LOGGER.info("Check result {}", r);
+                    
+                    AlignmentAnalyzerResult analyse = metric.get(r);
+                    //analyse.logErroneousReport();
+                    if(analyse.isSwitchOfSourceTargetBetter()){
+                        writer.write("Need switch,");
+                    }else if(analyse.getUrisNotFound().isEmpty() == false){
+                        writer.write(analyse.getUrisNotFound().size() + " URIs not found,"); 
+                        
+                        //create appendix
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(matcher).append(",").append(testcase.getName()).append(",");
+                        for(String uri : analyse.getUrisNotFound()){
+                            sb.append(StringEscapeUtils.escapeCsv(uri)).append(",");
+                        }
+                        sb.append(newline);                        
+                        appendix.add(sb.toString());
+                    }else{
+                        writer.write("OK,"); 
+                    }
+                }
+                writer.write(newline);                
+            }
+            writer.write(newline+newline);
+            writer.write("matcher, testcase, missing urls" + newline);
+            for(String a : appendix){
+                writer.write(a);
+            }
+        } catch (IOException ex) {
+            LOGGER.error("Could not write analysis file", ex);
+        }
     }
 
 }

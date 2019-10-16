@@ -74,6 +74,8 @@ public class DashboardBuilder extends Evaluator {
         this.currentRow = new ArrayList<>();
         this.title = titleOfPage;
         this.additionalText = additionalText;
+        
+        addDefaultDashboard();
     }
 
     /**
@@ -381,6 +383,12 @@ public class DashboardBuilder extends Evaluator {
     
     public DashboardBuilder addElement(DcjsElement element){
         this.currentRow.add(element);
+        return this;
+    }
+    
+    public DashboardBuilder clearElements(){
+        this.rows.clear();
+        this.currentRow.clear();
         return this;
     }
     
