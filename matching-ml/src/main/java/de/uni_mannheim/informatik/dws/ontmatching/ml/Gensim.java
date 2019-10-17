@@ -21,6 +21,10 @@ public class Gensim {
     public static void main(String[] args) {
         Gensim gensim = new Gensim();
         gensim.printHello("Jan");
+        double similarity = gensim.getSimilarity("wn-lemma:gallus#gallus-n",
+                "wn-lemma:Southern_Tai#Southern_Tai-n",
+                "C:\\Users\\D060249\\OneDrive - SAP SE\\Desktop\\sg200_wordnet_500_8");
+        System.out.println(similarity);
         gensim.shutDown();
     }
 
@@ -30,6 +34,37 @@ public class Gensim {
     private Gensim(){
         this.server = new GensimPythonServer();
         server.start();
+    }
+
+
+    /**
+     * Ge the similarity given 2 concepts and a gensim model.
+     * @param concept1 First concept.
+     * @param concept2 Second concept.
+     * @param modelPath Path to the URI.
+     * @return -1.0 in case of failure, else similarity.
+     */
+    public double getSimilarity(String concept1, String concept2, String modelPath){
+        HttpGet request = new HttpGet("http://127.0.0.1:41193/get-similarity");
+        request.addHeader("concept_1", concept1);
+        request.addHeader("concept_2", concept2);
+        request.addHeader("model_path", modelPath);
+        try (CloseableHttpResponse response = httpClient.execute(request)){
+            HttpEntity entity = response.getEntity();
+            if (entity == null){
+                LOGGER.error("No server response.");
+                return -1.0;
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                System.out.println(resultString);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")){
+                    LOGGER.error(resultString);
+                } else return Double.parseDouble(resultString);
+            }
+        } catch (IOException ioe){
+            LOGGER.error("Problem with http request.", ioe);
+        }
+        return -1.0;
     }
 
     /**

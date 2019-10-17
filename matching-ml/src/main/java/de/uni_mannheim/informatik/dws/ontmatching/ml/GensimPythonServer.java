@@ -71,15 +71,14 @@ public class GensimPythonServer {
         try {
             pb.inheritIO();
             this.serverProcess = pb.start();
-            boolean isServerRunning = false;
-            while(!isServerRunning){
+            for(int i = 0; i < 3; i++){
                 HttpGet request = new HttpGet("http://127.0.0.1:41193/melt_ml.html");
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 try (CloseableHttpResponse response = httpClient.execute(request)){
                     HttpEntity entity = response.getEntity();
                     if (entity != null) {
                         LOGGER.info("Server is running.");
-                        isServerRunning = true;
+                        break;
                     }
                 } catch (HttpHostConnectException hce){
                     LOGGER.info("Server is not yet running. Waiting 5 seconds.");
