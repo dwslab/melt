@@ -43,6 +43,9 @@ log.txt
 matching-eval/log.txt
 log4j.properties
 
+# Python
+playground.py
+
 **/datasets/*.xml
 
 #latex
