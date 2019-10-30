@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.ontmatching.validation;
 
 import java.io.File;
+import java.io.StringReader;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,6 +26,14 @@ public class JenaOntologyValidationService extends OntologyValidationService<Ont
     public JenaOntologyValidationService(File ontologyFile){
         super(ontologyFile);
     }
+    
+    /**
+     * Constructor
+     * @param fileContent file content of ontology file.
+     */
+    public JenaOntologyValidationService(String fileContent){
+        super(fileContent);
+    }
 
     /**
      * Constructor
@@ -38,6 +47,13 @@ public class JenaOntologyValidationService extends OntologyValidationService<Ont
     protected OntModel parseOntology(URI ontUri) throws Exception {
         OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);    
         model.read(ontUri.toString(), "");
+        return model;
+    }
+    
+    @Override
+    protected OntModel parseOntology(String fileContent) throws Exception {
+        OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);    
+        model.read(new StringReader(fileContent), "");
         return model;
     }
     

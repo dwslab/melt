@@ -44,7 +44,38 @@ public abstract class OntologyValidationService<T> {
      */
     public OntologyValidationService(URI ontologyUri){
         this.ontologyUri = ontologyUri;
-        loadOntology(this.ontologyUri);
+        try {
+            this.ontology = parseOntology(ontologyUri);
+            if(this.ontology == null)
+                throw new Exception("Ontology is null");
+            this.ontologyParseable = true;
+            setVersion(getClassForVersionSpecification());
+            computeStatistics(this.ontology);            
+        } catch (Exception ex) {
+            this.ontology = null;
+            this.ontologyParseable = false;
+            LOGGER.warn("Ontology not parsable", ex);
+        }
+    }
+    
+    /**
+     * Constructor
+     * @param fileContent file content of ontology file.
+     */
+    public OntologyValidationService(String fileContent){
+        this.ontologyUri = null;
+        try {
+            this.ontology = parseOntology(fileContent);
+            if(this.ontology == null)
+                throw new Exception("Ontology is null");
+            this.ontologyParseable = true;
+            setVersion(getClassForVersionSpecification());
+            computeStatistics(this.ontology);            
+        } catch (Exception ex) {
+            this.ontology = null;
+            this.ontologyParseable = false;
+            LOGGER.warn("Ontology not parsable", ex);
+        }
     }
 
 
@@ -54,28 +85,6 @@ public abstract class OntologyValidationService<T> {
      */
     public OntologyValidationService(File ontologyFile){
         this(ontologyFile.toURI());
-    }
-
-
-    /**
-     * Loads the ontology as specified by the URI.
-     * @param ontologyUri The URI to the corresponding ontology.
-     */
-    private void loadOntology(URI ontologyUri){
-        this.ontologyUri = ontologyUri;
-        try {
-            this.ontology = parseOntology(ontologyUri);
-            if(this.ontology == null)
-                throw new Exception("Ontology is null");
-            this.ontologyParseable = true;
-            setVersion(getClassForVersionSpecification());
-            LOGGER.info("Run OntologyValidationService with \"{}\", version: \"{}\"", this.libName, this.libVersion);
-            computeStatistics(this.ontology);            
-        } catch (Exception ex) {
-            this.ontology = null;
-            this.ontologyParseable = false;
-            LOGGER.warn("Ontology not parsable", ex);
-        }
     }
 
 
@@ -95,6 +104,7 @@ public abstract class OntologyValidationService<T> {
     }
     
     protected abstract T parseOntology(URI ontUri) throws Exception; 
+    protected abstract T parseOntology(String fileContent) throws Exception; 
     
     protected abstract Set<String> retrieveClasses(T ontology);
     protected abstract Set<String> retrieveDatatypeProperties(T ontology);

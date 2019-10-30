@@ -1,7 +1,10 @@
 package de.uni_mannheim.informatik.dws.ontmatching.validation;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.StringReader;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.ArrayList;
@@ -27,6 +30,14 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
      */
     public OwlApiOntologyValidationService(File ontologyFile){
         super(ontologyFile);
+    }
+    
+    /**
+     * Constructor
+     * @param fileContent file content of ontology file.
+     */
+    public OwlApiOntologyValidationService(String fileContent){
+        super(fileContent);
     }
 
     /**
@@ -56,6 +67,18 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
         }
         return man.loadOntologyFromOntologyDocument(IRI.create(ontUri));
     }
+    
+    @Override
+    protected OWLOntology parseOntology(String fileContent) throws Exception {
+        // Required to avoid errors on older OWL API releases with tracks that reuse one ontology in multiple test
+        // cases.
+        ArrayList<OWLOntology> ontologiesToBeDeleted = new ArrayList<>(man.getOntologies());
+        for(OWLOntology ontology : ontologiesToBeDeleted){
+            man.removeOntology(ontology);
+        }
+        return man.loadOntologyFromOntologyDocument(new ByteArrayInputStream(fileContent.getBytes(StandardCharsets.UTF_8)));
+    }
+    
 
     @Override
     protected Set<String> retrieveClasses(OWLOntology ontology) {
