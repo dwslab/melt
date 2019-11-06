@@ -8,6 +8,7 @@ app = Flask(__name__)
 # set of active gensim models
 active_models = {}
 
+
 @app.route('/melt_ml.html')
 def display_server_status():
     """Can be used to check whether the server is running. Also works in a Web browser.
@@ -18,6 +19,28 @@ def display_server_status():
         A message indicating that the server is running.
     """
     return "MELT ML Server running. Ready to accept requests."
+
+
+@app.route('/is-in-vocabulary', methods=['GET'])
+def is_in_vocabulary():
+    """Check whether there is a vector for the given concept.
+
+    Returns
+    -------
+        boolean
+        True if concept in model vocabulary, else False.
+    """
+    concept = request.headers.get('concept')
+    model_path = request.headers.get('model_path')
+
+    if model_path in active_models:
+        model = active_models[model_path]
+    else:
+        model = gensim.models.Word2Vec.load(model_path)
+        active_models[model_path] = model
+
+    return str(concept in model.wv.vocab)
+
 
 @app.route('/get-similarity', methods=['GET'])
 def get_similarity_given_model():

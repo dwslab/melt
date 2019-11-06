@@ -64,3 +64,6 @@ paper/*.pdf
 #exclude playgrounds
 Spielewiese.java
 Playground.java
+
+# mac specific
+.DS_Store

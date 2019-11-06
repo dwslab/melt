@@ -40,6 +40,10 @@ public class Gensim {
         startServer();
     }
 
+    /**
+     * The URL that shall be used to perform the requests.
+     */
+    private String serverUrl = "http://127.0.0.1:41193";
 
     /**
      * Ge the similarity given 2 concepts and a gensim model.
@@ -49,7 +53,7 @@ public class Gensim {
      * @return -1.0 in case of failure, else similarity.
      */
     public double getSimilarity(String concept1, String concept2, String modelPath){
-        HttpGet request = new HttpGet("http://127.0.0.1:41193/get-similarity");
+        HttpGet request = new HttpGet(serverUrl + "/get-similarity");
         request.addHeader("concept_1", concept1);
         request.addHeader("concept_2", concept2);
         request.addHeader("model_path", modelPath);
@@ -70,6 +74,55 @@ public class Gensim {
         return -1.0;
     }
 
+
+    /**
+     * Returns true when the concept can be found in the vocabulary of the model.
+     * @param concept The concept/URI that shall be looked up.
+     * @return True if exists, else false.
+     */
+    public boolean isInVocabulary(String concept, String modelPath){
+        HttpGet request = new HttpGet(serverUrl + "/is-in-vocabulary");
+        request.addHeader("concept", concept);
+        request.addHeader("model_path", getCanonicalModelPath(modelPath));
+
+        try (CloseableHttpResponse response = httpClient.execute(request)){
+            HttpEntity entity = response.getEntity();
+            if (entity == null){
+                LOGGER.error("No server response.");
+                return false;
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")){
+                    LOGGER.error(resultString);
+                } else return Boolean.parseBoolean(resultString);
+            }
+        } catch (IOException ioe){
+            LOGGER.error("Problem with http request.", ioe);
+        }
+        return false;
+    }
+
+
+    /**
+     * Obtain the canonical model path.
+     * @param modelPath The path to the gensim model.
+     * @return The canonical model path as String.
+     */
+    private String getCanonicalModelPath(String modelPath){
+        File modelFile = new File(modelPath);
+        if(!modelFile.exists() || modelFile.isDirectory()){
+            LOGGER.error("ERROR: The specified model path does not exist or is a directory.");
+            return modelPath;
+        }
+        try {
+            return modelFile.getCanonicalPath();
+        } catch (IOException e) {
+            LOGGER.error("Could not derive canoncial model path.", e);
+            return modelPath;
+        }
+    }
+
+
     /**
      * Default logger
      */
@@ -80,7 +133,7 @@ public class Gensim {
      * @param name The name that shall be printed.
      */
     private void printHello(String name){
-        HttpGet request = new HttpGet("http://127.0.0.1:41193/hello");
+        HttpGet request = new HttpGet(serverUrl + "/hello");
         request.addHeader("name", name);
         try (CloseableHttpResponse response = httpClient.execute(request)){
             HttpEntity entity = response.getEntity();
@@ -141,7 +194,7 @@ public class Gensim {
      */
     private void startServer(){
         String canonicalPath = "";
-        File serverFile = new File("./matching-ml/oaei-resources/python_server.py");
+        File serverFile = new File("oaei-resources/python_server.py");
         try {
             if(!serverFile.exists()){
                 LOGGER.error("Server File does not exist. Cannot start server. ABORTING.");
@@ -154,13 +207,13 @@ public class Gensim {
             LOGGER.error("Server File does not exist. Cannot start server. ABORTING.");
             return;
         }
-        List<String> command = Arrays.asList("python", "\"" + canonicalPath + "\"");
+        List<String> command = Arrays.asList("python", canonicalPath);
         ProcessBuilder pb = new ProcessBuilder(command);
         try {
             pb.inheritIO();
             this.serverProcess = pb.start();
             for(int i = 0; i < 3; i++){
-                HttpGet request = new HttpGet("http://127.0.0.1:41193/melt_ml.html");
+                HttpGet request = new HttpGet(serverUrl + "/melt_ml.html");
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 try (CloseableHttpResponse response = httpClient.execute(request)){
                     HttpEntity entity = response.getEntity();
@@ -182,5 +235,9 @@ public class Gensim {
             LOGGER.error("Could not wait for python server.", e);
         }
     }
+
+
+
+
 
 }
