@@ -15,7 +15,14 @@ class GensimTest {
     @Test
     @EnabledOnOs({ MAC })
     void isInVocabulary() {
+        // test case 1: model file
         String pathToModel = getClass().getClassLoader().getResource("test_model").getPath();
+        assertTrue(gensim.isInVocabulary("Europe", pathToModel));
+        assertTrue(gensim.isInVocabulary("united", pathToModel));
+        assertFalse(gensim.isInVocabulary("China", pathToModel));
+
+        // test case 2: vector file
+        String pathToVectorFile = getClass().getClassLoader().getResource("test_model_vectors.kv").getPath();
         assertTrue(gensim.isInVocabulary("Europe", pathToModel));
         assertTrue(gensim.isInVocabulary("united", pathToModel));
         assertFalse(gensim.isInVocabulary("China", pathToModel));

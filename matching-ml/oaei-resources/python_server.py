@@ -1,12 +1,17 @@
 from flask import Flask
 from flask import request
+from gensim.models import KeyedVectors
 import gensim
+import logging
 
 # default boilerplate code
 app = Flask(__name__)
 
-# set of active gensim models
+# set of active gensim models (learning/relearning possible)
 active_models = {}
+
+# set of active gensim vector files (just consumption)
+active_vectors = {}
 
 
 @app.route('/melt_ml.html')
@@ -32,14 +37,25 @@ def is_in_vocabulary():
     """
     concept = request.headers.get('concept')
     model_path = request.headers.get('model_path')
+    vector_path = request.headers.get('vector_path')
 
-    if model_path in active_models:
-        model = active_models[model_path]
+    logging.info(vector_path)
+    logging.info(model_path)
+
+    if vector_path is None:
+        if model_path in active_models:
+            model = active_models[model_path]
+            vectors = model.wv
+        else:
+            model = gensim.models.Word2Vec.load(model_path)
+            active_models[model_path] = model
+            vectors = model.wv
+    elif vector_path in active_vectors:
+        vectors = active_vectors[vector_path]
     else:
-        model = gensim.models.Word2Vec.load(model_path)
-        active_models[model_path] = model
+        vectors = KeyedVectors.load(vector_path, mmap='r')
 
-    return str(concept in model.wv.vocab)
+    return str(concept in vectors.vocab)
 
 
 @app.route('/get-similarity', methods=['GET'])

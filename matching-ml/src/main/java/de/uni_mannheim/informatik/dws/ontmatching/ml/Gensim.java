@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class Gensim {
 
     public static void main(String[] args) {
+        // TODO delete - not required
         Gensim gensim = new Gensim();
         gensim.printHello("Jan");
         double similarity = gensim.getSimilarity("wn-lemma:gallus#gallus-n",
@@ -32,6 +33,11 @@ public class Gensim {
         System.out.println(similarity);
         gensim.shutDown();
     }
+
+    /**
+     * Default logger
+     */
+    private final static Logger LOGGER = LoggerFactory.getLogger(Gensim.class);
 
     /**
      * Contructor
@@ -49,14 +55,16 @@ public class Gensim {
      * Ge the similarity given 2 concepts and a gensim model.
      * @param concept1 First concept.
      * @param concept2 Second concept.
-     * @param modelPath Path to the URI.
+     * @param modelOrVectorPath The path to the model or vector file. Note that the vector file MUST end with .kv in
+     *                          order to be recognized as vector file.
      * @return -1.0 in case of failure, else similarity.
      */
-    public double getSimilarity(String concept1, String concept2, String modelPath){
+    public double getSimilarity(String concept1, String concept2, String modelOrVectorPath){
         HttpGet request = new HttpGet(serverUrl + "/get-similarity");
         request.addHeader("concept_1", concept1);
         request.addHeader("concept_2", concept2);
-        request.addHeader("model_path", modelPath);
+        addModelToRequest(request, modelOrVectorPath);
+
         try (CloseableHttpResponse response = httpClient.execute(request)){
             HttpEntity entity = response.getEntity();
             if (entity == null){
@@ -78,12 +86,14 @@ public class Gensim {
     /**
      * Returns true when the concept can be found in the vocabulary of the model.
      * @param concept The concept/URI that shall be looked up.
+     * @param modelOrVectorPath The path to the model or vector file. Note that the vector file MUST end with .kv in
+     *                          order to be recognized as vector file.
      * @return True if exists, else false.
      */
-    public boolean isInVocabulary(String concept, String modelPath){
+    public boolean isInVocabulary(String concept, String modelOrVectorPath){
         HttpGet request = new HttpGet(serverUrl + "/is-in-vocabulary");
         request.addHeader("concept", concept);
-        request.addHeader("model_path", getCanonicalModelPath(modelPath));
+        addModelToRequest(request, modelOrVectorPath);
 
         try (CloseableHttpResponse response = httpClient.execute(request)){
             HttpEntity entity = response.getEntity();
@@ -104,29 +114,35 @@ public class Gensim {
 
 
     /**
+     * Given a path to a model or vector file, this method determines whether it is a model or a vector file and
+     * adds the corresponding parameter to the request.
+     * @param request The request to which the model/vector file shall be added to.
+     * @param modelOrVectorPath The path to the model/vector file.
+     */
+    private void addModelToRequest(HttpGet request, String modelOrVectorPath){
+        if(modelOrVectorPath.endsWith(".kv")){
+            request.addHeader("vector_path", getCanonicalPath(modelOrVectorPath));
+        } else request.addHeader("model_path", getCanonicalPath(modelOrVectorPath));
+    }
+
+    /**
      * Obtain the canonical model path.
-     * @param modelPath The path to the gensim model.
+     * @param filePath The path to the gensim model or gensim vector file.
      * @return The canonical model path as String.
      */
-    private String getCanonicalModelPath(String modelPath){
-        File modelFile = new File(modelPath);
+    private String getCanonicalPath(String filePath){
+        File modelFile = new File(filePath);
         if(!modelFile.exists() || modelFile.isDirectory()){
             LOGGER.error("ERROR: The specified model path does not exist or is a directory.");
-            return modelPath;
+            return filePath;
         }
         try {
             return modelFile.getCanonicalPath();
         } catch (IOException e) {
             LOGGER.error("Could not derive canoncial model path.", e);
-            return modelPath;
+            return filePath;
         }
     }
-
-
-    /**
-     * Default logger
-     */
-    private final static Logger LOGGER = LoggerFactory.getLogger(Gensim.class);
 
     /**
      * A quick technical demo. If the service works, it will print "Hello {@code name}".
@@ -155,7 +171,7 @@ public class Gensim {
 
     /**
      * Get the instance.
-     * @return
+     * @return Gensim instance.
      */
     public static Gensim getInstance(){
         if(instance == null) instance = new Gensim();
@@ -186,14 +202,14 @@ public class Gensim {
     /**
      * The python process.
      */
-    protected Process serverProcess;
+    private Process serverProcess;
 
 
     /**
      * Initializes the server.
      */
     private void startServer(){
-        String canonicalPath = "";
+        String canonicalPath;
         File serverFile = new File("oaei-resources/python_server.py");
         try {
             if(!serverFile.exists()){
@@ -235,9 +251,4 @@ public class Gensim {
             LOGGER.error("Could not wait for python server.", e);
         }
     }
-
-
-
-
-
 }
