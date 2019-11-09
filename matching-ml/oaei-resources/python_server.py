@@ -38,10 +38,19 @@ def is_in_vocabulary():
     concept = request.headers.get('concept')
     model_path = request.headers.get('model_path')
     vector_path = request.headers.get('vector_path')
+    vectors = get_vectors(model_path, vector_path)
+    return str(concept in vectors.vocab)
 
-    logging.info(vector_path)
-    logging.info(model_path)
 
+def get_vectors(model_path, vector_path):
+    """Will return the gensim vectors given model_path and vector_path where only one variable is filled.
+    The Java backend makes sure that the correct variable of the both is filled. This method also handles the
+    caching of models and vectors.
+
+    Returns
+    -------
+        gensim vectors for further operations.
+    """
     if vector_path is None:
         if model_path in active_models:
             model = active_models[model_path]
@@ -54,34 +63,37 @@ def is_in_vocabulary():
         vectors = active_vectors[vector_path]
     else:
         vectors = KeyedVectors.load(vector_path, mmap='r')
-
-    return str(concept in vectors.vocab)
+    return vectors
 
 
 @app.route('/get-similarity', methods=['GET'])
 def get_similarity_given_model():
+
     concept_1 = request.headers.get('concept_1')
     concept_2 = request.headers.get('concept_2')
     model_path = request.headers.get('model_path')
-    if concept_1 is None or concept_2 is None or model_path is None:
-        message = "ERROR! concept_1 and/or concept_2 and/or model_path not found in header. " \
+    vector_path = request.headers.get("vector_path")
+    vectors = get_vectors(model_path=model_path, vector_path=vector_path)
+
+    if vectors is None:
+        logging.error("Could not instantiate vectors.")
+        return 0.0
+
+    if concept_1 is None or concept_2 is None:
+        message = "ERROR! concept_1 and/or concept_2 not found in header. " \
                   "Similarity cannot be calculated."
         print(message)
         return message
-    if model_path in active_models:
-        model = active_models[model_path]
-    else:
-        model = gensim.models.Word2Vec.load(model_path)
-        active_models[model_path] = model
-    if concept_1 not in model.wv.vocab:
+
+    if concept_1 not in vectors.vocab:
         message = "ERROR! concept_1 not in the vocabulary."
         print(message)
         return message
-    if concept_2 not in model.wv.vocab:
+    if concept_2 not in vectors.vocab:
         message = "ERROR! concept_2 not in the vocabulary."
         print(message)
         return message
-    similarity = model.wv.similarity(concept_1, concept_2)
+    similarity = vectors.similarity(concept_1, concept_2)
     return str(similarity)
 
 
