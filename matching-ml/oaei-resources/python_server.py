@@ -66,6 +66,7 @@ def get_vectors(model_path, vector_path):
         vectors = active_vectors[vector_path]
     else:
         vectors = KeyedVectors.load(vector_path, mmap='r')
+        active_vectors[vector_path] = vectors
     return vectors
 
 
