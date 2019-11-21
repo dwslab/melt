@@ -4,6 +4,9 @@ from gensim.models import KeyedVectors
 import gensim
 import logging
 
+
+logging.basicConfig(handlers=[logging.FileHandler(__file__ + '.log', 'w', 'utf-8')], format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
+
 # default boilerplate code
 app = Flask(__name__)
 
@@ -95,6 +98,36 @@ def get_similarity_given_model():
         return message
     similarity = vectors.similarity(concept_1, concept_2)
     return str(similarity)
+
+
+@app.route('/get-vector', methods=['GET'])
+def get_vector_given_model():
+    concept = request.headers.get('concept')
+    model_path = request.headers.get('model_path')
+    vector_path = request.headers.get("vector_path")
+    vectors = get_vectors(model_path=model_path, vector_path=vector_path)
+
+    if vectors is None:
+        logging.error("Could not instantiate vectors.")
+        return 0.0
+
+    if concept is None:
+        message = "ERROR! concept not found in header. " \
+                  "Vector cannot be retrieved."
+        print(message)
+        logging.error(message)
+        return message
+
+    if concept not in vectors.vocab:
+        message = "ERROR! concept not in the vocabulary."
+        logging.error(message)
+        print(message)
+        return message
+
+    result = ""
+    for element in vectors.word_vec(concept):
+        result += " " + str(element)
+    return result[1:]
 
 
 @app.route('/hello', methods=['GET'])

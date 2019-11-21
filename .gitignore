@@ -67,3 +67,6 @@ Playground.java
 
 # mac specific
 .DS_Store
+
+# log files
+*.log
