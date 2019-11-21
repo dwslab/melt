@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.ontmatching.ml;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 

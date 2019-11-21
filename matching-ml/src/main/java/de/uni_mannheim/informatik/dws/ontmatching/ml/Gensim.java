@@ -23,17 +23,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class Gensim {
 
-    public static void main(String[] args) {
-        // TODO delete - not required
-        Gensim gensim = new Gensim();
-        gensim.printHello("Jan");
-        double similarity = gensim.getSimilarity("wn-lemma:gallus#gallus-n",
-                "wn-lemma:Southern_Tai#Southern_Tai-n",
-                "C:\\Users\\D060249\\OneDrive - SAP SE\\Desktop\\sg200_wordnet_500_8");
-        System.out.println(similarity);
-        gensim.shutDown();
-    }
-
     /**
      * Default logger
      */
