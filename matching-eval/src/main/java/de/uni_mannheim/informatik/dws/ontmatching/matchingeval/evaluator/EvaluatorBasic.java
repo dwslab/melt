@@ -49,7 +49,7 @@ public class EvaluatorBasic extends Evaluator {
                     "FP Size", "FN Size", "Runtime");
             for (ExecutionResult er : results) {
                 ConfusionMatrix matrix = metric.compute(er);
-                printer.printRecord(er.getTestCase().getTrack().getName(), er.getTestCase().getName(), er.getMatcher(), matrix.getPrecision(),
+                printer.printRecord(er.getTestCase().getTrack().getName(), er.getTestCase().getName(), er.getMatcherName(), matrix.getPrecision(),
                         matrix.getRecall(),matrix.getF1measure(), matrix.getTruePositiveSize(),
                         matrix.getFalsePositiveSize(), matrix.getFalseNegativeSize(), er.getRuntime());
             }
