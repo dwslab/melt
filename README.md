@@ -1,7 +1,7 @@
 # MELT - Matching EvaLuation Toolkit
 [![Build Status](https://travis-ci.org/dwslab/melt.svg?branch=master)](https://travis-ci.org/dwslab/melt)
 
-Melt is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.
+MELT is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.
 It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the 
 SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.
 
@@ -9,6 +9,7 @@ SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-
 ```
 Hertling, Sven; Portisch, Jan; Paulheim, Heiko. MELT - Matching EvaLuation Toolkit. SEMANTICS. Karlsruhe. 2019.
 ```
+An open-access version of the paper is available <a href="https://link.springer.com/content/pdf/10.1007%2F978-3-030-33220-4_17.pdf">here</a>.
 
 
 ## Code Examples
@@ -219,6 +220,10 @@ Contains various tools to evaluate the performance of matchers and to analyze th
 ### matching-jena
 Contains [Jena-based](https://jena.apache.org/) classes related to matcher development as well as additional services 
 such as caching of source and target ontologies.  
+
+### matching-ml
+The machine learning extension for MELT. Currently [gensim](https://radimrehurek.com/gensim/) is supported. The ML
+extension allows to communicate with a Python backend.
 
 ### matching-owlapi
 Contains OWL-API-based classes related to matcher development as well as additional services  such as caching of 

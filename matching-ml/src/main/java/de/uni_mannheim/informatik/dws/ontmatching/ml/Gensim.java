@@ -49,6 +49,11 @@ public class Gensim {
     private boolean isVectorCaching = true;
 
     /**
+     * Indicates whether the server has been shut down.
+     */
+    private static boolean isShutDown = false;
+
+    /**
      * Local vector cache.
      */
     private HashMap<String, Double[]> vectorCache;
@@ -254,7 +259,7 @@ public class Gensim {
      * @return Gensim instance.
      */
     public static Gensim getInstance() {
-        if (instance == null) instance = new Gensim();
+        if (instance == null || isShutDown) instance = new Gensim();
         return instance;
     }
 
@@ -262,6 +267,7 @@ public class Gensim {
      * Shut down the service.
      */
     public void shutDown() {
+        isShutDown = true;
         try {
             httpClient.close();
         } catch (IOException e) {

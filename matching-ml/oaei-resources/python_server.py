@@ -120,7 +120,7 @@ def get_vector_given_model():
         return message
 
     if concept not in vectors.vocab:
-        message = "ERROR! concept not in the vocabulary."
+        message = "ERROR! Concept '" + str(concept) + "' not in the vocabulary."
         logging.error(message)
         print(message)
         return message
