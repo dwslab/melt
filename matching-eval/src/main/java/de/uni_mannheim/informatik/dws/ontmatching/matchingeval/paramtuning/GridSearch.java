@@ -28,20 +28,35 @@ import org.slf4j.LoggerFactory;
  */
 public class GridSearch {
 
-    private static final Logger logger = LoggerFactory.getLogger(GridSearch.class);
-    
+    /**
+     * Default logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(GridSearch.class);
+
+    /**
+     * The matcher under evaluation.
+     */
     private Class<? extends IOntologyMatchingToolBridge> matcher;
     private String matcherName;
     private List<String> paramName;
     private List<List<Object>> paramValues;
-    
+
+    /**
+     * Constructor
+     * @param matcher The matcher for which the grid search shall be performed.
+     * @param matcherName Name of the matcher.
+     */
     public GridSearch(Class<? extends IOntologyMatchingToolBridge> matcher, String matcherName){
         this.matcher = matcher;
         this.matcherName = matcherName;
         this.paramName = new ArrayList<>();
         this.paramValues = new ArrayList<>();
     }
-    
+
+    /**
+     * Constructor
+     * @param matcher The matcher for which the grid search shall be performed.
+     */
     public GridSearch(Class<? extends IOntologyMatchingToolBridge> matcher){
         this(matcher, Executor.getMatcherName(matcher));
     }
@@ -141,13 +156,23 @@ public class GridSearch {
         this.paramValues.add(Arrays.asList(paramValues));
         return this;
     }
-    
-    
-    public ExecutionResultSet runGridParallel(TestCase tc){
-        return runGridParallel(tc, Runtime.getRuntime().availableProcessors());
+
+    /**
+     * Runs the grid search in parallel.
+     * @param testCase
+     * @return An execution result set.
+     */
+    public ExecutionResultSet runGridParallel(TestCase testCase){
+        return runGridParallel(testCase, Runtime.getRuntime().availableProcessors());
     }
 
-    public ExecutionResultSet runGridParallel(TestCase tc, int numberOfThreads){
+    /**
+     * Runs the grid search in parallel.
+     * @param testCase The test case to be used.
+     * @param numberOfThreads The number of threads that shall be used for the multi-threaded grid search.
+     * @return
+     */
+    public ExecutionResultSet runGridParallel(TestCase testCase, int numberOfThreads){
         Map<String, IOntologyMatchingToolBridge> matchers = new HashMap<>();
         List<List<Object>> paramCombinations = cartesianProduct(0, this.paramValues);
         for(List<Object> paramSetting : paramCombinations){
@@ -155,10 +180,10 @@ public class GridSearch {
             try {
                 matchers.put(getMatcherNameWithSettings(paramSetting), getInstantiatedMatcher(paramSetting));
             } catch (InstantiationException|IllegalAccessException ex) {
-                logger.error("Cannot instantiate new Matcher", ex);
+                LOGGER.error("Cannot instantiate new Matcher", ex);
             }
         }
-        return new ExecutorParallel(numberOfThreads).run(Arrays.asList(tc), matchers);
+        return new ExecutorParallel(numberOfThreads).run(Arrays.asList(testCase), matchers);
     }
     
     public ExecutionResultSet runGridSequential(TestCase tc){
@@ -169,7 +194,7 @@ public class GridSearch {
             try {
                 matchers.put(getMatcherNameWithSettings(paramSetting), getInstantiatedMatcher(paramSetting));
             } catch (InstantiationException|IllegalAccessException ex) {
-                logger.error("Cannot instantiate new Matcher", ex);
+                LOGGER.error("Cannot instantiate new Matcher", ex);
             }
         }
         return Executor.run(Arrays.asList(tc), matchers);
@@ -193,7 +218,7 @@ public class GridSearch {
             try {
                 pub.setNestedProperty(matcherInstance, this.paramName.get(i), paramValue.get(i));
             } catch (IllegalAccessException| InvocationTargetException|NoSuchMethodException ex) {
-                logger.error("Cannot set property", ex);
+                LOGGER.error("Cannot set property", ex);
             }
         }
         
@@ -206,7 +231,7 @@ public class GridSearch {
         try {
             matcherInstance = matcher.newInstance();
         } catch (InstantiationException | IllegalAccessException ex) {
-            logger.error("Cannot instantiate new Matcher", ex);
+            LOGGER.error("Cannot instantiate new Matcher", ex);
             return;
         }
         //set the parameter
@@ -215,7 +240,7 @@ public class GridSearch {
             try {
                 pub.setNestedProperty(matcherInstance, paramName.get(i), paramValue.get(i));
             } catch (IllegalAccessException| InvocationTargetException|NoSuchMethodException ex) {
-                logger.error("Cannot set property", ex);
+                LOGGER.error("Cannot set property", ex);
             }
         }
         
@@ -223,11 +248,9 @@ public class GridSearch {
         try {            
             matcherInstance.align(tc.getSource().toURL(), tc.getTarget().toURL());
         } catch (ToolBridgeException | MalformedURLException ex) {
-            logger.error("Exception during matching", ex);
+            LOGGER.error("Exception during matching", ex);
         }
     }
-    
-    
     
     private static List<List<Object>> cartesianProduct(int index, List<List<Object>> paramValues) {
         List<List<Object>> result = new ArrayList<>();

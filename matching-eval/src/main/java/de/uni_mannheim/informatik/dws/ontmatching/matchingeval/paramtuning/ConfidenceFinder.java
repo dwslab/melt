@@ -15,12 +15,15 @@ import java.util.List;
 import java.util.Set;
 
 
+/**
+ * This class offers static functionality to analyze and opimize matchers in terms of their confidences (and
+ * confidence thresholds).
+ */
 public class ConfidenceFinder{
     
-    
-    public static Set<Double> getSteps(double start, double end, double stepwidth){
+    public static Set<Double> getSteps(double start, double end, double stepWidth){
         Set<Double> set = new HashSet<>();
-        for(double d = start; d <= end; d += stepwidth){
+        for(double d = start; d <= end; d += stepWidth){
             set.add(d);
         }
         return set;
@@ -67,8 +70,12 @@ public class ConfidenceFinder{
         return set;
     }
 
-    
-    public static Double getBestConfidenceForFmeasure(ExecutionResult executionResult){
+    /**
+     * Given an ExecutionResult, this method determines the best cutting point in order to optimize the F1-score.
+     * @param executionResult The execution result for which the optimal confidence threshold shall be determined.
+     * @return The optimal confidence threshold.
+     */
+    public static double getBestConfidenceForFmeasure(ExecutionResult executionResult){
         ConfusionMatrix m = new ConfusionMatrixMetric().compute(executionResult);
 
         List<Double> systemConfidences = new ArrayList(getOccurringConfidences(executionResult.getSystemAlignment(), 2));
@@ -92,7 +99,6 @@ public class ConfidenceFinder{
         return bestConf;
     }
     
-    
     public static ExecutionResultSet getConfidenceResultSet(ExecutionResult executionResult){
         ExecutionResultSet s = new ExecutionResultSet();
         s.add(executionResult);
@@ -103,8 +109,7 @@ public class ConfidenceFinder{
         }
         return s;
     }
-    
-    
+
     /**
      * Simple division that is to be performed. The two denominators will be added.
      *
