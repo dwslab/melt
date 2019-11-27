@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingeval;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,18 @@ public class ExecutorParallel {
         }
         exec.shutdown();
         return results;
+    }
+    
+    public ExecutionResultSet run(Track track, Map<String, IOntologyMatchingToolBridge> matchers) {
+        return run(track.getTestCases(), matchers);
+    }
+    
+    public ExecutionResultSet runTracks(List<Track> tracks, Map<String, IOntologyMatchingToolBridge> matchers) {
+        List<TestCase> testCases = new ArrayList<>();
+        for(Track t : tracks){
+            testCases.addAll(t.getTestCases());
+        }
+        return run(testCases, matchers);
     }
     
 }

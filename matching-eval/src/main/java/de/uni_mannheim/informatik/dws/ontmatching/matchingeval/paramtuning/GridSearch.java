@@ -4,8 +4,10 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSe
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.Executor;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutorParallel;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import eu.sealsproject.platform.res.tool.api.ToolBridgeException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
+import java.util.logging.Level;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,7 @@ public class GridSearch {
      * Default logger
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(GridSearch.class);
+    private static final String CONSTRUCTOR = "constructor";
 
     /**
      * The matcher under evaluation.
@@ -79,8 +83,7 @@ public class GridSearch {
      */
     public GridSearch addParameters(Map<String, List<Object>> paramsToValuesGrid){
         for(Entry<String, List<Object>> entry : paramsToValuesGrid.entrySet()){
-            this.paramName.add(entry.getKey());
-            this.paramValues.add(entry.getValue());
+            addParameter(entry.getKey(), entry.getValue());
         }
         return this;
     }
@@ -106,9 +109,31 @@ public class GridSearch {
         if(paramsNames.size() != paramsValues.size()){
             throw new IllegalArgumentException("The size of parameter name and parameter values is not equal.");
         }
-        this.paramName.addAll(paramsNames);
-        this.paramValues.addAll(paramsValues);
+        for(int i=0; i < paramsNames.size(); i++){
+            addParameter(paramsNames.get(i), paramsValues.get(i));
+        }
         return this;
+    }
+    
+    /**
+     * Adds a parameter search. The name can be a nested property.
+     * Example values for parameter "name" are:
+     * <ul>
+     * <li> "a" -- sets the value of property a of the specified bean </li>
+     * <li> "a.b" -- gets the value of property a of the specified bean,
+     * then on that object sets the value of property b.</li>
+     * <li> "a(key)" -- sets a value of mapped-property a on the specified
+     * bean. This effectively means bean.setA("key").</li>
+     * <li> "a[3]" -- sets a value of indexed-property a on the specified
+     * bean. This effectively means bean.setA(3).</li>
+     * </ul>
+     * (this is from org.apache.commons.beanutils.PropertyUtilsBean)
+     * @param name Possibly nested name of the property to be modified
+     * @param paramValues Values to which the property is to be set
+     * @return GridSearch object (for builder pattern)
+     */
+    public GridSearch addParameter(String name, Object... paramValues){
+        return addParameter(name, Arrays.asList(paramValues));
     }
     
     /**
@@ -135,70 +160,88 @@ public class GridSearch {
     }
     
     /**
-     * Adds a parameter search. The name can be a nested property.
-     * Example values for parameter "name" are:
-     * <ul>
-     * <li> "a" -- sets the value of property a of the specified bean </li>
-     * <li> "a.b" -- gets the value of property a of the specified bean,
-     * then on that object sets the value of property b.</li>
-     * <li> "a(key)" -- sets a value of mapped-property a on the specified
-     * bean. This effectively means bean.setA("key").</li>
-     * <li> "a[3]" -- sets a value of indexed-property a on the specified
-     * bean. This effectively means bean.setA(3).</li>
-     * </ul>
-     * (this is from org.apache.commons.beanutils.PropertyUtilsBean)
-     * @param name Possibly nested name of the property to be modified
-     * @param paramValues Values to which the property is to be set
-     * @return GridSearch object (for builder pattern)
+     * If the constructor value shall be held constant, use fill only one value
+     * in the list.
+     * Position matters!
+     * @param paramValues
+     * @return 
      */
-    public GridSearch addParameter(String name, Object... paramValues){
-        this.paramName.add(name);
-        this.paramValues.add(Arrays.asList(paramValues));
+    public GridSearch addConstructorParameter(List<Object> paramValues){
+        this.paramName.add(CONSTRUCTOR);
+        this.paramValues.add(paramValues);
         return this;
     }
+    
+    
 
-    /**
-     * Runs the grid search in parallel.
-     * @param testCase
-     * @return An execution result set.
-     */
+    //run grid parallel 
     public ExecutionResultSet runGridParallel(TestCase testCase){
         return runGridParallel(testCase, Runtime.getRuntime().availableProcessors());
     }
-
-    /**
-     * Runs the grid search in parallel.
-     * @param testCase The test case to be used.
-     * @param numberOfThreads The number of threads that shall be used for the multi-threaded grid search.
-     * @return
-     */
-    public ExecutionResultSet runGridParallel(TestCase testCase, int numberOfThreads){
-        Map<String, IOntologyMatchingToolBridge> matchers = new HashMap<>();
-        List<List<Object>> paramCombinations = cartesianProduct(0, this.paramValues);
-        for(List<Object> paramSetting : paramCombinations){
-            Collections.reverse(paramSetting); //TODO: optimze
-            try {
-                matchers.put(getMatcherNameWithSettings(paramSetting), getInstantiatedMatcher(paramSetting));
-            } catch (InstantiationException|IllegalAccessException ex) {
-                LOGGER.error("Cannot instantiate new Matcher", ex);
-            }
-        }
-        return new ExecutorParallel(numberOfThreads).run(Arrays.asList(testCase), matchers);
+    
+    public ExecutionResultSet runGridParallel(List<TestCase> testCases){
+        return runGridParallel(testCases, Runtime.getRuntime().availableProcessors());
     }
     
+    public ExecutionResultSet runGridParallel(Track track){
+        return runGridParallel(track, Runtime.getRuntime().availableProcessors());
+    }
+
+    public ExecutionResultSet runGridParallelTracks(List<Track> tracks){
+        return runGridParallelTrack(tracks, Runtime.getRuntime().availableProcessors());
+    }
+    
+    
+    //run grid parallel 
+    public ExecutionResultSet runGridParallel(TestCase testCase, int numberOfThreads){
+        return new ExecutorParallel(numberOfThreads).run(Arrays.asList(testCase), getMatcherConfigurations());
+    }
+    
+    public ExecutionResultSet runGridParallel(List<TestCase> testCases, int numberOfThreads){
+        return new ExecutorParallel(numberOfThreads).run(testCases, getMatcherConfigurations());
+    }
+    
+    public ExecutionResultSet runGridParallel(Track track, int numberOfThreads){
+        return new ExecutorParallel(numberOfThreads).run(track, getMatcherConfigurations());
+    }
+    
+    public ExecutionResultSet runGridParallelTrack(List<Track> tracks, int numberOfThreads){
+        return new ExecutorParallel(numberOfThreads).runTracks(tracks, getMatcherConfigurations());
+    }
+    
+    
+    //run Grid Sequential
     public ExecutionResultSet runGridSequential(TestCase tc){
+        return Executor.run(Arrays.asList(tc), getMatcherConfigurations());
+    }
+    
+    public ExecutionResultSet runGridSequential(List<TestCase> tc){
+        return Executor.run(tc, getMatcherConfigurations());
+    }
+    
+    public ExecutionResultSet runGridSequential(Track track){
+        return Executor.run(track, getMatcherConfigurations());
+    }
+    
+    public ExecutionResultSet runGridSequentialTracks(List<Track> tracks){
+        return Executor.runTracks(tracks, getMatcherConfigurations());
+    }
+    
+    
+    public Map<String, IOntologyMatchingToolBridge> getMatcherConfigurations(){
         Map<String, IOntologyMatchingToolBridge> matchers = new HashMap<>();
         List<List<Object>> paramCombinations = cartesianProduct(0, this.paramValues);
         for(List<Object> paramSetting : paramCombinations){
             Collections.reverse(paramSetting); //TODO: optimze
             try {
                 matchers.put(getMatcherNameWithSettings(paramSetting), getInstantiatedMatcher(paramSetting));
-            } catch (InstantiationException|IllegalAccessException ex) {
+            } catch (ReflectiveOperationException ex) {
                 LOGGER.error("Cannot instantiate new Matcher", ex);
             }
         }
-        return Executor.run(Arrays.asList(tc), matchers);
+        return matchers;
     }
+    
     
     protected String getMatcherNameWithSettings(List<Object> paramValue){
         StringJoiner setting = new StringJoiner(",");
@@ -208,13 +251,35 @@ public class GridSearch {
         return String.format("%s (%s)", this.matcherName, setting.toString());
     }
     
-    private IOntologyMatchingToolBridge getInstantiatedMatcher(List<Object> paramValue) throws InstantiationException, IllegalAccessException{
-        //initialize matcher
-        IOntologyMatchingToolBridge matcherInstance = this.matcher.newInstance();
-
+    private IOntologyMatchingToolBridge getInstantiatedMatcher(List<Object> paramValue) throws ReflectiveOperationException {        
+        List<Object> constructorValues = new ArrayList();
+        List<Class<?>> constructorTypes = new ArrayList<>();
+        for(int i=0; i < this.paramName.size(); i++){
+            if(this.paramName.get(i).toLowerCase().equals(CONSTRUCTOR)){
+                Object oneParamValue = paramValue.get(i);
+                constructorValues.add(oneParamValue);
+                constructorTypes.add(oneParamValue.getClass());
+            }
+        }
+        
+        IOntologyMatchingToolBridge matcherInstance = null;
+        if(constructorValues.isEmpty()){
+            matcherInstance = this.matcher.newInstance();
+        }else{
+            Constructor constructor = this.matcher.getConstructor(constructorTypes.toArray(new Class<?>[constructorTypes.size()]));
+            if(constructor == null)
+                throw new NoSuchMethodException("Constructor with param types" + constructorTypes.toString() + " not found.");
+            matcherInstance = (IOntologyMatchingToolBridge)constructor.newInstance(constructorValues.toArray(new Object[constructorValues.size()]));
+        }
+        
+        if(matcherInstance == null)
+            throw new InstantiationException("Matcher is null and could not be instantiated.");
+        
         //set the parameter
         PropertyUtilsBean pub = new PropertyUtilsBean();
         for(int i=0; i < paramValue.size(); i++){
+            if(this.paramName.get(i).toLowerCase().equals(CONSTRUCTOR))
+                continue;
             try {
                 pub.setNestedProperty(matcherInstance, this.paramName.get(i), paramValue.get(i));
             } catch (IllegalAccessException| InvocationTargetException|NoSuchMethodException ex) {
@@ -223,33 +288,6 @@ public class GridSearch {
         }
         
         return matcherInstance;
-    }
-    
-    private static void runMatcherSetting(TestCase tc, Class<? extends IOntologyMatchingToolBridge> matcher, List<String> paramName, List<Object> paramValue){
-        //initialize matcher
-        IOntologyMatchingToolBridge matcherInstance = null;
-        try {
-            matcherInstance = matcher.newInstance();
-        } catch (InstantiationException | IllegalAccessException ex) {
-            LOGGER.error("Cannot instantiate new Matcher", ex);
-            return;
-        }
-        //set the parameter
-        PropertyUtilsBean pub = new PropertyUtilsBean();
-        for(int i=0; i < paramValue.size(); i++){
-            try {
-                pub.setNestedProperty(matcherInstance, paramName.get(i), paramValue.get(i));
-            } catch (IllegalAccessException| InvocationTargetException|NoSuchMethodException ex) {
-                LOGGER.error("Cannot set property", ex);
-            }
-        }
-        
-        //run the matcher:
-        try {            
-            matcherInstance.align(tc.getSource().toURL(), tc.getTarget().toURL());
-        } catch (ToolBridgeException | MalformedURLException ex) {
-            LOGGER.error("Exception during matching", ex);
-        }
     }
     
     private static List<List<Object>> cartesianProduct(int index, List<List<Object>> paramValues) {

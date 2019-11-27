@@ -67,6 +67,18 @@ public class Executor {
         }
         return r;
     }
+    
+    public static ExecutionResultSet runTracks(List<Track> tracks, Map<String, IOntologyMatchingToolBridge> matchers) {
+        ExecutionResultSet r = new ExecutionResultSet();
+        for(Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()){
+            for(Track track : tracks){
+                for (TestCase tc : track.getTestCases()) {
+                    r.add(ExecutionRunner.runMatcher(tc, matcher.getValue(), matcher.getKey()));
+                }
+            }
+        }        
+        return r;
+    }
 
     /**
      * Run a set of matchers on a set of test cases.
