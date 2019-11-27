@@ -109,5 +109,16 @@ public class AlignmentTest {
         assertTrue(result.contains(new Correspondence("http://www.left.com/e3", "http://www.right.com/e3")), "Union correspondence not contained in result.");
     }
 
+    @Test
+    void getExtension(){
+        Alignment alignment_1 = new Alignment();
+        alignment_1.add("http://www.left.com/e1", "http://www.right.com/e1");
+        alignment_1.add("http://www.left.com/e2", "http://www.right.com/e2");
+        alignment_1.addExtensionValue("http://www.test.com/myExtension_value_1", "ABC");
+        alignment_1.addExtensionValue("http://www.test.com/myExtension_value_2", "DEF");
+        assertEquals("ABC", alignment_1.getExtensionValue("http://www.test.com/myExtension_value_1"));
+        assertEquals("DEF", alignment_1.getExtensionValue("http://www.test.com/myExtension_value_2"));
+        assertEquals(2, alignment_1.getExtensions().size());
+    }
 
 }

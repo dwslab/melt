@@ -500,6 +500,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     /**
      * Obtain the value of an extension.
      * @param extensionUri The URI identifying the extension.
+     *                     Note that many default extension URIs are contained in {@link DefaultExtensions}.
      * @return The value of the extension as String, null if there is no value.
      */
     public String getExtensionValue(String extensionUri){
@@ -511,6 +512,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     /**
      * Set the value for an extension.
      * @param extensionUri The URI identifying the extension.
+     *                     Note that many default extension URIs are contained in {@link DefaultExtensions}.
      * @param extensionValue The value of the extension to be set.
      */
     public void addExtensionValue(String extensionUri, String extensionValue){
@@ -518,5 +520,22 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         extensions.put(extensionUri, extensionValue);
     }
 
+    /**
+     * Obtain the alignment extensions as Map.
+     * @return The map is build as follows:
+     * <ul>
+     *  <li>key: extension URI</li>
+     *  <li>value: extension value</li>
+     * </ul>
+     */
     public Map<String, String> getExtensions() { return this.extensions; }
+
+    /**
+     * Set the extensions of the alignment. Note that this method will overwrite existing extensions of the
+     * alignment.
+     * @param extensions The alignment extensions to be set.
+     */
+    public void setExtensions(Map<String, String> extensions) {
+        this.extensions = extensions;
+    }
 }

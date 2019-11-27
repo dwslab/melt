@@ -63,7 +63,6 @@ public class TypeRefiner implements Refiner {
         return new ExecutionResult(toBeRefined, refinedSystem, refinedReference, this);
     }
 
-
     /**
      * Perform the actual refinement.
      * @param source The source ontology model.
@@ -89,9 +88,9 @@ public class TypeRefiner implements Refiner {
                 }
             }
         }
+        refinedAlignment.setExtensions(originalAlignment.getExtensions());
         return refinedAlignment;
     }
-
 
     /**
      * Obtain the resource type for a particular URI.
@@ -105,7 +104,6 @@ public class TypeRefiner implements Refiner {
             return ResourceType.subsumeProperties(t);
         return t;
     }
-    
 
     @Override
     public int hashCode() {

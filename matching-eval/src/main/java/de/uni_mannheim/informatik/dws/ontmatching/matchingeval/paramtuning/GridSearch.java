@@ -27,8 +27,9 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Gridsearch for ontology matching with arbitrary amount of parameter and values to optimize.
- * Important: when using parallel processing, ensure that the matcher doesnÄt write to the same results file.
+ * Gridsearch for ontology matching with an arbitrary amount of parameter and values to optimize.
+ * Important: when using parallel processing, ensure that the matcher does not write to the same results file.
+ *
  * @author Sven Hertling
  */
 public class GridSearch {
@@ -37,6 +38,10 @@ public class GridSearch {
      * Default logger
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(GridSearch.class);
+
+    /**
+     * constructor constant to be used in {@link GridSearch#addParameter(String, List)}.
+     */
     private static final String CONSTRUCTOR = "constructor";
 
     /**
@@ -46,6 +51,8 @@ public class GridSearch {
     private String matcherName;
     private List<String> paramName;
     private List<List<Object>> paramValues;
+
+    private List<Class<?>> paramTypes;
 
     /**
      * Constructor
@@ -57,6 +64,7 @@ public class GridSearch {
         this.matcherName = matcherName;
         this.paramName = new ArrayList<>();
         this.paramValues = new ArrayList<>();
+        this.paramTypes = new ArrayList<>();
     }
 
     /**
@@ -158,29 +166,59 @@ public class GridSearch {
     public GridSearch addParameter(String name, List<Object> paramValues){
         this.paramName.add(name);
         this.paramValues.add(paramValues);
+        this.paramTypes.add(paramValues.get(0).getClass());
         return this;
     }
     
     /**
-     * If the constructor value shall be held constant, use fill only one value
-     * in the list.
-     * Position matters!
-     * @param paramValues
-     * @return 
+     * The parameters for the constructor of the given class. Position mattes!
+     * @param paramValues The parameters for the constructor in the correct order.
+     * @return Edited {@code GridSearch} instance.
      */
     public GridSearch addConstructorParameter(List<Object> paramValues){
+        return this.addConstructorParameter(paramValues, paramValues.get(0).getClass());
+    }
+
+    /**
+     * The parameters for the constructor of the given class. Position mattes!
+     * @param paramValues The parameters for the constructor in the correct order.
+     * @return Edited {@code GridSearch} instance.
+     */
+    public GridSearch addConstructorParameter(List<Object> paramValues, Class<?> clazz){
         this.paramName.add(CONSTRUCTOR);
         this.paramValues.add(paramValues);
+        this.paramTypes.add(clazz);
         return this;
     }
-    
-    
 
-    //run grid parallel 
+    /**
+     * The parameters for the constructor of the given class. Position mattes!
+     * @param paramValues The parameters for the constructor in the correct order.
+     * @return Edited {@code GridSearch} instance.
+     */
+    public GridSearch addStaticConstructorParameter(Object... paramValues){
+        for(Object param : paramValues){
+            this.paramName.add(CONSTRUCTOR);
+            this.paramValues.add(Arrays.asList(param));
+            this.paramTypes.add(param.getClass());
+        }
+        return this;
+    }
+
+    /**
+     * Run in parallel on {@link TestCase}.
+     * @param testCase The test case to use.
+     * @return {@link ExecutionResultSet} instance.
+     */
     public ExecutionResultSet runGridParallel(TestCase testCase){
         return runGridParallel(testCase, Runtime.getRuntime().availableProcessors());
     }
-    
+
+    /**
+     * Run in parallel on multiple {@link TestCase}.
+     * @param testCases The test cases to use.
+     * @return {@link ExecutionResultSet} instance.
+     */
     public ExecutionResultSet runGridParallel(List<TestCase> testCases){
         return runGridParallel(testCases, Runtime.getRuntime().availableProcessors());
     }
@@ -192,9 +230,7 @@ public class GridSearch {
     public ExecutionResultSet runGridParallelTracks(List<Track> tracks){
         return runGridParallelTrack(tracks, Runtime.getRuntime().availableProcessors());
     }
-    
-    
-    //run grid parallel 
+
     public ExecutionResultSet runGridParallel(TestCase testCase, int numberOfThreads){
         return updateExecutionResultSet(new ExecutorParallel(numberOfThreads).run(Arrays.asList(testCase), getMatcherConfigurations()));
     }
@@ -210,21 +246,39 @@ public class GridSearch {
     public ExecutionResultSet runGridParallelTrack(List<Track> tracks, int numberOfThreads){
         return updateExecutionResultSet(new ExecutorParallel(numberOfThreads).runTracks(tracks, getMatcherConfigurations()));
     }
-    
-    
-    //run Grid Sequential
-    public ExecutionResultSet runGridSequential(TestCase tc){
-        return updateExecutionResultSet(Executor.run(Arrays.asList(tc), getMatcherConfigurations()));
+
+    /**
+     * Run sequentially on a {@link TestCase}.
+     * @param testCase The test case to use.
+     * @return {@link ExecutionResultSet} instance.
+     */
+    public ExecutionResultSet runGridSequential(TestCase testCase){
+        return updateExecutionResultSet(Executor.run(Arrays.asList(testCase), getMatcherConfigurations()));
     }
-    
-    public ExecutionResultSet runGridSequential(List<TestCase> tc){
-        return updateExecutionResultSet(Executor.run(tc, getMatcherConfigurations()));
+
+    /**
+     * Run sequentially on multiple {@link TestCase}.
+     * @param testCases The test cases to use.
+     * @return {@link ExecutionResultSet} instance.
+     */
+    public ExecutionResultSet runGridSequential(List<TestCase> testCases){
+        return updateExecutionResultSet(Executor.run(testCases, getMatcherConfigurations()));
     }
-    
+
+    /**
+     * Run sequentially a {@link Track}.
+     * @param track The track to use.
+     * @return {@link ExecutionResultSet} instance.
+     */
     public ExecutionResultSet runGridSequential(Track track){
         return updateExecutionResultSet(Executor.run(track, getMatcherConfigurations()));
     }
-    
+
+    /**
+     * Run sequentially on multiple {@link Track}.
+     * @param tracks The tracks to use.
+     * @return {@link ExecutionResultSet} instance.
+     */
     public ExecutionResultSet runGridSequentialTracks(List<Track> tracks){
         return updateExecutionResultSet(Executor.runTracks(tracks, getMatcherConfigurations()));
     }
@@ -290,14 +344,14 @@ public class GridSearch {
             if(isConstructorParameter(this.paramName.get(i))){
                 Object oneParamValue = paramValue.get(i);
                 constructorValues.add(oneParamValue);
-                constructorTypes.add(oneParamValue.getClass());
+                constructorTypes.add(this.paramTypes.get(i));
             }
         }
         
         IOntologyMatchingToolBridge matcherInstance = null;
         if(constructorValues.isEmpty()){
             matcherInstance = this.matcher.newInstance();
-        }else{
+        } else {
             Constructor constructor = this.matcher.getConstructor(constructorTypes.toArray(new Class<?>[constructorTypes.size()]));
             if(constructor == null)
                 throw new NoSuchMethodException("Constructor with param types" + constructorTypes.toString() + " not found.");
@@ -318,7 +372,6 @@ public class GridSearch {
                 LOGGER.error("Cannot set property", ex);
             }
         }
-        
         return matcherInstance;
     }
     

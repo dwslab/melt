@@ -14,9 +14,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * A basic evaluator that is easy on Memory.
- * If you are interested in an in-depth analysis (and if you have enough memory), you should use
- * EvaluatorCSV.
+ * A basic evaluator that is easy on Memory and prints the performance results per test case in CSV format.
+ * No track aggregation is performed. If you are interested in an in-depth analysis (and if you have enough memory), you should use
+ * {@link EvaluatorCSV}.
  */
 public class EvaluatorBasic extends Evaluator {
 
