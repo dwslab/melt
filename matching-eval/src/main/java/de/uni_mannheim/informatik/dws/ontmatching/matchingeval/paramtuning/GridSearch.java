@@ -1,10 +1,12 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.paramtuning;
 
+import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.Executor;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutorParallel;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
+import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.DefaultExtensions;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import eu.sealsproject.platform.res.tool.api.ToolBridgeException;
 import java.lang.reflect.Constructor;
@@ -194,37 +196,61 @@ public class GridSearch {
     
     //run grid parallel 
     public ExecutionResultSet runGridParallel(TestCase testCase, int numberOfThreads){
-        return new ExecutorParallel(numberOfThreads).run(Arrays.asList(testCase), getMatcherConfigurations());
+        return updateExecutionResultSet(new ExecutorParallel(numberOfThreads).run(Arrays.asList(testCase), getMatcherConfigurations()));
     }
     
     public ExecutionResultSet runGridParallel(List<TestCase> testCases, int numberOfThreads){
-        return new ExecutorParallel(numberOfThreads).run(testCases, getMatcherConfigurations());
+        return updateExecutionResultSet(new ExecutorParallel(numberOfThreads).run(testCases, getMatcherConfigurations()));
     }
     
     public ExecutionResultSet runGridParallel(Track track, int numberOfThreads){
-        return new ExecutorParallel(numberOfThreads).run(track, getMatcherConfigurations());
+        return updateExecutionResultSet(new ExecutorParallel(numberOfThreads).run(track, getMatcherConfigurations()));
     }
     
     public ExecutionResultSet runGridParallelTrack(List<Track> tracks, int numberOfThreads){
-        return new ExecutorParallel(numberOfThreads).runTracks(tracks, getMatcherConfigurations());
+        return updateExecutionResultSet(new ExecutorParallel(numberOfThreads).runTracks(tracks, getMatcherConfigurations()));
     }
     
     
     //run Grid Sequential
     public ExecutionResultSet runGridSequential(TestCase tc){
-        return Executor.run(Arrays.asList(tc), getMatcherConfigurations());
+        return updateExecutionResultSet(Executor.run(Arrays.asList(tc), getMatcherConfigurations()));
     }
     
     public ExecutionResultSet runGridSequential(List<TestCase> tc){
-        return Executor.run(tc, getMatcherConfigurations());
+        return updateExecutionResultSet(Executor.run(tc, getMatcherConfigurations()));
     }
     
     public ExecutionResultSet runGridSequential(Track track){
-        return Executor.run(track, getMatcherConfigurations());
+        return updateExecutionResultSet(Executor.run(track, getMatcherConfigurations()));
     }
     
     public ExecutionResultSet runGridSequentialTracks(List<Track> tracks){
-        return Executor.runTracks(tracks, getMatcherConfigurations());
+        return updateExecutionResultSet(Executor.runTracks(tracks, getMatcherConfigurations()));
+    }
+    
+    /**
+     * Updates the execution result set with configuration attributes in the extension of the alignment.
+     * @param set
+     * @return 
+     */
+    public ExecutionResultSet updateExecutionResultSet(ExecutionResultSet set){
+        for(List<Object> paramSetting : cartesianProduct(0, this.paramValues)){
+            Collections.reverse(paramSetting); //TODO: optimze
+            int counter = 0;
+            for(ExecutionResult result : set.getGroup(getMatcherNameWithSettings(paramSetting))){
+                for(int i=0; i < paramSetting.size(); i++){
+                    String name = this.paramName.get(i);
+                    if(isConstructorParameter(name)){
+                        name += "_" + counter;
+                        counter++;
+                    }
+                    String key = DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + name;
+                    result.getSystemAlignment().addExtensionValue(key, paramSetting.get(i).toString());                           
+                }
+            }
+        }
+        return set;
     }
     
     
@@ -244,9 +270,15 @@ public class GridSearch {
     
     
     protected String getMatcherNameWithSettings(List<Object> paramValue){
+        int counter = 0;
         StringJoiner setting = new StringJoiner(",");
-        for(int i=0; i < paramValue.size(); i++){     
-            setting.add(this.paramName.get(i) + "=" + paramValue.get(i));
+        for(int i=0; i < paramValue.size(); i++){  
+            String name = this.paramName.get(i);
+            if(isConstructorParameter(name)){
+                name += "_" + counter;
+                counter++;
+            }
+            setting.add(name + "=" + paramValue.get(i));
         }
         return String.format("%s (%s)", this.matcherName, setting.toString());
     }
@@ -255,7 +287,7 @@ public class GridSearch {
         List<Object> constructorValues = new ArrayList();
         List<Class<?>> constructorTypes = new ArrayList<>();
         for(int i=0; i < this.paramName.size(); i++){
-            if(this.paramName.get(i).toLowerCase().equals(CONSTRUCTOR)){
+            if(isConstructorParameter(this.paramName.get(i))){
                 Object oneParamValue = paramValue.get(i);
                 constructorValues.add(oneParamValue);
                 constructorTypes.add(oneParamValue.getClass());
@@ -278,7 +310,7 @@ public class GridSearch {
         //set the parameter
         PropertyUtilsBean pub = new PropertyUtilsBean();
         for(int i=0; i < paramValue.size(); i++){
-            if(this.paramName.get(i).toLowerCase().equals(CONSTRUCTOR))
+            if(isConstructorParameter(this.paramName.get(i)))
                 continue;
             try {
                 pub.setNestedProperty(matcherInstance, this.paramName.get(i), paramValue.get(i));
@@ -290,6 +322,10 @@ public class GridSearch {
         return matcherInstance;
     }
     
+    private static boolean isConstructorParameter(String parameterName){
+        return parameterName.toLowerCase().equals(CONSTRUCTOR);
+    }
+      
     private static List<List<Object>> cartesianProduct(int index, List<List<Object>> paramValues) {
         List<List<Object>> result = new ArrayList<>();
         if (index >= paramValues.size()) {

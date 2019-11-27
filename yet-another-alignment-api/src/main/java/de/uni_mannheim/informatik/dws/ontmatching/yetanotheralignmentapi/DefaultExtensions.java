@@ -503,8 +503,14 @@ public class DefaultExtensions {
          * 0 in the case of false positives). In order to also track the annotators confidence, this extension can
          * be used.
          */
-        GOLD_STANDARD_CONFIDENCE("http://melt.dws.uni-mannheim.de/vocabulary#gold-standard-confidence");
-
+        GOLD_STANDARD_CONFIDENCE("http://melt.dws.uni-mannheim.de/vocabulary#gold-standard-confidence"),
+        
+        /**
+         * The base URI that is to be used with extension predicates that have to be defined "on the spot" and
+         * require a base URI. 
+         */
+        CONFIGURATION_BASE("http://melt.dws.uni-mannheim.de/configuration#");
+        
         /**
          * The URI of the extension label.
          */
