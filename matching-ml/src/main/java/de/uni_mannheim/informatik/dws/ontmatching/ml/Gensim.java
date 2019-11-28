@@ -70,13 +70,11 @@ public class Gensim {
     public double getSimilarity(String concept1, String concept2, String modelOrVectorPath) {
         if (isVectorCaching) {
             // caching is enabled: do not use gensim library but cache vectors and calculate in java on demand
-
             Double[] v1 = getVector(concept1, modelOrVectorPath);
             Double[] v2 = getVector(concept2, modelOrVectorPath);
             if (v1 != null && v2 != null) {
                 return this.cosineSimilarity(v1, v2);
             }
-
         } else {
             HttpGet request = new HttpGet(serverUrl + "/get-similarity");
             request.addHeader("concept_1", concept1);
@@ -337,7 +335,15 @@ public class Gensim {
             LOGGER.error("Could not wait for python server.", e);
         }
         vectorCache = new HashMap<>();
+
+        // now: add shutdown hook in case the JVM is terminating
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            LOGGER.info("JVM shutdown detected - close python server if still open.");
+            shutDown();
+            LOGGER.info("Shutdown completed.");
+        }));
     }
+
 
 
     /**
