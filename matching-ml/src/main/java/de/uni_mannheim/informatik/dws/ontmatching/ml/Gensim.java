@@ -59,6 +59,12 @@ public class Gensim {
     private HashMap<String, Double[]> vectorCache;
 
     /**
+     * Indicates whether the shutdown hook has been initialized.
+     * This flag is required in order to have only one hook despite multiple reinitializations.
+     */
+    private boolean isHookStarted = false;
+
+    /**
      * Ge the similarity given 2 concepts and a gensim model.
      *
      * @param concept1          First concept.
@@ -257,7 +263,8 @@ public class Gensim {
      * @return Gensim instance.
      */
     public static Gensim getInstance() {
-        if (instance == null || isShutDown) instance = new Gensim();
+        if (instance == null) instance = new Gensim();
+        if (isShutDown) instance.startServer();
         return instance;
     }
 
@@ -337,11 +344,14 @@ public class Gensim {
         vectorCache = new HashMap<>();
 
         // now: add shutdown hook in case the JVM is terminating
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            LOGGER.info("JVM shutdown detected - close python server if still open.");
-            shutDown();
-            LOGGER.info("Shutdown completed.");
-        }));
+        if(!isHookStarted) {
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                LOGGER.info("JVM shutdown detected - close python server if still open.");
+                shutDown();
+                LOGGER.info("Shutdown completed.");
+            }));
+            isHookStarted = true;
+        }
     }
 
 
