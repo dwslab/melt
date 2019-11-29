@@ -255,7 +255,7 @@ public class Gensim {
     /**
      * Client to communicate with the server.
      */
-    private final CloseableHttpClient httpClient = HttpClients.createDefault();
+    private CloseableHttpClient httpClient;
 
     /**
      * Get the instance.
@@ -300,6 +300,7 @@ public class Gensim {
      * Initializes the server.
      */
     private void startServer() {
+        httpClient = HttpClients.createDefault(); // has to be reinstantiated
         String canonicalPath;
         File serverFile = new File("oaei-resources/python_server.py");
         try {

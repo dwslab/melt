@@ -27,7 +27,7 @@ public class LocalTrack extends Track {
     private File folderToTestCases;
 
     /**
-     * Constructor
+     * Default Constructor
      * @param name Name of the track.
      * @param version Version of the track.
      * @param folderToTestCases The test case folder has to follow a specific structure: It contains a folder for each
@@ -39,12 +39,22 @@ public class LocalTrack extends Track {
         this.folderToTestCases = folderToTestCases;
     }
 
+    /**
+     * Convenience Constructor
+     * @param name Name of the track.
+     * @param version Version of the track.
+     * @param folderToTestCasesPath The test case folder has to follow a specific structure: It contains a folder for
+     *                              each test case. the Folder's name will be the test case's name. In each test case
+     *                              folder, there has to be a file named source.rdf, target.rdf, and alignment.rdf.
+     */
+    public LocalTrack(String name, String version, String folderToTestCasesPath){
+        this(name, version, new File(folderToTestCasesPath));
+    }
 
     @Override
     protected void downloadToCache() throws Exception {
         // intentionally kept empty
     }
-
 
     @Override
     protected List<TestCase> readFromCache(){

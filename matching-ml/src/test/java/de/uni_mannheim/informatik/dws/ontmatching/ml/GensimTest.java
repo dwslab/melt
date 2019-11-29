@@ -89,6 +89,26 @@ class GensimTest {
 
     @Test
     @EnabledOnOs({ MAC })
+    void testMultipleShutdownCallsAndRestarts() {
+        gensim.setVectorCaching(false);
+        // test case 1: model file
+        gensim.shutDown();
+        gensim = Gensim.getInstance();
+        String pathToModel = getClass().getClassLoader().getResource("test_model").getPath();
+        double similarity = gensim.getSimilarity("Europe", "united", pathToModel);
+        assertTrue(similarity > 0);
+
+        // test case 2: vector file
+        gensim.shutDown();
+        gensim = Gensim.getInstance();
+        String pathToVectorFile = getClass().getClassLoader().getResource("test_model_vectors.kv").getPath();
+        similarity = gensim.getSimilarity("Europe", "united", pathToVectorFile);
+        assertTrue(similarity > 0);
+    }
+
+
+    @Test
+    @EnabledOnOs({ MAC })
     /**
      * Default test with cache.
      */
