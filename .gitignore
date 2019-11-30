@@ -70,3 +70,6 @@ Playground.java
 
 # log files
 *.log
+
+# documentation: avoid adding temporal file versions when opened in libre office
+documentation/.~lock.melt_ml_architecture_image.odp#
