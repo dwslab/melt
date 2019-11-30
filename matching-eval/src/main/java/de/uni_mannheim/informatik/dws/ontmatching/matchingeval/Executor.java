@@ -13,16 +13,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,11 +27,21 @@ import org.slf4j.LoggerFactory;
 /**
  * The Executor runs a matcher or a list of matchers on a single test case or a list of test cases.
  * Also have a look at other executors like ExecutorParallel or ExecutorSeals.
+ *
  * @author Sven Hertling
  * @author Jan Portisch
  */
 public class Executor {
+
+    /**
+     * Default logger.
+      */
     private static final Logger LOGGER = LoggerFactory.getLogger(Executor.class);
+
+    private static final String FALLBACK_MATCHER_NAME = "default_matcher";
+
+    private static Pattern timeRunning = Pattern.compile("MELT: Matcher finished within\\s*(\\d+)\\s*seconds");
+
 
     /**
      * This method runs the specified matcher on the specified track.
@@ -49,16 +53,58 @@ public class Executor {
         return run(track, matcher, getMatcherName(matcher));
     }
 
-
+    /**
+     * This method runs the specified matcher on the specified track.
+     * @param track Track on which the matcher shall be run.
+     * @param matcher The matcher to be run.
+     * @param matcherName The name of the matcher that will be associated with an individual execution result.
+     * @return An {@link ExecutionResultSet} instance.
+     */
     public static ExecutionResultSet run(Track track, IOntologyMatchingToolBridge matcher, String matcherName) {
+        if(track == null){
+            LOGGER.error("The track specified is null. Cannot execute the given matcher. " +
+                    "Resolution: Will return null.");
+            return null;
+        }
         return run(track.getTestCases(), matcher, matcherName);
     }
-    
+
+    /**
+     * Evaluate multiple matchers on the given track with this static method.
+     * @param track The track to be evaluated.
+     * @param matchers The matchers to be run on the given track.
+     * @return ExecutionResultSet instance.
+     */
     public static ExecutionResultSet run(Track track, Map<String, IOntologyMatchingToolBridge> matchers) {
+        if(track == null){
+            LOGGER.error("The track specified is null. Cannot execute the given matchers. " +
+                    "Resolution: Will return null.");
+            return null;
+        }
+        if(matchers == null){
+            LOGGER.error("The matchers are not specified (map is null). Cannot execute the given matchers. " +
+                    "Resolution: Will return null.");
+            return null;
+        }
         return run(track.getTestCases(), matchers);
     }
-        
+
+    /**
+     * Run a matchers on multiple tracks.
+     *
+     * @param tracks The tracks on which the matchers shall be run.
+     * @param matcher The matcher that shall be run.
+     * @return The matching result as {@link ExecutionResultSet} instance.
+     */
     public static ExecutionResultSet runTracks(List<Track> tracks, IOntologyMatchingToolBridge matcher, String matcherName) {
+        if(tracks == null){
+            LOGGER.error("The tracks list is null. Resolution: Returning null.");
+            return null;
+        }
+        if(matcher == null){
+            LOGGER.error("The specified matcher is null. Resolution: Returning null.");
+            return null;
+        }
         ExecutionResultSet r = new ExecutionResultSet();
         for(Track track : tracks){
             for (TestCase tc : track.getTestCases()) {
@@ -67,8 +113,23 @@ public class Executor {
         }
         return r;
     }
-    
+
+    /**
+     * Run multiple matchers on multiple tracks.
+     *
+     * @param tracks The tracks on which the matchers shall be run.
+     * @param matchers The matchers that shall be run.
+     * @return The matching result as {@link ExecutionResultSet} instance.
+     */
     public static ExecutionResultSet runTracks(List<Track> tracks, Map<String, IOntologyMatchingToolBridge> matchers) {
+        if(tracks == null){
+            LOGGER.error("The tracks list is null. Resolution: Returning null.");
+            return null;
+        }
+        if(matchers == null){
+            LOGGER.error("The matchers are null. Resolution: Returning null.");
+            return null;
+        }
         ExecutionResultSet r = new ExecutionResultSet();
         for(Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()){
             for(Track track : tracks){
@@ -85,9 +146,17 @@ public class Executor {
      *
      * @param testCases The test cases on which all the specified matchers shall be run.
      * @param matchers  A map of matchers from unique_name to matcher instance.
-     * @return The result as {@link ExecutionResultSet} instance.
+     * @return The matching result as {@link ExecutionResultSet} instance.
      */
     public static ExecutionResultSet run(List<TestCase> testCases, Map<String, IOntologyMatchingToolBridge> matchers) {
+        if(testCases == null){
+            LOGGER.error("The testCases list is null. Resolution: Returning null.");
+            return null;
+        }
+        if(matchers == null){
+            LOGGER.error("The matchers are null. Resolution: Returning null.");
+            return null;
+        }
         ExecutionResultSet r = new ExecutionResultSet();
         for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
             for (TestCase tc : testCases) {
@@ -105,6 +174,14 @@ public class Executor {
      * @return The result as {@link ExecutionResultSet} instance.
      */
     public static ExecutionResultSet run(TestCase testCase, Map<String, IOntologyMatchingToolBridge> matchers) {
+        if(matchers == null){
+            LOGGER.error("The matchers are null. Resolution: Returning null.");
+            return null;
+        }
+        if(testCase == null){
+            LOGGER.error("The testCase is null. Resolution: Returning null.");
+            return null;
+        }
         ExecutionResultSet r = new ExecutionResultSet();
         for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
             r.add(ExecutionRunner.runMatcher(testCase, matcher.getValue(), matcher.getKey()));
@@ -120,13 +197,38 @@ public class Executor {
      * @return The result as {@link ExecutionResultSet} instance.
      */
     public static ExecutionResultSet run(List<TestCase> testCases, IOntologyMatchingToolBridge matcher) {
+        if(testCases == null){
+            LOGGER.error("The testCase list is null. Resolution: Returning null.");
+            return null;
+        }
+        if(matcher == null){
+            LOGGER.error("The matcher is null. Resolution: Returning null.");
+            return null;
+        }
         return run(testCases, matcher, getMatcherName(matcher));
     }
 
+    /**
+     * Run a matcher on a set of test cases.
+     *
+     * @param testCases The set of test cases on which the specified matcher shall be run.
+     * @param matcher The matcher to be run.
+     * @param matcherName The name of the matcher that will be associated with an individual execution result of the specified matcher.
+     * @return An ExecutionResultSet instance.
+     */
     public static ExecutionResultSet run(List<TestCase> testCases, IOntologyMatchingToolBridge matcher, String matcherName) {
+        if(testCases == null){
+            LOGGER.error("testCases list is null. Cannot execute matcher " + matcherName + " on the specified list of test cases." +
+                    "Resolution: Return null.");
+            return null;
+        }
         ExecutionResultSet r = new ExecutionResultSet();
         for (TestCase tc : testCases) { // no parallelism possible because each matcher possibly writes to the same temp file.
-            r.add(ExecutionRunner.runMatcher(tc, matcher, matcherName));
+            if(tc != null) {
+                r.add(ExecutionRunner.runMatcher(tc, matcher, matcherName));
+            } else {
+                LOGGER.error("The testCases list contains a null object. Resolution: skipping...");
+            }
         }
         return r;
     }
@@ -142,9 +244,25 @@ public class Executor {
         return run(testCase, matcher, getMatcherName(matcher));
     }
 
-    public static ExecutionResultSet run(TestCase tc, IOntologyMatchingToolBridge matcher, String matcherName) {
+    /**
+     * Run a matcher on a test case.
+     *
+     * @param testCase The test case on which the matcher shall be executed.
+     * @param matcher The matcher to be executed.
+     * @param matcherName The name of the matcher that will be associated with an individual execution result of the specified matcher.
+     * @return Result in the form of an {@link ExecutionResultSet}.
+     */
+    public static ExecutionResultSet run(TestCase testCase, IOntologyMatchingToolBridge matcher, String matcherName) {
+        if(testCase == null){
+            LOGGER.error("The testCase is null. Resolution: Returning null.");
+            return null;
+        }
+        if(matcher == null){
+            LOGGER.error("The matcher is null. Resolution: Returning null.");
+            return null;
+        }
         ExecutionResultSet r = new ExecutionResultSet();
-        r.add(ExecutionRunner.runMatcher(tc, matcher, matcherName));
+        r.add(ExecutionRunner.runMatcher(testCase, matcher, matcherName));
         return r;
     }
 
@@ -160,7 +278,6 @@ public class Executor {
         return ExecutionRunner.runMatcher(testCase, matcher, matcherName);
     }
 
-
     /**
      * Run a single test case with one matcher.
      *
@@ -171,7 +288,6 @@ public class Executor {
     public static ExecutionResult runSingle(TestCase testCase, IOntologyMatchingToolBridge matcher) {
         return ExecutionRunner.runMatcher(testCase, matcher, getMatcherName(matcher));
     }
-
 
     /**
      * Load raw results from folder structure like:
@@ -203,7 +319,6 @@ public class Executor {
         return results;
     }
     
-    private static Pattern timeRunning = Pattern.compile("MELT: Matcher finished within\\s*(\\d+)\\s*seconds");
     private static long tryToGetRuntime(File logFile){
         if(logFile.exists() == false)
             return 0;
@@ -287,10 +402,6 @@ public class Executor {
         return loadFromFolder(new File(folder), track);
     }
 
-
-   
-
-
     /**
      * Load raw results from a folder with the structure used by the <a href="http://oaei.ontologymatching.org/2018/results/anatomy/index.html">Anatomy Track</a>
      * of the OAEI.
@@ -300,7 +411,6 @@ public class Executor {
     public static ExecutionResultSet loadFromAnatomyResultsFolder(String pathToFolder) {
         return loadFromFolder(pathToFolder, TrackRepository.Anatomy.Default.getTestCases().get(0));
     }
-
 
     /**
      * Load raw results from a folder with the structure used by the <a href="http://oaei.ontologymatching.org/2018/results/conference/">Conference Track</a>
@@ -349,7 +459,6 @@ public class Executor {
         return results;
     }
 
-
     /**
      * Load raw results from a folder with the structure used by the
      * <a href="http://oaei.ontologymatching.org/2019/results/knowledgegraph/">Knowledge Graph Track</a>
@@ -360,10 +469,6 @@ public class Executor {
     public static ExecutionResultSet loadFromKnowledgeGraphResultsFolder(String pathToFolder){
         return loadFromFolder(pathToFolder, TrackRepository.Knowledgegraph.V3);
     }
-
-
-
-    private static final String FALLBACK_MATCHER_NAME = "default_matcher";
 
     /**
      * Given a matcher, this method returns its name.
@@ -436,5 +541,4 @@ public class Executor {
             f.delete();
         }
     }
-
 }

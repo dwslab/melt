@@ -29,18 +29,32 @@ import org.slf4j.LoggerFactory;
  * </pre>
  * A track consists of multiple {@link TestCase}.
  * @author Sven Hertling
+ * @author Jan Portisch
  */
 public abstract class Track {
+
+    /**
+     * Default Logger
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Track.class);
     
     static {
-        //TODO: check whats better because a global store is maybe preferable, but does the user know where to look?
-        setCacheFolder(new File(System.getProperty("user.home"), "oaei_track_cache"));
-        //setCacheFolder(new File("trackCache"));
+        File cacheFolder = new File(System.getProperty("user.home"), "oaei_track_cache");
+        setCacheFolder(cacheFolder);
+        try {
+            LOGGER.info("Track cache folder is: " + cacheFolder.getCanonicalPath());
+        } catch (IOException e) {
+            LOGGER.error("Could not get canonical file path of cache folder. Program will resume normally.", e);
+        }
         setSkipTestCasesWithoutRefAlign(true);
     }
-    
-    protected static File cacheFolder;    
+
+    /**
+     * The folder where the individual tracks that were downloaded will be cached so that they can be reused
+     * across multiple evaluation session.
+     */
+    protected static File cacheFolder;
+
     protected static boolean skipTestsWithoutRefAlign;
     
     protected String remoteLocation;
@@ -60,7 +74,7 @@ public abstract class Track {
     protected Track(String remoteLocation, String name, String version){
         this(remoteLocation, name, version, false);
     }
-    
+
     protected Track(String remoteLocation, String name, String version, boolean useDuplicateFreeStorageLayout){
         this.remoteLocation = remoteLocation;
         this.name = name;
