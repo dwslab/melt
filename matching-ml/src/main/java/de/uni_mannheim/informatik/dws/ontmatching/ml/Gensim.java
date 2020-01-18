@@ -197,7 +197,6 @@ public class Gensim {
         }
     }
 
-
     /**
      * Given a path to a model or vector file, this method determines whether it is a model or a vector file and
      * adds the corresponding parameter to the request.
@@ -289,12 +288,10 @@ public class Gensim {
         }
     }
 
-
     /**
      * The python process.
      */
     private Process serverProcess;
-
 
     /**
      * Initializes the server.
@@ -355,8 +352,6 @@ public class Gensim {
         }
     }
 
-
-
     /**
      * Calculate The cosine similarity between two vectors.
      *
@@ -380,6 +375,12 @@ public class Gensim {
         return isVectorCaching;
     }
 
+    /**
+     * If vector caching is turned on, similarities will be calculated on Java site (rather than in Python) and
+     * vectors are held in memories. Turn this function on, if you plan to do many computations with the same set
+     * of vectors. This will increase the performance at the cost of memory.
+     * @param vectorCaching True if caching shall be enabled, else false.
+     */
     public void setVectorCaching(boolean vectorCaching) {
         isVectorCaching = vectorCaching;
     }

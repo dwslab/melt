@@ -205,6 +205,14 @@ TrackRepository.Conference.V1.getTestCases();
 The resulting instances can be directly used by the Executor or any other MELT functionality that requires tracks or
 test cases.
 
+
+### Gensim Integration
+The MELT-ML module exposes some machine learning functionality that is implemented in python. This is achieved
+through the start of a python process within java. The communication is performed through local HTTP calls. This
+is also shown in the following figure. 
+
+![image](documentation/melt_ml_architecture.png)
+
 ## Modules Overview
 The ontology matching framework is grouped into multiple maven modules which are described in the following.
 
