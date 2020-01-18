@@ -69,7 +69,12 @@ public class AlignmentAnalyzerResult {
     /**
      * Which URIs in the alignment are not found in source nor target ontology.
      */
-    private List<String> urisNotFound;    
+    private List<String> urisNotFound;
+    
+    /**
+     * Which arity occurs how often
+     */
+    private Map<Arity, Integer> arityCounts;
     
     /**
      * Constructor
@@ -83,7 +88,7 @@ public class AlignmentAnalyzerResult {
     AlignmentAnalyzerResult(ExecutionResult executionResult, double minimumConfidence,
                             double maximumConfidence, Map<CorrespondenceRelation, Integer> frequenciesOfRelations,
                             boolean isHomogenousAlingment, Map<String, Integer> frequenciesOfMappingTypes,
-                            int urisCorrectPosition, int urisIncorrectPosition, List<String> urisNotFound){
+                            int urisCorrectPosition, int urisIncorrectPosition, List<String> urisNotFound, Map<Arity, Integer> arityCounts){
         this.executionResult = executionResult;
         this.minimumConfidence = minimumConfidence;
         this.maximumConfidence = maximumConfidence;
@@ -93,6 +98,7 @@ public class AlignmentAnalyzerResult {
         this.urisCorrectPosition = urisCorrectPosition;
         this.urisIncorrectPosition = urisIncorrectPosition;
         this.urisNotFound = urisNotFound;
+        this.arityCounts = arityCounts;
     }
 
     @Override
@@ -337,4 +343,13 @@ public class AlignmentAnalyzerResult {
     public List<String> getUrisNotFound() {
         return urisNotFound;
     }
+
+    /**
+     * Return the map of arity to corresponding counts.
+     * @return map of arity to corresponding counts
+     */
+    public Map<Arity, Integer> getArityCounts() {
+        return arityCounts;
+    }
+    
 }

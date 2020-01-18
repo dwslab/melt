@@ -117,6 +117,14 @@ public class DcjsElement {
         );
     }
     
+    public String createGroupDefinitionReduceSortedAttribute(String dimensionName, String field, String fieldEvaluationResult){
+        this.jsHelperFileNames.add("reduceSortedAttribute.js");
+        return createGroupDefinition(removeDimensionText(dimensionName) + "ReduceSortedAttribute" + makeJsIdentifier(field) + "Group", 
+                String.format("%s.group().reduce(reduceSortedAttributeAdd(\"%s\", \"%s\"), reduceSortedAttributeRemove(\"%s\"), reduceSortedAttributeInit());", 
+                dimensionName, field, fieldEvaluationResult, field)
+        );
+    }
+    
     public String createGroupDefinitionReduceTwoFields(String dimensionName, String reduceFieldOne, String reduceFieldTwo){
         this.jsHelperFileNames.add("reduceTwoFields.js");
         return createGroupDefinition(removeDimensionText(dimensionName) + "Reduce" + makeJsIdentifier(reduceFieldOne) + "And" + makeJsIdentifier(reduceFieldTwo) + "Group", 

@@ -15,8 +15,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jena.ontology.OntModel;
@@ -49,6 +52,7 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
         int urisCorrectPosition = 0;
         int urisIncorrectPosition = 0;
         List<String> urisNotFound = new ArrayList<>();
+        Map<Arity, Integer> arityCounts = new HashMap<>();
 
         for (Correspondence cell : alignment) {
 
@@ -102,12 +106,35 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
             }else{
                 urisNotFound.add(cell.getEntityTwo());
             }
-
+            
+            //arity
+            List<String> targets = new ArrayList<>();
+            for(Correspondence c : alignment.getCorrespondencesSource(cell.getEntityOne())){
+                targets.add(c.getEntityTwo());
+            }
+            Arity arity = Arity.OneToOne;
+            if(targets.size() == 1){
+                if(size(alignment.getCorrespondencesTarget(targets.get(0))) > 1){
+                    arity = Arity.OneToMany;
+                }else{
+                    arity = Arity.OneToOne;
+                }
+            }else{
+                arity = Arity.ManyToOne;
+                for(String target : targets){
+                    if(size(alignment.getCorrespondencesTarget(targets.get(0))) > 1){
+                        //n:m
+                        arity = Arity.ManyToMany;
+                        break;
+                    }
+                }
+            }
+            arityCounts.put(arity, arityCounts.getOrDefault(arity, 0) + 1);
         } // end of loop over cells
 
         AlignmentAnalyzerResult result = new AlignmentAnalyzerResult(
                 executionResult, minimumConfidence, maximumConfidence, frequenciesOfRelations, 
-                isHomogenousAlingment, frequenciesOfMappingTypes, urisCorrectPosition, urisIncorrectPosition, urisNotFound);
+                isHomogenousAlingment, frequenciesOfMappingTypes, urisCorrectPosition, urisIncorrectPosition, urisNotFound, arityCounts);
         return result;
     }
     
@@ -159,5 +186,19 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
             LOGGER.error("Could not write analysis file", ex);
         }
     }
-
+    
+    private static int size(Iterable<?> iterable) {
+    return (iterable instanceof Collection)
+            ? ((Collection<?>) iterable).size()
+        : size(iterable.iterator());
+  }
+    private static int size(Iterator<?> iterator) {
+        int count = 0;
+        while (iterator.hasNext()) {
+          iterator.next();
+          count++;
+        }
+        return count;
+   }
+    
 }

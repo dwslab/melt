@@ -112,6 +112,8 @@ public class DashboardBuilder extends Evaluator {
         this.addPieChart("matcherChart", "Matcher");
         this.addPieChartEvaluation();
         this.newRow();
+        this.addBoxPlotMatcherConfidence();
+        this.newRow();
         this.addPieChartMultiValue("typeLeftChart", "Type Left");
         this.addPieChartMultiValue("typeRightChart", "Type Right");
         this.addPieChart("residualChart", "Residual True Positive");
@@ -128,6 +130,29 @@ public class DashboardBuilder extends Evaluator {
         this.addDataCount();
         this.addDataChart();
         return this;
+    }
+    
+    
+    
+    public DashboardBuilder addBoxPlotMatcherConfidence(){
+        DcjsElement e = new DcjsElement("dc.boxPlot", "boxPlotMatcherConfidence");
+        
+        e.createDimensionDefinitionCsvFieldString("ConfidenceBoxPlotMatcherDimension", "Matcher");
+        String groupConfidenceBoxPlot = e.createGroupDefinitionReduceSortedAttribute("ConfidenceBoxPlotMatcherDimension", "Confidence (Matcher)", "Evaluation Result");
+        
+        
+        e.setAnchorStyle("width:1200px");
+        
+        
+        e.setDimension("ConfidenceBoxPlotMatcherDimension");
+        e.setGroup(groupConfidenceBoxPlot);
+       
+        e.addJsMethod(
+                "elasticX(true)",
+                "elasticY(true)",
+                "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-80)\").attr(\"dy\", \"-0.7em\").attr(\"dx\", \"-1em\");})"
+        );
+        return addElement(e);
     }
     
     
