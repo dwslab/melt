@@ -4,12 +4,14 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.condition.OS.MAC;
 
 class EvaluatorTest {
 
@@ -17,6 +19,7 @@ class EvaluatorTest {
      * Development remark: Note that a network connection is required and the SEALS repository must be up and running.
      */
     @Test
+    @EnabledOnOs({ MAC })
     void getResultsDirectoryTrackMatcher() {
         try {
             ExecutionResult result = new ExecutionResult(TrackRepository.Conference.V1.getTestCases().get(0), "myMatcher", null, null);

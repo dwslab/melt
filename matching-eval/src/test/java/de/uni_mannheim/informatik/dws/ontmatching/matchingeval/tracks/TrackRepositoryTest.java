@@ -16,15 +16,15 @@ import static org.junit.jupiter.api.condition.OS.MAC;
  */
 class TrackRepositoryTest {
 
-    @EnabledOnOs({ MAC })
     @Test
+    @EnabledOnOs({ MAC })
     public void testTracks(){
         // tests downloading process and implementation
         assertTrue(TrackRepository.Anatomy.Default.getTestCases().size() > 0);
     }
 
-    @EnabledOnOs({ MAC })
     @Test
+    @EnabledOnOs({ MAC })
     public void getMultifarmTrackForLanguage(){
         assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("de").size() == 9);
         assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("DE").size() == 9);
@@ -40,8 +40,8 @@ class TrackRepositoryTest {
         assertTrue(appears, "The method does not return track de-en which should be contained when querying for 'de'.");
     }
 
-    @EnabledOnOs({ MAC })
     @Test
+    @EnabledOnOs({ MAC })
     public void getSpecificMultifarmTrack(){
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de-en").getName().equals("de-en"));
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de-EN").getName().equals("de-en"));
