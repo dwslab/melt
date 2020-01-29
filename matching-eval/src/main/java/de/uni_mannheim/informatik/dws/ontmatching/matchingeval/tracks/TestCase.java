@@ -22,8 +22,10 @@ public class TestCase {
     private URI source;
     private URI target;
     private URI reference;
-    /**this is the identifier for the track*/
+
+    /** This is the identifier for the track */
     private String name;
+
     private Track track;
     
     private Alignment parsedReference;
@@ -70,7 +72,7 @@ public class TestCase {
         return "Testcase " + name + " of " + track.toString() + "(src: " + source + " dst: " + target + " ref: " + reference + ")";
     }
     
-    //convenient methods for retriving parsed ontologies
+    //convenient methods for retrieving parsed ontologies
     
     /**
      * Get the source ontology using a buffer and the default OntModelSpec.

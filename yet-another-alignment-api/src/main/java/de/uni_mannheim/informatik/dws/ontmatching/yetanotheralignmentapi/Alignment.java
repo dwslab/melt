@@ -86,7 +86,11 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         init(indexSource, indexTarget, indexRelation, indexConfidence);
         AlignmentParser.parse(s, this);
     }
-    
+
+    /**
+     * Copy constructor.
+     * @param alignment The alignment which shall be copied (deep copy).
+     */
     public Alignment(Alignment alignment) {
         init(alignment.indexSource != null, alignment.indexTarget != null, alignment.indexRelation != null, alignment.indexConfidence != null);
         this.method = alignment.method;

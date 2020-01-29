@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.Executor;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.condition.OS.MAC;
 
 class EvaluatorCSVTest {
 
@@ -22,6 +24,7 @@ class EvaluatorCSVTest {
      * using EvaluatorCSV. This test makes sure that something is written and that setting of the base directory works.
      */
     @Test
+    @EnabledOnOs({ MAC })
     void testEvaluator(){
         ExecutionResultSet resultSet = Executor.loadFromFolder("./src/test/resources/externalAlignmentForEvaluation", TrackRepository.Anatomy.Default.getTestCases().get(0));
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(resultSet);

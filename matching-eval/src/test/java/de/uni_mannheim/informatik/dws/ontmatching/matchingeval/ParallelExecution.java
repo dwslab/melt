@@ -4,6 +4,8 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingbase.MatcherURL;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.condition.OS.MAC;
 
 public class ParallelExecution {
     
@@ -33,6 +36,7 @@ public class ParallelExecution {
      * @throws MalformedURLException Should not be thrown.
      */
     @Test
+    @EnabledOnOs({ MAC })
     public void testParallelExecution() throws MalformedURLException{
         URL one = new URL("http", "one", "");
         URL two = new URL("http", "two", "");
