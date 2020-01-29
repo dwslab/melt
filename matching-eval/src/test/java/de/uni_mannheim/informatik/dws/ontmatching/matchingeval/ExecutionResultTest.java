@@ -3,6 +3,8 @@ package de.uni_mannheim.informatik.dws.ontmatching.matchingeval;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.condition.OS.MAC;
 
 class ExecutionResultTest {
 
@@ -26,6 +29,7 @@ class ExecutionResultTest {
     }
 
     @Test
+    @EnabledOnOs({ MAC })
     void testNonParseableSystemAlignment() {
         try {
             ExecutionResult result = new ExecutionResult(
