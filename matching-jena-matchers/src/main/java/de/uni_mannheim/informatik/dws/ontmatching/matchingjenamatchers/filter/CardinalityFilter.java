@@ -15,7 +15,6 @@ import java.util.Set;
  * This filter returns only the alignments with the highest confidence if there are n-to-m matched elements.
  * This might not be the best solution.
  *
- * // TODO not deterministic yet in case multiple matches have the same confidence
  */
 public class CardinalityFilter extends MatcherYAAA{
 
@@ -26,8 +25,9 @@ public class CardinalityFilter extends MatcherYAAA{
     
     public static Alignment filter(Alignment inputAlignment){
         List<Correspondence> sortedAlignment = new ArrayList<>(inputAlignment);
-        sortedAlignment.sort(new CorrespondenceConfidenceComparator().reversed());
-        
+        sortedAlignment.sort(new CorrespondenceConfidenceComparator().reversed()
+                .thenComparing(Correspondence::getEntityOne)
+                .thenComparing(Correspondence::getEntityTwo));
         Set<String> sourceMatches = new HashSet<>();
         Set<String> targetMatches = new HashSet<>();
         for(Correspondence c : sortedAlignment){
