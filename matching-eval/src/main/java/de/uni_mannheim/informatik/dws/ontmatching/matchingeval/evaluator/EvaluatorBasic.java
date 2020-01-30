@@ -53,9 +53,25 @@ public class EvaluatorBasic extends Evaluator {
         this.alignmentExtensions = getAlignmentExtensions(results);
     }
 
+    /**
+     * Persist the results of the evaluator in the base directory.
+     * Convenience method for {@link EvaluatorBasic#writeToDirectory(File)}
+     * @param baseDirectoryPath The directory path into which the evaluation results shall be written to.
+     */
+    public void writeToDirectory(String baseDirectoryPath){
+        this.writeToDirectory(new File(baseDirectoryPath));
+    }
+
     @Override
     public void writeToDirectory(File baseDirectory) {
         try {
+            if(!baseDirectory.exists()){
+                baseDirectory.mkdirs();
+            } else if (baseDirectory.isFile()) {
+                LOGGER.error("The baseDirectory needs to be a directory, not a file. ABORTING writing process.");
+                return;
+            }
+
             File fileToBeWritten = new File(baseDirectory, RESULT_FILE_NAME);
             CSVPrinter printer = new CSVPrinter(new FileWriter(fileToBeWritten, false), CSVFormat.DEFAULT);
             ConfusionMatrixMetric metric = new ConfusionMatrixMetric();

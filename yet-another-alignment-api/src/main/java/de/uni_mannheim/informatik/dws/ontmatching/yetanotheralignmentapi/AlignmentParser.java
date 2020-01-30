@@ -18,7 +18,6 @@ import java.net.URLConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//TODO: make only parser methods outside visible
 
 /**
  * The AlignmentParser can parse XML files following the convention described in the
@@ -54,7 +53,7 @@ public class AlignmentParser {
 
     /**
      * Reference the alignment file to be parsed using a String URI.
-     * @param uri URI as String.
+     * @param uri URI as String. Alternatively a file path can be specified.
      * @return Parsed alignment instance.
      * @throws SAXException Parsing exception.
      * @throws IOException IO exception.
@@ -82,9 +81,16 @@ public class AlignmentParser {
     public static Alignment parse(URL url) throws SAXException, IOException{
         return parse(getInputStreamFromURL(url));
     }
-    
-    public static Alignment parse(File f) throws SAXException, IOException {
-	return parse(new FileInputStream(f));
+
+    /**
+     * Parses the given file as alignment.
+     * @param fileToBeParsed The file that shall be parsed.
+     * @return Parsed alignment instance.
+     * @throws SAXException
+     * @throws IOException
+     */
+    public static Alignment parse(File fileToBeParsed) throws SAXException, IOException {
+	return parse(new FileInputStream(fileToBeParsed));
     }
     
     public static Alignment parse(InputStream s) throws SAXException, IOException {

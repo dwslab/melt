@@ -108,8 +108,8 @@ public class ExecutionResult {
      * It should be used by all refinement operations to create a new executionResult with modified system and referenceAlignments.
      * The refinement is not executed.
      * @param base The base execution result from which all members except the mappings are copied.
-     * @param systemAlignment the new systemalignment which should be used 
-     * @param referenceAlignment 
+     * @param systemAlignment The new system alignment which should be used.
+     * @param referenceAlignment The reference alignment.
      */
     public ExecutionResult(ExecutionResult base, Alignment systemAlignment, Alignment referenceAlignment, Refiner refinement) {
         this(base.testCase, base.matcherName, base.originalSystemAlignment, base.runtime, systemAlignment, referenceAlignment, base.matcher, addRefinementToNewSet(base.refinements, refinement));

@@ -111,7 +111,7 @@ public class AlignmentsCube {
                 String trackName = cubeComponent.getKey().testCase.getTrack().getName();
                 String testCaseName = cubeComponent.getKey().testCase.getName();
                 String matcherName = (cubeComponent.getKey().matcher);
-                LOGGER.info("Writing " + trackName + " | " + testCaseName + " | " + matcherName);
+                LOGGER.info("Writing " + trackName + " | " + testCaseName + " | " + matcherName + " [to file: " + fileToBeWritten.getCanonicalPath() + "]");
 
                 for (HashMap.Entry<Correspondence, HashMap<String, String>> mappingInformationEntry : cubeComponent.getValue().getMappingInformation().entrySet()) {
                     List<String> record = new LinkedList<>();

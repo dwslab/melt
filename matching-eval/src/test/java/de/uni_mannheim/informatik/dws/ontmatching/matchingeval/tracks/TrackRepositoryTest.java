@@ -1,8 +1,10 @@
 package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.condition.OS.MAC;
 
 /**
  * Developer note:
@@ -10,17 +12,19 @@ import static org.junit.jupiter.api.Assertions.*;
  * - The SEALS servers must be online.
  * - While it might be desirable to test all tracks, note that in the testing step of the continuous integration pipeline, all test cases
  * are re-downloaded which significantly slows down the build process.
+ * - The track repository is down.
  */
 class TrackRepositoryTest {
 
     @Test
+    @EnabledOnOs({ MAC })
     public void testTracks(){
         // tests downloading process and implementation
         assertTrue(TrackRepository.Anatomy.Default.getTestCases().size() > 0);
     }
 
-
     @Test
+    @EnabledOnOs({ MAC })
     public void getMultifarmTrackForLanguage(){
         assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("de").size() == 9);
         assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("DE").size() == 9);
@@ -36,8 +40,8 @@ class TrackRepositoryTest {
         assertTrue(appears, "The method does not return track de-en which should be contained when querying for 'de'.");
     }
 
-
     @Test
+    @EnabledOnOs({ MAC })
     public void getSpecificMultifarmTrack(){
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de-en").getName().equals("de-en"));
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de-EN").getName().equals("de-en"));

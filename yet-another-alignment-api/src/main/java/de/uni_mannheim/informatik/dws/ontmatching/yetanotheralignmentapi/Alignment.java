@@ -86,7 +86,11 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         init(indexSource, indexTarget, indexRelation, indexConfidence);
         AlignmentParser.parse(s, this);
     }
-    
+
+    /**
+     * Copy constructor.
+     * @param alignment The alignment which shall be copied (deep copy).
+     */
     public Alignment(Alignment alignment) {
         init(alignment.indexSource != null, alignment.indexTarget != null, alignment.indexRelation != null, alignment.indexConfidence != null);
         this.method = alignment.method;
@@ -319,7 +323,16 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
         return m;
     }
-    
+
+
+
+    public static Alignment subtraction(Alignment alignment_1, Alignment alignment_2) {
+        Alignment result = new Alignment();
+        result.addAll(alignment_1);
+        result.removeAll(alignment_2);
+        return result;
+    }
+
     
     /**
      * Create the intersection between the two given alignments. Only copies the alignment and not further infos like onto or extensions.
