@@ -8,6 +8,8 @@ import java.net.URLEncoder;
 import java.nio.file.Paths;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +30,9 @@ public abstract class Evaluator {
      */
     private static File resultsDirectory;
     static {
-        setDefaultResultsDirectory(new File("results"));
+        String dateAndTime = "results_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+        setDefaultResultsDirectory(Paths.get("results", dateAndTime).toFile()); //default results folder has now time stamp
+        //setDefaultResultsDirectory(new File("results"));
     }
 
     /**
