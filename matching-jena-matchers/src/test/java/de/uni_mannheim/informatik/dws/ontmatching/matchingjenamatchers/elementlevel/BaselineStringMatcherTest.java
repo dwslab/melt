@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.baselineMatchers;
+package de.uni_mannheim.informatik.dws.ontmatching.matchingjenamatchers.elementlevel;
 
 import org.junit.jupiter.api.Test;
 

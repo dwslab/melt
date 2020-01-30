@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.baselineMatchers;
+package de.uni_mannheim.informatik.dws.ontmatching.matchingjenamatchers.elementlevel;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingjena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;

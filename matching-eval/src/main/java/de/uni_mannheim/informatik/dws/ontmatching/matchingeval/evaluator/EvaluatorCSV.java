@@ -4,7 +4,6 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingbase.IExplainerResourc
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ResourceType;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.baselineMatchers.BaselineStringMatcher;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.explainer.ExplainerResourceProperty;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.cm.ConfusionMatrix;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.cm.ConfusionMatrixMetric;
@@ -15,6 +14,7 @@ import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.Residu
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.refinement.TypeRefiner;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.Track;
+import de.uni_mannheim.informatik.dws.ontmatching.matchingjenamatchers.elementlevel.BaselineStringMatcher;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Correspondence;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import org.apache.commons.csv.CSVFormat;
