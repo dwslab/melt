@@ -110,6 +110,21 @@ the alignment (classes, properties, datatype properties, object properties, inst
 refiner is the `ResidualRefiner` which only keeps non-trivial correspondences. Refiners can be combined. This means that 
 MELT can calculate very specific evaluation statistics such as the residual precision of datatype property correspondences.
 
+#### Available Evaluators
+- `EvaluatorCSV`: Default evaluator for an in-depth analysis of alignments. Multiple CSV files are generated that can be 
+analyzed using a spreadsheet program such as <a href="https://www.libreoffice.org/download/download/">LibreOffice Calc</a>.
+- `EvaluatorBasic`: A basic evaluator that is easy on memory. Use this evaluator when you run into
+memory issues with `EvaluatorCSV` on very large evaluation problems. Note that this evaluator offers less
+functionality than the default evaluator.
+- `EvaluatorMcNemarSignificance`: An evaluator for statistical significance tests.
+ This evaluator allows to check whether multiple alignments
+are significantly different.
+- `DashboardBuilder`: This evaluator generates an interactive Web UI (*MELT Dashboard*) to analyze alignments
+in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2019
+<a href="http://oaei.ontologymatching.org/2019/anatomy/index.html">anatomy</a> and <a href="http://oaei.ontologymatching.org/2019/conference/index.html">conference</a> track <a href="https://dwslab.github.io/melt/anatomy_conference_dashboard.html">here</a>.
+
+*Note that it is possible to build your own evaluator and call functions from the existing evaluators.*
+
 
 ## Packaging Matchers for SEALS and HOBBIT
 
@@ -205,6 +220,10 @@ TrackRepository.Conference.V1.getTestCases();
 The resulting instances can be directly used by the Executor or any other MELT functionality that requires tracks or
 test cases.
 
+**Note that the OAEI SEALS repository is currently offline. This is not an issue of MELT
+but a problem in the central infrastructure. We will update the repository classes
+once the repository is back online.**
+
 
 ### Gensim Integration
 The MELT-ML module exposes some machine learning functionality that is implemented in python. This is achieved
@@ -228,6 +247,11 @@ Contains various tools to evaluate the performance of matchers and to analyze th
 ### matching-jena
 Contains [Jena-based](https://jena.apache.org/) classes related to matcher development as well as additional services 
 such as caching of source and target ontologies.  
+
+### matching-jena-matchers
+Contains modularized matchers that can be used to quickly
+assemble matching systems. Note that it is possible to easily chain those matchers
+building a matching pipeline.
 
 ### matching-ml
 The machine learning extension for MELT. Currently [gensim](https://radimrehurek.com/gensim/) is supported. The ML
