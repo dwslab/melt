@@ -171,7 +171,8 @@ public class Correspondence {
 
     /**
      * Set the value for an extension.
-     * @param extensionUri The URI identifying the extension.
+     * Possible keys are defined in class DefaultExtensions.
+     * @param extensionUri The URI identifying the extension. Possible keys are defined in class DefaultExtensions
      * @param extensionValue The value of the extension to be set.
      */
     public void addExtensionValue(String extensionUri, String extensionValue){
