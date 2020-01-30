@@ -323,7 +323,16 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
         return m;
     }
-    
+
+
+
+    public static Alignment subtraction(Alignment alignment_1, Alignment alignment_2) {
+        Alignment result = new Alignment();
+        result.addAll(alignment_1);
+        result.removeAll(alignment_2);
+        return result;
+    }
+
     
     /**
      * Create the intersection between the two given alignments. Only copies the alignment and not further infos like onto or extensions.

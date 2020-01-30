@@ -75,6 +75,15 @@ public abstract class Evaluator {
     public abstract void writeToDirectory(File baseDirectory);
 
     /**
+     * Persist the results of the evaluator in the base directory.
+     * @param baseDirectoryPath The directory path into which the evaluation results shall be written to.
+     */
+    public void writeToDirectory(String baseDirectoryPath){
+        File baseDirectory = new File(baseDirectoryPath);
+        writeToDirectory(baseDirectory);
+    }
+
+    /**
      * Given a base directory and an {@link ExecutionResult}, the target directory will be returned to which results can
      * be persisted.
      * @param baseDirectory Base directory for evaluation results.
