@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
+import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,14 +39,24 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     @Override
     public void writeToDirectory(File baseDirectory) {
+        writeToDirectory(baseDirectory, 0.05);
+    }
+
+
+    /**
+     * Two files will be written.
+     * @param baseDirectory
+     * @param alpha The desired alpha (probability of making a type 1 error.
+     */
+    public void writeToDirectory(File baseDirectory, double alpha) {
         try {
 
             // with continuity correction
             File resultFile = new File(baseDirectory, "McNemar_asymptotic_with_continuity_correction.csv");
             BufferedWriter writer = new BufferedWriter(new FileWriter(resultFile));
-            writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Significant?\n");
-            for(Map.Entry<McNemarIndividualResult, String> entry : calculateSignificance(AlphaValue.ZERO_POINT_ZERO_FIVE, TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION).entrySet()){
-                writer.write(entry.getKey().toString() + "," + entry.getValue()+"\n");
+            writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Alpha,p,Significant?\n");
+            for(Map.Entry<McNemarIndividualResult, Double> entry : calculatePvalues(alpha, TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION).entrySet()){
+                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + (entry.getValue() < alpha) + "\n");
             }
             writer.flush();
             writer.close();
@@ -53,9 +64,9 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             // without continuity correction
             resultFile = new File(baseDirectory, "McNemar_asymptotic.csv");
             writer = new BufferedWriter(new FileWriter(resultFile));
-            writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Significant?\n");
-            for(Map.Entry<McNemarIndividualResult, String> entry : calculateSignificance(AlphaValue.ZERO_POINT_ZERO_FIVE, TestType.ASYMPTOTIC_TEST).entrySet()){
-                writer.write(entry.getKey().toString() + "," + entry.getValue()+"\n");
+            writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Alpha,p,Significant?\n");
+            for(Map.Entry<McNemarIndividualResult, Double> entry : calculatePvalues(alpha, TestType.ASYMPTOTIC_TEST).entrySet()){
+                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + (entry.getValue() < alpha) + "\n");
             }
             writer.flush();
             writer.close();
@@ -64,23 +75,19 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         }
     }
 
-    public HashMap<McNemarIndividualResult, String> calculateSignificance(AlphaValue alpha, TestType testType){
-        HashMap<McNemarIndividualResult, String> result = new HashMap<>();
+    public HashMap<McNemarIndividualResult, Double> calculatePvalues(double alpha, TestType testType){
+        HashMap<McNemarIndividualResult, Double> result = new HashMap<>();
         for (ExecutionResult result1 : results) {
             for (ExecutionResult result2 : results){
                 if(result1.getTestCase().getName().equals(result2.getTestCase().getName()) && result1.getTrack().getName().equals(result2.getTrack().getName())){
-                    McNemarIndividualResult mr = new McNemarIndividualResult(result1.getMatcherName(), result2.getMatcherName(), result1.getTestCase().getName(), result1.getTrack().getName());
-
-
-                    String valueToWrite = "UNDEFINED";
+                    McNemarIndividualResult mr = new McNemarIndividualResult(result1.getMatcherName(), result2.getMatcherName(), result1.getTestCase().getName(), result1.getTrack().getName(), alpha);
+                    double pValue = 1.0;
                     try {
-                        boolean isSignificant = isSignificantConsideringFalsePositives(result1, result2, alpha, testType);
-                        if(isSignificant) valueToWrite = "TRUE";
-                        else valueToWrite = "FALSE";
+                        pValue = pValueConsideringFalsePositives(result1, result2, testType);
                     } catch (ArithmeticException ae){
                         ae.printStackTrace();
                     }
-                    result.put(mr, valueToWrite);
+                    result.put(mr, pValue);
                 }
             }
         }
@@ -97,12 +104,14 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         public String matcherName2;
         public String testCaseName;
         public String trackName;
+        public double alpha;
 
-        public McNemarIndividualResult(String matcherName1, String matcherName2, String testCaseName, String trackName){
+        public McNemarIndividualResult(String matcherName1, String matcherName2, String testCaseName, String trackName, double alpha){
             this.matcherName1 = matcherName1;
             this.matcherName2 = matcherName2;
             this.testCaseName = testCaseName;
             this.trackName = trackName;
+            this.alpha = alpha;
         }
 
         @Override
@@ -114,39 +123,41 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             return this.matcherName1.equals(that.matcherName1) &&
                     this.matcherName2.equals(that.matcherName2) &&
                     this.testCaseName.equals(that.testCaseName) &&
-                    this.trackName.equals(that.trackName);
+                    this.trackName.equals(that.trackName) &&
+                    this.alpha == that.alpha;
         }
 
         @Override
         public String toString(){
-            return this.trackName + "," + this.testCaseName + "," + this.matcherName1 + "," + this.matcherName2;
+            return this.trackName + "," + this.testCaseName + "," + this.matcherName1 + "," + this.matcherName2 + "," + alpha;
         }
     }
 
 
     /**
-     * Given two execution results, it is determined whether the two results are significantly different.
-     * The execution results must be from the same test case. The assumed alpha is 0.05.
+     * Given two execution results, it is determined whether the two results are significantly different (p < alpha).
+     * The execution results must be from the same test case.
      * @param executionResult1 Result 1.
      * @param executionResult2 Result 2.
-     * @return True if significant, else false.
+     * @return p value
      */
-    private boolean isSignificantConsideringFalsePositives(ExecutionResult executionResult1, ExecutionResult executionResult2){
-        return isSignificantConsideringFalsePositives(executionResult1, executionResult2, AlphaValue.ZERO_POINT_ZERO_FIVE, TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION);
+    private double pValueConsideringFalsePositives(ExecutionResult executionResult1, ExecutionResult executionResult2){
+        return pValueConsideringFalsePositives(executionResult1, executionResult2, TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION);
     }
 
 
         /**
-         * Given two execution results, it is determined whether the two results are significantly different.
+         * GGiven two execution results, it is determined whether the two results are significantly different (p < alpha).
          * The execution results must be from the same test case.
          * @param executionResult1 Result 1.
          * @param executionResult2 Result 2.
-         * @param alpha Desired alpha for significance test.
          * @param testType The type of test to be used.
-         * @return True if significant, else false.
+         * @return p value
          */
-    private boolean isSignificantConsideringFalsePositives(ExecutionResult executionResult1, ExecutionResult executionResult2, AlphaValue alpha, TestType testType){
+    private double pValueConsideringFalsePositives(ExecutionResult executionResult1, ExecutionResult executionResult2, TestType testType){
 
+        // initialize the chi square distribution
+        ChiSquaredDistribution distribution = new ChiSquaredDistribution(1);
 
         // n01
         Alignment A2_intersects_R = Alignment.intersection(executionResult2.getSystemAlignment(), executionResult2.getReferenceAlignment());
@@ -174,15 +185,15 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
                 LOGGER.warn("A sufficient number of data is required: n01 + n10 >= 25. This is not the case here.");
             }
             double chiSquare = Math.pow(n01 - n10, 2) / (n01 + n10);
-            return chiSquare > alpha.getCriticalValue();
+            return (1.0 - distribution.cumulativeProbability(chiSquare));
         } else if (testType == TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION){
             if(n01 == 0 && n10 == 0){
                 LOGGER.error("Significance cannot be determined using McNemar's Asymptotic test with continuity " +
                         "correction because n01 == 0 and n10 == 0.");
-                return false;
+                return 1.0;
             }
             double chiSquare = Math.pow(Math.abs(n01 - n10) - 1, 2) / (n01 + n10);
-            return chiSquare > alpha.getCriticalValue();
+            return (1.0 - distribution.cumulativeProbability(chiSquare));
         }
 
         // TODO: mathematically midp and exact are easily available, but there needs to be a "smart" shortcut b/c the factorial is too large for int
@@ -198,7 +209,9 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             pValue = exactPvalue - nCr(n, n01) * Math.pow(0.5, n);
         }
          **/
-        return pValue < alpha.getNumericalValue();
+
+        // (never reached)
+        return 1.0;
     }
 
 
@@ -255,34 +268,5 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION;
     }
 
-
-    /**
-     * Supported values for alpha.
-     */
-    public enum AlphaValue {
-        ZERO_POINT_ZERO_FIVE;
-
-        double getNumericalValue(){
-            switch (this){
-                case ZERO_POINT_ZERO_FIVE:
-                    return 0.05;
-                default:
-                    return 0.05;
-            }
-        }
-
-        /**
-         * Get the critical value for alpha with one degree of freedom.
-         * @return
-         */
-        double getCriticalValue(){
-            switch (this){
-                case ZERO_POINT_ZERO_FIVE:
-                    return 3.84;
-                default:
-                    return 1000;
-            }
-        }
-    }
 
 }
