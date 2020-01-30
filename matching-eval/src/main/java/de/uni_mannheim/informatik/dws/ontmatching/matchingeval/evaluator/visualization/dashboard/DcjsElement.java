@@ -35,9 +35,11 @@ public class DcjsElement {
     
     private String anchorStyle;
     
-    private String anchorClass;
+    private Set<String> anchorClass;
     
     private String tagName;
+    
+    private String preText;
     
     private String dimensionDefinition;
     
@@ -54,6 +56,7 @@ public class DcjsElement {
         this.groupDefinitions = new HashSet<>();
         this.jsMethods = new ArrayList<>();
         this.jsHelperFileNames = new HashSet<>();
+        this.anchorClass = new HashSet<>();
     }
     
     //Dimension Definition
@@ -177,9 +180,7 @@ public class DcjsElement {
         this.anchorStyle = anchorStyle;
     }
 
-    public void setAnchorClass(String anchorClass) {
-        this.anchorClass = anchorClass;
-    }
+    
     
     
     public String getTagName() {
@@ -230,10 +231,25 @@ public class DcjsElement {
         return jsMethods;
     }
 
-    public String getAnchorClass() {
-        return anchorClass;
+    public void addAnchorClass(String newAnchorClass) {
+        this.anchorClass.add(newAnchorClass.trim());
     }
     
+    public void clearAnchorClass() {
+        this.anchorClass.clear();
+    }
+    
+    public String getAnchorClass() {
+        return String.join(" ", this.anchorClass);
+    }
+
+    public String getPreText() {
+        return preText;
+    }
+
+    public void setPreText(String preText) {
+        this.preText = preText;
+    }
   
     
     private static String makeJsIdentifier(String s){

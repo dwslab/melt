@@ -10,6 +10,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
         <!--dc.js (no integrity check because of underspecified/changing versions)-->
         <script src="https://unpkg.com/d3@5/dist/d3.js"></script>
@@ -22,6 +23,20 @@
 
         <script src="https://unpkg.com/pako@1.0.10/dist/pako.min.js"></script>
         #end
+        
+        <style>
+        .collapseBtn:before {
+            font-family: FontAwesome;
+            content:"\f106";
+            padding-right: 4px;
+        }
+        .collapseBtn.collapsed:before {
+            content:"\f107";
+        }
+        .collapseBtn:focus, .collapseBtn:active {
+            box-shadow: none
+        }
+        </style>
     </head>
     <body>
         <div class="container-fluid">
@@ -33,8 +48,12 @@
             </div>
             <!--dc.js: anchor div for charts -->
             #foreach( $row in $dcjsElements )
-            <div class="row">
+            <button type="button" class="btn btn-default btn-sm collapseBtn" data-toggle="collapse" data-target="#row_$foreach.count"></button>
+            <div class="row collapse show" id="row_$foreach.count">
                 #foreach( $element in $row )
+                #if($element.preText)
+                $element.preText
+                #end
                 <$element.tagName id="$element.name"#if($element.anchorClass) class="$element.anchorClass"#end#if($element.anchorStyle) style="$element.anchorStyle"#end>
                     #if($element.title)
                     <strong>$element.title</strong>
@@ -53,6 +72,8 @@
         </div><!--container-->
        <script type="text/javascript">
             <!--dc.js: create chart objects: accessible at the global scope so that they can be modified or filtered by other page controls -->
+            var ndx;
+
             #foreach( $row in $dcjsElements )
             #foreach( $element in $row )
             var $element.name;
@@ -80,7 +101,7 @@
                 #else
                 var experiments = d3.csvParse(d3.select('pre#data').text());
                 #end
-                var ndx         = crossfilter(experiments);
+                ndx         = crossfilter(experiments);
 
                 //dimension 
                 #foreach( $def in $dimensionDefinition )

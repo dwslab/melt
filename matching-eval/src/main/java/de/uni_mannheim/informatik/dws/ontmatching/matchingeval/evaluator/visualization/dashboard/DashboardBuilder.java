@@ -126,8 +126,10 @@ public class DashboardBuilder extends Evaluator {
         //this.addMetricTableSelectedAndMatcher();
         //this.addMatcherMetricTableOnlyMatcher();
         this.addMetricTableSelectedAndMatcher();
+        //this.addPrecisionRecallScatterPlot();
         this.newRow();
         this.addDataCount();
+        //this.addTextFilter();
         this.addDataChart();
         return this;
     }
@@ -139,18 +141,14 @@ public class DashboardBuilder extends Evaluator {
         
         e.createDimensionDefinitionCsvFieldString("ConfidenceBoxPlotMatcherDimension", "Matcher");
         String groupConfidenceBoxPlot = e.createGroupDefinitionReduceSortedAttribute("ConfidenceBoxPlotMatcherDimension", "Confidence (Matcher)", "Evaluation Result");
-        
-        
-        e.setAnchorStyle("width:1200px");
-        
-        
+        e.setAnchorStyle("width:1000px");
         e.setDimension("ConfidenceBoxPlotMatcherDimension");
-        e.setGroup(groupConfidenceBoxPlot);
-       
+        e.setGroup(groupConfidenceBoxPlot);       
         e.addJsMethod(
                 "elasticX(true)",
-                "elasticY(true)",
-                "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-80)\").attr(\"dy\", \"-0.7em\").attr(\"dx\", \"-1em\");})"
+                "y(d3.scaleLinear().domain([0.0,1.05]))",
+                "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-60)\").attr(\"dy\", \"0.1em\").attr(\"dx\", \"-1em\");})",
+                "margins({top: 10, right: 50, bottom: 80, left: 40})"
         );
         return addElement(e);
     }
@@ -173,10 +171,39 @@ public class DashboardBuilder extends Evaluator {
                 "columns(['Name', 'Prec(micro)', 'Rec(micro)', 'F-m.(micro)', 'Prec(macro)', 'Rec(macro)', 'F-m.(macro)'])",
                 "showSections(false)"
         );
-        e.setAnchorClass("table");
+        e.addAnchorClass("table");
         e.setAnchorStyle("width:700px");
         return addElement(e);
     }
+    
+    public DashboardBuilder addPrecisionRecallScatterPlot(){
+        DcjsElement e = new DcjsElement("dc.scatterPlot", "scatterplot");
+        
+        e.createDimensionDefinitionCsvFieldString("ResultPerTestCaseDimension", "TestCase");
+        String group_testcase_result = e.createGroupDefinitionReduceField("ResultPerTestCaseDimension", "Evaluation Result");
+        
+        e.createDimensionDefinitionCsvFieldString("MetricTableMatcherDimension", "Matcher");
+        String group_matcher_testcase_result = e.createGroupDefinitionReduceTwoFields("MetricTableMatcherDimension", "TestCase", "Evaluation Result");
+        
+        e.addJsHelperFileName("computeMetrics.js"); //because compute_metrics_for_group is used in next line
+        String groupMetric = e.createGroupDefinition("metricGroup", String.format("compute_matcher_selected_metrics(%s, %s);", group_testcase_result,group_matcher_testcase_result));
+        
+        
+        e.createDimensionDefinitionCsvFieldString("PrecisionRecallDimension", "Matcher");
+        e.setDimension("PrecisionRecallDimension");
+        e.setGroup(groupMetric);
+        
+        e.addJsMethod(
+                "xAxisLabel(\"Recall\")",
+                "x(d3.scaleLinear().domain([0,1]))",
+                "yAxisLabel(\"Precision\")",
+                "y(d3.scaleLinear().domain([0,1]))"
+        );
+        
+        return addElement(e);
+    }
+    
+    
     
     public DashboardBuilder addMetricTableOnlySelected(){
         DcjsElement e = new DcjsElement("dc.dataTable", "metricTableSelected");        
@@ -189,7 +216,7 @@ public class DashboardBuilder extends Evaluator {
                 "columns(['name', 'precision', 'recall', 'fmeasure'])",
                 "showSections(false)"
         );
-        e.setAnchorClass("table");
+        e.addAnchorClass("table");
         e.setAnchorStyle("width:310px");
         return addElement(e);
     }
@@ -205,7 +232,7 @@ public class DashboardBuilder extends Evaluator {
                 "columns(['name', 'precision', 'recall', 'fmeasure'])",
                 "showSections(false)"
         );
-        e.setAnchorClass("table");
+        e.addAnchorClass("table");
         e.setAnchorStyle("width:310px");
         return addElement(e);
     }
@@ -253,7 +280,8 @@ public class DashboardBuilder extends Evaluator {
                 "yAxisLabel(\"\")",
                 "colors(d3.scaleOrdinal(dc.config.defaultColors()))", //quick hack can be removed when fixed in dc.js https://github.com/dc-js/dc.js/issues/1564
                 //rotate x axis labels
-                "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-80)\").attr(\"dy\", \"-0.7em\").attr(\"dx\", \"-1em\");})"
+                "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-60)\").attr(\"dy\", \"0.1em\").attr(\"dx\", \"-1em\");})",
+                "margins({top: 10, right: 50, bottom: 90, left: 40})"
         );
         e.createDimensionDefinitionCsvFieldString("ResultPerMatcherDimension", "Matcher");
         e.setDimension("ResultPerMatcherDimension");
@@ -278,7 +306,8 @@ public class DashboardBuilder extends Evaluator {
                 "yAxisLabel(\"\")",
                 "colors(d3.scaleOrdinal(dc.config.defaultColors()))", //quick hack can be removed when fixed in dc.js https://github.com/dc-js/dc.js/issues/1564
                 //rotate x axis labels
-                "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-80)\").attr(\"dy\", \"-0.7em\").attr(\"dx\", \"-1em\");})"
+                "on(\"renderlet\", function(chart) { chart.select('.axis.x').attr(\"text-anchor\", \"end\").selectAll(\"text\").attr(\"transform\", \"rotate(-60)\").attr(\"dy\", \"0.1em\").attr(\"dx\", \"-1em\");})",
+                "margins({top: 10, right: 50, bottom: 90, left: 40})"
         );
         e.createDimensionDefinitionCsvFieldString("ResultPerTestCaseDimension", "TestCase");
         e.setDimension("ResultPerTestCaseDimension");
@@ -312,6 +341,9 @@ public class DashboardBuilder extends Evaluator {
         e.setTitle(csvField);
         e.setResetText("reset");
         //e.setFilterText("<span class='filter'></span>");
+        e.addJsMethod("width(280)");
+        e.addJsMethod("height(280)");
+        
         e.addJsMethod("ordering(function(d){return getSortedEvaluationResult(d.key);})");
         e.addJsHelperFileName("sortedEvalResult.js");
         e.createDimensionDefinitionCsvFieldString(name + "Dimension", csvField);
@@ -324,6 +356,8 @@ public class DashboardBuilder extends Evaluator {
         DcjsElement e = new DcjsElement("dc.pieChart", name);
         e.setTitle(csvField);
         e.setResetText("reset");
+        e.addJsMethod("width(280)");
+        e.addJsMethod("height(280)");
         //e.setFilterText("<span class='filter'></span>");
         e.createDimensionDefinitionCsvFieldString(name + "Dimension", csvField);
         e.setDimension(name + "Dimension");
@@ -335,6 +369,7 @@ public class DashboardBuilder extends Evaluator {
         DcjsElement e = new DcjsElement("dc.pieChart", name);
         e.setTitle(csvField);
         e.setResetText("reset");
+        e.addJsMethod("width(280)","height(280)");
         //e.setFilterText("<span class='filter'></span>");
         e.createDimensionDefinitionCsvFieldJsonArray(name + "Dimension", csvField);
         e.setDimension(name + "Dimension");
@@ -347,7 +382,8 @@ public class DashboardBuilder extends Evaluator {
         
         e.createDimensionDefinitionMultipleCsvFields("TrackTestCaseDimension", "Track", "TestCase");
         e.setDimension("TrackTestCaseDimension");
-         e.setGroup(e.createGroupDefinitionBasedOnDimension("TrackTestCaseDimension"));        
+        e.setGroup(e.createGroupDefinitionBasedOnDimension("TrackTestCaseDimension"));        
+        e.addJsMethod("width(280)","height(280)");
         e.addJsMethod("innerRadius(50)");
         e.setResetText("reset");
         e.setTitle("Track/Testcase");
@@ -389,7 +425,13 @@ public class DashboardBuilder extends Evaluator {
     }
     
     
-    
+    public DashboardBuilder addTextFilter(){
+        DcjsElement e = new DcjsElement("dc.TextFilterWidget", "textFilter");
+        e.createDimensionDefinitionCsvFieldString("URILeftDimension", "URI Left");
+        e.setDimension("URILeftDimension");
+        return addElement(e);
+        
+    }
     
     public DashboardBuilder addDataChart(){
         DcjsElement e = new DcjsElement("dc.dataTable", "dataTable");
@@ -398,9 +440,21 @@ public class DashboardBuilder extends Evaluator {
         e.setDimension(dimName);
         e.addJsMethod(
                 "columns(d3.keys(experiments[0]))",
-                "showSections(false)"
+                "showSections(false)",
+                "size(Infinity)",
+                "order(d3.ascending)",
+                //"sortBy(function (d) { return [fmt(+d.Expt),fmt(+d.Run)]; })"//TODO: make id?
+                "on('preRender', update_offset(ndx))",
+                "on('preRedraw', update_offset)",
+                "on('pretransition', display)"
         );
-        e.setAnchorClass("table");
+        e.setPreText("<div id=\"paging\">\n" +
+"                    &nbsp; | Showing <span id=\"begin\"></span>-<span id=\"end\"></span>\n" +
+"                    <button id=\"last\" class=\"btn btn-sm btn-outline-secondary\" type=\"button\" style=\"font-size: 0.7em;\" onclick=\"javascript:last()\">Last</button>\n" +
+"                    <button id=\"next\" class=\"btn btn-sm btn-outline-secondary\" type=\"button\" style=\"font-size: 0.7em;\" onclick=\"javascript:next()\">Next</button>\n" +
+"                </div>");
+        e.addJsHelperFileName("table_pagination.js");//becuase above confidenceFilterHandler is used.
+        e.addAnchorClass("table");
         e.setAnchorStyle("table-layout:fixed; word-wrap:break-word;");
         return addElement(e);
     }
@@ -419,6 +473,11 @@ public class DashboardBuilder extends Evaluator {
     
     public DashboardBuilder newRow(){
         if(this.currentRow.size() > 0){
+            if(this.currentRow.size()> 4){
+                for(DcjsElement e : this.currentRow){
+                    e.addAnchorClass("col");
+                }
+            }
             this.rows.add(this.currentRow);
             this.currentRow = new ArrayList<>();
         }
