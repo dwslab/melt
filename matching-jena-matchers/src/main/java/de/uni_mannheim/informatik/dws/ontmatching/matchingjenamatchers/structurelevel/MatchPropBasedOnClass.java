@@ -16,14 +16,21 @@ import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
- * Graphbased Matcher: check all matched classes and match also properties
- * between them with mean value of both classes
+ * Graph-based Matcher: Checks all matched classes and matches also properties
+ * between them with mean value of both classes.
+ *
+ *
+ * Example:
+ * {@code
  *     foo <---already matched with c=0.5---> foo
  *      |                                      |
  *     blub <--new with c=(0.5+0.4)/2=0.45--> bla 
  *      |                                      |
  *      v                                      v
  *    bar <----already matched with c=0.4---> bar
+ *  }
+ *
+ *  In the example blub and bla are properties.
  */
 public class MatchPropBasedOnClass extends MatcherYAAAJena {
 

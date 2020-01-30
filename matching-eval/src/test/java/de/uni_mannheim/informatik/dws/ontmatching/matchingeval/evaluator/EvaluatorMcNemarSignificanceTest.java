@@ -3,6 +3,8 @@ package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.Executor;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EvaluatorMcNemarSignificanceTest {
 
     @Test
+    @EnabledOnOs( { OS.MAC } )
     void calculateSignificance() {
         ExecutionResultSet ers = Executor.loadFromAnatomyResultsFolder("./src/test/resources/2016_anatomy/");
         EvaluatorMcNemarSignificance evaluator = new EvaluatorMcNemarSignificance(ers);
@@ -24,6 +27,6 @@ class EvaluatorMcNemarSignificanceTest {
                 assertEquals(entry.getValue().toLowerCase(), "true", "Error for set: " + individualResult.matcherName1 + "  ||  " + individualResult.matcherName2);
             }
         }
-        evaluator.writeToDirectory("./results");
+        evaluator.writeToDirectory();
     }
 }

@@ -7,8 +7,7 @@ import java.util.Properties;
 import org.apache.jena.ontology.OntModel;
 
 /**
- *
- * @author shertlin
+ * Scales the correspondence confidence values linearly to an interval [0,1] (by default).
  */
 public class ScaleConfidence extends MatcherYAAAJena{
 

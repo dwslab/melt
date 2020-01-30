@@ -14,6 +14,8 @@ import java.util.Set;
 /**
  * This filter returns only the alignments with the highest confidence if there are n-to-m matched elements.
  * This might not be the best solution.
+ *
+ * // TODO not deterministic yet in case multiple matches have the same confidence
  */
 public class CardinalityFilter extends MatcherYAAA{
 
@@ -31,7 +33,7 @@ public class CardinalityFilter extends MatcherYAAA{
         for(Correspondence c : sortedAlignment){
             if(sourceMatches.contains(c.getEntityOne()) || targetMatches.contains(c.getEntityTwo())){
                 inputAlignment.remove(c);
-            }else{
+            } else {
                 sourceMatches.add(c.getEntityOne());
                 targetMatches.add(c.getEntityTwo());
             }

@@ -14,8 +14,10 @@ import java.util.Set;
 import org.apache.jena.ontology.OntModel;
 
 /**
- * This filter returns only aligments with confidence greater or equals than a
+ * This filter returns only alignments with confidence greater or equals than a
  * specific threshold. Default is 0.9.
+ *
+ * Thresholds can be set per type.
  */
 public class ConfidenceFilter extends MatcherYAAAJena {
 

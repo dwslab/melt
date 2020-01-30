@@ -10,7 +10,17 @@ import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * Asserts a homogenous alignment (i.e. only the same type is matched).
+ * For instance, correspondences between instances and classes will be deleted.
+ *
+ * Not Allowed (examples):
+ * - class, instance
+ * - datatype property, object property
+ * - rdf property, datatype property
+ *
+ * Allowed are only exact matches.
+ */
 public class MixedTypFilter extends MatcherYAAAJena{
     private static final Logger LOGGER = LoggerFactory.getLogger(MixedTypFilter.class);
     @Override

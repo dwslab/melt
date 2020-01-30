@@ -28,18 +28,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A matcher which tries to match classes based on already instance matches.
- * @see https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-18253/DissKatrinZaiß.pdf
- * @see https://dbs.uni-leipzig.de/file/rev-ontomatch-dils-2007-final.pdf
- * @see http://cs.emis.de/LNI/Proceedings/Proceedings103/gi-proc-103-026.pdf
- * @see https://link.springer.com/content/pdf/10.1007%2Fs13740-012-0011-z.pdf
+ * A matcher which matches classes based on already instance matches.
+ * @see <a href="https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-18253/DissKatrinZaiß.pdf">https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-18253/DissKatrinZaiß.pdf</a>
+ * @see <a>https://dbs.uni-leipzig.de/file/rev-ontomatch-dils-2007-final.pdf</a>
+ * @see <a>http://cs.emis.de/LNI/Proceedings/Proceedings103/gi-proc-103-026.pdf</a>
+ * @see <a>https://link.springer.com/content/pdf/10.1007%2Fs13740-012-0011-z.pdf</a>
  */
 public class MatchClassBasedOnInstances extends MatcherYAAAJena{
     private static final Logger LOGGER = LoggerFactory.getLogger(MatchClassBasedOnInstances.class);
-    
+
+    /**
+     * Threshold for metric.
+     * Values by metric larger than the threshold will be a match.
+     */
     private double threshold;
+
+    /**
+     * Metric to be used.
+     */
     private SimInstanceMetric metric;
+
+    /**
+     * What is an instance match? --> Minimal confidence for instance matches.
+     */
     private double instanceMinConfidence;
+
+    /**
+     * If set, all metrics will be logged.
+     */
     private File debugFile;
 
     public MatchClassBasedOnInstances(double threshold, SimInstanceMetric metric, double instanceMinConfidence, File debugFile) {

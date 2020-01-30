@@ -59,7 +59,7 @@ public enum ConceptType {
     /**
      * Returns the most precise/specific resource type.
      * This method implements its own simplistic reasoning for determining the type of the resource.
-     * For more sophisticated reasoning use {@link ResourceType#analyzeWithInference(InfModel, String)} } .
+     * For more sophisticated reasoning use {@link ConceptType#analyzeWithInference(InfModel, String)} } .
      * @param model any model
      * @param resourceURI The URI for which the resource type shall be determined.
      * @return The most specify resource type available (like ObjectProperty)
