@@ -108,7 +108,9 @@ public class Executor {
         ExecutionResultSet r = new ExecutionResultSet();
         for(Track track : tracks){
             for (TestCase tc : track.getTestCases()) {
-                r.add(ExecutionRunner.runMatcher(tc, matcher, matcherName));
+                ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher, matcherName);
+                if(er != null)
+                    r.add(er);
             }
         }
         return r;
@@ -134,7 +136,9 @@ public class Executor {
         for(Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()){
             for(Track track : tracks){
                 for (TestCase tc : track.getTestCases()) {
-                    r.add(ExecutionRunner.runMatcher(tc, matcher.getValue(), matcher.getKey()));
+                    ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher.getValue(), matcher.getKey());
+                    if(er != null)
+                        r.add(er);
                 }
             }
         }        
@@ -160,7 +164,9 @@ public class Executor {
         ExecutionResultSet r = new ExecutionResultSet();
         for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
             for (TestCase tc : testCases) {
-                r.add(ExecutionRunner.runMatcher(tc, matcher.getValue(), matcher.getKey()));
+                ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher.getValue(), matcher.getKey());
+                if(er != null)
+                    r.add(er);
             }
         }
         return r;
@@ -184,7 +190,9 @@ public class Executor {
         }
         ExecutionResultSet r = new ExecutionResultSet();
         for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
-            r.add(ExecutionRunner.runMatcher(testCase, matcher.getValue(), matcher.getKey()));
+            ExecutionResult er = ExecutionRunner.runMatcher(testCase, matcher.getValue(), matcher.getKey());
+            if(er != null)
+                r.add(er);
         }
         return r;
     }
@@ -225,7 +233,9 @@ public class Executor {
         ExecutionResultSet r = new ExecutionResultSet();
         for (TestCase tc : testCases) { // no parallelism possible because each matcher possibly writes to the same temp file.
             if(tc != null) {
-                r.add(ExecutionRunner.runMatcher(tc, matcher, matcherName));
+                ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher, matcherName);
+                if(er != null)
+                    r.add(er);
             } else {
                 LOGGER.error("The testCases list contains a null object. Resolution: skipping...");
             }
@@ -262,7 +272,9 @@ public class Executor {
             return null;
         }
         ExecutionResultSet r = new ExecutionResultSet();
-        r.add(ExecutionRunner.runMatcher(testCase, matcher, matcherName));
+        ExecutionResult er = ExecutionRunner.runMatcher(testCase, matcher, matcherName);
+        if(er != null)
+            r.add(er);
         return r;
     }
 
