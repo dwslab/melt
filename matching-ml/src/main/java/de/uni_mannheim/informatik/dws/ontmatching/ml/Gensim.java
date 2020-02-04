@@ -12,15 +12,26 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 /**
  * A client class to communicate with python gensim library.
  * Singleton pattern.
  * Communication is performed through HTTP requests.
+ * In case you need a different python environment or python executable, 
+ * create a file in oaei-resources named python_command.txt and write your absolute path of the python executable in that file.
  */
 public class Gensim {
 
@@ -306,14 +317,17 @@ public class Gensim {
                 return;
             }
             canonicalPath = serverFile.getCanonicalPath();
-            System.out.println();
         } catch (IOException e) {
-            e.printStackTrace();
-            LOGGER.error("Server File does not exist. Cannot start server. ABORTING.");
+            LOGGER.error("Server File does not exist. Cannot start server. ABORTING.", e);
             return;
         }
-        List<String> command = Arrays.asList("python", canonicalPath);
+        String pythonCommand = getPythonCommand();
+        List<String> command = Arrays.asList(pythonCommand, canonicalPath);
         ProcessBuilder pb = new ProcessBuilder(command);
+        updateEnvironmentPath(pb.environment(), pythonCommand);
+        //List<String> command = Arrays.asList("python", "--version");
+        //ProcessBuilder pb = new ProcessBuilder(command);
+        //pb.environment().put("PATH", "{FOLDER CONTAINING PYTHON EXE}" + File.pathSeparator + pb.environment().get("PATH"));
         try {
             pb.inheritIO();
             this.serverProcess = pb.start();
@@ -327,7 +341,7 @@ public class Gensim {
                         break;
                     }
                 } catch (HttpHostConnectException hce) {
-                    LOGGER.info("Server is not yet running. Waiting 5 seconds.");
+                    LOGGER.info("Server is not yet running. Waiting 5 seconds. Trial {} / 3", i + 1);
                     TimeUnit.SECONDS.sleep(5);
                 } catch (IOException ioe) {
                     LOGGER.error("Problem with http request.", ioe);
@@ -351,7 +365,51 @@ public class Gensim {
             isHookStarted = true;
         }
     }
-
+    
+    protected String getPythonCommand(){
+        String pythonCommand = "python";
+        Path filePath = Paths.get("oaei-resources", "python_command.txt");
+        if(Files.exists(filePath)){
+            try {
+                String fileContent = new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
+                fileContent = fileContent.replace("\r", "").replace("\n", "")
+                    .replace("{File.pathSeparator}", File.pathSeparator)
+                    .replace("{File.separator}", File.separator)
+                    .trim();
+                return fileContent;
+            } catch (IOException ex) {
+                LOGGER.warn("The file which should contain the python command could not be read.", ex);
+            }
+        }
+        return pythonCommand;
+    }
+    
+    protected void updateEnvironmentPath(Map<String,String> environment, String pythonCommand){
+        String path = environment.getOrDefault("PATH", "");
+        String additionalPaths = getPythonAdditionalPath(pythonCommand);
+        if(additionalPaths.isEmpty() == false){
+            if(path.endsWith(File.pathSeparator) == false)
+                path += File.pathSeparator;
+            path += additionalPaths;
+        }        
+        environment.put("PATH",  path);
+    }
+    protected String getPythonAdditionalPath(String pythonCommand){
+        File f = new File(pythonCommand).getParentFile();
+        if(f == null){
+            return "";
+        }
+        try {
+            String s = Files.find(f.toPath(), 6, (path, attributes) -> attributes.isDirectory() && path.getFileName().toString().equals("bin"))
+                    .map(path->path.toAbsolutePath().toString())
+                    .collect(Collectors.joining(File.pathSeparator));
+            return s;
+        } catch (IOException ex) {
+            LOGGER.info("Could not add more directories in path", ex);
+            return "";
+        }
+    }
+    
     /**
      * Calculate The cosine similarity between two vectors.
      *

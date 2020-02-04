@@ -6,13 +6,15 @@ import org.junit.jupiter.api.condition.EnabledOnOs;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.condition.OS.MAC;
+import static org.junit.jupiter.api.condition.OS.WINDOWS;
+
 
 class GensimTest {
 
     static Gensim gensim = Gensim.getInstance();
 
     @Test
-    @EnabledOnOs({ MAC })
+    @EnabledOnOs({ MAC, WINDOWS })
     /**
      * Default test with cache.
      */
@@ -32,7 +34,7 @@ class GensimTest {
     }
 
     @Test
-    @EnabledOnOs({ MAC })
+    @EnabledOnOs({ MAC, WINDOWS })
     /**
      * Default test without cache.
      */
@@ -53,7 +55,7 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
+    @EnabledOnOs({ MAC, WINDOWS })
     /**
      * Default test with cache.
      */
@@ -72,7 +74,7 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
+    @EnabledOnOs({ MAC, WINDOWS })
     void getSimilarityNoCaching() {
         gensim.setVectorCaching(false);
         // test case 1: model file
@@ -88,7 +90,7 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
+    @EnabledOnOs({ MAC, WINDOWS })
     void testMultipleShutdownCallsAndRestarts() {
         gensim.setVectorCaching(false);
         // test case 1: model file
@@ -108,7 +110,7 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
+    @EnabledOnOs({ MAC, WINDOWS })
     /**
      * Default test with cache.
      */
@@ -133,7 +135,7 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
+    @EnabledOnOs({ MAC, WINDOWS })
     /**
      * Test without cache.
      */
