@@ -31,7 +31,7 @@ def display_server_status():
     return "MELT ML Server running. Ready to accept requests."
 
 
-    # a memory-friendly iterator
+# a memory-friendly iterator
 class MySentences(object):
 
     def __init__(self, file_name):
@@ -80,6 +80,9 @@ def train_word_2_vec():
         model.save(model_path)
         model.wv.save(vector_path)
 
+        active_models[os.path.realpath(model_path)] = model
+        active_vectors[os.path.realpath(vector_path)] = model.wv
+
         return "True"
 
     except Exception as exception:
@@ -115,6 +118,7 @@ def get_vectors(model_path, vector_path):
     """
     if vector_path is None:
         if model_path in active_models:
+            # logging.info("Found model in cache.")
             model = active_models[model_path]
             vectors = model.wv
         else:
@@ -122,6 +126,7 @@ def get_vectors(model_path, vector_path):
             active_models[model_path] = model
             vectors = model.wv
     elif vector_path in active_vectors:
+        # logging.info("Found vector file in cache.")
         vectors = active_vectors[vector_path]
     else:
         vectors = KeyedVectors.load(vector_path, mmap='r')
@@ -146,15 +151,18 @@ def get_similarity_given_model():
         message = "ERROR! concept_1 and/or concept_2 not found in header. " \
                   "Similarity cannot be calculated."
         print(message)
+        logging.error(message)
         return message
 
     if concept_1 not in vectors.vocab:
         message = "ERROR! concept_1 not in the vocabulary."
         print(message)
+        logging.error(message)
         return message
     if concept_2 not in vectors.vocab:
         message = "ERROR! concept_2 not in the vocabulary."
         print(message)
+        logging.error(message)
         return message
     similarity = vectors.similarity(concept_1, concept_2)
     return str(similarity)
@@ -180,8 +188,8 @@ def get_vector_given_model():
 
     if concept not in vectors.vocab:
         message = "ERROR! Concept '" + str(concept) + "' not in the vocabulary."
-        logging.error(message)
         print(message)
+        logging.error(message)
         return message
 
     result = ""

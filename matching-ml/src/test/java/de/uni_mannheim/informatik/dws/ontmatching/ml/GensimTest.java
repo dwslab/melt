@@ -180,8 +180,6 @@ class GensimTest {
     }
 
 
-
-
     @AfterAll
     static void shutdown(){
         gensim.shutDown();
