@@ -2,7 +2,9 @@ from flask import Flask
 from flask import request
 from gensim.models import KeyedVectors
 import gensim
+import traceback
 import logging
+import os
 
 
 logging.basicConfig(handlers=[logging.FileHandler(__file__ + '.log', 'w', 'utf-8')], format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
@@ -27,6 +29,63 @@ def display_server_status():
         A message indicating that the server is running.
     """
     return "MELT ML Server running. Ready to accept requests."
+
+
+    # a memory-friendly iterator
+class MySentences(object):
+
+    def __init__(self, file_name):
+        self.file_name = file_name
+
+    def __iter__(self):
+        try:
+            for line in open(self.file_name, mode='rt', encoding="utf-8"):
+                line = line.rstrip('\n')
+                words = line.split(" ")
+                yield words
+        except Exception:
+            logging.error("Failed reading file:")
+            logging.error(self.file_name)
+            logging.exception("Stack Trace:")
+
+
+
+@app.route('/train-word2vec', methods=['GET'])
+def train_word_2_vec():
+    try:
+        model_path = request.headers.get('model_path') # where the model will be stored
+        vector_path = request.headers.get('vector_path') # where the vector file will be stored
+        file_path = request.headers.get('file_path')
+        vector_dimension = request.headers.get('vector_dimension')
+        number_of_threads = request.headers.get('number_of_threads')
+        window_size = request.headers.get('window_size')
+        iterations = request.headers.get('iterations')
+        negatives = request.headers.get('negatives')
+        cbow_or_sg = request.headers.get('cbow_or_sg')
+
+        sentences = MySentences(file_path)
+        logging.info("Sentences object initialized.")
+
+        if cbow_or_sg == 'sg':
+            model = gensim.models.Word2Vec(min_count=1, size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=1, negative=int(negatives), iter=int(iterations))
+        else:
+            model = gensim.models.Word2Vec(min_count=1, size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=0, cbow_mean=1, alpha = 0.05, negative=int(negatives), iter=int(iterations))
+
+        logging.info("Model object initialized. Building Vocabulary...")
+        model.build_vocab(sentences)
+        logging.info("Vocabulary built. Training now...")
+        model.train(sentences=sentences, total_examples=model.corpus_count, epochs=model.epochs)
+        logging.info("Model trained.")
+
+        model.save(model_path)
+        model.wv.save(vector_path)
+
+        return "True"
+
+    except Exception as exception:
+        logging.exception("An exception occurred.")
+        return "False"
+
 
 
 @app.route('/is-in-vocabulary', methods=['GET'])

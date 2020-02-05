@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.condition.OS.MAC;
 import static org.junit.jupiter.api.condition.OS.WINDOWS;
@@ -149,14 +151,35 @@ class GensimTest {
         Double[] unitedVector = gensim.getVector("united", pathToVectorFile);
 
         double similarityJava = (gensim.cosineSimilarity(europeVector, unitedVector));
-        double similarityPyhton = (gensim.getSimilarity("Europe", "united", pathToVectorFile));
-        assertEquals(similarityJava, similarityPyhton, 0.0001);
+        double similarityPython = (gensim.getSimilarity("Europe", "united", pathToVectorFile));
+        assertEquals(similarityJava, similarityPython, 0.0001);
 
         // test case 2: model file
         String pathToModel = getClass().getClassLoader().getResource("test_model").getPath();
         europeVector = gensim.getVector("Europe", pathToModel);
         assertEquals(100, europeVector.length);
     }
+
+
+    @Test
+    @EnabledOnOs({MAC, WINDOWS})
+    void trainWord2VecModel() {
+        String testFilePath = getClass().getClassLoader().getResource("testInputForWord2Vec.txt").getPath();
+        String fileToWrite = "./freudeWord2vec.kv";
+        assertTrue(gensim.trainWord2VecModel(fileToWrite, testFilePath, Word2VecConfiguration.CBOW));
+
+        File vectorFile = new File(fileToWrite);
+        File modelFile = new File(fileToWrite.substring(0, fileToWrite.length() - 3));
+        assertTrue(vectorFile.exists(), "No vector file was written.");
+        assertTrue(modelFile.exists(), "No model file was written.");
+        assertTrue(gensim.getSimilarity("Menschen", "Brüder", fileToWrite) > 0);
+
+        // cleaning up
+        modelFile.delete();
+        vectorFile.delete();
+    }
+
+
 
 
     @AfterAll
