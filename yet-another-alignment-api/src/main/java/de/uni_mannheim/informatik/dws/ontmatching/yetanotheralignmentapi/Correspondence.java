@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 /**
  * A Correspondence contains a relation that holds between two elements from two different ontologies.
  * This is also known as "Mapping Cell" or "Cell".
+ * It is uniquely identified by entityOne, entityTwo and relation.
  *
  * @author Sven Hertling
  * @author Jan Portisch
@@ -174,7 +175,7 @@ public class Correspondence {
      * @param extensionUri The URI identifying the extension.
      * @return The value of the extension as String, null if there is no value.
      */
-    public Object getExtensionValueAsString(String extensionUri){
+    public String getExtensionValueAsString(String extensionUri){
         if(extensions == null) return null;
         return extensions.get(extensionUri).toString();
     }
@@ -199,6 +200,25 @@ public class Correspondence {
         if(extensions == null) extensions = new HashMap<>();
         extensions.put(extensionUri, extensionValue);
     }
+
+
+    /**
+     * Adds an additional confidence 
+     * @param matcherClass the class of the matcher
+     * @param confidence the additional confidence
+     */
+    public void addAdditionalConfidence(Class matcherClass, double confidence) {
+        addExtensionValue(matcherClass.getSimpleName() + DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX, confidence);
+    }
+    
+    /**
+     * Adds an additional explanation 
+     * @param matcherClass the class of the matcher
+     * @param explanation the explanation for a correspondence
+     */
+    public void addAdditionalExplanation(Class matcherClass, String explanation) {
+        addExtensionValue(matcherClass.getSimpleName() + DefaultExtensions.MeltExtensions.ADDITIONAL_EXPLANATION_SUFFIX, explanation);
+    }    
 
     public Map<String, Object> getExtensions() { return this.extensions; }
 

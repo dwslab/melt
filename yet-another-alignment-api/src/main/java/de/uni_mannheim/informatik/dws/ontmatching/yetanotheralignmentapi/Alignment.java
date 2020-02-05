@@ -23,8 +23,11 @@ import org.xml.sax.SAXException;
 
 /**
  * Data structure to represent an Alignment.
- * An alignment is a collection of multiple {@link Correspondence} instances.
+ * An alignment is a set of multiple {@link Correspondence} instances.
  * An alignment is also known as "mapping" or "mappings".
+ * Each {@link Correspondence} is uniquely identified by entityOne, entityTwo and relation.
+ * This means, if you add a Correspondence which already exists, it will not be modified.
+ * To modify an already existant correspondence you can use addOrModify.
  *
  * @author Sven Hertling
  * @author Jan Portisch
@@ -205,6 +208,47 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     public void addOrModify(String entityOne, String entityTwo, String extensionKey, Object extensionValue) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
         c.addExtensionValue(extensionKey, extensionValue);
+        addOrModify(c);
+    }
+    
+    /**
+     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param matcherClass the class of the matcher
+     * @param confidence the additional confidence
+     */
+    public void addAdditionalConfidence(String entityOne, String entityTwo, Class matcherClass, double confidence) {
+        Correspondence c = new Correspondence(entityOne, entityTwo);
+        c.addAdditionalConfidence(matcherClass, confidence);
+        addOrModify(c);
+    }
+    
+    /**
+     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param matcherClass the class of the matcher
+     * @param explanation the explanation for a correspondence
+     */
+    public void addAdditionalExplanation(String entityOne, String entityTwo, Class matcherClass, String explanation) {
+        Correspondence c = new Correspondence(entityOne, entityTwo);
+        c.addAdditionalExplanation(matcherClass, explanation);
+        addOrModify(c);
+    }
+    
+    /**
+     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param matcherClass the class of the matcher
+     * @param confidence the additional confidence
+     * @param explanation the explanation for a correspondence
+     */
+    public void addAdditionalConfidenceAndExplanation(String entityOne, String entityTwo, Class matcherClass, double confidence, String explanation) {
+        Correspondence c = new Correspondence(entityOne, entityTwo);
+        c.addAdditionalConfidence(matcherClass, confidence);
+        c.addAdditionalExplanation(matcherClass, explanation);
         addOrModify(c);
     }
     
