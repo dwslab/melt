@@ -21,13 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
- * A client class to communicate with python gensim library.
+ * A client class to communicate with python <a href="https://radimrehurek.com/gensim/">gensim</a> library.
  * Singleton pattern.
  * Communication is performed through HTTP requests.
  * In case you need a different python environment or python executable, 
@@ -74,6 +72,51 @@ public class Gensim {
      * This flag is required in order to have only one hook despite multiple reinitializations.
      */
     private boolean isHookStarted = false;
+
+
+    /**
+     * Method to train a word2vec model. The file for the training (i.e., file with sentences, paths etc.) has to
+     * exist already.
+     * @param modelOrVectorPath If a vector file is desired, the file ending '.kv' is required.
+     * @param trainingFilePath The file path to the file that shall be used for training.
+     * @param configuration The configuration for the training operation.
+     * @return True if training succeeded, else false.
+     */
+    public boolean trainWord2VecModel(String modelOrVectorPath, String trainingFilePath, Word2VecConfiguration configuration){
+        HttpGet request = new HttpGet(serverUrl + "/train-word2vec");
+        if (modelOrVectorPath.endsWith(".kv")) {
+            request.addHeader("vector_path", modelOrVectorPath);
+            request.addHeader("model_path", modelOrVectorPath.substring(0, modelOrVectorPath.length() - 3));
+        } else {
+            request.addHeader("model_path", modelOrVectorPath);
+            request.addHeader("vector_path", modelOrVectorPath + ".kv");
+        }
+
+        request.addHeader("file_path", getCanonicalPath(trainingFilePath));
+        request.addHeader("vector_dimension", "" + configuration.getVectorDimension());
+        request.addHeader("number_of_threads", "" + configuration.getNumberOfThreads());
+        request.addHeader("window_size", "" + configuration.getWindowSize());
+        request.addHeader("iterations", "" + configuration.getIterations());
+        request.addHeader("negatives", "" + configuration.getNegatives());
+        request.addHeader("cbow_or_sg", configuration.toString());
+
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                LOGGER.error("No server response.");
+                return false;
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    LOGGER.error(resultString);
+                    return false;
+                } else return Boolean.parseBoolean(resultString);
+            }
+        } catch (IOException ioe) {
+            LOGGER.error("Problem with http request.", ioe);
+            return false;
+        }
+    }
 
     /**
      * Ge the similarity given 2 concepts and a gensim model.
@@ -236,7 +279,7 @@ public class Gensim {
         try {
             return modelFile.getCanonicalPath();
         } catch (IOException e) {
-            LOGGER.error("Could not derive canoncial model path.", e);
+            LOGGER.error("Could not derive canonical model path.", e);
             return filePath;
         }
     }
@@ -444,6 +487,7 @@ public class Gensim {
         }
         return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
     }
+
 
     public boolean isVectorCaching() {
         return isVectorCaching;

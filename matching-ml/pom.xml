@@ -22,11 +22,11 @@
         </dependency>
 
         <!-- logging -->
-        <dependency>
+        <!--dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.25</version>
-        </dependency>
+        </dependency-->
 
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
         <dependency>
@@ -34,6 +34,21 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.10</version>
         </dependency>
+        
+        <dependency>
+            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <artifactId>matching-eval</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.30</version>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 

@@ -27,76 +27,90 @@ import org.apache.jena.vocabulary.RDF;
 
 public class TextGenerator extends MatcherYAAAJena{
     private static final String newline = System.getProperty("line.separator");
+    
     private Collection<Property> textProperties;
+    private boolean addFragment;
 
-    public TextGenerator(){
-        this.textProperties = new ArrayList<>();
+    public TextGenerator(Collection<Property> textProperties, boolean addFragment){
+        this.textProperties = textProperties;
+        this.addFragment = addFragment;
     }
     
     public TextGenerator(Collection<Property> textProperties){
-        this.textProperties = textProperties;
+        this(textProperties, true);
     }
+    
+    public TextGenerator(){
+        this(new ArrayList<>());
+    }
+    
+    
 
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         
         //TODO: make temporary file and delete and the end
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("oaei-resources/corpora.txt"), "UTF-8"))){
-            writeResourceText(source.listClasses(), textProperties, true, writer);
-            writeResourceText(source.listOntProperties(), textProperties, true, writer);
-            writeResourceText(source.listIndividuals(), textProperties, true, writer);
+            writeResourceText(source.listClasses(), writer);
+            writeResourceText(source.listOntProperties(), writer);
+            writeResourceText(source.listIndividuals(), writer);
             
-            writeResourceText(target.listClasses(), textProperties, true, writer);
-            writeResourceText(target.listOntProperties(), textProperties, true, writer);
-            writeResourceText(target.listIndividuals(), textProperties, true, writer);
-        }        
-        return inputAlignment;
+            writeResourceText(target.listClasses(), writer);
+            writeResourceText(target.listOntProperties(), writer);
+            writeResourceText(target.listIndividuals(), writer);
+        }
         
+        //start server and query
+        
+        return inputAlignment;
     }
-    
-    protected void writeResourceText(ExtendedIterator<? extends OntResource> resources, Collection<Property> properties, boolean addFragment, Writer writer) throws IOException{
+
+    protected void writeResourceText(ExtendedIterator<? extends OntResource> resources, Writer writer) throws IOException{
         while (resources.hasNext()) {
             OntResource r = resources.next();
             if(r.isURIResource() == false)
                 continue;
-            Set<String> resourceText = new HashSet<>();
-            if(addFragment){
-                String localName = r.getLocalName();
-                if(localName != null){
-                    String processed = StringUtil.getProcessedString(localName);
+            String textForResource = getResourceText(r).trim();
+            if(textForResource.isEmpty())
+                continue;
+            writer.write(StringEscapeUtils.escapeCsv(r.getURI()) + "," + StringEscapeUtils.escapeCsv(textForResource) + newline);
+        }
+    }
+    
+    protected String getResourceText(OntResource r){
+        Set<String> resourceText = new HashSet<>();
+        if(this.addFragment){
+            String localName = r.getLocalName();
+            if(localName != null){
+                String processed = StringUtil.getProcessedString(localName);
+                if(isBlank(processed) == false)
+                    resourceText.add(processed);
+            }
+        }
+
+        List<Statement> statements = new ArrayList<>();
+        if(this.textProperties.isEmpty()){
+            statements = r.listProperties().toList();
+        }else{
+            for(Property p : this.textProperties){
+                statements.addAll(r.listProperties(p).toList());
+            }
+        }
+
+        for(Statement stmt : statements){
+            RDFNode n = stmt.getObject();
+            if(n.isLiteral()){
+                Literal lit = n.asLiteral();
+                if(isString(lit)){
+                    String processed = StringUtil.getProcessedString(lit.getLexicalForm());
                     if(isBlank(processed) == false)
                         resourceText.add(processed);
                 }
             }
-            
-            List<Statement> statements = new ArrayList<>();
-            if(properties.isEmpty()){
-                statements = r.listProperties().toList();
-            }else{
-                for(Property p : properties){
-                    statements.addAll(r.listProperties(p).toList());
-                }
-            }
-
-            for(Statement stmt : statements){
-                RDFNode n = stmt.getObject();
-                if(n.isLiteral()){
-                    Literal lit = n.asLiteral();
-                    if(isString(lit)){
-                        String processed = StringUtil.getProcessedString(lit.getLexicalForm());
-                        if(isBlank(processed) == false)
-                            resourceText.add(processed);
-                    }
-                }
-            }
-            
-            if(resourceText.isEmpty())
-                continue;
-            
-                        
-            writer.write(StringEscapeUtils.escapeCsv(r.getURI()) + "," + StringEscapeUtils.escapeCsv(String.join(" ", resourceText)) + newline);
         }
+        return String.join(" ", resourceText);        
     }
+    
         
     private static boolean isString(Literal lit){        
         //check datatype
