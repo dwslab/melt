@@ -366,6 +366,10 @@ public class Gensim {
         }
     }
     
+    /**
+     * Returns the python command which is extracted from file oaei-resources/python_command.txt.
+     * @return the python executable path
+     */
     protected String getPythonCommand(){
         String pythonCommand = "python";
         Path filePath = Paths.get("oaei-resources", "python_command.txt");
@@ -384,6 +388,11 @@ public class Gensim {
         return pythonCommand;
     }
     
+    /**
+     * Updates the environment variable PATH with additional python needed directories like env/lib/bin
+     * @param environment the environemtn to be changed
+     * @param pythonCommand the python executable path
+     */
     protected void updateEnvironmentPath(Map<String,String> environment, String pythonCommand){
         String path = environment.getOrDefault("PATH", "");
         String additionalPaths = getPythonAdditionalPath(pythonCommand);
@@ -394,6 +403,13 @@ public class Gensim {
         }        
         environment.put("PATH",  path);
     }
+    
+    /**
+     * Returns a concatenated path of directories which can be used in the PATH variable.
+     * It searches based on a python executable path, all bin directories within the python dir.
+     * @param pythonCommand the python executable path
+     * @return a concatenated path of directories which can be used in the PATH variable
+     */
     protected String getPythonAdditionalPath(String pythonCommand){
         File f = new File(pythonCommand).getParentFile();
         if(f == null){
