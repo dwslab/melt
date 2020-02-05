@@ -31,8 +31,9 @@ def display_server_status():
     return "MELT ML Server running. Ready to accept requests."
 
 
-# a memory-friendly iterator
 class MySentences(object):
+    """Data structure to iterate over the lines of a file in a memory-friendly way.
+    """
 
     def __init__(self, file_name):
         self.file_name = file_name
@@ -52,6 +53,14 @@ class MySentences(object):
 
 @app.route('/train-word2vec', methods=['GET'])
 def train_word_2_vec():
+    """Method to train a word2vec model given one file to be used for training. Parameters are expected in the request
+    header.
+
+    Returns
+    -------
+        boolean
+        'True' as string if operation was successful, else 'False' (as string).
+    """
     try:
         model_path = request.headers.get('model_path') # where the model will be stored
         vector_path = request.headers.get('vector_path') # where the vector file will be stored

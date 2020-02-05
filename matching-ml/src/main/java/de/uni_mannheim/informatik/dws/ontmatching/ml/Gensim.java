@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * A client class to communicate with python gensim library.
+ * A client class to communicate with python <a href="https://radimrehurek.com/gensim/">gensim</a> library.
  * Singleton pattern.
  * Communication is performed through HTTP requests.
  * In case you need a different python environment or python executable, 
