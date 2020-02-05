@@ -519,7 +519,16 @@ public class DefaultExtensions {
          * e.g. structural_matcher_confidence -> 0.9,
          *      string_matcher_confidence -> 0.8
          */
-        ADDITIONAL_CONFIDENCE_SUFFIX("_confidence");        
+        ADDITIONAL_CONFIDENCE_SUFFIX("_confidence"),
+        
+        
+        /**
+         * The key of the extension should end with this suffix, to be detected as an additional explanation.
+         * The value should be castable to String.
+         * e.g. structural_matcher_explanation -> "match is between ... and ... is added because...",
+         *      string_matcher_explanation -> "match is between ... and ... is added because..."
+         */
+        ADDITIONAL_EXPLANATION_SUFFIX("_explanation");
         
         /**
          * The URI of the extension label.
