@@ -509,7 +509,17 @@ public class DefaultExtensions {
          * The base URI that is to be used with extension predicates that have to be defined "on the spot" and
          * require a base URI. 
          */
-        CONFIGURATION_BASE("http://melt.dws.uni-mannheim.de/configuration#");
+        CONFIGURATION_BASE("http://melt.dws.uni-mannheim.de/configuration#"),
+        
+        
+         /**
+         * The key of the extension should end with this suffix, to be detected as an additional confidence.
+         * The value should be castable to double.
+         * This is required if you chain matchers.
+         * e.g. structural_matcher_confidence -> 0.9,
+         *      string_matcher_confidence -> 0.8
+         */
+        ADDITIONAL_CONFIDENCE_SUFFIX("_confidence");        
         
         /**
          * The URI of the extension label.

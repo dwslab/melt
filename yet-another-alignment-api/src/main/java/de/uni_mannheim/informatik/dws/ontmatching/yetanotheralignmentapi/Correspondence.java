@@ -25,9 +25,9 @@ public class Correspondence {
     protected double confidence;
     protected CorrespondenceRelation relation;
     protected String identifier;
-    protected Map<String, String> extensions;
-
-
+    protected Map<String, Object> extensions;
+        
+    
     /**
      * Constructor
      * @param entityOne URI of the entity from the source ontology as String.
@@ -37,7 +37,7 @@ public class Correspondence {
      * @param identifier The unique identifier for the mapping.
      * @param extensions extensions in the form of a map
      */
-    public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String, String> extensions, String identifier) {
+    public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String, Object> extensions, String identifier) {
         this.entityOne = entityOne;
         this.entityTwo = entityTwo;
         this.confidence = confidence;
@@ -68,7 +68,7 @@ public class Correspondence {
      * @param relation The relation that holds between the two entities.
      * @param extensions extensions as a map of key to value (both strings)
      */
-    public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String, String> extensions) {
+    public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String, Object> extensions) {
         this(entityOne, entityTwo, confidence, relation, extensions, null);
     }
     
@@ -138,8 +138,8 @@ public class Correspondence {
         this("", "", 1.0);
     }
     
-    private static Map<String,String> parseExtensions(String[] arr){
-        Map<String, String> map = new HashMap<>();
+    private static Map<String,Object> parseExtensions(String[] arr){
+        Map<String, Object> map = new HashMap<>();
         for (int i = 0; i < arr.length; i+=2) {
             if(i+1 >= arr.length){
                 LOGGER.error("Uneven number of extension arguments. Exepect are Key1, Value1, Key2, Value2, ....->Discard last extension");
@@ -164,9 +164,29 @@ public class Correspondence {
      * @param extensionUri The URI identifying the extension.
      * @return The value of the extension as String, null if there is no value.
      */
-    public String getExtensionValue(String extensionUri){
+    public Object getExtensionValue(String extensionUri){
         if(extensions == null) return null;
         return extensions.get(extensionUri);
+    }
+    
+    /**
+     * Obtain the value of an extension as string.
+     * @param extensionUri The URI identifying the extension.
+     * @return The value of the extension as String, null if there is no value.
+     */
+    public Object getExtensionValueAsString(String extensionUri){
+        if(extensions == null) return null;
+        return extensions.get(extensionUri).toString();
+    }
+    
+    /**
+     * Obtain the value of an extension.
+     * @param extensionUri The URI identifying the extension.
+     * @return The value of the extension as String, null if there is no value.
+     */
+    public <T> T getExtensionValueCasted(String extensionUri){
+        if(extensions == null) return null;
+        return (T) extensions.get(extensionUri);
     }
 
     /**
@@ -175,12 +195,12 @@ public class Correspondence {
      * @param extensionUri The URI identifying the extension. Possible keys are defined in class DefaultExtensions
      * @param extensionValue The value of the extension to be set.
      */
-    public void addExtensionValue(String extensionUri, String extensionValue){
+    public void addExtensionValue(String extensionUri, Object extensionValue){
         if(extensions == null) extensions = new HashMap<>();
         extensions.put(extensionUri, extensionValue);
     }
 
-    public Map<String, String> getExtensions() { return this.extensions; }
+    public Map<String, Object> getExtensions() { return this.extensions; }
 
     public String getEntityOne() {
         return entityOne;

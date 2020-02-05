@@ -112,10 +112,10 @@ public class AlignmentSerializer {
         sb.append("      <relation>").append(StringEscapeUtils.ESCAPE_XML10.translate(cell.getRelation().toString())).append("</relation>\n");
         sb.append("      <measure rdf:datatype=\"xsd:float\">").append(cell.getConfidence()).append("</measure>\n");
         if(cell.getExtensions() != null){
-            for(HashMap.Entry<String, String> extension : cell.getExtensions().entrySet()){
+            for(HashMap.Entry<String, Object> extension : cell.getExtensions().entrySet()){
                 String extensionLabel = getExtensionLabel(extension.getKey());
                 sb.append("      <alignapilocalns:" + extensionLabel + " xmlns:alignapilocalns=\"" + getExtensionBaseUri(extension.getKey()) + "\">")
-                        .append(StringEscapeUtils.ESCAPE_XML10.translate(extension.getValue()) + "</alignapilocalns:" + extensionLabel + ">\n");
+                        .append(StringEscapeUtils.ESCAPE_XML10.translate(extension.getValue().toString()) + "</alignapilocalns:" + extensionLabel + ">\n");
             }
         }
         sb.append("    </Cell>\n");

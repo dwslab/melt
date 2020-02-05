@@ -128,7 +128,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param relation The relation that holds between the two entities.
      * @param extensions extenions
      */
-    public void add(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String,String> extensions) {
+    public void add(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String,Object> extensions) {
         add(new Correspondence(entityOne, entityTwo, confidence, relation, extensions));
     }
 
@@ -170,6 +170,63 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      */
     public void add(String entityOne, String entityTwo) {
         add(new Correspondence(entityOne, entityTwo));
+    }
+    
+
+    /**
+     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param confidence The confidence of the mapping.
+     * @param relation The relation that holds between the two entities.
+     * @param extensions extensions
+     */
+    public void addOrModify(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String,Object> extensions) {
+        addOrModify(new Correspondence(entityOne, entityTwo, confidence, relation, extensions));
+    }
+    
+    /**
+     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param extensions extensions
+     */
+    public void addOrModify(String entityOne, String entityTwo, Map<String,Object> extensions) {
+        addOrModify(new Correspondence(entityOne, entityTwo, 1.0, CorrespondenceRelation.EQUIVALENCE, extensions));
+    }
+    
+    /**
+     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param extensionKey the key of the extension
+     * @param extensionValue the value of the extension
+     */
+    public void addOrModify(String entityOne, String entityTwo, String extensionKey, Object extensionValue) {
+        Correspondence c = new Correspondence(entityOne, entityTwo);
+        c.addExtensionValue(extensionKey, extensionValue);
+        addOrModify(c);
+    }
+    
+    /**
+     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * @param c Correspondence to be added
+     */
+    public void addOrModify(Correspondence c) {
+        ResultSet<Correspondence> r = this.retrieve(
+                QueryFactory.and(
+                    QueryFactory.equal(Correspondence.SOURCE, c.getEntityOne()),
+                    QueryFactory.equal(Correspondence.TARGET, c.getEntityTwo()),
+                    QueryFactory.equal(Correspondence.RELATION, c.getRelation())
+                ));
+        Iterator<Correspondence> iterator = r.iterator();
+        if (!iterator.hasNext()) {
+           this.add(c);
+           return;            
+        }
+        Correspondence result = iterator.next();
+        result.getExtensions().putAll(c.getExtensions());
+        result.setConfidence(c.getConfidence());
     }
     
     
