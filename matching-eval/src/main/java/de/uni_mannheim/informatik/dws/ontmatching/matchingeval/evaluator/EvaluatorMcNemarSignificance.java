@@ -22,41 +22,49 @@ import java.util.Map;
  * Alignment Systems Across Single Matching Task Via the McNemar's Test. 2018.</a>.
  */
 public class EvaluatorMcNemarSignificance extends Evaluator {
-
-    /**
-     * Constructor.
-     *
-     * @param results The results of the matching process.
-     */
-    public EvaluatorMcNemarSignificance(ExecutionResultSet results) {
-        super(results);
-    }
-
+    
     /**
      * Default Logger
      */
     private static Logger LOGGER = LoggerFactory.getLogger(EvaluatorMcNemarSignificance.class);
+    
+    protected double alpha;
 
-    @Override
-    public void writeToDirectory(File baseDirectory) {
-        writeToDirectory(baseDirectory, 0.05);
+    /**
+     * Constructor. It runs the test with alpha=0.05
+     *
+     * @param results The results of the matching process.
+     */
+    public EvaluatorMcNemarSignificance(ExecutionResultSet results) {
+        this(results, 0.05);
+    }
+    
+    /**
+     * Constructor.
+     *
+     * @param results The results of the matching process.
+     * @param alpha The desired alpha (probability of making a type 1 error.
+     */
+    public EvaluatorMcNemarSignificance(ExecutionResultSet results, double alpha) {
+        super(results);
+        this.alpha = alpha;
     }
 
 
     /**
      * Two files will be written.
      * @param baseDirectory
-     * @param alpha The desired alpha (probability of making a type 1 error.
      */
-    public void writeToDirectory(File baseDirectory, double alpha) {
+    @Override
+    public void writeResultsToDirectory(File baseDirectory) {
         try {
 
             // with continuity correction
             File resultFile = new File(baseDirectory, "McNemar_asymptotic_with_continuity_correction.csv");
             BufferedWriter writer = new BufferedWriter(new FileWriter(resultFile));
             writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Alpha,p,Significant?\n");
-            for(Map.Entry<McNemarIndividualResult, Double> entry : calculatePvalues(alpha, TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION).entrySet()){
-                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + (entry.getValue() < alpha) + "\n");
+            for(Map.Entry<McNemarIndividualResult, Double> entry : calculatePvalues(this.alpha, TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION).entrySet()){
+                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + (entry.getValue() < this.alpha) + "\n");
             }
             writer.flush();
             writer.close();
@@ -65,8 +73,8 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             resultFile = new File(baseDirectory, "McNemar_asymptotic.csv");
             writer = new BufferedWriter(new FileWriter(resultFile));
             writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Alpha,p,Significant?\n");
-            for(Map.Entry<McNemarIndividualResult, Double> entry : calculatePvalues(alpha, TestType.ASYMPTOTIC_TEST).entrySet()){
-                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + (entry.getValue() < alpha) + "\n");
+            for(Map.Entry<McNemarIndividualResult, Double> entry : calculatePvalues(this.alpha, TestType.ASYMPTOTIC_TEST).entrySet()){
+                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + (entry.getValue() < this.alpha) + "\n");
             }
             writer.flush();
             writer.close();

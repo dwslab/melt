@@ -485,7 +485,7 @@ public class DashboardBuilder extends Evaluator {
     }
     
     @Override
-    public void writeToDirectory(File baseDirectory) {
+    public void writeResultsToDirectory(File baseDirectory) {
         writeToFile(new File(baseDirectory, "meltDashboard.html"));
     }
     

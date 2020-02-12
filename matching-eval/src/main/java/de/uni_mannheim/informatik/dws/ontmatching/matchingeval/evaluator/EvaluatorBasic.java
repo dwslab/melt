@@ -53,17 +53,8 @@ public class EvaluatorBasic extends Evaluator {
         this.alignmentExtensions = getAlignmentExtensions(results);
     }
 
-    /**
-     * Persist the results of the evaluator in the base directory.
-     * Convenience method for {@link EvaluatorBasic#writeToDirectory(File)}
-     * @param baseDirectoryPath The directory path into which the evaluation results shall be written to.
-     */
-    public void writeToDirectory(String baseDirectoryPath){
-        this.writeToDirectory(new File(baseDirectoryPath));
-    }
-
     @Override
-    public void writeToDirectory(File baseDirectory) {
+    public void writeResultsToDirectory(File baseDirectory) {
         try {
             if(!baseDirectory.exists()){
                 baseDirectory.mkdirs();

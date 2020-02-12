@@ -43,12 +43,6 @@ public abstract class Evaluator {
         if (directory == null) {
             throw new IllegalArgumentException("DefaultResultsFolder in class Evaluator should not be null");
         }
-        if(!directory.exists()) {
-            directory.mkdirs();
-        }
-        if(directory.isDirectory() == false){
-            throw new IllegalArgumentException("DefaultResultsFolder should be a directory.");
-        }
         resultsDirectory = directory;
     }
 
@@ -66,26 +60,50 @@ public abstract class Evaluator {
     }
 
     /**
-     * Persist the results of the evaluator in the default directory.
+     * Perform an evaluation and persist the results of the evaluator in the default directory.
      */
     public void writeToDirectory(){
         this.writeToDirectory(resultsDirectory);
     }
 
     /**
-     * Persist the results of the evaluator in the base directory.
-     * @param baseDirectory The directory into which the evaluation results shall be written to.
+     * Perform an evaluation and persist the results of the evaluator in the given directory.
+     * @param baseDirectory The directory which shall be used to place the evaluation files. 
+     *                      The directory will be created if it does not exist.
      */
-    public abstract void writeToDirectory(File baseDirectory);
+    public void writeToDirectory(File baseDirectory){
+        checkAndCreateDirectory(baseDirectory);
+        writeResultsToDirectory(baseDirectory);
+    }
+    
+    protected abstract void writeResultsToDirectory(File baseDirectory);
 
     /**
-     * Persist the results of the evaluator in the base directory.
-     * @param baseDirectoryPath The directory path into which the evaluation results shall be written to.
+     * Perform an evaluation and persist the results of the evaluator in the default directory.
+     * @param baseDirectoryPath The directory path which shall be used to place the evaluation files. 
+     *                          The directory will be created if it does not exist.
      */
     public void writeToDirectory(String baseDirectoryPath){
-        File baseDirectory = new File(baseDirectoryPath);
-        writeToDirectory(baseDirectory);
+        writeToDirectory(new File(baseDirectoryPath));
     }
+    
+    /**
+     * Checks if the directory is not null, creates it and check if it is a directory.
+     * Throws an exception if something is not correct.
+     * @param directory the directory to inspect
+     */
+    protected void checkAndCreateDirectory(File directory){
+        if (directory == null) {
+            throw new IllegalArgumentException("Could not write evaluator results to baseDirectory because it is null.");
+        }
+        if(!directory.exists()) {
+            directory.mkdirs();
+        }
+        if(directory.isDirectory() == false){
+            throw new IllegalArgumentException("Could not write evaluator results to baseDirectory because it is not a directory.");
+        }
+    }
+    
 
     /**
      * Given a base directory and an {@link ExecutionResult}, the target directory will be returned to which results can

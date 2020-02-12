@@ -192,7 +192,7 @@ public class EvaluatorCSV extends Evaluator {
     }
 
     @Override
-    public void writeToDirectory(File baseDirectory) {
+    public void writeResultsToDirectory(File baseDirectory) {
         initializePrinters(baseDirectory);
         for (String matcher : this.results.getDistinctMatchers()) {
             // individual evaluation per test case
@@ -207,14 +207,6 @@ public class EvaluatorCSV extends Evaluator {
         closePrinters();
     }
 
-    /**
-     * Perform an evaluation and save the artefacts of the evaluation in the given directory.
-     * @param baseDirectoryPath The directory which shall be used to place the evaluation files.
-     *                          The directory will be created if it does not exist.
-     */
-    public void writeToDirectory(String baseDirectoryPath) {
-        this.writeToDirectory(new File(baseDirectoryPath));
-    }
 
     /**
      * This method initializes global writers for the performance KPI CSV files.

@@ -48,7 +48,7 @@ public class ResultsPageHTML extends Evaluator{
     }
 
     @Override
-    public void writeToDirectory(File baseDirectory) {
+    public void writeResultsToDirectory(File baseDirectory) {
         writeToFile(new File(baseDirectory, "resultspage.html"));        
     }
     
