@@ -43,22 +43,22 @@ class ExecutionRunner implements Callable<ExecutionResult> {
      * @return ExecutionResult Object
      */
     public static ExecutionResult runMatcher(TestCase testCase, IOntologyMatchingToolBridge matcher, String matcherName){
-        LOGGER.info("Running matcher " + matcherName + ".");
+        LOGGER.info("Running matcher {} on testcase {} (track {}).",matcherName, testCase.getName(), testCase.getTrack().getName());
         long runTime;
         URL resultingAlignment = null;
         long startTime = System.nanoTime();
         try {
             resultingAlignment = matcher.align(testCase.getSource().toURL(), testCase.getTarget().toURL());
         } catch (ToolBridgeException | MalformedURLException ex) {
-            LOGGER.error("Exception during matching", ex);
+            LOGGER.error("Exception during matching (matcher " + matcherName + " on testcase " +  testCase.getName() + ").", ex);
         }
         finally
         {
             runTime = System.nanoTime() - startTime;
-            LOGGER.info("Running matcher " + matcherName + " completed.");
+            LOGGER.info("Running matcher {} on testcase {} (track {}) completed.", matcherName, testCase.getName(), testCase.getTrack().getName());
         }
         if(resultingAlignment == null) {
-            LOGGER.error("Matching task unsuccessful: output alignment equals null.");
+            LOGGER.error("Matching task unsuccessful: output alignment equals null. (matcher: {} testcase: {} track: {})", matcherName, testCase.getName(), testCase.getTrack().getName());
         } else {
             try {
                 new File(resultingAlignment.toURI()).deleteOnExit();

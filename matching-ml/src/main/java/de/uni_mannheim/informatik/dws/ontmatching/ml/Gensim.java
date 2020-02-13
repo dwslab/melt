@@ -73,6 +73,50 @@ public class Gensim {
      */
     private boolean isHookStarted = false;
 
+    
+    /**
+     * Method to train a vector space model. The file for the training (i.e., csv file where first column is id and second colum text) has to
+     * exist already.
+     * @param modelPath identifier for the model (used for querying a specific model
+     * @param trainingFilePath The file path to the file that shall be used for training.
+     */
+    public void trainVectorSpaceModel(String modelPath, String trainingFilePath){
+        HttpGet request = new HttpGet(serverUrl + "/train-vector-space-model");
+        request.addHeader("input_file_path", getCanonicalPath(trainingFilePath));
+        request.addHeader("model_path", modelPath);
+
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+        } catch (IOException ioe) {
+            LOGGER.error("Problem with http request.", ioe);
+        }
+    }
+    
+    /**
+     * Method to train a vector space model. The file for the training (i.e., csv file where first column is id and second colum text) has to
+     * exist already.
+     * @param modelPath identifier for the model (used for querying a specific model
+     * @param documentIdOne Document id for the first document
+     * @param documentIdTwo Document id for the second document
+     */
+    public double queryVectorSpaceModel(String modelPath, String documentIdOne, String documentIdTwo) throws Exception{
+        HttpGet request = new HttpGet(serverUrl + "/query-vector-space-model");
+        request.addHeader("model_path", modelPath);
+        request.addHeader("document_id_one", documentIdOne);        
+        request.addHeader("document_id_two", documentIdTwo);
+
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                } else return Double.parseDouble(resultString);
+            }
+        }
+    }
 
     /**
      * Method to train a word2vec model. The file for the training (i.e., file with sentences, paths etc.) has to

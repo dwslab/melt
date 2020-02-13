@@ -1,8 +1,7 @@
-from flask import Flask
-from flask import request
-from gensim.models import KeyedVectors
-import gensim
-import traceback
+from flask import Flask, request
+from gensim import corpora, models, similarities
+import csv
+import numpy as np
 import logging
 import os
 
@@ -76,9 +75,9 @@ def train_word_2_vec():
         logging.info("Sentences object initialized.")
 
         if cbow_or_sg == 'sg':
-            model = gensim.models.Word2Vec(min_count=1, size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=1, negative=int(negatives), iter=int(iterations))
+            model = models.Word2Vec(min_count=1, size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=1, negative=int(negatives), iter=int(iterations))
         else:
-            model = gensim.models.Word2Vec(min_count=1, size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=0, cbow_mean=1, alpha = 0.05, negative=int(negatives), iter=int(iterations))
+            model = models.Word2Vec(min_count=1, size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=0, cbow_mean=1, alpha = 0.05, negative=int(negatives), iter=int(iterations))
 
         logging.info("Model object initialized. Building Vocabulary...")
         model.build_vocab(sentences)
@@ -131,14 +130,14 @@ def get_vectors(model_path, vector_path):
             model = active_models[model_path]
             vectors = model.wv
         else:
-            model = gensim.models.Word2Vec.load(model_path)
+            model = models.Word2Vec.load(model_path)
             active_models[model_path] = model
             vectors = model.wv
     elif vector_path in active_vectors:
         # logging.info("Found vector file in cache.")
         vectors = active_vectors[vector_path]
     else:
-        vectors = KeyedVectors.load(vector_path, mmap='r')
+        vectors = models.KeyedVectors.load(vector_path, mmap='r')
         active_vectors[vector_path] = vectors
     return vectors
 
@@ -205,6 +204,115 @@ def get_vector_given_model():
     for element in vectors.word_vec(concept):
         result += " " + str(element)
     return result[1:]
+
+
+# TF-IDF and LSI models
+
+@app.route('/train-vector-space-model', methods=['GET'])
+def train_vector_space_model():
+    input_file_path = request.headers.get('input_file_path')
+    model_path = request.headers.get('model_path')
+
+    dictionary = __createDictionary(input_file_path)
+    corpus = CsvCorpus(dictionary, input_file_path)
+    tfidf = models.TfidfModel(dictionary=dictionary)
+    tfidf_corpus = tfidf[corpus]
+
+    index = similarities.Similarity('index.index', tfidf_corpus, num_features=len(dictionary))
+    # index = similarities.SparseMatrixSimilarity(tfidf_corpus, num_features=len(dictionary))
+    # index = similarities.MatrixSimilarity(tfidf_corpus, num_features=len(dictionary))
+    active_models[model_path] = (corpus, index)
+    return "True"
+
+@app.route('/query-vector-space-model', methods=['GET'])
+def query_vector_space_model():
+    try:
+        model_path = request.headers.get('model_path')
+        document_id_one = request.headers.get('document_id_one')
+        document_id_two = request.headers.get('document_id_two')  # can be None
+
+        model = active_models.get(model_path)
+        if model is None:
+            return "ERROR! Model not active"
+        (corpus, index) = model
+
+        pos_one = corpus.id2pos.get(document_id_one)
+        if pos_one is None:
+            return "ERROR! document_id_one not in the vocabulary."
+        sims = index.similarity_by_id(pos_one)
+
+        if document_id_two is None:
+            return __sims2scores(sims, corpus.pos2id, 10)
+        else:
+            pos_two = corpus.id2pos.get(document_id_two)
+            if pos_two is None:
+                return "ERROR! document_id_two not in the vocabulary."
+            test = sims[pos_two]
+            return str(test)
+    except Exception as e:
+        return str(e)
+
+
+english_stopwords = {'has', 'mightn', 'me', 'here', 'other', 'very', 'but', 'ours', 'he', 'his', 'there', 'you', 'some',
+                     'don', 'such', 'under', 'their', 'themselves', "mustn't", 'had', "shan't", "she's", 'yourselves',
+                     'by', 'about', 'needn', 're', "weren't", 'any', 'herself', "don't", 'am', 'hadn', 'what', 'each',
+                     'weren', "hadn't", 'between', 'both', 'in', 'can', 'the', 'does', 'too', 'shouldn', 'once', 'when',
+                     's', 'it', 'as', 'same', 'haven', "hasn't", "didn't", "wasn't", 'on', 'shan', 'they', 'of', 'was',
+                     "aren't", 'out', 'before', 'our', 'aren', 'ourselves', 'wouldn', 'we', 'didn', 'having', 'above',
+                     'just', 'below', 'why', 'against', "wouldn't", 'were', 'yours', 'few', 'm', 'doesn', 'my', 'nor',
+                     'then', "you'll", 'your', "isn't", "haven't", 'him', "doesn't", 'i', 'wasn', 'who', 'will',
+                     "that'll", 'if', 'hasn', 'been', 'myself', 'd', 'where', 'into', 't', 'ain', "couldn't", 'being',
+                     'how', 'y', 'which', "you've", 'an', 'or', 'from', 'no', 'ma', 'doing', 'through', 'all', 'most',
+                     'theirs', 'than', 'are', 'to', 'while', "shouldn't", 'that', 'so', 'and', 'only', 'until', 've',
+                     'isn', 'should', 'her', 'yourself', 'have', 'over', 'because', "you'd", 'be', 'more', 'a',
+                     'himself', 'those', 'these', 'not', 'its', 'own', 'for', 'she', 'down', 'hers', "you're", 'whom',
+                     'after', 'this', 'at', 'do', 'll', "it's", 'up', 'couldn', 'with', 'itself', 'again', 'off', 'is',
+                     'during', 'further', 'mustn', 'won', 'did', "mightn't", "needn't", "should've", 'them', 'now', 'o',
+                     "won't"}
+
+def __createDictionary(file_path, stopwords=english_stopwords):
+    with open(file_path) as f:
+        # collect statistics about all tokens
+        readCSV = csv.reader(f, delimiter=',')
+        dictionary = corpora.Dictionary(line[1].lower().split() for line in readCSV)
+    # remove stop words and words that appear only once
+    stop_ids = [dictionary.token2id[stopword] for stopword in stopwords if stopword in dictionary.token2id]
+    once_ids = [tokenid for tokenid, docfreq in dictionary.dfs.items() if docfreq == 1]
+    dictionary.filter_tokens(stop_ids + once_ids)  # remove stop words and words that appear only once
+    dictionary.compactify()  # remove gaps in id sequence after words that were removed
+    return dictionary
+
+
+def __sims2scores(sims, pos2id, topsims, eps=1e-7):
+    """Convert raw similarity vector to a list of (docid, similarity) results."""
+    result = []
+    sims = abs(sims)  # TODO or maybe clip? are opposite vectors "similar" or "dissimilar"?!
+    for pos in np.argsort(sims)[::-1]:
+        if pos in pos2id and sims[pos] > eps:  # ignore deleted/rewritten documents
+            # convert positions of resulting docs back to ids
+            result.append((pos2id[pos], sims[pos]))
+            if len(result) == topsims:
+                break
+    return result
+
+
+class CsvCorpus(object):
+    def __init__(self, dictionary, file_path):
+        self.dictionary = dictionary
+        self.file_path = file_path
+        self.id2pos = {}  # map document id (string) to index position (integer)
+        self.pos2id = {}  # map index position (integer) to document id (string)
+
+    def __iter__(self):
+        with open(self.file_path) as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for i, row in enumerate(readCSV):
+                if row[0] in self.id2pos:
+                    logging.info("Document ID %s already in file - the last one is used only", row[0])
+                self.id2pos[row[0]] = i
+                self.pos2id[i] = row[0]
+                yield self.dictionary.doc2bow(row[1].lower().split())
+
 
 
 @app.route('/hello', methods=['GET'])

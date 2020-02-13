@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.ontmatching.ml;
 
 import de.uni_mannheim.informatik.dws.ontmatching.matchingjena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
+import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Correspondence;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,24 +24,27 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.vocabulary.RDF;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
-public class TextGenerator extends MatcherYAAAJena{
+public class VectorSpaceModelMatcher extends MatcherYAAAJena{
+    private final static Logger LOGGER = LoggerFactory.getLogger(VectorSpaceModelMatcher.class);
     private static final String newline = System.getProperty("line.separator");
     
     private Collection<Property> textProperties;
     private boolean addFragment;
 
-    public TextGenerator(Collection<Property> textProperties, boolean addFragment){
+    public VectorSpaceModelMatcher(Collection<Property> textProperties, boolean addFragment){
         this.textProperties = textProperties;
         this.addFragment = addFragment;
     }
     
-    public TextGenerator(Collection<Property> textProperties){
+    public VectorSpaceModelMatcher(Collection<Property> textProperties){
         this(textProperties, true);
     }
     
-    public TextGenerator(){
+    public VectorSpaceModelMatcher(){
         this(new ArrayList<>());
     }
     
@@ -60,7 +64,15 @@ public class TextGenerator extends MatcherYAAAJena{
             writeResourceText(target.listIndividuals(), writer);
         }
         
-        //start server and query
+        Gensim.getInstance().trainVectorSpaceModel("corpora", "oaei-resources/corpora.txt");        
+        for(Correspondence c : inputAlignment){
+            try{
+                double conf = Gensim.getInstance().queryVectorSpaceModel("corpora", c.getEntityOne(), c.getEntityTwo());
+                c.setConfidence(conf);
+            }catch(Exception e){
+                LOGGER.warn("Could not get confidence from python server", e);
+            }
+        }
         
         return inputAlignment;
     }
