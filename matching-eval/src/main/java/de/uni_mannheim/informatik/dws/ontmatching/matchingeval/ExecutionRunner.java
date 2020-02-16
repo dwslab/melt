@@ -32,6 +32,7 @@ class ExecutionRunner implements Callable<ExecutionResult> {
 
     @Override
     public ExecutionResult call() {
+        Thread.currentThread().setName(matcherName + "-" + testCase.getName());
         return runMatcher(testCase, matcher, matcherName);
     }
 

@@ -7,15 +7,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
@@ -30,51 +29,57 @@ import org.apache.jena.vocabulary.RDFS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * Matches resource A (source) to B (target) iff they have at least one label in the same synset.
+ * The text used for the resources can be defined (e.g. rdfs:label etc).
+ * The processing can also be adjusted by subclassing this class and override method processString.
+ */
 public class SynonymTextMatcher extends MatcherYAAAJena {
     private static final Logger LOGGER = LoggerFactory.getLogger(SynonymTextMatcher.class);
     
     private Map<String, Long> synonymSet;
-    private Long synsetIndex; //initialized to 0
     private Collection<Property> properties;
     
     
-    public SynonymTextMatcher(File csvFile, Collection<Property> properties){
-        this.synsetIndex = 0L;
-        this.synonymSet = new HashMap<>();
+    public SynonymTextMatcher(Map<String, Long> synonymSet, Collection<Property> properties){
+        this.synonymSet = synonymSet;
         this.properties = properties;
-        parseSynonymCsvFile(csvFile);        
     }
     
-    public SynonymTextMatcher(Collection<Property> properties){
-        this(null, properties);
+    public SynonymTextMatcher(Map<String, Long> synonymSet, Property... properties){
+        this.synonymSet = synonymSet;
+        this.properties = Arrays.asList(properties);
     }
     
+    public SynonymTextMatcher(File csvFile, Collection<Property> properties){
+        this.synonymSet = parseSynonymCsvFile(csvFile);
+        this.properties = properties;
+    }
+
     public SynonymTextMatcher(File csvFile, Property... properties){
         this(csvFile, Arrays.asList(properties));
-    }
-    
-    public SynonymTextMatcher(Property... properties){
-        this(null, Arrays.asList(properties));
     }
     
     public SynonymTextMatcher(File csvFile){
         this(csvFile, Arrays.asList(RDFS.label));
     }
     
-    public SynonymTextMatcher(){
-        this(null, Arrays.asList(RDFS.label));
-    }
-    
     
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        if(OaeiOptions.isMatchingClassesRequired())
-            matchResources(source.listClasses(), target.listClasses(), inputAlignment);        
-        if(OaeiOptions.isMatchingDataPropertiesRequired() || OaeiOptions.isMatchingObjectPropertiesRequired())
-            matchResources(source.listAllOntProperties(), target.listAllOntProperties(), inputAlignment);        
-        if(OaeiOptions.isMatchingInstancesRequired())
+        if(OaeiOptions.isMatchingClassesRequired()){
+            LOGGER.info("SynonymMatcher - match classes");
+            matchResources(source.listClasses(), target.listClasses(), inputAlignment);    
+        }                
+        if(OaeiOptions.isMatchingDataPropertiesRequired() || OaeiOptions.isMatchingObjectPropertiesRequired()){
+            LOGGER.info("SynonymMatcher - match properties");
+            matchResources(source.listAllOntProperties(), target.listAllOntProperties(), inputAlignment);      
+        }              
+        if(OaeiOptions.isMatchingInstancesRequired()){
+            LOGGER.info("SynonymMatcher - match instances");
             matchResources(source.listIndividuals(), target.listIndividuals(), inputAlignment);
+        }
+        LOGGER.info("SynonymMatcher - finished matching");
         return inputAlignment;
     }
     
@@ -131,33 +136,64 @@ public class SynonymTextMatcher extends MatcherYAAAJena {
         return values;
     }
     
-    
-        
-    protected void parseSynonymCsvFile(File f){
+    /**
+     * This method parse a synonym file formatted as a csv file.
+     * Each line is a synsetand each cell in a line is a text. 
+     * @param f teh file to be parsed
+     * @return a map which maps a text to its synset id.
+     */
+    protected Map<String, Long> parseSynonymCsvFile(File f){
+        Map<String, Long> map = new HashMap<>();
         if(f == null || f.exists() == false){
-            return;
-        }        
-        LOGGER.debug("Start loading synonym file");
+            LOGGER.warn("SynonymCsvFile is null or does not exist. Continue with empty synonym map.");
+            return map;
+        }
+        LOGGER.info("Start loading synonym file");
+        long synsetIndex = 0;
         try(Reader in = new FileReader(f)){
             for (CSVRecord row : CSVFormat.DEFAULT.parse(in)) {
-                addSynonymSet(row);
+                synsetIndex++;
+                for(String text : row){
+                    map.put(processString(text), synsetIndex);
+                }
             }
         } catch (IOException ex) {
-            LOGGER.warn("Could not parse transitive closure", ex);
+            LOGGER.warn("Could not parse synonym file", ex);
         }
-        LOGGER.debug("Finished loading synonym file");
+        LOGGER.info("Finished loading synonym file");
+        return map;
     }
     
-    protected void addSynonymSet(Iterable<String> synset){
-        this.synsetIndex++;
-        for(String text : synset){
-            this.synonymSet.put(processString(text), this.synsetIndex);
-        }
-    }
-    
+        
     protected String processString(String text){
         return text.toLowerCase().trim();
     }
     
     
+    /**
+     * Parse a synset file which can be shared across different synonym text matchers.
+     * @param f
+     * @return 
+     */
+    public static Map<String, Long> parseCommonSynonymCsvFile(File f){
+        Map<String, Long> map = new ConcurrentHashMap<>();
+        if(f == null || f.exists() == false){
+            LOGGER.warn("SynonymCsvFile is null or does not exist. Continue with empty synonym map.");
+            return map;
+        }
+        LOGGER.info("Start loading synonym file");
+        long synsetIndex = 0;
+        try(Reader in = new FileReader(f)){
+            for (CSVRecord row : CSVFormat.DEFAULT.parse(in)) {
+                synsetIndex++;
+                for(String text : row){
+                    map.put(text.toLowerCase().trim(), synsetIndex);
+                }
+            }
+        } catch (IOException ex) {
+            LOGGER.warn("Could not parse synonym file", ex);
+        }
+        LOGGER.info("Finished loading synonym file");
+        return map;
+    }
 }

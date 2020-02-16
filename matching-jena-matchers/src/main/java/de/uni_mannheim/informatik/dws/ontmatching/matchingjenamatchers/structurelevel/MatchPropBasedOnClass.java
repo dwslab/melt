@@ -17,7 +17,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * Graph-based Matcher: Checks all matched classes and matches also properties
- * between them with mean value of both classes.
+ * between them (domain and range) with mean value of both classes.
  *
  *
  * Example:
