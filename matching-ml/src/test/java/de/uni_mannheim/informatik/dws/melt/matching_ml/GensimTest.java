@@ -7,14 +7,26 @@ import org.junit.jupiter.api.condition.EnabledOnOs;
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 import static org.junit.jupiter.api.condition.OS.MAC;
 import static org.junit.jupiter.api.condition.OS.WINDOWS;
 
 
 class GensimTest {
 
-    static Gensim gensim = Gensim.getInstance();
+    private Gensim gensim;
 
+    @BeforeAll
+    public void setup(){
+        this.gensim = Gensim.getInstance();
+    }
+    
+    @AfterAll
+    public void tearDown(){
+        this.gensim.shutDown();
+    }
+    
+    
     @Test
     @EnabledOnOs({ MAC })
     /**
@@ -180,8 +192,5 @@ class GensimTest {
     }
 
 
-    @AfterAll
-    static void shutdown(){
-        gensim.shutDown();
-    }
+    
 }
