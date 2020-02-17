@@ -466,9 +466,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     
     /**
      * Switches sources with targets. Does not change the relation.
-     * This method is only for errneous alignments where a matcher switched the source with the target ontology.
-     * @param alignment
-     * @return 
+     * This method is only for erroneous alignments where a matcher switched the source with the target ontology.
+     * @param alignment The alignment where the source shall be switched with the target.
+     * @return Edited alignment.
      */
     public static Alignment switchSourceWithTarget(Alignment alignment) {
         Alignment result = new Alignment(alignment);
@@ -484,7 +484,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * Serialize this mapping to a string.
      * Better use the function serialize(File f) if the mapping is huge.
      * @return the mapping in the alignment xml format
-     * @throws IOException 
+     * @throws IOException An IOException.
      */
     public String serialize() throws IOException{
         return AlignmentSerializer.serialize(this);
@@ -494,7 +494,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * Serialize this mapping directly to a given file.
      * This also works if the alignment is huge.
      * @param file The file for writing the mapping.
-     * @throws IOException 
+     * @throws IOException An IOException.
      */
     public void serialize(File file) throws IOException{
         AlignmentSerializer.serialize(this, file);

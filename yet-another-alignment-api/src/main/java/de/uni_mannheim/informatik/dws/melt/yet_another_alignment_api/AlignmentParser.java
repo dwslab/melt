@@ -86,8 +86,8 @@ public class AlignmentParser {
      * Parses the given file as alignment.
      * @param fileToBeParsed The file that shall be parsed.
      * @return Parsed alignment instance.
-     * @throws SAXException
-     * @throws IOException
+     * @throws SAXException A SAXException.
+     * @throws IOException An IOException.
      */
     public static Alignment parse(File fileToBeParsed) throws SAXException, IOException {
 	return parse(new FileInputStream(fileToBeParsed));

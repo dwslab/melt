@@ -516,8 +516,8 @@ public class DefaultExtensions {
          * The key of the extension should end with this suffix, to be detected as an additional confidence.
          * The value should be castable to double.
          * This is required if you chain matchers.
-         * e.g. structural_matcher_confidence -> 0.9,
-         *      string_matcher_confidence -> 0.8
+         * e.g. structural_matcher_confidence -&gt; 0.9,
+         *      string_matcher_confidence -&gt; 0.8
          */
         ADDITIONAL_CONFIDENCE_SUFFIX("_confidence"),
         
@@ -525,8 +525,8 @@ public class DefaultExtensions {
         /**
          * The key of the extension should end with this suffix, to be detected as an additional explanation.
          * The value should be castable to String.
-         * e.g. structural_matcher_explanation -> "match is between ... and ... is added because...",
-         *      string_matcher_explanation -> "match is between ... and ... is added because..."
+         * e.g. structural_matcher_explanation -&gt; "match is between ... and ... is added because...",
+         *      string_matcher_explanation -&gt; "match is between ... and ... is added because..."
          */
         ADDITIONAL_EXPLANATION_SUFFIX("_explanation");
         

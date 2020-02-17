@@ -179,10 +179,12 @@ public class Correspondence {
         if(extensions == null) return null;
         return extensions.get(extensionUri).toString();
     }
-    
+
+
     /**
      * Obtain the value of an extension.
      * @param extensionUri The URI identifying the extension.
+     * @param <T> Extension value type.
      * @return The value of the extension as String, null if there is no value.
      */
     public <T> T getExtensionValueCasted(String extensionUri){

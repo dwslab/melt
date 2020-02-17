@@ -54,6 +54,8 @@ public class AlignmentXmlRepair {
      * Loads a repaired alignment.
      * @param alignmentFile The alignment file
      * @return the repaired alignment
+     * @throws IOException An IOException.
+     * @throws SAXException A SAXException.
      */ 
     public static Alignment loadRepairedAlignment(File alignmentFile) throws IOException, SAXException{
         File tmpFile = new File(alignmentFile.getParentFile(), alignmentFile.getName() + ".tmp");
