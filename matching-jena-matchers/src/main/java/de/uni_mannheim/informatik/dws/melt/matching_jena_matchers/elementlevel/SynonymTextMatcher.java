@@ -173,18 +173,18 @@ public class SynonymTextMatcher extends MatcherYAAAJena {
     
     /**
      * Parse a synset file which can be shared across different synonym text matchers.
-     * @param f
-     * @return 
+     * @param fileWithSynonyms The file containing the synonyms.
+     * @return  Map from text to synset id.
      */
-    public static Map<String, Long> parseCommonSynonymCsvFile(File f){
+    public static Map<String, Long> parseCommonSynonymCsvFile(File fileWithSynonyms){
         Map<String, Long> map = new ConcurrentHashMap<>();
-        if(f == null || f.exists() == false){
+        if(fileWithSynonyms == null || fileWithSynonyms.exists() == false){
             LOGGER.warn("SynonymCsvFile is null or does not exist. Continue with empty synonym map.");
             return map;
         }
         LOGGER.info("Start loading synonym file");
         long synsetIndex = 0;
-        try(Reader in = new FileReader(f)){
+        try(Reader in = new FileReader(fileWithSynonyms)){
             for (CSVRecord row : CSVFormat.DEFAULT.parse(in)) {
                 synsetIndex++;
                 for(String text : row){

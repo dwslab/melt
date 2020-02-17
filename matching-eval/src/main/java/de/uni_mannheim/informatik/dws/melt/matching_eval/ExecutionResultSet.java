@@ -37,7 +37,6 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
     private HashIndex trackIndex;
     private HashIndex refinementSetIndex;
 
-
     /**
      * Constructor
      */
@@ -63,7 +62,7 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
      * @param testCase The test case that shall match.
      * @param matcherName The matcher name shall match.
      * @param refinements The refinements.
-     * @return
+     * @return The Execution result instance.
      */
     public ExecutionResult get(TestCase testCase, String matcherName, Refiner... refinements){
         ResultSet<ExecutionResult> r = this.retrieve(query(testCase,matcherName, refinements));

@@ -94,6 +94,7 @@ public class Executor {
      *
      * @param tracks The tracks on which the matchers shall be run.
      * @param matcher The matcher that shall be run.
+     * @param matcherName The name of the matcher.
      * @return The matching result as {@link ExecutionResultSet} instance.
      */
     public static ExecutionResultSet runTracks(List<Track> tracks, IOntologyMatchingToolBridge matcher, String matcherName) {
@@ -418,6 +419,7 @@ public class Executor {
      * Load raw results from a folder with the structure used by the <a href="http://oaei.ontologymatching.org/2018/results/anatomy/index.html">Anatomy Track</a>
      * of the OAEI.
      *
+     * @param pathToFolder Path to the anatomy results folder (can be downloaded from OAEI Web site).
      * @return {@link ExecutionResultSet} instance with the loaded results.
      */
     public static ExecutionResultSet loadFromAnatomyResultsFolder(String pathToFolder) {

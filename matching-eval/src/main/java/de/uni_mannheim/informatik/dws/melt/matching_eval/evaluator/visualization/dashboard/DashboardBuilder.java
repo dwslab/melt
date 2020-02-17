@@ -98,7 +98,7 @@ public class DashboardBuilder extends Evaluator {
 
     /**
      * Constructor
-     * @param evaluatorCSV
+     * @param evaluatorCSV The CSV evaluator object to be used.
      */
     public DashboardBuilder(EvaluatorCSV evaluatorCSV){
         this(evaluatorCSV, "MELT Dashboard", "");

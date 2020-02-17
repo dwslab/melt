@@ -84,6 +84,10 @@ public class AlignmentAnalyzerResult {
      * @param frequenciesOfRelations The distribution of relations in the given mapping.
      * @param isHomogenousAlingment Indicator on whether only resources of the same type are matched.
      * @param frequenciesOfMappingTypes Frequency of different mapping types.
+     * @param urisCorrectPosition How often source and target URIs were correct in the alignment file.
+     * @param urisIncorrectPosition How often source and target URIs were incorrect in the alignment file.
+     * @param urisNotFound List of URIs that cannot be found in the ontologies to be matched.
+     * @param arityCounts Distribution of arities.
      */
     AlignmentAnalyzerResult(ExecutionResult executionResult, double minimumConfidence,
                             double maximumConfidence, Map<CorrespondenceRelation, Integer> frequenciesOfRelations,
@@ -221,7 +225,7 @@ public class AlignmentAnalyzerResult {
     /**
      * Returns true if each cell in the mapping uses the equivalence relation.
      * If multiple relations are used, false will be returned.
-     * @return
+     * @return True if the only relation in the alignment is equality, else false.
      */
     public boolean isAlwaysEqualityRelation() {
         if(frequenciesOfRelations.size() == 1 && frequenciesOfRelations.containsKey(CorrespondenceRelation.EQUIVALENCE)) {
@@ -250,7 +254,7 @@ public class AlignmentAnalyzerResult {
     /**
      * Returns true if the alignment is homogenous, i.e., whether only resources of the same type
      * are matched e.g. classes with classes and object properties with object properites.
-     * @return
+     * @return True if homogenous, else false.
      */
     public boolean isHomogenousAlignment() {
         return this.isHomogenousAlingment;
@@ -268,6 +272,7 @@ public class AlignmentAnalyzerResult {
     /**
      * Returns the frequency of different mapping types.
      * e.g. "class - class" → 55
+     * @return Distribution of mapping types.
      */
     public Map<String, Integer> getFrequenciesOfMappingTypes(){
         return frequenciesOfMappingTypes;
@@ -330,7 +335,7 @@ public class AlignmentAnalyzerResult {
     /**
      * Tests if a switch of source and target URIs makes sense 
      * e.g. more first entities of correspondnce are found in target ontology and not source ontology.
-     * @return true if a switch of source and target URIs makes sense 
+     * @return True if a switch of source and target URIs makes sense .
      */
     public boolean isSwitchOfSourceTargetBetter() {
         return urisCorrectPosition < urisIncorrectPosition;
@@ -346,7 +351,7 @@ public class AlignmentAnalyzerResult {
 
     /**
      * Return the map of arity to corresponding counts.
-     * @return map of arity to corresponding counts
+     * @return map of arity to corresponding counts.
      */
     public Map<Arity, Integer> getArityCounts() {
         return arityCounts;

@@ -521,7 +521,7 @@ public class EvaluatorCSV extends Evaluator {
 
     /**
      * Obtain an output stream that can be used to write the CSV file.
-     * @return
+     * @return CSV String representation of the alignment cube.
      */
     public String getAlignmentsCubeAsString(){
         if(!isPrintAsShortenedString) {
@@ -540,7 +540,7 @@ public class EvaluatorCSV extends Evaluator {
 
     /**
      * Obtain an output stream that can be used to write the CSV file.
-     * @return
+     * @return CSV String representation of the alignment cube.
      */
     private String getAlignmentsCubeAsShortenedString(){
         for (String matcher : this.results.getDistinctMatchers()) {

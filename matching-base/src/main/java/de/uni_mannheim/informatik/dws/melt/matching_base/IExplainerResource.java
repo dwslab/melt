@@ -12,7 +12,7 @@ public interface IExplainerResource {
     /**
      * Gets information (features) about a resource (represent through the uri parameter) from e.g. a matcher.
      * The result is a map of feature name and corresponding value.
-     * @param uri the resource uri
+     * @param uri the resource uri.
      * @return a map of feature name and corresponding value.
      */
     Map<String, String> getResourceFeatures(String uri);

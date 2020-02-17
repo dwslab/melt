@@ -53,7 +53,8 @@ public class AlignmentsCube {
      *
      * @param testCase Test case instance.
      * @param matcherName Matcher name.
-     * @param analyticalAlignmentInformation
+     * @param analyticalAlignmentInformation The analytical alignment information data set to be added.
+     * @return The previous value associated with key, or null if there was no mapping for key. (A null return can also indicate that the map previously associated null with key.)
      */
     public AnalyticalAlignmentInformation putAnalyticalMappingInformation(TestCase testCase, String matcherName, AnalyticalAlignmentInformation analyticalAlignmentInformation) {
         return alignmentDataCube.put(new TestCaseMatcher(testCase, matcherName), analyticalAlignmentInformation);
@@ -92,7 +93,7 @@ public class AlignmentsCube {
     /**
      * Write the Alignment Cube as CSV.
      *
-     * @param baseDirectory
+     * @param baseDirectory The base directory to which the alignment cube shall be written.
      */
     public void write(File baseDirectory) {
         try {
@@ -280,6 +281,10 @@ public class AlignmentsCube {
      * This method returns the alignment cube in a way that it can be easily printed as String.
      * This internal method is to be used by {@link AlignmentsCube#toString()} and {@link AlignmentsCube#toShortString()}.
      * This method only contains the data (without the CSV header).
+     *
+     * @param left Left side.
+     * @param right Right side.
+     * @param printShort Indicator whether prefixes shall be used in URIs.
      * @return List of the records to be printed.
      */
     private List<List<String>> getRecordsToPrintForToStringMethods(HashMap<TestCaseMatcher, PrefixLookup> left, HashMap<TestCaseMatcher, PrefixLookup> right, boolean printShort){

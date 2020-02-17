@@ -48,7 +48,7 @@ public class MatchClassBasedOnInstances extends MatcherYAAAJena{
     private SimInstanceMetric metric;
 
     /**
-     * What is an instance match? --> Minimal confidence for instance matches.
+     * What is an instance match? -&gt; Minimal confidence for instance matches.
      */
     private double instanceMinConfidence;
 

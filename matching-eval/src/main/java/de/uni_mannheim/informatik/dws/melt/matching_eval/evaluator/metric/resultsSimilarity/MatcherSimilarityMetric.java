@@ -28,6 +28,7 @@ public class MatcherSimilarityMetric {
      *
      * @param resultSet The result set for which the matcher similarity shall be calculated.
      * @param testCase  The test case on whose basis the evaluation shall be performed.
+     * @param refiners The refiners for the comparison operation.
      * @return The similarity between matchers.
      */
     public MatcherSimilarity get(ExecutionResultSet resultSet, TestCase testCase, Refiner... refiners) {
@@ -50,7 +51,9 @@ public class MatcherSimilarityMetric {
      * Obtain the aggregated matcher similarity for the given {@link ExecutionResultSet}.
      * Results will be averaged in a micro-average fashion.
      *
-     * @param track    The track for which the matcher similarity shall be aggregated.
+     * @param mode The mode for the calculation (i.e., micro or macro).
+     * @param resultSet The result set to be used.
+     * @param track The track for which the matcher similarity shall be aggregated.
      * @param refiners Refiners that apply.
      * @return The similarity between matchers.
      */
@@ -69,6 +72,7 @@ public class MatcherSimilarityMetric {
      * Obtain the aggregated matcher similarity for the given {@link ExecutionResultSet}.
      * Results will be averaged in a micro-average fashion.
      *
+     * @param resultSet The result set to be used.
      * @param track    The track for which the matcher similarity shall be aggregated.
      * @param refiners Refiners that apply.
      * @return The similarity between matchers.
@@ -121,7 +125,8 @@ public class MatcherSimilarityMetric {
      * Obtain the aggregated matcher similarity for the given {@link ExecutionResultSet}.
      * Results will be averaged in a micro-average fashion.
      *
-     * @param track    The track for which the matcher similarity shall be aggregated.
+     * @param resultSet The result set to be used.
+     * @param track The track for which the matcher similarity shall be aggregated.
      * @param refiners Refiners that apply.
      * @return The similarity between matchers.
      */

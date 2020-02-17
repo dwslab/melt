@@ -179,8 +179,10 @@ public class GridSearch {
     }
 
     /**
-     * The parameters for the constructor of the given class. Position mattes!
+     * The parameters for the constructor of the given class. All {@code paramValues} do have to be of the same type (that is also to be set in this method).
+     * Position mattes!
      * @param paramValues The parameters for the constructor in the correct order.
+     * @param clazz The type of all the values.
      * @return Edited {@code GridSearch} instance.
      */
     public GridSearch addConstructorParameter(List<Object> paramValues, Class<?> clazz){
@@ -284,8 +286,8 @@ public class GridSearch {
     
     /**
      * Updates the execution result set with configuration attributes in the extension of the alignment.
-     * @param set
-     * @return 
+     * @param set The execution result set to be updated.
+     * @return The updated execution result set.
      */
     public ExecutionResultSet updateExecutionResultSet(ExecutionResultSet set){
         for(List<Object> paramSetting : cartesianProduct(0, this.paramValues)){

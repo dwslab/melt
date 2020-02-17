@@ -9,8 +9,8 @@ import org.apache.jena.ontology.OntModel;
 public interface IExplainerResourceWithJenaOntology extends IExplainerResource {
 
     /**
-     * Set the ontolog that is to be used for a lookup.
-     * @param ontModel
+     * Set the ontology that is to be used for a lookup.
+     * @param ontModel The jena ont model to be used for the lookup.
      */
     void setOntModel(OntModel ontModel);
 }

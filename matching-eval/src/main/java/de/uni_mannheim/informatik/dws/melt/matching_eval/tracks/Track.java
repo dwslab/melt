@@ -152,6 +152,7 @@ public abstract class Track {
     
     /**
      * Obtain a test case using the index.
+     * @param index The position of the test case that is to be obtained.
      * @return Test case.
      */
     public TestCase getTestCase(int index){

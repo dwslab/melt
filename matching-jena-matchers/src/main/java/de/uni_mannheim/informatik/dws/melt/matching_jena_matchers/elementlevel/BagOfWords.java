@@ -16,7 +16,7 @@ public class BagOfWords extends ArrayList<String> {
 
     /**
      * Constructor
-     * @param tokensToBeAdded
+     * @param tokensToBeAdded Tokens that shall be added to the BOW.
      */
     public BagOfWords(String[] tokensToBeAdded){
         for(String token : tokensToBeAdded){
@@ -28,8 +28,8 @@ public class BagOfWords extends ArrayList<String> {
     /**
      * Two BagOfWords qualify as the same object if they contain the same objects.
      * The order of elements does not matter.
-     * @param o
-     * @return
+     * @param o Object for comparison.
+     * @return True if equals, else false.
      */
     @Override
     public boolean equals(Object o){

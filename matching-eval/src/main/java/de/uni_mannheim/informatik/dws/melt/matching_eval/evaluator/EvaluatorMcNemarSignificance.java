@@ -53,7 +53,7 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     /**
      * Two files will be written.
-     * @param baseDirectory
+     * @param baseDirectory The directory to which the result shall be written.
      */
     @Override
     public void writeResultsToDirectory(File baseDirectory) {
@@ -143,7 +143,7 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
 
     /**
-     * Given two execution results, it is determined whether the two results are significantly different (p < alpha).
+     * Given two execution results, it is determined whether the two results are significantly different (p &lt; alpha).
      * The execution results must be from the same test case.
      * @param executionResult1 Result 1.
      * @param executionResult2 Result 2.
@@ -155,7 +155,7 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
 
         /**
-         * GGiven two execution results, it is determined whether the two results are significantly different (p < alpha).
+         * GGiven two execution results, it is determined whether the two results are significantly different (p &lt; alpha).
          * The execution results must be from the same test case.
          * @param executionResult1 Result 1.
          * @param executionResult2 Result 2.
@@ -225,8 +225,8 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     /**
      * From n choose r with large numbers.
-     * @param N
-     * @param R
+     * @param N N of nCr(N,r)
+     * @param R R of nCr(n,R)
      * @return nCr(n,r)
      */
     static BigInteger nCrBigInt(final int N, final int R) {
@@ -241,8 +241,8 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     /**
      * From n choose r.
-     * @param n
-     * @param r
+     * @param n N of nCr(N,r)
+     * @param r R of nCr(n,R)
      * @return nCr(n,r)
      */
     static long nCr(int n, int r)

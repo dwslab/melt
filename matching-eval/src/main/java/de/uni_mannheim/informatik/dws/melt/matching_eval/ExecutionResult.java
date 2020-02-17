@@ -108,6 +108,7 @@ public class ExecutionResult {
      * @param base The base execution result from which all members except the mappings are copied.
      * @param systemAlignment The new system alignment which should be used.
      * @param referenceAlignment The reference alignment.
+     * @param refinement The refinement that was used.
      */
     public ExecutionResult(ExecutionResult base, Alignment systemAlignment, Alignment referenceAlignment, Refiner refinement) {
         this(base.testCase, base.matcherName, base.originalSystemAlignment, base.runtime, systemAlignment, referenceAlignment, base.matcher, addRefinementToNewSet(base.refinements, refinement));
@@ -148,9 +149,9 @@ public class ExecutionResult {
     /**
      * Helper method to parse an alignment from an URL and log a possible error.
      * This method will not throw any exceptions.
-     * Used by one contructor of this class.
+     * Used by one constructor of this class.
      * @param uri URI which represents the alignment
-     * @return
+     * @return Parsed alignment object.
      */
     private static Alignment silentlyParseAlignment(URI uri){
         try {

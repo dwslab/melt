@@ -31,8 +31,8 @@ public class MatcherSimilarity {
 
     /**
      * Returns the matcher similarity between the two execution results.
-     * @param executionResult_1
-     * @param executionResult_2
+     * @param executionResult_1 The first execution results.
+     * @param executionResult_2 The second execution result.
      * @return Similarity as double.
      */
     public double getMatcherSimilarity(ExecutionResult executionResult_1, ExecutionResult executionResult_2){
