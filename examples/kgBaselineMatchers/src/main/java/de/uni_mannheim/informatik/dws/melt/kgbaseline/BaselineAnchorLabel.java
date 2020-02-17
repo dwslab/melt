@@ -1,7 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.kgbaseline;
 
-import de.uni_mannheim.informatik.dws.ontmatching.matchingjena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.util.Arrays;
 import java.util.Properties;
 import org.apache.jena.ontology.OntModel;

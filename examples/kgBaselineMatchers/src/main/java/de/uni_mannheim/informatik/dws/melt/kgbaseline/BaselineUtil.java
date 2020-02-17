@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.kgbaseline;
 
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;

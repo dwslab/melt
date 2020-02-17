@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Wrapper for the external Python matcher.
- * @author Sven Hertling
+ * RDFlib is required in python environment.
  */
 public class DemoPythonMatcher extends MatcherExternal {
 

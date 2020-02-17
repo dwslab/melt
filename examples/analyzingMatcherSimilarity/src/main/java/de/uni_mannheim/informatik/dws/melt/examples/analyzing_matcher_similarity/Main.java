@@ -1,4 +1,4 @@
-
+package de.uni_mannheim.informatik.dws.melt.examples.analyzing_matcher_similarity;
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;

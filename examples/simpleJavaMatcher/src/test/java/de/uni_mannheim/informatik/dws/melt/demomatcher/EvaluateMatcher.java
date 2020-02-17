@@ -9,11 +9,8 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import org.junit.jupiter.api.Assertions;
 
-/**
- *
- * @author Sven Hertling
- */
 public class EvaluateMatcher {
     
     @Test
@@ -33,6 +30,7 @@ public class EvaluateMatcher {
         GridSearch gridSearch = new GridSearch(LevenshteinMatcher.class);
         gridSearch.addParameter("threshold", Arrays.asList(0.1, 0.3, 0.5, 0.7, 1.0));
         ExecutionResultSet executionResultSet = gridSearch.runGridSequential(TrackRepository.Conference.V1.getTestCase("cmt-conference"));
+        Assertions.assertTrue(executionResultSet.size() > 0);
         EvaluatorCSV evaluator = new EvaluatorCSV(executionResultSet);
         evaluator.writeToDirectory();
     }

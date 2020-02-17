@@ -1,6 +1,8 @@
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.Executor;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.visualization.dashboard.DashboardBuilder;
+package de.uni_mannheim.informatik.dws.melt.examples.melt_dashboard;
+
+import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.dashboard.DashboardBuilder;
 
 import java.io.File;
 
