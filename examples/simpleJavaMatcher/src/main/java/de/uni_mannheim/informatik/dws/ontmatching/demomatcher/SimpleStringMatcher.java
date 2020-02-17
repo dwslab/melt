@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.ontmatching.demomatcher;
 
-import de.uni_mannheim.informatik.dws.ontmatching.matchingbase.OaeiOptions;
+import de.uni_mannheim.informatik.dws.ontmatching.melt.OaeiOptions;
 import de.uni_mannheim.informatik.dws.ontmatching.matchingjena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
 import java.util.HashMap;

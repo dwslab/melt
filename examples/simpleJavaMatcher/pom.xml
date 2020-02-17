@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+    <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
     <artifactId>simpleJavaMatcher</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
     <packaging>jar</packaging>
     <version>1.0</version><!-- version appearing in descriptor file of seals package and system.ttl file in hobbit -->
@@ -31,13 +31,13 @@
     <dependencies>
         <!-- dependency for jena matchers - for other matchers you can replace it with artifactId: matching-base -->
         <dependency>
-            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-jena</artifactId>
             <version>${matching.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-eval</artifactId>
             <version>${matching.version}</version>
             <scope>test</scope>
@@ -48,7 +48,7 @@
         
         <!-- This dependency is necessary for hobbit submission. It contains the wrapper. -->
         <dependency>
-            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>hobbit-wrapper</artifactId>
             <version>${matching.version}</version>
         </dependency>
@@ -82,7 +82,7 @@
                 <version>3.1.0</version>
                 <dependencies>
                     <dependency>
-                        <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+                        <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
                         <artifactId>seals-assembly</artifactId>
                         <version>${matching.version}</version>
                     </dependency>
@@ -109,7 +109,7 @@
             The plugin has to appear before the docker-maven-plugin because it generates the maven property used there.
             To remove the matcher from the platform just delete the Gitlab project.--> 
             <plugin>
-                <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+                <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
                 <artifactId>hobbit-maven-plugin</artifactId>
                 <version>${matching.version}</version>
                 <configuration>
@@ -152,7 +152,7 @@
                                 <from>openjdk:8-jre-alpine</from><!--change it to a docker base image you want - this is just a small image which contains java-->
                                 <assembly><descriptorRef>hobbit</descriptorRef></assembly>
                                 <env><OAEI_MAIN>${oaei.mainClass}</OAEI_MAIN></env>
-                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter de.uni_mannheim.informatik.dws.ontmatching.hobbitwrapper.HobbitWrapper</shell></cmd>
+                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter HobbitWrapper</shell></cmd>
                                 <workdir>/maven</workdir>
                             </build>
                         </image>
@@ -160,7 +160,7 @@
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+                        <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
                         <artifactId>hobbit-assembly</artifactId>
                         <version>${matching.version}</version>
                     </dependency>

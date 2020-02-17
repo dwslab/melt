@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+    <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
     <artifactId>external-python-matcher</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
     <packaging>jar</packaging>
     <version>1.0</version><!-- version appearing in descriptor file of seals package and system.ttl file in hobbit -->
@@ -24,7 +24,7 @@
     <dependencies>
         <!-- dependency for jena matchers - for other matchers you can replace it with artifactId: matching-base -->
         <dependency>
-            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-external</artifactId>
             <version>${matching.version}</version>
         </dependency>
@@ -37,7 +37,7 @@
         
         <!-- test dependencies -->
         <dependency>
-            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-eval</artifactId>
             <version>${matching.version}</version>
             <scope>test</scope>
@@ -60,7 +60,7 @@
                 <version>3.1.0</version>
                 <dependencies>
                     <dependency>
-                        <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+                        <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
                         <artifactId>seals-assembly</artifactId>
                         <version>${matching.version}</version>
                     </dependency>

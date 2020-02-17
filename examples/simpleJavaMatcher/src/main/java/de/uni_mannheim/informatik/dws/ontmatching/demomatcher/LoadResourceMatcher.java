@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.ontmatching.demomatcher;
 
-import de.uni_mannheim.informatik.dws.ontmatching.matchingbase.MatcherURL;
+import de.uni_mannheim.informatik.dws.ontmatching.melt.MatcherURL;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;

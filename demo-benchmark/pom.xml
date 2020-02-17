@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+    <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
     <artifactId>demo-benchmark</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -20,7 +20,7 @@
             <!-- maven.aksw.org/repository/internal/org/hobbit/core/ -->
         </dependency>
         <dependency>
-            <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>yet-another-alignment-api</artifactId>
             <version>${matching.version}</version>
         </dependency>      
@@ -82,7 +82,7 @@
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+                        <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
                         <artifactId>hobbit-assembly</artifactId>
                         <version>${matching.version}</version>
                     </dependency>
