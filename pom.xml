@@ -28,7 +28,37 @@
         <module>seals-assembly</module>
         <module>yet-another-alignment-api</module>
     </modules>
+    
+    <name>MELT - Matching EvaLuation Toolkit</name>
+    <description>MELT is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems. It is optimized to be used in OAEI campaigns and allows to submit matchers to the SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.</description>
+    <url>http://melt.dws.informatik.uni-mannheim.de</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Sven Hertling</name>
+            <email>sven@informatik.uni-mannheim.de</email>
+            <organization>University of Mannheim</organization>
+            <organizationUrl>https://www.uni-mannheim.de/dws/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Jan Portisch</name>
+            <email>jan@informatik.uni-mannheim.de</email>
+            <organization>University of Mannheim</organization>
+            <organizationUrl>https://www.uni-mannheim.de/dws/</organizationUrl>
+        </developer>
+    </developers>
 
+    <scm>
+        <connection>scm:git:git://github.com/dwslab/melt.git</connection>
+        <developerConnection>scm:git:git@github.com:dwslab/melt.git</developerConnection>
+        <url>https://github.com/dwslab/melt</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <distributionManagement>
         <repository>
@@ -41,11 +71,7 @@
         </snapshotRepository>
     </distributionManagement>
     
-    <scm>
-        <developerConnection>scm:git:git@github.com:dwslab/melt.git</developerConnection>
-        <url>https://github.com/dwslab/melt</url>
-        <tag>HEAD</tag>
-    </scm>
+    
     
     <dependencies>
         <dependency>
