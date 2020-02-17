@@ -1,10 +1,10 @@
-package de.uni_mannheim.informatik.dws.ontmatching.demomatcher;
+package de.uni_mannheim.informatik.dws.melt.demomatcher;
 
-import de.uni_mannheim.informatik.dws.ontmatching.matchingexternal.MatcherExternal;
+import de.uni_mannheim.informatik.dws.melt.matching_external.MatcherExternal;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

@@ -1,11 +1,13 @@
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.Executor;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.EvaluatorCSV;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.resultsSimilarity.MatcherSimilarity;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.resultsSimilarity.MatcherSimilarityMetric;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TrackRepository;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.visualization.MatcherSimilarityLatexPlotWriter;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.visualization.MatcherSimilarityLatexHeatMapWriter;
+
+
+import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity.MatcherSimilarity;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity.MatcherSimilarityMetric;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.visualization.MatcherSimilarityLatexHeatMapWriter;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.visualization.MatcherSimilarityLatexPlotWriter;
 
 import java.io.PrintWriter;
 
@@ -59,6 +61,6 @@ public class Main {
         allExecutionResults.addAll(executionResultSetAnatomy);
         allExecutionResults.addAll(executionResultSetConference);
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(allExecutionResults);
-        evaluatorCSV.write();
+        evaluatorCSV.writeToDirectory();
     }
 }

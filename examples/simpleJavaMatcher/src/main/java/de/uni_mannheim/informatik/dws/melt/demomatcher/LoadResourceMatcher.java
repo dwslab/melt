@@ -1,9 +1,8 @@
-package de.uni_mannheim.informatik.dws.ontmatching.demomatcher;
+package de.uni_mannheim.informatik.dws.melt.demomatcher;
 
-import de.uni_mannheim.informatik.dws.ontmatching.melt.MatcherURL;
+import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherURL;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,7 +11,7 @@ import java.util.Scanner;
 /**
  * This stub demonstrates how resources such as configuration files can be accessed in a matcher.
  */
-public class LoadResourceMatcher extends MatcherURL{
+public class LoadResourceMatcher extends MatcherURL {
 
     /** Accessing the resources:
     - all files in "oaei-resources" folder are stored in the current working directory and can be accessed with 

@@ -1,9 +1,10 @@
-package de.uni_mannheim.informatik.dws.ontmatching.demomatcher;
+package de.uni_mannheim.informatik.dws.melt.demomatcher;
 
-import de.uni_mannheim.informatik.dws.ontmatching.matchingjena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Alignment;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import java.util.List;
 import java.util.Properties;
+
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
 

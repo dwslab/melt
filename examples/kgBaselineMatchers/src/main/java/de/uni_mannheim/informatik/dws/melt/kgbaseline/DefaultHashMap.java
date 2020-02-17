@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.ontmatching.kgbaseline;
+package de.uni_mannheim.informatik.dws.melt.kgbaseline;
 
 import java.util.HashMap;
 
