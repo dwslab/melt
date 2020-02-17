@@ -3,7 +3,7 @@
     <parent>
         <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
         <artifactId>matching-parent</artifactId>
-        <version>2.1-SNAPSHOT</version>
+        <version>2.1</version>
     </parent>
     <artifactId>matching-validation</artifactId>
 
@@ -75,7 +75,7 @@
                 <jenaVersion>2.9.4</jenaVersion>
                 <owlapiVersion>3.3</owlapiVersion>
                 <jenaPrefix>com.hp.hpl.jena.</jenaPrefix>
-                <owlapiAdd></owlapiAdd>
+                <owlapiAdd />
             </properties>
         </profile>
         <profile>
@@ -84,7 +84,7 @@
                 <jenaVersion>2.11.2</jenaVersion>
                 <owlapiVersion>3.4.10</owlapiVersion>
                 <jenaPrefix>com.hp.hpl.jena.</jenaPrefix>
-                <owlapiAdd></owlapiAdd>
+                <owlapiAdd />
             </properties>
         </profile>
         <profile>
@@ -93,7 +93,7 @@
                 <jenaVersion>2.13.0</jenaVersion>
                 <owlapiVersion>3.5.7</owlapiVersion>
                 <jenaPrefix>com.hp.hpl.jena.</jenaPrefix>
-                <owlapiAdd></owlapiAdd>
+                <owlapiAdd />
             </properties>
         </profile>
         <profile>
