@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns="http://knowledgeweb.semanticweb.org/heterogeneity/alignment" 
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+<Alignment>
+<xml>yes</xml>
+<level>0</level>
+<type>??</type>
+
+<onto1>
+<Ontology rdf:about="http://cmt">
+  <location>http://nb.vse.cz/~svabo/oaei2010/cmt.owl</location>
+</Ontology>
+</onto1>
+<onto2>
+<Ontology rdf:about="http://confOf">
+  <location>http://nb.vse.cz/~svabo/oaei2010/confOf.owl</location>
+</Ontology>
+</onto2>
+
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#ProgramCommitteeChair"/>
+		<entity2 rdf:resource="http://confOf#Chair_PC"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#writePaper"/>
+		<entity2 rdf:resource="http://confOf#writes"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#Author"/>
+		<entity2 rdf:resource="http://confOf#Author"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#ConferenceMember"/>
+		<entity2 rdf:resource="http://confOf#Member"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#Administrator"/>
+		<entity2 rdf:resource="http://confOf#Administrator"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#title"/>
+		<entity2 rdf:resource="http://confOf#hasTitle"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#SubjectArea"/>
+		<entity2 rdf:resource="http://confOf#Topic"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#PaperFullVersion"/>
+		<entity2 rdf:resource="http://confOf#Paper"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#hasBeenAssigned"/>
+		<entity2 rdf:resource="http://confOf#reviewes"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#hasAuthor"/>
+		<entity2 rdf:resource="http://confOf#writtenBy"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#Conference"/>
+		<entity2 rdf:resource="http://confOf#Conference"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#ProgramCommitteeMember"/>
+		<entity2 rdf:resource="http://confOf#Member_PC"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#hasSubjectArea"/>
+		<entity2 rdf:resource="http://confOf#dealsWith"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#Person"/>
+		<entity2 rdf:resource="http://confOf#Person"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#Paper"/>
+		<entity2 rdf:resource="http://confOf#Contribution"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+<map>
+	<Cell>
+		<entity1 rdf:resource="http://cmt#email"/>
+		<entity2 rdf:resource="http://confOf#hasEmail"/>
+		<measure rdf:datatype="xsd:float">1.0</measure>
+		<relation>=</relation>
+	</Cell>
+</map>
+
+</Alignment>
+</rdf:RDF>
