@@ -14,9 +14,18 @@ An open-access version of the paper is available <a href="https://link.springer.
 
 ## Code Examples
 The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for 
-different tasks and that can be used as barebone project for specific applications. [Javadoc](https://dwslab.github.io/melt/) is also available.
+different tasks and that can be used as barebone project for specific applications. [Javadoc](https://javadoc.io/doc/de.uni-mannheim.informatik.dws.melt) is also available.
 
 ## Matcher Development in Java
+
+MELT is now available in [maven central](https://repo1.maven.org/maven2/de/uni-mannheim/informatik/dws/melt/) and can be added as a dependency with e.g.:
+```
+<dependency>
+    <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+    <artifactId>matching-eval</artifactId>
+    <version>2.4</version>
+</dependency>
+```
 
 ### TL;DR
 1. Pick a class to start with depending on your needs. If you start from scratch `MatcherYAAAJena` or `MatcherYAAAOwlApi` 
@@ -66,7 +75,7 @@ are displayed in the figure below.
 
 ## External Matcher Development
 MELT allows to develop a matcher in any other programming language and wrap it as a SEALS or HOBBIT package. 
-Therefore, class [`MatcherExternal`](/matching-external/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingexternal/MatcherExternal.java) 
+Therefore, class [`MatcherExternal`](/matching-external/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_external/MatcherExternal.java) 
 has to be extended. The interface for the external process is simple. It receives the input variables via the command 
 line and outputs the results via the standard output of the process - similar to many Unix command line tools. 
 All external resources have to be placed in a directory named `oaei-resources`. An example project for a 
@@ -145,18 +154,18 @@ in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2
         - open [http://master.project-hobbit.eu/](http://master.project-hobbit.eu/)  and click on ```Register```
         - user name should be the first part (local part - everything before the @) of your mail address
         - mail: `max.power@example.org` then user name should be `max.power`
-        - more information at [the  hobbit wiki page](https://github.com/hobbit-project/platform/wiki/User-registration)
+        - more information at [the  hobbit wiki page](https://hobbit-project.github.io/master.html#user-registration)
     - update settings in gitlab (in Hobbit every matcher corresponds to a gitlab project)
       - go to page [http://git.project-hobbit.eu](http://git.project-hobbit.eu) and log in (same account as for the platform itself)
       - click on the upper right user icon and choose `settings`
       - create a Personal Access Token (click on `Access Tokens` give it a name and choose only the `api` scope)
-      - use this access token and you username and password to create the settings file (see the pom.xml)
+      - use this access token and your username and password to create the settings file (see the pom.xml)
 - adjust pom.xml to your needs
     - definitely change the following:
         - `groupId` and `artifactId` (only artifactId is used to identify the matcher -> make it unique)
-        - `oaei.mainClass`: set it to the fully qualified path to the matcher
+        - `oaei.mainClass`: set it to the fully qualified path to the matcher (the class implementing ```IOntologyMatchingToolBridge``` or any subclass like ```MatcherURL``` or ```MatcherYAAAJena```)
         - benchmarks: change the benchmarks to the ones your system can deal with
-        - create a settings file with username, password and access_token
+        - create a settings file with username, password and access_token (see an example at the bottom of the [simpleJavaMatcher pom file](/examples/simpleJavaMatcher/pom.xml))
 - implement your matcher (see Matcher development)
 - build your matcher
     - execute maven goals from command line or from any IDE
@@ -175,7 +184,7 @@ in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2
     - select the system you want to use
     - (optionally) specify configuration parameters and click on `submit`
     - click on the Hobbit ID in the pop up to see the results (reload the page if it is not finished)
-    - more information at [the  hobbit wiki page 'Experiments' ](https://github.com/hobbit-project/platform/wiki/Experiments)
+    - more information at the  hobbit wiki page ['Benchmarking'](https://hobbit-project.github.io/benchmarking) and ['Browsing Results'](https://hobbit-project.github.io/browsing_results.html).
 
 
 ## Further Services
@@ -187,7 +196,7 @@ test cases:
 2. Contain a parseable reference alignment.
 3. Mention only URIs in the reference alignment that also appear in the corresponding source and target ontologies.
 
-Exemplary call using the [`TestCaseValidationService`](/matching-validation/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/validation/TestCaseValidationService.java):
+Exemplary call using the [`TestCaseValidationService`](/matching-validation/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_validation/TestCaseValidationService.java):
 ```
 URI sourceUri = new File("<path to source ontology file>").toURI();
 URI targetUri = new File("<path to target ontology file>").toURI();
@@ -197,13 +206,13 @@ TestCaseValidationService validator = new TestCaseValidationService(testCase)
 System.out.println(validator);
 ```
 You can also test your track on different versions of Jena and the OWL API automatically
-by adapting the [`TrackValidationServiceTest`](/matching-validation/src/test/java/de/uni_mannheim/informatik/dws/ontmatching/validation/TrackValidationServiceTest.java) 
+by adapting the [`TestLocalFile`](/matching-validation/src/test/java/de/uni_mannheim/informatik/dws/melt/matching_validation/local/TestLocalFile.java) 
 and running `runAll.cmd` in the Windows shell. The release versions to be tested can be edited in the corresponding
 [`pom.xml`](/matching-validation/pom.xml).
 
 
 ### OAEI Track Repository
-The [`TrackRepository`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/tracks/TrackRepository.java) 
+The [`TrackRepository`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/tracks/TrackRepository.java) 
 checks whether the required ontologies and alignments are available in the internal buffer; if data is missing, it is automatically downloading and 
 caching it for the next access.
 
@@ -287,9 +296,9 @@ to do so?**<br/>
 SEALS packages were wrapped for the SEALS platform. If the matchers were not developed using MELT or you are not sure 
 whether they were developed with MELT, one option is to create the alignment files by executing the matchers 
 using the SEALS client. Afterwards, you can read the alignment files (e.g. method `loadFromFolder` of class 
-[`Executor`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/Executor.java)).<br/>
+[`Executor`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.java)).<br/>
 Alternatively (and more easily), you can install the SEALS client and run the SEALS packages from within MELT using 
-[`ExecutorSeals`]((/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/ontmatching/matchingeval/Executor.java)). This executor 
+[`ExecutorSeals`]((/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutorSeals.java)). This executor 
 will start the evaluation in SEALS directly from the framework and can be used to conveniently evaluate one or more
 matchers. Like the default `Executor`, `ExecutorSeals` will return an `ExecutionResultSet` that can then be further processed by 
 any evaluator. When calling `run()`, system alignment files and any output will also be stored on disk and can be reused at 
