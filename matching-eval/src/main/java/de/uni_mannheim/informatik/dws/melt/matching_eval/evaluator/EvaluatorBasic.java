@@ -41,6 +41,11 @@ public class EvaluatorBasic extends Evaluator {
      * If true: Alignment extensions are printed in CSV.
      */
     private boolean isPrintAlignmentExtensions = true;
+    
+    /**
+     * the ConfusionMatrixMetric to be used for evaluation
+     */
+    private ConfusionMatrixMetric metric;
 
     /**
      * Constructor.
@@ -48,8 +53,18 @@ public class EvaluatorBasic extends Evaluator {
      * @param results The results of the matching process that shall be evaluated.
      */
     public EvaluatorBasic(ExecutionResultSet results) {
+        this(results, new ConfusionMatrixMetric());
+    }
+    
+    /**
+     * Constructor.
+     * @param results The results of the matching process that shall be evaluated.
+     * @param metric The ConfusionMatrixMetric to be used for evaluation
+     */
+    public EvaluatorBasic(ExecutionResultSet results, ConfusionMatrixMetric metric) {
         super(results);
-
+        
+        this.metric = metric;
         // alignment extensions to be printed
         this.alignmentExtensions = getAlignmentExtensions(results);
     }
@@ -66,7 +81,6 @@ public class EvaluatorBasic extends Evaluator {
 
             File fileToBeWritten = new File(baseDirectory, RESULT_FILE_NAME);
             CSVPrinter printer = new CSVPrinter(new FileWriter(fileToBeWritten, false), CSVFormat.DEFAULT);
-            ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
             printer.printRecord(getHeader());
             for (ExecutionResult er : results) {
                 String[] extensionValues;
@@ -74,7 +88,7 @@ public class EvaluatorBasic extends Evaluator {
                     Map<String, String> alignmentExtensions = er.getSystemAlignment().getExtensions();
                     extensionValues = determineExtensionValuesToWriteForCSV(alignmentExtensions);
                 } else extensionValues = new String[0];
-                ConfusionMatrix matrix = metric.compute(er);
+                ConfusionMatrix matrix = this.metric.compute(er);
                 printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, er.getTestCase().getTrack().getName(), er.getTestCase().getName(), er.getMatcherName(), matrix.getPrecision(),
                         matrix.getRecall(),matrix.getF1measure(), matrix.getTruePositiveSize(),
                         matrix.getFalsePositiveSize(), matrix.getFalseNegativeSize(), er.getRuntime()));

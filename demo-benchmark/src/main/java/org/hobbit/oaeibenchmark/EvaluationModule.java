@@ -1,13 +1,12 @@
 package org.hobbit.oaeibenchmark;
 
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.AlignmentParser;
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Mapping;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
@@ -57,8 +56,8 @@ public class EvaluationModule extends AbstractEvaluationModule {
         this.time += currentTime;
         LOGGER.info("currentTime in ms: " + currentTime);
 
-        Mapping refAlignment = getExpectedAlignment(expectedData);
-        Mapping systemAlignment = getSystemAlignment(receivedData);
+        Alignment refAlignment = getExpectedAlignment(expectedData);
+        Alignment systemAlignment = getSystemAlignment(receivedData);
         
         LOGGER.info("refAlignment size={}", refAlignment.size());
         LOGGER.info("systemAlignment size={}", systemAlignment.size());
@@ -120,7 +119,7 @@ public class EvaluationModule extends AbstractEvaluationModule {
         return time;
     }
     
-    private static Mapping getExpectedAlignment(byte[] expectedData) throws IOException, SAXException{
+    private static Alignment getExpectedAlignment(byte[] expectedData) throws IOException, SAXException{
         ByteBuffer buffer_exp = ByteBuffer.wrap(expectedData);
         String format = RabbitMQUtils.readString(buffer_exp);
         String path = RabbitMQUtils.readString(buffer_exp);
@@ -129,7 +128,7 @@ public class EvaluationModule extends AbstractEvaluationModule {
         return AlignmentParser.parse(new ByteArrayInputStream(expected));
     }
     
-    private static Mapping getSystemAlignment(byte[] receivedData) throws IOException, SAXException{
+    private static Alignment getSystemAlignment(byte[] receivedData) throws IOException, SAXException{
         ByteBuffer buffer_sys = ByteBuffer.wrap(receivedData);     
         byte[] received = RabbitMQUtils.readByteArray(buffer_sys);
         return AlignmentParser.parse(new ByteArrayInputStream(received));

@@ -5,13 +5,12 @@
  */
 package org.hobbit.eval;
 
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Mapping;
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.MappingCell;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +32,7 @@ public class ConfusionMatrix {
         this.systemSize = 0;
     }
     
-    public void addEval(Mapping ref, Mapping system){
+    public void addEval(Alignment ref, Alignment system){
         int truePositive = 0;
         int falsePositive = 0;
         int falseNegative = 0;
@@ -42,12 +41,12 @@ public class ConfusionMatrix {
         
         Map<String, Set<String>> systemSourceTarget = new HashMap<>();
         Map<String, Set<String>> systemTargetSource = new HashMap<>();
-        for(MappingCell systemCell : system){
+        for(Correspondence systemCell : system){
             addToMap(systemSourceTarget, systemCell.getEntityOne(), systemCell.getEntityTwo());
             addToMap(systemTargetSource, systemCell.getEntityTwo(), systemCell.getEntityOne());
         }
         
-        for(MappingCell refCell : ref){
+        for(Correspondence refCell : ref){
             if(refCell.getEntityTwo().equals("null")){
                 falsePositive += systemSourceTarget.getOrDefault(refCell.getEntityOne(), new HashSet<>()).size();
             }

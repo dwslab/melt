@@ -5,18 +5,14 @@
  */
 package org.hobbit.eval;
 
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.AlignmentParser;
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.Mapping;
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.MappingCell;
-import de.uni_mannheim.informatik.dws.ontmatching.yetanotheralignmentapi.MappingRelation;
-import java.io.ByteArrayInputStream;
+
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,16 +35,16 @@ public class KnowledgeGraphTrackEval {
     }
     
     
-    public void addEval(Mapping ref, Mapping system){
-        Mapping refClass = new Mapping();
-        Mapping refProp = new Mapping();
-        Mapping refInst = new Mapping();
+    public void addEval(Alignment ref, Alignment system){
+        Alignment refClass = new Alignment();
+        Alignment refProp = new Alignment();
+        Alignment refInst = new Alignment();
                 
         getAlignmentTypes(ref, refClass, refProp, refInst);
         
-        Mapping systemClass = new Mapping();
-        Mapping systemProp = new Mapping();
-        Mapping systemInst = new Mapping();
+        Alignment systemClass = new Alignment();
+        Alignment systemProp = new Alignment();
+        Alignment systemInst = new Alignment();
         
         getAlignmentTypes(system, systemClass, systemProp, systemInst);
         
@@ -61,8 +57,8 @@ public class KnowledgeGraphTrackEval {
     private static Set<String> propTypes = new HashSet(Arrays.asList("property", "ontology", "null"));
     private static Set<String> instanceTypes = new HashSet(Arrays.asList("resource", "null"));    
     private static final Pattern p = Pattern.compile("http:\\/\\/dbkwik\\.webdatacommons\\.org\\/.+?\\/(.+?)\\/.*");
-    private static void getAlignmentTypes(Mapping m, Mapping clazz, Mapping props, Mapping instance){
-        for(MappingCell c : m){
+    private static void getAlignmentTypes(Alignment m, Alignment clazz, Alignment props, Alignment instance){
+        for(Correspondence c : m){
             String sourceType = getType(c.getEntityOne());
             String targetType = getType(c.getEntityTwo());
             
@@ -102,9 +98,9 @@ public class KnowledgeGraphTrackEval {
     
     
     public static void main(String[] args) throws SAXException, IOException {
-        Mapping refAlignment = AlignmentParser.parse(new FileInputStream("C:\\dev\\OntMatching\\demo_mappings\\ref.xml"));
-        Mapping systemAlignment = AlignmentParser.parse(new FileInputStream("C:\\dev\\OntMatching\\demo_mappings\\system.xml"));
-        Mapping system2Alignment = AlignmentParser.parse(new FileInputStream("C:\\dev\\OntMatching\\demo_mappings\\system2.xml"));
+        Alignment refAlignment = AlignmentParser.parse(new FileInputStream("C:\\dev\\OntMatching\\demo_mappings\\ref.xml"));
+        Alignment systemAlignment = AlignmentParser.parse(new FileInputStream("C:\\dev\\OntMatching\\demo_mappings\\system.xml"));
+        Alignment system2Alignment = AlignmentParser.parse(new FileInputStream("C:\\dev\\OntMatching\\demo_mappings\\system2.xml"));
         
         KnowledgeGraphTrackEval eval = new KnowledgeGraphTrackEval();
         eval.addEval(refAlignment, systemAlignment);
