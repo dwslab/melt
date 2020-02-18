@@ -20,13 +20,13 @@ import org.codehaus.plexus.component.annotations.Component;
 public class SealsExternalDescriptorHandler extends SealsDescriptorHandler {
     
     //dummy matcher
-    protected String dummyMatcherMainclass = "de.uni_mannheim.informatik.dws.ontmatching.matchingexternal.MatcherExternalCommandFromFile";
-    protected String dummyMatcherJarMain = "matching-external.jar";    
-    protected String dummyMatcherJarDep = "matching-base.jar";    
+    protected String dummyMatcherMainclass = "de.uni_mannheim.informatik.dws.melt.matching_external.MatcherExternalCommandFromFile";
+    protected String dummyMatcherJarMain = "matching-external.jar";
+    protected String dummyMatcherJarDep = "matching-base.jar";
     
     //wrapper
     protected String wrapperJar = "seals-external.jar";
-    protected String wrapperMainclass = "de.uni_mannheim.informatik.dws.ontmatching.sealexternal.Main";
+    protected String wrapperMainclass = "de.uni_mannheim.informatik.dws.melt.matching_seals_external.Main";
     
     protected String externalCommand;
 

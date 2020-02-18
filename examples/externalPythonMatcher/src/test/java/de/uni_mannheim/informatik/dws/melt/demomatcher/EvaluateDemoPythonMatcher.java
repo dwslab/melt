@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.ontmatching.demomatcher;
+package de.uni_mannheim.informatik.dws.melt.demomatcher;
 
 import de.uni_mannheim.informatik.dws.melt.demomatcher.DemoPythonMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;

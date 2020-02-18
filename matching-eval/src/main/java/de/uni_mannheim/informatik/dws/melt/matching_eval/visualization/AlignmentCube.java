@@ -1,11 +1,11 @@
 /*
-package de.uni_mannheim.informatik.dws.ontmatching.matchingeval.evaluator.metric.alignmentcube;
+package de.uni_mannheim.informatik.dws.melt.matching_eval.visualization;
 
 import cubix.Cubix;
 import cubix.CubixJavaAPI;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResult;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.ExecutionResultSet;
-import de.uni_mannheim.informatik.dws.ontmatching.matchingeval.tracks.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;

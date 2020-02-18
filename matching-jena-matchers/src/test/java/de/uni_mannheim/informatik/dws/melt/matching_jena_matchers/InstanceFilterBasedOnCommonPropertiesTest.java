@@ -15,8 +15,8 @@ import org.junit.jupiter.api.Test;
 
 
 public class InstanceFilterBasedOnCommonPropertiesTest {
-    private static final String namespaceSource = "http://ontmatching.dws.informatik.uni-mannheim.de/source/";
-    private static final String namespaceTarget = "http://ontmatching.dws.informatik.uni-mannheim.de/target/";
+    private static final String namespaceSource = "http://melt.dws.informatik.uni-mannheim.de/source/";
+    private static final String namespaceTarget = "http://melt.dws.informatik.uni-mannheim.de/target/";
     
     @Test
     void testFilter() throws IOException {
