@@ -97,7 +97,7 @@ public class ExecutionResult {
      * @param matcher Matcher that was used for the testCase.
      */
     public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, IOntologyMatchingToolBridge matcher) {
-        this(testCase, matcherName, originalSystemAlignment, runtime, silentlyParseAlignment(originalSystemAlignment), testCase.getParsedReferenceAlignment(), matcher, new HashSet());
+        this(testCase, matcherName, originalSystemAlignment, runtime, null, testCase.getParsedReferenceAlignment(), matcher, new HashSet());
     }
 
     
@@ -146,24 +146,6 @@ public class ExecutionResult {
         return new Alignment();
     }
 
-    /**
-     * Helper method to parse an alignment from an URL and log a possible error.
-     * This method will not throw any exceptions.
-     * Used by one constructor of this class.
-     * @param uri URI which represents the alignment
-     * @return Parsed alignment object.
-     */
-    private static Alignment silentlyParseAlignment(URI uri){
-        try {
-            URL url = uri.toURL();
-            return AlignmentParser.parse(url);
-        } catch (SAXException | IOException ex) {
-            LOGGER.error("The system alignment given by following URL could not be parsed: " + uri.toString(), ex);
-            return new Alignment();
-        }
-    }
-
-
     public TestCase getTestCase() {
         return testCase;
     }
@@ -181,6 +163,13 @@ public class ExecutionResult {
     }    
 
     public Alignment getSystemAlignment() {
+        if(this.systemAlignment == null){
+            if(this.originalSystemAlignment == null){
+                LOGGER.warn("originalSystemAlignment and systemAlignment is null - returned an empty alignment.");
+                return new Alignment();                
+            }
+            this.systemAlignment = silentlyParseAlignment(this.originalSystemAlignment);            
+        }
         return this.systemAlignment;
     }
 

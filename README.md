@@ -171,6 +171,7 @@ in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2
     - execute maven goals from command line or from any IDE
     - ```mvn package``` will only build seals zip
     - ```mvn install``` will create seals zip and hobbit docker image locally
+        - On MacOS, you have to run ```export DOCKER_HOST=unix:///var/run/docker.sock``` (see [issue of docker-maven-plugin](https://github.com/spotify/docker-maven-plugin/issues/218)) in order to allow maven to communicate with docker.
     - ```mvn deploy``` will create seals zip and deploy docker image to hobbit server
 - submit your matcher
     - for SEALS upload the generated seals file ```{artifactId}-{version}-seals.zip``` in the target folder
