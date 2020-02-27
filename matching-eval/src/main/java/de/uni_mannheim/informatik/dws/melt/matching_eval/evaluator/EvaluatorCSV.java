@@ -51,6 +51,11 @@ public class EvaluatorCSV extends Evaluator {
     private boolean isPrintAlignmentExtensions = true;
 
     /**
+     * If true: Correspondence extensions are printed in CSV.
+     */
+    private boolean isPrintCorrespondenceExtensions = true;
+
+    /**
      * Baseline matcher for residual results.
      */
     private IOntologyMatchingToolBridge baselineMatcher = new BaselineStringMatcher();
@@ -630,6 +635,15 @@ public class EvaluatorCSV extends Evaluator {
 
     public void setPrintAsShortenedString(boolean printAsShortenedString) {
         isPrintAsShortenedString = printAsShortenedString;
+    }
+
+    public boolean isPrintCorrespondenceExtensions() {
+        return isPrintCorrespondenceExtensions;
+    }
+
+    public void setPrintCorrespondenceExtensions(boolean printCorrespondenceExtensions) {
+        isPrintCorrespondenceExtensions = printCorrespondenceExtensions;
+        this.alignmentsCube.setPrintCorrespondenceExtensions(isPrintCorrespondenceExtensions);
     }
 
     public boolean isPrintAlignmentExtensions() {

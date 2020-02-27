@@ -56,7 +56,7 @@ public class AlignmentsCube {
     /**
      * If true no correspondence extensions will be printed.
      */
-    private boolean excludeCorrespondenceExtensions = false;
+    private boolean isPrintCorrespondenceExtensions = true;
 
 
     /**
@@ -178,7 +178,7 @@ public class AlignmentsCube {
                     }
 
                     // add correspondence extensions
-                    if(!excludeCorrespondenceExtensions) {
+                    if(isPrintCorrespondenceExtensions) {
                         Map<String, Object> extensionsForCorrespondence = mappingInformationEntry.getKey().getExtensions();
                         if (extensionsForCorrespondence != null) {
                             for (String extensionValue : correspondenceExtensions) {
@@ -211,7 +211,6 @@ public class AlignmentsCube {
      * @return Large String.
      */
     public String toShortString(){
-        this.excludeCorrespondenceExtensions = excludeCorrespondenceExtensions;
         HashMap<TestCaseMatcher, PrefixLookup> leftURIs = new HashMap<>();
         HashMap<TestCaseMatcher, PrefixLookup> rightURIs = new HashMap<>();
         for(Entry<TestCaseMatcher, AnalyticalAlignmentInformation> entry : this.alignmentDataCube.entrySet()){
@@ -404,7 +403,7 @@ public class AlignmentsCube {
                 }
 
                 // add correspondence extensions
-                if(!excludeCorrespondenceExtensions) {
+                if(isPrintCorrespondenceExtensions) {
                     Map<String, Object> extensionsForCorrespondence = mappingInformationEntry.getKey().getExtensions();
                     if (extensionsForCorrespondence != null) {
                         for (String extensionValue : correspondenceExtensions) {
@@ -451,7 +450,7 @@ public class AlignmentsCube {
             header.add(featureName);
         }
 
-        if(!excludeCorrespondenceExtensions) {
+        if(isPrintCorrespondenceExtensions) {
             for (String extensionName : getCorrespondenceExtensions()) {
                 header.add(AlignmentSerializer.getExtensionLabel(extensionName));
             }
@@ -546,12 +545,12 @@ public class AlignmentsCube {
         this.correspondenceExtensions = correspondenceExtensions;
     }
 
-    public boolean isExcludeCorrespondenceExtensions() {
-        return excludeCorrespondenceExtensions;
+    public boolean isPrintCorrespondenceExtensions() {
+        return isPrintCorrespondenceExtensions;
     }
 
-    public void setExcludeCorrespondenceExtensions(boolean excludeCorrespondenceExtensions) {
-        this.excludeCorrespondenceExtensions = excludeCorrespondenceExtensions;
+    public void setPrintCorrespondenceExtensions(boolean printCorrespondenceExtensions) {
+        this.isPrintCorrespondenceExtensions = printCorrespondenceExtensions;
     }
 }
 
