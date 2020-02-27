@@ -183,7 +183,6 @@
             </plugin>
 
             <!-- Test Code Coverage -->
-            <!--
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
@@ -192,7 +191,6 @@
                     <repoToken>yourcoverallsprojectrepositorytoken</repoToken>
                 </configuration>
             </plugin>
-            -->
 
             <plugin>
                 <groupId>org.jacoco</groupId>
