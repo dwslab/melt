@@ -19,7 +19,7 @@ public class TrackRepository{
      */
     public static class Anatomy {
         /** Default Anatomy Testsuite which is used all the time. */
-        public static Track Default = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "anatomy_track", "anatomy_track-default");
+        public static Track Default = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "anatomy_track", "anatomy_track-default");//new SealsTrack("http://repositories.seals-project.eu/tdrs/", "anatomy_track", "anatomy_track-default");
     }
     
     /**
@@ -31,7 +31,7 @@ public class TrackRepository{
      */
     public static class Conference {
         /** Conference Testsuite V1 which is used all the time. */
-        public static Track V1 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1");
+        public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1");//new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1");
     }
 
     /**

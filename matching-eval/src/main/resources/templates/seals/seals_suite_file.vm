@@ -1,0 +1,46 @@
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:seals="http://www.seals-project.eu/ontologies/SEALSMetadata.owl#" 
+    xmlns:owl="http://www.w3.org/2002/07/owl#" 
+    xmlns:dc="http://purl.org/dc/terms/" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#" 
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+<rdf:Description rdf:about="http://www.seals-project.eu/alignment/$track.getName()#ConferenceSuite">
+    <rdf:type rdf:resource="http://www.seals-project.eu/ontologies/SEALSMetadata.owl#Suite" />
+#foreach ( $tc in $track.getTestCases())
+    <seals:hasSuiteItem rdf:resource="http://www.seals-project.eu/alignment/$track.getName()#$tc.getName()" />
+#end
+</rdf:Description>
+#foreach ( $tc in $track.getTestCases())
+
+<rdf:Description rdf:about="http://www.seals-project.eu/alignment/$track.getName()#$tc.getName()">
+    <rdf:type rdf:resource="http://www.seals-project.eu/ontologies/SEALSMetadata.owl#SuiteItem" />
+    <seals:hasDataItem rdf:resource="http://www.seals-project.eu/alignment/$track.getName()#$tc.getName()-source" />
+    <seals:hasDataItem rdf:resource="http://www.seals-project.eu/alignment/$track.getName()#$tc.getName()-target" />
+    <seals:hasDataItem rdf:resource="http://www.seals-project.eu/alignment/$track.getName()#$tc.getName()-ref" />
+    <dc:identifier>$tc.getName()</dc:identifier> 
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.seals-project.eu/alignment/$track.getName()#$tc.getName()-source">
+    <rdf:type rdf:resource="http://www.seals-project.eu/ontologies/SEALSMetadata.owl#DataItem" />
+    <seals:isLocatedAt>./ont/$tc.getName()-source.owl</seals:isLocatedAt>
+    <seals:hasComponentType>source</seals:hasComponentType>
+    <dc:identifier>$tc.getName()-source</dc:identifier> 
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.seals-project.eu/alignment/$track.getName()#$tc.getName()-target">
+    <rdf:type rdf:resource="http://www.seals-project.eu/ontologies/SEALSMetadata.owl#DataItem" />
+    <seals:isLocatedAt>./ont/$tc.getName()-target.owl</seals:isLocatedAt>
+    <seals:hasComponentType>target</seals:hasComponentType>
+    <dc:identifier>$tc.getName()-target</dc:identifier> 
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.seals-project.eu/alignment/$track.getName()#$tc.getName()-ref">
+    <rdf:type rdf:resource="http://www.seals-project.eu/ontologies/SEALSMetadata.owl#DataItem" />
+    <seals:isLocatedAt>./ref/$tc.getName()-ref.rdf</seals:isLocatedAt>
+    <seals:hasComponentType>reference</seals:hasComponentType>
+    <dc:identifier>$tc.getName()-ref</dc:identifier> 
+</rdf:Description>
+#end
+</rdf:RDF>
