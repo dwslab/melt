@@ -45,6 +45,7 @@ public class SealsDownloadHelper {
                 encode(this.testDataVersionNumber),
                 "suite");
         Model m = ModelFactory.createDefaultModel();
+        LOGGER.info("Load from url {}", url);
         m.read(url);
         String queryString = "SELECT ?suiteItem ?suiteItemName WHERE { ?x <" + HAS_SUITE_ITEM + "> ?suiteItem . ?suiteItem <" + IDENTIFIER + "> ?suiteItemName . } ORDER BY ?suiteItemName";
         List<String> names = new ArrayList<>();
