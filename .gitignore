@@ -79,3 +79,5 @@ index.index.0
 
 # include travis file
 !.travis.yml
+!.github/workflows/maven.yml
+!.gitignore
