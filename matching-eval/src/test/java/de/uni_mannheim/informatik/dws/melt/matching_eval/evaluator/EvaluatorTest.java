@@ -19,7 +19,7 @@ class EvaluatorTest {
      * Development remark: Note that a network connection is required and the SEALS repository must be up and running.
      */
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void getResultsDirectoryTrackMatcher() {
         try {
             ExecutionResult result = new ExecutionResult(TrackRepository.Conference.V1.getTestCases().get(0), "myMatcher", null, null);

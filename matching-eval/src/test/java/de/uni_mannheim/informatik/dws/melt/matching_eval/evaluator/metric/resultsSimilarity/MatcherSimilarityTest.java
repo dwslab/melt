@@ -31,7 +31,7 @@ class MatcherSimilarityTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void getMedianSimilariyWithoutSelfSimilarity(){
         Alignment alignment_1 = new Alignment();
         alignment_1.add("http://www.left.com/e1", "http://www.right.com/e1");
@@ -64,7 +64,7 @@ class MatcherSimilarityTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void getMedianSimilariyWithSelfSimilarity_1(){
         Alignment alignment_1 = new Alignment();
         alignment_1.add("http://www.left.com/e1", "http://www.right.com/e1");
@@ -97,7 +97,7 @@ class MatcherSimilarityTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void getMedianSimilariyWithOutSelfSimilarity_2(){
         Alignment alignment_1 = new Alignment();
         alignment_1.add("http://www.left.com/e1", "http://www.right.com/e1");

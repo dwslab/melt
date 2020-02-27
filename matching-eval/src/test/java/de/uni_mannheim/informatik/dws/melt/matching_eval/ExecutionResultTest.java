@@ -28,7 +28,7 @@ class ExecutionResultTest {
     }
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void testNonParseableSystemAlignment() {
         try {
             ExecutionResult result = new ExecutionResult(

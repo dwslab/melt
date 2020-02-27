@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EvaluatorMcNemarSignificanceTest {
 
     @Test
-    @EnabledOnOs( { OS.MAC } )
+    //@EnabledOnOs( { OS.MAC } )
     void calculateSignificance() {
         ExecutionResultSet ers = Executor.loadFromAnatomyResultsFolder("./src/test/resources/2016_anatomy/");
         EvaluatorMcNemarSignificance evaluator = new EvaluatorMcNemarSignificance(ers);

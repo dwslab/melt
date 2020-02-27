@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util;
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer.IExplainerResourceWithJenaOntology;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentSerializer;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.matching_base.IExplainerResource;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer.ExplainerResourceProperty;
@@ -428,7 +429,7 @@ public class AlignmentsCube {
             header.add(featureName);
         }
         for(String extensionName : getCorrespondenceExtensions()){
-            header.add(extensionName);
+            header.add(AlignmentSerializer.getExtensionLabel(extensionName));
         }
         return header;
     }

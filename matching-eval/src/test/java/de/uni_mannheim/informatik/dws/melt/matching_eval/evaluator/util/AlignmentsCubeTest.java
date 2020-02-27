@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.condition.OS.MAC;
 class AlignmentsCubeTest {
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void addAnalyticalMappingInformation() {
         AlignmentsCube cube = new AlignmentsCube();
         cube.putAnalyticalMappingInformation(TrackRepository.Conference.V1.getTestCases().get(0), "myMatcher", new AnalyticalAlignmentInformation());
@@ -18,7 +18,7 @@ class AlignmentsCubeTest {
     }
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void getAnalyticalMappingInformation() {
         AlignmentsCube cube = new AlignmentsCube();
         cube.putAnalyticalMappingInformation(TrackRepository.Conference.V1.getTestCases().get(0), "myMatcher", new AnalyticalAlignmentInformation());
