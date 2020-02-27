@@ -47,6 +47,11 @@ public class AlignmentsCube {
      */
     private List<IExplainerResource> resourceExplainers;
 
+    /**
+     * Correspondence extension.
+     */
+    private List<String> correspondenceExtensions;
+
 
     /**
      * Add analytical alignment information.
@@ -165,6 +170,18 @@ public class AlignmentsCube {
                             record.add("");
                         } else record.add(featureValue);
                     }
+
+                    // add correspondence extensions
+                    Map<String, Object> extensionsForCorrespondence = mappingInformationEntry.getKey().getExtensions();
+                    if(extensionsForCorrespondence != null){
+                        for (String extensionValue : correspondenceExtensions){
+                            Object value = extensionsForCorrespondence.get(extensionValue);
+                            if(value != null){
+                                record.add(value.toString());
+                            } else record.add("");
+                        }
+                    }
+
                     printer.printRecord(record);
                 } // end of loop over mapping information entry
             } // end of loop over mapping information entries a.k.a. cubeComponent
@@ -271,8 +288,7 @@ public class AlignmentsCube {
         }
     }
 
-    
-    
+
     private List<List<String>> getRecordsToPrintForToStringMethods(){
         return getRecordsToPrintForToStringMethods(null, null, false);
     }
@@ -411,6 +427,9 @@ public class AlignmentsCube {
         for (String featureName : getFeatureNames()) {
             header.add(featureName);
         }
+        for(String extensionName : getCorrespondenceExtensions()){
+            header.add(extensionName);
+        }
         return header;
     }
 
@@ -491,6 +510,14 @@ public class AlignmentsCube {
 
     public void setResourceExplainers(List<IExplainerResource> resourceExplainers) {
         this.resourceExplainers = resourceExplainers;
+    }
+
+    public List<String> getCorrespondenceExtensions() {
+        return correspondenceExtensions;
+    }
+
+    public void setCorrespondenceExtensions(List<String> correspondenceExtensions) {
+        this.correspondenceExtensions = correspondenceExtensions;
     }
 }
 

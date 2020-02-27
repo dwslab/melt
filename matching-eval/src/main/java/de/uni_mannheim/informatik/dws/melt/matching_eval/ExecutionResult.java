@@ -132,7 +132,7 @@ public class ExecutionResult {
      * This method will not throw any exceptions.
      * Used by one constructor of this class.
      * @param url url which represents the alignment
-     * @return 
+     * @return Parsed alignment.
      */
     private static Alignment silentlyParseAlignment(URL url){
         try {

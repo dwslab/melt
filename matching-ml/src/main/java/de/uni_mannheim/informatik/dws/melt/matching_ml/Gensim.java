@@ -395,7 +395,7 @@ public class Gensim {
      * Initializes the server.
      */
     private void startServer() {
-        httpClient = HttpClients.createDefault(); // has to be reinstantiated
+        httpClient = HttpClients.createDefault(); // has to be re-instantiated
         String canonicalPath;
         File serverFile = new File("oaei-resources/python_server.py");
         try {

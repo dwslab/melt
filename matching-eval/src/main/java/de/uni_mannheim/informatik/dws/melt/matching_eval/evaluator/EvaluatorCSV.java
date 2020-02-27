@@ -98,6 +98,11 @@ public class EvaluatorCSV extends Evaluator {
      */
     private ArrayList<String> alignmentExtensions;
 
+    /**
+     * The correspondence extensions that are to be printed.
+     */
+    private ArrayList<String> correspondenceExtensions;
+
 
     /**
      * Constructor
@@ -133,13 +138,40 @@ public class EvaluatorCSV extends Evaluator {
 
         // alignment extensions to be printed
         this.alignmentExtensions = getAlignmentExtensions(results);
+
+        // correspondence extensions to be printed
+        this.correspondenceExtensions = getCorrespondenceExtensions(results);
     }
+
+
+    /**
+     * This method determines the unique {@link Correspondence} extensions that are used in the alignments.
+     * @param results The result set.
+     * @return A set of unique correspondence extensions.
+     */
+    private ArrayList<String> getCorrespondenceExtensions(ExecutionResultSet results){
+        HashSet<String> uniqueExtensions = new HashSet<>();
+        if(results != null){
+            for(ExecutionResult executionResult : results){
+                for(Correspondence correspondence : executionResult.getSystemAlignment()){
+                    Map<String, Object> extensions = correspondence.getExtensions();
+                    if(extensions != null){
+                        uniqueExtensions.addAll(extensions.keySet());
+                    }
+                }
+            }
+        }
+        ArrayList<String> result = new ArrayList<String>();
+        result.addAll(uniqueExtensions);
+        return result;
+    }
+
 
 
     /**
      * This method determines the unique {@link Alignment}
      * extensions that are used in the alignments in the ExecutionResultSet.
-     * @param results The result set of which
+     * @param results The result set.
      * @return A list of unique alignment extensions that are used.
      */
     private ArrayList<String> getAlignmentExtensions(ExecutionResultSet results) {
@@ -286,7 +318,7 @@ public class EvaluatorCSV extends Evaluator {
                 Set<ExecutionResult> temporaryExecutionResult =  results.getGroup(track, matcher);
                 if(temporaryExecutionResult.iterator().hasNext()){
                     Map<String, String> alignmentExtensions = temporaryExecutionResult.iterator().next().getSystemAlignment().getExtensions();
-                    extensionValues = determineExtensionValuesToWriteForCSV(alignmentExtensions);
+                    extensionValues = determineAlignmentExtensionValuesToWriteForCSV(alignmentExtensions);
                 } else extensionValues = new String[0];
             } else extensionValues = new String[0];
 
@@ -381,6 +413,8 @@ public class EvaluatorCSV extends Evaluator {
             }
         }
         alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(nonResidualCorrespondence, AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString(), "false");
+        alignmentsCube.setCorrespondenceExtensions(this.getCorrespondenceExtensions(results));
+
 
         if(!onlyCalculateCube) {
             try {
@@ -388,7 +422,7 @@ public class EvaluatorCSV extends Evaluator {
                 String[] extensionValues;
                 if(isPrintAlignmentExtensions && this.alignmentExtensions != null && this.alignmentExtensions.size() > 0) {
                     Map<String, String> alignmentExtensions = results.get(testCase, matcher).getSystemAlignment().getExtensions();
-                    extensionValues = determineExtensionValuesToWriteForCSV(alignmentExtensions);
+                    extensionValues = determineAlignmentExtensionValuesToWriteForCSV(alignmentExtensions);
                 } else extensionValues = new String[0];
 
                 File fileToBeWritten = new File(super.getResultsFolderTrackTestcaseMatcher(baseDirectory, allExecutionResult), "performance.csv");
@@ -417,7 +451,7 @@ public class EvaluatorCSV extends Evaluator {
      * @param existingExtensionValues The existing extension values in the alignment.
      * @return Tokenized extension values in the correct order for the CSV file to print.
      */
-    private String[] determineExtensionValuesToWriteForCSV(Map<String,String> existingExtensionValues){
+    private String[] determineAlignmentExtensionValuesToWriteForCSV(Map<String,String> existingExtensionValues){
         String[] result = new String[this.alignmentExtensions.size()];
         for(int i = 0; i < this.alignmentExtensions.size(); i++){
             String extensionUri = alignmentExtensions.get(i);

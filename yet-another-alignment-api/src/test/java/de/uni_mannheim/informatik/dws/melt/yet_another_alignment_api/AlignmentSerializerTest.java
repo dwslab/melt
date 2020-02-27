@@ -36,7 +36,6 @@ class AlignmentSerializerTest {
         cell.addExtensionValue("http://www.extension.com/extensionLabel", "MyExtensionValue");
         alignment.add(cell);
         result = AlignmentSerializer.serialize(alignment);
-        System.out.println(result);
         assertTrue(result.contains("<alignapilocalns:extensionLabel xmlns:alignapilocalns=\"http://www.extension.com/\">MyExtensionValue</alignapilocalns:extensionLabel>"));
         assertTrue(result.contains("<entity1 rdf:resource=\"http://cmt#assignExternalReviewer\"/>"));
         assertTrue(result.contains("<entity2 rdf:resource=\"http://conference#invites_co-reviewers\"/>"));

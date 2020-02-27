@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-    <artifactId>simpleHobbitMatcher</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
+    <groupId>eu.jan-portisch</groupId>
+    <artifactId>simpleMeltHobbitMatcher</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
     <packaging>jar</packaging>
     <version>1.0</version><!-- version appearing in descriptor file of seals package and system.ttl file in hobbit -->
     <description>demo matcher description</description><!-- description appearing in descriptor file of seals package and system.ttl file in hobbit -->
@@ -142,7 +142,6 @@
 
 <!-- config example for settings file which is usually located at ~/.m2/settings.xml (you can create the file if it does not exist)
      username and password are used for pushing the docker image and privateKey is necessary for creating gitlab projects and system.ttl files:
-
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
@@ -158,3 +157,4 @@
 </settings>
 
 -->
+
