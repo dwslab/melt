@@ -26,7 +26,6 @@ class AlignmentSerializerTest {
         assertTrue(result.contains("<relation>=</relation>"));
         assertTrue(result.contains("<measure rdf:datatype=\"xsd:float\">1.0</measure>"));
 
-
         //-------------------------------------------------
         // Test 2: Simple test with extension. (slash in extension uri)
         //-------------------------------------------------
@@ -42,8 +41,6 @@ class AlignmentSerializerTest {
         assertTrue(result.contains("<relation>=</relation>"));
         assertTrue(result.contains("<relation>=</relation>"));
         assertTrue(result.contains("<measure rdf:datatype=\"xsd:float\">1.0</measure>"));
-
-
     }
 
 }

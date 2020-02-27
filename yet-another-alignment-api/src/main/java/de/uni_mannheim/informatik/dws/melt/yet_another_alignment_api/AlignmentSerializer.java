@@ -59,7 +59,7 @@ public class AlignmentSerializer {
     }
 
     /**
-     * Serlializes an alignment as String.
+     * Serializes an alignment as String.
      * @param alignment The alignment to be serialized.
      * @return Alignment as String.
      */
@@ -157,7 +157,7 @@ public class AlignmentSerializer {
      * @return Only the extension label.
      *         Example: creator or pretty
      */
-    private static String getExtensionLabel(String uri){
+    public static String getExtensionLabel(String uri){
         if(uri.contains("#")){
             return uri.replaceAll("^.*#", "");
         } else {
