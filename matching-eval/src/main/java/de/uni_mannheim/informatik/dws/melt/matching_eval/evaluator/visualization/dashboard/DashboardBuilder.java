@@ -70,6 +70,7 @@ public class DashboardBuilder extends Evaluator {
         
         template = Velocity.getTemplate("templates/dashboard/dashboard.vm");
         this.evaluatorCSV = evaluatorCSV;
+        this.evaluatorCSV.setPrintCorrespondenceExtensions(false);
         this.rows = new ArrayList<>();
         this.currentRow = new ArrayList<>();
         this.title = titleOfPage;
