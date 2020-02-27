@@ -42,8 +42,7 @@ class AlignmentSerializerTest {
         assertTrue(result.contains("<relation>=</relation>"));
         assertTrue(result.contains("<measure rdf:datatype=\"xsd:float\">1.0</measure>"));
     }
-    
-    
+
     @Test
     void getExtensionLabel(){
         assertEquals("extensionLabel", AlignmentSerializer.getExtensionLabel("http://www.extension.com#extensionLabel"));
@@ -61,7 +60,6 @@ class AlignmentSerializerTest {
             AlignmentSerializer.getExtensionBaseUri("extensionLabel");
         });
     }
-    
     
 
 }

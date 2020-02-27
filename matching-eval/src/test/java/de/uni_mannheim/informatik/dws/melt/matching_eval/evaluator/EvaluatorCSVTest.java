@@ -24,7 +24,7 @@ class EvaluatorCSVTest {
      * using EvaluatorCSV. This test makes sure that something is written and that setting of the base directory works.
      */
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void testEvaluator(){
         ExecutionResultSet resultSet = Executor.loadFromFolder("./src/test/resources/externalAlignmentForEvaluation", TrackRepository.Anatomy.Default.getTestCases().get(0));
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(resultSet);

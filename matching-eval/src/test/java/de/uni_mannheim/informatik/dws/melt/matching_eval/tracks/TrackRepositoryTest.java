@@ -17,14 +17,14 @@ import static org.junit.jupiter.api.condition.OS.MAC;
 class TrackRepositoryTest {
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     public void testTracks(){
         // tests downloading process and implementation
         assertTrue(TrackRepository.Anatomy.Default.getTestCases().size() > 0);
     }
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     public void getMultifarmTrackForLanguage(){
         assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("de").size() == 9);
         assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("DE").size() == 9);
@@ -41,7 +41,7 @@ class TrackRepositoryTest {
     }
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     public void getSpecificMultifarmTrack(){
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de-en").getName().equals("de-en"));
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de-EN").getName().equals("de-en"));

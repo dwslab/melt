@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util;
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer.IExplainerResourceWithJenaOntology;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentSerializer;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.matching_base.IExplainerResource;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer.ExplainerResourceProperty;
@@ -51,6 +52,11 @@ public class AlignmentsCube {
      * Correspondence extension.
      */
     private List<String> correspondenceExtensions;
+
+    /**
+     * If true no correspondence extensions will be printed.
+     */
+    private boolean excludeCorrespondenceExtensions = false;
 
 
     /**
@@ -172,13 +178,15 @@ public class AlignmentsCube {
                     }
 
                     // add correspondence extensions
-                    Map<String, Object> extensionsForCorrespondence = mappingInformationEntry.getKey().getExtensions();
-                    if(extensionsForCorrespondence != null){
-                        for (String extensionValue : correspondenceExtensions){
-                            Object value = extensionsForCorrespondence.get(extensionValue);
-                            if(value != null){
-                                record.add(value.toString());
-                            } else record.add("");
+                    if(!excludeCorrespondenceExtensions) {
+                        Map<String, Object> extensionsForCorrespondence = mappingInformationEntry.getKey().getExtensions();
+                        if (extensionsForCorrespondence != null) {
+                            for (String extensionValue : correspondenceExtensions) {
+                                Object value = extensionsForCorrespondence.get(extensionValue);
+                                if (value != null) {
+                                    record.add(value.toString());
+                                } else record.add("");
+                            }
                         }
                     }
 
@@ -199,9 +207,11 @@ public class AlignmentsCube {
      * Same logic/code as in {@link AlignmentsCube#write(File)} but worse memory behavior (that's why the code cannot
      * be better modularized). Similar to {@link AlignmentsCube#toString()} with the difference that URIs are
      * shortened.
+     *
      * @return Large String.
      */
     public String toShortString(){
+        this.excludeCorrespondenceExtensions = excludeCorrespondenceExtensions;
         HashMap<TestCaseMatcher, PrefixLookup> leftURIs = new HashMap<>();
         HashMap<TestCaseMatcher, PrefixLookup> rightURIs = new HashMap<>();
         for(Entry<TestCaseMatcher, AnalyticalAlignmentInformation> entry : this.alignmentDataCube.entrySet()){
@@ -211,7 +221,6 @@ public class AlignmentsCube {
                 leftUris.add(c.getEntityOne());
                 rightUris.add(c.getEntityTwo());
             }
-            
             leftURIs.put(entry.getKey(), new PrefixLookup(leftUris));
             rightURIs.put(entry.getKey(), new PrefixLookup(rightUris));            
         }
@@ -393,6 +402,20 @@ public class AlignmentsCube {
                         record.add("");
                     } else record.add(featureValue);
                 }
+
+                // add correspondence extensions
+                if(!excludeCorrespondenceExtensions) {
+                    Map<String, Object> extensionsForCorrespondence = mappingInformationEntry.getKey().getExtensions();
+                    if (extensionsForCorrespondence != null) {
+                        for (String extensionValue : correspondenceExtensions) {
+                            Object value = extensionsForCorrespondence.get(extensionValue);
+                            if (value != null) {
+                                record.add(value.toString());
+                            } else record.add("");
+                        }
+                    }
+                }
+
                 result.add(record);
             } // end of loop over mapping information entry
         } // end of loop over mapping information entries a.k.a. cubeComponent
@@ -427,8 +450,11 @@ public class AlignmentsCube {
         for (String featureName : getFeatureNames()) {
             header.add(featureName);
         }
-        for(String extensionName : getCorrespondenceExtensions()){
-            header.add(extensionName);
+
+        if(!excludeCorrespondenceExtensions) {
+            for (String extensionName : getCorrespondenceExtensions()) {
+                header.add(AlignmentSerializer.getExtensionLabel(extensionName));
+            }
         }
         return header;
     }
@@ -518,6 +544,14 @@ public class AlignmentsCube {
 
     public void setCorrespondenceExtensions(List<String> correspondenceExtensions) {
         this.correspondenceExtensions = correspondenceExtensions;
+    }
+
+    public boolean isExcludeCorrespondenceExtensions() {
+        return excludeCorrespondenceExtensions;
+    }
+
+    public void setExcludeCorrespondenceExtensions(boolean excludeCorrespondenceExtensions) {
+        this.excludeCorrespondenceExtensions = excludeCorrespondenceExtensions;
     }
 }
 

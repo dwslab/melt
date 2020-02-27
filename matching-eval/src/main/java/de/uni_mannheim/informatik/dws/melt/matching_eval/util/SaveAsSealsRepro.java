@@ -26,7 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
+/**
+ * Creates a track in folder test so that it can be used for the SEALS/MELT Track Repository.
+ */
 public class SaveAsSealsRepro {
     private static final Logger LOGGER = LoggerFactory.getLogger(Track.class);
     

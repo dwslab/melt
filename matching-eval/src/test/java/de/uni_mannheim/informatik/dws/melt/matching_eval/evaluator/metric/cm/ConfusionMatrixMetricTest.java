@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.condition.OS.MAC;
 class ConfusionMatrixMetricTest {
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void computeExample_1() throws Exception {
         ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
 
@@ -55,7 +55,7 @@ class ConfusionMatrixMetricTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void computeExample_2() throws Exception {
         ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
 
@@ -87,7 +87,7 @@ class ConfusionMatrixMetricTest {
     }
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void getMicroAverages() throws Exception {
         ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
 
@@ -153,7 +153,7 @@ class ConfusionMatrixMetricTest {
     }
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void getMacroAverages() throws Exception {
         ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
 
@@ -225,7 +225,7 @@ class ConfusionMatrixMetricTest {
      * and compares the MELT results with those given on the Web Page (http://oaei.ontologymatching.org/2018/results/anatomy/index.html).
      **/
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void realTest() {
         TestCase testCase = TrackRepository.Anatomy.Default.getTestCases().get(0);
         ExecutionResultSet resultSet = Executor.loadFromFolder("./src/test/resources/externalAlignmentForEvaluation", testCase);

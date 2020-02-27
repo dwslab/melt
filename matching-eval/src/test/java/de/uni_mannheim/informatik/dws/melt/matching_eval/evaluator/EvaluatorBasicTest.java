@@ -19,7 +19,7 @@ class EvaluatorBasicTest {
 
     private static Logger LOGGER = LoggerFactory.getLogger(EvaluatorCSVTest.class);
 
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     @Test
     void writeToDirectory() {
         ExecutionResultSet resultSet = Executor.loadFromFolder("./src/test/resources/externalAlignmentForEvaluation", TrackRepository.Anatomy.Default.getTestCases().get(0));
@@ -36,7 +36,7 @@ class EvaluatorBasicTest {
         }
     }
 
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     @Test
     void writeToDirectoryConvenience() {
         ExecutionResultSet resultSet = Executor.loadFromFolder("./src/test/resources/externalAlignmentForEvaluation", TrackRepository.Anatomy.Default.getTestCases().get(0));

@@ -57,8 +57,7 @@ public class ResourceTypeTest {
         }
     }
     
-    
-    
+
     private OntModel createModel(OntModelSpec spec){
         OntModel m = ModelFactory.createOntologyModel(spec);
         

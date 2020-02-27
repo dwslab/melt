@@ -46,7 +46,7 @@ class MatcherSimilarityMetricTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
+    //@EnabledOnOs({ MAC })
     void get(){
         Alignment alignment_1 = new Alignment();
         alignment_1.add("http://www.left.com/e1", "http://www.right.com/e1");
