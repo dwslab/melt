@@ -1,5 +1,5 @@
 # MELT - Matching EvaLuation Toolkit
-[![Build Status](https://travis-ci.org/dwslab/melt.svg?branch=master)](https://travis-ci.org/dwslab/melt)
+[![Java CI](https://github.com/janothan/kgvec2go-walks/workflows/Java%20CI/badge.svg)](https://github.com/janothan/kgvec2go-walks/actions)
 [![Coverage Status](https://coveralls.io/repos/github/dwslab/melt/badge.svg?branch=master)](https://coveralls.io/github/dwslab/melt?branch=master)
 
 MELT is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.
