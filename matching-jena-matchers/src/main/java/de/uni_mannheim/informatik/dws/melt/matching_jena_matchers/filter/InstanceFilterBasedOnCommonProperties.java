@@ -11,7 +11,6 @@ import java.util.Set;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,14 +37,34 @@ public class InstanceFilterBasedOnCommonProperties extends MatcherYAAAJena {
      */
     private double minPropertyConfidence;
 
+    /**
+     * Constructor with all neccessary parameters.
+     * @param minNumberOfCommonProperties Minimum number of properties which two instances has to have to be a valid and non filtered match.
+     * @param excludeSameURIMapping If true, this excludes correspodences which maps to the same URI e.g. rdf:type = rdf:type
+     * @param minPropertyConfidence The minmum confidence for which a property mapping is counted.
+     */
     public InstanceFilterBasedOnCommonProperties(int minNumberOfCommonProperties, boolean excludeSameURIMapping, double minPropertyConfidence) {
         this.minNumberOfCommonProperties = minNumberOfCommonProperties;
         this.excludeSameURIMapping = excludeSameURIMapping;
         this.minPropertyConfidence = minPropertyConfidence;
     }
     
-    public InstanceFilterBasedOnCommonProperties(){
-        this(1,true, 0.0);
+    /**
+     * Constructor with reduced parameters. It count all Property mappings in the alignment (regardless of their confidence - at least non negative) and
+     * excludes correspodences which maps to the same URI e.g. rdf:type = rdf:type
+     * @param minNumberOfCommonProperties Minimum number of properties which two instances has to have to be a valid and non filtered match.
+     */
+    public InstanceFilterBasedOnCommonProperties(int minNumberOfCommonProperties) {
+        this(minNumberOfCommonProperties, true, 0.0);
+    }
+    
+    /**
+     * Constructor with default parameters. It count all Property mappings in the alignment (regardless of their confidence - at least non negative) and
+     * excludes correspodences which maps to the same URI e.g. rdf:type = rdf:type. 
+     * Furthermore it needs to have at least one overlapping property.
+     */
+    public InstanceFilterBasedOnCommonProperties() {
+        this(1, true, 0.0);
     }
 
     @Override
@@ -63,20 +82,7 @@ public class InstanceFilterBasedOnCommonProperties extends MatcherYAAAJena {
                 continue;
             }
             
-            int count = 0;
-            Set<String> sourceProperties = getDistinctProperties(source, individualSource);            
-            Set<String> targetProperties = getDistinctProperties(target, individualTarget);
-            for(String sourcePropURI : sourceProperties){
-                for(Correspondence propCorrespondence : inputAlignment.getCorrespondencesSourceRelation(sourcePropURI, CorrespondenceRelation.EQUIVALENCE)){
-                    if(excludeSameURIMapping && sourcePropURI.equals(propCorrespondence.getEntityTwo()))
-                        continue;
-                    if(propCorrespondence.getConfidence() < this.minPropertyConfidence)
-                        continue;
-                    if(targetProperties.contains(propCorrespondence.getEntityTwo())){
-                        count++;
-                    }
-                }                
-            }
+            int count = sharedProperties(individualSource, individualTarget, inputAlignment, this.excludeSameURIMapping, this.minPropertyConfidence);
             if(count >= this.minNumberOfCommonProperties){
                 finalAlignment.add(c);
             }else{
@@ -87,9 +93,37 @@ public class InstanceFilterBasedOnCommonProperties extends MatcherYAAAJena {
     }
     
     
-    private static Set<String> getDistinctProperties(OntModel m, Individual subject){        
-        Set<String> properties = new HashSet<>();        
-        StmtIterator stmts = m.listStatements(subject, null, (RDFNode)null);
+    
+    /**
+     * Return the number of overlapping distinct properties.
+     * @param individualSource the individual source
+     * @param individualTarget the individual target
+     * @param inputAlignment the input alignment to check for property matches
+     * @param excludeSameURIMapping if true, this excludes correspodences which maps to the same URI e.g. rdf:type = rdf:type
+     * @param minPropertyConfidence the minmum confidence for which a property mapping is counted.
+     * @return number of distinct properties
+     */
+    public static int sharedProperties(Individual individualSource, Individual individualTarget, Alignment inputAlignment, boolean excludeSameURIMapping, double minPropertyConfidence){
+        int count = 0;
+        Set<String> sourceProperties = getDistinctProperties(individualSource);            
+        Set<String> targetProperties = getDistinctProperties(individualTarget);
+        for(String sourcePropURI : sourceProperties){
+            for(Correspondence propCorrespondence : inputAlignment.getCorrespondencesSourceRelation(sourcePropURI, CorrespondenceRelation.EQUIVALENCE)){
+                if(excludeSameURIMapping && sourcePropURI.equals(propCorrespondence.getEntityTwo()))
+                    continue;
+                if(propCorrespondence.getConfidence() < minPropertyConfidence)
+                    continue;
+                if(targetProperties.contains(propCorrespondence.getEntityTwo())){
+                    count++;
+                }
+            }                
+        }
+        return count;
+    }
+    
+    private static Set<String> getDistinctProperties(Individual resource){ 
+        Set<String> properties = new HashSet<>();  
+        StmtIterator stmts = resource.listProperties();
         while(stmts.hasNext()){
             Property p = stmts.next().getPredicate();
             if(p.isURIResource()){

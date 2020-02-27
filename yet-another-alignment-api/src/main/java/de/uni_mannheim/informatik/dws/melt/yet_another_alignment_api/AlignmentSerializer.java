@@ -149,7 +149,6 @@ public class AlignmentSerializer {
         }
     }
 
-
     /**
      * Returns the extension label of a full URI.
      * @param uri Extension URI with base URI and appended extension label.
@@ -158,14 +157,15 @@ public class AlignmentSerializer {
      *         Example: creator or pretty
      */
     public static String getExtensionLabel(String uri){
-        if(uri.contains("#")){
-            return uri.replaceAll("^.*#", "");
-        } else {
-            Pattern pattern = Pattern.compile("(?<=\\/)[^\\/]*$"); // plain: (?<=\/)[^\/]*$
-            Matcher matcher = pattern.matcher(uri);
-            matcher.find();
-            return matcher.group();
+        int lastIndex = uri.lastIndexOf("#");
+        if(lastIndex >= 0){
+            return uri.substring(lastIndex + 1);
         }
+        lastIndex = uri.lastIndexOf("/");
+        if(lastIndex >= 0){
+            return uri.substring(lastIndex + 1);
+        }
+        throw new IllegalArgumentException("Key of correspondence extension is not a URI. Please use ExtensionMap to ensure every key is a URI.");
     }
 
     /**
@@ -175,9 +175,16 @@ public class AlignmentSerializer {
      * @return Only the extension label.
      *         Example: http://purl.org/dc/elements/1.1/ or http://exmo.inrialpes.fr/align/ext/1.0/#
      */
-    private static String getExtensionBaseUri(String uri){
-        String extensionLabel = getExtensionLabel(uri);
-        return uri.substring(0, uri.length() - extensionLabel.length());
+    public static String getExtensionBaseUri(String uri){
+        int lastIndex = uri.lastIndexOf("#");
+        if(lastIndex >= 0){
+            return uri.substring(0, lastIndex + 1);
+        }
+        lastIndex = uri.lastIndexOf("/");
+        if(lastIndex >= 0){
+            return uri.substring(0, lastIndex + 1);
+        }
+        throw new IllegalArgumentException("Key of correspondence extension is not a URI. Please use ExtensionMap to ensure every key is a URI.");
     }
 
 
