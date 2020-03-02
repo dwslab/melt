@@ -1,5 +1,9 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 import org.slf4j.Logger;
@@ -428,5 +432,85 @@ public class TrackRepository{
                 public static Track R5 = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "2016benchmarks-film", "2016benchmarks-film-r5");
             }
          }
+    }
+    
+    
+    private static Set<Track> definedTracks = null;
+    
+    /**
+     * This method returns all tracks defined in TrackRepository with java reflections.
+     * It uses all public static fields (of type Track or Collection of Track) in all nested classes.
+     * @return a set of Tracks defined in this class.
+     */
+    public static Set<Track> getDefinedTracks(){
+        if(definedTracks == null){
+            definedTracks = retriveDefinedTracks();
+        }
+        return definedTracks;
+    }
+    
+    private static Map<String, Track> trackNameAndVersionToTrack = null;
+    
+    /**
+     * Return a map between track name and version and the track object.
+     * This is used to find tracks whenloading from file.
+     * @return 
+     */
+    public static Map<String, Track> getMapFromTrackNameAndVersionToTrack(){
+        if(trackNameAndVersionToTrack == null){
+            trackNameAndVersionToTrack = new HashMap<>();
+            for(Track t : getDefinedTracks()){
+                trackNameAndVersionToTrack.put(t.getNameAndVersionString(), t);
+            }
+        }
+        return trackNameAndVersionToTrack;
+    }
+    
+    
+    /**
+     * This method retrives all tracks defined in TrackRepository with java reflections.
+     * It uses all public static fields (of type Track or Collection of Track) in all nested classes.
+     * @return Set of defined Tracks.
+     */
+    private static Set<Track> retriveDefinedTracks(){
+        Set<Track> tracks = new HashSet<>();
+        
+        Queue<Class<?>> classesToInspect = new LinkedList();
+        Collections.addAll(classesToInspect, TrackRepository.class.getDeclaredClasses());
+        while(!classesToInspect.isEmpty()){
+            Class<?> clazz = classesToInspect.poll();
+            LOGGER.info("Inspect class {} for static Track instance (full path : {}).", clazz.getSimpleName(), clazz.getName());
+            for(Field field : clazz.getDeclaredFields()){
+                int fieldModifier = field.getModifiers();
+                if(Modifier.isStatic(fieldModifier) && Modifier.isPublic(fieldModifier)){                    
+                    if(Track.class.isAssignableFrom(field.getType())){
+                        try {
+                            tracks.add((Track) field.get(null));
+                        } catch (IllegalArgumentException | IllegalAccessException ex) {
+                            LOGGER.error("Can not get track from TrackRepository with reflection.", ex);
+                        }
+                    }else if(Collection.class.isAssignableFrom(field.getType())){
+                        //check generic parameter of collection
+                        Type genericFieldType = field.getGenericType();
+                        if(genericFieldType instanceof ParameterizedType){
+                            ParameterizedType aType = (ParameterizedType) genericFieldType;
+                            Type[] fieldArgTypes = aType.getActualTypeArguments();
+                            if(fieldArgTypes.length > 0){
+                                if(Track.class.isAssignableFrom((Class<?>)fieldArgTypes[0])){
+                                    try {
+                                        tracks.addAll((Collection<Track>) field.get(null));
+                                    } catch (IllegalAccessException | IllegalArgumentException | ClassCastException ex) {
+                                        LOGGER.error("Can not get track from TrackRepository with reflection.", ex);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }            
+            Collections.addAll(classesToInspect, clazz.getDeclaredClasses());
+        }
+        
+        return tracks;
     }
 }

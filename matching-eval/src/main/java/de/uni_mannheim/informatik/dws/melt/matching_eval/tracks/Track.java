@@ -170,6 +170,19 @@ public abstract class Track {
         return null;
     }
     
+    /**
+     * Returns a string containing name and version of track in url encoded fashion.
+     * @return String as name and version of track (url encoded)
+     */
+    public String getNameAndVersionString(){
+        try {
+            return URLEncoder.encode(this.getName(), "UTF-8") + "_" + URLEncoder.encode(this.getVersion(), "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            LOGGER.warn("Could not generate encoded name and version string of track.", ex);
+            return this.getName() + "_" + this.getVersion();
+        }
+    }
+    
     protected List<TestCase> readFromCache(){ return readFromDefaultLayout(); } // can be overwritten if download does not use default layout
 
     protected abstract void downloadToCache() throws Exception;

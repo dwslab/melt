@@ -483,6 +483,51 @@ public class Executor {
     public static ExecutionResultSet loadFromKnowledgeGraphResultsFolder(String pathToFolder){
         return loadFromFolder(pathToFolder, TrackRepository.Knowledgegraph.V3);
     }
+    
+    /**
+     * Load results that are produced by the MELT framework in the results folder.
+     *
+     * @param folder Path to the results folder (the one with the time code e.g. results/results_2020-03-02_08-47-40)
+     * @return {@link ExecutionResultSet} instance with the loaded results.
+     */
+    public static ExecutionResultSet loadFromMeltResultsFolder(File folder) {
+        if (!folder.isDirectory()) {
+            LOGGER.error("The specified folder is not a directory. Returning null.");
+            return null;
+        }
+        ExecutionResultSet results = new ExecutionResultSet();
+        for (File trackFolder : folder.listFiles()) {
+            if(trackFolder.isDirectory()){
+                Track track = TrackRepository.getMapFromTrackNameAndVersionToTrack().get(trackFolder.getName());
+                if(track == null){
+                    LOGGER.error("cannot read from folder {} because track doesn't exist.", trackFolder.getName());
+                    continue;
+                }
+                for (File testCaseFolder : trackFolder.listFiles()) {
+                    if(testCaseFolder.getName().equals("aggregated"))
+                        continue;
+                    TestCase testcase = track.getTestCase(testCaseFolder.getName());
+                    if(testcase == null){
+                        LOGGER.error("cannot read from folder {} because testcase doesn't exist in track {} .", testCaseFolder.getName(), track.getName());
+                        continue;
+                    }
+                    for (File matcherFolder : testCaseFolder.listFiles()) {
+                        File alignmentFile = new File(matcherFolder, "systemAlignment.rdf");
+                        if(alignmentFile.exists() == false){
+                            LOGGER.error("alignment file (systemAlignment.rdf) is missing in folder {}", matcherFolder.getAbsolutePath());
+                            continue;
+                        }
+                        try {
+                            results.add(new ExecutionResult(testcase, matcherFolder.getName(), alignmentFile.toURI().toURL(), 0, null));
+                        } catch (MalformedURLException ex) {
+                            LOGGER.error("Could not build URL for file " + alignmentFile.getName());
+                        }
+                    }
+                }
+            }
+        }
+        return results;
+    }
 
     /**
      * Given a matcher, this method returns its name.
