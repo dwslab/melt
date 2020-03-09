@@ -39,7 +39,7 @@ public class Gensim {
     private final static Logger LOGGER = LoggerFactory.getLogger(Gensim.class);
 
     /**
-     * Contructor
+     * Constructor
      */
     private Gensim() {
         startServer();
@@ -454,8 +454,8 @@ public class Gensim {
     }
     
     /**
-     * Returns the python command which is extracted from file oaei-resources/python_command.txt.
-     * @return the python executable path
+     * Returns the python command which is extracted from {@code file oaei-resources/python_command.txt}.
+     * @return The python executable path.
      */
     protected String getPythonCommand(){
         String pythonCommand = "python";
@@ -477,8 +477,8 @@ public class Gensim {
     
     /**
      * Updates the environment variable PATH with additional python needed directories like env/lib/bin
-     * @param environment the environemtn to be changed
-     * @param pythonCommand the python executable path
+     * @param environment The environment to be changed.
+     * @param pythonCommand The python executable path.
      */
     protected void updateEnvironmentPath(Map<String,String> environment, String pythonCommand){
         String path = environment.getOrDefault("PATH", "");
