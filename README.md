@@ -243,6 +243,21 @@ is also shown in the following figure.
 
 ![image](documentation/melt_ml_architecture.png)
 
+In order to use MELT-ML, you have to copy [/matching-ml/oaei-resources](/matching-ml/oaei-resources) into your
+project root. The program will use the default `python` command of your system path.
+Note that Python 3 is required together with the dependencies listed 
+in [/matching-ml/oaei-resources/requirements.txt](/matching-ml/oaei-resources/requirements.txt).
+
+If you want to use a special python environment, you can create a file named `python_command.txt`
+in your `oaei-resources` directory containing the path to your python executable. You can, for example,
+use the executable of a certain Anaconda environment. 
+
+*Example*:
+```
+C:\Users\myUser\Anaconda3\envs\matching\python.exe
+```
+Here, an Anaconda environment, named `matching` will be used.
+
 ## Modules Overview
 The ontology matching framework is grouped into multiple maven modules which are described in the following.
 
