@@ -2,14 +2,12 @@ package de.uni_mannheim.informatik.dws.melt.matching_ml;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
 
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
-import static org.junit.jupiter.api.condition.OS.MAC;
-import static org.junit.jupiter.api.condition.OS.WINDOWS;
+
 
 
 class GensimTest {
@@ -183,6 +181,4 @@ class GensimTest {
         vectorFile.delete();
     }
 
-
-    
 }
