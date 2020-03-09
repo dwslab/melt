@@ -31,7 +31,7 @@ def display_server_status():
 
 
 class MySentences(object):
-    """Data structure to iterate over the lines of a file in a memory-friendly way.
+    """Data structure to iterate over the lines of a file in a memory-friendly way. The files can be gzipped.
     """
 
     def __init__(self, file_name):
@@ -39,15 +39,21 @@ class MySentences(object):
 
     def __iter__(self):
         try:
-            for line in open(self.file_name, mode='rt', encoding="utf-8"):
-                line = line.rstrip('\n')
-                words = line.split(" ")
-                yield words
+            if self.file_name[-2:] in "gz":
+                logging.info("Gzip file detected! Using gzip.open().")
+                for line in gzip.open(self.file_name, mode='rt', encoding="utf-8"):
+                    line = line.rstrip('\n')
+                    words = line.split(" ")
+                    yield words
+            else:
+                for line in open(self.file_name, mode='rt', encoding="utf-8"):
+                    line = line.rstrip('\n')
+                    words = line.split(" ")
+                    yield words
         except Exception:
             logging.error("Failed reading file:")
             logging.error(self.file_name)
             logging.exception("Stack Trace:")
-
 
 
 @app.route('/train-word2vec', methods=['GET'])
@@ -313,6 +319,52 @@ class CsvCorpus(object):
                 self.pos2id[i] = row[0]
                 yield self.dictionary.doc2bow(row[1].lower().split())
 
+
+@app.route('/write-model-as-text-file', methods=['GET'])
+def write_all_vectors_as_text_file():
+    """
+    Writes all vectors of the model to a text file: one vector per line
+    """
+    model_path = request.headers.get('model_path')
+    vector_path = request.headers.get("vector_path")
+    file_to_write = request.headers.get("file_to_write")
+    entity_file = request.headers.get("entity_file")
+    vectors = get_vectors(model_path=model_path, vector_path=vector_path)
+    final_string = ""
+    if entity_file is None:
+        for concept in vectors.vocab:
+            if concept in vectors.vocab:
+                vector = vectors.get_vector(concept)
+                final_string += concept + " "
+                for element in np.nditer(vector):
+                    final_string += str(element) + " "
+            else:
+                logging.info("WARN: The following concept has not been found in the vector space: " + concept)
+            final_string += "\n"
+        # write final string to file
+    else:
+        concepts = read_concept_file(entity_file)
+        for concept in concepts:
+            if concept in vectors.vocab:
+                vector = vectors.get_vector(concept)
+                final_string += concept + " "
+                for element in np.nditer(vector):
+                    final_string += str(element) + " "
+            else:
+                logging.info("WARN: The following concept has not been found in the vector space: " + concept)
+                logging.info("Trying to resolve new URI.")
+            final_string += "\n"
+    with open(file_to_write, "w+") as f:
+        f.write(final_string)
+
+def read_concept_file(path_to_concept_file):
+    result = []
+    with open(path_to_concept_file, errors='ignore') as concept_file:
+        for lemma in concept_file:
+            lemma = lemma.replace("\n", "").replace("\r", "")
+            result.append(lemma)
+    logging.info("Concept file read: " + str(path_to_concept_file))
+    return result
 
 
 @app.route('/hello', methods=['GET'])

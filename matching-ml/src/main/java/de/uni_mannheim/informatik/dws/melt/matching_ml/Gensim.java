@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
  * A client class to communicate with python <a href="https://radimrehurek.com/gensim/">gensim</a> library.
  * Singleton pattern.
  * Communication is performed through HTTP requests.
- * In case you need a different python environment or python executable, 
- * create a file in oaei-resources named python_command.txt and write your absolute path of the python executable in that file.
+ * In case you need a different python environment or python executable, create a file in directory python_server
+ * named {@code python_command.txt} and write your absolute path of the python executable in that file.
  */
 public class Gensim {
 
@@ -400,12 +400,14 @@ public class Gensim {
         File serverFile = new File("oaei-resources/python_server.py");
         try {
             if (!serverFile.exists()) {
-                LOGGER.error("Server File does not exist. Cannot start server. ABORTING.");
+                LOGGER.error("Server File does not exist. Cannot start server. ABORTING. Please make sure that " +
+                        "the 'python_server.py' file is placed in directory '/oaei-resources/'.");
                 return;
             }
             canonicalPath = serverFile.getCanonicalPath();
         } catch (IOException e) {
-            LOGGER.error("Server File does not exist. Cannot start server. ABORTING.", e);
+            LOGGER.error("Server File ('oaei-resources/python_server.py') does not exist. " +
+                    "Cannot start server. ABORTING.", e);
             return;
         }
         String pythonCommand = getPythonCommand();
@@ -530,6 +532,46 @@ public class Gensim {
             norm2 = norm2 + Math.pow(vector2[i], 2);
         }
         return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
+    }
+
+    /**
+     * Writes the vectors to a human-readable text file.
+     * @param modelOrVectorPath The path to the model or vector file. Note that the vector file MUST end with .kv in
+     *      *                          order to be recognized as vector file.
+     * @param fileToWrite The file that will be written.
+     */
+    public void writeModelAsTextFile(String modelOrVectorPath, String fileToWrite){
+        writeModelAsTextFile(modelOrVectorPath, fileToWrite, null);
+    }
+
+    /**
+     * Writes the vectors to a human-readable text file.
+     * @param modelOrVectorPath The path to the model or vector file. Note that the vector file MUST end with .kv in
+     *      *                          order to be recognized as vector file.
+     * @param fileToWrite The file that will be written.
+     * @param entityFile The vocabulary that shall appear in the text file (can be null if all words shall be written).
+     *                   The file must contain one word per line. The contents must be a subset of the vocabulary.
+     */
+    public void writeModelAsTextFile(String modelOrVectorPath, String fileToWrite, String entityFile){
+        HttpGet request = new HttpGet(serverUrl + "/write-model-as-text-file");
+        addModelToRequest(request, modelOrVectorPath);
+        if(entityFile != null) {
+            request.addHeader("entity_file", entityFile);
+        }
+        request.addHeader("file_to_write", fileToWrite);
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                LOGGER.error("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    LOGGER.error(resultString);
+                }
+            }
+        } catch (IOException ioe) {
+            LOGGER.error("Problem with http request.", ioe);
+        }
     }
 
 
