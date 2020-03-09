@@ -28,7 +28,6 @@ class GensimTest {
     
     
     @Test
-    @EnabledOnOs({ MAC })
     /**
      * Default test with cache.
      */
