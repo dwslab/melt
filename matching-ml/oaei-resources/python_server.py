@@ -321,9 +321,14 @@ class CsvCorpus(object):
 
 
 @app.route('/write-model-as-text-file', methods=['GET'])
-def write_all_vectors_as_text_file():
+def write_vectors_as_text_file():
     """
     Writes all vectors of the model to a text file: one vector per line
+
+    Returns
+    -------
+    boolean
+        'True' as string if operation was successful, else 'False' (as string).
     """
     model_path = request.headers.get('model_path')
     vector_path = request.headers.get("vector_path")
@@ -356,6 +361,7 @@ def write_all_vectors_as_text_file():
             final_string += "\n"
     with open(file_to_write, "w+") as f:
         f.write(final_string)
+    return "True"
 
 def read_concept_file(path_to_concept_file):
     result = []
