@@ -47,7 +47,6 @@ class GensimTest {
     }
 
     @Test
-    @EnabledOnOs({ MAC })
     /**
      * Default test without cache.
      */
@@ -68,7 +67,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
     /**
      * Default test with cache.
      */
@@ -87,7 +85,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
     void getSimilarityNoCaching() {
         gensim.setVectorCaching(false);
         // test case 1: model file
@@ -103,7 +100,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
     void testMultipleShutdownCallsAndRestarts() {
         gensim.setVectorCaching(false);
         // test case 1: model file
@@ -123,7 +119,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
     /**
      * Default test with cache.
      */
@@ -148,7 +143,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
     /**
      * Test without cache.
      */
@@ -173,7 +167,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({MAC})
     void trainWord2VecModel() {
         String testFilePath = getClass().getClassLoader().getResource("testInputForWord2Vec.txt").getPath();
         String fileToWrite = "./freudeWord2vec.kv";
