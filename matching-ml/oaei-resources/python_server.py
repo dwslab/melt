@@ -271,7 +271,7 @@ english_stopwords = {'has', 'mightn', 'me', 'here', 'other', 'very', 'but', 'our
                      "won't"}
 
 def __createDictionary(file_path, stopwords=english_stopwords):
-    with open(file_path) as f:
+    with open(file_path, encoding='utf-8') as f:
         # collect statistics about all tokens
         readCSV = csv.reader(f, delimiter=',')
         dictionary = corpora.Dictionary(line[1].lower().split() for line in readCSV)
@@ -304,7 +304,7 @@ class CsvCorpus(object):
         self.pos2id = {}  # map index position (integer) to document id (string)
 
     def __iter__(self):
-        with open(self.file_path) as csvfile:
+        with open(self.file_path, encoding='utf-8') as csvfile:
             readCSV = csv.reader(csvfile, delimiter=',')
             for i, row in enumerate(readCSV):
                 if row[0] in self.id2pos:

@@ -28,11 +28,15 @@ import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * Updates the confidence of already matched resources.
+ * It writes a textual representation of each resource to a csv file (text generation can be modified by subclassing and overriding getResourceText method).
+ */
 public class VectorSpaceModelMatcher extends MatcherYAAAJena {
     private final static Logger LOGGER = LoggerFactory.getLogger(VectorSpaceModelMatcher.class);
     private static final String newline = System.getProperty("line.separator");
     
+    private Set<String> textAvailable;
     private Collection<Property> textProperties;
     private boolean addFragment;
 
@@ -53,7 +57,7 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
 
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        
+        this.textAvailable = new HashSet<>();
         //TODO: make temporary file and delete and the end
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("oaei-resources/corpora.txt"), "UTF-8"))){
             writeResourceText(source.listClasses(), writer);
@@ -67,11 +71,13 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
         
         Gensim.getInstance().trainVectorSpaceModel("corpora", "oaei-resources/corpora.txt");        
         for(Correspondence c : inputAlignment){
-            try{
-                double conf = Gensim.getInstance().queryVectorSpaceModel("corpora", c.getEntityOne(), c.getEntityTwo());
-                c.setConfidence(conf);
-            }catch(Exception e){
-                LOGGER.warn("Could not get confidence from python server", e);
+            if(this.textAvailable.contains(c.getEntityOne()) && this.textAvailable.contains(c.getEntityTwo())){
+                try{
+                    double conf = Gensim.getInstance().queryVectorSpaceModel("corpora", c.getEntityOne(), c.getEntityTwo());
+                    c.setConfidence(conf);
+                }catch(Exception e){
+                    LOGGER.warn("Could not get confidence from python server", e);
+                }
             }
         }
         
@@ -86,6 +92,7 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
             String textForResource = getResourceText(r).trim();
             if(textForResource.isEmpty())
                 continue;
+            this.textAvailable.add(r.getURI());
             writer.write(StringEscapeUtils.escapeCsv(r.getURI()) + "," + StringEscapeUtils.escapeCsv(textForResource) + newline);
         }
     }

@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_yaaa.MatcherYAAA;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -10,16 +11,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import org.apache.jena.ontology.OntModel;
 
 /**
  * This filter returns only the alignments with the highest confidence if there are n-to-m matched elements.
  * This might not be the best solution.
  *
  */
-public class CardinalityFilter extends MatcherYAAA{
+public class CardinalityFilter extends MatcherYAAAJena{
 
    @Override
-    public Alignment match(URL source, URL target, Alignment inputAlignment, Properties p) throws Exception {
+    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties p) throws Exception {
         return filter(inputAlignment);        
     }
     

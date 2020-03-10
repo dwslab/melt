@@ -90,4 +90,23 @@ public class ConfusionMatrix {
             return numerator / denominator;
         }
     }
+    
+    /**
+     * Returns a new confusion matrix where tp, fp, fn are substracted from the other confusion matrix.
+     * @param other the other confusion matrix
+     * @return a new confusion matrix which is the set difference
+     */
+    public ConfusionMatrix substract(ConfusionMatrix other){
+        
+        Alignment subTruePositive = new Alignment(this.truePositive);
+        subTruePositive.removeAll(other.truePositive);
+        
+        Alignment subFalsePositive = new Alignment(this.falsePositive);
+        subFalsePositive.removeAll(other.falsePositive);
+        
+        Alignment subFalseNegative = new Alignment(this.falseNegative);
+        subFalseNegative.removeAll(other.falseNegative);
+        
+        return ConfusionMatrixMetric.calculateConfusionMatrixFromMappings(subTruePositive, subFalsePositive, subFalseNegative);
+    }
 }

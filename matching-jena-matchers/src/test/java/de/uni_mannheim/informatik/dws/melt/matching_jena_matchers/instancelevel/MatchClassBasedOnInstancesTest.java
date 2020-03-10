@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.instancelevel;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.instancelevel.MatchClassBasedOnInstances;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.instancelevel.SimInstanceMetric;

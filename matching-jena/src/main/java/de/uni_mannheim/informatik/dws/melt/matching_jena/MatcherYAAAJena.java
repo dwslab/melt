@@ -23,9 +23,9 @@ public abstract class MatcherYAAAJena extends MatcherYAAA {
      * Default implementation to load an ontology from an url with jena.
      * Uses the cache.
      * It can be changed by subclasses.
-     * @param url 
-     * @param spec
-     * @return 
+     * @param url the url pointing to an ontology
+     * @param spec the spec which should be used
+     * @return ont model
      */
     protected OntModel readOntology(URL url, OntModelSpec spec){
         return OntologyCacheJena.get(url, spec);
@@ -54,7 +54,7 @@ public abstract class MatcherYAAAJena extends MatcherYAAA {
      * @param inputAlignment this mapping represents the input alignment
      * @param properties additional properties
      * @return The resulting mapping of the matching process.
-     * @throws Exception
+     * @throws Exception any exception which occurs during matching
      */
     public abstract Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception ;
 

@@ -180,13 +180,13 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
 
 
     /**
-     * Internal calculation method which calculates the confusion matrix given three mappings: tp, fp, and fn.
+     * Calculation method which calculates the confusion matrix given three mappings: tp, fp, and fn.
      * @param truePositives True Positive (tp) mapping.
      * @param falsePositives False Positive (fp) mapping.
      * @param falseNegatives False Negative (fn) mapping.
      * @return The confusion matrix.
      */
-    private static ConfusionMatrix calculateConfusionMatrixFromMappings(Alignment truePositives, Alignment falsePositives, Alignment falseNegatives){
+    public static ConfusionMatrix calculateConfusionMatrixFromMappings(Alignment truePositives, Alignment falsePositives, Alignment falseNegatives){
         double tpSize = truePositives.size();
         double fpSize = falsePositives.size();
         double fnSize = falseNegatives.size();

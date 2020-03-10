@@ -157,6 +157,16 @@ public class OntologyCacheJena {
     public static OntModel get(File file){
         return get(file.toURI().toString(), DEFAULT_JENA_ONT_MODEL_SPEC, true);
     }
+    
+    /**
+     * Adds an ont model with a specified key to the cache.
+     * @param key key is usually uri + "_" + OntModelSpec.hashCode()
+     * @param model the ontmodel
+     */
+    public static void put(String key, OntModel model) {
+        ontologyCache.put(key, model);
+    }
+    
 
 
     /**

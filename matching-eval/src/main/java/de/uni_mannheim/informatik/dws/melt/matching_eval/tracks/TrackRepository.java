@@ -454,7 +454,7 @@ public class TrackRepository{
     /**
      * Return a map between track name and version and the track object.
      * This is used to find tracks whenloading from file.
-     * @return 
+     * @return map between track name, version and the track object
      */
     public static Map<String, Track> getMapFromTrackNameAndVersionToTrack(){
         if(trackNameAndVersionToTrack == null){
@@ -479,7 +479,7 @@ public class TrackRepository{
         Collections.addAll(classesToInspect, TrackRepository.class.getDeclaredClasses());
         while(!classesToInspect.isEmpty()){
             Class<?> clazz = classesToInspect.poll();
-            LOGGER.info("Inspect class {} for static Track instance (full path : {}).", clazz.getSimpleName(), clazz.getName());
+            //LOGGER.info("Inspect class {} for static Track instance (full path : {}).", clazz.getSimpleName(), clazz.getName());
             for(Field field : clazz.getDeclaredFields()){
                 int fieldModifier = field.getModifiers();
                 if(Modifier.isStatic(fieldModifier) && Modifier.isPublic(fieldModifier)){                    
