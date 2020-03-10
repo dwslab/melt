@@ -32,7 +32,7 @@ jobs:
         python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
     - name: Install python dependencies
-      run: pip install -r ./matching-ml/oaei-resources/requirements.txt
+      run: pip install -r ./matching-ml/src/main/resources/requirements.txt
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Coveralls
