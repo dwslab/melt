@@ -10,8 +10,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -391,22 +390,55 @@ public class Gensim {
      */
     private Process serverProcess;
 
+
+    /**
+     * Export a resource embedded into a Jar file to the local file path.
+     *
+     * @param resourceName ie.: "/SmartLibrary.dll"
+     * @return The path to the exported resource
+     * @throws Exception
+     */
+    private void exportResource(File baseDirectory, String resourceName) {
+        try (InputStream stream = this.getClass().getResourceAsStream("/" + resourceName)){
+            if(stream == null) {
+                throw new Exception("Cannot get resource \"" + resourceName + "\" from Jar file.");
+            }
+            int readBytes;
+            byte[] buffer = new byte[4096];
+            try (OutputStream resStreamOut = new FileOutputStream(new File(baseDirectory,resourceName))){
+                while ((readBytes = stream.read(buffer)) > 0) {
+                    resStreamOut.write(buffer, 0, readBytes);
+                }
+            }
+        } catch (Exception ex) {
+            LOGGER.error("Could not read/write resource file: " + resourceName);
+        }
+    }
+
+
     /**
      * Initializes the server.
      */
     private void startServer() {
+
+        File meltResourceDirectory = new File("./melt-resources/");
+        meltResourceDirectory.mkdirs();
+
+        exportResource(meltResourceDirectory, "python_server.py");
+        exportResource(meltResourceDirectory, "requirements.txt");
+
         httpClient = HttpClients.createDefault(); // has to be re-instantiated
         String canonicalPath;
-        File serverFile = new File("oaei-resources/python_server.py");
+        File serverFile = new File("melt-resources/python_server.py");
         try {
             if (!serverFile.exists()) {
                 LOGGER.error("Server File does not exist. Cannot start server. ABORTING. Please make sure that " +
-                        "the 'python_server.py' file is placed in directory '/oaei-resources/'.");
+                        "the 'python_server.py' file is placed in directory '/melt-resources/'.");
                 return;
             }
             canonicalPath = serverFile.getCanonicalPath();
         } catch (IOException e) {
-            LOGGER.error("Server File ('oaei-resources/python_server.py') does not exist. " +
+            LOGGER.error("Server File ('melt-resources/python_server.py') does not exist. " +
                     "Cannot start server. ABORTING.", e);
             return;
         }
@@ -456,12 +488,12 @@ public class Gensim {
     }
     
     /**
-     * Returns the python command which is extracted from {@code file oaei-resources/python_command.txt}.
+     * Returns the python command which is extracted from {@code file melt-resources/python_command.txt}.
      * @return The python executable path.
      */
     protected String getPythonCommand(){
         String pythonCommand = "python";
-        Path filePath = Paths.get("oaei-resources", "python_command.txt");
+        Path filePath = Paths.get("melt-resources", "python_command.txt");
         if(Files.exists(filePath)){
             try {
                 String fileContent = new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
