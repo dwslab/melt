@@ -4,11 +4,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -59,7 +55,7 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         this.textAvailable = new HashSet<>();
         //TODO: make temporary file and delete and the end
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("oaei-resources/corpora.txt"), "UTF-8"))){
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./corpora.txt"), "UTF-8"))){
             writeResourceText(source.listClasses(), writer);
             writeResourceText(source.listOntProperties(), writer);
             writeResourceText(source.listIndividuals(), writer);
@@ -79,6 +75,11 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
                     LOGGER.warn("Could not get confidence from python server", e);
                 }
             }
+        }
+
+        File tmpFile = new File("./corpora.txt");
+        if(tmpFile.exists()) {
+            tmpFile.delete();
         }
         
         return inputAlignment;

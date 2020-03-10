@@ -23,8 +23,7 @@ public class VectorSpaceModelTest {
     @EnabledOnOs({ MAC })
     void isConfidenceCorrectlySet() throws Exception {
         TestCase testCase = TrackRepository.Anatomy.Default.getFirstTestCase();
-        
-        
+
         Alignment inputAlignment = new Alignment();
         inputAlignment.add("http://mouse.owl#MA_0000253", "http://human.owl#NCI_C12274");
         inputAlignment.add("http://mouse.owl#MA_0000253", "http://human.owl#NCI_C12292");

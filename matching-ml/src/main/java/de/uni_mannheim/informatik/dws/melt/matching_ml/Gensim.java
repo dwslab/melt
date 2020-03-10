@@ -90,13 +90,16 @@ public class Gensim {
             LOGGER.error("Problem with http request.", ioe);
         }
     }
-    
+
+
     /**
      * Method to train a vector space model. The file for the training (i.e., csv file where first column is id and second colum text) has to
      * exist already.
      * @param modelPath identifier for the model (used for querying a specific model
      * @param documentIdOne Document id for the first document
      * @param documentIdTwo Document id for the second document
+     * @return The cosine similarity in the vector space between the two documents.
+     * @throws Exception Thrown if there are server problems.
      */
     public double queryVectorSpaceModel(String modelPath, String documentIdOne, String documentIdTwo) throws Exception{
         HttpGet request = new HttpGet(serverUrl + "/query-vector-space-model");
@@ -206,6 +209,7 @@ public class Gensim {
      * Returns the vector of a concept.
      *
      * @param concept The concept for which the vector shall be obtained.
+     * @param modelOrVectorPath The model path or vector file path leading to the file to be used.
      * @return The vector for the specified concept.
      */
     public Double[] getVector(String concept, String modelOrVectorPath) {
@@ -395,8 +399,6 @@ public class Gensim {
      * Export a resource embedded into a Jar file to the local file path.
      *
      * @param resourceName ie.: "/SmartLibrary.dll"
-     * @return The path to the exported resource
-     * @throws Exception
      */
     private void exportResource(File baseDirectory, String resourceName) {
         try (InputStream stream = this.getClass().getResourceAsStream("/" + resourceName)){
