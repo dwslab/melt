@@ -2,33 +2,30 @@ package de.uni_mannheim.informatik.dws.melt.matching_ml;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
 
-import java.io.File;
+import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
-import static org.junit.jupiter.api.condition.OS.MAC;
-import static org.junit.jupiter.api.condition.OS.WINDOWS;
+
 
 
 class GensimTest {
 
-    private Gensim gensim;
+    private static Gensim gensim;
 
     @BeforeAll
-    public void setup(){
-        this.gensim = Gensim.getInstance();
+    public static void setup(){
+        gensim = Gensim.getInstance();
     }
     
     @AfterAll
-    public void tearDown(){
-        this.gensim.shutDown();
+    public static void tearDown(){
+        gensim.shutDown();
     }
     
     
     @Test
-    @EnabledOnOs({ MAC })
     /**
      * Default test with cache.
      */
@@ -48,7 +45,6 @@ class GensimTest {
     }
 
     @Test
-    @EnabledOnOs({ MAC })
     /**
      * Default test without cache.
      */
@@ -69,7 +65,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
     /**
      * Default test with cache.
      */
@@ -88,7 +83,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
     void getSimilarityNoCaching() {
         gensim.setVectorCaching(false);
         // test case 1: model file
@@ -104,7 +98,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
     void testMultipleShutdownCallsAndRestarts() {
         gensim.setVectorCaching(false);
         // test case 1: model file
@@ -124,7 +117,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
     /**
      * Default test with cache.
      */
@@ -149,7 +141,6 @@ class GensimTest {
 
 
     @Test
-    @EnabledOnOs({ MAC })
     /**
      * Test without cache.
      */
@@ -172,9 +163,60 @@ class GensimTest {
         assertEquals(100, europeVector.length);
     }
 
+    @Test
+    void writeModelAsTextFile() {
+        // "normal" training task
+        String testFilePath = getClass().getClassLoader().getResource("testInputForWord2Vec.txt").getPath();
+        String fileToWrite = "./freudeWord2vec.kv";
+        assertTrue(gensim.trainWord2VecModel(fileToWrite, testFilePath, Word2VecConfiguration.CBOW));
+
+        File vectorFile = new File(fileToWrite);
+        File modelFile = new File(fileToWrite.substring(0, fileToWrite.length() - 3));
+        assertTrue(vectorFile.exists(), "No vector file was written.");
+        assertTrue(modelFile.exists(), "No model file was written.");
+        assertTrue(gensim.getSimilarity("Menschen", "Brüder", fileToWrite) > 0);
+
+        gensim.writeModelAsTextFile(fileToWrite, "./testTextVectors.txt");
+        File writtenFile = new File("./testTextVectors.txt");
+        assertTrue(writtenFile.exists());
+        assertTrue(getNumberOfLines(writtenFile) > 10);
+
+        String entityFile = getClass().getClassLoader().getResource("freudeSubset.txt").getPath();
+        gensim.writeModelAsTextFile(fileToWrite, "./testTextVectors2.txt", entityFile);
+        File writtenFile2 = new File("./testTextVectors2.txt");
+        assertTrue(writtenFile2.exists());
+        assertTrue(getNumberOfLines(writtenFile2) <= 2);
+
+        // cleaning up
+        writtenFile2.delete();
+        writtenFile.delete();
+        modelFile.delete();
+        vectorFile.delete();
+    }
+
+    /**
+     * Helper method to obtain the number of read lines.
+     * @param file File to be read.
+     * @return Number of lines in the file.
+     */
+    private static int getNumberOfLines(File file){
+        int linesRead = 0;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            while(br.readLine() != null){
+                linesRead++;
+            }
+            br.close();
+        } catch (FileNotFoundException fnfe){
+            fnfe.printStackTrace();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
+        return linesRead;
+    }
+
 
     @Test
-    @EnabledOnOs({MAC})
     void trainWord2VecModel() {
         String testFilePath = getClass().getClassLoader().getResource("testInputForWord2Vec.txt").getPath();
         String fileToWrite = "./freudeWord2vec.kv";
@@ -191,6 +233,4 @@ class GensimTest {
         vectorFile.delete();
     }
 
-
-    
 }

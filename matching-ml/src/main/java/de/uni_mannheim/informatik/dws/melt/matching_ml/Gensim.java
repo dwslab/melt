@@ -10,8 +10,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,8 +27,8 @@ import java.util.stream.Collectors;
  * A client class to communicate with python <a href="https://radimrehurek.com/gensim/">gensim</a> library.
  * Singleton pattern.
  * Communication is performed through HTTP requests.
- * In case you need a different python environment or python executable, 
- * create a file in oaei-resources named python_command.txt and write your absolute path of the python executable in that file.
+ * In case you need a different python environment or python executable, create a file in directory python_server
+ * named {@code python_command.txt} and write your absolute path of the python executable in that file.
  */
 public class Gensim {
 
@@ -39,7 +38,7 @@ public class Gensim {
     private final static Logger LOGGER = LoggerFactory.getLogger(Gensim.class);
 
     /**
-     * Contructor
+     * Constructor
      */
     private Gensim() {
         startServer();
@@ -391,21 +390,56 @@ public class Gensim {
      */
     private Process serverProcess;
 
+
+    /**
+     * Export a resource embedded into a Jar file to the local file path.
+     *
+     * @param resourceName ie.: "/SmartLibrary.dll"
+     * @return The path to the exported resource
+     * @throws Exception
+     */
+    private void exportResource(File baseDirectory, String resourceName) {
+        try (InputStream stream = this.getClass().getResourceAsStream("/" + resourceName)){
+            if(stream == null) {
+                throw new Exception("Cannot get resource \"" + resourceName + "\" from Jar file.");
+            }
+            int readBytes;
+            byte[] buffer = new byte[4096];
+            try (OutputStream resStreamOut = new FileOutputStream(new File(baseDirectory,resourceName))){
+                while ((readBytes = stream.read(buffer)) > 0) {
+                    resStreamOut.write(buffer, 0, readBytes);
+                }
+            }
+        } catch (Exception ex) {
+            LOGGER.error("Could not read/write resource file: " + resourceName);
+        }
+    }
+
+
     /**
      * Initializes the server.
      */
     private void startServer() {
+
+        File meltResourceDirectory = new File("./melt-resources/");
+        meltResourceDirectory.mkdirs();
+
+        exportResource(meltResourceDirectory, "python_server.py");
+        exportResource(meltResourceDirectory, "requirements.txt");
+
         httpClient = HttpClients.createDefault(); // has to be re-instantiated
         String canonicalPath;
-        File serverFile = new File("oaei-resources/python_server.py");
+        File serverFile = new File("melt-resources/python_server.py");
         try {
             if (!serverFile.exists()) {
-                LOGGER.error("Server File does not exist. Cannot start server. ABORTING.");
+                LOGGER.error("Server File does not exist. Cannot start server. ABORTING. Please make sure that " +
+                        "the 'python_server.py' file is placed in directory '/melt-resources/'.");
                 return;
             }
             canonicalPath = serverFile.getCanonicalPath();
         } catch (IOException e) {
-            LOGGER.error("Server File does not exist. Cannot start server. ABORTING.", e);
+            LOGGER.error("Server File ('melt-resources/python_server.py') does not exist. " +
+                    "Cannot start server. ABORTING.", e);
             return;
         }
         String pythonCommand = getPythonCommand();
@@ -454,12 +488,12 @@ public class Gensim {
     }
     
     /**
-     * Returns the python command which is extracted from file oaei-resources/python_command.txt.
-     * @return the python executable path
+     * Returns the python command which is extracted from {@code file melt-resources/python_command.txt}.
+     * @return The python executable path.
      */
     protected String getPythonCommand(){
         String pythonCommand = "python";
-        Path filePath = Paths.get("oaei-resources", "python_command.txt");
+        Path filePath = Paths.get("melt-resources", "python_command.txt");
         if(Files.exists(filePath)){
             try {
                 String fileContent = new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
@@ -477,8 +511,8 @@ public class Gensim {
     
     /**
      * Updates the environment variable PATH with additional python needed directories like env/lib/bin
-     * @param environment the environemtn to be changed
-     * @param pythonCommand the python executable path
+     * @param environment The environment to be changed.
+     * @param pythonCommand The python executable path.
      */
     protected void updateEnvironmentPath(Map<String,String> environment, String pythonCommand){
         String path = environment.getOrDefault("PATH", "");
@@ -530,6 +564,46 @@ public class Gensim {
             norm2 = norm2 + Math.pow(vector2[i], 2);
         }
         return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
+    }
+
+    /**
+     * Writes the vectors to a human-readable text file.
+     * @param modelOrVectorPath The path to the model or vector file. Note that the vector file MUST end with .kv in
+     *      *                          order to be recognized as vector file.
+     * @param fileToWrite The file that will be written.
+     */
+    public void writeModelAsTextFile(String modelOrVectorPath, String fileToWrite){
+        writeModelAsTextFile(modelOrVectorPath, fileToWrite, null);
+    }
+
+    /**
+     * Writes the vectors to a human-readable text file.
+     * @param modelOrVectorPath The path to the model or vector file. Note that the vector file MUST end with .kv in
+     *      *                          order to be recognized as vector file.
+     * @param fileToWrite The file that will be written.
+     * @param entityFile The vocabulary that shall appear in the text file (can be null if all words shall be written).
+     *                   The file must contain one word per line. The contents must be a subset of the vocabulary.
+     */
+    public void writeModelAsTextFile(String modelOrVectorPath, String fileToWrite, String entityFile){
+        HttpGet request = new HttpGet(serverUrl + "/write-model-as-text-file");
+        addModelToRequest(request, modelOrVectorPath);
+        if(entityFile != null) {
+            request.addHeader("entity_file", entityFile);
+        }
+        request.addHeader("file_to_write", fileToWrite);
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                LOGGER.error("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    LOGGER.error(resultString);
+                }
+            }
+        } catch (IOException ioe) {
+            LOGGER.error("Problem with http request.", ioe);
+        }
     }
 
 

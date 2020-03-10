@@ -243,6 +243,20 @@ is also shown in the following figure.
 
 ![image](documentation/melt_ml_architecture.png)
 
+The program will use the default `python` command of your system path.
+Note that Python 3 is required together with the dependencies listed 
+in [/matching-ml/melt-resources/requirements.txt](/matching-ml/src/main/resources/requirements.txt).
+
+If you want to use a special python environment, you can create a file named `python_command.txt`
+in your `melt-resources` directory (create if not existing) containing the path to your python executable. You can, for example,
+use the executable of a certain Anaconda environment. 
+
+*Example*:
+```
+C:\Users\myUser\Anaconda3\envs\matching\python.exe
+```
+Here, an Anaconda environment, named `matching` will be used.
+
 ## Modules Overview
 The ontology matching framework is grouped into multiple maven modules which are described in the following.
 

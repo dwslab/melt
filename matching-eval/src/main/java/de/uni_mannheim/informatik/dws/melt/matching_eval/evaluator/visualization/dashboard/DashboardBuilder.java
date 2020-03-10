@@ -489,13 +489,22 @@ public class DashboardBuilder extends Evaluator {
     public void writeResultsToDirectory(File baseDirectory) {
         writeToFile(new File(baseDirectory, "meltDashboard.html"));
     }
-    
+
+    public void writeToFile(String htmlFilePath){
+        this.writeToFile(new File(htmlFilePath));
+    }
+
     /**
      * Writes the HTML content to one file. This includes also the data (csv) which is included in the HTML file.
      * This HTML file can be opened directly by a browser.
      * @param htmlFile the file where all html data should be written to
      */
     public void writeToFile(File htmlFile){
+        if(htmlFile == null) {
+            LOGGER.error("The specified file is NULL. ABORT.");
+            return;
+        }
+
         //in case the last row is not closed:
         newRow();
 

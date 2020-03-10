@@ -77,6 +77,8 @@ documentation/.~lock.melt_ml_architecture_image.odp#
 python_command.txt
 index.index.0
 
+*/melt-resources/*
+
 # include travis file
 !.travis.yml
 !.github/workflows/maven.yml

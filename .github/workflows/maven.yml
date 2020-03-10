@@ -18,6 +18,21 @@ jobs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
+#    From a runtime perspective, it would make sense to cache OAEI files. However, in order to test also the
+#    TrackRepostitory and related classes, we decided not to cache those files.
+#    - name: Cache OAEI
+#      uses: actions/cache@v1
+#      with:
+#        path: ~/oaei_track_cache
+#        key: ${{ runner.os }}-m2-${{ hashFiles('**/TrackRepository.java') }}
+#        restore-keys: ${{ runner.os }}-oaei
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+        architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+    - name: Install python dependencies
+      run: pip install -r ./matching-ml/src/main/resources/requirements.txt
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Coveralls

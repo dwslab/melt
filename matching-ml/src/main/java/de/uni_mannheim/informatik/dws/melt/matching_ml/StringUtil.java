@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A collection of useful String operations that can be used for matcher development.
+ */
 public class StringUtil {
 
     private static HashMap<String, List<String>> tokenMap = new HashMap<String, List<String>>();
@@ -14,10 +17,10 @@ public class StringUtil {
     private static String myFormat = String.format("%s|%s|%s", "(?<=[\\p{Lu}])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[\\p{Lu}])", "(?<=[A-Za-z])(?=[^\\p{L}])");
 
     /**
-     * make tokens out of a String
+     * Make tokens out of a String.
      *
-     * @param text string for token
-     * @return a list of tokens
+     * @param text String to be tokenized.
+     * @return A list of tokens.
      */
     public static List<String> tokenize(String text) {
         if (tokenMap.containsKey(text)) {
@@ -83,8 +86,10 @@ public class StringUtil {
         return removeStopwords(tokenize(text));
     }
 
-    
-    private static final Set<String> STOPWORDS = new HashSet<String>(Arrays.asList(
+    /**
+     * A set of English stopwords.
+     */
+    private static final Set<String> ENGLISH_STOPWORDS = new HashSet<String>(Arrays.asList(
             //new String[]{"is", "by", "of", "a", "an", "the"}// ,, "has"}
             "a","an","and","are","as","at","be","but","by","for","if","in","into","is","it","no","not","of","on","or","such",
             "that","the","their","then","there","these","they","this","to","was","will","with"
@@ -129,7 +134,7 @@ public class StringUtil {
 	*/
 
     public static List<String> removeStopwords(List<String> tokens) {
-        return removeStopwords(tokens, STOPWORDS);
+        return removeStopwords(tokens, ENGLISH_STOPWORDS);
     }
 
     public static List<String> removeStopwords(List<String> tokens, Set<String> stopwords) {
