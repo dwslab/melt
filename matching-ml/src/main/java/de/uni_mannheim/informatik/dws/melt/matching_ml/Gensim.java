@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-
 /**
  * A client class to communicate with python <a href="https://radimrehurek.com/gensim/">gensim</a> library.
  * Singleton pattern.
@@ -41,7 +40,7 @@ public class Gensim {
      * Constructor
      */
     private Gensim() {
-        startServer();
+        // do nothing; do not start the server (yet)
     }
 
     /**
@@ -58,8 +57,9 @@ public class Gensim {
 
     /**
      * Indicates whether the server has been shut down.
+     * Initial state: shutDown.
      */
-    private static boolean isShutDown = false;
+    private static boolean isShutDown = true;
 
     /**
      * Local vector cache.
@@ -77,7 +77,7 @@ public class Gensim {
      */
     private File resourcesDirectory = new File("./melt-resources/");
 
-    
+
     /**
      * Method to train a vector space model. The file for the training (i.e., csv file where first column is id and second colum text) has to
      * exist already.
@@ -109,7 +109,7 @@ public class Gensim {
     public double queryVectorSpaceModel(String modelPath, String documentIdOne, String documentIdTwo) throws Exception{
         HttpGet request = new HttpGet(serverUrl + "/query-vector-space-model");
         request.addHeader("model_path", modelPath);
-        request.addHeader("document_id_one", documentIdOne);        
+        request.addHeader("document_id_one", documentIdOne);
         request.addHeader("document_id_two", documentIdTwo);
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
@@ -374,6 +374,19 @@ public class Gensim {
     }
 
     /**
+     * Get the instance (singleton pattern).
+     * @param resourcesDirectory Directory where the files shall be copied to.
+     * @return Gensim Instance
+     */
+    public static Gensim getInstance(File resourcesDirectory){
+        if (instance == null) instance = new Gensim();
+        instance.setResourcesDirectory(resourcesDirectory);
+        if (isShutDown) instance.startServer();
+        return instance;
+    }
+
+
+    /**
      * Shut down the service.
      */
     public void shutDown() {
@@ -418,7 +431,8 @@ public class Gensim {
                 }
             }
         } catch (Exception ex) {
-            LOGGER.error("Could not read/write resource file: " + resourceName);
+            LOGGER.error("Could not read/write resource file: " + resourceName + " (base directory: "
+                    + baseDirectory.getAbsolutePath() + ")", ex);
         }
     }
 
@@ -436,7 +450,7 @@ public class Gensim {
 
         httpClient = HttpClients.createDefault(); // has to be re-instantiated
         String canonicalPath;
-        File serverFile = new File("melt-resources/python_server.py");
+        File serverFile = new File(meltResourceDirectory, "python_server.py");
         try {
             if (!serverFile.exists()) {
                 LOGGER.error("Server File does not exist. Cannot start server. ABORTING. Please make sure that " +
@@ -493,21 +507,22 @@ public class Gensim {
             isHookStarted = true;
         }
     }
-    
+
     /**
      * Returns the python command which is extracted from {@code file melt-resources/python_command.txt}.
      * @return The python executable path.
      */
     protected String getPythonCommand(){
         String pythonCommand = "python";
-        Path filePath = Paths.get("melt-resources", "python_command.txt");
+        Path filePath = Paths.get(this.getResourcesDirectoryPath(), "python_command.txt");
         if(Files.exists(filePath)){
+            LOGGER.info("Python command file detected.");
             try {
                 String fileContent = new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
                 fileContent = fileContent.replace("\r", "").replace("\n", "")
-                    .replace("{File.pathSeparator}", File.pathSeparator)
-                    .replace("{File.separator}", File.separator)
-                    .trim();
+                        .replace("{File.pathSeparator}", File.pathSeparator)
+                        .replace("{File.separator}", File.separator)
+                        .trim();
                 return fileContent;
             } catch (IOException ex) {
                 LOGGER.warn("The file which should contain the python command could not be read.", ex);
@@ -515,7 +530,7 @@ public class Gensim {
         }
         return pythonCommand;
     }
-    
+
     /**
      * Updates the environment variable PATH with additional python needed directories like env/lib/bin
      * @param environment The environment to be changed.
@@ -528,10 +543,10 @@ public class Gensim {
             if(path.endsWith(File.pathSeparator) == false)
                 path += File.pathSeparator;
             path += additionalPaths;
-        }        
+        }
         environment.put("PATH",  path);
     }
-    
+
     /**
      * Returns a concatenated path of directories which can be used in the PATH variable.
      * It searches based on a python executable path, all bin directories within the python dir.
@@ -553,7 +568,7 @@ public class Gensim {
             return "";
         }
     }
-    
+
     /**
      * Calculate The cosine similarity between two vectors.
      *
@@ -618,12 +633,25 @@ public class Gensim {
     }
 
     /**
+     * Get the resource directory as String.
+     * @return Directory as String.
+     */
+    public String getResourcesDirectoryPath() {
+        try {
+            return this.resourcesDirectory.getCanonicalPath();
+        } catch (IOException ioe){
+            LOGGER.error("Could not determine canonical path for resources directory. Returning default.");
+            return "./melt-resources/";
+        }
+    }
+
+    /**
      * Set the directory where the python files will be copied to.
      * @param resourcesDirectory Must be a directory.
      */
     public void setResourcesDirectory(File resourcesDirectory) {
         if(!resourcesDirectory.isDirectory()){
-            LOGGER.error("The speicifed directory is no directory. Using default: './melt-resources/'");
+            LOGGER.error("The specified directory is no directory. Using default: './melt-resources/'");
             resourcesDirectory = new File("./melt-resources/");
         }
         this.resourcesDirectory = resourcesDirectory;
