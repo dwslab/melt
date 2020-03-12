@@ -72,6 +72,11 @@ public class Gensim {
      */
     private boolean isHookStarted = false;
 
+    /**
+     * The directory where the python files will be copied to.
+     */
+    private File resourcesDirectory = new File("./melt-resources/");
+
     
     /**
      * Method to train a vector space model. The file for the training (i.e., csv file where first column is id and second colum text) has to
@@ -423,7 +428,7 @@ public class Gensim {
      */
     private void startServer() {
 
-        File meltResourceDirectory = new File("./melt-resources/");
+        File meltResourceDirectory = this.resourcesDirectory;
         meltResourceDirectory.mkdirs();
 
         exportResource(meltResourceDirectory, "python_server.py");
@@ -608,7 +613,26 @@ public class Gensim {
         }
     }
 
+    public File getResourcesDirectory() {
+        return resourcesDirectory;
+    }
 
+    /**
+     * Set the directory where the python files will be copied to.
+     * @param resourcesDirectory Must be a directory.
+     */
+    public void setResourcesDirectory(File resourcesDirectory) {
+        if(!resourcesDirectory.isDirectory()){
+            LOGGER.error("The speicifed directory is no directory. Using default: './melt-resources/'");
+            resourcesDirectory = new File("./melt-resources/");
+        }
+        this.resourcesDirectory = resourcesDirectory;
+    }
+
+    /**
+     * If true: enabled. Else: false.
+     * @return True if enabled, else false.
+     */
     public boolean isVectorCaching() {
         return isVectorCaching;
     }

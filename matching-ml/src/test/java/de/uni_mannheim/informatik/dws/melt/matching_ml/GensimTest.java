@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 
 
-
 class GensimTest {
 
     private static Gensim gensim;
