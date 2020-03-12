@@ -54,8 +54,9 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         this.textAvailable = new HashSet<>();
-        //TODO: make temporary file and delete and the end
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./corpora.txt"), "UTF-8"))){
+        File coporaFile = new File("./corpora.txt");
+        coporaFile.deleteOnExit();
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(coporaFile), "UTF-8"))){
             writeResourceText(source.listClasses(), writer);
             writeResourceText(source.listOntProperties(), writer);
             writeResourceText(source.listIndividuals(), writer);
@@ -64,12 +65,12 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
             writeResourceText(target.listOntProperties(), writer);
             writeResourceText(target.listIndividuals(), writer);
         }
-        
-        Gensim.getInstance().trainVectorSpaceModel("corpora", "oaei-resources/corpora.txt");        
+        String modelName = "corpora";
+        Gensim.getInstance().trainVectorSpaceModel(modelName, coporaFile.getCanonicalPath());        
         for(Correspondence c : inputAlignment){
             if(this.textAvailable.contains(c.getEntityOne()) && this.textAvailable.contains(c.getEntityTwo())){
                 try{
-                    double conf = Gensim.getInstance().queryVectorSpaceModel("corpora", c.getEntityOne(), c.getEntityTwo());
+                    double conf = Gensim.getInstance().queryVectorSpaceModel(modelName, c.getEntityOne(), c.getEntityTwo());
                     c.setConfidence(conf);
                 }catch(Exception e){
                     LOGGER.warn("Could not get confidence from python server", e);
@@ -77,9 +78,8 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
             }
         }
 
-        File tmpFile = new File("./corpora.txt");
-        if(tmpFile.exists()) {
-            tmpFile.delete();
+        if(coporaFile.exists()) {
+            coporaFile.delete();
         }
         
         return inputAlignment;
