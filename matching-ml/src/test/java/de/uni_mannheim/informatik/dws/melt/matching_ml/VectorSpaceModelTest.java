@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.condition.OS.WINDOWS;
 public class VectorSpaceModelTest {
     
     @Test
-    @EnabledOnOs({ MAC })
     void isConfidenceCorrectlySet() throws Exception {
         TestCase testCase = TrackRepository.Anatomy.Default.getFirstTestCase();
 

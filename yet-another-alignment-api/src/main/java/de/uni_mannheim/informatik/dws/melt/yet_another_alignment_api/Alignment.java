@@ -652,4 +652,20 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     public void setExtensions(Map<String, String> extensions) {
         this.extensions = extensions;
     }
+    
+    private static final String newline = System.getProperty("line.separator");
+            
+    /**
+     * ToString method which returns the alignment in multiple lines (each correspondence in one line) to have a better overview.
+     * @return a string which contains the alignment in multiple lines.
+     */
+    public String toStringMultiline(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[").append(newline);
+        for(Correspondence c : this){
+            sb.append("    ").append(c.toString()).append(",").append(newline);
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 }
