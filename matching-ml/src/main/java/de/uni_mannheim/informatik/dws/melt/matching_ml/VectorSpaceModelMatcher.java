@@ -76,13 +76,13 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
                     LOGGER.warn("Could not get confidence from python server", e);
                 }
             }
-            Gensim.getInstance().shutDown();
         }
 
         if(coporaFile.exists()) {
             coporaFile.delete();
         }
-        
+
+        Gensim.shutDown();
         return inputAlignment;
     }
 

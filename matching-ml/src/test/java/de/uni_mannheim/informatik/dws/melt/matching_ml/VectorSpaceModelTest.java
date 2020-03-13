@@ -6,6 +6,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.Properties;
 import org.apache.jena.ontology.OntModel;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 
@@ -31,6 +32,11 @@ public class VectorSpaceModelTest {
         for(Correspondence c : result){
             assertNotEquals(1.0, c.getConfidence()); 
         }
+    }
+
+    @AfterAll
+    public static void tearDown(){
+        Gensim.shutDown();
     }
     
 }

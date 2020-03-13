@@ -366,7 +366,7 @@ public class Gensim {
     /**
      * Client to communicate with the server.
      */
-    private CloseableHttpClient httpClient;
+    private static CloseableHttpClient httpClient;
 
     /**
      * Get the instance.
@@ -395,7 +395,7 @@ public class Gensim {
     /**
      * Shut down the service.
      */
-    public void shutDown() {
+    public static void shutDown() {
         isShutDown = true;
         try {
             httpClient.close();
@@ -416,7 +416,7 @@ public class Gensim {
     /**
      * The python process.
      */
-    private Process serverProcess;
+    private static Process serverProcess;
 
 
     /**
