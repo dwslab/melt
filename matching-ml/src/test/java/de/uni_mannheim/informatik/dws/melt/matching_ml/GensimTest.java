@@ -5,6 +5,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,13 +38,13 @@ class GensimTest {
     void isInVocabulary() {
         gensim.setVectorCaching(true);
         // test case 1: model file
-        String pathToModel = getClass().getClassLoader().getResource("test_model").getPath();
+        String pathToModel = getPathOfResource("test_model");
         assertTrue(gensim.isInVocabulary("Europe", pathToModel));
         assertTrue(gensim.isInVocabulary("united", pathToModel));
         assertFalse(gensim.isInVocabulary("China", pathToModel));
 
         // test case 2: vector file
-        String pathToVectorFile = getClass().getClassLoader().getResource("test_model_vectors.kv").getPath();
+        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
         assertTrue(gensim.isInVocabulary("Europe", pathToVectorFile));
         assertTrue(gensim.isInVocabulary("united", pathToVectorFile));
         assertFalse(gensim.isInVocabulary("China", pathToVectorFile));
@@ -54,13 +57,13 @@ class GensimTest {
     void isInVocabularyNoCaching() {
         gensim.setVectorCaching(false);
         // test case 1: model file
-        String pathToModel = getClass().getClassLoader().getResource("test_model").getPath();
+        String pathToModel = getPathOfResource("test_model");
         assertTrue(gensim.isInVocabulary("Europe", pathToModel));
         assertTrue(gensim.isInVocabulary("united", pathToModel));
         assertFalse(gensim.isInVocabulary("China", pathToModel));
 
         // test case 2: vector file
-        String pathToVectorFile = getClass().getClassLoader().getResource("test_model_vectors.kv").getPath();
+        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
         assertTrue(gensim.isInVocabulary("Europe", pathToVectorFile));
         assertTrue(gensim.isInVocabulary("united", pathToVectorFile));
         assertFalse(gensim.isInVocabulary("China", pathToVectorFile));
@@ -74,12 +77,12 @@ class GensimTest {
     void getSimilarity() {
         gensim.setVectorCaching(true);
         // test case 1: model file
-        String pathToModel = getClass().getClassLoader().getResource("test_model").getPath();
+        String pathToModel = getPathOfResource("test_model");
         double similarity = gensim.getSimilarity("Europe", "united", pathToModel);
         assertTrue(similarity > 0);
 
         // test case 2: vector file
-        String pathToVectorFile = getClass().getClassLoader().getResource("test_model_vectors.kv").getPath();
+        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
         similarity = gensim.getSimilarity("Europe", "united", pathToVectorFile);
         assertTrue(similarity > 0);
     }
@@ -89,12 +92,12 @@ class GensimTest {
     void getSimilarityNoCaching() {
         gensim.setVectorCaching(false);
         // test case 1: model file
-        String pathToModel = getClass().getClassLoader().getResource("test_model").getPath();
+        String pathToModel = getPathOfResource("test_model");
         double similarity = gensim.getSimilarity("Europe", "united", pathToModel);
         assertTrue(similarity > 0);
 
         // test case 2: vector file
-        String pathToVectorFile = getClass().getClassLoader().getResource("test_model_vectors.kv").getPath();
+        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
         similarity = gensim.getSimilarity("Europe", "united", pathToVectorFile);
         assertTrue(similarity > 0);
     }
@@ -106,14 +109,14 @@ class GensimTest {
         // test case 1: model file
         gensim.shutDown();
         gensim = Gensim.getInstance();
-        String pathToModel = getClass().getClassLoader().getResource("test_model").getPath();
+        String pathToModel = getPathOfResource("test_model");
         double similarity = gensim.getSimilarity("Europe", "united", pathToModel);
         assertTrue(similarity > 0);
 
         // test case 2: vector file
         gensim.shutDown();
         gensim = Gensim.getInstance();
-        String pathToVectorFile = getClass().getClassLoader().getResource("test_model_vectors.kv").getPath();
+        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
         similarity = gensim.getSimilarity("Europe", "united", pathToVectorFile);
         assertTrue(similarity > 0);
     }
@@ -126,7 +129,7 @@ class GensimTest {
     void getVector() {
         gensim.setVectorCaching(true);
         // test case 1: vector file
-        String pathToVectorFile = getClass().getClassLoader().getResource("test_model_vectors.kv").getPath();
+        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
         Double[] europeVector = gensim.getVector("Europe", pathToVectorFile);
         assertEquals(100, europeVector.length);
 
@@ -137,7 +140,7 @@ class GensimTest {
         assertEquals(similarityJava, similarityPyhton, 0.0001);
 
         // test case 2: model file
-        String pathToModel = getClass().getClassLoader().getResource("test_model").getPath();
+        String pathToModel = getPathOfResource("test_model");
         europeVector = gensim.getVector("Europe", pathToModel);
         assertEquals(100, europeVector.length);
     }
@@ -150,7 +153,7 @@ class GensimTest {
     void getVectorNoCaching() {
         gensim.setVectorCaching(false);
         // test case 1: vector file
-        String pathToVectorFile = getClass().getClassLoader().getResource("test_model_vectors.kv").getPath();
+        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
         Double[] europeVector = gensim.getVector("Europe", pathToVectorFile);
         assertEquals(100, europeVector.length);
 
@@ -161,7 +164,7 @@ class GensimTest {
         assertEquals(similarityJava, similarityPython, 0.0001);
 
         // test case 2: model file
-        String pathToModel = getClass().getClassLoader().getResource("test_model").getPath();
+        String pathToModel = getPathOfResource("test_model");
         europeVector = gensim.getVector("Europe", pathToModel);
         assertEquals(100, europeVector.length);
     }
@@ -169,7 +172,7 @@ class GensimTest {
     @Test
     void writeModelAsTextFile() {
         // "normal" training task
-        String testFilePath = getClass().getClassLoader().getResource("testInputForWord2Vec.txt").getPath();
+        String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
         String fileToWrite = "./freudeWord2vec.kv";
         assertTrue(gensim.trainWord2VecModel(fileToWrite, testFilePath, Word2VecConfiguration.CBOW));
 
@@ -184,7 +187,7 @@ class GensimTest {
         assertTrue(writtenFile.exists());
         assertTrue(getNumberOfLines(writtenFile) > 10);
 
-        String entityFile = getClass().getClassLoader().getResource("freudeSubset.txt").getPath();
+        String entityFile = getPathOfResource("freudeSubset.txt");
         gensim.writeModelAsTextFile(fileToWrite, "./testTextVectors2.txt", entityFile);
         File writtenFile2 = new File("./testTextVectors2.txt");
         assertTrue(writtenFile2.exists());
@@ -196,32 +199,11 @@ class GensimTest {
         modelFile.delete();
         vectorFile.delete();
     }
-
-    /**
-     * Helper method to obtain the number of read lines.
-     * @param file File to be read.
-     * @return Number of lines in the file.
-     */
-    private static int getNumberOfLines(File file){
-        int linesRead = 0;
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            while(br.readLine() != null){
-                linesRead++;
-            }
-            br.close();
-        } catch (FileNotFoundException fnfe){
-            fnfe.printStackTrace();
-        } catch (IOException ioe){
-            ioe.printStackTrace();
-        }
-        return linesRead;
-    }
-
-
+    
+    
     @Test
     void trainWord2VecModel() {
-        String testFilePath = getClass().getClassLoader().getResource("testInputForWord2Vec.txt").getPath();
+        String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
         String fileToWrite = "./freudeWord2vec.kv";
         assertTrue(gensim.trainWord2VecModel(fileToWrite, testFilePath, Word2VecConfiguration.CBOW));
 
@@ -261,6 +243,38 @@ class GensimTest {
         } catch (IOException e) {
             LOGGER.error("Failed to clean up external resources directory.");
         }
+    }
+    
+    private String getPathOfResource(String resource){
+        try {
+            URL res = getClass().getClassLoader().getResource(resource);
+            File file = Paths.get(res.toURI()).toFile();
+            return file.getCanonicalPath();
+        } catch (URISyntaxException | IOException ex) {
+            LOGGER.info("Cannot create path of resource", ex);
+            return "";
+        }
+    }
+
+    /**
+     * Helper method to obtain the number of read lines.
+     * @param file File to be read.
+     * @return Number of lines in the file.
+     */
+    private static int getNumberOfLines(File file){
+        int linesRead = 0;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            while(br.readLine() != null){
+                linesRead++;
+            }
+            br.close();
+        } catch (FileNotFoundException fnfe){
+            fnfe.printStackTrace();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
+        return linesRead;
     }
 
 }
