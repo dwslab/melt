@@ -73,9 +73,15 @@ public class Gensim {
     private boolean isHookStarted = false;
 
     /**
+     * Default resources directory (where the python files will be copied to by default) and where the resources
+     * are read from within the JAR.
+     */
+    private static final String DEFAULT_RESOURCES_DIRECTORY = "./melt-resources/";
+
+    /**
      * The directory where the python files will be copied to.
      */
-    private File resourcesDirectory = new File("./melt-resources/");
+    private File resourcesDirectory = new File(DEFAULT_RESOURCES_DIRECTORY);
 
 
     /**
@@ -88,6 +94,7 @@ public class Gensim {
         HttpGet request = new HttpGet(serverUrl + "/train-vector-space-model");
         request.addHeader("input_file_path", getCanonicalPath(trainingFilePath));
         request.addHeader("model_path", modelPath);
+
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             HttpEntity entity = response.getEntity();
         } catch (IOException ioe) {
@@ -352,7 +359,7 @@ public class Gensim {
     }
 
     /**
-     * Instance (singleton pattern).
+     * Instance (singleton pattern.
      */
     private static Gensim instance;
 
@@ -441,24 +448,24 @@ public class Gensim {
      */
     private void startServer() {
 
-        File meltResourceDirectory = this.resourcesDirectory;
-        meltResourceDirectory.mkdirs();
+        File serverResourceDirectory = this.resourcesDirectory;
+        serverResourceDirectory.mkdirs();
 
-        exportResource(meltResourceDirectory, "python_server.py");
-        exportResource(meltResourceDirectory, "requirements.txt");
+        exportResource(serverResourceDirectory, "python_server.py");
+        exportResource(serverResourceDirectory, "requirements.txt");
 
         httpClient = HttpClients.createDefault(); // has to be re-instantiated
         String canonicalPath;
-        File serverFile = new File(meltResourceDirectory, "python_server.py");
+        File serverFile = new File(serverResourceDirectory, "python_server.py");
         try {
             if (!serverFile.exists()) {
                 LOGGER.error("Server File does not exist. Cannot start server. ABORTING. Please make sure that " +
-                        "the 'python_server.py' file is placed in directory '/melt-resources/'.");
+                        "the 'python_server.py' file is placed in directory '" + DEFAULT_RESOURCES_DIRECTORY + "'.");
                 return;
             }
             canonicalPath = serverFile.getCanonicalPath();
         } catch (IOException e) {
-            LOGGER.error("Server File ('melt-resources/python_server.py') does not exist. " +
+            LOGGER.error("Server File (" + serverFile.getAbsolutePath() + ") does not exist. " +
                     "Cannot start server. ABORTING.", e);
             return;
         }
@@ -651,8 +658,8 @@ public class Gensim {
     public void setResourcesDirectory(File resourcesDirectory) {
         if(!resourcesDirectory.exists()) resourcesDirectory.mkdir();
         if(!resourcesDirectory.isDirectory()){
-            LOGGER.error("The specified directory is no directory. Using default: './melt-resources/'");
-            resourcesDirectory = new File("./melt-resources/");
+            LOGGER.error("The specified directory is no directory. Using default: '" + DEFAULT_RESOURCES_DIRECTORY + "'");
+            resourcesDirectory = new File(DEFAULT_RESOURCES_DIRECTORY);
         }
         this.resourcesDirectory = resourcesDirectory;
     }

@@ -256,6 +256,11 @@ class GensimTest {
         // shut down again to keep using default resources directory
         gensim.shutDown();
 
+        try {
+            FileUtils.deleteDirectory(externalResourcesDirectory);
+        } catch (IOException e) {
+            LOGGER.error("Failed to clean up external resources directory.");
+        }
     }
 
 }
