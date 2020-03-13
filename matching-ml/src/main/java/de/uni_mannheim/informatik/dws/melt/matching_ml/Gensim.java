@@ -88,7 +88,6 @@ public class Gensim {
         HttpGet request = new HttpGet(serverUrl + "/train-vector-space-model");
         request.addHeader("input_file_path", getCanonicalPath(trainingFilePath));
         request.addHeader("model_path", modelPath);
-
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             HttpEntity entity = response.getEntity();
         } catch (IOException ioe) {
@@ -353,7 +352,7 @@ public class Gensim {
     }
 
     /**
-     * Instance (singleton pattern.
+     * Instance (singleton pattern).
      */
     private static Gensim instance;
 
@@ -650,6 +649,7 @@ public class Gensim {
      * @param resourcesDirectory Must be a directory.
      */
     public void setResourcesDirectory(File resourcesDirectory) {
+        if(!resourcesDirectory.exists()) resourcesDirectory.mkdir();
         if(!resourcesDirectory.isDirectory()){
             LOGGER.error("The specified directory is no directory. Using default: './melt-resources/'");
             resourcesDirectory = new File("./melt-resources/");

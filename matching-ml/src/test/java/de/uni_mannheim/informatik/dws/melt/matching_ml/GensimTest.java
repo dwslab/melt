@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
@@ -7,6 +8,8 @@ import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 class GensimTest {
@@ -23,7 +26,8 @@ class GensimTest {
         gensim.shutDown();
     }
     
-    
+    private static Logger LOGGER = LoggerFactory.getLogger(GensimTest.class);
+
     @Test
     /**
      * Default test with cache.
@@ -230,6 +234,28 @@ class GensimTest {
         // cleaning up
         modelFile.delete();
         vectorFile.delete();
+    }
+
+    @Test
+    void externalResourcesDirectory(){
+        // shut down
+        gensim.shutDown();
+
+        // reinitialize
+        File externalResourcesDirectory = new File("./ext/");
+        gensim = Gensim.getInstance(externalResourcesDirectory);
+        File serverFile = new File(externalResourcesDirectory, "python_server.py");
+        assertTrue(serverFile.exists());
+        try {
+            FileUtils.deleteDirectory(externalResourcesDirectory);
+        } catch (IOException e) {
+            LOGGER.info("Cleanup failed.");
+            e.printStackTrace();
+        }
+
+        // shut down again to keep using default resources directory
+        gensim.shutDown();
+
     }
 
 }
