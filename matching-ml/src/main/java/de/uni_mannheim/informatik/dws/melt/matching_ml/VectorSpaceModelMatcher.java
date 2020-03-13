@@ -66,11 +66,12 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
             writeResourceText(target.listIndividuals(), writer);
         }
         String modelName = "corpora";
-        Gensim.getInstance().trainVectorSpaceModel(modelName, coporaFile.getCanonicalPath());        
+        Gensim gensim = Gensim.getInstance();
+        gensim.trainVectorSpaceModel(modelName, coporaFile.getCanonicalPath());
         for(Correspondence c : inputAlignment){
             if(this.textAvailable.contains(c.getEntityOne()) && this.textAvailable.contains(c.getEntityTwo())){
                 try{
-                    double conf = Gensim.getInstance().queryVectorSpaceModel(modelName, c.getEntityOne(), c.getEntityTwo());
+                    double conf = gensim.queryVectorSpaceModel(modelName, c.getEntityOne(), c.getEntityTwo());
                     c.setConfidence(conf);
                 }catch(Exception e){
                     LOGGER.warn("Could not get confidence from python server", e);

@@ -447,7 +447,8 @@ public class Gensim {
      * Initializes the server.
      */
     private void startServer() {
-
+        isShutDown = false;
+        
         File serverResourceDirectory = this.resourcesDirectory;
         serverResourceDirectory.mkdirs();
 
