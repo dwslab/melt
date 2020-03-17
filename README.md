@@ -191,6 +191,44 @@ in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2
 
 ## Further Services
 
+### OAEI Track Repository
+The [`TrackRepository`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/tracks/TrackRepository.java) 
+checks whether the required ontologies and alignments are available in the cache folder (~/oaei_track_cache); if data is missing, it is automatically downloading and 
+caching it for the next access.
+
+Exemplary call using the `TrackRepository`:
+
+```
+// access the Anatomy track
+TrackRepository.Anatomy.Default;
+
+// access all Conference test cases
+TrackRepository.Conference.V1.getTestCases();
+```
+
+The resulting instances can be directly used by the Executor or any other MELT functionality that requires tracks or
+test cases.
+
+#### Available tracks as SEALS Repository
+MELT also provides a server which mocks the SEALS repository and hosts the following tracks:
+
+Name | Repository | Suite-ID | Version-ID 
+---- | ---------- | -------- | ----------
+[anatomy](http://oaei.ontologymatching.org/2019/anatomy/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `anatomy_track` | `anatomy_track-default`
+[conference](http://oaei.ontologymatching.org/2019/conference/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `conference` | `conference-v1`
+[knowledgegraph](http://oaei.ontologymatching.org/2019/knowledgegraph/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `knowledgegraph` | `v3`
+[iimb](http://islab.di.unimi.it/content/im_oaei/2018/) | `http://oaei.webdatacommons.org/tdrs/` | `iimb` | `v1`
+[biodiv](http://oaei.ontologymatching.org/2018/biodiv/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `biodiv` | `2018`
+[link](https://project-hobbit.eu/challenges/om2019/) | `http://oaei.webdatacommons.org/tdrs/` | `link` | `2017`
+
+Soon:
+Name | Repository | Suite-ID | Version-ID 
+---- | ---------- | -------- | ----------
+[largebio](http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/) | `http://oaei.webdatacommons.org/tdrs/` | `` | ``
+[phenotype](https://sws.ifi.uio.no/oaei/phenotype/) | `http://oaei.webdatacommons.org/tdrs/` | `` | ``
+[multifarm](http://oaei.ontologymatching.org/2018/multifarm/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `` | ``
+
+
 ### TestCase/Track Validation Service
 Creating new tracks and test case can be very cumbersome. The MELT validation service allows you to check whether your 
 test cases:
@@ -211,30 +249,6 @@ You can also test your track on different versions of Jena and the OWL API autom
 by adapting the [`TestLocalFile`](/matching-validation/src/test/java/de/uni_mannheim/informatik/dws/melt/matching_validation/local/TestLocalFile.java) 
 and running `runAll.cmd` in the Windows shell. The release versions to be tested can be edited in the corresponding
 [`pom.xml`](/matching-validation/pom.xml).
-
-
-### OAEI Track Repository
-The [`TrackRepository`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/tracks/TrackRepository.java) 
-checks whether the required ontologies and alignments are available in the internal buffer; if data is missing, it is automatically downloading and 
-caching it for the next access.
-
-Exemplary call using the `TrackRepository`:
-
-```
-// access the Anatomy track
-TrackRepository.Anatomy.Default;
-
-// access all Conference test cases
-TrackRepository.Conference.V1.getTestCases();
-```
-
-The resulting instances can be directly used by the Executor or any other MELT functionality that requires tracks or
-test cases.
-
-**Note that the OAEI SEALS repository is currently offline. This is not an issue of MELT
-but a problem in the central infrastructure. We will update the repository classes
-once the repository is back online.**
-
 
 ### Gensim Integration
 The MELT-ML module exposes some machine learning functionality that is implemented in python. This is achieved

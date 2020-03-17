@@ -347,7 +347,7 @@ public class TrackRepository{
      */
     public static class Biodiv {
         /** Default Testsuite which is used all the time. */
-        public static Track Default = new BioDivTrack("http://oaei.ontologymatching.org/2018/biodiv/data/biodiv.zip", "biodiv", "2018");
+        public static Track Default = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "biodiv", "2018");//new BioDivTrack("http://oaei.ontologymatching.org/2018/biodiv/data/biodiv.zip", "biodiv", "2018");
     }
     
     /**
@@ -366,7 +366,7 @@ public class TrackRepository{
      */
     public static class Link {
         /** The default HOBBIT Link Discovery Task*/
-        public static Track Default = new LinkTrack("http://islab.di.unimi.it/content/im_oaei/2017/data/FORTH_sandbox.tar.gz", "link", "2017", "Tbox1.nt", "Tbox2.nt", "refalign.rdf");
+        public static Track Default = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "link", "2017");//new LinkTrack("http://islab.di.unimi.it/content/im_oaei/2017/data/FORTH_sandbox.tar.gz", "link", "2017", "Tbox1.nt", "Tbox2.nt", "refalign.rdf");
     }
     
     
@@ -378,7 +378,8 @@ public class TrackRepository{
      * and ii) to cover a wide spectrum of possible techniques and tools.
      */
     public static class IIMB {
-        // TODO implement
+        /** Version V1 of the IIMB track */
+        public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "iimb", "v1");
     }
     
     /**
