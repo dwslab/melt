@@ -54,4 +54,14 @@ class TrackRepositoryTest {
         assertNull(TrackRepository.Multifarm.getSpecificMultifarmTrack("ABC", "XYZ"));
     }
 
+    
+    //@Test
+    public void testMeltRepository(){
+        assertEquals(1, TrackRepository.Anatomy.Default.getTestCases().size());
+        assertEquals(21, TrackRepository.Conference.V1.getTestCases().size());
+        assertEquals(5, TrackRepository.Knowledgegraph.V3.getTestCases().size());
+        assertEquals(80, TrackRepository.IIMB.V1.getTestCases().size());
+        assertEquals(2, TrackRepository.Biodiv.Default.getTestCases().size());
+        assertEquals(11, TrackRepository.Link.Default.getTestCases().size());
+    }
 }
