@@ -214,7 +214,7 @@ Name | Repository | Suite-ID | Version-ID
 [iimb](http://islab.di.unimi.it/content/im_oaei/2018/) | `http://oaei.webdatacommons.org/tdrs/` | `iimb` | `v1`  
 [biodiv](http://oaei.ontologymatching.org/2018/biodiv/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `biodiv` | `2018`  
 [link](https://project-hobbit.eu/challenges/om2019/) | `http://oaei.webdatacommons.org/tdrs/` | `link` | `2017`  
-[phenotype](https://sws.ifi.uio.no/oaei/phenotype/) | `http://oaei.webdatacommons.org/tdrs/` | `phenotype` | `phenotype-hp-mp-2017-bioportal` OR `phenotype-doid-ordo-2017-bioportal`
+[phenotype](https://sws.ifi.uio.no/oaei/phenotype/) | `http://oaei.webdatacommons.org/tdrs/` | `phenotype` | <ul><li>`phenotype-hp-mp-2017-bioportal`</li><li>`phenotype-doid-ordo-2017-bioportal`</li></ul>
 
   
 Soon:  
