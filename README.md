@@ -213,9 +213,7 @@ Name | Repository | Suite-ID | Version-ID
 [iimb](http://islab.di.unimi.it/content/im_oaei/2018/) | `http://oaei.webdatacommons.org/tdrs/` | `iimb` | `v1`  
 [biodiv](http://oaei.ontologymatching.org/2018/biodiv/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `biodiv` | `2018`  
 [link](https://project-hobbit.eu/challenges/om2019/) | `http://oaei.webdatacommons.org/tdrs/` | `link` | `2017`  
-[phenotype](https://sws.ifi.uio.no/oaei/phenotype/) | `http://oaei.webdatacommons.org/tdrs/` | `phenotype` |    
- | | | | `phenotype-hp-mp-2017-bioportal`   
- | | | | `phenotype-doid-ordo-2017-bioportal` 
+[phenotype](https://sws.ifi.uio.no/oaei/phenotype/) | `http://oaei.webdatacommons.org/tdrs/` | `phenotype` | <ul><li>`phenotype-hp-mp-2017-bioportal`</li><li>`phenotype-doid-ordo-2017-bioportal`</li></ul>
 [multifarm](http://oaei.ontologymatching.org/2018/multifarm/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `multifarm` | `<language_pair>-v2`  
 [largebio](http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/) | `http://oaei.webdatacommons.org/tdrs/` | `largebio` | `largebio-all_tasks_2016`  
 
