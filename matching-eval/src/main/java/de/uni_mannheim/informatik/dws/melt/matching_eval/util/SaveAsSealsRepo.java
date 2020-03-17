@@ -35,7 +35,7 @@ public class SaveAsSealsRepro {
     
     public static void main(String[] args){
         //save(TrackRepository.Anatomy.Default, "test");
-        save(TrackRepository.Conference.V1, "test");
+        save(TrackRepository.Largebio.V2016.ALL, "test_large_bio");
         
     }
     
