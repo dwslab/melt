@@ -1,6 +1,5 @@
 # MELT - Matching EvaLuation Toolkit  
-[![Java CI](https://github.com/janothan/kgvec2go-walks/workflows/Java%20CI/badge.svg)](https://github.com/dwslab/melt/actions)  
-[![Coverage Status](https://coveralls.io/repos/github/dwslab/melt/badge.svg?branch=master)](https://coveralls.io/github/dwslab/melt?branch=master)  
+[![Java CI](https://github.com/janothan/kgvec2go-walks/workflows/Java%20CI/badge.svg)](https://github.com/dwslab/melt/actions)  [![Coverage Status](https://coveralls.io/repos/github/dwslab/melt/badge.svg?branch=master)](https://coveralls.io/github/dwslab/melt?branch=master)  
   
 MELT is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.  
 It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the   
@@ -217,14 +216,24 @@ Name | Repository | Suite-ID | Version-ID
 [phenotype](https://sws.ifi.uio.no/oaei/phenotype/) | `http://oaei.webdatacommons.org/tdrs/` | `phenotype` |    
  | | | | `phenotype-hp-mp-2017-bioportal`   
  | | | | `phenotype-doid-ordo-2017-bioportal` 
+[multifarm](http://oaei.ontologymatching.org/2018/multifarm/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `multifarm` | `<language_pair>-v2`  
+[largebio](http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/) | `http://oaei.webdatacommons.org/tdrs/` | `largebio` | `largebio-all_tasks_2016`  
 
-  
-Soon:  
-Name | Repository | Suite-ID | Version-ID   
----- | ---------- | -------- | ----------  
-[largebio](http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/) | `http://oaei.webdatacommons.org/tdrs/` | `` | ``  
- [multifarm](http://oaei.ontologymatching.org/2018/multifarm/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `` | ``  
-  
+<!--
+ | | | | `largebio-fma_nci_small_2016`  
+ | | | | `largebio-fma_nci_whole_2016`  
+ | | | | `largebio-fma_snomed_small_2016`  
+ | | | | `largebio-fma_snomed_whole_2016`  
+ | | | | `largebio-snomed_nci_small_2016`  
+ | | | | `largebio-snomed_nci_whole_2016`  
+-->
+
+Available multifarm language pairs:<br/>
+`ar-cn`, `ar-cz`, `ar-de`, `ar-en`, `ar-es`, `ar-fr`, `ar-nl`, `ar-pt`, `ar-ru`, `cn-cz`, `cn-de`, `cn-en`, `cn-es`, 
+`cn-fr`, `cn-nl`, `cn-pt`, `cn-ru`, `cz-de`, `cz-en`, `cz-es`, `cz-fr`, `cz-nl`, `cz-pt`, `cz-ru`, `de-en`, `de-es`, 
+`de-fr`, `de-nl`, `de-pt`, `de-ru`, `en-es`, `en-fr`, `en-nl`, `en-pt`, `en-ru`, `es-fr`, `es-nl`, `es-pt`, `es-ru`, 
+`fr-nl`, `fr-pt`, `fr-ru`, `nl-pt`, `nl-ru`, `pt-ru`
+
   
 ### TestCase/Track Validation Service  
 Creating new tracks and test case can be very cumbersome. The MELT validation service allows you to check whether your   

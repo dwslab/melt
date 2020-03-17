@@ -6,6 +6,9 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Track on the SEALS platform.
+ */
 public class SealsTrack extends Track {
     private static final Logger logger = LoggerFactory.getLogger(SealsTrack.class);
     
@@ -17,6 +20,13 @@ public class SealsTrack extends Track {
         this(tdrsLocation, testDataCollectionName, testDataVersionNumber, getNiceRemoteLocation(tdrsLocation));
     }
 
+    /**
+     *
+     * @param tdrsLocation Repository location e.g. "http://repositories.seals-project.eu/tdrs/".
+     * @param testDataCollectionName Track name e.g. conference, anatomy
+     * @param testDataVersionNumber Version of the track.
+     * @param nicerLocation To avoid that multiple tracks are created, an own repository location is artificially created.
+     */
     public SealsTrack(String tdrsLocation, String testDataCollectionName, String testDataVersionNumber, String nicerLocation){
         this(tdrsLocation, testDataCollectionName, testDataVersionNumber, nicerLocation, false);
     }

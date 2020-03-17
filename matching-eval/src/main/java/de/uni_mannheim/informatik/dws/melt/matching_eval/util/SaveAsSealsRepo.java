@@ -4,19 +4,11 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.util;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Writer;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Paths;
-import java.util.logging.Level;
 import org.apache.commons.io.FileUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -27,15 +19,17 @@ import org.slf4j.LoggerFactory;
 
 
 /**
+ * A quick helper program for track organizers and MELT administrators.
  * Creates a track in folder test so that it can be used for the SEALS/MELT Track Repository.
  */
-public class SaveAsSealsRepro {
+public class SaveAsSealsRepo {
     private static final Logger LOGGER = LoggerFactory.getLogger(Track.class);
     
     
     public static void main(String[] args){
-        //save(TrackRepository.Anatomy.Default, "test");
-        save(TrackRepository.Largebio.V2016.ALL, "test_large_bio");
+        save(TrackRepository.Phenotype.V2017.DOID_ORDO, "./test_phenotype");
+        save(TrackRepository.Phenotype.V2017.HP_MP, "./test_phenotype");
+
         
     }
     

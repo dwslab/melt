@@ -39,7 +39,7 @@ public class TrackRepository{
     }
 
     /**
-     * Mutifarm track.
+     * Multifarm track.
      * The goal of this track is to evaluate the ability of systems to deal with ontologies in different natural languages.
      * It serves the purpose of evaluating the strengths and the weaknesses of matchers and measuring their progress, with a focus on multilingualism.
      */
@@ -58,7 +58,7 @@ public class TrackRepository{
         ));
 
         private static Track getTrackByLanguagePair(String languagePair){
-            return new SealsTrack("http://repositories.seals-project.eu/tdrs/", languagePair, languagePair+"-v2", "repositories.seals-project.eu_multifarm");
+            return new SealsTrack("http://oaei.webdatacommons.org/tdrs/", languagePair, languagePair+"-v2", "repositories.seals-project.eu_multifarm");
         }
 
         public static List<Track> ALL = calculateAllMultifarmTracks();
@@ -147,7 +147,7 @@ public class TrackRepository{
         public static class V2016 {
             
             /** With the this benchmark all 6 largebio matching tasks are executed. For individual matching tasks refer to other benchmarks. */
-            public static Track ALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-all_tasks_2016");
+            public static Track ALL = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "largebio", "largebio-all_tasks_2016");
             
             /**
              * Task 1: FMA-NCI small fragments:
@@ -155,14 +155,14 @@ public class TrackRepository{
              * The FMA fragment contains 3,696 classes (5% of FMA), while the NCI fragment contains 6,488 classes (10% of NCI).
              * Together 10,184 classes
              */
-            public static Track FMA_NCI_SMALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_nci_small_2016");
+            public static Track FMA_NCI_SMALL = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "largebio", "largebio-fma_nci_small_2016");
 
             /**
              * Task 2: FMA-NCI whole ontologies.
              * This task consists of matching the whole FMA and NCI ontologies, which contains 78,989 and 66,724 classes, respectively.
              * Together 145,713 classes
              */
-            public static Track FMA_NCI_WHOLE = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_nci_whole_2016");
+            public static Track FMA_NCI_WHOLE = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "largebio", "largebio-fma_nci_whole_2016");
             
             /**
              * Task 3: FMA-SNOMED small fragments.
@@ -170,14 +170,14 @@ public class TrackRepository{
              * The FMA fragment contains 10,157 classes (13% of FMA), while the SNOMED fragment contains 13,412 classes (5% of SNOMED).
              * Together 23,569 classes
              */
-            public static Track FMA_SNOMED_SMALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_snomed_small_2016");
+            public static Track FMA_SNOMED_SMALL = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "largebio", "largebio-fma_snomed_small_2016");
             
             /**
              * Task 4: FMA whole ontology.
              * This task consists of matching the whole FMA that contains 78,989 classes with a large SNOMED fragment that contains 122,464 classes (40% of SNOMED).
              * Together 201,453 classes.
              */
-            public static Track FMA_SNOMED_WHOLE = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-fma_snomed_whole_2016");
+            public static Track FMA_SNOMED_WHOLE = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "largebio", "largebio-fma_snomed_whole_2016");
             
             /**
              * Task 5: SNOMED-NCI small fragments. 
@@ -185,14 +185,14 @@ public class TrackRepository{
              * The SNOMED fragment contains 51,128 classes (17% of SNOMED), while the NCI fragment contains 23,958 classes (36% of NCI).
              * Together 75,086 classes.
              */
-            public static Track SNOMED_NCI_SMALL = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-snomed_nci_small_2016");
+            public static Track SNOMED_NCI_SMALL = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "largebio", "largebio-snomed_nci_small_2016");
             
             /**
              * Task 6: NCI whole ontology with SNOMED large fragment.
              * This task consists of matching the whole NCI that contains 66,724 classes with a large SNOMED fragment that contains 122,464 classes (40% of SNOMED).
              * Together 189,188 classes.
              */
-            public static Track SNOMED_NCI_WHOLE = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-snomed_nci_whole_2016");
+            public static Track SNOMED_NCI_WHOLE = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "largebio", "largebio-snomed_nci_whole_2016");
         }
         
         /** 2015 version of Large Biomedical Ontologies. */
@@ -324,10 +324,10 @@ public class TrackRepository{
         public static class V2017 {
             
             /** This task consists of matching the HP (31,034 classes) and MP (30,273 entities) ontologies. The BioPortal-based alignment contains 696 mappings. */
-            public static Track HP_MP = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-hp-mp-2017-bioportal");
+            public static Track HP_MP = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "phenotype", "phenotype-hp-mp-2017-bioportal");
             
             /** This task consists of matching the DOID (38,240 classes) and ORDO (13,504) ontologies. The BioPortal-based alignment contains 1,237 mappings. */
-            public static Track DOID_ORDO = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-doid-ordo-2017-bioportal");
+            public static Track DOID_ORDO = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "phenotype", "phenotype-doid-ordo-2017-bioportal");
             
             /** This task consists of matching the HP (31,034 classes) and MESH (305,349) ontologies. The BioPortal-based alignment contains 2,466 mappings. Not used in 2018*/
             public static Track HP_MESH = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-hp-mesh-2017-bioportal");

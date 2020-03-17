@@ -295,8 +295,9 @@ public abstract class Track {
         File[] files = file.listFiles();
         if(files == null)
             return testCases;
-        
+
         for(File f : files){
+            if(f.getName().equalsIgnoreCase(".DS_Store")) continue; // ignore this file for mac operating systems
             File source_file = new File(f, TestCaseType.SOURCE.toFileName());
             File target_file = new File(f, TestCaseType.TARGET.toFileName());
             File reference_file = new File(f, TestCaseType.REFERENCE.toFileName());
@@ -344,6 +345,7 @@ public abstract class Track {
         
         List<TestCase> testCases = new ArrayList<>(); 
         for(File referenceFile : referenceFiles){
+            if(referenceFile.getName().equalsIgnoreCase(".DS_Store")) continue; // ignore this file for mac operating systems
             String fileNameWithoutExtension = removeExtension(referenceFile.getName());
             String[] sourceTargetName = fileNameWithoutExtension.split("-");
             if(sourceTargetName.length != 2){
