@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * Track on the SEALS platform.
  */
 public class SealsTrack extends Track {
-    private static final Logger logger = LoggerFactory.getLogger(SealsTrack.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SealsTrack.class);
     
     protected String tdrsLocation;
     protected String testDataCollectionName;
@@ -44,16 +44,16 @@ public class SealsTrack extends Track {
 
     @Override
     protected void downloadToCache() throws IOException {
-        logger.info("Downloading track {}", testDataCollectionName);
+        LOGGER.info("Downloading track {}", testDataCollectionName);
         SealsDownloadHelper bmd = new SealsDownloadHelper(tdrsLocation, testDataCollectionName, testDataVersionNumber);
         for(String testCaseId : bmd.getTestCases()){
-            logger.info("  currently downloading {}", testCaseId);
+            LOGGER.info("  currently downloading {}", testCaseId);
             URL source = bmd.getDataItem(testCaseId, "source");
             URL target = bmd.getDataItem(testCaseId, "target");
             URL reference = bmd.getDataItem(testCaseId, "reference");
             
             if(exists(source) == false || exists(target) == false){
-                logger.error("Source or Target is not defined - continue");
+                LOGGER.error("Source or Target is not defined - continue");
                 continue;
             }
             
@@ -63,7 +63,7 @@ public class SealsTrack extends Track {
                 this.saveInDefaultLayout(reference, testCaseId, TestCaseType.REFERENCE);
             }
         }
-        logger.info("Finished downloading track {}", testDataCollectionName);
+        LOGGER.info("Finished downloading track {}", testDataCollectionName);
     }
     
     private static boolean exists(URL url)

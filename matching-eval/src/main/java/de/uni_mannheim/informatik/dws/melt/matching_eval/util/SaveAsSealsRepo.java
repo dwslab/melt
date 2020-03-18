@@ -27,11 +27,14 @@ public class SaveAsSealsRepo {
     
     
     public static void main(String[] args){
-        save(TrackRepository.Phenotype.V2017.DOID_ORDO, "./test_phenotype");
-        save(TrackRepository.Phenotype.V2017.HP_MP, "./test_phenotype");
-
-        
+        save(TrackRepository.Largebio.V2016.FMA_NCI_SMALL, "./z_fma_nci_small/");
+        save(TrackRepository.Largebio.V2016.FMA_NCI_WHOLE, "./z_fma_nci_whole/");
+        save(TrackRepository.Largebio.V2016.FMA_SNOMED_SMALL, "./z_fma_snomed_small/");
+        save(TrackRepository.Largebio.V2016.FMA_SNOMED_WHOLE, "./z_fma_snomed_whole/");
+        save(TrackRepository.Largebio.V2016.SNOMED_NCI_SMALL, "./z_snomed_nci_small/");
+        save(TrackRepository.Largebio.V2016.SNOMED_NCI_WHOLE, "./z_snomed_nci_whole/");
     }
+
     
     public static void save(Track track, String folder){
         try {

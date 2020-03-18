@@ -57,6 +57,13 @@ class TrackRepositoryTest {
     
     @Test
     public void testMeltRepository(){
+        assertEquals(6, TrackRepository.Largebio.V2016.ALL.getTestCases().size());
+        assertEquals(1, TrackRepository.Largebio.V2016.FMA_NCI_SMALL.getTestCases().size());
+        assertEquals(1, TrackRepository.Largebio.V2016.FMA_NCI_WHOLE.getTestCases().size());
+        assertEquals(1, TrackRepository.Largebio.V2016.FMA_SNOMED_SMALL.getTestCases().size());
+        assertEquals(1, TrackRepository.Largebio.V2016.FMA_SNOMED_WHOLE.getTestCases().size());
+        assertEquals(1, TrackRepository.Largebio.V2016.SNOMED_NCI_SMALL.getTestCases().size());
+        assertEquals(1, TrackRepository.Largebio.V2016.SNOMED_NCI_WHOLE.getTestCases().size());
         assertEquals(25, TrackRepository.Multifarm.getSpecificMultifarmTrack("de-en").getTestCases().size());
         assertEquals(1, TrackRepository.Phenotype.V2017.DOID_ORDO.getTestCases().size());
         assertEquals(1, TrackRepository.Phenotype.V2017.HP_MP.getTestCases().size());
@@ -66,12 +73,5 @@ class TrackRepositoryTest {
         assertEquals(80, TrackRepository.IIMB.V1.getTestCases().size());
         assertEquals(2, TrackRepository.Biodiv.Default.getTestCases().size());
         assertEquals(11, TrackRepository.Link.Default.getTestCases().size());
-        assertEquals(6, TrackRepository.Largebio.V2016.ALL.getTestCases().size());
-        //assertEquals(1, TrackRepository.Largebio.V2016.FMA_NCI_SMALL.getTestCases().size());
-        //assertEquals(1, TrackRepository.Largebio.V2016.FMA_NCI_WHOLE.getTestCases().size());
-        //assertEquals(1, TrackRepository.Largebio.V2016.FMA_SNOMED_SMALL.getTestCases().size());
-        //assertEquals(1, TrackRepository.Largebio.V2016.FMA_SNOMED_WHOLE.getTestCases().size());
-        //assertEquals(1, TrackRepository.Largebio.V2016.SNOMED_NCI_SMALL.getTestCases().size());
-        //assertEquals(1, TrackRepository.Largebio.V2016.SNOMED_NCI_WHOLE.getTestCases().size());
     }
 }

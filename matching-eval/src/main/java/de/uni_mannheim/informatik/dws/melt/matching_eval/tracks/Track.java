@@ -61,7 +61,7 @@ public abstract class Track {
     protected String name;
     protected String version;
     
-    protected List<TestCase> testCases;//initialized lazily
+    protected List<TestCase> testCases; //initialized lazily
     
     protected boolean useDuplicateFreeStorageLayout;
     
@@ -80,7 +80,7 @@ public abstract class Track {
         this.name = name;
         this.version = version;
         this.useDuplicateFreeStorageLayout = useDuplicateFreeStorageLayout;
-        this.testCases = null;//initialized lazily
+        this.testCases = null; //initialized lazily
     }
 
     /**
