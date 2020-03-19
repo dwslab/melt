@@ -34,26 +34,51 @@ class MySentences(object):
     """Data structure to iterate over the lines of a file in a memory-friendly way. The files can be gzipped.
     """
 
-    def __init__(self, file_name):
-        self.file_name = file_name
+    def __init__(self, file_or_directory_path):
+        """Constructor
+
+        Parameters
+        ----------
+        file_or_directory_path : str
+            The path to the file containing the walks or the path to the file which contains multiple walk files.
+        """
+        self.file_or_directory_path = file_or_directory_path
 
     def __iter__(self):
         try:
-            if self.file_name[-2:] in "gz":
-                logging.info("Gzip file detected! Using gzip.open().")
-                for line in gzip.open(self.file_name, mode='rt', encoding="utf-8"):
-                    line = line.rstrip('\n')
-                    words = line.split(" ")
-                    yield words
+            if os.path.isdir(self.file_or_directory_path):
+                logging.info("Directory detected.")
+                for file_name in os.listdir(self.file_or_directory_path):
+                    logging.info("Processing file: " + file_name)
+                    if file_name[-2:] in "gz":
+                        logging.info("Gzip file detected! Using gzip.open().")
+                        for line in gzip.open(os.path.join(self.file_or_directory_path, file_name), mode='rt', encoding="utf-8"):
+                            line = line.rstrip('\n')
+                            words = line.split(" ")
+                            yield words
+                    else:
+                        for line in open(os.path.join(self.file_or_directory_path, file_name), mode='rt', encoding="utf-8"):
+                            line = line.rstrip('\n')
+                            words = line.split(" ")
+                            yield words
             else:
-                for line in open(self.file_name, mode='rt', encoding="utf-8"):
-                    line = line.rstrip('\n')
-                    words = line.split(" ")
-                    yield words
+                logging.info("Processing file: " + self.file_or_directory_path)
+                if self.file_or_directory_path[-2:] in "gz":
+                    logging.info("Gzip file detected! Using gzip.open().")
+                    for line in gzip.open(self.file_or_directory_path, mode='rt', encoding="utf-8"):
+                        line = line.rstrip('\n')
+                        words = line.split(" ")
+                        yield words
+                else:
+                    for line in open(self.file_or_directory_path, mode='rt', encoding="utf-8"):
+                        line = line.rstrip('\n')
+                        words = line.split(" ")
+                        yield words
         except Exception:
             logging.error("Failed reading file:")
-            logging.error(self.file_name)
+            logging.error(self.file_or_directory_path)
             logging.exception("Stack Trace:")
+
 
 
 @app.route('/train-word2vec', methods=['GET'])
