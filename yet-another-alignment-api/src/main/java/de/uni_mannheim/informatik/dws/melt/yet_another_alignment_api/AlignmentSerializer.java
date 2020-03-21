@@ -24,6 +24,8 @@ public class AlignmentSerializer {
      * Constant for UTF-8 encoding.
      */
     private static final Charset ENCODING = StandardCharsets.UTF_8;
+    
+    private static final String newline = System.getProperty("line.separator");
 
     /**
      * Method to write the specified alignment to the specified file
@@ -201,4 +203,40 @@ public class AlignmentSerializer {
         return true;
     }
 
+    /**
+     * Method to write the specified alignment to the specified file (in CSV format).
+     * @param alignment The alignment that shall be written.
+     * @param file The file to which the alignment shall be written.
+     * @throws IOException Exception that occurred while serializing the alignment.
+     */
+    public static void serializeToCSV(Alignment alignment, File file) throws IOException {
+        
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                throw new IOException("File '" + file + "' exists but is a directory");
+            }
+            if (file.canWrite() == false) {
+                throw new IOException("File '" + file + "' cannot be written to");
+            }
+        } else {
+            final File parent = file.getParentFile();
+            if (parent != null) {
+                if (!parent.mkdirs() && !parent.isDirectory()) {
+                    throw new IOException("Directory '" + parent + "' could not be created");
+                }
+            }
+        }
+        //TODO: add also correspondence extensions
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            out.write(("source,target,confidence,relation" + newline).getBytes(ENCODING));
+            for(Correspondence cell : alignment){
+                StringBuilder sb = new StringBuilder();
+                sb.append(StringEscapeUtils.escapeCsv(cell.getEntityOne())).append(",");
+                sb.append(StringEscapeUtils.escapeCsv(cell.getEntityTwo())).append(",");
+                sb.append(Double.toString(cell.confidence)).append(",");
+                sb.append(cell.getRelation().toString()).append(newline);
+                out.write(sb.toString().getBytes(ENCODING));
+            }
+        }        
+    }
 }

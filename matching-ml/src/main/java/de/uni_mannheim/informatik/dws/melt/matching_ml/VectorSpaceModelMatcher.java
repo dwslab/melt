@@ -55,6 +55,7 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         this.textAvailable = new HashSet<>();
         File coporaFile = new File("./corpora.txt");
+        LOGGER.info("Write corpora file to {} which is later removed.", coporaFile.getCanonicalPath());
         coporaFile.deleteOnExit();
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(coporaFile), "UTF-8"))){
             writeResourceText(source.listClasses(), writer);
@@ -68,6 +69,7 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
         String modelName = "corpora";
         Gensim gensim = Gensim.getInstance();
         gensim.trainVectorSpaceModel(modelName, coporaFile.getCanonicalPath());
+        /*
         for(Correspondence c : inputAlignment){
             if(this.textAvailable.contains(c.getEntityOne()) && this.textAvailable.contains(c.getEntityTwo())){
                 try{
@@ -78,13 +80,14 @@ public class VectorSpaceModelMatcher extends MatcherYAAAJena {
                 }
             }
         }
+        */
+        Alignment newAlignment = gensim.queryVectorSpaceModel(modelName, inputAlignment);
 
         if(coporaFile.exists()) {
             coporaFile.delete();
         }
-
         Gensim.shutDown();
-        return inputAlignment;
+        return newAlignment;
     }
 
     protected void writeResourceText(ExtendedIterator<? extends OntResource> resources, Writer writer) throws IOException{

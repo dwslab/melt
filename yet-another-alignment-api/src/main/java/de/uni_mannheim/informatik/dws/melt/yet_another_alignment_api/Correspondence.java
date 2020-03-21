@@ -202,6 +202,8 @@ public class Correspondence {
         if(extensions == null) extensions = new HashMap<>();
         extensions.put(extensionUri, extensionValue);
     }
+    
+    
 
 
     /**
@@ -210,7 +212,9 @@ public class Correspondence {
      * @param confidence the additional confidence
      */
     public void addAdditionalConfidence(Class matcherClass, double confidence) {
-        addExtensionValue(matcherClass.getSimpleName() + DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX, confidence);
+        addExtensionValue(
+                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + matcherClass.getSimpleName() + DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX,
+                confidence);
     }
     
     /**
@@ -219,7 +223,9 @@ public class Correspondence {
      * @param explanation the explanation for a correspondence
      */
     public void addAdditionalExplanation(Class matcherClass, String explanation) {
-        addExtensionValue(matcherClass.getSimpleName() + DefaultExtensions.MeltExtensions.ADDITIONAL_EXPLANATION_SUFFIX, explanation);
+        addExtensionValue(
+                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + matcherClass.getSimpleName() + DefaultExtensions.MeltExtensions.ADDITIONAL_EXPLANATION_SUFFIX, 
+                explanation);
     }    
 
     public Map<String, Object> getExtensions() { return this.extensions; }
