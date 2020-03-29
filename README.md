@@ -21,7 +21,10 @@ different tasks and that can be used as barebone project for specific applicatio
 MELT is now available in [maven central](https://repo1.maven.org/maven2/de/uni-mannheim/informatik/dws/melt/) and can be added as a dependency with e.g.:  
 ```  
 <dependency>  
- <groupId>de.uni-mannheim.informatik.dws.melt</groupId> <artifactId>matching-eval</artifactId> <version>2.4</version></dependency>  
+ <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+ <artifactId>matching-eval</artifactId>
+ <version>2.4</version>
+</dependency>  
 ```  
   
 ### TL;DR  
