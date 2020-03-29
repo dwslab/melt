@@ -55,8 +55,9 @@ class TrackRepositoryTest {
     }
 
     
-    @Test
+    //@Test
     public void testMeltRepository(){
+        //LargeBio
         assertEquals(6, TrackRepository.Largebio.V2016.ALL.getTestCases().size());
         assertEquals(1, TrackRepository.Largebio.V2016.FMA_NCI_SMALL.getTestCases().size());
         assertEquals(1, TrackRepository.Largebio.V2016.FMA_NCI_WHOLE.getTestCases().size());
@@ -64,14 +65,35 @@ class TrackRepositoryTest {
         assertEquals(1, TrackRepository.Largebio.V2016.FMA_SNOMED_WHOLE.getTestCases().size());
         assertEquals(1, TrackRepository.Largebio.V2016.SNOMED_NCI_SMALL.getTestCases().size());
         assertEquals(1, TrackRepository.Largebio.V2016.SNOMED_NCI_WHOLE.getTestCases().size());
+        
+        //multifarm
         assertEquals(25, TrackRepository.Multifarm.getSpecificMultifarmTrack("de-en").getTestCases().size());
+        
+        //phenotype
         assertEquals(1, TrackRepository.Phenotype.V2017.DOID_ORDO.getTestCases().size());
         assertEquals(1, TrackRepository.Phenotype.V2017.HP_MP.getTestCases().size());
+        
+        //anatomy
         assertEquals(1, TrackRepository.Anatomy.Default.getTestCases().size());
+        
+        //conference
         assertEquals(21, TrackRepository.Conference.V1.getTestCases().size());
+        
+        //knowledge graph
         assertEquals(5, TrackRepository.Knowledgegraph.V3.getTestCases().size());
+        
+        //IIMB
         assertEquals(80, TrackRepository.IIMB.V1.getTestCases().size());
+        
+        //Biodiv
         assertEquals(2, TrackRepository.Biodiv.Default.getTestCases().size());
+        
+        //Link        
         assertEquals(11, TrackRepository.Link.Default.getTestCases().size());
+        
+        //Complex
+        assertEquals(1, TrackRepository.Complex.GeoLink.getTestCases().size());
+        assertEquals(1, TrackRepository.Complex.PopgeoLink.getTestCases().size());
+        assertEquals(4, TrackRepository.Complex.Hydrography.getTestCases().size());
     }
 }

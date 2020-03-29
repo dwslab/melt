@@ -36,6 +36,8 @@ public class AlignmentsCube {
      */
     public AlignmentsCube() {
         alignmentDataCube = new HashMap<>();
+        resourceExplainers = new ArrayList<>();
+        correspondenceExtensions = new ArrayList<>();
     }
 
     /**

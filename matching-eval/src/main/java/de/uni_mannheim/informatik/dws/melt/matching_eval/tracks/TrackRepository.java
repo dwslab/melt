@@ -130,10 +130,13 @@ public class TrackRepository{
         public static Track Conference  = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1");
         
         /**The hydrography dataset is composed of four source ontologies (Hydro3, HydrOntology_native, HydrOntology_translated, and Cree) that each should be aligned to a single target Surface Water Ontology (SWO).**/
-        public static Track Hydrography  = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "hydrography", "hydrography-v1");
+        public static Track Hydrography  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "hydrography", "hydrography-v1");
         
         /**This dataset is from the GeoLink project, which was funded under the U.S. National Science Foundation's EarthCube initiative.**/
-        public static Track GeoLink  = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "geolink", "geolink-v1");
+        public static Track GeoLink  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "geolink", "geolink-v1");
+        
+        /**PopgeoLink**/
+        public static Track PopgeoLink  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popgeolink", "popgeolink-v1");
     }
 
     /**

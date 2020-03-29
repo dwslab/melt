@@ -610,6 +610,7 @@ public class EvaluatorCSV extends Evaluator {
 
     public void setBaselineMatcher(IOntologyMatchingToolBridge baselineMatcher) {
         this.baselineMatcher = baselineMatcher;
+        this.residualRefiner = new ResidualRefiner(baselineMatcher);
     }
 
     public ConfusionMatrixMetric getConfusionMatrixMetric() {

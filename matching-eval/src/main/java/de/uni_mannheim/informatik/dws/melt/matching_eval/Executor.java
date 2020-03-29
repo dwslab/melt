@@ -63,8 +63,8 @@ public class Executor {
     public static ExecutionResultSet run(Track track, IOntologyMatchingToolBridge matcher, String matcherName) {
         if(track == null){
             LOGGER.error("The track specified is null. Cannot execute the given matcher. " +
-                    "Resolution: Will return null.");
-            return null;
+                    "Resolution: Will return empty resultSet.");
+            return new ExecutionResultSet();
         }
         return run(track.getTestCases(), matcher, matcherName);
     }
@@ -78,13 +78,13 @@ public class Executor {
     public static ExecutionResultSet run(Track track, Map<String, IOntologyMatchingToolBridge> matchers) {
         if(track == null){
             LOGGER.error("The track specified is null. Cannot execute the given matchers. " +
-                    "Resolution: Will return null.");
-            return null;
+                    "Resolution: Will return empty resultSet.");
+            return new ExecutionResultSet();
         }
         if(matchers == null){
             LOGGER.error("The matchers are not specified (map is null). Cannot execute the given matchers. " +
-                    "Resolution: Will return null.");
-            return null;
+                    "Resolution: Will return empty resultSet.");
+            return new ExecutionResultSet();
         }
         return run(track.getTestCases(), matchers);
     }
@@ -99,12 +99,12 @@ public class Executor {
      */
     public static ExecutionResultSet runTracks(List<Track> tracks, IOntologyMatchingToolBridge matcher, String matcherName) {
         if(tracks == null){
-            LOGGER.error("The tracks list is null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The tracks list is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         if(matcher == null){
-            LOGGER.error("The specified matcher is null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The specified matcher is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         ExecutionResultSet r = new ExecutionResultSet();
         for(Track track : tracks){
@@ -126,12 +126,12 @@ public class Executor {
      */
     public static ExecutionResultSet runTracks(List<Track> tracks, Map<String, IOntologyMatchingToolBridge> matchers) {
         if(tracks == null){
-            LOGGER.error("The tracks list is null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The tracks list is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         if(matchers == null){
-            LOGGER.error("The matchers are null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The matchers are null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         ExecutionResultSet r = new ExecutionResultSet();
         for(Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()){
@@ -155,12 +155,12 @@ public class Executor {
      */
     public static ExecutionResultSet run(List<TestCase> testCases, Map<String, IOntologyMatchingToolBridge> matchers) {
         if(testCases == null){
-            LOGGER.error("The testCases list is null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The testCases list is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         if(matchers == null){
-            LOGGER.error("The matchers are null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The matchers are null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         ExecutionResultSet r = new ExecutionResultSet();
         for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
@@ -182,12 +182,12 @@ public class Executor {
      */
     public static ExecutionResultSet run(TestCase testCase, Map<String, IOntologyMatchingToolBridge> matchers) {
         if(matchers == null){
-            LOGGER.error("The matchers are null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The matchers are null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         if(testCase == null){
-            LOGGER.error("The testCase is null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The testCase is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         ExecutionResultSet r = new ExecutionResultSet();
         for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
@@ -207,12 +207,12 @@ public class Executor {
      */
     public static ExecutionResultSet run(List<TestCase> testCases, IOntologyMatchingToolBridge matcher) {
         if(testCases == null){
-            LOGGER.error("The testCase list is null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The testCase list is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         if(matcher == null){
-            LOGGER.error("The matcher is null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The matcher is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         return run(testCases, matcher, getMatcherName(matcher));
     }
@@ -228,8 +228,8 @@ public class Executor {
     public static ExecutionResultSet run(List<TestCase> testCases, IOntologyMatchingToolBridge matcher, String matcherName) {
         if(testCases == null){
             LOGGER.error("testCases list is null. Cannot execute matcher " + matcherName + " on the specified list of test cases." +
-                    "Resolution: Return null.");
-            return null;
+                    "Resolution: Return empty resultSet.");
+            return new ExecutionResultSet();
         }
         ExecutionResultSet r = new ExecutionResultSet();
         for (TestCase tc : testCases) { // no parallelism possible because each matcher possibly writes to the same temp file.
@@ -265,12 +265,12 @@ public class Executor {
      */
     public static ExecutionResultSet run(TestCase testCase, IOntologyMatchingToolBridge matcher, String matcherName) {
         if(testCase == null){
-            LOGGER.error("The testCase is null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The testCase is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         if(matcher == null){
-            LOGGER.error("The matcher is null. Resolution: Returning null.");
-            return null;
+            LOGGER.error("The matcher is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         ExecutionResultSet r = new ExecutionResultSet();
         ExecutionResult er = ExecutionRunner.runMatcher(testCase, matcher, matcherName);
@@ -315,8 +315,8 @@ public class Executor {
      */
     public static ExecutionResultSet loadFromFolder(File folder, TestCase testCase) {
         if (!folder.isDirectory()) {
-            LOGGER.error("The specified folder is not a directory. Returning null.");
-            return null;
+            LOGGER.error("The specified folder is not a directory. Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         ExecutionResultSet results = new ExecutionResultSet();
         for (File f : folder.listFiles()) {
@@ -382,8 +382,8 @@ public class Executor {
      */
     public static ExecutionResultSet loadFromFolder(File folder, Track track) {
         if (!folder.isDirectory()) {
-            LOGGER.error("The specified folder is not a directory. Returning null.");
-            return null;
+            LOGGER.error("The specified folder is not a directory. Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         ExecutionResultSet results = new ExecutionResultSet();
         for (File f : folder.listFiles()) {
@@ -437,8 +437,8 @@ public class Executor {
         ExecutionResultSet results = new ExecutionResultSet();
         File folder = new File(pathToFolder);
         if (!folder.isDirectory()) {
-            LOGGER.error("The specified folder is not a directory. Returning null.");
-            return null;
+            LOGGER.error("The specified folder is not a directory. Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         HashMap<String, TestCase> name2tc = new HashMap<>();
         for(TestCase tc : TrackRepository.Conference.V1.getTestCases()){
@@ -492,8 +492,8 @@ public class Executor {
      */
     public static ExecutionResultSet loadFromMeltResultsFolder(File folder) {
         if (!folder.isDirectory()) {
-            LOGGER.error("The specified folder is not a directory. Returning null.");
-            return null;
+            LOGGER.error("The specified folder is not a directory. Returning empty resultSet.");
+            return new ExecutionResultSet();
         }
         ExecutionResultSet results = new ExecutionResultSet();
         for (File trackFolder : folder.listFiles()) {
