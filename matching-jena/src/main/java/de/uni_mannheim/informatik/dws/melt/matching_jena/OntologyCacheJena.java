@@ -191,4 +191,17 @@ public class OntologyCacheJena {
         }
         isDeactivatedCache = deactivatedCache;
     }
+    
+    /*
+    //methods for createing and loading TDB Model
+    private static void createTDBcache(String url, String tdblocation){
+        Dataset d = TDBFactory.createDataset(tdblocation);
+        GraphTDB graphTDB = (GraphTDB)d.asDatasetGraph().getDefaultGraph();
+        TDBLoader.load(graphTDB,url, true);
+    }
+    private static OntModel loadTDBcache(String tdblocation, OntModelSpec spec){
+        Dataset d = TDBFactory.createDataset(tdblocation);
+        return ModelFactory.createOntologyModel(spec, d.getDefaultModel());
+    }
+    */
 }

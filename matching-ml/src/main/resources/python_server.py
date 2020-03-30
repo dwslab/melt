@@ -1,5 +1,5 @@
-from flask import Flask, request
-from gensim import corpora, models, similarities
+from flask import Flask, request, jsonify
+from gensim import corpora, models, similarities, matutils
 import csv
 import numpy as np
 import logging
@@ -283,6 +283,46 @@ def query_vector_space_model():
     except Exception as e:
         return str(e)
 
+
+@app.route('/query-vector-space-model-batch', methods=['POST'])
+def query_vector_space_model_batch():
+    try:
+        content = request.get_json()
+        
+        model = active_models.get(content['modelPath'])
+        if model is None:
+            return "ERROR! Model not active"
+        (corpus, index) = model
+        
+        result_list = []
+        for (source, target) in content['documentIds']:
+            #logging.info("processing: %s and %s", source, target)
+            source_position = corpus.id2pos.get(source)
+            target_position = corpus.id2pos.get(target)
+            #logging.info("pos: %s and %s", source_position, target_position)
+            if source_position is None or target_position is None:
+                result_list.append(-2.0)
+                continue
+            
+            #first variant - very slow:
+            #sims = index.similarity_by_id(source_position)
+            #resulting_sim = sims[target_position]
+            
+            #second variant with scikit learn
+            # from sklearn.metrics.pairwise import cosine_similarity
+            #vec_one = index.vector_by_id(source_position)
+            #vec_two = index.vector_by_id(target_position)
+            #resulting_sim = cosine_similarity(vec_one, vec_two) 
+            
+            # third variant - best runtime
+            vec_one = matutils.scipy2sparse(index.vector_by_id(corpus.id2pos.get(source)))
+            vec_two = matutils.scipy2sparse(index.vector_by_id(corpus.id2pos.get(target)))
+            resulting_sim = matutils.cossim(vec_one, vec_two)
+            
+            result_list.append(resulting_sim)
+        return jsonify(result_list)
+    except Exception as e:
+        return str(e)
 
 english_stopwords = {'has', 'mightn', 'me', 'here', 'other', 'very', 'but', 'ours', 'he', 'his', 'there', 'you', 'some',
                      'don', 'such', 'under', 'their', 'themselves', "mustn't", 'had', "shan't", "she's", 'yourselves',

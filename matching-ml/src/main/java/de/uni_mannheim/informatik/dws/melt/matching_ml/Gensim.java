@@ -1,5 +1,10 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -15,12 +20,16 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 
 /**
  * A client class to communicate with python <a href="https://radimrehurek.com/gensim/">gensim</a> library.
@@ -35,6 +44,18 @@ public class Gensim {
      * Default logger
      */
     private final static Logger LOGGER = LoggerFactory.getLogger(Gensim.class);
+    
+    /**
+     * Default resources directory (where the python files will be copied to by default) and where the resources
+     * are read from within the JAR.
+     */
+    private static final String DEFAULT_RESOURCES_DIRECTORY = "./melt-resources/";
+
+    /**
+     * Objectmapper from jackson to generate JSON.
+     */
+    private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+    
 
     /**
      * Constructor
@@ -72,18 +93,16 @@ public class Gensim {
      */
     private boolean isHookStarted = false;
 
-    /**
-     * Default resources directory (where the python files will be copied to by default) and where the resources
-     * are read from within the JAR.
-     */
-    private static final String DEFAULT_RESOURCES_DIRECTORY = "./melt-resources/";
-
+    
+    
     /**
      * The directory where the python files will be copied to.
      */
     private File resourcesDirectory = new File(DEFAULT_RESOURCES_DIRECTORY);
 
 
+    
+    
     /**
      * Method to train a vector space model. The file for the training (i.e., csv file where first column is id and second colum text) has to
      * exist already.
@@ -104,8 +123,7 @@ public class Gensim {
 
 
     /**
-     * Method to train a vector space model. The file for the training (i.e., csv file where first column is id and second colum text) has to
-     * exist already.
+     * Method to query a vector space model (which has to be trained with trainVectorSpaceModel).
      * @param modelPath identifier for the model (used for querying a specific model
      * @param documentIdOne Document id for the first document
      * @param documentIdTwo Document id for the second document
@@ -130,6 +148,71 @@ public class Gensim {
             }
         }
     }
+    
+    /**
+     * Method to query a vector space model (which has to be trained with trainVectorSpaceModel) in a batch mode.
+     * @param modelPath identifier for the model (used for querying a specific model
+     * @param alignment the alignment which contains the source and target uris
+     * @return The cosine similarities in the vector space between the requested documents in the same order .
+     * @throws Exception Thrown if there are server problems.
+     */
+    public List<Double> queryVectorSpaceModel(String modelPath, List<Correspondence> alignment) throws Exception{
+        ObjectNode root = JSON_MAPPER.createObjectNode();
+        root.put("modelPath", modelPath);
+        //root.putPOJO("documentIds", documentIds);
+        ArrayNode array = root.putArray("documentIds");
+        for(Correspondence c : alignment){
+            array.addArray()
+                    .add(c.getEntityOne())
+                    .add(c.getEntityTwo());
+        }       
+        String jsonContent = JSON_MAPPER.writeValueAsString(root);
+        
+        HttpPost request = new HttpPost(serverUrl + "/query-vector-space-model-batch");
+        request.setEntity(new StringEntity(jsonContent,ContentType.APPLICATION_JSON));
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                } else return JSON_MAPPER.readValue(resultString, JSON_MAPPER.getTypeFactory().constructCollectionType(List.class, Double.class));
+            }
+        }
+    }
+    
+    /**
+     * Method to query a vector space model (which has to be trained with trainVectorSpaceModel) in a batch mode.
+     * @param modelPath identifier for the model (used for querying a specific model
+     * @param alignment the alignment which contains the source and target uris
+     * @return The alignment where the confidence is updated if possible
+     * @throws Exception Thrown if there are server problems.
+     */
+    public Alignment queryVectorSpaceModel(String modelPath, Alignment alignment) throws Exception{
+        //make the order explicit
+        List<Correspondence> list = new ArrayList<>();
+        for(Correspondence c : alignment){
+            list.add(c);
+        }
+        List<Double> confidences = queryVectorSpaceModel(modelPath, list);
+        if(confidences.size() != list.size())
+            throw new Exception("Size of result list of confidences is not equal to initial list of correspondences.");
+        
+        Alignment a = new Alignment();        
+        for(int i=0; i < list.size(); i++){
+            Correspondence c = list.get(i);
+            Double conf = confidences.get(i);            
+            if(conf <= 1.1 && conf >= -1.1){ // between -1.0 and 1.0 (.1 because of rounding)
+                a.add(c.getEntityOne(), c.getEntityTwo(), conf);
+            }else{
+                a.add(c.getEntityOne(), c.getEntityTwo(), c.getConfidence());
+            }
+        }
+        return a;
+    }
+    
 
     /**
      * Method to train a word2vec model. The file for the training (i.e., file with sentences, paths etc.) has to
@@ -398,7 +481,8 @@ public class Gensim {
     public static void shutDown() {
         isShutDown = true;
         try {
-            httpClient.close();
+            if (httpClient != null)
+                httpClient.close();
         } catch (IOException e) {
             LOGGER.error("Could not close client.", e);
         }

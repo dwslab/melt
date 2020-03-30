@@ -16,7 +16,7 @@ public class VectorSpaceModelTest {
         TestCase testCase = TrackRepository.Anatomy.Default.getFirstTestCase();
 
         Alignment inputAlignment = new Alignment();
-        inputAlignment.add("http://mouse.owl#MA_0000253", "http://human.owl#NCI_C12274");
+        inputAlignment.add("http://mouse.owl#MA_0000253", "http://human.owl#NCI_C33127");
         inputAlignment.add("http://mouse.owl#MA_0000253", "http://human.owl#NCI_C12292");
         
         VectorSpaceModelMatcher vsmm = new VectorSpaceModelMatcher();

@@ -500,6 +500,16 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         AlignmentSerializer.serialize(this, file);
     }
     
+    /**
+     * Serialize this mapping directly to a given file in CSV format.
+     * This also works if the alignment is huge.
+     * @param file The file for writing the mapping.
+     * @throws IOException An IOException.
+     */
+    public void serializeToCSV(File file) throws IOException{
+        AlignmentSerializer.serializeToCSV(this, file);
+    }
+    
     public String getMethod() {
         return method;
     }
