@@ -23,12 +23,12 @@ class GensimTest {
     public static void setup(){
         gensim = Gensim.getInstance();
     }
-    
+
     @AfterAll
     public static void tearDown(){
         gensim.shutDown();
     }
-    
+
     private static Logger LOGGER = LoggerFactory.getLogger(GensimTest.class);
 
     @Test
@@ -180,7 +180,7 @@ class GensimTest {
         File modelFile = new File(fileToWrite.substring(0, fileToWrite.length() - 3));
         assertTrue(vectorFile.exists(), "No vector file was written.");
         assertTrue(modelFile.exists(), "No model file was written.");
-        assertTrue(gensim.getSimilarity("Menschen", "Brüder", fileToWrite) > 0);
+        assertTrue(gensim.getSimilarity("Menschen", "Brüder", fileToWrite) > -1.0);
 
         gensim.writeModelAsTextFile(fileToWrite, "./testTextVectors.txt");
         File writtenFile = new File("./testTextVectors.txt");
@@ -199,19 +199,37 @@ class GensimTest {
         modelFile.delete();
         vectorFile.delete();
     }
-    
-    
-    @Test
-    void trainWord2VecModel() {
-        String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
-        String fileToWrite = "./freudeWord2vec.kv";
-        assertTrue(gensim.trainWord2VecModel(fileToWrite, testFilePath, Word2VecConfiguration.CBOW));
 
-        File vectorFile = new File(fileToWrite);
-        File modelFile = new File(fileToWrite.substring(0, fileToWrite.length() - 3));
+    @Test
+    void trainWord2VecModelSG() {
+        String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
+        String vectorFilePath = "./freudeWord2vec_sg.kv";
+        assertTrue(gensim.trainWord2VecModel(vectorFilePath, testFilePath, Word2VecConfiguration.SG));
+
+        File vectorFile = new File(vectorFilePath);
+        File modelFile = new File(vectorFilePath.substring(0, vectorFilePath.length() - 3));
         assertTrue(vectorFile.exists(), "No vector file was written.");
         assertTrue(modelFile.exists(), "No model file was written.");
-        assertTrue(gensim.getSimilarity("Menschen", "Brüder", fileToWrite) > 0);
+        double similarity = gensim.getSimilarity("Menschen", "Brüder", vectorFilePath);
+        assertTrue(similarity > -1.0, "Problem with the simliarity. Similarity: " + similarity);
+
+        // cleaning up
+        modelFile.delete();
+        vectorFile.delete();
+    }
+
+    @Test
+    void trainWord2VecModelCBOW() {
+        String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
+        String vectorFilePath = "./freudeWord2vec.kv";
+        assertTrue(gensim.trainWord2VecModel(vectorFilePath, testFilePath, Word2VecConfiguration.CBOW));
+
+        File vectorFile = new File(vectorFilePath);
+        File modelFile = new File(vectorFilePath.substring(0, vectorFilePath.length() - 3));
+        assertTrue(vectorFile.exists(), "No vector file was written.");
+        assertTrue(modelFile.exists(), "No model file was written.");
+        double similarity = gensim.getSimilarity("Menschen", "Brüder", vectorFilePath);
+        assertTrue(similarity > -1.0, "Problem with the simliarity. Similarity: " + similarity);
 
         // cleaning up
         modelFile.delete();
@@ -244,7 +262,7 @@ class GensimTest {
             LOGGER.error("Failed to clean up external resources directory.");
         }
     }
-    
+
     private String getPathOfResource(String resource){
         try {
             URL res = getClass().getClassLoader().getResource(resource);

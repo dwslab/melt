@@ -25,14 +25,19 @@ public enum Word2VecConfiguration {
     private int windowSize = 5;
 
     /**
-     * Iterations during the word2vec training.
+     * Iterations during the word2vec training. Default 5.
      */
     private int iterations = 5;
 
     /**
-     * The number of negatives during the word2vec training.
+     * The number of negatives during the word2vec training. Default 25.
      */
     private int negatives = 25;
+
+    /**
+     * The minimum count for the word2vec training. Default: 1.
+     */
+    private int minCount = 1;
 
     /**
      * The number of threads to be used for the computation.
@@ -98,6 +103,19 @@ public enum Word2VecConfiguration {
         }
         this.vectorDimension = vectorDimension;
     }
+
+    public int getMinCount() {
+        return minCount;
+    }
+
+    public void setMinCount(int minCount) {
+        if(minCount < 1){
+            LOGGER.warn("The minCount must be greater than 1. Using default: 1.");
+            minCount = 1;
+        }
+        this.minCount = minCount;
+    }
+
 
     @Override
     public String toString(){
