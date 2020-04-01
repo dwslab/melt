@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -104,7 +105,7 @@ public class Gensim {
     
     
     /**
-     * Method to train a vector space model. The file for the training (i.e., csv file where first column is id and second colum text) has to
+     * Method to train a vector space model. The file for the training (i.e., csv file where first column is id and second column text) has to
      * exist already.
      * @param modelPath identifier for the model (used for querying a specific model
      * @param trainingFilePath The file path to the file that shall be used for training.
@@ -745,6 +746,18 @@ public class Gensim {
         if(!resourcesDirectory.isDirectory()){
             LOGGER.error("The specified directory is no directory. Using default: '" + DEFAULT_RESOURCES_DIRECTORY + "'");
             resourcesDirectory = new File(DEFAULT_RESOURCES_DIRECTORY);
+        }
+
+        // check if python command file exists in default resources directory
+        Path pythonCommandFilePath = Paths.get(DEFAULT_RESOURCES_DIRECTORY, "python_command.txt");
+        if(Files.exists(pythonCommandFilePath)){
+            LOGGER.info("Python command file detected. Trying to copy file to external resources directory.");
+            try {
+                FileUtils.copyFile(pythonCommandFilePath.toFile(), new File(resourcesDirectory, "python_command.txt"));
+            } catch (IOException e) {
+                LOGGER.error("Could not copy python command file.", e);
+            }
+            LOGGER.info("Python command file successfully copied to external resources directory.");
         }
         this.resourcesDirectory = resourcesDirectory;
     }
