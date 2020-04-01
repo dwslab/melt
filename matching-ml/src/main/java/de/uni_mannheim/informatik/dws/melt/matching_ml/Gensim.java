@@ -607,7 +607,7 @@ public class Gensim {
     /**
      * Initializes the server.
      */
-    private void startServer() {
+    private boolean startServer() {
         isShutDown = false;
         
         File serverResourceDirectory = this.resourcesDirectory;
@@ -623,13 +623,13 @@ public class Gensim {
             if (!serverFile.exists()) {
                 LOGGER.error("Server File does not exist. Cannot start server. ABORTING. Please make sure that " +
                         "the 'python_server.py' file is placed in directory '" + DEFAULT_RESOURCES_DIRECTORY + "'.");
-                return;
+                return false;
             }
             canonicalPath = serverFile.getCanonicalPath();
         } catch (IOException e) {
             LOGGER.error("Server File (" + serverFile.getAbsolutePath() + ") does not exist. " +
                     "Cannot start server. ABORTING.", e);
-            return;
+            return false;
         }
         String pythonCommand = getPythonCommand();
         List<String> command = Arrays.asList(pythonCommand, canonicalPath);
@@ -641,7 +641,8 @@ public class Gensim {
         try {
             pb.inheritIO();
             this.serverProcess = pb.start();
-            for (int i = 0; i < 4; i++) {
+            final int maxTrials = 4;
+            for (int i = 0; i < maxTrials; i++) {
                 HttpGet request = new HttpGet(serverUrl + "/melt_ml.html");
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 try (CloseableHttpResponse response = httpClient.execute(request)) {
@@ -657,6 +658,12 @@ public class Gensim {
                     LOGGER.error("Problem with http request.", ioe);
                 }
                 httpClient.close();
+                if (i == maxTrials -1){
+                    LOGGER.error("Failed to start the gensim server after " + maxTrials + " trials.");
+                    isHookStarted = false;
+                    isShutDown = true;
+                    return false;
+                }
             }
         } catch (IOException ex) {
             LOGGER.error("Could not start python server.", ex);
@@ -674,6 +681,7 @@ public class Gensim {
             }));
             isHookStarted = true;
         }
+        return true;
     }
 
     /**
