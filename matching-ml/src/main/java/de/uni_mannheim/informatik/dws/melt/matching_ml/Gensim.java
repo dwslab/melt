@@ -93,16 +93,12 @@ public class Gensim {
      * This flag is required in order to have only one hook despite multiple reinitializations.
      */
     private boolean isHookStarted = false;
-
-    
     
     /**
      * The directory where the python files will be copied to.
      */
     private File resourcesDirectory = new File(DEFAULT_RESOURCES_DIRECTORY);
 
-
-    
     
     /************************************
      * Vector space model
@@ -557,6 +553,7 @@ public class Gensim {
      */
     public static void shutDown() {
         isShutDown = true;
+        instance = null;
         try {
             if (httpClient != null)
                 httpClient.close();
