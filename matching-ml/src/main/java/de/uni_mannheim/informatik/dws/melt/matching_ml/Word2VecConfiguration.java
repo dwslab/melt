@@ -1,5 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml;
 
+import java.util.Arrays;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,9 +32,9 @@ public enum Word2VecConfiguration {
     private int iterations = 5;
 
     /**
-     * The number of negatives during the word2vec training. Default 25.
+     * The number of negatives during the word2vec training. Default 5.
      */
-    private int negatives = 25;
+    private int negatives = 5;
 
     /**
      * The minimum count for the word2vec training. Default: 1.
@@ -129,4 +131,8 @@ public enum Word2VecConfiguration {
                 return "UNDEFINED";
         }
     }
+    
+    
+    public List<Integer> usefullVectorDimensions = Arrays.asList(50,100,200,500);
+    public List<Integer> usefullIterations = Arrays.asList(5,10,20,40);
 }

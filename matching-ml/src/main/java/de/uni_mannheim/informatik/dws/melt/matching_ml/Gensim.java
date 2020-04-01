@@ -103,6 +103,10 @@ public class Gensim {
 
     
     
+    /************************************
+     * Vector space model
+     ***********************************/
+    
     /**
      * Method to train a vector space model. The file for the training (i.e., csv file where first column is id and second colum text) has to
      * exist already.
@@ -213,6 +217,78 @@ public class Gensim {
         return a;
     }
     
+    
+    /************************************
+     * doc2vec model
+     ***********************************/
+    
+    /**
+     * Method to train a doc2vec model. The file for the training (i.e., csv file where first column is id and second colum text) has to
+     * exist already.
+     * @param modelPath identifier for the model (used for querying a specific model
+     * @param trainingFilePath The file path to the file that shall be used for training.
+     * @param configuration the configuration for the doc2vec model
+     */
+    public void trainDoc2VecModel(String modelPath, String trainingFilePath, Word2VecConfiguration configuration){
+        HttpGet request = new HttpGet(serverUrl + "/train-doc2vec-model");
+        request.addHeader("input_file_path", getCanonicalPath(trainingFilePath));
+        request.addHeader("model_path", modelPath);
+        
+        request.addHeader("vector_dimension", "" + configuration.getVectorDimension());
+        request.addHeader("min_count", "" + configuration.getMinCount());
+        request.addHeader("number_of_threads", "" + configuration.getNumberOfThreads());
+        request.addHeader("window_size", "" + configuration.getWindowSize());
+        request.addHeader("iterations", "" + configuration.getIterations());
+        request.addHeader("negatives", "" + configuration.getNegatives());
+        request.addHeader("cbow_or_sg", configuration.toString());
+        
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+        } catch (IOException ioe) {
+            LOGGER.error("Problem with http request.", ioe);
+        }
+    }
+    
+    /**
+     * Method to query a doc2vec model (which has to be trained with trainDoc2VecModel) in a batch mode.
+     * @param modelPath identifier for the model (used for querying a specific model
+     * @param alignment the alignment which contains the source and target uris
+     * @return The cosine similarities in the doc2vec space between the requested documents in the same order .
+     * @throws Exception Thrown if there are server problems.
+     */
+    public List<Double> queryDoc2VecModel(String modelPath, List<Correspondence> alignment) throws Exception{
+        ObjectNode root = JSON_MAPPER.createObjectNode();
+        root.put("modelPath", modelPath);
+        //root.putPOJO("documentIds", documentIds);
+        ArrayNode array = root.putArray("documentIds");
+        for(Correspondence c : alignment){
+            array.addArray()
+                    .add(c.getEntityOne())
+                    .add(c.getEntityTwo());
+        }
+        String jsonContent = JSON_MAPPER.writeValueAsString(root);
+        
+        HttpPost request = new HttpPost(serverUrl + "/query-doc2vec-model-batch");
+        request.setEntity(new StringEntity(jsonContent,ContentType.APPLICATION_JSON));
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                //LOGGER.info("query-doc2vec result: {}", resultString);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                } else return JSON_MAPPER.readValue(resultString, JSON_MAPPER.getTypeFactory().constructCollectionType(List.class, Double.class));
+            }
+        }
+    }
+    
+    
+    
+    /************************************
+     * Word2vec model
+     ***********************************/
 
     /**
      * Method to train a word2vec model. The file for the training (i.e., file with sentences, paths etc.) has to
@@ -564,7 +640,7 @@ public class Gensim {
         try {
             pb.inheritIO();
             this.serverProcess = pb.start();
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 4; i++) {
                 HttpGet request = new HttpGet(serverUrl + "/melt_ml.html");
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 try (CloseableHttpResponse response = httpClient.execute(request)) {
@@ -574,7 +650,7 @@ public class Gensim {
                         break;
                     }
                 } catch (HttpHostConnectException hce) {
-                    LOGGER.info("Server is not yet running. Waiting 5 seconds. Trial {} / 3", i + 1);
+                    LOGGER.info("Server is not yet running. Waiting 5 seconds. Trial {} / 4", i + 1);
                     TimeUnit.SECONDS.sleep(5);
                 } catch (IOException ioe) {
                     LOGGER.error("Problem with http request.", ioe);

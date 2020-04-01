@@ -6,7 +6,6 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Corresponde
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
 import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +14,15 @@ import org.slf4j.LoggerFactory;
  * Updates the confidence of already matched resources.
  * It writes a textual representation of each resource to a csv file (text generation can be modified by subclassing and overriding getResourceText method).
  */
-public class VectorSpaceModelMatcher extends DocumentSimilarityBase {
-    private final static Logger LOGGER = LoggerFactory.getLogger(VectorSpaceModelMatcher.class);
+public class Doc2vecModelMatcher extends DocumentSimilarityBase {
+    private final static Logger LOGGER = LoggerFactory.getLogger(Doc2vecModelMatcher.class);
+    
+    protected Word2VecConfiguration configuration;
+    
+    public Doc2vecModelMatcher(){
+        super();
+        this.configuration = Word2VecConfiguration.SG;
+    }
     
 
     @Override
@@ -24,7 +30,7 @@ public class VectorSpaceModelMatcher extends DocumentSimilarityBase {
         createCorpusFileIfNecessary(source, target);
         String modelName = "corpora";
         Gensim gensim = Gensim.getInstance();
-        gensim.trainVectorSpaceModel(modelName, this.corpusFile.getCanonicalPath());
+        gensim.trainDoc2VecModel(modelName, this.corpusFile.getCanonicalPath(), this.configuration);
         updateConfidences(gensim, modelName, inputAlignment);
         Gensim.shutDown();
         return inputAlignment;
@@ -35,7 +41,7 @@ public class VectorSpaceModelMatcher extends DocumentSimilarityBase {
         List<Correspondence> list = new ArrayList<>(inputAlignment);
         List<Double> confidences = null;
         try {
-            confidences = gensim.queryVectorSpaceModel(modelName, list);
+            confidences = gensim.queryDoc2VecModel(modelName, list);
         } catch (Exception ex) {
             LOGGER.error("Server failure in queryVectorSpaceModel. No confidences are updated.", ex);
             return;
@@ -53,4 +59,15 @@ public class VectorSpaceModelMatcher extends DocumentSimilarityBase {
         }
     }
 
+    public Word2VecConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Word2VecConfiguration configuration) {
+        this.configuration = configuration;
+    }
+    
+    
+    
+    
 }
