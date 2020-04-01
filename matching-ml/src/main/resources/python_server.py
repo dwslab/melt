@@ -236,6 +236,63 @@ def get_vector_given_model():
         result += " " + str(element)
     return result[1:]
 
+# Doc2vec models
+
+class Doc2VecCsvCorpus(object):
+
+    def __init__(self, file_path):
+        self.file_path = file_path
+
+    def __iter__(self):
+        with open(self.file_path, encoding='utf-8') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for i, row in enumerate(readCSV):
+                yield models.doc2vec.TaggedDocument(row[1].split(), [row[0]])
+
+
+@app.route('/train-doc2vec-model', methods=['GET'])
+def train_doc2vec_model():
+    input_file_path = request.headers.get('input_file_path')
+    model_path = request.headers.get('model_path')
+    
+    vector_dimension = request.headers.get('vector_dimension')
+    min_count = request.headers.get('min_count')
+    number_of_threads = request.headers.get('number_of_threads')
+    window_size = request.headers.get('window_size')
+    iterations = request.headers.get('iterations')
+    negatives = request.headers.get('negatives')
+    cbow_or_sg = request.headers.get('cbow_or_sg')
+    
+    corpus = Doc2VecCsvCorpus(input_file_path)
+    dm = 1 if cbow_or_sg == 'sg' else 0
+    
+    #train the model:
+    model = models.doc2vec.Doc2Vec(documents=corpus, dm=dm, min_count=int(min_count), vector_size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), negative=int(negatives), epochs=int(iterations))
+
+    #model.save(model_path + '.model')
+    active_models[model_path] = model
+    return "True"
+
+@app.route('/query-doc2vec-model-batch', methods=['POST'])
+def query_doc2vec_model_batch():
+    try:
+        content = request.get_json()
+        model = active_models.get(content['modelPath'])
+        if model is None:
+            return "ERROR! Model not active"
+        result_list = []
+        for (source, target) in content['documentIds']:
+            #logging.info("processing: %s and %s", source, target)
+            try:
+                doc2vec_similarity = float(model.docvecs.similarity(source, target))
+                result_list.append(doc2vec_similarity)
+            except KeyError as e:
+                result_list.append(-2.0)
+        return jsonify(result_list)
+    except Exception as e:
+        return str(e)
+
+
 
 # TF-IDF and LSI models
 
