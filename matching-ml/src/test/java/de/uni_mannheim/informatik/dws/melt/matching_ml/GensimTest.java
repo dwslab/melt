@@ -246,12 +246,6 @@ class GensimTest {
         gensim = Gensim.getInstance(externalResourcesDirectory);
         File serverFile = new File(externalResourcesDirectory, "python_server.py");
         assertTrue(serverFile.exists());
-        try {
-            FileUtils.deleteDirectory(externalResourcesDirectory);
-        } catch (IOException e) {
-            LOGGER.info("Cleanup failed.");
-            e.printStackTrace();
-        }
 
         // shut down again to keep using default resources directory
         gensim.shutDown();
@@ -259,7 +253,7 @@ class GensimTest {
         try {
             FileUtils.deleteDirectory(externalResourcesDirectory);
         } catch (IOException e) {
-            LOGGER.error("Failed to clean up external resources directory.");
+            LOGGER.error("Failed to clean up external resources directory.", e);
         }
     }
 
