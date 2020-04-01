@@ -174,7 +174,7 @@ class GensimTest {
         // "normal" training task
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
         String fileToWrite = "./freudeWord2vec.kv";
-        assertTrue(gensim.trainWord2VecModel(fileToWrite, testFilePath, Word2VecConfiguration.CBOW));
+        assertTrue(gensim.trainWord2VecModel(fileToWrite, testFilePath, new Word2VecConfiguration(Word2VecTyp.CBOW)));
 
         File vectorFile = new File(fileToWrite);
         File modelFile = new File(fileToWrite.substring(0, fileToWrite.length() - 3));
@@ -204,7 +204,7 @@ class GensimTest {
     void trainWord2VecModelSG() {
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
         String vectorFilePath = "./freudeWord2vec_sg.kv";
-        assertTrue(gensim.trainWord2VecModel(vectorFilePath, testFilePath, Word2VecConfiguration.SG));
+        assertTrue(gensim.trainWord2VecModel(vectorFilePath, testFilePath, new Word2VecConfiguration(Word2VecTyp.SG)));
 
         File vectorFile = new File(vectorFilePath);
         File modelFile = new File(vectorFilePath.substring(0, vectorFilePath.length() - 3));
@@ -222,7 +222,7 @@ class GensimTest {
     void trainWord2VecModelCBOW() {
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
         String vectorFilePath = "./freudeWord2vec.kv";
-        assertTrue(gensim.trainWord2VecModel(vectorFilePath, testFilePath, Word2VecConfiguration.CBOW));
+        assertTrue(gensim.trainWord2VecModel(vectorFilePath, testFilePath, new Word2VecConfiguration(Word2VecTyp.CBOW)));
 
         File vectorFile = new File(vectorFilePath);
         File modelFile = new File(vectorFilePath.substring(0, vectorFilePath.length() - 3));

@@ -245,6 +245,10 @@ public class ExecutionResult {
         return this.testCase.getTrack();
     }
 
+    public Set<Refiner> getRefinements() {
+        return refinements;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;

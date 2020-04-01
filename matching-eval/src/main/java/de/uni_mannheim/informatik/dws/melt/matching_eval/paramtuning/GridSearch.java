@@ -369,7 +369,7 @@ public class GridSearch {
                 continue;
             try {
                 pub.setNestedProperty(matcherInstance, this.paramName.get(i), paramValue.get(i));
-            } catch (IllegalAccessException| InvocationTargetException|NoSuchMethodException ex) {
+            } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException | NoSuchMethodException  ex) {
                 LOGGER.error("Cannot set property", ex);
             }
         }

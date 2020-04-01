@@ -21,7 +21,7 @@ public class Doc2vecModelMatcher extends DocumentSimilarityBase {
     
     public Doc2vecModelMatcher(){
         super();
-        this.configuration = Word2VecConfiguration.SG;
+        this.configuration = new Word2VecConfiguration();
     }
     
 

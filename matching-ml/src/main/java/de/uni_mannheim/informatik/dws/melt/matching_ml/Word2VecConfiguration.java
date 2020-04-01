@@ -8,14 +8,20 @@ import org.slf4j.LoggerFactory;
 /**
  * The configuration for the word2vec calculation.
  */
-public enum Word2VecConfiguration {
-    CBOW, SG;
-
+public class Word2VecConfiguration {
     /**
      * Default logger.
      */
     private static Logger LOGGER = LoggerFactory.getLogger(Word2VecConfiguration.class);
-
+    
+    public static List<Integer> USEFULL_VECTOR_DIMENSIONS = Arrays.asList(50,100,200,500);
+    public static List<Integer> USEFULL_ITERATIONS = Arrays.asList(5,10,20,40);
+    
+    /**
+     * Size of the vector. Default: 200.
+     */
+    private Word2VecTyp type = Word2VecTyp.CBOW;
+    
     /**
      * Size of the vector. Default: 200.
      */
@@ -46,6 +52,25 @@ public enum Word2VecConfiguration {
      */
     private int numberOfThreads = Runtime.getRuntime().availableProcessors();
 
+    
+    public Word2VecConfiguration(){}
+    
+    public Word2VecConfiguration(Word2VecTyp type){
+        this.type = type;
+    }
+    
+    public Word2VecConfiguration(Word2VecTyp type, int vectorDimension){
+        this.type = type;
+        this.vectorDimension = vectorDimension;
+    }
+    
+    public Word2VecConfiguration(Word2VecTyp type, int vectorDimension, int iterations){
+        this.type = type;
+        this.vectorDimension = vectorDimension;
+        this.iterations = iterations;
+    }
+    
+    
     public int getNumberOfThreads(){
         return this.numberOfThreads;
     }
@@ -64,8 +89,8 @@ public enum Word2VecConfiguration {
 
     public void setNegatives(int negatives){
         if(negatives < 1){
-            LOGGER.warn("The number of negatives must be greater than 1. Using default: 25.");
-            negatives = 25;
+            LOGGER.warn("The number of negatives must be greater than 1. Using default: 5.");
+            negatives = 5;
         }
         this.negatives = negatives;
     }
@@ -118,21 +143,11 @@ public enum Word2VecConfiguration {
         this.minCount = minCount;
     }
 
-
-    @Override
-    public String toString(){
-        switch (this){
-            case CBOW:
-                return "cbow";
-            case SG:
-                return "sg";
-            default:
-                // this code part is never reached
-                return "UNDEFINED";
-        }
+    public Word2VecTyp getType() {
+        return type;
     }
-    
-    
-    public List<Integer> usefullVectorDimensions = Arrays.asList(50,100,200,500);
-    public List<Integer> usefullIterations = Arrays.asList(5,10,20,40);
+
+    public void setType(Word2VecTyp type) {
+        this.type = type;
+    }
 }

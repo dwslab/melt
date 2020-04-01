@@ -8,10 +8,10 @@ class Word2VecConfigurationTest {
 
     @Test
     void setNumberOfThreads() {
-        Word2VecConfiguration configuration = Word2VecConfiguration.CBOW;
+        Word2VecConfiguration configuration = new Word2VecConfiguration(Word2VecTyp.CBOW);
         configuration.setNumberOfThreads(-5);
 
-        Word2VecConfiguration configuration2 = Word2VecConfiguration.CBOW;
+        Word2VecConfiguration configuration2 = new Word2VecConfiguration(Word2VecTyp.CBOW);
         configuration2.setNumberOfThreads(40);
 
         assertTrue(configuration.getNumberOfThreads() > 0);
@@ -20,10 +20,10 @@ class Word2VecConfigurationTest {
 
     @Test
     void setNegatives() {
-        Word2VecConfiguration configuration = Word2VecConfiguration.SG;
+        Word2VecConfiguration configuration = new Word2VecConfiguration(Word2VecTyp.SG);
         configuration.setNegatives(-5);
 
-        Word2VecConfiguration configuration2 = Word2VecConfiguration.SG;
+        Word2VecConfiguration configuration2 = new Word2VecConfiguration(Word2VecTyp.SG);
         configuration2.setNegatives(40);
 
         assertTrue(configuration.getNegatives() > 0);
@@ -32,10 +32,10 @@ class Word2VecConfigurationTest {
 
     @Test
     void setIterations() {
-        Word2VecConfiguration configuration = Word2VecConfiguration.SG;
+        Word2VecConfiguration configuration = new Word2VecConfiguration(Word2VecTyp.SG);
         configuration.setIterations(-5);
 
-        Word2VecConfiguration configuration2 = Word2VecConfiguration.SG;
+        Word2VecConfiguration configuration2 = new Word2VecConfiguration(Word2VecTyp.SG);
         configuration2.setIterations(40);
 
         assertTrue(configuration.getIterations() > 0);
@@ -44,11 +44,11 @@ class Word2VecConfigurationTest {
 
     @Test
     void setWindowSize() {
-        Word2VecConfiguration configuration = Word2VecConfiguration.SG;
+        Word2VecConfiguration configuration = new Word2VecConfiguration(Word2VecTyp.SG);
         configuration.setWindowSize(-5);
         assertTrue(configuration.getWindowSize() > 0);
 
-        Word2VecConfiguration configuration2 = Word2VecConfiguration.SG;
+        Word2VecConfiguration configuration2 = new Word2VecConfiguration(Word2VecTyp.SG);
         configuration2.setWindowSize(40);
 
         assertTrue(configuration.getWindowSize() > 0);
@@ -57,7 +57,7 @@ class Word2VecConfigurationTest {
 
     @Test
     void setMinCount() {
-        Word2VecConfiguration configuration = Word2VecConfiguration.SG;
+        Word2VecConfiguration configuration = new Word2VecConfiguration(Word2VecTyp.SG);
         configuration.setMinCount(0);
         assertTrue(configuration.getMinCount() > 0);
         configuration.setMinCount(10);

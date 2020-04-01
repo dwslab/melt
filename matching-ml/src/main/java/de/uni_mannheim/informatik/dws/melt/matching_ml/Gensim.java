@@ -237,7 +237,7 @@ public class Gensim {
         request.addHeader("window_size", "" + configuration.getWindowSize());
         request.addHeader("iterations", "" + configuration.getIterations());
         request.addHeader("negatives", "" + configuration.getNegatives());
-        request.addHeader("cbow_or_sg", configuration.toString());
+        request.addHeader("cbow_or_sg", configuration.getType().toString());
         
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             HttpEntity entity = response.getEntity();
@@ -311,7 +311,7 @@ public class Gensim {
         request.addHeader("window_size", "" + configuration.getWindowSize());
         request.addHeader("iterations", "" + configuration.getIterations());
         request.addHeader("negatives", "" + configuration.getNegatives());
-        request.addHeader("cbow_or_sg", configuration.toString());
+        request.addHeader("cbow_or_sg", configuration.getType().toString());
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             HttpEntity entity = response.getEntity();
