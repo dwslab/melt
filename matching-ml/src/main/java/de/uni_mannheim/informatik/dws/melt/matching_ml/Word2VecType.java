@@ -5,7 +5,7 @@ import java.util.Locale;
 /**
  * Type of word2vec model/approach like CBOW or SG.
  */
-public enum Word2VecTyp {
+public enum Word2VecType {
     
     /**
      * Continuous bag-of-words model for word2vec.
@@ -23,5 +23,4 @@ public enum Word2VecTyp {
     public String toString(){
         return this.name().toLowerCase(Locale.ENGLISH);
     }
-    
 }
