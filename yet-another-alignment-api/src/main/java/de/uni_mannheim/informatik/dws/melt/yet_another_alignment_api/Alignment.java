@@ -13,9 +13,11 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -271,6 +273,41 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         Correspondence result = iterator.next();
         result.getExtensions().putAll(c.getExtensions());
         result.setConfidence(c.getConfidence());
+    }
+    
+    
+    /**
+     * Adds the correspondence if not existant.
+     * In case it already exists, adds the extensions values and updates confidence value(but only if it increases the confidence value).
+     * @param c Correspondence to be added
+     */
+    public void addOrUseHighestConfidence(Correspondence c) {
+        ResultSet<Correspondence> r = this.retrieve(
+                QueryFactory.and(
+                    QueryFactory.equal(Correspondence.SOURCE, c.getEntityOne()),
+                    QueryFactory.equal(Correspondence.TARGET, c.getEntityTwo()),
+                    QueryFactory.equal(Correspondence.RELATION, c.getRelation())
+                ));
+        Iterator<Correspondence> iterator = r.iterator();
+        if (!iterator.hasNext()) {
+           this.add(c);
+           return;            
+        }
+        Correspondence result = iterator.next();
+        result.getExtensions().putAll(c.getExtensions());
+        if(c.getConfidence() > result.getConfidence()) // set the confidence only if higher
+            result.setConfidence(c.getConfidence());
+    }
+    
+    /**
+     * Adds the correspondence if not existant.
+     * In case it already exists, updates confidence value only if it increases.
+     * @param entityOne URI of the entity from the source ontology as String.
+     * @param entityTwo URI of the entity from the target ontology as String.
+     * @param confidence The confidence of the mapping.
+     */
+    public void addOrUseHighestConfidence(String entityOne, String entityTwo, double confidence) {
+        addOrUseHighestConfidence(new Correspondence(entityOne, entityTwo, confidence));
     }
     
     
@@ -595,6 +632,10 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
     }
     
+    public Set<String> getDistinctSourcesAsSet(){
+        return makeSet(this.getDistinctSources());
+    }
+    
     public Iterable<String> getDistinctTargets(){
         if(this.indexTarget == null){
             return this.stream().map(c -> c.entityTwo).collect(Collectors.toSet());
@@ -603,12 +644,20 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
     }
     
+    public Set<String> getDistinctTargetsAsSet(){
+        return makeSet(this.getDistinctTargets());
+    }
+    
     public Iterable<CorrespondenceRelation> getDistinctRelations(){
         if(this.indexRelation == null){
             return this.stream().map(c -> c.relation).collect(Collectors.toSet());
         }else{
             return this.indexRelation.getDistinctKeys(noQueryOptions());
         }
+    }
+    
+    public Set<CorrespondenceRelation> getDistinctRelationsAsSet(){
+        return makeSet(this.getDistinctRelations());
     }
     
     
@@ -620,6 +669,17 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
     }
     
+    public Set<Double> getDistinctConfidencesAsSet(){
+        return makeSet(this.getDistinctConfidences());
+    }
+        
+    private static <T> Set<T> makeSet(Iterable<T> iterable) {
+        Set<T> set = new HashSet<>();
+        for(T element : iterable){
+            set.add(element);
+        }
+        return set;
+    }
 
     /**
      * Obtain the value of an extension.

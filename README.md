@@ -44,9 +44,9 @@ explained:
 - `Correspondence`<br/>A Correspondence contains a relation (`CorrespondenceRelation`) that holds between two elements from two different ontologies.   
 In the literature, it is also known as "Mapping Cell" or "Cell". Optionally, a correspondence might have a confidence value,  
 and an identifier. Note that a correspondence can be extended with further attributes. For usability, class `DefaultExtensions`  
-contains the most common extensions.   
-- `Alignment`<br/>An alignment is a collection of multiple `Correspondence` instances. In the literature, it is also   
-known as "mapping" or "mappings".  
+contains the most common extensions. The correspondence is uniquely identified by the two matching elements as well as the relation.
+- `Alignment`<br/>An alignment is a set (no duplicates, no ordering) of multiple `Correspondence` instances. In the literature, it is also   
+known as "mapping" or "mappings". 
   
 Class `AlignmentSerializer` can be used to persist an alignment to a file and class `AlignmentParser` can parse an alignment  
 file directly into a Java object.   
