@@ -13,14 +13,22 @@ public class Word2VecConfiguration {
      * Default logger.
      */
     private static Logger LOGGER = LoggerFactory.getLogger(Word2VecConfiguration.class);
-    
-    public static List<Integer> USEFULL_VECTOR_DIMENSIONS = Arrays.asList(50,100,200,500);
-    public static List<Integer> USEFULL_ITERATIONS = Arrays.asList(5,10,20,40);
+
+    /**
+     * Useful intervals for testing.
+     */
+    public static final List<Integer> USEFUL_VECTOR_DIMENSIONS = Arrays.asList(50,100,200,500);
+
+    /**
+     * Useful intervals for testing.
+     */
+    public static final List<Integer> USEFUL_ITERATIONS = Arrays.asList(5,10,20,40);
     
     /**
-     * Size of the vector. Default: 200.
+     * Model type.
+     * Default type: SG.
      */
-    private Word2VecTyp type = Word2VecTyp.CBOW;
+    private Word2VecType type = Word2VecType.SG;
     
     /**
      * Size of the vector. Default: 200.
@@ -52,22 +60,40 @@ public class Word2VecConfiguration {
      */
     private int numberOfThreads = Runtime.getRuntime().availableProcessors();
 
-    
+    /**
+     * Default constructor.
+     * Many parameters are assumed such as training type SG.
+     */
     public Word2VecConfiguration(){}
-    
-    public Word2VecConfiguration(Word2VecTyp type){
-        this.type = type;
+
+    /**
+     * Constructor
+     * @param type Training type (SG/CBOW).
+     */
+    public Word2VecConfiguration(Word2VecType type){
+        setType(type);
     }
-    
-    public Word2VecConfiguration(Word2VecTyp type, int vectorDimension){
-        this.type = type;
-        this.vectorDimension = vectorDimension;
+
+    /**
+     * Constructor
+     * @param type Training type (SG/CBOW).
+     * @param vectorDimension ize of the vectors (number of elements).
+     */
+    public Word2VecConfiguration(Word2VecType type, int vectorDimension){
+        setType(type);
+        setVectorDimension(vectorDimension);
     }
-    
-    public Word2VecConfiguration(Word2VecTyp type, int vectorDimension, int iterations){
-        this.type = type;
-        this.vectorDimension = vectorDimension;
-        this.iterations = iterations;
+
+    /**
+     * Constructor
+     * @param type Training type (SG/CBOW).
+     * @param vectorDimension Size of the vectors (number of elements).
+     * @param iterations aka epochs
+     */
+    public Word2VecConfiguration(Word2VecType type, int vectorDimension, int iterations){
+        setType(type);
+        setVectorDimension(vectorDimension);
+        setIterations(iterations);
     }
     
     
@@ -143,11 +169,11 @@ public class Word2VecConfiguration {
         this.minCount = minCount;
     }
 
-    public Word2VecTyp getType() {
+    public Word2VecType getType() {
         return type;
     }
 
-    public void setType(Word2VecTyp type) {
+    public void setType(Word2VecType type) {
         this.type = type;
     }
 }

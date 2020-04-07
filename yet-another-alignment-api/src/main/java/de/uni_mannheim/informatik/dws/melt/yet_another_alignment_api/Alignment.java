@@ -179,7 +179,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     
 
     /**
-     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
      * @param entityOne URI of the entity from the source ontology as String.
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param confidence The confidence of the mapping.
@@ -191,7 +191,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
-     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
      * @param entityOne URI of the entity from the source ontology as String.
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param extensions extensions
@@ -201,11 +201,11 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
-     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
      * @param entityOne URI of the entity from the source ontology as String.
      * @param entityTwo URI of the entity from the target ontology as String.
-     * @param extensionKey the key of the extension
-     * @param extensionValue the value of the extension
+     * @param extensionKey The key of the extension
+     * @param extensionValue The value of the extension
      */
     public void addOrModify(String entityOne, String entityTwo, String extensionKey, Object extensionValue) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
@@ -214,11 +214,11 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
-     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
      * @param entityOne URI of the entity from the source ontology as String.
      * @param entityTwo URI of the entity from the target ontology as String.
-     * @param matcherClass the class of the matcher
-     * @param confidence the additional confidence
+     * @param matcherClass The class of the matcher.
+     * @param confidence The additional confidence.
      */
     public void addAdditionalConfidence(String entityOne, String entityTwo, Class matcherClass, double confidence) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
@@ -227,7 +227,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
-     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
      * @param entityOne URI of the entity from the source ontology as String.
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param matcherClass the class of the matcher
@@ -240,7 +240,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
-     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
+     * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
      * @param entityOne URI of the entity from the source ontology as String.
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param matcherClass the class of the matcher
@@ -255,24 +255,24 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
-     * Adds the correspondence if not existant or adds the extensions values and updates confidence value.
-     * @param c Correspondence to be added
+     * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
+     * @param correspondence Correspondence to be added.
      */
-    public void addOrModify(Correspondence c) {
+    public void addOrModify(Correspondence correspondence) {
         ResultSet<Correspondence> r = this.retrieve(
                 QueryFactory.and(
-                    QueryFactory.equal(Correspondence.SOURCE, c.getEntityOne()),
-                    QueryFactory.equal(Correspondence.TARGET, c.getEntityTwo()),
-                    QueryFactory.equal(Correspondence.RELATION, c.getRelation())
+                    QueryFactory.equal(Correspondence.SOURCE, correspondence.getEntityOne()),
+                    QueryFactory.equal(Correspondence.TARGET, correspondence.getEntityTwo()),
+                    QueryFactory.equal(Correspondence.RELATION, correspondence.getRelation())
                 ));
         Iterator<Correspondence> iterator = r.iterator();
         if (!iterator.hasNext()) {
-           this.add(c);
+           this.add(correspondence);
            return;            
         }
         Correspondence result = iterator.next();
-        result.getExtensions().putAll(c.getExtensions());
-        result.setConfidence(c.getConfidence());
+        result.getExtensions().putAll(correspondence.getExtensions());
+        result.setConfidence(correspondence.getConfidence());
     }
     
     
