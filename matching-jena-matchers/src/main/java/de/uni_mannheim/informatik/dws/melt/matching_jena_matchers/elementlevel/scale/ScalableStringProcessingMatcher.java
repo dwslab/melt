@@ -148,6 +148,8 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     protected Set<String> getAllStringValue(Resource r, Property p){
         Set<String> values = new HashSet<>();
         if(p.equals(PropertySpecificStringProcessing.URL_FRAGMENT)){
+            values.add(getUriFragment(r.getURI()));
+        } else if(p.equals(PropertySpecificStringProcessing.URL_LOCAL_NAME)){
             values.add(r.getLocalName().trim());
         } else if(p.equals(PropertySpecificStringProcessing.ALL_LITERALS)){
             StmtIterator i = r.listProperties();
@@ -158,7 +160,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
                     values.add(text);
                 }
             }
-        }else if(p.equals(PropertySpecificStringProcessing.ALL_STRING_LITERALS)){
+        } else if(p.equals(PropertySpecificStringProcessing.ALL_STRING_LITERALS)){
             StmtIterator i = r.listProperties();
             while(i.hasNext()){
                 RDFNode n = i.next().getObject();
@@ -182,6 +184,19 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
         }        
         return values;
     }
+    
+    
+    private static String getUriFragment(String uri){
+        int lastIndex = uri.lastIndexOf("#");
+        if(lastIndex >= 0){
+            return uri.substring(lastIndex + 1);
+        }
+        lastIndex = uri.lastIndexOf("/");
+        if(lastIndex >= 0){
+            return uri.substring(lastIndex + 1);
+        }
+        return uri;
+    } 
     
     private static boolean isLiteralAString(Literal lit){        
         //check datatype
