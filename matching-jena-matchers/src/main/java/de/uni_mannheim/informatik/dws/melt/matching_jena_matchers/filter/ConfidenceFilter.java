@@ -16,10 +16,11 @@ import org.apache.jena.ontology.OntModel;
  */
 public class ConfidenceFilter extends MatcherYAAAJena {
 
-    private double confidenceThresholdClasses;
-    private double confidenceThresholdObjects;
-    private double confidenceThresholdDatatypes;
-    private double confidenceThresholdMixed;
+    private double thresholdClass;
+    private double thresholdObjectProperty;
+    private double thresholdDatatypeProperty;
+    private double thresholdIndividual;
+    private double thresholdMixed;
 
     public ConfidenceFilter() {
         setThreshold(0.9);
@@ -29,12 +30,14 @@ public class ConfidenceFilter extends MatcherYAAAJena {
         setThreshold(threshold);
     }
 
-    public ConfidenceFilter(double confidenceThresholdClasses, double confidenceThresholdObjects, double confidenceThresholdDatatypes, double confidenceThresholdMixed) {
-        this.confidenceThresholdClasses = confidenceThresholdClasses;
-        this.confidenceThresholdObjects = confidenceThresholdObjects;
-        this.confidenceThresholdDatatypes = confidenceThresholdDatatypes;
-        this.confidenceThresholdMixed = confidenceThresholdMixed;
+    public ConfidenceFilter(double thresholdClass, double thresholdObjectProperty, double thresholdDatatypeProperty, double thresholdIndividual, double thresholdMixed) {
+        this.thresholdClass = thresholdClass;
+        this.thresholdObjectProperty = thresholdObjectProperty;
+        this.thresholdDatatypeProperty = thresholdDatatypeProperty;
+        this.thresholdIndividual = thresholdIndividual;
+        this.thresholdMixed = thresholdMixed;
     }
+
 
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
@@ -43,11 +46,11 @@ public class ConfidenceFilter extends MatcherYAAAJena {
     
 
     public Alignment filter(Alignment inputAlignment, OntModel source, OntModel target) {
-        if (areAllEqual(this.confidenceThresholdClasses, this.confidenceThresholdObjects, this.confidenceThresholdDatatypes, this.confidenceThresholdMixed)) {
-            return inputAlignment.cut(this.confidenceThresholdClasses);
+        if (areAllEqual(this.thresholdClass, this.thresholdObjectProperty, this.thresholdDatatypeProperty, this.thresholdIndividual, this.thresholdMixed)) {
+            return inputAlignment.cut(this.thresholdClass);
         }
 
-        Alignment result = new Alignment();
+        Alignment result = new Alignment(inputAlignment, false);
         for (Correspondence c : inputAlignment) {
             if(c.getConfidence() >= getThreshold(c, source, target)){
                 result.add(c);
@@ -56,64 +59,70 @@ public class ConfidenceFilter extends MatcherYAAAJena {
         return result;
     }
 
-    private double getThreshold(Correspondence c, OntModel ont1, OntModel ont2) {
-        boolean obj1isDataType = ont1.getDatatypeProperty(c.getEntityOne()) != null;
-        boolean obj2isDataType = ont2.getDatatypeProperty(c.getEntityTwo()) != null;
-        boolean obj1isClass = ont1.getOntClass(c.getEntityOne()) != null;
-        boolean obj2isClass = ont2.getOntClass(c.getEntityTwo()) != null;
-        boolean obj1isObject = ont1.getObjectProperty(c.getEntityOne()) != null;
-        boolean obj2isObject = ont2.getObjectProperty(c.getEntityTwo()) != null;
-
-        if (obj1isDataType == true && obj2isDataType == true) {
-            return this.confidenceThresholdDatatypes;
-        } else if (obj1isClass == true && obj2isClass == true) {
-            return this.confidenceThresholdClasses;
-        } else if (obj1isObject == true && obj2isObject == true) {
-            return this.confidenceThresholdObjects;
+    private double getThreshold(Correspondence c, OntModel ont1, OntModel ont2) {        
+        if (ont1.getOntClass(c.getEntityOne()) != null && ont2.getOntClass(c.getEntityTwo()) != null) {
+            return this.thresholdClass;
+        } else if (ont1.getObjectProperty(c.getEntityOne()) != null && ont2.getObjectProperty(c.getEntityTwo()) != null) {
+            return this.thresholdObjectProperty;
+        } else if (ont1.getDatatypeProperty(c.getEntityOne()) != null && ont2.getDatatypeProperty(c.getEntityTwo()) != null) {
+            return this.thresholdDatatypeProperty;
+        } else if (ont1.getIndividual(c.getEntityOne()) != null && ont2.getIndividual(c.getEntityTwo()) != null) {
+            return this.thresholdIndividual;
         } else {
-            return this.confidenceThresholdMixed;
+            return this.thresholdMixed;
         }
     }
 
     public final void setThreshold(double confidence) {
-        this.confidenceThresholdClasses = confidence;
-        this.confidenceThresholdObjects = confidence;
-        this.confidenceThresholdDatatypes = confidence;
-        this.confidenceThresholdMixed = confidence;
+        this.thresholdClass = confidence;
+        this.thresholdObjectProperty = confidence;
+        this.thresholdDatatypeProperty = confidence;
+        this.thresholdIndividual = confidence;
+        this.thresholdMixed = confidence;
     }
 
     //Setter Getter for specific thresholds:
-    public void setThresholdClasses(double confidence) {
-        this.confidenceThresholdClasses = confidence;
+
+    public double getThresholdClass() {
+        return thresholdClass;
     }
 
-    public double getThresholdClasses() {
-        return this.confidenceThresholdClasses;
+    public void setThresholdClass(double thresholdClass) {
+        this.thresholdClass = thresholdClass;
     }
 
-    public double getConfidenceThresholdObjects() {
-        return this.confidenceThresholdObjects;
+    public double getThresholdObjectProperty() {
+        return thresholdObjectProperty;
     }
 
-    public void setThresholdObjects(double confidenceThresholdObjects) {
-        this.confidenceThresholdObjects = confidenceThresholdObjects;
+    public void setThresholdObjectProperty(double thresholdObjectProperty) {
+        this.thresholdObjectProperty = thresholdObjectProperty;
     }
 
-    public double getThresholdDatatypes() {
-        return this.confidenceThresholdDatatypes;
+    public double getThresholdDatatypeProperty() {
+        return thresholdDatatypeProperty;
     }
 
-    public void setThresholdDatatypes(double confidenceThresholdDatatypes) {
-        this.confidenceThresholdDatatypes = confidenceThresholdDatatypes;
+    public void setThresholdDatatypeProperty(double thresholdDatatypeProperty) {
+        this.thresholdDatatypeProperty = thresholdDatatypeProperty;
+    }
+
+    public double getThresholdIndividual() {
+        return thresholdIndividual;
+    }
+
+    public void setThresholdIndividual(double thresholdIndividual) {
+        this.thresholdIndividual = thresholdIndividual;
     }
 
     public double getThresholdMixed() {
-        return this.confidenceThresholdMixed;
+        return thresholdMixed;
     }
 
-    public void setThresholdMixed(double confidenceThresholdMixed) {
-        this.confidenceThresholdMixed = confidenceThresholdMixed;
+    public void setThresholdMixed(double thresholdMixed) {
+        this.thresholdMixed = thresholdMixed;
     }
+    
 
     //helper:
     private static boolean areAllEqual(double checkValue, double... otherValues) {

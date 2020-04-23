@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.OaeiOptions;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.URIUtil;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.util.Collection;
 import java.util.HashMap;
@@ -148,7 +149,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     protected Set<String> getAllStringValue(Resource r, Property p){
         Set<String> values = new HashSet<>();
         if(p.equals(PropertySpecificStringProcessing.URL_FRAGMENT)){
-            values.add(getUriFragment(r.getURI()));
+            values.add(URIUtil.getUriFragment(r.getURI()));
         } else if(p.equals(PropertySpecificStringProcessing.URL_LOCAL_NAME)){
             values.add(r.getLocalName().trim());
         } else if(p.equals(PropertySpecificStringProcessing.ALL_LITERALS)){
@@ -185,18 +186,6 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
         return values;
     }
     
-    
-    private static String getUriFragment(String uri){
-        int lastIndex = uri.lastIndexOf("#");
-        if(lastIndex >= 0){
-            return uri.substring(lastIndex + 1);
-        }
-        lastIndex = uri.lastIndexOf("/");
-        if(lastIndex >= 0){
-            return uri.substring(lastIndex + 1);
-        }
-        return uri;
-    } 
     
     private static boolean isLiteralAString(Literal lit){        
         //check datatype

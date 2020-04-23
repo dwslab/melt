@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.NaiveDescendingExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_yaaa.MatcherYAAA;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -16,7 +17,7 @@ import org.apache.jena.ontology.OntModel;
 /**
  * This filter returns only the alignments with the highest confidence if there are n-to-m matched elements.
  * This might not be the best solution.
- *
+ * @deprecated use {@link NaiveDescendingExtractor}.
  */
 public class CardinalityFilter extends MatcherYAAAJena{
 
@@ -26,20 +27,6 @@ public class CardinalityFilter extends MatcherYAAAJena{
     }
     
     public static Alignment filter(Alignment inputAlignment){
-        List<Correspondence> sortedAlignment = new ArrayList<>(inputAlignment);
-        sortedAlignment.sort(new CorrespondenceConfidenceComparator().reversed()
-                .thenComparing(Correspondence::getEntityOne)
-                .thenComparing(Correspondence::getEntityTwo));
-        Set<String> sourceMatches = new HashSet<>();
-        Set<String> targetMatches = new HashSet<>();
-        for(Correspondence c : sortedAlignment){
-            if(sourceMatches.contains(c.getEntityOne()) || targetMatches.contains(c.getEntityTwo())){
-                inputAlignment.remove(c);
-            } else {
-                sourceMatches.add(c.getEntityOne());
-                targetMatches.add(c.getEntityTwo());
-            }
-        }
-        return inputAlignment;                
+        return NaiveDescendingExtractor.filter(inputAlignment);
     }
 }
