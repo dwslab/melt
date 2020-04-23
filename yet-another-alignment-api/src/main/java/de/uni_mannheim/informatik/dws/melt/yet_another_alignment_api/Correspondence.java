@@ -152,8 +152,17 @@ public class Correspondence {
     }
 
     /**
+     * This method returns a NEW correspondence where the source and target are reversed but not the relation.
+     * @return New reversed correspondence.
+     */
+    public Correspondence reverseWithoutRelationChange(){
+        return new Correspondence(entityTwo, entityOne, confidence, relation, extensions, identifier);
+    }
+    
+    /**
      * This method returns a NEW correspondence with a reversed relation.
      * For example {@link CorrespondenceRelation#SUBSUME} will be reversed to {@link CorrespondenceRelation#SUBSUMED}.
+     * If only the source and target should be reversed, use {@link #reverseWithoutRelationChange()} method.
      * @return New reversed correspondence.
      */
     public Correspondence reverse(){

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -61,6 +62,12 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     public Alignment() {
         init(true, true, true, true);
     }
+    
+    public Alignment(Iterable<Correspondence> correspondences) {
+        init(true, true, true, true);
+        for(Correspondence c : correspondences)
+            this.add(c);
+    }
         
     public Alignment(boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence){
         init(indexSource, indexTarget, indexRelation, indexConfidence);
@@ -93,18 +100,28 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
 
     /**
-     * Copy constructor.
+     * Copy constructor which copies all information stores in alignment as well as all correspondences.
      * @param alignment The alignment which shall be copied (deep copy).
      */
     public Alignment(Alignment alignment) {
+        this(alignment, true);
+    }
+    
+    /**
+     * Copy constructor which copies all information stores in alignment as well as all correspondences (depending on attribute copyCorrespondences).
+     * @param alignment The alignment which shall be copied (deep copy).
+     * @param copyCorrespondences if true copies all information, if false copies all but no correspondences
+     */
+    public Alignment(Alignment alignment, boolean copyCorrespondences) {
         init(alignment.indexSource != null, alignment.indexTarget != null, alignment.indexRelation != null, alignment.indexConfidence != null);
         this.method = alignment.method;
         this.type = alignment.type;
         this.level = alignment.level;
         this.onto1 = new OntoInfo(alignment.onto1);
         this.onto2 = new OntoInfo(alignment.onto2);        
-        this.extensions = new HashMap<>(alignment.extensions);        
-        addAll(alignment);
+        this.extensions = new HashMap<>(alignment.extensions);
+        if(copyCorrespondences)
+            addAll(alignment);
     }
     
     private void init(boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence){
@@ -271,8 +288,10 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
            return;            
         }
         Correspondence result = iterator.next();
+        this.remove(result);
         result.getExtensions().putAll(correspondence.getExtensions());
         result.setConfidence(correspondence.getConfidence());
+        this.add(result);
     }
     
     
@@ -291,12 +310,16 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         Iterator<Correspondence> iterator = r.iterator();
         if (!iterator.hasNext()) {
            this.add(c);
-           return;            
+           return;
         }
         Correspondence result = iterator.next();
         result.getExtensions().putAll(c.getExtensions());
-        if(c.getConfidence() > result.getConfidence()) // set the confidence only if higher
+        if(c.getConfidence() > result.getConfidence()){ // set the confidence only if higher
+            this.remove(result);
             result.setConfidence(c.getConfidence());
+            this.add(result);
+            //this.update(Arrays.asList(result), Arrays.asList(result));
+        }
     }
     
     /**
@@ -421,6 +444,25 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      public boolean isTargetRelationContained(String target, CorrespondenceRelation relation) {
         return getCorrespondencesTargetRelation(target, relation).iterator().hasNext();
     }
+     
+     
+    /**
+     * Obtain an iterator for all correspondences where the given relation are involved.
+     * @param relation The relation that shall hold between the specified target and an arbitrary source.
+     * @return Iterable over {@link Correspondence}.
+     */
+    public Iterable<Correspondence> getCorrespondencesRelation(CorrespondenceRelation relation) {
+        return this.retrieve(QueryFactory.equal(Correspondence.RELATION, relation));
+    }
+
+    /**
+     * Check whether the given relation are contained in this alignment.
+     * @param relation The relation that shall hold.
+     * @return True if correspondence with the specified criteria could be found, else false.
+     */
+     public boolean isRelationContained(CorrespondenceRelation relation) {
+        return getCorrespondencesRelation(relation).iterator().hasNext();
+    }
     
     
     public void removeCorrespondencesSourceTarget(String source, String target) {
@@ -448,7 +490,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      */
     public Alignment cut(double threshold){
         assertIndexOnConfidence();
-        Alignment m = new Alignment(this.indexSource != null, this.indexTarget != null, this.indexRelation != null, this.indexConfidence != null);
+        Alignment m = new Alignment(this, false);
         ResultSet<Correspondence> result = this.retrieve(QueryFactory.greaterThanOrEqualTo(Correspondence.CONFIDENCE, threshold));
         //m.addAll(result.stream().collect(Collectors.toList()));  //makes an arraylist 
         //List<Correspondence> list = new ArrayList<>(result.size());
@@ -461,9 +503,42 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
         return m;
     }
+    
+    /**
+     * Reverse the alignment (switches sources with targets) and does not change the relation.
+     * It creates a new Alignment.
+     * If the relation should be changed use the {@link #reverse()} method.
+     * @return NEW reversed alignment.
+     */
+    public Alignment reverseWithoutRelationChange() {
+        Alignment result = new Alignment(this, false);//copy constructor but no copy of correspondences
+        for(Correspondence c : this){
+            result.add(c.reverseWithoutRelationChange());
+        }
+        return result;
+    }
+    
+    /**
+     * Reverse the alignment (switches sources with targets) and adjust(reverse) the relation.
+     * It creates a new Alignment.
+     * If the relation should not be changed use the {@link #reverseWithoutRelationChange()} method.
+     * @return New reversed alignment.
+     */
+    public Alignment reverse() {
+        Alignment result = new Alignment(this, false);//copy constructor but no copy of correspondences
+        for(Correspondence c : this){
+            result.add(c.reverse());
+        }
+        return result;
+    }
 
 
-
+    /**
+     * Create the subtraction between the two given alignments. Only copies the alignment and not further infos like onto or extensions.
+     * @param alignment_1 Set 1.
+     * @param alignment_2 Set 2.
+     * @return Substraction alignment.
+     */
     public static Alignment subtraction(Alignment alignment_1, Alignment alignment_2) {
         Alignment result = new Alignment();
         result.addAll(alignment_1);
@@ -504,17 +579,12 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     /**
      * Switches sources with targets. Does not change the relation.
      * This method is only for erroneous alignments where a matcher switched the source with the target ontology.
+     * @deprecated use function reverse
      * @param alignment The alignment where the source shall be switched with the target.
      * @return Edited alignment.
      */
-    public static Alignment switchSourceWithTarget(Alignment alignment) {
-        Alignment result = new Alignment(alignment);
-        for(Correspondence c: result){
-            String tmp = c.entityOne;
-            c.setEntityOne(c.entityTwo);
-            c.setEntityTwo(tmp);
-        }
-        return result;
+    public static Alignment switchSourceWithTarget(Alignment alignment){
+        return alignment.reverseWithoutRelationChange();
     }
 
     /**
