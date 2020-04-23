@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -80,7 +81,7 @@ public class EvaluatorBasic extends Evaluator {
             }
 
             File fileToBeWritten = new File(baseDirectory, RESULT_FILE_NAME);
-            CSVPrinter printer = new CSVPrinter(new FileWriter(fileToBeWritten, false), CSVFormat.DEFAULT);
+            CSVPrinter printer = CSVFormat.DEFAULT.print(fileToBeWritten, StandardCharsets.UTF_8);
             printer.printRecord(getHeader());
             for (ExecutionResult er : results) {
                 String[] extensionValues;

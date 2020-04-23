@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -109,10 +110,11 @@ public class AlignmentsCube {
      * @param baseDirectory The base directory to which the alignment cube shall be written.
      */
     public void write(File baseDirectory) {
+
         try {
             File fileToBeWritten = new File(baseDirectory, "alignmentCube.csv");
             fileToBeWritten.getParentFile().mkdirs();
-            CSVPrinter printer = new CSVPrinter(new FileWriter(fileToBeWritten, false), CSVFormat.DEFAULT);
+            CSVPrinter printer = CSVFormat.DEFAULT.print(fileToBeWritten, StandardCharsets.UTF_8);
             List<String> header = getHeader();
             printer.printRecord(header);
 
@@ -200,7 +202,6 @@ public class AlignmentsCube {
             printer.close();
         } catch (IOException ioe) {
             LOGGER.error("Could not write alignments cube.", ioe);
-            ioe.printStackTrace();
         }
     }
 
