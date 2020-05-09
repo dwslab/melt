@@ -6,7 +6,10 @@ import com.googlecode.cqengine.query.option.QueryOptions;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -216,15 +219,55 @@ public class Correspondence {
 
 
     /**
-     * Adds an additional confidence 
+     * Adds an additional confidence based on a specif class.
      * @param matcherClass the class of the matcher
      * @param confidence the additional confidence
      */
     public void addAdditionalConfidence(Class matcherClass, double confidence) {
+        addAdditionalConfidence(matcherClass.getSimpleName(), confidence);
+    }
+    
+    /**
+     * Adds an additional confidence associated with any specific string value.
+     * This should be used if one class puts multiple confidence values. 
+     * @param key the key which should be associated with the confidence
+     * @param confidence the additional confidence
+     */
+    public void addAdditionalConfidence(String key, double confidence) {
         addExtensionValue(
-                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + matcherClass.getSimpleName() + DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX,
+                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + key + DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX,
                 confidence);
     }
+    
+    public Double getAdditionalConfidence(Class matcherClass) { 
+        return getAdditionalConfidence(matcherClass.getSimpleName());
+    }
+    
+    public Double getAdditionalConfidence(String key) { 
+        return (Double)this.extensions.get(
+                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + 
+                key + 
+                DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX
+        ); 
+    }
+    
+    private static final Pattern CONFIDENCE_KEY_PATTERN = Pattern.compile(
+            DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + 
+            "(.*)" + 
+            DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX
+    );
+    public Map<String,Double> getAdditionalConfidences() { 
+        Map<String,Double> confidences = new HashMap<>();
+        for(Entry<String, Object> e : this.extensions.entrySet()){
+            Matcher m = CONFIDENCE_KEY_PATTERN.matcher(e.getKey());
+            if(m.find()){
+                confidences.put(m.group(1), (Double) e.getValue());
+            }
+        }
+        return confidences;
+    }
+    
+    
     
     /**
      * Adds an additional explanation 
@@ -232,10 +275,48 @@ public class Correspondence {
      * @param explanation the explanation for a correspondence
      */
     public void addAdditionalExplanation(Class matcherClass, String explanation) {
+        addAdditionalExplanation(matcherClass.getSimpleName(), explanation);
+    }
+    
+    /**
+     * Adds an additional explanation 
+     * @param key the key which should be associated with the explanation
+     * @param explanation the explanation for a correspondence
+     */
+    public void addAdditionalExplanation(String key, String explanation) {
         addExtensionValue(
-                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + matcherClass.getSimpleName() + DefaultExtensions.MeltExtensions.ADDITIONAL_EXPLANATION_SUFFIX, 
+                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + key + DefaultExtensions.MeltExtensions.ADDITIONAL_EXPLANATION_SUFFIX, 
                 explanation);
-    }    
+    }
+    
+    public String getAdditionalExplanation(Class matcherClass) { 
+        return getAdditionalExplanation(matcherClass.getSimpleName());
+    }
+    
+    public String getAdditionalExplanation(String key) { 
+        return (String)this.extensions.get(
+                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + 
+                key + 
+                DefaultExtensions.MeltExtensions.ADDITIONAL_EXPLANATION_SUFFIX
+        ); 
+    }
+    
+    private static final Pattern EXPLANATION_KEY_PATTERN = Pattern.compile(
+            DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + 
+            "(.*)" + 
+            DefaultExtensions.MeltExtensions.ADDITIONAL_EXPLANATION_SUFFIX
+    );
+    public Map<String,String> getAdditionalExplanations() { 
+        Map<String,String> explanations = new HashMap<>();
+        for(Entry<String, Object> e : this.extensions.entrySet()){
+            Matcher m = EXPLANATION_KEY_PATTERN.matcher(e.getKey());
+            if(m.find()){
+                explanations.put(m.group(1), (String) e.getValue());
+            }
+        }
+        return explanations;
+    }
+    
 
     public Map<String, Object> getExtensions() { return this.extensions; }
 

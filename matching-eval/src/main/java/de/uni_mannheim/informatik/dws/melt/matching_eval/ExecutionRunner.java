@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.concurrent.Callable;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,8 +56,8 @@ class ExecutionRunner implements Callable<ExecutionResult> {
         }
         finally
         {
-            runTime = System.nanoTime() - startTime;
-            LOGGER.info("Running matcher {} on testcase {} (track {}) completed.", matcherName, testCase.getName(), testCase.getTrack().getName());
+            runTime = System.nanoTime() - startTime;  
+            LOGGER.info("Running matcher {} on testcase {} (track {}) completed in {}.", matcherName, testCase.getName(), testCase.getTrack().getName(), DurationFormatUtils.formatDurationWords((long)(runTime/1_000_000), true, true));
         }
         if(resultingAlignment == null) {
             LOGGER.error("Matching task unsuccessful: output alignment equals null. (matcher: {} testcase: {} track: {})", matcherName, testCase.getName(), testCase.getTrack().getName());

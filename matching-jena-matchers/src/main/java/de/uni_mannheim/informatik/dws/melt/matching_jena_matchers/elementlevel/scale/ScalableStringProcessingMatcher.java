@@ -4,24 +4,20 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.OaeiOptions;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.URIUtil;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntResource;
 import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.StmtIterator;
-import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.vocabulary.RDF;
 
 /**
@@ -75,13 +71,13 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     }
     
     
-    public void matchResources(ExtendedIterator<? extends OntResource> sourceResources, ExtendedIterator<? extends OntResource> targetResources, Alignment alignment) {
+    public void matchResources(Iterator<? extends Resource> sourceResources, Iterator<? extends Resource> targetResources, Alignment alignment) {
         //index name -> tokens/ids -> (list of resources)
         Map<String,Map<Object, Set<String>>> index = new HashMap<>();
 
         //source
         while (sourceResources.hasNext()) {
-            OntResource source = sourceResources.next();
+            Resource source = sourceResources.next();
             if(source.isURIResource() == false)
                 continue;
             String sourceURI = source.getURI();            
@@ -100,7 +96,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
         }
         
         while (targetResources.hasNext()) {
-            OntResource target = targetResources.next();
+            Resource target = targetResources.next();
             if(target.isURIResource() == false)
                 continue;
             String targetURI = target.getURI();
