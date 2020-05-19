@@ -13,8 +13,13 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,11 +140,50 @@ public abstract class Track {
         }
         return testCases;
     }
+    
+    /**
+     * Obtain multiple test cases using specified test case names.
+     * If name does not exist, a log is written and the testcase is skipped.
+     * @param names Names of the test cases.
+     * @return List of testcases.
+     */
+    public List<TestCase> getTestCases(String... names){
+        return getTestCases(Arrays.asList(names));
+    }
+    
+    /**
+     * Obtain multiple test cases using specified test case names.
+     * If name does not exist, a log is written and the testcase is skipped.
+     * @param testCaseNames Names of the test cases.
+     * @return List of testcases.
+     */
+    public List<TestCase> getTestCases(List<String> testCaseNames){
+        Map<String, TestCase> map = getMapNameToTestCase();        
+        List<TestCase> tcs = new ArrayList(testCaseNames.size());
+        for(String testCaseName : testCaseNames){
+            TestCase tc = map.get(testCaseName);
+            if(tc == null){
+                LOGGER.warn("Did not find testCase with name {}", testCaseName);
+                continue;
+            }
+            tcs.add(tc);
+        }
+        return tcs;
+    }
+    
+    private Map<String, TestCase> getMapNameToTestCase(){
+        Map<String, TestCase> map = new HashMap();
+        for(TestCase testCase : getTestCases()){
+            map.put(testCase.getName(), testCase);
+        }
+        return map;
+    }
 
     /**
      * Obtain a test case using a specified name.
+     * If name does not exist, null is returned.
      * @param name Name of the test case.
-     * @return Test case.
+     * @return Test case or null if not existent.
      */
     public TestCase getTestCase(String name){
         for(TestCase c : getTestCases()){
@@ -147,6 +191,7 @@ public abstract class Track {
                 return c;
             }
         }
+        LOGGER.warn("Did not find testCase with name {}", name);
         return null;
     }
     
@@ -154,6 +199,7 @@ public abstract class Track {
      * Obtain a test case using the index.
      * @param index The position of the test case that is to be obtained.
      * @return Test case.
+     * @throws IndexOutOfBoundsException if the index is out of range
      */
     public TestCase getTestCase(int index){
         return getTestCases().get(index);
@@ -161,13 +207,11 @@ public abstract class Track {
     
     /**
      * Obtain an example test case (the first one).
+     * throws NoSuchElementException if there are no test cases.
      * @return Test case.
      */
     public TestCase getFirstTestCase(){
-        for(TestCase c : getTestCases()){
-            return c;
-        }
-        return null;
+        return getTestCases().iterator().next();
     }
     
     /**

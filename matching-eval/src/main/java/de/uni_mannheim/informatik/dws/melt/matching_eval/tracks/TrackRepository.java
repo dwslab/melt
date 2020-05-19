@@ -118,6 +118,48 @@ public class TrackRepository{
             secondLanguage = secondLanguage.trim().toLowerCase();
             return getSpecificMultifarmTrack(firstLanguage + "-" + secondLanguage);
         }
+        
+        public static List<TestCase> getSameOntologies(){
+            return getSameOrDifferentOntologies(ALL, true);
+        }
+        
+        public static List<TestCase> getSameOntologies(List<Track> multiFarmLanguageTracks){
+            return getSameOrDifferentOntologies(multiFarmLanguageTracks, true);
+        }
+        
+        public static List<TestCase> getDifferentOntologies(){
+            return getSameOrDifferentOntologies(ALL, false);
+        }
+        
+        public static List<TestCase> getDifferentOntologies(List<Track> multiFarmLanguageTracks){
+            return getSameOrDifferentOntologies(multiFarmLanguageTracks, false);
+        }
+        
+        
+        public static List<TestCase> getSameOrDifferentOntologies(boolean same){
+            return getSameOrDifferentOntologies(ALL, same);
+        }
+        
+        public static List<TestCase> getSameOrDifferentOntologies(List<Track> multiFarmLanguageTracks, boolean same){
+            List<TestCase> testCases = new ArrayList<>();
+            for(Track track : multiFarmLanguageTracks){
+                for(TestCase testCase : track.getTestCases()){
+                    if(isTestCaseSameOntology(testCase) == same){
+                        testCases.add(testCase);
+                    }
+                }
+            }
+            return testCases;
+        }
+        
+        public static boolean isTestCaseSameOntology(TestCase tc){
+            String[] splits = tc.getName().split("-");
+            if(splits.length <= 1){
+                LOGGER.warn("Split of test case name in multifarm track is less than 1 which should normally be 4. Return false for same Ontology test.");
+                return false;
+            }
+            return splits[0].equals(splits[1]);
+        }
     }
     
     /**

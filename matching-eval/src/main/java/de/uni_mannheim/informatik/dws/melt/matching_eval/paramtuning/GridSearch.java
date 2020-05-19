@@ -170,7 +170,28 @@ public class GridSearch {
     }
     
     /**
-     * The parameters for the constructor of the given class. Position mattes!
+     * In case the matcher needs parameters in the constructor which should be changed in each run, use this method.
+     * If the constructor of the matcher has n parameters you should call this method n times with values which should be tried out.
+     * If the constructor looks like this:
+     * <pre>{@code 
+     * public MyMatcher(int number, String text){
+     * }
+     * }</pre>
+     * then you should call it like that (order matters!)
+     * <pre>{@code
+     * gridsearch.addConstructorParameter(1,2,3);
+     * gridsearch.addConstructorParameter("x", "y");
+     * }</pre>
+     * to have the following calls of the constructor:
+     * <pre>{@code
+     * new MyMatcher(1, "x")
+     * new MyMatcher(2, "x")
+     * new MyMatcher(3, "x")
+     * new MyMatcher(1, "y")
+     * new MyMatcher(2, "y")
+     * new MyMatcher(3, "y")
+     * }</pre>
+     * In case you just want to provide constructro paramters which should not be changed, use {@link #addStaticConstructorParameter(java.lang.Object...) }
      * @param paramValues The parameters for the constructor in the correct order.
      * @return Edited {@code GridSearch} instance.
      */
@@ -179,8 +200,28 @@ public class GridSearch {
     }
 
     /**
-     * The parameters for the constructor of the given class. All {@code paramValues} do have to be of the same type (that is also to be set in this method).
-     * Position mattes!
+     * In case the matcher needs parameters in the constructor which should be changed in each run, use this method.
+     * If the constructor of the matcher has n parameters you should call this method n times with values which should be tried out.
+     * If the constructor looks like this:
+     * <pre>{@code 
+     * public MyMatcher(int number, String text){
+     * }
+     * }</pre>
+     * then you should call it like that (order matters!)
+     * <pre>{@code
+     * gridsearch.addConstructorParameter(Arrays.asList(1,2,3), Integer.class);
+     * gridsearch.addConstructorParameter(Arrays.asList("x", "y"), String.class);
+     * }</pre>
+     * to have the following calls of the constructor:
+     * <pre>{@code
+     * new MyMatcher(1, "x")
+     * new MyMatcher(2, "x")
+     * new MyMatcher(3, "x")
+     * new MyMatcher(1, "y")
+     * new MyMatcher(2, "y")
+     * new MyMatcher(3, "y")
+     * }</pre>
+     * In case you just want to provide constructro paramters which should not be changed, use {@link #addStaticConstructorParameter(java.lang.Object...) }
      * @param paramValues The parameters for the constructor in the correct order.
      * @param clazz The type of all the values.
      * @return Edited {@code GridSearch} instance.
@@ -193,7 +234,10 @@ public class GridSearch {
     }
 
     /**
-     * The parameters for the constructor of the given class. Position mattes!
+     * In case you need parameters for the matcher constructor, but do not want the change them in each run, but keep them the same, then use this method.
+     * In case you supply multiple values, the constructor should also need the same amount of parameters (position matters!).
+     * This differ to {@link #addConstructorParameter(java.util.List)} because it does not change the constructor paramters in each run.
+     * In case the constructor is not found (java.lang.NoSuchMethodException) then use {@link #addStaticConstructorParameter(java.util.List, java.util.List) } and specify the types explicitly.
      * @param paramValues The parameters for the constructor in the correct order.
      * @return Edited {@code GridSearch} instance.
      */
@@ -202,6 +246,26 @@ public class GridSearch {
             this.paramName.add(CONSTRUCTOR);
             this.paramValues.add(Arrays.asList(param));
             this.paramTypes.add(param.getClass());
+        }
+        return this;
+    }
+    
+    /**
+     * In case you need parameters for the matcher constructor, but do not want the change them in each run, but keep them the same, then use this method.
+     * In case you supply multiple values, the constructor should also need the same amount of parameters (position matters!).
+     * This differ to {@link #addConstructorParameter(java.util.List)} because it does not change the constructor paramters in each run.
+     * @param paramValues The parameters values for the constructor in the correct order.
+     * @param paramTypes The parameter type of the constructor in the correct order.
+     * @return Edited {@code GridSearch} instance.
+     */
+    public GridSearch addStaticConstructorParameter(List<Object> paramValues, List<Class> paramTypes){
+        if(paramTypes.size() != paramValues.size()){
+            throw new IllegalArgumentException("The size of paramTypes and paramValues is not equal.");
+        }
+        for(int i=0; i < paramTypes.size(); i++){
+            this.paramName.add(CONSTRUCTOR);
+            this.paramValues.add(Arrays.asList(paramValues.get(i)));
+            this.paramTypes.add(paramTypes.get(i));
         }
         return this;
     }
