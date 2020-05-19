@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -7,7 +7,7 @@ import java.util.Properties;
 import org.apache.jena.ontology.OntModel;
 
 /**
- * Scales the correspondence confidence values linearly to an interval [0,1] (by default).
+ * Scales the correspondence confidence values linearly to an given interval (by default [0,1]).
  */
 public class ScaleConfidence extends MatcherYAAAJena{
 

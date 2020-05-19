@@ -24,7 +24,7 @@ public class TransitiveClosure <T> {
     private Map<Integer, Set<T>> idToClosure;
     
     /**
-     * id counter to be used when generating new synste ids.
+     * id counter to be used when generating new synset ids.
      */
     private int idCounter;
     

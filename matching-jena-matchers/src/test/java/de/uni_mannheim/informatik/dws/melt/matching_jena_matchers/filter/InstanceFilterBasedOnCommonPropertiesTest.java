@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.InstanceFilterBasedOnCommonProperties;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance.CommonPropertiesFilter;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class InstanceFilterBasedOnCommonPropertiesTest {
         m.add(namespaceSource + "instanceTwo", namespaceTarget + "instanceTwo", 0.9);
         m.add(namespaceSource + "propOne", namespaceTarget + "propOne", 0.9);
         
-        Alignment filtered = new InstanceFilterBasedOnCommonProperties().filter(source, target, m);
+        Alignment filtered = new CommonPropertiesFilter().filter(source, target, m);
         
         assertEquals(2, filtered.size());
     }

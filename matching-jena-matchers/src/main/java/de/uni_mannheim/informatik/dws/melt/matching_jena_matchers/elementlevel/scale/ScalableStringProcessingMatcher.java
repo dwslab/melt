@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.OaeiOptions;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.URIUtil;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,14 +10,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.StmtIterator;
-import org.apache.jena.vocabulary.RDF;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Matcher which uses different String Matching approaches (stored in PropertySpecificStringProcessing) with a specific confidence.
@@ -28,17 +23,19 @@ import org.apache.jena.vocabulary.RDF;
  * Function<String, Object> equality = (text) -> text;
  * Function<String, Object> lowercase = (text) -> text.toLowerCase();
  * ScalableStringProcessingMatcher matcherOne = new ScalableStringProcessingMatcher(Arrays.asList(
- *              new PropertySpecificStringProcessing(RDFS.label, equality, 1.0),
- *              new PropertySpecificStringProcessing(RDFS.label, lowercase, 0.9)
- *              new PropertySpecificStringProcessing(SKOS.altLabel, equality, 0.7),
- *              new PropertySpecificStringProcessing(SKOS.altLabel, lowercase, 0.6)
+ *              new PropertySpecificStringProcessing(equality, 1.0, RDFS.label),
+ *              new PropertySpecificStringProcessing(lowercase, 0.9, RDFS.label)
+ *              new PropertySpecificStringProcessing(equality, 0.7, SKOS.altLabel),
+ *              new PropertySpecificStringProcessing(lowercase, 0.6, SKOS.altLabel)
  * ));
  * }</pre>
  */
 public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScalableStringProcessingMatcher.class);
+    
     protected Iterable<PropertySpecificStringProcessing> processingElements;
-    protected Set<Property> usedProperties;
+    protected Set<ValueExtractor> usedValueExtractors;
     
     protected boolean matchClasses = true;
     protected boolean matchProperties = true;
@@ -49,9 +46,9 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     public ScalableStringProcessingMatcher(Iterable<PropertySpecificStringProcessing> processingElements, boolean earlyStopping){
         this.earlyStopping = earlyStopping;
         this.processingElements = processingElements;
-        this.usedProperties = new HashSet<>();
+        this.usedValueExtractors = new HashSet<>();
         for(PropertySpecificStringProcessing p: processingElements){
-            this.usedProperties.addAll(p.getProperties());
+            this.usedValueExtractors.addAll(p.getValueExtractors());
         }
     }
     
@@ -61,12 +58,19 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        if(OaeiOptions.isMatchingClassesRequired() && matchClasses)
-            matchResources(source.listClasses(), target.listClasses(), inputAlignment);        
-        if((OaeiOptions.isMatchingDataPropertiesRequired() || OaeiOptions.isMatchingObjectPropertiesRequired()) && matchProperties)
-            matchResources(source.listAllOntProperties(), target.listAllOntProperties(), inputAlignment);        
-        if(OaeiOptions.isMatchingInstancesRequired() && matchInstances)
+        if(OaeiOptions.isMatchingClassesRequired() && matchClasses){
+            LOGGER.debug("Match classes");
+            matchResources(source.listClasses(), target.listClasses(), inputAlignment);  
+        }
+        if((OaeiOptions.isMatchingDataPropertiesRequired() || OaeiOptions.isMatchingObjectPropertiesRequired()) && matchProperties){
+            LOGGER.debug("Match properties");
+            matchResources(source.listAllOntProperties(), target.listAllOntProperties(), inputAlignment);
+        }
+        if(OaeiOptions.isMatchingInstancesRequired() && matchInstances){
+            LOGGER.debug("Match instances");
             matchResources(source.listIndividuals(), target.listIndividuals(), inputAlignment);
+        }
+        LOGGER.debug("Finished");
         return inputAlignment;
     }
     
@@ -81,10 +85,10 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
             if(source.isURIResource() == false)
                 continue;
             String sourceURI = source.getURI();            
-            Map<Property, Set<String>> literalMap = extractAllLiterals(source);
+            Map<ValueExtractor, Set<String>> valueMap = extractAllValues(source);
             for(PropertySpecificStringProcessing processing : this.processingElements){
                 Map<Object, Set<String>> tokenIndex = index.computeIfAbsent(processing.getIndexName(), k->new HashMap<>());
-                for(String sourceLabels : getLiterals(processing, literalMap)){
+                for(String sourceLabels : getLiterals(processing, valueMap)){
                     if(StringUtils.isBlank(sourceLabels))
                         continue;
                     Object o = processing.getProcessing().apply(sourceLabels);
@@ -101,13 +105,13 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
                 continue;
             String targetURI = target.getURI();
             
-            Map<Property, Set<String>> literalMap = extractAllLiterals(target);
+            Map<ValueExtractor, Set<String>> valueMap = extractAllValues(target);
             for(PropertySpecificStringProcessing processing : this.processingElements){
                 Map<Object, Set<String>> tokenIndex = index.get(processing.getIndexName());
                 if(tokenIndex == null)
                     continue;
                 boolean findMatch = false;
-                for(String targetLabel : getLiterals(processing, literalMap)){
+                for(String targetLabel : getLiterals(processing, valueMap)){
                     if(StringUtils.isBlank(targetLabel))
                         continue;
                     Object o = processing.getProcessing().apply(targetLabel);
@@ -125,81 +129,23 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     }
     
     
-    protected Set<String> getLiterals(PropertySpecificStringProcessing processing, Map<Property, Set<String>> literalMap){
-        Set<String> literals = new HashSet<>();
-        for(Property p : processing.getProperties()){
-            literals.addAll(literalMap.get(p));
-        }
-        return literals;
-    }
-    
-    protected Map<Property,Set<String>> extractAllLiterals(Resource r){
-        Map<Property, Set<String>> literals = new HashMap<>();
-        for(Property p : this.usedProperties){
-            literals.put(p, getAllStringValue(r, p));
-        }
-        return literals;
-    }
-    
-    
-    protected Set<String> getAllStringValue(Resource r, Property p){
+    protected Set<String> getLiterals(PropertySpecificStringProcessing processing, Map<ValueExtractor, Set<String>> valueMap){
         Set<String> values = new HashSet<>();
-        if(p.equals(PropertySpecificStringProcessing.URL_FRAGMENT)){
-            values.add(URIUtil.getUriFragment(r.getURI()));
-        } else if(p.equals(PropertySpecificStringProcessing.URL_LOCAL_NAME)){
-            values.add(r.getLocalName().trim());
-        } else if(p.equals(PropertySpecificStringProcessing.ALL_LITERALS)){
-            StmtIterator i = r.listProperties();
-            while(i.hasNext()){
-                RDFNode n = i.next().getObject();
-                if(n.isLiteral()){
-                    String text = n.asLiteral().getLexicalForm().trim();
-                    values.add(text);
-                }
-            }
-        } else if(p.equals(PropertySpecificStringProcessing.ALL_STRING_LITERALS)){
-            StmtIterator i = r.listProperties();
-            while(i.hasNext()){
-                RDFNode n = i.next().getObject();
-                if(n.isLiteral()){
-                    Literal lit = n.asLiteral();
-                    if(isLiteralAString(lit)){
-                        String text = lit.getLexicalForm().trim();
-                        values.add(text);
-                    }
-                }
-            }
-        } else{
-            StmtIterator i = r.listProperties(p);
-            while(i.hasNext()){
-                RDFNode n = i.next().getObject();
-                if(n.isLiteral()){
-                    String text = n.asLiteral().getLexicalForm().trim();
-                    values.add(text);
-                }
-            }
-        }        
+        for(ValueExtractor extractor : processing.getValueExtractors()){
+            values.addAll(valueMap.get(extractor));
+        }
         return values;
     }
     
-    
-    private static boolean isLiteralAString(Literal lit){        
-        //check datatype
-        String dtStr = lit.getDatatypeURI() ;
-        if (dtStr != null){
-            //have datatype -> check it
-            if(dtStr.equals(XSDDatatype.XSDstring.getURI()))
-                return true;
-            if(dtStr.equals(RDF.dtLangString.getURI()))
-                return true;
+    protected Map<ValueExtractor,Set<String>> extractAllValues(Resource r){
+        Map<ValueExtractor, Set<String>> literals = new HashMap<>();
+        for(ValueExtractor p : this.usedValueExtractors){
+            literals.put(p, p.extract(r));
         }
-        //datatype == null -> check for language tag
-        String lang = lit.getLanguage();
-        if ( lang != null  && ! lang.equals(""))
-            return true;
-        return false;
+        return literals;
     }
     
+        
     protected boolean isObjectEmpty(Object o){
         if(o == null)
             return true;
@@ -241,5 +187,4 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     public void setEarlyStopping(boolean earlyStopping) {
         this.earlyStopping = earlyStopping;
     }
-    
 }
