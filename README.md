@@ -1,5 +1,14 @@
 # MELT - Matching EvaLuation Toolkit  
-[![Java CI](https://github.com/janothan/kgvec2go-walks/workflows/Java%20CI/badge.svg)](https://github.com/dwslab/melt/actions)  [![Coverage Status](https://coveralls.io/repos/github/dwslab/melt/badge.svg?branch=master)](https://coveralls.io/github/dwslab/melt?branch=master)  
+
+
+[![Java CI](https://github.com/janothan/kgvec2go-walks/workflows/Java%20CI/badge.svg)](https://github.com/dwslab/melt/actions)
+[![Coverage Status](https://coveralls.io/repos/github/dwslab/melt/badge.svg?branch=master)](https://coveralls.io/github/dwslab/melt?branch=master)
+[![Maven Central](https://img.shields.io/maven-central/v/de.uni-mannheim.informatik.dws.melt/matching-eval)](https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt)
+[![License](https://img.shields.io/github/license/dwslab/melt)](https://github.com/dwslab/melt/blob/master/LICENSE)
+
+
+
+
   
 MELT is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.  
 It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the   
