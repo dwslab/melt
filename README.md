@@ -16,13 +16,14 @@ SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-
 Hertling, Sven; Portisch, Jan; Paulheim, Heiko. MELT - Matching EvaLuation Toolkit. SEMANTICS. Karlsruhe, Germany. 2019.  
 ```  
 An open-access version of the paper is available <a href="https://link.springer.com/content/pdf/10.1007%2F978-3-030-33220-4_17.pdf">here</a>.  
+The accompanying presentation can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/MELT_presentation_semantics.pdf">documentation directory</a>.
   
 *Demo Paper (MELT Dashboard)*
 ```  
 Portisch, Jan; Hertling, Sven;  Paulheim, Heiko. Visual Analysis of Ontology Matching Results with the MELT Dashboard. ESWC 2020 - Posters and Demos. Heraklion, Greece. 2020.  
 ``` 
 An open-access version of the paper is available <a href="https://arxiv.org/pdf/2004.12628.pdf">here</a>.<br/>
-The poster can be found in the <a>documentation directory</a>. 
+The poster can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/eswc_2020_melt_dashboard_poster.pdf">documentation directory</a>. 
 
   
 ## Code Examples  
