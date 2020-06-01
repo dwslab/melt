@@ -175,7 +175,7 @@
                 <version>3.0.0-M4</version>
             </plugin>
             
-            <!-- for checksytle reports -->
+            <!-- for checkstyle reports -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>

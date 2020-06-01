@@ -1,25 +1,30 @@
 # MELT - Matching EvaLuation Toolkit  
 
-
 [![Java CI](https://github.com/janothan/kgvec2go-walks/workflows/Java%20CI/badge.svg)](https://github.com/dwslab/melt/actions)
 [![Coverage Status](https://coveralls.io/repos/github/dwslab/melt/badge.svg?branch=master)](https://coveralls.io/github/dwslab/melt?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/de.uni-mannheim.informatik.dws.melt/matching-eval)](https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt)
 [![License](https://img.shields.io/github/license/dwslab/melt)](https://github.com/dwslab/melt/blob/master/LICENSE)
 
-
-
-
-  
 MELT is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.  
 It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the   
 SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.  
   
 **How to Cite?** <br/>  
+
+*Main Paper*
 ```  
-Hertling, Sven; Portisch, Jan; Paulheim, Heiko. MELT - Matching EvaLuation Toolkit. SEMANTICS. Karlsruhe. 2019.  
+Hertling, Sven; Portisch, Jan; Paulheim, Heiko. MELT - Matching EvaLuation Toolkit. SEMANTICS. Karlsruhe, Germany. 2019.  
 ```  
 An open-access version of the paper is available <a href="https://link.springer.com/content/pdf/10.1007%2F978-3-030-33220-4_17.pdf">here</a>.  
+The accompanying presentation can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/MELT_presentation_semantics.pdf">documentation directory</a>.
   
+*Demo Paper (MELT Dashboard)*
+```  
+Portisch, Jan; Hertling, Sven;  Paulheim, Heiko. Visual Analysis of Ontology Matching Results with the MELT Dashboard. ESWC 2020 - Posters and Demos. Heraklion, Greece. 2020.  
+``` 
+An open-access version of the paper is available <a href="https://arxiv.org/pdf/2004.12628.pdf">here</a>.<br/>
+The poster can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/eswc_2020_melt_dashboard_poster.pdf">documentation directory</a>. 
+
   
 ## Code Examples  
 The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for   
