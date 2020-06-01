@@ -38,13 +38,6 @@
             <artifactId>liblevenshtein</artifactId>
             <version>3.0.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-            <artifactId>matching-eval</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
             
 
     </dependencies>
