@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Function;
 import org.apache.jena.rdf.model.Property;
 
@@ -12,34 +11,30 @@ public class PropertySpecificStringProcessing {
     private List<ValueExtractor> valueExtractors;
     private Function<String, Object> processing;
     private double confidence;
-    /**
-     * The index name, this Processing belongs to.
-     * Same index name means that all objects are search in this index.
-     */
-    private String indexName;
     
-    public PropertySpecificStringProcessing(Function<String, Object> processing, double confidence, String indexName, List<ValueExtractor> valueExtractors) {
+    private int maxLevenshteinDistance;
+    private int minLengthForLevenshtein;
+
+    public PropertySpecificStringProcessing(Function<String, Object> processing, double confidence, List<ValueExtractor> valueExtractors, int maxLevenshteinDistance, int minLengthForLevenshtein) {
         this.valueExtractors = valueExtractors;
         this.processing = processing;
         this.confidence = confidence;
-        this.indexName = indexName;
+        this.maxLevenshteinDistance = maxLevenshteinDistance;
+        this.minLengthForLevenshtein = minLengthForLevenshtein;
     }
     
-    public PropertySpecificStringProcessing(Function<String, Object> processing, double confidence, String indexName, ValueExtractor... valueExtractors) {
-        this(processing, confidence, indexName, Arrays.asList(valueExtractors));
+    public PropertySpecificStringProcessing(Function<String, Object> processing, double confidence, List<ValueExtractor> valueExtractors) {
+        this(processing, confidence, valueExtractors, 0,0);
     }
     
-    public PropertySpecificStringProcessing(Function<String, Object> processing, double confidence, String indexName, Property... properties) {
-        this(processing, confidence, indexName, ValueExtractorProperty.wrapExtractor(properties));
-    }
-
     public PropertySpecificStringProcessing(Function<String, Object> processing, double confidence, ValueExtractor... valueExtractors) {
-        this(processing, confidence, UUID.randomUUID().toString(), valueExtractors);
+        this(processing, confidence, Arrays.asList(valueExtractors));
     }
     
     public PropertySpecificStringProcessing(Function<String, Object> processing, double confidence, Property... properties) {
-        this(processing, confidence, UUID.randomUUID().toString(), properties);
+        this(processing, confidence, ValueExtractorProperty.wrapExtractor(properties));
     }
+
     
     public List<ValueExtractor> getValueExtractors() {
         return valueExtractors;
@@ -53,7 +48,11 @@ public class PropertySpecificStringProcessing {
         return confidence;
     }
 
-    public String getIndexName() {
-        return indexName;
+    public int getMaxLevenshteinDistance() {
+        return maxLevenshteinDistance;
+    }
+
+    public int getMinLengthForLevenshtein() {
+        return minLengthForLevenshtein;
     }
 }

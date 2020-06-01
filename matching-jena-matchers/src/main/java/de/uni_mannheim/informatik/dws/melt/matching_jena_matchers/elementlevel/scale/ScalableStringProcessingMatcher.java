@@ -1,12 +1,18 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.scale;
 
+import com.github.liblevenshtein.transducer.Algorithm;
+import com.github.liblevenshtein.transducer.ITransducer;
+import com.github.liblevenshtein.transducer.factory.TransducerBuilder;
 import de.uni_mannheim.informatik.dws.melt.matching_base.OaeiOptions;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
@@ -76,8 +82,9 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     
     
     public void matchResources(Iterator<? extends Resource> sourceResources, Iterator<? extends Resource> targetResources, Alignment alignment) {
-        //index name -> tokens/ids -> (list of resources)
-        Map<String,Map<Object, Set<String>>> index = new HashMap<>();
+        //processing -> tokens/ids -> (list of resources)
+        Map<PropertySpecificStringProcessing, Map<Object, Set<String>>> index = new HashMap<>();
+        
 
         //source
         while (sourceResources.hasNext()) {
@@ -87,7 +94,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
             String sourceURI = source.getURI();            
             Map<ValueExtractor, Set<String>> valueMap = extractAllValues(source);
             for(PropertySpecificStringProcessing processing : this.processingElements){
-                Map<Object, Set<String>> tokenIndex = index.computeIfAbsent(processing.getIndexName(), k->new HashMap<>());
+                Map<Object, Set<String>> tokenIndex = index.computeIfAbsent(processing, k->new HashMap<>());
                 for(String sourceLabels : getLiterals(processing, valueMap)){
                     if(StringUtils.isBlank(sourceLabels))
                         continue;
@@ -99,6 +106,8 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
             }
         }
         
+        Map<PropertySpecificStringProcessing, ITransducer> levenshteinIndex = buildLevenshteinIndex(index);
+        
         while (targetResources.hasNext()) {
             Resource target = targetResources.next();
             if(target.isURIResource() == false)
@@ -107,7 +116,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
             
             Map<ValueExtractor, Set<String>> valueMap = extractAllValues(target);
             for(PropertySpecificStringProcessing processing : this.processingElements){
-                Map<Object, Set<String>> tokenIndex = index.get(processing.getIndexName());
+                Map<Object, Set<String>> tokenIndex = index.get(processing);
                 if(tokenIndex == null)
                     continue;
                 boolean findMatch = false;
@@ -115,17 +124,66 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
                     if(StringUtils.isBlank(targetLabel))
                         continue;
                     Object o = processing.getProcessing().apply(targetLabel);
-                    if(isObjectEmpty(o))
+                    
+                    Set<Object> searchObjects = new HashSet<>();
+                    if(o == null)
                         continue;
-                    for(String sourceURI : tokenIndex.getOrDefault(o, new HashSet<>())){
-                        findMatch = true;
-                        alignment.addOrUseHighestConfidence(sourceURI, targetURI, processing.getConfidence());
+                    searchObjects.add(o);
+                    if(o instanceof String){
+                        String oString = (String)o;
+                        if(StringUtils.isBlank(oString))
+                            continue;
+                        ITransducer transducer = levenshteinIndex.get(processing);
+                        if(transducer != null){
+                            for(Object s : transducer.transduce(oString)){
+                                searchObjects.add(s);
+                            }
+                        }
+                    }
+                    for(Object object : searchObjects){
+                        for(String sourceURI : tokenIndex.getOrDefault(object, new HashSet<>())){
+                            findMatch = true;
+                            alignment.addOrUseHighestConfidence(sourceURI, targetURI, processing.getConfidence());
+                        }
                     }
                 }
                 if(findMatch && earlyStopping)
                     break;
             }
         }
+    }
+    
+    private Map<PropertySpecificStringProcessing, ITransducer> buildLevenshteinIndex(Map<PropertySpecificStringProcessing,Map<Object, Set<String>>> index){
+        //choose all processing with levenshtein
+        Set<PropertySpecificStringProcessing> levenshteinProcessings = new HashSet();
+        for(PropertySpecificStringProcessing processing : this.processingElements){
+            if(processing.getMaxLevenshteinDistance() > 0){
+                levenshteinProcessings.add(processing);
+            }
+        }
+        
+        Map<PropertySpecificStringProcessing, ITransducer> levenshteinIndex = new HashMap<>();
+        for(PropertySpecificStringProcessing processsing : levenshteinProcessings){
+            List<String> texts = new ArrayList<>();
+            int minLength = processsing.getMinLengthForLevenshtein();
+            for(Object o : index.get(processsing).keySet()){
+                if(o instanceof String){
+                    String text = (String)o;
+                    if(text.length() > minLength){
+                        texts.add(text);
+                    }
+                }
+            }
+            ITransducer transducer = new TransducerBuilder()
+                .dictionary(texts)
+                .isSorted(false)
+                .algorithm(Algorithm.TRANSPOSITION)
+                .defaultMaxDistance(processsing.getMaxLevenshteinDistance())
+                .includeDistance(false)
+                .build();
+            levenshteinIndex.put(processsing, transducer);
+        }
+        return levenshteinIndex;
     }
     
     

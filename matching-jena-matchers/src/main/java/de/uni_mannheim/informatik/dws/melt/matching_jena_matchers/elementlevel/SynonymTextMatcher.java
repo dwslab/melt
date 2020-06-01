@@ -139,8 +139,8 @@ public class SynonymTextMatcher extends MatcherYAAAJena {
     
     /**
      * This method parse a synonym file formatted as a csv file.
-     * Each line is a synsetand each cell in a line is a text. 
-     * @param f teh file to be parsed
+     * Each line is a synset and each cell in a line is a text. 
+     * @param f the file to be parsed
      * @return a map which maps a text to its synset id.
      */
     protected Map<String, Long> parseSynonymCsvFile(File f){

@@ -13,7 +13,9 @@ public class ValueExtractorUrlFragment implements ValueExtractor {
     @Override
     public Set<String> extract(Resource r) {
         Set<String> values = new HashSet();
-        values.add(URIUtil.getUriFragment(r.getURI()));
+        String fragment = URIUtil.getUriFragment(r.getURI()).trim();
+        if(!fragment.isEmpty())
+            values.add(fragment);
         return values;
     }
     

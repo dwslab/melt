@@ -234,6 +234,7 @@ public class EvaluatorCSV extends Evaluator {
     public void writeResultsToDirectory(File baseDirectory) {
         initializePrinters(baseDirectory);
         for (String matcher : this.results.getDistinctMatchers()) {
+            LOGGER.info("Evaluate matcher {}", matcher);
             // individual evaluation per test case
             for (TestCase testCase : this.results.getDistinctTestCases(matcher)) {
                 writeOverviewFileMatcherTestCase(testCase, matcher, baseDirectory, false);
@@ -242,6 +243,7 @@ public class EvaluatorCSV extends Evaluator {
                 writeAggregatedFileMatcherTrack(track, matcher, baseDirectory);
             }
         }
+        LOGGER.info("Writing alignment cube");
         alignmentsCube.write(baseDirectory);
         closePrinters();
     }
@@ -314,8 +316,8 @@ public class EvaluatorCSV extends Evaluator {
         ConfusionMatrix macroInstancesResidualCm = confusionMatrixMetric.getMacroAveragesForResults(this.results.getGroup(track, matcher, instanceRefiner, residualRefiner));
 
         File fileToBeWritten = new File(getResultsDirectoryTrackMatcher(baseDirectory, track), "/" + matcher + "/aggregatedPerformance.csv");
-        if (fileToBeWritten.getParentFile().mkdirs())
-            LOGGER.info("Results directory created because it did not exist.");
+        fileToBeWritten.getParentFile().mkdirs();
+        //    LOGGER.info("Results directory created because it did not exist.");
 
         try {
             // alignment extension handling

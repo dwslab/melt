@@ -24,7 +24,8 @@ public class ValueExtractorAllStringLiterals implements ValueExtractor {
                 Literal lit = n.asLiteral();
                 if(isLiteralAString(lit)){
                     String text = lit.getLexicalForm().trim();
-                    values.add(text);
+                    if(!text.isEmpty())
+                        values.add(text);
                 }
             }
         }

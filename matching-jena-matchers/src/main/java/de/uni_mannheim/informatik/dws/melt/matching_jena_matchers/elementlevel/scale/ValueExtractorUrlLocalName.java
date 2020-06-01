@@ -12,7 +12,9 @@ public class ValueExtractorUrlLocalName implements ValueExtractor {
     @Override
     public Set<String> extract(Resource r) {
         Set<String> values = new HashSet();
-        values.add(r.getLocalName().trim());
+        String localName = r.getLocalName().trim().trim();
+        if(!localName.isEmpty())
+            values.add(localName);
         return values;
     }
     

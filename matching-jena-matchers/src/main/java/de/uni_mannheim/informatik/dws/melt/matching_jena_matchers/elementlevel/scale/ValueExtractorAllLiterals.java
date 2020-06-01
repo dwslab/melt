@@ -19,7 +19,8 @@ public class ValueExtractorAllLiterals implements ValueExtractor {
             RDFNode n = i.next().getObject();
             if(n.isLiteral()){
                 String text = n.asLiteral().getLexicalForm().trim();
-                values.add(text);
+                if(!text.isEmpty())
+                    values.add(text);
             }
         }
         return values;
