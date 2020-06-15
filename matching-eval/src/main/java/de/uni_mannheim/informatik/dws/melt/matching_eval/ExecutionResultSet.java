@@ -292,6 +292,17 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         list.sort(c);
         return list;
     }
+    
+    /**
+     * Returns the first execution result in this resultset.
+     * If it is empty return null.
+     * @return first result in this resultset
+     */
+    public ExecutionResult getFirstResult(){
+        if(this.isEmpty())
+            return null;
+        return this.iterator().next();
+    }
 
     /**
      * Constant for an empty refinement.

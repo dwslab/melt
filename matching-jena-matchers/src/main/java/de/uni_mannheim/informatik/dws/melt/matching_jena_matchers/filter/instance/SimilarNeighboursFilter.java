@@ -48,6 +48,8 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
     private boolean useOutgoing;
     private boolean useResource;
     private boolean useLiteral;
+    
+    private boolean addNeighboursToCorrespondence = false;
 
     /**
      * Constructor
@@ -132,6 +134,14 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
             }
             //in case of n:m mappings only the minimum amount of resource is the number of the intersection.
             int resourceIntersection = Math.min(mappedSources.size(), mappedTargets.size());
+            
+            if(this.addNeighboursToCorrespondence){
+                if(mappedSources.size() < mappedTargets.size()){
+                    correspondence.addAdditionalExplanation(this.getClass(), "[" + String.join(",", mappedSources) + "]");
+                }else{
+                    correspondence.addAdditionalExplanation(this.getClass(), "[" + String.join(",", mappedTargets) + "]");
+                }
+            }
             
             //sum up resource mappings and literal mappings
             int countSourceNeighbours = sourceNeighbours.getUriResources().size() + sourceNeighbours.getLiterals().size();
@@ -237,6 +247,16 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
     public void setUseLiteral(boolean useLiteral) {
         this.useLiteral = useLiteral;
     }
+
+    public boolean isAddNeighboursToCorrespondence() {
+        return addNeighboursToCorrespondence;
+    }
+
+    public void setAddNeighboursToCorrespondence(boolean addNeighboursToCorrespondence) {
+        this.addNeighboursToCorrespondence = addNeighboursToCorrespondence;
+    }
+    
+    
 
     @Override
     public String toString() {

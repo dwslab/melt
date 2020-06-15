@@ -742,13 +742,33 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     public Set<Double> getDistinctConfidencesAsSet(){
         return makeSet(this.getDistinctConfidences());
     }
-        
-    private static <T> Set<T> makeSet(Iterable<T> iterable) {
+       
+    /**
+     * Creates a set from an iterable.
+     * @param <T> the type of the iterable
+     * @param iterable iterable which should be converted to set
+     * @return set containing all elements of iterable
+     */
+    public static <T> Set<T> makeSet(Iterable<T> iterable) {
         Set<T> set = new HashSet<>();
         for(T element : iterable){
             set.add(element);
         }
         return set;
+    }
+    
+    /**
+     * Creates a list from an iterable.
+     * @param <T> the type of the iterable
+     * @param iterable iterable which should be converted to list
+     * @return list containing all elements of iterable
+     */
+    public static <T> List<T> makeList(Iterable<T> iterable) {
+        List<T> list = new ArrayList<>();
+        for(T element : iterable){
+            list.add(element);
+        }
+        return list;
     }
 
     /**

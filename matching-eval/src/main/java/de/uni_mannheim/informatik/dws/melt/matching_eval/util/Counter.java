@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * A Counter is for counting arbitrary objects.
+ * @deprecated use the counter in matching-jena-matchers.
  */
 public class Counter<T> {
     protected Map<T, Integer> counts;
