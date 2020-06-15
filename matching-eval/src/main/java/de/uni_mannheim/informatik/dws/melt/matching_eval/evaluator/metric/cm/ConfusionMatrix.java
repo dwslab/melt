@@ -4,6 +4,7 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 
 /**
  * Data Structure for an individual confusion matrix.
+ *
  * @author Sven Hertling, Jan Portisch
  */
 public class ConfusionMatrix {
@@ -15,9 +16,15 @@ public class ConfusionMatrix {
     private double precision;
     private double recall;
 
+    /**
+     * The number of correspondences. Typically, this number is {@code truePositive + falsePositive} but this is not
+     * the case for partial gold standards!
+     */
+    private int numberOfCorrespondences;
+
 
     /**
-     * Constructor to fill confusion matrix.
+     * Constructor to fill confusion matrix. The number of correspondences is assumed to be {@code truePositive + falsePositive}.
      * @param truePositive True positive mapping.
      * @param falsePositive False positive mapping.
      * @param falseNegative False negative mapping
@@ -30,6 +37,26 @@ public class ConfusionMatrix {
         this.falseNegative = falseNegative;
         this.precision = precision;
         this.recall = recall;
+        this.numberOfCorrespondences = truePositive.size() + falsePositive.size();
+    }
+
+    /**
+     * Constructor to fill confusion matrix.
+     * @param truePositive True positive mapping.
+     * @param falsePositive False positive mapping.
+     * @param falseNegative False negative mapping
+     * @param numberOfCorrespondences The number of correspondences. Note that this number can deviate from {@code truePositive + falsePositive}
+     *                                in case of partial gold standards.
+     * @param precision Precision as double [0, 1].
+     * @param recall Recall as double [0, 1].
+     */
+    public ConfusionMatrix(Alignment truePositive, Alignment falsePositive, Alignment falseNegative, int numberOfCorrespondences, double precision, double recall){
+        this.truePositive = truePositive;
+        this.falsePositive = falsePositive;
+        this.falseNegative = falseNegative;
+        this.precision = precision;
+        this.recall = recall;
+        this.numberOfCorrespondences = numberOfCorrespondences;
     }
 
     /**
@@ -90,13 +117,21 @@ public class ConfusionMatrix {
             return numerator / denominator;
         }
     }
-    
+
+    public int getNumberOfCorrespondences() {
+        return numberOfCorrespondences;
+    }
+
+    public void setNumberOfCorrespondences(int numberOfCorrespondences) {
+        this.numberOfCorrespondences = numberOfCorrespondences;
+    }
+
     /**
-     * Returns a new confusion matrix where tp, fp, fn are substracted from the other confusion matrix.
-     * @param other the other confusion matrix
-     * @return a new confusion matrix which is the set difference
+     * Returns a new confusion matrix where tp, fp, fn are subtracted from the other confusion matrix.
+     * @param other the other confusion matrix.
+     * @return a new confusion matrix which is the set difference.
      */
-    public ConfusionMatrix substract(ConfusionMatrix other){
+    public ConfusionMatrix subtract(ConfusionMatrix other){
         
         Alignment subTruePositive = new Alignment(this.truePositive);
         subTruePositive.removeAll(other.truePositive);
@@ -106,7 +141,10 @@ public class ConfusionMatrix {
         
         Alignment subFalseNegative = new Alignment(this.falseNegative);
         subFalseNegative.removeAll(other.falseNegative);
+
+        int numberOfCorrespondences = this.getNumberOfCorrespondences();
+        numberOfCorrespondences = numberOfCorrespondences - other.getNumberOfCorrespondences();
         
-        return ConfusionMatrixMetric.calculateConfusionMatrixFromMappings(subTruePositive, subFalsePositive, subFalseNegative);
+        return ConfusionMatrixMetric.calculateConfusionMatrixFromMappings(subTruePositive, subFalsePositive, subFalseNegative, numberOfCorrespondences);
     }
 }

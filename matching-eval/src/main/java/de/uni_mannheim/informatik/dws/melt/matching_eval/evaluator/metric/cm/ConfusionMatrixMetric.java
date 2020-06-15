@@ -88,10 +88,11 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
      * @return The confusion matrix.
      */
     private ConfusionMatrix computeForPartialGoldStandard(ExecutionResult executionResult){
-        //TODO: what happens when referenceAlignment is empty and systemAlignment contains 200 mappings?
         Alignment truePositives = new Alignment();
         Alignment falsePositives = new Alignment();
         Alignment falseNegatives = new Alignment();
+
+        int numberOfCorrespondences = executionResult.getSystemAlignment().size();
 
         for(Correspondence referenceCell : executionResult.getReferenceAlignment()){
             if(referenceCell.getRelation() == CorrespondenceRelation.UNKNOWN){
@@ -145,7 +146,7 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                 }
             }
         }
-        return calculateConfusionMatrixFromMappings(truePositives, falsePositives, falseNegatives);
+        return calculateConfusionMatrixFromMappings(truePositives, falsePositives, falseNegatives, numberOfCorrespondences);
     }
 
     /**
@@ -175,7 +176,8 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                 }
             }
         }
-        return calculateConfusionMatrixFromMappings(truePositives, falsePositives, falseNegatives);
+        int numberOfCorrespondences = executionResult.getSystemAlignment().size();
+        return calculateConfusionMatrixFromMappings(truePositives, falsePositives, falseNegatives, numberOfCorrespondences);
     }
 
 
@@ -184,15 +186,16 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
      * @param truePositives True Positive (tp) mapping.
      * @param falsePositives False Positive (fp) mapping.
      * @param falseNegatives False Negative (fn) mapping.
+     * @param numberOfCorrespondences The number of correspondences.
      * @return The confusion matrix.
      */
-    public static ConfusionMatrix calculateConfusionMatrixFromMappings(Alignment truePositives, Alignment falsePositives, Alignment falseNegatives){
+    public static ConfusionMatrix calculateConfusionMatrixFromMappings(Alignment truePositives, Alignment falsePositives, Alignment falseNegatives, int numberOfCorrespondences){
         double tpSize = truePositives.size();
         double fpSize = falsePositives.size();
         double fnSize = falseNegatives.size();
         double precision = divideWithTwoDenominators(tpSize, tpSize, fpSize);
         double recall = divideWithTwoDenominators(tpSize, tpSize, fnSize);
-        return new ConfusionMatrix(truePositives, falsePositives, falseNegatives, precision, recall);
+        return new ConfusionMatrix(truePositives, falsePositives, falseNegatives, numberOfCorrespondences, precision, recall);
     }
 
 
@@ -314,11 +317,15 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
         // for aggregation:
         double numberOfElementsInConfusionMatrices = 0.0;
 
+        // for number of correspondences
+        int numberOfCorrespondences = 0;
+
         for (ConfusionMatrix individualConfusionMatrix : confusionMatrices) {
             truePositive.addAll(individualConfusionMatrix.getTruePositive());
             falsePositive.addAll(individualConfusionMatrix.getFalsePositive());
             falseNegative.addAll(individualConfusionMatrix.getFalseNegative());
             numberOfElementsInConfusionMatrices++;
+            numberOfCorrespondences += individualConfusionMatrix.getNumberOfCorrespondences();
         }
 
         // compiling the numbers for the calculation
@@ -346,7 +353,7 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                 precision = divideWithTwoDenominators(tpSize, tpSize, fpSize);
                 recall = divideWithTwoDenominators(tpSize, tpSize, fnSize);
         }
-        return new ConfusionMatrix(truePositive, falsePositive, falseNegative, precision, recall);
+        return new ConfusionMatrix(truePositive, falsePositive, falseNegative, numberOfCorrespondences, precision, recall);
     }
 
 

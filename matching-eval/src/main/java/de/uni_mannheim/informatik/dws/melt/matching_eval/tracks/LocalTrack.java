@@ -44,7 +44,7 @@ public class LocalTrack extends Track {
      * @param name Name of the track.
      * @param version Version of the track.
      * @param folderToTestCasesPath The test case folder has to follow a specific structure: It contains a folder for
-     *                              each test case. the Folder's name will be the test case's name. In each test case
+     *                              each test case. The folder's name will be the test case's name. In each test case
      *                              folder, there has to be a file named source.rdf, target.rdf, and alignment.rdf.
      */
     public LocalTrack(String name, String version, String folderToTestCasesPath){
