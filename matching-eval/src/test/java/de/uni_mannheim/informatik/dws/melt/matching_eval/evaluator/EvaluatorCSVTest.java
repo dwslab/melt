@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrixMetric;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BaselineStringMatcher;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -89,11 +90,12 @@ class EvaluatorCSVTest {
      */
     @Test
     void testEvaluatorPartialGS() {
-        ExecutionResultSet resultSet = Executor.loadFromFolder("./src/test/resources/externalAlignmentForEvaluation", TrackRepository.Anatomy.Default.getTestCases().get(0));
+        ExecutionResultSet resultSet = Executor.run(TrackRepository.Conference.V1.getFirstTestCase(), new BaselineStringMatcher());
 
         for(ExecutionResult r : resultSet){
             // add random alignment that is not false...
             r.getSystemAlignment().add("http://www.test.eu/ABC", "http://www.test.eu/DEF");
+            r.getSystemAlignment().add("http://www.test.eu/GHI", "http://www.test.eu/JKL");
         }
 
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(resultSet, new ConfusionMatrixMetric(true, true));
@@ -134,8 +136,9 @@ class EvaluatorCSVTest {
                     // Now we add 1 to the expected result because the added correspondence is not counted as a FP because we use a partial gold standard here!
                     int tpAndFp = Integer.parseInt(splitLine[positionTp]) + Integer.parseInt(splitLine[positionFp]);
                     int cNumber = Integer.parseInt(splitLine[positionCorrespondencesNumber]);
-                    // TODO comment in for failure
-                    //assertTrue(tpAndFp < cNumber, "The following assertion failed: " + tpAndFp + " < " + cNumber);
+
+                    // <= because the type of the randomly added URIs cannot be obtained
+                    assertTrue(tpAndFp <= cNumber, "The following assertion failed: " + tpAndFp + " < " + cNumber);
                 } else loop_1 = false;
             }
 
