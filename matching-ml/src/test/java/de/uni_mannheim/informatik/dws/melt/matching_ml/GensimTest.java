@@ -213,6 +213,18 @@ class GensimTest {
         double similarity = gensim.getSimilarity("Menschen", "Brüder", vectorFilePath);
         assertTrue(similarity > -1.0, "Problem with the simliarity. Similarity: " + similarity);
 
+        //contains "Hymne" (count = 1)
+        assertTrue(gensim.isInVocabulary("Hymne", vectorFilePath));
+
+        //contains "Freude" (count > 3)
+        assertTrue(gensim.isInVocabulary("Freude", vectorFilePath));
+
+        //contains "Bösewicht," (count = 1)
+        assertTrue(gensim.isInVocabulary("Bösewicht,", vectorFilePath));
+
+        int vocabularySize = gensim.getVocabularySize(vectorFilePath);
+        assertTrue(vocabularySize > 100);
+
         // cleaning up
         modelFile.delete();
         vectorFile.delete();

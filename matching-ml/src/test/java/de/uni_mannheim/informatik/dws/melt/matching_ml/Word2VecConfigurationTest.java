@@ -59,7 +59,7 @@ class Word2VecConfigurationTest {
     void setMinCount() {
         Word2VecConfiguration configuration = new Word2VecConfiguration(Word2VecType.SG);
         configuration.setMinCount(0);
-        assertTrue(configuration.getMinCount() > 0);
+        assertEquals(Word2VecConfiguration.MIN_COUNT_DEFAULT, configuration.getMinCount());
         configuration.setMinCount(10);
         assertEquals(10, configuration.getMinCount());
     }
@@ -68,8 +68,17 @@ class Word2VecConfigurationTest {
     void setVectorDimension(){
         Word2VecConfiguration configuration = new Word2VecConfiguration(Word2VecType.SG);
         configuration.setVectorDimension(-5);
-        assertTrue(configuration.getVectorDimension() > 0);
+        assertEquals(Word2VecConfiguration.VECTOR_DIMENSION_DEFAULT, configuration.getVectorDimension());
         configuration.setVectorDimension(411);
         assertEquals(411, configuration.getVectorDimension());
+    }
+
+    @Test
+    void setSample() {
+        Word2VecConfiguration configuration = new Word2VecConfiguration(Word2VecType.SG);
+        configuration.setSample(-1);
+        assertEquals(Word2VecConfiguration.SAMPLE_DEFAULT, configuration.getSample(), "Expected " + Word2VecConfiguration.SAMPLE_DEFAULT + " but actual: " + configuration.getSample());
+        configuration.setSample(0.00000001);
+        assertEquals(0.00000001, configuration.getSample(), "Expected: 0.00000001 but actual: " + configuration.getSample());
     }
 }

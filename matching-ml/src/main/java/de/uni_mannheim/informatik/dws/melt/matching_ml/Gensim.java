@@ -312,6 +312,8 @@ public class Gensim {
         request.addHeader("iterations", "" + configuration.getIterations());
         request.addHeader("negatives", "" + configuration.getNegatives());
         request.addHeader("cbow_or_sg", configuration.getType().toString());
+        request.addHeader("min_count", "" + configuration.getMinCount());
+        request.addHeader("sample", "" + configuration.getSample());
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             HttpEntity entity = response.getEntity();
@@ -841,6 +843,32 @@ public class Gensim {
             LOGGER.info("Python command file successfully copied to external resources directory.");
         }
         this.resourcesDirectory = resourcesDirectory;
+    }
+
+    /**
+     * Returns the size of the vocabulary of the stated model/vector set.
+     * @param modelOrVectorPath The path to the model or vector file. Note that the vector file MUST end with .kv in
+     *                          order to be recognized as vector file.
+     * @return -1 in case of an error else the size of the vocabulary.
+     */
+    public int getVocabularySize(String modelOrVectorPath){
+        HttpGet request = new HttpGet(serverUrl + "/get-vocabulary-size");
+        addModelToRequest(request, modelOrVectorPath);
+
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                LOGGER.error("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    LOGGER.error(resultString);
+                } else return Integer.parseInt(resultString);
+            }
+        } catch (IOException ioe) {
+            LOGGER.error("Problem with http request.", ioe);
+        }
+        return -1;
     }
 
     /**

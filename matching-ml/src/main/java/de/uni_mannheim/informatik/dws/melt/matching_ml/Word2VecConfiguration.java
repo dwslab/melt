@@ -9,51 +9,67 @@ import org.slf4j.LoggerFactory;
  * The configuration for the word2vec calculation.
  */
 public class Word2VecConfiguration {
+
     /**
      * Default logger.
      */
     private static Logger LOGGER = LoggerFactory.getLogger(Word2VecConfiguration.class);
 
     /**
-     * Useful intervals for testing.
-     */
-    public static final List<Integer> USEFUL_VECTOR_DIMENSIONS = Arrays.asList(50,100,200,500);
-
-    /**
-     * Useful intervals for testing.
-     */
-    public static final List<Integer> USEFUL_ITERATIONS = Arrays.asList(5,10,20,40);
-    
-    /**
      * Model type.
      * Default type: SG.
      */
     private Word2VecType type = Word2VecType.SG;
-    
+
     /**
      * Size of the vector. Default: 200.
      */
-    private int vectorDimension = 200;
+    private int vectorDimension = VECTOR_DIMENSION_DEFAULT;
+
+    /**
+     * Default value for parameter {@link Word2VecConfiguration#vectorDimension}.
+     */
+    public static final int VECTOR_DIMENSION_DEFAULT = 200;
 
     /**
      * The size of the window during the word2vec training. Default: 5.
      */
-    private int windowSize = 5;
+    private int windowSize = WINDOW_SIZE_DEFAULT;
 
     /**
-     * Iterations during the word2vec training. Default 5.
+     * Default value for parameter {@link Word2VecConfiguration#windowSize}.
      */
-    private int iterations = 5;
+    public static final int WINDOW_SIZE_DEFAULT = 5;
+
+    /**
+     * Iterations during the word2vec training.
+     */
+    private int iterations = ITERATIONS_DEFAULT;
+
+    /**
+     * Default value for parameter {@link Word2VecConfiguration#iterations}.
+     */
+    public static final int ITERATIONS_DEFAULT = 5;
 
     /**
      * The number of negatives during the word2vec training. Default 5.
      */
-    private int negatives = 5;
+    private int negatives = NEGATIVES_DEFAULT;
 
     /**
-     * The minimum count for the word2vec training. Default: 1.
+     * Default value for parameter {@link Word2VecConfiguration#negatives}.
      */
-    private int minCount = 1;
+    public static final int NEGATIVES_DEFAULT = 5;
+
+    /**
+     * The minimum count for the word2vec training.
+     */
+    private int minCount = MIN_COUNT_DEFAULT;
+
+    /**
+     * Default for parameter {@link Word2VecConfiguration#minCount}
+     */
+    public static final int MIN_COUNT_DEFAULT = 1;
 
     /**
      * The number of threads to be used for the computation.
@@ -61,7 +77,18 @@ public class Word2VecConfiguration {
     private int numberOfThreads = Runtime.getRuntime().availableProcessors();
 
     /**
-     * Default constructor.
+     * Documentation of parameter from the gensim documentation: "The threshold for configuring which higher-frequency
+     * words are randomly downsampled, useful range is (0, 1e-5)."
+     */
+    private double sample = SAMPLE_DEFAULT;
+
+    /**
+     * Default for {@link Word2VecConfiguration#sample} parameter.
+     */
+    public static final double SAMPLE_DEFAULT =  0.001;
+
+    /**
+     * Default Constructor.
      * Many parameters are assumed such as training type SG.
      */
     public Word2VecConfiguration(){}
@@ -81,7 +108,7 @@ public class Word2VecConfiguration {
      */
     public Word2VecConfiguration(Word2VecType type, int vectorDimension){
         setType(type);
-        setVectorDimension(vectorDimension);
+        this.vectorDimension = vectorDimension;
     }
 
     /**
@@ -92,11 +119,11 @@ public class Word2VecConfiguration {
      */
     public Word2VecConfiguration(Word2VecType type, int vectorDimension, int iterations){
         setType(type);
-        setVectorDimension(vectorDimension);
-        setIterations(iterations);
+        this.vectorDimension = vectorDimension;
+        this.iterations = iterations;
     }
-    
-    
+
+
     public int getNumberOfThreads(){
         return this.numberOfThreads;
     }
@@ -104,9 +131,8 @@ public class Word2VecConfiguration {
     public void setNumberOfThreads(int numberOfThreads){
         if(numberOfThreads < 1){
             LOGGER.warn("The number of threads must be greater than 0. Using default: All available processors.");
-            numberOfThreads = Runtime.getRuntime().availableProcessors();
-        }
-        this.numberOfThreads = numberOfThreads;
+            this.numberOfThreads = Runtime.getRuntime().availableProcessors();
+        } else this.numberOfThreads = numberOfThreads;
     }
 
     public int getNegatives(){
@@ -116,9 +142,8 @@ public class Word2VecConfiguration {
     public void setNegatives(int negatives){
         if(negatives < 1){
             LOGGER.warn("The number of negatives must be greater than 1. Using default: 5.");
-            negatives = 5;
-        }
-        this.negatives = negatives;
+            this.negatives = 5;
+        } else this.negatives = negatives;
     }
 
     public int getIterations(){
@@ -128,9 +153,8 @@ public class Word2VecConfiguration {
     public void setIterations(int iterations){
         if(iterations < 1){
             LOGGER.warn("The number of iterations must be greater than 1. Using default: 5.");
-            iterations = 5;
-        }
-        this.iterations = iterations;
+            this.iterations = 5;
+        } else this.iterations = iterations;
     }
 
     public int getWindowSize(){
@@ -140,9 +164,8 @@ public class Word2VecConfiguration {
     public void setWindowSize(int windowSize){
         if(windowSize < 2){
             LOGGER.warn("The window size must be greater than 2. Using default: 5.");
-            windowSize = 5;
-        }
-        this.windowSize = windowSize;
+            this.windowSize = 5;
+        } else this.windowSize = windowSize;
     }
 
     public int getVectorDimension(){
@@ -152,9 +175,8 @@ public class Word2VecConfiguration {
     public void setVectorDimension(int vectorDimension) {
         if(vectorDimension < 1){
             LOGGER.warn("The vector dimension must be greater than 1. Using default vector size (200).");
-            vectorDimension = 200;
-        }
-        this.vectorDimension = vectorDimension;
+            this.vectorDimension = 200;
+        } else this.vectorDimension = vectorDimension;
     }
 
     public int getMinCount() {
@@ -164,9 +186,8 @@ public class Word2VecConfiguration {
     public void setMinCount(int minCount) {
         if(minCount < 1){
             LOGGER.warn("The minCount must be greater than 1. Using default: 1.");
-            minCount = 1;
-        }
-        this.minCount = minCount;
+            this.minCount = 1;
+        } else this.minCount = minCount;
     }
 
     public Word2VecType getType() {
@@ -175,5 +196,16 @@ public class Word2VecConfiguration {
 
     public void setType(Word2VecType type) {
         this.type = type;
+    }
+
+    public double getSample() {
+        return sample;
+    }
+
+    public void setSample(double sample) {
+        if(sample < 0.0) {
+            LOGGER.warn("The sample must be greater than 0 or equal 0. Using default: 0.");
+            this.sample = 0.001;
+        } else this.sample = sample;
     }
 }

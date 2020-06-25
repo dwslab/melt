@@ -79,7 +79,12 @@ class MySentences(object):
             logging.error(self.file_or_directory_path)
             logging.exception("Stack Trace:")
 
-
+@app.route('/get-vocabulary-size', methods=['GET'])
+def get_vocab_size():
+    model_path = request.headers.get('model_path')
+    vector_path = request.headers.get('vector_path')
+    vectors = get_vectors(model_path, vector_path)
+    return str(len(vectors.vocab))
 
 @app.route('/train-word2vec', methods=['GET'])
 def train_word_2_vec():
@@ -101,14 +106,16 @@ def train_word_2_vec():
         iterations = request.headers.get('iterations')
         negatives = request.headers.get('negatives')
         cbow_or_sg = request.headers.get('cbow_or_sg')
+        min_count = request.headers.get('min_count')
+        sample = request.headers.get('sample')
 
         sentences = MySentences(file_path)
         logging.info("Sentences object initialized.")
 
         if cbow_or_sg == 'sg':
-            model = models.Word2Vec(min_count=1, size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=1, negative=int(negatives), iter=int(iterations))
+            model = models.Word2Vec(min_count=int(min_count), sample=float(sample), size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=1, negative=int(negatives), iter=int(iterations))
         else:
-            model = models.Word2Vec(min_count=1, size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=0, cbow_mean=1, alpha = 0.05, negative=int(negatives), iter=int(iterations))
+            model = models.Word2Vec(min_count=int(min_count), sample=float(sample), size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=0, cbow_mean=1, alpha = 0.05, negative=int(negatives), iter=int(iterations))
 
         logging.info("Model object initialized. Building Vocabulary...")
         model.build_vocab(sentences)
