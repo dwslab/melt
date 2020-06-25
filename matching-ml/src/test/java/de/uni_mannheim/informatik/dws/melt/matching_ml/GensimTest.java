@@ -231,6 +231,34 @@ class GensimTest {
     }
 
     @Test
+    void trainWord2VecModelWithWalkDirectory() {
+        String testFilePath = getPathOfResource("walk_directory_test");
+        if(testFilePath == null) fail("Test resource not found.");
+        String vectorFilePath = "./w2v_directory_test.kv";
+        assertTrue(gensim.trainWord2VecModel(vectorFilePath, testFilePath, new Word2VecConfiguration(Word2VecType.SG)));
+        File vectorFile = new File(vectorFilePath);
+        File modelFile = new File(vectorFilePath.substring(0, vectorFilePath.length() - 3));
+        assertTrue(vectorFile.exists(), "No vector file was written.");
+        assertTrue(modelFile.exists(), "No model file was written.");
+
+        //contains "Hymne" (count = 1) in file "an_die_freude.txt"
+        assertTrue(gensim.isInVocabulary("Hymne", vectorFilePath));
+
+        //contains "Freude" (count > 3) in file "an_die_freude.txt"
+        assertTrue(gensim.isInVocabulary("Freude", vectorFilePath));
+
+        // contains "Stolz" (count = 1) in file "auf_die_europa.txt"
+        assertTrue(gensim.isInVocabulary("Stolz", vectorFilePath));
+
+        // contains "Europen" (count = 1) in file "auf_die_europa.txt"
+        assertTrue(gensim.isInVocabulary("Europen", vectorFilePath));
+
+        // cleaning up
+        modelFile.delete();
+        vectorFile.delete();
+    }
+
+    @Test
     void trainWord2VecModelCBOW() {
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
         String vectorFilePath = "./freudeWord2vec.kv";
@@ -269,14 +297,20 @@ class GensimTest {
         }
     }
 
-    private String getPathOfResource(String resource){
+    /**
+     * Helper method to obtain the canonical path of a (test) resource.
+     * @param resourceName File/directory name.
+     * @return Canonical path of resource.
+     */
+    private String getPathOfResource(String resourceName){
         try {
-            URL res = getClass().getClassLoader().getResource(resource);
+            URL res = getClass().getClassLoader().getResource(resourceName);
+            if(res == null) throw new IOException();
             File file = Paths.get(res.toURI()).toFile();
             return file.getCanonicalPath();
         } catch (URISyntaxException | IOException ex) {
             LOGGER.info("Cannot create path of resource", ex);
-            return "";
+            return null;
         }
     }
 

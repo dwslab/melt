@@ -291,7 +291,7 @@ public class Gensim {
      * Method to train a word2vec model. The file for the training (i.e., file with sentences, paths etc.) has to
      * exist already.
      * @param modelOrVectorPath If a vector file is desired, the file ending '.kv' is required.
-     * @param trainingFilePath The file path to the file that shall be used for training.
+     * @param trainingFilePath The file path to the file that shall be used for training or to the directory containing the files that shall be used.
      * @param configuration The configuration for the training operation.
      * @return True if training succeeded, else false.
      */
