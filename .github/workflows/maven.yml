@@ -36,7 +36,8 @@ jobs:
     - name: Install python dependencies
       run: pip install -r ./matching-ml/src/main/resources/requirements.txt
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      #run: mvn -B package --file pom.xml
+      run: mvn clean install
     - name: Coveralls
       run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS }}
     - name: Generate Documentation 📚
