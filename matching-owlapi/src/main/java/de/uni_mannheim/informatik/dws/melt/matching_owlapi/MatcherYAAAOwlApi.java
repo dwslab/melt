@@ -22,14 +22,14 @@ public abstract class MatcherYAAAOwlApi extends MatcherYAAA {
     }
     
     @Override
-    public Alignment match(URL source, URL target, Alignment inputAlignment, Properties p) throws Exception {
+    public Alignment match(URL source, URL target, Alignment inputAlignment, Properties properties) throws Exception {
         OWLOntology owlapiSource = readOntology(source);
         OWLOntology owlapiTarget = readOntology(target);
         
         //inputAlignment.setOnto1(new OntoInfo(jena_source.getNsPrefixURI(""), source.toString()));
         //inputAlignment.setOnto2(new OntoInfo(jena_target.getNsPrefixURI(""), target.toString()));
         
-        return this.match(owlapiSource, owlapiTarget, inputAlignment, p);
+        return this.match(owlapiSource, owlapiTarget, inputAlignment, properties);
     }
 
     public abstract Alignment match(OWLOntology source, OWLOntology target, Alignment inputAlignment, Properties p) throws Exception ;

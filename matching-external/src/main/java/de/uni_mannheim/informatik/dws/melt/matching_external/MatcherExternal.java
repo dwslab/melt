@@ -32,11 +32,11 @@ public abstract class MatcherExternal extends MatcherURL {
     }
     
     /**
-     * The command which should be executed. For example new ArrayList(Arrays.asList("java", "-jar", "myjar.jar", source));.
-     * @param source source url
-     * @param target target url
-     * @param inputAlignment url of input alignment
-     * @return the command as a list of strings
+     * The command which should be executed. For example {@code new ArrayList(Arrays.asList("java", "-jar", "myjar.jar", source));}.
+     * @param source Source URL
+     * @param target Target URL
+     * @param inputAlignment URL of input alignment.
+     * @return The command as a list of strings.
      * @throws java.lang.Exception Exception
      */
     protected abstract List<String> getCommand(URL source, URL target, URL inputAlignment) throws Exception;

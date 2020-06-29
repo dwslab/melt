@@ -728,8 +728,8 @@ public class Gensim {
     /**
      * Returns a concatenated path of directories which can be used in the PATH variable.
      * It searches based on a python executable path, all bin directories within the python dir.
-     * @param pythonCommand the python executable path
-     * @return a concatenated path of directories which can be used in the PATH variable
+     * @param pythonCommand The python executable path.
+     * @return a concatenated path of directories which can be used in the PATH variable.
      */
     protected String getPythonAdditionalPath(String pythonCommand){
         File f = new File(pythonCommand).getParentFile();

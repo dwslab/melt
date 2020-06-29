@@ -10,7 +10,7 @@ import java.util.Properties;
  */
 public class NoOpMatcher extends MatcherYAAA {
     @Override
-    public Alignment match(URL source, URL target, Alignment inputAlignment, Properties p) throws Exception {
+    public Alignment match(URL source, URL target, Alignment inputAlignment, Properties properties) throws Exception {
         return new Alignment();
     }
 }
