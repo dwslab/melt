@@ -582,6 +582,7 @@ public class Gensim {
     /**
      * Export a resource embedded into a Jar file to the local file path.
      *
+     * @param baseDirectory The base directory.
      * @param resourceName ie.: "/SmartLibrary.dll"
      */
     private void exportResource(File baseDirectory, String resourceName) {
@@ -605,6 +606,8 @@ public class Gensim {
 
     /**
      * Initializes the server.
+     *
+     * @return True if successful, else false.
      */
     private boolean startServer() {
         isShutDown = false;

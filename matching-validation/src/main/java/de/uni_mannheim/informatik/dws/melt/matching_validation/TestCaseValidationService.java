@@ -20,6 +20,7 @@ public class TestCaseValidationService {
     /**
      * Constructor
      * @param testCase Test case on which the analysis was performed on.
+     * @param semanticWebLibrary The type of library to be used.
      */
     public TestCaseValidationService(TestCase testCase, SemanticWebLibrary semanticWebLibrary){
         this.testCase = testCase;
@@ -92,7 +93,7 @@ public class TestCaseValidationService {
 
     /**
      * Indicates whether the reference alignment is a 1-1 mapping or a 1-n mapping.
-     * @return
+     * @return True if one to one alignment.
      */
     public boolean isOneToOneMapping(){
         if(nSourceMappings.size() + nTargetMappings.size() > 0){

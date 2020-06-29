@@ -37,7 +37,7 @@ public abstract class MatcherExternal extends MatcherURL {
      * @param target target url
      * @param inputAlignment url of input alignment
      * @return the command as a list of strings
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception Exception
      */
     protected abstract List<String> getCommand(URL source, URL target, URL inputAlignment) throws Exception;
     

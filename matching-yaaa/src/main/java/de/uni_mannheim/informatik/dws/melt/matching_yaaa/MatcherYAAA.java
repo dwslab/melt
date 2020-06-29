@@ -43,7 +43,7 @@ public abstract class MatcherYAAA extends MatcherFile implements IMatcher<Alignm
      * @param inputAlignment this mapping represents the input alignment
      * @param p additional properties
      * @return The resulting mapping of the matching process.
-     * @throws Exception
+     * @throws Exception An exception that was risen while matching.
      */
     @Override
     public abstract Alignment match(URL source, URL target, Alignment inputAlignment, Properties p) throws Exception ;
