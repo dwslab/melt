@@ -49,6 +49,7 @@ public class DataStore {
     /**
      * Get an object from the data store using a key.
      * @param key Key used to retrieve object.
+     * @param clazz The class.
      * @return Value stored for key.
      */
     public Object get(String key, Class clazz){

@@ -17,10 +17,10 @@ public interface IExplainerResource {
      */
     Map<String, String> getResourceFeatures(String uri);
 
-
     /**
      * Get the names of the resource features which will also appear in the result of
      * {@link IExplainerResource#getResourceFeatures(String)}.
+     * @return A list of the resource feature names.
      */
     List<String> getResourceFeatureNames();
 
