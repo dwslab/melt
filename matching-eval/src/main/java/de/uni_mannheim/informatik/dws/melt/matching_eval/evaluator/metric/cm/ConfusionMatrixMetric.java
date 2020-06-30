@@ -28,10 +28,10 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
     @Override
     public ConfusionMatrix compute(ExecutionResult executionResult) {
         if(executionResult.getTestCase().getGoldStandardCompleteness().isGoldStandardComplete()){
-            return computeForPartialGoldStandard(executionResult);
+            return computeForCompleteGoldStandard(executionResult);
         }
         else{
-            return computeForCompleteGoldStandard(executionResult);
+            return computeForPartialGoldStandard(executionResult);
         }
     }
 

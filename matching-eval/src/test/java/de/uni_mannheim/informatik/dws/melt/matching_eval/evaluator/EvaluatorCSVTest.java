@@ -4,6 +4,9 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrixMetric;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.SealsTrack;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BaselineStringMatcher;
 import org.apache.commons.io.FileUtils;
@@ -90,7 +93,8 @@ class EvaluatorCSVTest {
      */
     @Test
     void testEvaluatorPartialGS() {
-        ExecutionResultSet resultSet = Executor.run(TrackRepository.Conference.V1.getFirstTestCase(), new BaselineStringMatcher());
+        Track testTrack = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1", false, GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE);
+        ExecutionResultSet resultSet = Executor.run(testTrack.getFirstTestCase(), new BaselineStringMatcher());
 
         for(ExecutionResult r : resultSet){
             // add random alignment that is not false...
@@ -98,7 +102,7 @@ class EvaluatorCSVTest {
             r.getSystemAlignment().add("http://www.test.eu/GHI", "http://www.test.eu/JKL");
         }
 
-        EvaluatorCSV evaluatorCSV = new EvaluatorCSV(resultSet, new ConfusionMatrixMetric(true, true));
+        EvaluatorCSV evaluatorCSV = new EvaluatorCSV(resultSet);
         File baseDirectory = new File("./testBaseDirectory");
         baseDirectory.mkdir();
         evaluatorCSV.writeToDirectory(baseDirectory);
@@ -138,7 +142,7 @@ class EvaluatorCSVTest {
                     int cNumber = Integer.parseInt(splitLine[positionCorrespondencesNumber]);
 
                     // <= because the type of the randomly added URIs cannot be obtained
-                    assertTrue(tpAndFp <= cNumber, "The following assertion failed: " + tpAndFp + " < " + cNumber);
+                    assertTrue(tpAndFp < cNumber, "The following assertion failed: " + tpAndFp + " < " + cNumber);
                 } else loop_1 = false;
             }
 
