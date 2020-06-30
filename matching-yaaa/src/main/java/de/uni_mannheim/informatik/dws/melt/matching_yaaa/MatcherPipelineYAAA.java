@@ -22,9 +22,9 @@ public abstract class MatcherPipelineYAAA extends MatcherYAAA implements IMatche
     }
 
     @Override
-    public Alignment match(URL source, URL target, Alignment inputAlignment, Properties p) throws Exception {
+    public Alignment match(URL source, URL target, Alignment inputAlignment, Properties properties) throws Exception {
         for(MatcherYAAA matcher : this.matchers){
-             inputAlignment = matcher.match(source, target, inputAlignment, p);
+             inputAlignment = matcher.match(source, target, inputAlignment, properties);
         }
         return inputAlignment;
     }

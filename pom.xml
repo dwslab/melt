@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
     <artifactId>matching-parent</artifactId>
@@ -8,10 +9,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <junit.version>5.5.1</junit.version>
+        <junit.version>5.6.2</junit.version>
         <slf4j.version>1.7.28</slf4j.version>
     </properties>
-    
+
     <modules>
         <module>hobbit-assembly</module>
         <module>hobbit-maven-plugin</module>
@@ -28,9 +29,12 @@
         <module>seals-assembly</module>
         <module>yet-another-alignment-api</module>
     </modules>
-    
+
     <name>MELT - Matching EvaLuation Toolkit</name>
-    <description>MELT is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems. It is optimized to be used in OAEI campaigns and allows to submit matchers to the SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.</description>
+    <description>MELT is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching
+        systems. It is optimized to be used in OAEI campaigns and allows to submit matchers to the SEALS and HOBBIT
+        evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.
+    </description>
     <url>http://melt.dws.informatik.uni-mannheim.de</url>
     <licenses>
         <license>
@@ -70,9 +74,8 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-    
-    
-    
+
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -87,7 +90,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -97,7 +100,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -113,7 +116,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
@@ -124,7 +127,7 @@
                     <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -136,25 +139,27 @@
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.0</version>
                 <configuration>
                     <show>private</show>
                     <nohelp>true</nohelp>
+                    <failOnWarnings>true</failOnWarnings>
                 </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadoc</id>
                         <goals>
                             <goal>jar</goal>
+                            <goal>aggregate</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -168,13 +173,13 @@
                     </execution>
                 </executions>
             </plugin>
-                        
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M4</version>
             </plugin>
-            
+
             <!-- for checkstyle reports -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -215,7 +220,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <profiles>
         <!-- GPG Signature on release -->
         <profile>
@@ -246,7 +251,7 @@
             </build>
         </profile>
     </profiles>
-    
+
     <reporting>
         <plugins>
             <plugin>
@@ -263,5 +268,5 @@
             </plugin>
         </plugins>
     </reporting>
-    
+
 </project>

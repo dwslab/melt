@@ -59,7 +59,7 @@ public class ExecutorSeals {
     /**
      * Time unit for the process time out.
      */
-    private TimeUnit timoutTimeUnit;
+    private TimeUnit timeoutTimeUnit;
 
     /**
      * The parameters that appear between java [parameters] -jar.
@@ -94,7 +94,7 @@ public class ExecutorSeals {
         this.resultsDirectory = resultsDirectory;
         this.javaRuntimeParameters = javaRuntimeParameters;
         this.timeout = timeout;
-        this.timoutTimeUnit = timeoutTimeUnit;
+        this.timeoutTimeUnit = timeoutTimeUnit;
         this.deleteTempFiles = deleteTempFiles;
         
         if(this.sealsClientJar.exists() == false){
@@ -164,7 +164,7 @@ public class ExecutorSeals {
         this.sealsClientJar = sealsClientJar;
         this.sealsHome = sealsHome;
         this.timeout = timeout;
-        this.timoutTimeUnit = timeoutTimeUnit;
+        this.timeoutTimeUnit = timeoutTimeUnit;
     }
 
 
@@ -365,7 +365,7 @@ public class ExecutorSeals {
             return null;
         }        
         try {
-            matcherFinishesInTime = process.waitFor(this.timeout, this.timoutTimeUnit);
+            matcherFinishesInTime = process.waitFor(this.timeout, this.timeoutTimeUnit);
         } catch (InterruptedException e) {
             LOGGER.error("Interruption while waiting for matcher completion.", e);
         }
@@ -637,21 +637,21 @@ public class ExecutorSeals {
     // Getters and Setters
     //----------------------------------------------------------------------------
 
-    public void setTimeout(long timeout, TimeUnit timoutTimeUnit) {
+    public void setTimeout(long timeout, TimeUnit timeoutTimeUnit) {
         this.timeout = timeout;
-        this.timoutTimeUnit = timoutTimeUnit;
+        this.timeoutTimeUnit = timeoutTimeUnit;
     }
 
     public long getTimeout() {
         return timeout;
     }
 
-    public TimeUnit getTimoutTimeUnit() {
-        return timoutTimeUnit;
+    public TimeUnit getTimeoutTimeUnit() {
+        return timeoutTimeUnit;
     }
     
     public String getTimeoutAsText() {
-        return this.timeout + " " + this.timoutTimeUnit.toString().toLowerCase();
+        return this.timeout + " " + this.timeoutTimeUnit.toString().toLowerCase();
     }
 
     public File getSealsClientJar() {

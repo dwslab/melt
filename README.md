@@ -6,8 +6,7 @@
 [![License](https://img.shields.io/github/license/dwslab/melt)](https://github.com/dwslab/melt/blob/master/LICENSE)
 
 MELT is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.  
-It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the   
-SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.  
+It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.  
   
 **How to Cite?** <br/>  
 
@@ -27,8 +26,11 @@ The poster can be found in the <a href="https://github.com/dwslab/melt/blob/mast
 A simple demo for the <a href="http://oaei.ontologymatching.org/2019/anatomy/index.html">OAEI 2019 Anatomy</a> and <a href="http://oaei.ontologymatching.org/2019/conference/index.html">OAEI 2019 Conference</a> tracks can be found <a href="https://dwslab.github.io/melt/anatomy_conference_dashboard.html">here</a>.
   
 ## Code Examples  
-The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for   
-different tasks and that can be used as barebone project for specific applications. [Javadoc](https://javadoc.io/doc/de.uni-mannheim.informatik.dws.melt) is also available.  
+The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for different tasks and that can be used as barebone project for specific applications. 
+
+## Code Documentation / JavaDoc
+- [Latest Commit](https://dwslab.github.io/melt/)
+- [Release 2.4](https://javadoc.io/doc/de.uni-mannheim.informatik.dws.melt)  
   
 ## Matcher Development in Java  
   
@@ -352,4 +354,4 @@ does not finish within the given time limit, MELT will stop the process and proc
 **Is there more documentation?**<br/>  
 MELT is far more powerful than documented here. This `README` is intended to give an overview of the framework.  
 For specific code snippets, have a look at the examples. Note that classes, interfaces, and methods are extensively   
-documented using JavaDoc.
+documented using <a href="https://dwslab.github.io/melt/">JavaDoc</a>.

@@ -20,9 +20,11 @@ public interface IExplainerMapping {
      */
     public Map<String, String> getMappingFeatures(String uriOne, String uriTwo, String relation, double confidence);
 
+
     /**
      * Get the names of the mapping features which will also appear in the result of
      * {@link IExplainerMapping#getMappingFeatures(String, String, String, double)}.
+     * @return A list of the feature names.
      */
     public List<String> getMappingFeatureNames();
 }

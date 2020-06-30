@@ -582,6 +582,7 @@ public class Gensim {
     /**
      * Export a resource embedded into a Jar file to the local file path.
      *
+     * @param baseDirectory The base directory.
      * @param resourceName ie.: "/SmartLibrary.dll"
      */
     private void exportResource(File baseDirectory, String resourceName) {
@@ -605,6 +606,8 @@ public class Gensim {
 
     /**
      * Initializes the server.
+     *
+     * @return True if successful, else false.
      */
     private boolean startServer() {
         isShutDown = false;
@@ -725,8 +728,8 @@ public class Gensim {
     /**
      * Returns a concatenated path of directories which can be used in the PATH variable.
      * It searches based on a python executable path, all bin directories within the python dir.
-     * @param pythonCommand the python executable path
-     * @return a concatenated path of directories which can be used in the PATH variable
+     * @param pythonCommand The python executable path.
+     * @return a concatenated path of directories which can be used in the PATH variable.
      */
     protected String getPythonAdditionalPath(String pythonCommand){
         File f = new File(pythonCommand).getParentFile();
