@@ -11,7 +11,8 @@ import java.util.HashSet;
 
 
 /**
- * Confusion Matrix Metric
+ * Confusion Matrix Metric.
+ * Can handle full and partial gold standards as well as explict null mappings (there is no match for one entity).
  * @see <a href="https://github.com/DanFaria/OAEI_SealsClient/blob/020d97bbfb6816dcca55de5ce178c716da15b711/SealsClientSource/src/main/java/eu/sealsproject/omt/client/Client.java#L322">https://github.com/DanFaria/OAEI_SealsClient/blob/020d97bbfb6816dcca55de5ce178c716da15b711/SealsClientSource/src/main/java/eu/sealsproject/omt/client/Client.java#L322</a>
  * @see <a href="https://github.com/DanFaria/OAEI_SealsClient/blob/master/SealsClientSource/src/main/java/eu/sealsproject/omt/client/HashAlignment.java">https://github.com/DanFaria/OAEI_SealsClient/blob/master/SealsClientSource/src/main/java/eu/sealsproject/omt/client/HashAlignment.java</a>
  * @see <a href="http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/2017/oaei2017_umls_reference.html">http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/2017/oaei2017_umls_reference.html</a>
@@ -24,56 +25,10 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
      */
     private Logger LOGGER = LoggerFactory.getLogger(ConfusionMatrixMetric.class);
     
-    /**
-     * Assume &lt;a,b,=,1.0&gt; in the reference alignment. All mappings with entity one not "a" and entity two equal "b" such as &lt;c, b, =,1.0&gt; are assumed to be wrong.
-     * This means in knowledge base one there is no similar concept to b. Thus knowledge base one is duplicate free.
-     */
-    private boolean kbOneDuplicateFree;
-
-    /**
-     * Assume &lt;a,b,=,1.0&gt; in the reference alignment. All mappings with entity one as "a" and entity two not "b" such as &lt;a, c, =,1.0&gt; are assumed to be wrong.
-     * This means in knowledge base two there is no similar concept to b. Thus knowledge base two is duplicate free.
-     */
-    private boolean kbTwoDuplicateFree;
-    /**
-     * if true, then gold standard is incomplete. if the systems finds a mapping that is not contained in the gold standard, it will not count as a false positive.
-     */
-    private boolean isPartialGoldStandard;
-
-    /**
-     * Default constructor. It is assumed that the gold standard is complete.
-     */
-    public ConfusionMatrixMetric(){
-        this.kbOneDuplicateFree = false;
-        this.kbTwoDuplicateFree = false;
-        this.isPartialGoldStandard = false;
-    }
-
-    /**
-     * Constructor
-     * @param isPartialGoldStandard Indicates whether the gold standard is partial or complete.
-     */
-    public ConfusionMatrixMetric(boolean isPartialGoldStandard){
-        this.kbOneDuplicateFree = false;
-        this.kbTwoDuplicateFree = false;
-        this.isPartialGoldStandard = isPartialGoldStandard;
-    }
-
-
-    /**
-     * Constructor for partial gold standards. It can be set whether a knowledge base is duplicate free.
-     * @param kbOneDuplicateFree Indicator for knowledge base 1.
-     * @param kbTwoDuplicateFree Indicator for knowledge base 2.
-     */
-    public ConfusionMatrixMetric(boolean kbOneDuplicateFree, boolean kbTwoDuplicateFree){
-        this.kbOneDuplicateFree = kbOneDuplicateFree;
-        this.kbTwoDuplicateFree = kbTwoDuplicateFree;
-        this.isPartialGoldStandard = true;
-    }
     
     @Override
     public ConfusionMatrix compute(ExecutionResult executionResult) {
-        if(this.isPartialGoldStandard){
+        if(executionResult.getTestCase().getGoldStandardCompleteness().isGoldStandardComplete()){
             return computeForPartialGoldStandard(executionResult);
         }
         else{
@@ -93,6 +48,7 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
         Alignment falseNegatives = new Alignment();
 
         int numberOfCorrespondences = executionResult.getSystemAlignment().size();
+        GoldStandardCompleteness gsCompleteness = executionResult.getTestCase().getGoldStandardCompleteness();
 
         for(Correspondence referenceCell : executionResult.getReferenceAlignment()){
             if(referenceCell.getRelation() == CorrespondenceRelation.UNKNOWN){
@@ -129,7 +85,7 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                     falseNegatives.add(referenceCell);
                 }
 
-                if(kbOneDuplicateFree){
+                if(gsCompleteness.isTargetComplete()){
                     for(Correspondence sameTarget : executionResult.getSystemAlignment().getCorrespondencesTargetRelation(referenceCell.getEntityTwo(), referenceCell.getRelation())){
                         if(sameTarget.equals(referenceCell) == false){
                             falsePositives.add(sameTarget);
@@ -137,7 +93,7 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                     }
                 }
 
-                if(kbTwoDuplicateFree){
+                if(gsCompleteness.isSourceComplete()){
                     for(Correspondence sameSource : executionResult.getSystemAlignment().getCorrespondencesSourceRelation(referenceCell.getEntityOne(), referenceCell.getRelation())){
                         if(sameSource.equals(referenceCell) == false){
                             falsePositives.add(sameSource);

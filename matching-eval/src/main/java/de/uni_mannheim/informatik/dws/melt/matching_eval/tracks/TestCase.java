@@ -1,4 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.matching_owlapi.OntologyCacheOwlApi;
@@ -19,17 +20,43 @@ public class TestCase {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(TestCase.class);
 
-    private URI source;
-    private URI target;
-    private URI reference;
+    /** 
+     * This is the identifier for the test case 
+     */
+    private final String name;
 
-    /** This is the identifier for the track */
-    private String name;
-
-    private Track track;
+    /** 
+     * A test case always belongs to a track. 
+     */
+    private final Track track;
     
+    /**
+     * URI pointing to the source file for matching.
+     */
+    private final URI source;
+    /**
+     * URI pointing to the target file for matching.
+     */
+    private final URI target;
+    /**
+     * URI pointing to the reference file.
+     */
+    private final URI reference;
+    
+    /**
+     * The parsed reference which is initialized lazily.
+     */
     private Alignment parsedReference;
-
+        
+    /**
+     * Input alignment for the matcher. It is null in case there is no inputAlignment.
+     */
+    private URI inputAlignment;
+    
+    /**
+     * How complete is the gold standard for this test case.
+     */
+    private GoldStandardCompleteness goldStandardCompleteness;
 
     /**
      * Constructor
@@ -38,15 +65,40 @@ public class TestCase {
      * @param target URI to the target ontology.
      * @param reference URI to the alignment reference file.
      * @param track The track to which the test case belongs.
+     * @param inputAlignment The input alignment for the matcher.
+     * @param goldStandardCompleteness How complete is the gold standard for this test case.
      */
-    public TestCase(String name, URI source, URI target, URI reference, Track track) {
+    public TestCase(String name, URI source, URI target, URI reference, Track track, URI inputAlignment, GoldStandardCompleteness goldStandardCompleteness) {
         this.name = name;
+        this.track = track;
         this.source = source;
         this.target = target;
         this.reference = reference;
-        this.track = track;
+        this.inputAlignment = inputAlignment;
+        this.goldStandardCompleteness = goldStandardCompleteness;
     }
 
+    /**
+     * Constructor with a complete gold standard and not input alignment.
+     * @param name Name of the test case.
+     * @param source URI to the source ontology.
+     * @param target URI to the target ontology.
+     * @param reference URI to the alignment reference file.
+     * @param track The track to which the test case belongs.
+     */
+    public TestCase(String name, URI source, URI target, URI reference, Track track) {
+        this(name, source, target, reference, track, null, GoldStandardCompleteness.COMPLETE);
+    }
+
+    
+    public String getName() {
+        return name;
+    }
+    
+    public Track getTrack() {
+        return track;
+    }
+    
     public URI getSource() {
         return source;
     }
@@ -59,13 +111,13 @@ public class TestCase {
         return reference;
     }
 
-    public String getName() {
-        return name;
+    public URI getInputAlignment() {
+        return inputAlignment;
     }
-    
-    public Track getTrack() {
-        return track;
-    }
+
+    public GoldStandardCompleteness getGoldStandardCompleteness() {
+        return goldStandardCompleteness;
+    }    
     
     @Override
     public String toString() {

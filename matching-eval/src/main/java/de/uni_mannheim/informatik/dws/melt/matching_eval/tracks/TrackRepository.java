@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -179,6 +180,17 @@ public class TrackRepository{
         
         /**PopgeoLink**/
         public static Track PopgeoLink  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popgeolink", "popgeolink-v1");
+        
+        /**Popenslaved **/
+        public static Track Popenslaved  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popenslaved", "popenslaved-v1");
+        
+        /**Popconference **/
+        public static Track Popconference0  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-0-v1");
+        public static Track Popconference20  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-20-v1");
+        public static Track Popconference40  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-40-v1");
+        public static Track Popconference60  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-60-v1");
+        public static Track Popconference80  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-80-v1");
+        public static Track Popconference100  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-100-v1");
     }
 
     /**
@@ -444,19 +456,19 @@ public class TrackRepository{
      */
     public static class Knowledgegraph {
         /**The Knowledge Graph Track contains nine isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
-        public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v1", true);
+        public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v1", true, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
         
         /**The Knowledge Graph Track contains nine isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
-        public static Track V2 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v2", true);
+        public static Track V2 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v2", true, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
         
          /**The Knowledge Graph Track contains isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
-        public static Track V3 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3", true);
+        public static Track V3 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3", true, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
         
         /**The Knowledge Graph Track contains isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
-        public static Track V3_NonMatch_Small = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3-nonmatch-small", true);
+        public static Track V3_NonMatch_Small = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3-nonmatch-small", true, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
         
         /**The Knowledge Graph Track contains isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
-        public static Track V3_NonMatch_Large = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3-nonmatch-large", true);
+        public static Track V3_NonMatch_Large = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3-nonmatch-large", true, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
     }
     
     public static class SystematicBenchmark {

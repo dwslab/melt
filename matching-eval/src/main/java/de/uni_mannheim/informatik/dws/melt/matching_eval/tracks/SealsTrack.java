@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -28,15 +29,19 @@ public class SealsTrack extends Track {
      * @param nicerLocation To avoid that multiple tracks are created, an own repository location is artificially created.
      */
     public SealsTrack(String tdrsLocation, String testDataCollectionName, String testDataVersionNumber, String nicerLocation){
-        this(tdrsLocation, testDataCollectionName, testDataVersionNumber, nicerLocation, false);
+        this(tdrsLocation, testDataCollectionName, testDataVersionNumber, nicerLocation, false, GoldStandardCompleteness.COMPLETE);
     }
     
     public SealsTrack(String tdrsLocation, String testDataCollectionName, String testDataVersionNumber, boolean useDuplicateFreeStorageLayout){
-        this(tdrsLocation, testDataCollectionName, testDataVersionNumber, getNiceRemoteLocation(tdrsLocation), useDuplicateFreeStorageLayout);
+        this(tdrsLocation, testDataCollectionName, testDataVersionNumber, getNiceRemoteLocation(tdrsLocation), useDuplicateFreeStorageLayout, GoldStandardCompleteness.COMPLETE);
     }
     
-    public SealsTrack(String tdrsLocation, String testDataCollectionName, String testDataVersionNumber, String nicerLocation, boolean useDuplicateFreeStorageLayout){
-        super(nicerLocation, testDataCollectionName, testDataVersionNumber, useDuplicateFreeStorageLayout);
+    public SealsTrack(String tdrsLocation, String testDataCollectionName, String testDataVersionNumber, boolean useDuplicateFreeStorageLayout, GoldStandardCompleteness goldStandardCompleteness){
+        this(tdrsLocation, testDataCollectionName, testDataVersionNumber, getNiceRemoteLocation(tdrsLocation), useDuplicateFreeStorageLayout, goldStandardCompleteness);
+    }
+    
+    public SealsTrack(String tdrsLocation, String testDataCollectionName, String testDataVersionNumber, String nicerLocation, boolean useDuplicateFreeStorageLayout, GoldStandardCompleteness goldStandardCompleteness){
+        super(nicerLocation, testDataCollectionName, testDataVersionNumber, useDuplicateFreeStorageLayout, goldStandardCompleteness);
         this.tdrsLocation = tdrsLocation;
         this.testDataCollectionName = testDataCollectionName;
         this.testDataVersionNumber = testDataVersionNumber;

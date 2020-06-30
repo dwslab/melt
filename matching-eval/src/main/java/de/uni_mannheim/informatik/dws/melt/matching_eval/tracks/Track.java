@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -66,7 +67,35 @@ public abstract class Track {
     
     protected List<TestCase> testCases; //initialized lazily
     
+    /**
+     * If true, store and load testcases in a folder structure where ontologies are only stored once and not copied for every testcase.
+     * layout:
+     *   - ontologies
+     *     - ont1.rdf
+     *     - ont2.rdf
+     *   - references
+     *     - ont1-ont2.rdf
+     */
     protected boolean useDuplicateFreeStorageLayout;
+    
+    /**
+     * Completness of the gold standard for all test cases.
+     */
+    protected GoldStandardCompleteness goldStandardCompleteness;
+    
+    
+    protected Track(String remoteLocation, String name, String version, boolean useDuplicateFreeStorageLayout, GoldStandardCompleteness goldStandardCompleteness){
+        this.remoteLocation = remoteLocation;
+        this.name = name;
+        this.version = version;
+        this.useDuplicateFreeStorageLayout = useDuplicateFreeStorageLayout;
+        this.goldStandardCompleteness = goldStandardCompleteness;
+        this.testCases = null; //initialized lazily
+    }
+    
+    protected Track(String remoteLocation, String name, String version, boolean useDuplicateFreeStorageLayout){
+        this(remoteLocation, name, version, useDuplicateFreeStorageLayout, GoldStandardCompleteness.COMPLETE);
+    }
     
     /**
      * Constructor
@@ -76,14 +105,6 @@ public abstract class Track {
      */
     protected Track(String remoteLocation, String name, String version){
         this(remoteLocation, name, version, false);
-    }
-
-    protected Track(String remoteLocation, String name, String version, boolean useDuplicateFreeStorageLayout){
-        this.remoteLocation = remoteLocation;
-        this.name = name;
-        this.version = version;
-        this.useDuplicateFreeStorageLayout = useDuplicateFreeStorageLayout;
-        this.testCases = null; //initialized lazily
     }
 
     /**
@@ -356,7 +377,10 @@ public abstract class Track {
                     f.getName(),
                     source_file.toURI(),
                     target_file.toURI(),
-                    reference_file.exists() ? reference_file.toURI() : null, this));
+                    reference_file.exists() ? reference_file.toURI() : null,
+                    this,
+                    null,
+                    this.goldStandardCompleteness));
         }
         return testCases;
     }
@@ -409,7 +433,9 @@ public abstract class Track {
                     sourceFile.toURI(),
                     targetFile.toURI(),
                     referenceFile.toURI(),
-                    this));
+                    this,
+                    null,
+                    this.goldStandardCompleteness));
         }
         return testCases;
     }
