@@ -9,7 +9,7 @@
 
     <properties>
         <!-- project default compile: -->
-        <jenaVersion>3.12.0</jenaVersion>
+        <jenaVersion>3.15.0</jenaVersion>
         <owlapiVersion>5.1.11</owlapiVersion>
         <jenaPrefix>org.apache.jena.</jenaPrefix>
         <owlapiAdd>.orElse(null)</owlapiAdd>
