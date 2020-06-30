@@ -99,7 +99,8 @@ public class SaveAsSealsRepo {
     
     
     /**
-     * Transforms the zip file into a standard melt format.
+     * Transforms the zip file into a standard MELT format.
+     * @throws IOException Exception occurred during transformation.
      */
     private static void transformPopulatedOntologies() throws IOException{
         
@@ -132,7 +133,6 @@ public class SaveAsSealsRepo {
             FileUtils.copyFile(source, Paths.get(targetDir, testcase, "source.rdf").toFile());
             FileUtils.copyFile(target, Paths.get(targetDir, testcase, "target.rdf").toFile());
         }
-        
     }
    
 }
