@@ -70,7 +70,7 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
         this.kbTwoDuplicateFree = kbTwoDuplicateFree;
         this.isPartialGoldStandard = true;
     }
-    
+
     @Override
     public ConfusionMatrix compute(ExecutionResult executionResult) {
         if(this.isPartialGoldStandard){
@@ -117,7 +117,7 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                     }
                 }
             }
-            else{
+            else {
                 Correspondence systemCell = executionResult.getSystemAlignment().getCorrespondence(referenceCell.getEntityOne(), referenceCell.getEntityTwo(), referenceCell.getRelation());
 
                 if(systemCell != null){
@@ -146,6 +146,16 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                 }
             }
         }
+
+        // The following is required because a gold standard may have the same target or source multiple times in an alignment.
+        // The reason for this might be an error or another relation than ows:sameAs.
+        // Example:
+        // Gold Standard: (A,B,=), (A,C,=)
+        // System: (A,B,=)
+        // The correspondence (A,B,=) would be TP and FP at the same time using the algorithm above. To handle such cases
+        // the TPs are removed from the FPs.
+        falsePositives.removeAll(truePositives);
+
         return calculateConfusionMatrixFromMappings(truePositives, falsePositives, falseNegatives, numberOfCorrespondences);
     }
 
