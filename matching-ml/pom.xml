@@ -6,7 +6,10 @@
         <version>2.6-SNAPSHOT</version>
     </parent>
     <artifactId>matching-ml</artifactId>
-
+    <name>MELT - Matching EvaLuation Toolkit | Machine Learning Module</name>
+    <description>The machine learning extension for MELT. Currently, gensim is supported. The ML
+        extension allows to communicate with a Python backend.
+    </description>
     <dependencies>
         
         <dependency>

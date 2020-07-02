@@ -7,6 +7,10 @@
     </parent>
     <artifactId>matching-owlapi</artifactId>
 
+    <name>MELT - Matching EvaLuation Toolkit | Matching OWLApi Module</name>
+    <description>This module contains OWL-API-based classes related to matcher development as well as additional services such as caching of
+        source and target ontologies.</description>
+
     <dependencies>
         <dependency>
             <groupId>net.sourceforge.owlapi</groupId>

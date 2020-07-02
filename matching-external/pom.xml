@@ -6,6 +6,8 @@
         <version>2.6-SNAPSHOT</version>
     </parent>
     <artifactId>matching-external</artifactId>
+    <name>MELT - Matching EvaLuation Toolkit | Evaluation Module</name>
+    <description>This module contains various tools to evaluate the performance of matchers and to analyze their result.</description>
 
     <dependencies>
         <dependency>

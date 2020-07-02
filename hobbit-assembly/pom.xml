@@ -6,6 +6,8 @@
         <version>2.6-SNAPSHOT</version>
     </parent>
     <artifactId>hobbit-assembly</artifactId>
+    <name>MELT - Matching EvaLuation Toolkit | Hobbit Assembly</name>
+    <description>Maven Plugin for defining which files the docker image should contain (for HOBBIT platform).</description>
 
     <dependencies>
         <dependency>

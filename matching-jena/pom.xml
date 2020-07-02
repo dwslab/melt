@@ -6,6 +6,9 @@
         <version>2.6-SNAPSHOT</version>
     </parent>
     <artifactId>matching-jena</artifactId>
+    <name>MELT - Matching EvaLuation Toolkit | Jena Matching Module</name>
+    <description>This module contains Jena-based classes related to matcher development as well as additional services
+        such as caching of source and target ontologies.</description>
 
     <dependencies>
         <dependency>

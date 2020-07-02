@@ -7,6 +7,9 @@
     </parent>
     <artifactId>matching-jena-matchers</artifactId>
 
+    <name>MELT - Matching EvaLuation Toolkit | Jena Matchers Module</name>
+    <description>Contains modularized (jena-based) matchers that can be used to quickly assemble matching systems. </description>
+
     <dependencies>
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>

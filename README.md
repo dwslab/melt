@@ -29,8 +29,8 @@ A simple demo for the <a href="http://oaei.ontologymatching.org/2019/anatomy/ind
 The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for different tasks and that can be used as barebone project for specific applications. 
 
 ## Code Documentation / JavaDoc
-- [Latest Commit](https://dwslab.github.io/melt/)
-- [Release 2.4](https://javadoc.io/doc/de.uni-mannheim.informatik.dws.melt)  
+- [Latest Commit / Development Version](https://dwslab.github.io/melt/)
+- [Releases](https://javadoc.io/doc/de.uni-mannheim.informatik.dws.melt)  
   
 ## Matcher Development in Java  
   
@@ -47,10 +47,10 @@ MELT is now available in [maven central](https://repo1.maven.org/maven2/de/uni-m
 1. Pick a class to start with depending on your needs. If you start from scratch `MatcherYAAAJena` or `MatcherYAAAOwlApi` are the best fit depending on whether your prefer [Jena](https://jena.apache.org) or the [OWL API](http://owlcs.github.io/owlapi/).   
 Classes that can be extended for matcher implementation:  
    * `MatcherURL`  
- * `MatcherYAA`  
- * `MatcherYAAAJena`  
- * `MatcherYAAAOwlApi`  
-1. Implement the `match()` method.  
+   * `MatcherYAA`  
+   * `MatcherYAAAJena`  
+   * `MatcherYAAAOwlApi`  
+2. Implement the `match()` method.  
   
 ### In More Detail  
   
@@ -287,10 +287,10 @@ C:\Users\myUser\Anaconda3\envs\matching\python.exe
 Here, an Anaconda environment, named `matching` will be used.  
   
 ## Modules Overview  
-The ontology matching framework is grouped into multiple maven modules which are described in the following.  
+The ontology matching framework is grouped into multiple maven modules which are described below.  
   
-### yet-another-alignment-api (YAAA)  
-Simple alignment API offering data structures for Ontology Alignments as well as additional alignment-related services.  
+### matching-yaaa 
+Simple alignment API (Yet Another Alignment API, YAAA) offering data structures for Ontology Alignments as well as additional alignment-related services.  
   
 ### matching-base  
 Contains the basic interfaces to implement a matcher e.g. MatcherURL.  
@@ -299,25 +299,19 @@ Contains the basic interfaces to implement a matcher e.g. MatcherURL.
 Contains various tools to evaluate the performance of matchers and to analyze their result.  
   
 ### matching-jena  
-Contains [Jena-based](https://jena.apache.org/) classes related to matcher development as well as additional services   
-such as caching of source and target ontologies.    
+Contains [Jena-based](https://jena.apache.org/) classes related to matcher development as well as additional services such as caching of source and target ontologies.    
   
 ### matching-jena-matchers  
-Contains modularized matchers that can be used to quickly  
-assemble matching systems. Note that it is possible to easily chain those matchers  
-building a matching pipeline.  
+Contains modularized matchers that can be used to quickly assemble matching systems. Note that it is possible to easily chain those matchers building a matching pipeline.  
   
 ### matching-ml  
-The machine learning extension for MELT. Currently [gensim](https://radimrehurek.com/gensim/) is supported. The ML  
-extension allows to communicate with a Python backend.  
+The machine learning extension for MELT. Currently, [gensim](https://radimrehurek.com/gensim/) is supported. The ML extension allows to communicate with a Python backend.  
   
 ### matching-owlapi  
-Contains OWL-API-based classes related to matcher development as well as additional services  such as caching of   
-source and target ontologies.    
+Contains OWL-API-based classes related to matcher development as well as additional services such as caching of source and target ontologies.    
   
 ### matching-validation  
-Contains various validation services to validate new tracks and test cases. Validation includes parseability by  
-multiple libraries using different releases and further checks.  
+Contains various validation services to validate new tracks and test cases. Validation includes parseability by multiple libraries using different releases and further checks.  
   
 ### seals-assembly  
 Maven Plugin for creating a ZIP-file for the [SEALS platform](http://www.seals-project.eu/).  
@@ -331,9 +325,13 @@ Contains a wrapper for HOBBIT platform (implements the interface used in HOBBIT 
 ### hobbit-maven-plugin  
 Maven Plugin for creating a container for the [HOBBIT platform](https://project-hobbit.eu/outcomes/hobbit-platform/).  
   
+### matching-external
+Contains matcher classes for matchers that are implemented in another environment than Java (such as a python matcher).
+
 ### demo-benchmark  
 Tool for submitting a Track/Testcase in HOBBIT (only interesting for OAEI track organizers).  
-  
+    
+
 ## Frequently Asked Questions (FAQs)  
   
 **I have a muliple SEALS packages and I want to use MELT's group evaluation functionalities. What is the simplest way   
