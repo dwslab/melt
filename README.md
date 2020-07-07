@@ -5,8 +5,10 @@
 [![Maven Central](https://img.shields.io/maven-central/v/de.uni-mannheim.informatik.dws.melt/matching-eval)](https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt)
 [![License](https://img.shields.io/github/license/dwslab/melt)](https://github.com/dwslab/melt/blob/master/LICENSE)
 
-MELT is a helpful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.
+MELT is a powerful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.
 It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.
+
+Found a bug? Don't hesitate to <a href="https://github.com/dwslab/melt/issues">open an issue</a>.
 
 **How to Cite?** <br/>
 
