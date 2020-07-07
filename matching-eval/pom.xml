@@ -6,7 +6,7 @@
         <version>2.6-SNAPSHOT</version>
     </parent>
     <artifactId>matching-eval</artifactId>
-    <name>MELT - Matching EvaLuation Toolkit | External Matching Module</name>
+    <name>MELT - Matching EvaLuation Toolkit | Evaluation Module</name>
     <description>This module contains matcher classes for matchers that are implemented in another environment than Java (such as a python matcher).</description>
 
     <dependencies>
