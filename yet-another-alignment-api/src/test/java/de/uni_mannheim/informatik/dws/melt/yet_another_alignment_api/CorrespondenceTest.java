@@ -54,4 +54,13 @@ class CorrespondenceTest {
         assertTrue(c.getAdditionalExplanations().containsKey("mykey"));
         assertTrue(c.getAdditionalExplanations().containsKey("test"));
     }
+    
+    @Test
+    void testToString() {
+        Correspondence c = new Correspondence("one", "two");
+        c.addExtensionValue("http://test.com", 0.7);
+        
+        assertEquals("<one,two,1.0,=>", c.toString());
+        assertEquals("<one,two,1.0,=,{http://test.com=0.7}>", c.toStringWithExtensions());
+    }
 }

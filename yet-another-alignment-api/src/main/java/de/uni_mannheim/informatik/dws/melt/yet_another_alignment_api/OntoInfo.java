@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
 import java.util.HashMap;
+import java.util.StringJoiner;
 
 /**
  * Data structure storing further information about an ontology.
@@ -91,4 +92,19 @@ public class OntoInfo {
 
     public HashMap<String, String> getExtensions() { return this.extensions; }
 
+    @Override
+    public String toString() {        
+        StringJoiner sj = new StringJoiner(", ");
+        if(this.ontoID != null && !this.ontoID.isEmpty())
+            sj.add("ontoID=" + this.ontoID);
+        if(this.ontoLocation != null && !this.ontoLocation.isEmpty())
+            sj.add("ontoLocation=" + this.ontoLocation);
+        if(this.formalism != null && !this.formalism.isEmpty())
+            sj.add("formalism=" + this.formalism);
+        if(this.formalismURI != null && !this.formalismURI.isEmpty())
+            sj.add("formalismURI=" + this.formalismURI);
+        if(this.extensions != null)
+            sj.add("extensions=" + this.extensions.toString());        
+        return "OntoInfo{" + sj.toString() + "}";
+    }
 }

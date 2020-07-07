@@ -43,7 +43,7 @@ class AlignmentHandler extends DefaultHandler{
     private static final String LEVEL = "level"; 
     private static final String EXTENSION = "alignapilocalns:extensionLabel";
 
-    private String content;
+    private StringBuilder content;
     private Alignment alignment;
     private Correspondence cell;
     private OntoInfo currentOntoInfo;
@@ -109,16 +109,25 @@ class AlignmentHandler extends DefaultHandler{
         } else if (namespaceURI.equals(EDOAL)) { 
             throw new SAXException("[XMLParser] EDOAL alignment must have type EDOAL: "+pName);
         }
+        content = new StringBuilder();
     }
 
     @Override
     public void characters( char ch[], int start, int length ) {
-        String newContent = new String( ch, start, length );
-        if ( content != null && content.indexOf('.',0) != -1 && newContent != null && !newContent.startsWith("\n ")) {
-            content += newContent;
-        } else {
-            content = newContent; 
-        }
+        if (content != null)
+            content.append(new String( ch, start, length ));
+        //use all charcters and reset it in start element.
+        //because it may happen that the parser call charcters method multiple times.
+        //when having the corenlp dependency in the environment, then there are multiple calls.
+        //https://gforge.inria.fr/scm/viewvc.php/alignapi/trunk/src/fr/inrialpes/exmo/align/parser/XMLParser.java?view=markup#l403
+        
+        //this was from procalign
+        //String newContent = new String( ch, start, length );
+        //if ( content != null && content.indexOf('.',0) != -1 && newContent != null && !newContent.startsWith("\n ")) {
+        //    content += newContent;
+        //} else {
+        //    content = newContent; 
+        //}
         //LOGGER.trace( "content XMLParser : {}", content );
     }
 
@@ -127,9 +136,9 @@ class AlignmentHandler extends DefaultHandler{
         //LOGGER.trace( "endElement XMLParser : {}", pName );
         if(namespaceURI.equals(ALIGNMENT+"#") || namespaceURI.equals(ALIGNMENT)){
             if (pName.equals(RULE_RELATION)) {
-                this.cell.setRelation(CorrespondenceRelation.parse(content));
+                this.cell.setRelation(CorrespondenceRelation.parse(content.toString()));
             } else if (pName.equals(MEASURE)) {
-                this.cell.setConfidence(Double.parseDouble(content));
+                this.cell.setConfidence(Double.parseDouble(content.toString()));
             } else if (pName.equals(CELL)) {
                 if ( this.cell.getEntityOne() == null || this.cell.getEntityTwo() == null) {
                     LOGGER.warn( "(cell voided), missing entity {} {}", this.cell.getEntityOne(), this.cell.getEntityTwo() );
@@ -138,25 +147,25 @@ class AlignmentHandler extends DefaultHandler{
                 }
                 this.inCorrespondence = false;
             } else if (pName.equals(URI1)) {                
-                this.alignment.getOnto1().setOntoLocation(content);
+                this.alignment.getOnto1().setOntoLocation(content.toString());
             } else if (pName.equals(URI2)) {
-                this.alignment.getOnto2().setOntoLocation(content);
+                this.alignment.getOnto2().setOntoLocation(content.toString());
             } else if (pName.equals(LOCATION)) {
-                this.currentOntoInfo.setOntoLocation(content);
+                this.currentOntoInfo.setOntoLocation(content.toString());
             } else if (pName.equals( ONTO1 ) || pName.equals(ONTO2)) {
-                if (this.currentOntoInfo.getOntoLocation().equals("") && content != null && !content.equals("")) {
-                    this.currentOntoInfo.setOntoLocation(content);
+                if (this.currentOntoInfo.getOntoLocation().equals("") && content != null && !content.toString().equals("")) {
+                    this.currentOntoInfo.setOntoLocation(content.toString());
                     if(this.currentOntoInfo.getOntoID().equals(""))
-                        this.currentOntoInfo.setOntoID(content);
+                        this.currentOntoInfo.setOntoID(content.toString());
                 };
                 this.currentOntoInfo = null;
             } else if (pName.equals(TYPE)) {
-                this.alignment.setType(content);
+                this.alignment.setType(content.toString());
             } else if (pName.equals(LEVEL)) {
-                if ( content.startsWith("2") ) { // Maybe !startsWith("0") would be better
+                if ( content.toString().startsWith("2") ) { // Maybe !startsWith("0") would be better
                     throw new SAXException("Cannot parse Level 2 alignments (so far).");
                 } else {
-                    this.alignment.setLevel(content);
+                    this.alignment.setLevel(content.toString());
                 }
             }
         }  else if ( namespaceURI.equals(SOAP_ENV)) {
@@ -171,12 +180,13 @@ class AlignmentHandler extends DefaultHandler{
         } else {
             // we are parsing an extension
             if(inCorrespondence) {
-                this.cell.addExtensionValue(namespaceURI + pName, content);
+                this.cell.addExtensionValue(namespaceURI + pName, content.toString());
             } else {
-                this.alignment.addExtensionValue(namespaceURI + pName, content);
+                this.alignment.addExtensionValue(namespaceURI + pName, content.toString());
             }
         }
-        content = null; // set it for the character patch
+        //uncommented because it is initialised in start element.
+        //content = null; // set it for the character patch
     }
     
     public Alignment getAlignment(){

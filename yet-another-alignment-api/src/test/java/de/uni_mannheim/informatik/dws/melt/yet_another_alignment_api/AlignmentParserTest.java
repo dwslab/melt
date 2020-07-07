@@ -1,16 +1,62 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
+import java.io.ByteArrayInputStream;
 import org.xml.sax.SAXException;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AlignmentParserTest {
-
+    
+    private static final String newline = System.getProperty("line.separator");
+    
+    @Test
+    public void testExtensionValues() throws SAXException, IOException {
+        Alignment a = new Alignment(Arrays.asList(
+                new Correspondence("http://cmt#assignExternalReviewer", "http://conference#invites_co-reviewers", 1.0, 
+                "http://melt.dws.uni-mannheim.de/configuration#test", "[]")
+        ));
+        String serialized = a.serialize();
+        Alignment b = new Alignment(new ByteArrayInputStream(serialized.getBytes()));
+        assertEquals("[]", b.iterator().next().getExtensionValueAsString("http://melt.dws.uni-mannheim.de/configuration#test"));
+    }
+    
+    @Test
+    public void testConfidenceRepresentations() throws SAXException, IOException {
+        //https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html#toString%28double%29
+        List<Double> doubles = Arrays.asList(
+                Double.NaN, 
+                Double.MIN_VALUE, Double.MAX_VALUE, 
+                Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
+                0.0, -0.0,
+                0.9, 2.0, //some normal values
+                0.000001, 12345678d); //small values, large values
+        
+        for(Double d : doubles){
+            //test serializer and parser
+            String serialized = new Alignment(Arrays.asList(new Correspondence("one", "two", d))).serialize();
+            Alignment b = new Alignment(new ByteArrayInputStream(serialized.getBytes()));
+            assertEquals(d, b.iterator().next().getConfidence());
+            
+            //test parser
+            String serlizedWithConfidence = new Alignment(Arrays.asList(new Correspondence("one", "two", 0.55))).serialize();
+            String replaced = serlizedWithConfidence.replace("0.55", Double.toString(d));
+            Alignment c = new Alignment(new ByteArrayInputStream(replaced.getBytes()));
+            assertEquals(d, c.iterator().next().getConfidence());
+            
+            //introduce newlines whitespace etc
+            String replacedWhitespace = serlizedWithConfidence.replace("0.55", "\n" + Double.toString(d) + "\t" + newline);
+            Alignment e = new Alignment(new ByteArrayInputStream(replacedWhitespace.getBytes()));
+            assertEquals(d, e.iterator().next().getConfidence());
+        }
+    }
+    
     @Test
     public void testNumberOfCells() throws SAXException, IOException {
         assertEquals(11,getOneMapping().size(), "Alignment does not contain 11 cells.");

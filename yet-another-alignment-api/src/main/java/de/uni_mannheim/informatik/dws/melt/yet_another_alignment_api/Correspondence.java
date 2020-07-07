@@ -397,6 +397,10 @@ public class Correspondence {
     public String toString() {
         return "<" + entityOne + "," + entityTwo + "," + confidence + "," + relation + ">";
     }
+        
+    public String toStringWithExtensions() {
+        return "<" + entityOne + "," + entityTwo + "," + confidence + "," + relation + "," + this.extensions.toString() + ">";
+    }
     
     public static Comparator<Correspondence> comparingByConfidence() {
         return (Comparator<Correspondence>) (c1, c2) -> Double.compare(c1.confidence, c2.confidence);

@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -827,5 +828,69 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
         sb.append("]");
         return sb.toString();
+    }
+    
+    /**
+     * ToString method which returns the alignment in multiple lines (each correspondence in one line) to have a better overview.
+     * In comparison to toStringMultiline, this method prints also the alignment and correspondence extensions and onto infos.
+     * @return a string which contains the alignment in multiple lines.
+     */
+    public String toStringMultilineInfo(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Alignment{").append(newline);
+        sb.append("  indexSource=").append(indexSource!=null)
+                .append(", indexTarget=").append(indexTarget!=null)
+                .append(", indexRelation=").append(indexRelation!=null)
+                .append(", indexConfidence=").append(indexConfidence!=null)
+                .append(",").append(newline);
+        
+        if(this.onto1 != null)
+            sb.append("  source=").append(this.onto1.toString()).append(",").append(newline);
+        if(this.onto2 != null)
+            sb.append("  target=").append(this.onto2.toString()).append(",").append(newline);
+        if(this.method != null && !this.method.isEmpty())
+            sb.append("  method=").append(this.method).append(",").append(newline);
+        if(this.type != null && !this.type.isEmpty())
+            sb.append("  type=").append(this.type).append(",").append(newline);
+        if(this.level != null && !this.level.isEmpty())
+            sb.append("  level=").append(this.level).append(",").append(newline);
+        if(this.extensions != null){
+            for(Entry<String, String> e : this.extensions.entrySet()){
+                sb.append("  ").append(e.getKey()).append("=").append(e.getValue()).append(",").append(newline);
+            }
+        }
+        
+        sb.append("  [").append(newline);
+        for(Correspondence c : this){
+            sb.append("    ").append(c.toStringWithExtensions()).append(",").append(newline);
+        }
+        sb.append("  ]").append(newline);
+        sb.append("}");
+        return sb.toString();
+    }
+    
+    /**
+     * ToString method which returns the alignment in one line.
+     * @return a string which contains the alignment in one line.
+     */
+    public String toStringOneLine(){
+        Iterator<Correspondence> it = iterator();
+        if (! it.hasNext())
+            return "[]";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (;;) {
+            Correspondence e = it.next();
+            sb.append(e.toString());
+            if (! it.hasNext())
+                return sb.append(']').toString();
+            sb.append(',').append(' ');
+        }
+    }
+
+    @Override
+    public String toString() {
+        return toStringMultiline();
     }
 }
