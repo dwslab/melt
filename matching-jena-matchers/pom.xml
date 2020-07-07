@@ -7,6 +7,9 @@
     </parent>
     <artifactId>matching-jena-matchers</artifactId>
 
+    <name>MELT - Matching EvaLuation Toolkit | Jena Matchers Module</name>
+    <description>Contains modularized (jena-based) matchers that can be used to quickly assemble matching systems. </description>
+
     <dependencies>
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
@@ -17,7 +20,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
-            <version>1.7</version>
+            <version>1.8</version>
         </dependency>
         
         <dependency>

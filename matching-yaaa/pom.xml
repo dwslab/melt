@@ -7,6 +7,10 @@
     </parent>
     <artifactId>matching-yaaa</artifactId>
 
+    <name>MELT - Matching EvaLuation Toolkit | Yet Another Alignment API (YAAA)</name>
+    <description>Simple alignment API (Yet Another Alignment API, YAAA) offering data structures for Ontology Alignments as well as additional alignment-related services.</description>
+
+
     <dependencies>
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>

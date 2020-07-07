@@ -6,6 +6,8 @@
         <version>2.6-SNAPSHOT</version>
     </parent>
     <artifactId>hobbit-wrapper</artifactId>
+    <name>MELT - Matching EvaLuation Toolkit | HOBBIT Wrapper</name>
+    <description>Contains a wrapper for HOBBIT platform (implements the interface used in HOBBIT and transforms the calls to MatcherURL interface).</description>
     
     <dependencies>
         <dependency>

@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
@@ -40,8 +41,8 @@ public class SealsDownloadHelper {
 
     public List<String> getTestCases() {
         String url = createLocation(
-                this.persistentRepositoryUrl, 
-                encode(this.testDataCollectionName), 
+                this.persistentRepositoryUrl,
+                encode(this.testDataCollectionName),
                 encode(this.testDataVersionNumber),
                 "suite");
         Model m = ModelFactory.createDefaultModel();
@@ -52,7 +53,7 @@ public class SealsDownloadHelper {
         try (QueryExecution qexec = QueryExecutionFactory.create(queryString, m)) {
             ResultSet results = qexec.execSelect();
             //ResultSetFormatter.out(System.out, results) ;
-            for (; results.hasNext();) {
+            for (; results.hasNext(); ) {
                 QuerySolution soln = results.nextSolution();
                 Literal l = soln.getLiteral("suiteItemName");
                 names.add(l.getString());
@@ -62,16 +63,15 @@ public class SealsDownloadHelper {
     }
 
     public URL getDataItem(String testCaseId, String componentType) {
-        String url = createLocation(this.testDataRepositoryUrl, 
-                new String[]{
-                    "testdata", 
-                    "persistent", 
-                    encode(this.testDataCollectionName), 
-                    encode(this.testDataVersionNumber), 
-                    "suite", 
-                    encode(testCaseId), 
-                    "component", 
-                    encode(componentType)});
+        String url = createLocation(this.testDataRepositoryUrl,
+                "testdata",
+                "persistent",
+                encode(this.testDataCollectionName),
+                encode(this.testDataVersionNumber),
+                "suite",
+                encode(testCaseId),
+                "component",
+                encode(componentType));
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
@@ -86,6 +86,7 @@ public class SealsDownloadHelper {
         try {
             return URLEncoder.encode(string, "UTF-8");
         } catch (UnsupportedEncodingException e) {
+            LOGGER.error("Endoding error occurred.", e);
         }
         return string;
     }

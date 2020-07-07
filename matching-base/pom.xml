@@ -6,7 +6,8 @@
         <version>2.6-SNAPSHOT</version>
     </parent>
     <artifactId>matching-base</artifactId>
-
+    <name>MELT - Matching EvaLuation Toolkit | Matching Base Module</name>
+    <description>Contains the basic interfaces to implement a matcher e.g. MatcherURL.</description>
     <dependencies>
         <dependency>
             <groupId>eu.sealsproject.platform.res</groupId>

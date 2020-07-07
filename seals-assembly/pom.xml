@@ -7,6 +7,9 @@
     </parent>
     <artifactId>seals-assembly</artifactId>
 
+    <name>MELT - Matching EvaLuation Toolkit | SEALS Package Assembly Module</name>
+    <description>Maven Plugin for creating a ZIP-file for the SEALS platform.</description>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
