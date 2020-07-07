@@ -165,6 +165,11 @@ public class Counter<T> {
                 .map(e -> e.getKey())
                 .findFirst().orElse(null);
     }
+
+    @Override
+    public String toString() {
+        return this.mostCommon().toString();
+    }
     
     class MutableInt {
         private int value = 1;

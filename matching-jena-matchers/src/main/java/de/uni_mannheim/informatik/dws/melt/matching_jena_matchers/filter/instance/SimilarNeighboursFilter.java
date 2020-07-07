@@ -44,6 +44,11 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
      */
     private Function<Literal, Object> literalProcessingFunction;
     
+    /**
+     * A function which returns a set of elements (uri as string and/or text filtered with literalprocessing function) which should be ignored.
+     */
+    private Function<Resource, Set<Object>> excludeNeighbours;
+    
     private boolean useIngoing;
     private boolean useOutgoing;
     private boolean useResource;
@@ -55,7 +60,8 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
      * Constructor
      * @param minResourceConfidence the confidence for which a neighour is counted as a mapping (greater or equal).
      * @param shouldPropertyBeCounted Predicate to decide which properties should be counted.
-     * @param literalProcessingFunction A function which processes a literal and returns some comparable (equals/hashCode) representation (usually a normalized text).
+     * @param literalProcessingFunction A function which processes a literal and returns some comparable (equals/hashCode) representation (usually a normalized text) .
+     * @param excludeNeighbours A function which returns a set of elements (uri as string and/or text filtered with literalprocessing function) which should be ignored.
      * @param useIngoing use ingoing edges
      * @param useOutgoing use outgoing edges
      * @param useResource use resources
@@ -63,43 +69,57 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
      * @param threshold The filtering threshold which should be larger or equal to be a valid match. Computation is based on set similarity.
      * @param setSimilatity The set similarity to choose when computing similarity value between the two distinct property sets.
      */
-    public SimilarNeighboursFilter(double minResourceConfidence, Predicate<Property> shouldPropertyBeCounted, Function<Literal, Object> literalProcessingFunction, 
-            boolean useIngoing, boolean useOutgoing, boolean useResource, boolean useLiteral, double threshold, SetSimilarity setSimilatity) {
+    public SimilarNeighboursFilter(double minResourceConfidence, Predicate<Property> shouldPropertyBeCounted, Function<Literal, Object> literalProcessingFunction,
+            Function<Resource, Set<Object>> excludeNeighbours, boolean useIngoing, boolean useOutgoing, boolean useResource, boolean useLiteral, 
+            double threshold, SetSimilarity setSimilatity) {
         super(threshold, setSimilatity);
         this.minResourceConfidence = minResourceConfidence;
         this.shouldPropertyBeCounted = shouldPropertyBeCounted;
         this.literalProcessingFunction = literalProcessingFunction;
+        this.excludeNeighbours = excludeNeighbours;
         this.useIngoing = useIngoing;
         this.useOutgoing = useOutgoing;
         this.useResource = useResource;
         this.useLiteral = useLiteral;
     }
     
+    /**
+     * Constructor which uses ingoing and outgoing edges as well as resources and literals.
+     * @param minResourceConfidence the confidence for which a neighour is counted as a mapping (greater or equal).
+     * @param shouldPropertyBeCounted Predicate to decide which properties should be counted.
+     * @param literalProcessingFunction A function which processes a literal and returns some comparable (equals/hashCode) representation (usually a normalized text) .
+     * @param excludeNeighbours A function which returns a set of elements (uri and text) which should be ignored.
+     * @param threshold The filtering threshold which should be larger or equal to be a valid match. Computation is based on set similarity.
+     * @param setSimilatity The set similarity to choose when computing similarity value between the two distinct property sets.
+     */
+    public SimilarNeighboursFilter(double minResourceConfidence, Predicate<Property> shouldPropertyBeCounted, Function<Literal, Object> literalProcessingFunction,
+            Function<Resource, Set<Object>> excludeNeighbours, double threshold, SetSimilarity setSimilatity) {
+        this(minResourceConfidence, shouldPropertyBeCounted, literalProcessingFunction,
+                excludeNeighbours, true, true, true, true, threshold, setSimilatity);
+    }
+    
+    /**
+     * Constructor
+     * @param minResourceConfidence the confidence for which a neighour is counted as a mapping (greater or equal).
+     * @param shouldPropertyBeCounted Predicate to decide which properties should be counted.
+     * @param threshold The filtering threshold which should be larger or equal to be a valid match. Computation is based on set similarity.
+     * @param setSimilatity The set similarity to choose when computing similarity value between the two distinct property sets.
+     */
+    public SimilarNeighboursFilter(double minResourceConfidence, Predicate<Property> shouldPropertyBeCounted, double threshold, SetSimilarity setSimilatity) {
+        this(minResourceConfidence, shouldPropertyBeCounted, l->l.getLexicalForm(), r->new HashSet(), threshold, setSimilatity);
+    }
+    
     
     public SimilarNeighboursFilter(Function<Literal, Object> literalProcessingFunction, double threshold, SetSimilarity setSimilatity) {
-        super(threshold, setSimilatity);
-        this.minResourceConfidence = 0.0;
-        this.shouldPropertyBeCounted = p -> true;
-        this.literalProcessingFunction = l -> l.getLexicalForm();//no lowercase here
-        this.useIngoing = true;
-        this.useOutgoing = true;
-        this.useResource = true;
-        this.useLiteral = true;
+        this(0.0, p -> true, literalProcessingFunction, r->new HashSet(), threshold, setSimilatity);
+    }
+    
+    public SimilarNeighboursFilter(double threshold, SetSimilarity setSimilatity){
+        this(0.0, p -> true, l->l.getLexicalForm(), r->new HashSet(), threshold, setSimilatity);
     }
     
     public SimilarNeighboursFilter() {
-        super(0.0, SetSimilarity.BOOLEAN);
-        this.minResourceConfidence = 0.0;
-        this.shouldPropertyBeCounted = p -> true;
-        this.literalProcessingFunction = l -> l.getLexicalForm();//no lowercase here
-        this.useIngoing = true;
-        this.useOutgoing = true;
-        this.useResource = true;
-        this.useLiteral = true;
-    }
-      
-    public SimilarNeighboursFilter(double threshold, SetSimilarity setSimilatity){
-        super(threshold, setSimilatity);
+        this(0.0, SetSimilarity.BOOLEAN);
     }
     
     @Override
@@ -136,11 +156,16 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
             int resourceIntersection = Math.min(mappedSources.size(), mappedTargets.size());
             
             if(this.addNeighboursToCorrespondence){
+                Set<String> neighboursPrint = new HashSet();
                 if(mappedSources.size() < mappedTargets.size()){
-                    correspondence.addAdditionalExplanation(this.getClass(), "[" + String.join(",", mappedSources) + "]");
+                    neighboursPrint.addAll(mappedSources);
                 }else{
-                    correspondence.addAdditionalExplanation(this.getClass(), "[" + String.join(",", mappedTargets) + "]");
+                    neighboursPrint.addAll(mappedTargets);
                 }
+                for(Object o : literalIntersection){
+                    neighboursPrint.add(o.toString());
+                }
+                correspondence.addAdditionalExplanation(this.getClass(), "[" + String.join(",", neighboursPrint) + "]");
             }
             
             //sum up resource mappings and literal mappings
@@ -160,6 +185,7 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
     
     private Neighbours getNeighbours(OntModel model, Individual individual){
         Neighbours neighbours = new Neighbours();
+        Set<Object> ignoreNeighbours = this.excludeNeighbours.apply(individual);
         if(useOutgoing){
             StmtIterator outgoingStmts = model.listStatements(individual, null, (RDFNode) null );
             while(outgoingStmts.hasNext()){
@@ -168,9 +194,14 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
                     continue;
                 RDFNode object = s.getObject();
                 if(object.isURIResource() && useResource){
-                    neighbours.addResource(object.asResource().getURI());
+                    if(object.asResource().equals(individual) == false){ // check for reflexive edges
+                        if(ignoreNeighbours.contains(object.asResource().getURI()) == false)
+                            neighbours.addResource(object.asResource().getURI());
+                    }
                 }else if(object.isLiteral() && useLiteral){
-                    neighbours.addLiteral(literalProcessingFunction.apply(object.asLiteral()));
+                    Object processedLiteral = literalProcessingFunction.apply(object.asLiteral());
+                    if(ignoreNeighbours.contains(processedLiteral) == false)
+                        neighbours.addLiteral(processedLiteral);
                 }
             }
         }
@@ -183,7 +214,10 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
                     continue;
                 Resource subject = s.getSubject();
                 if(subject.isURIResource()){
-                    neighbours.addResource(subject.getURI());
+                    if(subject.equals(individual) == false){ // check for reflexive edges
+                        if(ignoreNeighbours.contains(subject.getURI()) == false)
+                            neighbours.addResource(subject.getURI());
+                    }
                 }//can not be a literal (no outgoing edges)
             }
         }
@@ -256,7 +290,21 @@ public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison
         this.addNeighboursToCorrespondence = addNeighboursToCorrespondence;
     }
     
-    
+    public static Function<Resource, Set<Object>> createExcludeNeighboursFunction(Set<Property> excludeLiteralProeprties, Function<Literal, Object> literalProcessingFunction){
+        return r->{
+            Set<Object> exclude = new HashSet();
+            for(Property p : excludeLiteralProeprties){
+                StmtIterator i = r.listProperties(p);
+                while(i.hasNext()){
+                    RDFNode n = i.next().getObject();
+                    if(n.isLiteral()){
+                        exclude.add(literalProcessingFunction.apply(n.asLiteral()));
+                    }
+                }
+            }
+            return exclude;            
+        };        
+    }
 
     @Override
     public String toString() {
