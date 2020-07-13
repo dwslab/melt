@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Resource;
@@ -48,6 +49,11 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     protected boolean matchInstances = true;    
     protected boolean earlyStopping = true;
     
+    /**
+     * A list of fucntions which gets an ontModel and returns an iterator over elements which should be matched like classes, instances, proeprties etc.
+     */
+    protected List<Function<OntModel, Iterator<? extends Resource>>> matchableResourceIterators = new ArrayList();
+    
     
     public ScalableStringProcessingMatcher(Iterable<PropertySpecificStringProcessing> processingElements, boolean earlyStopping){
         this.earlyStopping = earlyStopping;
@@ -75,6 +81,9 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
         if(OaeiOptions.isMatchingInstancesRequired() && matchInstances){
             LOGGER.debug("Match instances");
             matchResources(source.listIndividuals(), target.listIndividuals(), inputAlignment);
+        }
+        for(Function<OntModel, Iterator<? extends Resource>> f : this.matchableResourceIterators){
+            matchResources(f.apply(source), f.apply(target), inputAlignment);
         }
         LOGGER.debug("Finished");
         return inputAlignment;
@@ -244,5 +253,12 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
 
     public void setEarlyStopping(boolean earlyStopping) {
         this.earlyStopping = earlyStopping;
+    }
+    /**
+     * Adds a function which gets an ontModel and returns an iterator over elements which should be matched like classes, instances, properties etc.
+     * @param f a function which gets an ontModel and returns an iterator over elements which should be matched
+     */
+    public void addMatchType(Function<OntModel, Iterator<? extends Resource>> f){
+        this.matchableResourceIterators.add(f);
     }
 }

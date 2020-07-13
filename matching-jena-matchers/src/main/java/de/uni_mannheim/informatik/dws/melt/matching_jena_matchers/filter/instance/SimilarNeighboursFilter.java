@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.BaseFilterWithSetComparison;
 import com.googlecode.cqengine.query.QueryFactory;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimilarity;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -28,7 +29,7 @@ import org.apache.jena.rdf.model.StmtIterator;
  * Target_Subject ------Target_Property------Target_Object
  * 
  */
-public class SimilarNeighboursFilter extends BaseInstanceFilterWithSetComparison{
+public class SimilarNeighboursFilter extends BaseFilterWithSetComparison{
 
     /**
      * The minmum confidence for which a resource(neighbour) mapping is counted. Compared with greater or equal.

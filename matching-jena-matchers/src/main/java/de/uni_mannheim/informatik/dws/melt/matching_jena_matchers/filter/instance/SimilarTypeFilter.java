@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.BaseFilterWithSetComparison;
 import com.googlecode.cqengine.query.QueryFactory;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimilarity;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -18,7 +19,7 @@ import org.apache.jena.vocabulary.RDF;
  * Checks for each instance mapping, how many already matched types it has in common.
  * For comparing a type hierarchy, choose SimilarHierarchyFilter.
  */
-public class SimilarTypeFilter extends BaseInstanceFilterWithSetComparison{
+public class SimilarTypeFilter extends BaseFilterWithSetComparison{
 
     /**
      * The minmum confidence for which a class mapping is counted. Compared with greater or equal.

@@ -1,5 +1,5 @@
 
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimilarity;
@@ -7,7 +7,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimila
 /**
  * Basic filter for instances which compares sets like neighbours or properties.
  */
-public abstract class BaseInstanceFilterWithSetComparison extends MatcherYAAAJena {
+public abstract class BaseFilterWithSetComparison extends MatcherYAAAJena {
     /**
      * The threshold which should be larger or equal to be a valid match.
      * Computation is based on set similarity.
@@ -19,7 +19,7 @@ public abstract class BaseInstanceFilterWithSetComparison extends MatcherYAAAJen
      */
     protected SetSimilarity setSimilatity;
 
-    public BaseInstanceFilterWithSetComparison(double threshold, SetSimilarity setSimilatity) {
+    public BaseFilterWithSetComparison(double threshold, SetSimilarity setSimilatity) {
         this.threshold = threshold;
         this.setSimilatity = setSimilatity;
     }

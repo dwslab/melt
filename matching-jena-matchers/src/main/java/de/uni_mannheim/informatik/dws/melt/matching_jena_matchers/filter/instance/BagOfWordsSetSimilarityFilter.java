@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.BaseFilterWithSetComparison;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimilarity;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -25,7 +26,7 @@ import org.apache.jena.rdf.model.StmtIterator;
  * The literals are selected by the correspodning properties (leave empty to select all).
  * The set of tokens created for each individual are compared with the {@link SetSimilarity}.
  */
-public class BagOfWordsSetSimilarityFilter extends BaseInstanceFilterWithSetComparison {
+public class BagOfWordsSetSimilarityFilter extends BaseFilterWithSetComparison {
     
     /**
      * The properties to choose when computing the tokens.

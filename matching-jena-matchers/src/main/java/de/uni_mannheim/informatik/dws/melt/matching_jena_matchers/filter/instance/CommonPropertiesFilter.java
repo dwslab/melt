@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.BaseFilterWithSetComparison;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimilarity;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Filter which deletes instance mappings if they have no matched properties in common.
  */
-public class CommonPropertiesFilter extends BaseInstanceFilterWithSetComparison {
+public class CommonPropertiesFilter extends BaseFilterWithSetComparison {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonPropertiesFilter.class);
 
     /**
