@@ -192,6 +192,15 @@ public class TrackRepository{
         public static Track Popconference80  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-80-v1");
         public static Track Popconference100  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-100-v1");
     }
+    
+    /**
+     * Instance Matching
+     */
+    public static class InstanceMatching {
+
+        /**GeoLinkCruise **/
+        public static Track GeoLinkCruise  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "geolinkcruise", "geolinkcruise-v1");
+    }
 
     /**
      * Large Biomedical Ontologies.
