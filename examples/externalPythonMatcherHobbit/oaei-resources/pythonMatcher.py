@@ -23,7 +23,7 @@ def match_rdflib(source_graph, target_graph, input_alignment):
 
 
 def match(source_url, target_url, input_alignment_url):
-    logging.info("Match " + source_url + " to " + target_url)
+    logging.info("Python matcher info: Match " + source_url + " to " + target_url)
 
     source_graph = Graph()
     source_graph.parse(source_url)
@@ -54,12 +54,6 @@ def main(argv):
         logging.error("Too few parameters. Need at least two (source and target URL of ontologies")
 
 
-def match_from_track_cache():
-    base = 'C:/dev/OntMatching/ontMatching/matching-eval/trackCache/repositories.seals-project.eu/anatomy_track/anatomy_track-default/mouse-human-suite/'
-    print(match(base + 'source.rdf', base + 'target.rdf', None))
-
-
 if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
     main(sys.argv[1:])
-    # match_from_track_cache()

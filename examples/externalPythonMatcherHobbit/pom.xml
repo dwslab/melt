@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>eu.jan-portisch</groupId>
-    <artifactId>simpleMeltHobbitMatcher</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
+    <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+    <artifactId>external-python-matcher-hobbit</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
     <packaging>jar</packaging>
     <version>1.0</version><!-- version appearing in descriptor file of seals package and system.ttl file in hobbit -->
-    <description>demo matcher description</description><!-- description appearing in descriptor file of seals package and system.ttl file in hobbit -->
+    <description>External Python matcher hobbit demo</description><!-- description appearing in descriptor file of seals package and system.ttl file in hobbit -->
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         
-        <oaei.mainClass>de.uni_mannheim.informatik.dws.melt.demomatcher.SimpleStringMatcher</oaei.mainClass><!-- mandatory: this class has to implement IOntologyMatchingToolBridge -->
+        <oaei.mainClass>de.uni_mannheim.informatik.dws.melt.demomatcher.DemoPythonMatcher</oaei.mainClass><!-- mandatory: this class has to implement IOntologyMatchingToolBridge -->
         <oaei.copyright>(C) Mannheim, 2019</oaei.copyright> <!--optional copyright appearing in the seals descriptor file -->
         <oaei.license>GNU Lesser General Public License 2.1 or above</oaei.license> <!--optional license appearing in the seals descriptor file -->
 
@@ -20,29 +20,20 @@
         <matching.version>2.5</matching.version> <!-- version for all matching related packages -->
     </properties>
     
-    <!-- Accessing the resources:
-    - all files in "oaei-resources" folder are stored in the current working directory and can be accessed with 
-          Files.readAllLines(Paths.get("oaei-resources", "configuration_oaei.txt"));
-    - all files in "src/main/resources" folder are compiled to the resulting jar and can be accessed with
-          getClass().getClassLoader().getResourceAsStream("configuration_jar.txt");
-    -->
     
     <dependencies>
-        <!-- dependency for jena matchers - for other matchers you can replace it with artifactId: matching-base -->
+        <!-- dependency for external matchers - for other matchers you can replace it with artifactId: matching-base -->
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-            <artifactId>matching-jena</artifactId>
+            <artifactId>matching-external</artifactId>
             <version>${matching.version}</version>
         </dependency>
-
+        
+        <!-- remove the follwing dependency when building a seals package to create smaller packages with less depedendencies. -->
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-eval</artifactId>
             <version>${matching.version}</version>
-            <scope>test</scope>
-            <!-- only in test scope, can only be used when running tests. 
-                 You can also remove the scope but then remove the whole dependency when packaging the matcher.
-                 Otherwise you get a lot of unused dependencies in your matcher.-->
         </dependency>
         
         <!-- This dependency is necessary for hobbit submission. It contains the wrapper. -->
@@ -57,11 +48,11 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.25</version>
         </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
-
             <!-- the following plugin will:
             1. create a project (if not already existent) in gitlab with the name of the artifactId
             2. create or update a system.ttl file which describes the matching system so that version and implementing benchmarks are updated
@@ -110,7 +101,10 @@
                         <image>
                             <name>${oaei.imageURL}</name>
                             <build>
-                                <from>openjdk:8-jre-alpine</from><!--change it to a docker base image you want - this is just a small image which contains java-->
+                                <from>python:3.8.4-alpine3.12</from><!--change it to a docker base image you want - this is just a small image which contains python 3.8.4-->
+                                <runCmds>
+                                    <run>pip install rdflib</run><!-- install all your python dependencies here -->
+                                </runCmds>
                                 <assembly><descriptorRef>hobbit</descriptorRef></assembly>
                                 <env><OAEI_MAIN>${oaei.mainClass}</OAEI_MAIN></env>
                                 <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter HobbitWrapper</shell></cmd>
@@ -135,10 +129,12 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            
+            
         </plugins>
     </build>
 </project>
-
 <!-- config example for settings file which is usually located at ~/.m2/settings.xml (you can create the file if it does not exist)
      username and password are used for pushing the docker image and privateKey is necessary for creating gitlab projects and system.ttl files:
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
@@ -156,4 +152,3 @@
 </settings>
 
 -->
-
