@@ -89,7 +89,8 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.26.0</version>                
                 <configuration>
-                    <!-- further machine configuration options: https://dmp.fabric8.io/#docker-machine -->
+                    <!-- further machine configuration options: https://dmp.fabric8.io/#docker-machine
+                    delete the following line in case of error: "Failed to start 'docker-machine status default'"-->
                     <machine><name>default</name></machine>
                     <!-- inline authConfig not recommended but possible - better use settings xml (one example is shown at the end of the file 
                          see also https://dmp.fabric8.io/#authentication
@@ -144,6 +145,12 @@
   <servers>
     <server>
       <id>git.project-hobbit.eu</id>
+      <username>{username}</username>
+      <password>{password}</password>
+      <privateKey>{gitlab_access_token}</privateKey>
+    </server>
+    <server>
+      <id>git.project-hobbit.eu:4567</id>
       <username>{username}</username>
       <password>{password}</password>
       <privateKey>{gitlab_access_token}</privateKey>
