@@ -72,6 +72,7 @@
                         <benchmark>bench:AnatomyAPI</benchmark>
                         <benchmark>bench:ConferenceAPI</benchmark>
                         <benchmark>bench:SpatialAPI</benchmark>
+                        <benchmark>bench:spimbenchAPI</benchmark>
                         <benchmark>bench:knowledgegraph</benchmark>
                         <benchmark>bench:LargebioAPI</benchmark>
                     </benchmarks>
