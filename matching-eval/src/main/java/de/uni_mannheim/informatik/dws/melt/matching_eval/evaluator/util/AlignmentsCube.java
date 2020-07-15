@@ -125,9 +125,9 @@ public class AlignmentsCube {
 
                 for (HashMap.Entry<Correspondence, HashMap<String, String>> mappingInformationEntry : cubeComponent.getValue().getMappingInformation().entrySet()) {
                     List<String> record = new LinkedList<>();
-                    record.add(trackName);
-                    record.add(testCaseName);
-                    record.add(matcherName);
+                    record.add(cutAfterThirtyTwoThousandCharacters(trackName));
+                    record.add(cutAfterThirtyTwoThousandCharacters(testCaseName));
+                    record.add(cutAfterThirtyTwoThousandCharacters(matcherName));
 
                     // resource feature uri1
                     for (IExplainerResource explainer : resourceExplainers) {
@@ -142,16 +142,16 @@ public class AlignmentsCube {
                                     if (feature == null) {
                                         LOGGER.info("Could not find feature " + resourceFeatureName + " ignoring it.");
                                         record.add("");
-                                    } else record.add(feature);
+                                    } else record.add(cutAfterThirtyTwoThousandCharacters(feature));
                                 }
                             }
                         }
                     }
 
-                    record.add(mappingInformationEntry.getKey().getEntityOne());
-                    record.add(mappingInformationEntry.getKey().getRelation().toString());
-                    record.add(Double.toString(mappingInformationEntry.getKey().getConfidence()));
-                    record.add(mappingInformationEntry.getKey().getEntityTwo());
+                    record.add(cutAfterThirtyTwoThousandCharacters(mappingInformationEntry.getKey().getEntityOne()));
+                    record.add(cutAfterThirtyTwoThousandCharacters(mappingInformationEntry.getKey().getRelation().toString()));
+                    record.add(cutAfterThirtyTwoThousandCharacters(Double.toString(mappingInformationEntry.getKey().getConfidence())));
+                    record.add(cutAfterThirtyTwoThousandCharacters(mappingInformationEntry.getKey().getEntityTwo()));
 
                     // resource feature uri2
                     for (IExplainerResource explainer : resourceExplainers) {
@@ -166,7 +166,7 @@ public class AlignmentsCube {
                                     if (feature == null) {
                                         LOGGER.info("Could not find feature " + resourceFeatureName + " ignoring it.");
                                         record.add("");
-                                    } else record.add(feature);
+                                    } else record.add(cutAfterThirtyTwoThousandCharacters(feature));
                                 }
                             }
                         }
@@ -177,7 +177,7 @@ public class AlignmentsCube {
                         String featureValue = mappingInformationEntry.getValue().get(featureName);
                         if(featureValue == null){
                             record.add("");
-                        } else record.add(featureValue);
+                        } else record.add(cutAfterThirtyTwoThousandCharacters(featureValue));
                     }
 
                     // add correspondence extensions
@@ -187,7 +187,7 @@ public class AlignmentsCube {
                             for (String extensionValue : correspondenceExtensions) {
                                 Object value = extensionsForCorrespondence.get(extensionValue);
                                 if (value != null) {
-                                    record.add(value.toString());
+                                    record.add(cutAfterThirtyTwoThousandCharacters(value.toString()));
                                 } else record.add("");
                             }
                         }
@@ -202,6 +202,19 @@ public class AlignmentsCube {
         } catch (IOException ioe) {
             LOGGER.error("Could not write alignments cube.", ioe);
         }
+    }
+
+
+    /**
+     * This method cuts Strings after 32000 characters.
+     * @param stringToCut The string to be cut.
+     * @return Cut string. If a cut operation was performed, this will be printed as warning in the log.
+     */
+    public static String cutAfterThirtyTwoThousandCharacters(String stringToCut){
+        if(stringToCut.length() > 32000){
+            LOGGER.warn("String cut because of > 32 000 characters.");
+            return stringToCut.substring(0, 32000);
+        } else return stringToCut;
     }
 
 
@@ -336,9 +349,9 @@ public class AlignmentsCube {
             
             for (HashMap.Entry<Correspondence, HashMap<String, String>> mappingInformationEntry : cubeComponent.getValue().getMappingInformation().entrySet()) {
                 List<String> record = new LinkedList<>();
-                record.add(trackName);
-                record.add(testCaseName);
-                record.add(matcherName);
+                record.add(cutAfterThirtyTwoThousandCharacters(trackName));
+                record.add(cutAfterThirtyTwoThousandCharacters(testCaseName));
+                record.add(cutAfterThirtyTwoThousandCharacters(matcherName));
 
                 // resource feature uri1
                 for (IExplainerResource explainer : resourceExplainers) {  
@@ -360,16 +373,16 @@ public class AlignmentsCube {
                                 if (feature == null) {
                                     LOGGER.info("Could not find feature " + resourceFeatureName + " ignoring it.");
                                     record.add("");
-                                } else record.add(feature);
+                                } else record.add(cutAfterThirtyTwoThousandCharacters(feature));
                             }
                         }
                     }
                 }
 
-                record.add(leftPrefixLookup.getPrefix(mappingInformationEntry.getKey().getEntityOne()));
-                record.add(mappingInformationEntry.getKey().getRelation().toString());
-                record.add(Double.toString(mappingInformationEntry.getKey().getConfidence()));
-                record.add(rightPrefixLookup.getPrefix(mappingInformationEntry.getKey().getEntityTwo()));
+                record.add(cutAfterThirtyTwoThousandCharacters(leftPrefixLookup.getPrefix(mappingInformationEntry.getKey().getEntityOne())));
+                record.add(cutAfterThirtyTwoThousandCharacters(mappingInformationEntry.getKey().getRelation().toString()));
+                record.add(cutAfterThirtyTwoThousandCharacters(Double.toString(mappingInformationEntry.getKey().getConfidence())));
+                record.add(cutAfterThirtyTwoThousandCharacters(rightPrefixLookup.getPrefix(mappingInformationEntry.getKey().getEntityTwo())));
 
                 // resource feature uri2
                 for (IExplainerResource explainer : resourceExplainers) {
@@ -390,7 +403,7 @@ public class AlignmentsCube {
                                 if (feature == null) {
                                     LOGGER.info("Could not find feature " + resourceFeatureName + " ignoring it.");
                                     record.add("");
-                                } else record.add(feature);
+                                } else record.add(cutAfterThirtyTwoThousandCharacters(feature));
                             }
                         }
                     }
@@ -401,7 +414,7 @@ public class AlignmentsCube {
                     String featureValue = mappingInformationEntry.getValue().get(featureName);
                     if (featureValue == null) {
                         record.add("");
-                    } else record.add(featureValue);
+                    } else record.add(cutAfterThirtyTwoThousandCharacters(featureValue));
                 }
 
                 // add correspondence extensions
@@ -411,7 +424,7 @@ public class AlignmentsCube {
                         for (String extensionValue : correspondenceExtensions) {
                             Object value = extensionsForCorrespondence.get(extensionValue);
                             if (value != null) {
-                                record.add(value.toString());
+                                record.add(cutAfterThirtyTwoThousandCharacters(value.toString()));
                             } else record.add("");
                         }
                     }
