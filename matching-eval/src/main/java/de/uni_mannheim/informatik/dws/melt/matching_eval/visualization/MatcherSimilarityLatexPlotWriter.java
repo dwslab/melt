@@ -97,6 +97,8 @@ public class MatcherSimilarityLatexPlotWriter {
         writer.println("    \\begin{axis}[");
         writer.println("    ylabel={Jaccard distance},");
         writer.println("    xlabel={Jaccard distance},");
+        writer.println("    xmin=0,xmax=1,");
+        writer.println("    ymin=0,ymax=1");
         writer.println("    ]");
         writer.println("\\addplot[color=black, only marks, mark=*,text mark as node=true,point meta=explicit symbolic,nodes near coords, nodes near coords style={font=\\tiny}, mark options={scale=0.8}] coordinates { ");
         for(Entry<ExecutionResult, Point2D.Double> executionResult : similarityResultInstance.getCoordinates().entrySet()){

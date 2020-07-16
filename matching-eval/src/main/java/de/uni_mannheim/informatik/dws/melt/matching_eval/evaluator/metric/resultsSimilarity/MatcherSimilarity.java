@@ -166,8 +166,8 @@ public class MatcherSimilarity {
         //compute coordinates
         double[][] coordinates = MDSJ.stressMinimization(distance_matrix, 2);
         
-        double[] xValues = normalize(coordinates[0]);
-        double[] yValues = normalize(coordinates[1]);
+        double[] xValues = shift(coordinates[0]); //shift if values are below zero
+        double[] yValues = shift(coordinates[1]);
         
         Map<ExecutionResult, Point2D.Double> coordinateMap = new HashMap();
         for(int i = 0; i < results.size(); i++){
@@ -176,31 +176,23 @@ public class MatcherSimilarity {
         return coordinateMap;
     }
     
-    private static double[] normalize(double[] array){
+    private static double[] shift(double[] array){
         double min = Double.MAX_VALUE;
-        double max = Double.MIN_VALUE;
         for(Double d : array){
-            if(d > max){
-                max = d;
-            }
             if(d < min){
                 min = d;
             }
         }
         
-        //scale:
-        double[] scaled = new double[array.length];
-        double range = max - min;
-        if(range == 0.0){
+        double[] shifted = new double[array.length];
+        double shift = 0 - min;
+        if(shift > 0){
             for(int i = 0; i < array.length; i++){
-                scaled[i] = 0.5; //there is no range, so all values are the same -> we can use any fixed value
+                shifted[i] = array[i] + shift; 
             }
+            return shifted;
         }else{
-            for(int i = 0; i < array.length; i++){
-                scaled[i] = (array[i] - min) / range; 
-            }
+            return array;
         }
-        return scaled; 
-        
     }
 }
