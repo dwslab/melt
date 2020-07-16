@@ -18,30 +18,8 @@ import java.util.Map.Entry;
 
 /**
  * This writer can persist {@link MatcherSimilarity} objects in a LaTex graph from the perspective of one particular matcher.
- *
- * @author Sven Hertling
  */
 public class MatcherSimilarityLatexBasePlotWriter {
-
-    // TODO: delete:
-    public static void main(String[] args) {
-        final String pathToAnatomyResultFiles = "C:\\Users\\shertlin\\Desktop\\oaei2018-anatomy-alignments\\";
-        final TestCase testCase = TrackRepository.Anatomy.Default.getTestCases().get(0);
-
-        //----------------------------
-        // Evaluation
-        //----------------------------
-
-        ExecutionResultSet executionResultSet = Executor.loadFromFolder(pathToAnatomyResultFiles, testCase);
-        MatcherSimilarityMetric metric = new MatcherSimilarityMetric();
-        MatcherSimilarity similarity = metric.get(executionResultSet, testCase);
-
-        try (PrintWriter w = new PrintWriter("basematcher.tex")) {
-            write("ALIN", new ConfusionMatrixMetric(), similarity, w);
-        } catch (FileNotFoundException ex) {
-        }
-    }
-
 
     /**
      * Persists a matcher similarity instance as LaTex graph from the perspective of one particular matcher.

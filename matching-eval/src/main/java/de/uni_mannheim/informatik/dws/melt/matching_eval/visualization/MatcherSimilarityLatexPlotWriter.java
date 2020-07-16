@@ -3,17 +3,14 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.visualization;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrixMetric;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity.MatcherSimilarity;
-
+import java.awt.geom.Point2D;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 
 /**
- * This writer can persist {@link MatcherSimilarity} objects in a LaTex graph from the perspective of one particular matcher.
- *
- * @author Sven Hertling
+ * This writer can persist {@link MatcherSimilarity} objects in a LaTex graph.
  */
 public class MatcherSimilarityLatexPlotWriter {
 
@@ -50,39 +47,40 @@ public class MatcherSimilarityLatexPlotWriter {
     }
 
     /**
-     * Persists a matcher similarity instance as LaTex graph from the perspective of one particular matcher.
+     * Persists a matcher similarity instance as LaTex graph.
+     * Writes two graphs:
+     * 1) The x axis is the mean absolute deviation and the y axis is the F measure.
+     * 2) The distances between the matchers are transformed into coordinates and plotted.
      * @param cm You can use this parameter to use a previously calculated confusion matrix in order to save execution time..
      * @param similarityResultInstance Similarity instance that shall be persisted.
      * @param writer The writer that shall be used to persist the results.
      */
     public static void write(ConfusionMatrixMetric cm, MatcherSimilarity similarityResultInstance, PrintWriter writer) {
+        List<ExecutionResult> executionResults = similarityResultInstance.getExecutionResultsAsList();
+        
         writer.println("\\documentclass{article}");
         writer.println("\\usepackage{pgfplots}");
-
         writer.println("\\begin{document}");
+        
+        //first figure
         writer.println("\\begin{figure}");
         writer.println("    \\centering");
         writer.println("    \\begin{tikzpicture}");
         writer.println("    \\begin{axis}[");
         writer.println("    ylabel={$F_1$ measure},");
-        writer.println("    xlabel={MAD of the Jaccard Similarity}");
+        writer.println("    xlabel={MAD of the Jaccard Similarity},");
+        writer.println("    xticklabel style={/pgf/number format/fixed}");
         writer.println("    ]");
-
         writer.println("\\addplot[color=black, only marks, mark=*,text mark as node=true,point meta=explicit symbolic,nodes near coords, nodes near coords style={font=\\tiny}, mark options={scale=0.8}] coordinates { ");
-        //List<String> names = new ArrayList();
-        
-        Map<String, List<Double>> matcherToSimilarities = new HashMap<>();
-        
-        for(ExecutionResult outer : similarityResultInstance.getExecutionResultsAsList()){
+        for(ExecutionResult outer : executionResults){
             List<Double> similarities = new ArrayList();
-            for(ExecutionResult inner : similarityResultInstance.getExecutionResultsAsList()){
+            for(ExecutionResult inner : executionResults){
                 if(inner != outer){
                     similarities.add(similarityResultInstance.getMatcherSimilarity(outer, inner));
                 }                
             }
             //double d = mean(similarities);
             double d = meanAbsoluteDeviation(similarities);
-            System.out.println(outer.getMatcherName() + " -> " + d);
             writer.println("(" + d + "," + cm.get(outer).getF1measure() + ") [" + outer.getMatcherName() + "]");
         }
         writer.println("};");
@@ -91,6 +89,26 @@ public class MatcherSimilarityLatexPlotWriter {
         writer.println("    \\caption{Matcher comparison using MAD}");
         writer.println("    \\label{comp}");
         writer.println("\\end{figure}");
+        
+        //second figue:
+        writer.println("\\begin{figure}");
+        writer.println("    \\centering");
+        writer.println("    \\begin{tikzpicture}");
+        writer.println("    \\begin{axis}[");
+        writer.println("    ylabel={Jaccard distance},");
+        writer.println("    xlabel={Jaccard distance},");
+        writer.println("    ]");
+        writer.println("\\addplot[color=black, only marks, mark=*,text mark as node=true,point meta=explicit symbolic,nodes near coords, nodes near coords style={font=\\tiny}, mark options={scale=0.8}] coordinates { ");
+        for(Entry<ExecutionResult, Point2D.Double> executionResult : similarityResultInstance.getCoordinates().entrySet()){
+            writer.println("(" + executionResult.getValue().getX() + "," + executionResult.getValue().getY() + ") [" + executionResult.getKey().getMatcherName() + "]");
+        }
+        writer.println("};");
+        writer.println("    \\end{axis}");
+        writer.println("    \\end{tikzpicture}");
+        writer.println("    \\caption{Matcher comparison using distances.}");
+        writer.println("    \\label{comp2}");
+        writer.println("\\end{figure}");
+        
         writer.println("\\end{document}");
         writer.flush();
     }

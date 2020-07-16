@@ -1,9 +1,11 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity;
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
+import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
+import mdsj.MDSJ;
 
 /**
  * Resulting object of the {@link MatcherSimilarityMetric} calculation.
@@ -135,6 +137,39 @@ public class MatcherSimilarity {
         }
         return resultBuffer.toString();
     }
-
-
+    
+    
+    /**
+     * Get coordinates for visualizing the matcher distances in a 2D space.
+     * It uses multidimensional scaling for converting the distances to coordinates.
+     * This is based on <a href="http://www.dit.unitn.it/~p2p/OM-2013/om2013_poster6.pdf">OM-Poster: Is my ontology matching system similar to yours? - Ernesto Jimenez-Ruiz, Bernardo Cuenca Grau, Ian Horrocks</a>.
+     * @see <a href="https://www.inf.uni-konstanz.de/exalgo/software/mdsj/">MDSJ Library from University Konstanz</a>
+     * @return a map which maps an execution result to a coordinate.
+     */
+    public Map<ExecutionResult, Point2D.Double> getCoordinates(){
+        List<ExecutionResult> results = this.getExecutionResultsAsList();
+        
+        //create distance matrix:
+        double[][] distance_matrix = new double[results.size()][results.size()];        
+        for(int i = 0; i < results.size(); i++){
+            ExecutionResult iResult = results.get(i);
+            for(int j = 0; j < results.size(); j++){
+                if(i == j){
+                    distance_matrix[i][j] = 0; // distance between same is zero
+                    continue;
+                }                    
+                ExecutionResult jResult = results.get(j);
+                distance_matrix[i][j] = 1.0 - this.getMatcherSimilarity(iResult, jResult); //"1 -" because dissimilarity
+            }
+        }
+        
+        //compute coordinates
+        double[][] coordinates = MDSJ.stressMinimization(distance_matrix, 2);
+        
+        Map<ExecutionResult, Point2D.Double> coordinateMap = new HashMap();
+        for(int i = 0; i < results.size(); i++){
+            coordinateMap.put(results.get(i), new Point2D.Double(coordinates[0][i], coordinates[1][i]));
+        }
+        return coordinateMap;
+    }
 }

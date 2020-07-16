@@ -165,6 +165,13 @@
             <version>0.3.2</version>
         </dependency-->
         <!--0.3.5 OR master-SNAPSHOT-->
+        
+        <!-- used at MatcherSimilarity for computing coordinates from distances -->
+        <dependency>
+            <groupId>de.unikonstanz.inf</groupId>
+            <artifactId>mdsj</artifactId>
+            <version>0.2</version>
+        </dependency>
 
     </dependencies>
 
@@ -178,4 +185,10 @@
         </repository>
     </repositories>
     -->
+    <repositories>
+        <repository><!-- used for mdsj -->
+          <id>ukp-oss-releases</id>
+          <url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases/</url>
+        </repository>
+    </repositories>
 </project>
