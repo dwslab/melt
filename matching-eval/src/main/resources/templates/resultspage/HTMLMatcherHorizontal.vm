@@ -116,7 +116,7 @@ time:
 <tbody>
     #foreach( $testCase in $util.getTestCases() )
     <tr class="#oddEvenClass($foreach.count)">
-        <td>$matcher</td>
+        <td>$testCase.getName()</td>
         #foreach( $matcher in $util.getMatchers() )
         <td>$util.getRuntime($util.getMatcherRefinement($matcher,$testCase,"overall"))</td>
         #end

@@ -71,7 +71,7 @@ public class TypeRefiner implements Refiner {
      * @param originalAlignment The original mapping before the refinement action.
      * @return The refined mapping.
      */
-    protected Alignment refineMapping(OntModel source, OntModel target, Alignment originalAlignment){
+    public Alignment refineMapping(OntModel source, OntModel target, Alignment originalAlignment){
         Alignment refinedAlignment = new Alignment();
         for(Correspondence correspondence : originalAlignment){
             ResourceType sourceType = getResourceType(source, correspondence.getEntityOne());

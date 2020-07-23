@@ -123,7 +123,8 @@ public class ExecutionResult {
      */
     private static Set<Refiner> addRefinementToNewSet(Set<Refiner> initialRefinement, Refiner newRefinement){
         Set<Refiner> s = new HashSet(initialRefinement);
-        s.add(newRefinement);
+        if(newRefinement != null)
+            s.add(newRefinement);
         return s;
     }
     
