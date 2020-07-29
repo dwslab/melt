@@ -98,8 +98,10 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.26.0</version>                
                 <configuration>
-                    <!-- further machine configuration options: https://dmp.fabric8.io/#docker-machine -->
-                    <machine><name>default</name></machine>
+                    <!-- further machine configuration options: https://dmp.fabric8.io/#docker-machine
+                    uncomment the following line in case you have installed docker on windows or mac-->
+                    <!--machine><name>default</name></machine-->
+                    
                     <!-- inline authConfig not recommended but possible - better use settings xml (one example is shown at the end of the file 
                          see also https://dmp.fabric8.io/#authentication
                     <authConfig>
