@@ -5,8 +5,12 @@ This directory contains various sample projects using MELT. The overall document
 ## analyzingMatcherSimilarity
 This project has been used to derive the statistics and figures of the original MELT paper.
 
-## externalPythonMatcher
-This project shows exemplarily how a matcher can be implemented in Python and packed for SEALS/HOBBIT using MELT.
+## externalPythonMatcherHobbit
+This project shows exemplarily how a matcher can be implemented in Python and packed for HOBBIT using MELT.
+You should add your python libraries in the POM file `<run>pip install rdflib</run><!-- install all your python dependencies here -->`.
+
+## externalPythonMatcherSeals
+This project shows exemplarily how a matcher can be implemented in Python and packed for SEALS using MELT.
 
 ## meltDashboard
 This project shows exemplarily how to generate dashboards for the OAEI 2019 results.
