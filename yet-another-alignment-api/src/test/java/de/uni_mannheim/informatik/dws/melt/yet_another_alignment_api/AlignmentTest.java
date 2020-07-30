@@ -240,5 +240,24 @@ public class AlignmentTest {
         }
         
     }
+    
+    @Test
+    void sampleTest(){
+        Alignment a = new Alignment();
+        a.add("one", "two");
+        a.add("three", "four");
+        a.add("five", "six");
+        
+        assertEquals(1, a.sample(1).size());
+        assertEquals(3, a.sample(3).size());
+        assertThrows(IllegalArgumentException.class, () -> a.sample(5)); //too high
+        assertThrows(IllegalArgumentException.class, () -> a.sample(-5)); //too low
+        
+        assertEquals(2, a.sampleByFraction(0.5).size());
+        assertEquals(1, a.sampleByFraction(0.3).size());
+        assertEquals(0, a.sampleByFraction(0.1).size());        
+        assertThrows(IllegalArgumentException.class, () -> a.sampleByFraction(1.2)); //too high
+        assertThrows(IllegalArgumentException.class, () -> a.sampleByFraction(-0.1)); //too low
+    }
 
 }

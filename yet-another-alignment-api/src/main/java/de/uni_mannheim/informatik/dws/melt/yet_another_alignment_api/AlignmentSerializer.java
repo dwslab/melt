@@ -5,9 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -210,7 +214,51 @@ public class AlignmentSerializer {
      * @throws IOException Exception that occurred while serializing the alignment.
      */
     public static void serializeToCSV(Alignment alignment, File file) throws IOException {
+        checkFile(file);
+        try(CSVPrinter csvPrinter = CSVFormat.DEFAULT.withHeader("source", "target", "confidence", "relation").print(file, StandardCharsets.UTF_8)){
+            for(Correspondence cell : alignment){
+                csvPrinter.printRecord(cell.getEntityOne(),cell.getEntityTwo(), cell.getConfidence(), cell.getRelation());
+            }
+        }
+    }
+    
+    /**
+     * Method to write the specified alignment to the specified file (in CSV format).
+     * @param alignment The alignment that shall be written.
+     * @param file The file to which the alignment shall be written.
+     * @throws IOException Exception that occurred while serializing the alignment.
+     */
+    public static void serializeToCSVWithExtensions(Alignment alignment, File file) throws IOException {
+        checkFile(file);
+        List<String> extensionKeys = new ArrayList(alignment.getDistinctCorrespondenceExtensionKeys());
+        List<String> header = new ArrayList<>();
+        header.add("source");
+        header.add("target");
+        header.add("confidence");
+        header.add("relation");
+        header.addAll(extensionKeys);
         
+        try(CSVPrinter csvPrinter = CSVFormat.DEFAULT.print(file, StandardCharsets.UTF_8)){
+            csvPrinter.printRecord(header);
+            for(Correspondence cell : alignment){
+                List<Object> record = new ArrayList<>();
+                record.add(cell.getEntityOne());
+                record.add(cell.getEntityTwo());
+                record.add(cell.getConfidence());
+                record.add(cell.getRelation());
+                for(String key : extensionKeys){
+                    Object o = cell.getExtensionValue(key);
+                    if(o == null)
+                        record.add("");
+                    else
+                        record.add(o);
+                }
+                csvPrinter.printRecord(record);
+            }
+        }
+    }
+    
+    private static void checkFile(File file) throws IOException{
         if (file.exists()) {
             if (file.isDirectory()) {
                 throw new IOException("File '" + file + "' exists but is a directory");
@@ -219,24 +267,10 @@ public class AlignmentSerializer {
                 throw new IOException("File '" + file + "' cannot be written to");
             }
         } else {
-            final File parent = file.getParentFile();
+            File parent = file.getParentFile();
             if (parent != null) {
-                if (!parent.mkdirs() && !parent.isDirectory()) {
-                    throw new IOException("Directory '" + parent + "' could not be created");
-                }
+                parent.mkdirs();
             }
         }
-        //TODO: add also correspondence extensions
-        try (FileOutputStream out = new FileOutputStream(file)) {
-            out.write(("source,target,confidence,relation" + newline).getBytes(ENCODING));
-            for(Correspondence cell : alignment){
-                StringBuilder sb = new StringBuilder();
-                sb.append(StringEscapeUtils.escapeCsv(cell.getEntityOne())).append(",");
-                sb.append(StringEscapeUtils.escapeCsv(cell.getEntityTwo())).append(",");
-                sb.append(Double.toString(cell.confidence)).append(",");
-                sb.append(cell.getRelation().toString()).append(newline);
-                out.write(sb.toString().getBytes(ENCODING));
-            }
-        }        
     }
 }
