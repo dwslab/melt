@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
+import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -18,9 +19,28 @@ import java.util.regex.Pattern;
 /**
  * Matcher for running external matchers (require the subclass to create a command to execute).
  */
-public abstract class MatcherExternal extends MatcherURL {
+public abstract class MatcherExternal extends MatcherURL {    
     private static final String NEWLINE = System.getProperty("line.separator");
-    private static Pattern URL_PATTERN = Pattern.compile("(?:https?|ftp|file)://?[^\\s]*",Pattern.CASE_INSENSITIVE);
+    private static final Pattern URL_PATTERN = Pattern.compile("(?:https?|ftp|file)://?[^\\s]*",Pattern.CASE_INSENSITIVE);
+    
+    private static final String RUNTIME_XMX = getRuntimeArgument("xmx");
+    private static final String RUNTIME_XMS = getRuntimeArgument("xms");
+    
+    /**
+     * Returns a runtime argument of the java virtual maschine like -Xmx (which specifies java heap size) and not main program arguments.
+     * It is checked if the given argument(parameter) is contained in one of the arguments of the program.
+     * If this is the case, it is returned (the full argument like "-Xmx100G" when "xmx" is the parameter of this function).
+     * @param argument the runtime argument to check for (like "xmx")
+     * @return the full argument like "-Xmx100G" (empty string if no argument is found)
+     */
+    private static String getRuntimeArgument(String argument){
+        for(String s : ManagementFactory.getRuntimeMXBean().getInputArguments()){
+            if(s.toLowerCase().contains(argument.toLowerCase())){
+                return s;
+            }
+        }
+        return "";
+    }
     
     /**
      * if set to true, all logging should go to stderr and the result of the process (url or alignment api format) should go to stdout.
@@ -97,7 +117,7 @@ public abstract class MatcherExternal extends MatcherURL {
         return alignmentFile.toURI().toURL();
     }
     
-    private Process startProcess(URL source, URL target, URL inputAlignment) throws Exception{
+    protected Process startProcess(URL source, URL target, URL inputAlignment) throws Exception{
         //https://examples.javacodegeeks.com/core-java/lang/processbuilder/java-lang-processbuilder-example/
         List<String> command = getCommand(source, target, inputAlignment);
         ProcessBuilder pb = new ProcessBuilder(command);//"python", "C:\\dev\\OntMatching\\ontMatching\\test.py", source.toString(), target.toString(), inputAlignment.toString());
@@ -114,7 +134,7 @@ public abstract class MatcherExternal extends MatcherURL {
         return pb.start();
     }
     
-    private String getResultOfProcess(Process process) throws IOException{
+    protected String getResultOfProcess(Process process) throws IOException{
         if(isUsingStdOut()){
             return streamToString(process.getInputStream());
         }
@@ -123,7 +143,7 @@ public abstract class MatcherExternal extends MatcherURL {
         }
     }
     
-    private static String streamToString(InputStream stream) throws IOException {        
+    protected String streamToString(InputStream stream) throws IOException {        
         StringBuilder sb = new StringBuilder();
         try(BufferedReader br = new BufferedReader(new InputStreamReader(stream))) {
             String line = null;
@@ -134,9 +154,59 @@ public abstract class MatcherExternal extends MatcherURL {
         }
         return sb.toString();
     }
-    private static void closeAllStreams(Process p){
+    protected void closeAllStreams(Process p){
         try { p.getErrorStream().close(); } catch (IOException ex) {}
         try { p.getInputStream().close(); } catch (IOException ex) {}
         try { p.getOutputStream().close(); } catch (IOException ex) {}
+    }
+    
+    /**
+     * Replaces a string with the following mapping:
+     * <ul>
+     * <li>"{File.separator}" with the os dependent file separator. On UNIX systems the value is <code>'/'</code>; on Microsoft Windows systems it is <code>'\\'</code>. </li>
+     *  <li>"{File.pathSeparator}" with the os dependent path separator. It is used to separate filenames in a sequence of files given as a <em>path list</em>.
+     * On UNIX systems, this character is <code>':'</code>; on Microsoft Windows systems it is <code>';'</code>.</li>
+     * <li>"{xmx}" with the value xmx value the java process is started with (e.g. "{xmx}" is replaced with "-Xmx100G")</li>
+     * <li>"{xms}" with the value xms value the java process is started with (e.g. "{xms}" is replaced with "-Xms10G")</li>
+     * </ul>
+     * @param s the string which should be replaced.
+     * @return the replaced string
+     */
+    protected String replaceString(String s){
+        return s.replace("\r", "").replace("\n", "")
+                .replace("{File.pathSeparator}", File.pathSeparator)
+                .replace("{File.separator}", File.separator)
+                .replace("{xmx}", RUNTIME_XMX)
+                .replace("{xms}", RUNTIME_XMS)
+                .trim();
+    }
+    
+    /**
+     * Replaces a string with the following mapping:
+     * <ul>
+     * <li>"{File.separator}" with the os dependent file separator.On UNIX systems the value is <code>'/'</code>; on Microsoft Windows systems it is <code>'\\'</code>.</li>
+     * <li>"{File.pathSeparator}" with the os dependent path separator.It is used to separate filenames in a sequence of files given as a <em>path list</em>.On UNIX systems, this character is <code>':'</code>; on Microsoft Windows systems it is <code>';'</code>.</li>
+     * <li>"{xmx}" with the value xmx value the java process is started with (e.g. "{xmx}" is replaced with "-Xmx100G")</li>
+     * <li>"{xms}" with the value xms value the java process is started with (e.g. "{xms}" is replaced with "-Xms10G")</li>
+     * <li>"{source}" with the URL of the source ontology</li>
+     * <li>"{target}" with the URL of the target ontology</li>
+     * <li>"{inputAlignment}" with the URL of the source ontology</li>
+     * </ul>
+     * @param s the string which should be replaced.
+     * @param source the source URL - should not be null
+     * @param target the target URL - should not be null
+     * @param inputAlignment the input alignment URL - can be null
+     * @return the replaced string
+     */
+    protected String replaceString(String s, URL source, URL target, URL inputAlignment){
+        return s.replace("\r", "").replace("\n", "")
+                .replace("{File.pathSeparator}", File.pathSeparator)
+                .replace("{File.separator}", File.separator)
+                .replace("{xmx}", RUNTIME_XMX)
+                .replace("{xms}", RUNTIME_XMS)
+                .replace("{source}", source.toString())
+                .replace("{target}", target.toString())
+                .replace("{inputAlignment}", inputAlignment == null ? "" : inputAlignment.toString())
+                .trim();
     }
 }

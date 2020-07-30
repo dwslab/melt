@@ -50,7 +50,11 @@ class ExecutionRunner implements Callable<ExecutionResult> {
         URL resultingAlignment = null;
         long startTime = System.nanoTime();
         try {
-            resultingAlignment = matcher.align(testCase.getSource().toURL(), testCase.getTarget().toURL());
+            if(testCase.getInputAlignment() != null){
+                resultingAlignment = matcher.align(testCase.getSource().toURL(), testCase.getTarget().toURL(), testCase.getInputAlignment().toURL());
+            }else{
+                resultingAlignment = matcher.align(testCase.getSource().toURL(), testCase.getTarget().toURL());
+            }
         } catch (ToolBridgeException | MalformedURLException ex) {
             LOGGER.error("Exception during matching (matcher " + matcherName + " on testcase " +  testCase.getName() + ").", ex);
         }

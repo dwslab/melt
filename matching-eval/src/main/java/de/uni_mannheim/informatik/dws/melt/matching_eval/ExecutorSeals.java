@@ -428,6 +428,8 @@ public class ExecutorSeals {
         commands.add("-o");
         commands.add(testCase.getSource().toString());
         commands.add(testCase.getTarget().toString());
+        if(testCase.getInputAlignment() != null)
+            commands.add(testCase.getInputAlignment().toString());
         commands.add("-f");
         commands.add(systemAlignmentToBeWritten.getAbsolutePath());
         commands.add("-z");

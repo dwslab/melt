@@ -98,8 +98,10 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.26.0</version>                
                 <configuration>
-                    <!-- further machine configuration options: https://dmp.fabric8.io/#docker-machine -->
-                    <machine><name>default</name></machine>
+                    <!-- further machine configuration options: https://dmp.fabric8.io/#docker-machine
+                    uncomment the following line in case you have installed docker on windows or mac-->
+                    <!--machine><name>default</name></machine-->
+                    
                     <!-- inline authConfig not recommended but possible - better use settings xml (one example is shown at the end of the file 
                          see also https://dmp.fabric8.io/#authentication
                     <authConfig>
@@ -113,7 +115,7 @@
                                 <from>openjdk:8-jre-alpine</from><!--change it to a docker base image you want - this is just a small image which contains java-->
                                 <assembly><descriptorRef>hobbit</descriptorRef></assembly>
                                 <env><OAEI_MAIN>${oaei.mainClass}</OAEI_MAIN></env>
-                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter HobbitWrapper</shell></cmd>
+                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter de.uni_mannheim.informatik.dws.melt.hobbit_wrapper.HobbitWrapper</shell></cmd>
                                 <workdir>/maven</workdir>
                             </build>
                         </image>

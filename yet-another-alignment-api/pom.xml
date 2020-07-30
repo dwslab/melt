@@ -18,6 +18,11 @@
             <version>1.8</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.8</version>
+        </dependency>
+        <dependency>
             <groupId>com.googlecode.cqengine</groupId>
             <artifactId>cqengine</artifactId>
             <version>3.4.0</version>

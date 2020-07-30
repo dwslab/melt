@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -503,6 +504,46 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
             m.add(c);
         }
         return m;
+    }
+    
+    /**
+     * Returns a random sample of correspondences.
+     * If the parameter n is creater than the alignment size, an IllegalArgumentException is thrown.
+     * @param n the number of correspondences to be returned. Should be smaller than the size of this alignment.
+     * @return a new Alignment which contains the sampled correspondences.
+     */
+    public Alignment sample(int n){
+        if(n > this.size() || n < 0)
+            throw new IllegalArgumentException("Parameter n is out of range (smaller zero or greater than the size of current alignment.");
+        ArrayList<Correspondence> correspondenceList = new ArrayList<>(this);
+        Collections.shuffle(correspondenceList);
+        Alignment samples = new Alignment(this, false);
+        samples.addAll(correspondenceList.subList(0, n));
+        return samples;
+    }
+    
+    /**
+     * Returns a random sample of correspondences.
+     * If the parameter n is creater than the alignment size, the full alignment (copy of this alignment) is returned.
+     * @param fraction the number of correspondences to be returned. Should be smaller than the size of this alignment.
+     * @return a new Alignment which contains the sampled correspondences.
+     */
+    public Alignment sampleByFraction(double fraction){
+        if(fraction < 0.0 || fraction > 1.0)
+            throw new IllegalArgumentException("Fraction is out of range (smaller zero or greater one");
+        return sample((int)Math.round((double)this.size() * fraction));
+    }
+    
+    /**
+     * Returns all extension keys of correspondences in this alignment.
+     * @return a set of all correspondence extension keys.
+     */
+    public Set<String> getDistinctCorrespondenceExtensionKeys(){
+        Set<String> keys = new HashSet();
+        for(Correspondence c : this){
+            keys.addAll(c.getExtensions().keySet());
+        }
+        return keys;
     }
     
     /**
