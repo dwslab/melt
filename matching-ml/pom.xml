@@ -10,8 +10,9 @@
     <description>The machine learning extension for MELT. Currently, gensim is supported. The ML
         extension allows to communicate with a Python backend.
     </description>
+
     <dependencies>
-        
+
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-jena</artifactId>

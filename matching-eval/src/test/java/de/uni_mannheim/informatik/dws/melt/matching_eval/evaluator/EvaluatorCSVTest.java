@@ -3,7 +3,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrixMetric;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.SealsTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
