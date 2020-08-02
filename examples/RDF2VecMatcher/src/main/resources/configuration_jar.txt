@@ -1,1 +1,0 @@
-This is content of configuration_jar.txt.
