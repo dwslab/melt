@@ -28,6 +28,8 @@ import org.apache.commons.io.FileUtils;
 
 /**
  * This executor can run SEALS matchers.
+ * Please note that as of 2020, SEALS Client 7.0.5 requires JDK 1.8!
+ * If you have a newer JDK installed and you run into trouble, you can install an additional JDK and use
  *
  * @author Jan Portisch
  */
@@ -76,7 +78,12 @@ public class ExecutorSeals {
      *  If true, deletes files in tmp folder which starts with "alignment" before running a matcher
      */
     private boolean deleteTempFiles;
-    
+
+    /**
+     * The command to start java in the terminal. Typically, this is "java"
+     */
+    private String javaCommand = "java";
+
     /**
      * Constructor
      *
@@ -98,12 +105,43 @@ public class ExecutorSeals {
         this.deleteTempFiles = deleteTempFiles;
         
         if(this.sealsClientJar.exists() == false){
-            LOGGER.error("Seals Client does not exists");
+            LOGGER.error("Seals Client does not exist! The execution will fail.");
         }
         if(this.resultsDirectory.exists() == false){
-            LOGGER.info("created seals result folder: {}", this.resultsDirectory.getAbsolutePath());
+            LOGGER.info("Created seals result folder: {}", this.resultsDirectory.getAbsolutePath());
             this.resultsDirectory.mkdirs();
         }        
+    }
+
+    /**
+     * Constructor
+     *
+     * @param javaCommand           Command to start java.
+     * @param sealsClientJar        The path to the local SEALS client JAR file.
+     * @param sealsHome             SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).
+     * @param resultsDirectory      Results folder where the SEALS results will be copied to
+     * @param javaRuntimeParameters Runtime parameters such as ("-Xmx25g", "-Xms15g").
+     * @param timeout               Timeout for one testcase as long.
+     * @param timeoutTimeUnit       The unit of the timeout.
+     * @param deleteTempFiles       If true, deletes files in tmp folder which starts with "alignment" before running a matcher
+     */
+    public ExecutorSeals(String javaCommand, File sealsClientJar, File sealsHome, File resultsDirectory, List<String> javaRuntimeParameters, long timeout, TimeUnit timeoutTimeUnit, boolean deleteTempFiles) {
+        this.sealsClientJar = sealsClientJar;
+        this.sealsHome = sealsHome;
+        this.resultsDirectory = resultsDirectory;
+        this.javaRuntimeParameters = javaRuntimeParameters;
+        this.timeout = timeout;
+        this.timeoutTimeUnit = timeoutTimeUnit;
+        this.deleteTempFiles = deleteTempFiles;
+        this.setJavaCommand(javaCommand);
+
+        if(this.sealsClientJar.exists() == false){
+            LOGGER.error("Seals Client does not exist! The execution will fail.");
+        }
+        if(this.resultsDirectory.exists() == false){
+            LOGGER.info("Created seals result folder: {}", this.resultsDirectory.getAbsolutePath());
+            this.resultsDirectory.mkdirs();
+        }
     }
 
     /**
@@ -117,6 +155,20 @@ public class ExecutorSeals {
      */
     public ExecutorSeals(File sealsClientJar, File sealsHome, List<String> javaRuntimeParameters, long timeout, TimeUnit timeoutTimeUnit) {
         this(sealsClientJar, sealsHome, new File("sealsResults"), javaRuntimeParameters, timeout, timeoutTimeUnit, true);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param javaCommand           Command to start java.
+     * @param sealsClientJar        The path to the local SEALS client JAR file.
+     * @param sealsHome             SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).
+     * @param javaRuntimeParameters Runtime parameters such as ("-Xmx25g", "-Xms15g").
+     * @param timeout               Timeout for one testcase as long.
+     * @param timeoutTimeUnit       The unit of the timeout.
+     */
+    public ExecutorSeals(String javaCommand, File sealsClientJar, File sealsHome, List<String> javaRuntimeParameters, long timeout, TimeUnit timeoutTimeUnit) {
+        this(javaCommand, sealsClientJar, sealsHome, new File("sealsResults"), javaRuntimeParameters, timeout, timeoutTimeUnit, true);
     }
 
     /**
@@ -135,11 +187,35 @@ public class ExecutorSeals {
      * Constructor
      * The default timeout of 12 hours will be used.
      *
+     * @param javaCommand           Command to start java.
+     * @param sealsClientJar        The path to the local SEALS client JAR file.
+     * @param sealsHome             SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).
+     * @param javaRuntimeParameters Runtime parameters such as ("-Xmx25g", "-Xms15g").
+     */
+    public ExecutorSeals(String javaCommand, File sealsClientJar, File sealsHome, List<String> javaRuntimeParameters) {
+        this(javaCommand, sealsClientJar, sealsHome, javaRuntimeParameters, 12, TimeUnit.HOURS);
+    }
+
+    /**
+     * Constructor
+     * The default timeout of 12 hours will be used.
+     *
      * @param sealsClientJar The file to the local SEALS client JAR file.
      * @param sealsHome      SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).
      */
     public ExecutorSeals(File sealsClientJar, File sealsHome) {
         this(sealsClientJar, sealsHome, Arrays.asList());
+    }
+
+    /**
+     * Constructor
+     * The default timeout of 12 hours will be used.
+     * @param javaCommand           Command to start java.
+     * @param sealsClientJar The file to the local SEALS client JAR file.
+     * @param sealsHome      SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).
+     */
+    public ExecutorSeals(String javaCommand, File sealsClientJar, File sealsHome) {
+        this(javaCommand, sealsClientJar, sealsHome, Arrays.asList());
     }
 
     /**
@@ -150,6 +226,17 @@ public class ExecutorSeals {
      */
     public ExecutorSeals(String sealsClientJarPath, String sealsHomePath) {
         this(new File(sealsClientJarPath), new File(sealsHomePath));
+    }
+
+    /**
+     * Constructor
+     *
+     * @param javaCommand           Command to start java.
+     * @param sealsClientJarPath The path to the local SEALS client JAR file.
+     * @param sealsHomePath      SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).
+     */
+    public ExecutorSeals(String javaCommand, String sealsClientJarPath, String sealsHomePath) {
+        this(javaCommand, new File(sealsClientJarPath), new File(sealsHomePath));
     }
 
     /**
@@ -328,12 +415,12 @@ public class ExecutorSeals {
         File errorFileToBeWritten = new File(resultsFolder, matcherName + "_error.txt");
 
         List<String> commands = new ArrayList<>();
-        //dont quote anything here; ProcessBuilder will already take care of.
+        //don't quote anything here; ProcessBuilder will already take care of this.
         //see https://blog.krecan.net/2008/02/09/processbuilder-and-quotes/
         if(isLinux){
             commands.add("setsid");
         }
-        commands.add("java");
+        commands.add(javaCommand);
         if (javaRuntimeParameters != null) commands.addAll(this.javaRuntimeParameters);
         commands.add("-jar");
         commands.add(this.sealsClientJar.getAbsolutePath());
@@ -399,22 +486,22 @@ public class ExecutorSeals {
         return result;
     }
     
-    private static void terminateProcess(Process p){
-        if(p == null)
+    private static void terminateProcess(Process process){
+        if(process == null)
             return;
-        if(p.isAlive()){
+        if(process.isAlive()){
             LOGGER.info("Matcher process is still alive - MELT is now trying to kill it.");
             if(isLinux){
-                Long pid = getPid(p);
+                Long pid = getPid(process);
                 if(pid == null){
-                    killProcessWithJava(p);
-                }else{
+                    killProcessWithJava(process);
+                } else {
                     killAllProcessesWithSameSessionId(pid);
-                    if(p.isAlive())
-                        killProcessWithJava(p);
+                    if(process.isAlive())
+                        killProcessWithJava(process);
                 }
-            }else{
-                killProcessWithJava(p);
+            } else {
+                killProcessWithJava(process);
             }
         }
     }
@@ -455,16 +542,21 @@ public class ExecutorSeals {
             LOGGER.error("Could not destroy matcher child processes", ex);
         }
     }
-    
-    private static Long getPid(Process p){
+
+    /**
+     * Obtains the process ID given a process.
+     * @param process The process for which the ID shall be determined.
+     * @return Process ID as Long of a given process.
+     */
+    private static Long getPid(Process process){
         if(isLinux == false)
             return null;
-        Class<?> clazz = p.getClass();
+        Class<?> clazz = process.getClass();
         if (clazz.getName().equals("java.lang.UNIXProcess")) {
             try {
                 Field pidField = clazz.getDeclaredField("pid");
                 pidField.setAccessible(true);
-                Object value = pidField.get(p);
+                Object value = pidField.get(process);
                 if (value instanceof Integer) {
                     return ((Integer) value).longValue();
                 }
@@ -474,8 +566,10 @@ public class ExecutorSeals {
         }
         return null;
     }
-    
-    
+
+    /**
+     * Regex pattern to get the matcher name from the SEALS {@code descriptor.xml} file.
+     */
     private static final Pattern matcherNamePattern = Pattern.compile("<ns:package.*?id=\"(.*?)\"", Pattern.DOTALL); 
     
     /**
@@ -490,19 +584,19 @@ public class ExecutorSeals {
         }else if(file.isDirectory()){
             descriptorFile = new File(file, "descriptor.xml");
         }else{
-            LOGGER.info("Can not retrive matcher name because given parameter is not a diretory or a descriptor file.");
+            LOGGER.info("Can not retrieve matcher name because given parameter is not a directory or a descriptor file.");
             return "";
         }
         
         if(descriptorFile.exists() == false){
-            LOGGER.info("Can not retrive matcher name because descriptor file does not exist.");
+            LOGGER.info("Can not retrieve matcher name because descriptor file does not exist.");
             return "";
         }
         String text = "";
         try {
             text = new String(Files.readAllBytes(descriptorFile.toPath()), StandardCharsets.UTF_8);
         } catch (IOException ex) {
-            LOGGER.info("Can not retrive matcher name because descriptor file can not be read.", ex);
+            LOGGER.info("Can not retrieve matcher name because descriptor file can not be read.", ex);
             return "";
         }
         
@@ -678,5 +772,22 @@ public class ExecutorSeals {
 
     public void setJavaRuntimeParameters(List<String> javaRuntimeParameters) {
         this.javaRuntimeParameters = javaRuntimeParameters;
+    }
+
+    public String getJavaCommand() {
+        return javaCommand;
+    }
+
+    /**
+     * If in your system, the "java" command links to a jdk &gt; 8, issues might occur. Therefore, you can use
+     * this command to point to a jdk 8 executable.
+     * @param javaCommand The command to start the desired java version such as a file path to the executable.
+     */
+    public void setJavaCommand(String javaCommand) {
+        if(javaCommand == null){
+            LOGGER.error("Cannot set javaCommand null. The command will not be changed.");
+            return;
+        }
+        this.javaCommand = javaCommand;
     }
 }

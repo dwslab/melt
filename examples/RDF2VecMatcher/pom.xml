@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-    <artifactId>simpleJavaMatcher</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
+    <artifactId>rdf2vecMatcher</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
     <packaging>jar</packaging>
     <version>1.0</version><!-- version appearing in descriptor file of seals package and system.ttl file in hobbit -->
     <description>demo matcher description</description><!-- description appearing in descriptor file of seals package and system.ttl file in hobbit -->
@@ -12,7 +12,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         
-        <oaei.mainClass>de.uni_mannheim.informatik.dws.melt.demomatcher.RDF2VecMatcher</oaei.mainClass><!-- mandatory: this class has to implement IOntologyMatchingToolBridge -->
+        <oaei.mainClass>de.uni_mannheim.informatik.dws.melt.demomatcher.SimpleStringMatcher</oaei.mainClass><!-- mandatory: this class has to implement IOntologyMatchingToolBridge -->
         
         <oaei.copyright>(C) Mannheim, 2019</oaei.copyright> <!--optional copyright appearing in the seals descriptor file -->
         <oaei.license>GNU Lesser General Public License 2.1 or above</oaei.license> <!--optional license appearing in the seals descriptor file -->
@@ -27,8 +27,16 @@
     - all files in "src/main/resources" folder are compiled to the resulting jar and can be accessed with
           getClass().getClassLoader().getResourceAsStream("configuration_jar.txt");
     -->
-    
+
     <dependencies>
+
+        <!-- RDF2Vec dependency -->
+        <dependency>
+            <groupId>com.github.dwslab</groupId>
+            <artifactId>jRDF2Vec</artifactId>
+            <version>jrdf2vec-1.0</version>
+        </dependency>
+
         <!-- dependency for jena matchers - for other matchers you can replace it with artifactId: matching-base -->
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
@@ -41,7 +49,7 @@
             <artifactId>matching-eval</artifactId>
             <version>${matching.version}</version>
             <scope>test</scope>
-            <!-- only in test scope, can only be used when running tests. 
+            <!-- only in test scope, can only be used when running tests.
                  You can also remove the scope but then remove the whole dependency when packaging the matcher.
                  Otherwise you get a lot of unused dependencies in your matcher.-->
         </dependency>
@@ -60,15 +68,21 @@
         </dependency>
 
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.3.0-M1</version>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>1.6.2</version>
+            <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.3.0-M1</version>
+            <version>5.6.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.6.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -133,48 +147,7 @@
             </plugin>
 
 
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.26.0</version>                
-                <configuration>
-                    <!-- further machine configuration options: https://dmp.fabric8.io/#docker-machine -->
-                    <machine><name>default</name></machine>
-                    <!-- inline authConfig not recommended but possible - better use settings xml (one example is shown at the end of the file 
-                         see also https://dmp.fabric8.io/#authentication
-                    <authConfig>
-                        <username>{username}</username>
-                        <password>{password}</password>
-                    </authConfig>  -->
-                    <images>
-                        <image>
-                            <name>${oaei.imageURL}</name>
-                            <build>
-                                <from>openjdk:8-jre-alpine</from><!--change it to a docker base image you want - this is just a small image which contains java-->
-                                <assembly><descriptorRef>hobbit</descriptorRef></assembly>
-                                <env><OAEI_MAIN>${oaei.mainClass}</OAEI_MAIN></env>
-                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter HobbitWrapper</shell></cmd>
-                                <workdir>/maven</workdir>
-                            </build>
-                        </image>
-                    </images>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-                        <artifactId>hobbit-assembly</artifactId>
-                        <version>${matching.version}</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>build</goal><!--install phase-->
-                            <goal>push</goal><!--deploy phase-->
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -184,6 +157,10 @@
     </build>
 
     <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
         <repository>
             <id>maven.mannheim.releases</id>
             <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>

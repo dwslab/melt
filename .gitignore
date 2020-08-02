@@ -46,6 +46,7 @@ log4j.properties
 # Python
 playground.py
 
+# datasets
 **/datasets/*.xml
 
 #latex
@@ -56,7 +57,6 @@ playground.py
 *.out
 *.dvi
 paper/*.pdf
-
 
 #include example results
 !examples/analyzingMatcherSimilarity/results*
@@ -77,9 +77,14 @@ documentation/.~lock.melt_ml_architecture_image.odp#
 python_command.txt
 index.index.0
 
+# resources
 */melt-resources/*
 
 # include travis file
 !.travis.yml
 !.github/workflows/maven.yml
 !.gitignore
+
+# result files
+/matching-eval/sealsResults
+/results

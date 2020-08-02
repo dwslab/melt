@@ -18,4 +18,18 @@ class ExecutorSealsTest {
         assertEquals("DemoMatcher", ExecutorSeals.getMatcherNameFromSealsDescriptor("./src/test/resources/sealsCompliantDirectory/descriptor.xml"));
         assertEquals("", ExecutorSeals.getMatcherNameFromSealsDescriptor("./src/test/resources/sealsCompliantDirectory/notexistent.xml"));
     }
+
+    @Test
+    void setJavaCommand() {
+        // setter
+        ExecutorSeals executorSeals = new ExecutorSeals("", "");
+        executorSeals.setJavaCommand(null);
+        assertEquals("java", executorSeals.getJavaCommand());
+
+        executorSeals = new ExecutorSeals("java8", "", "");
+        assertEquals("java8", executorSeals.getJavaCommand());
+
+        executorSeals = new ExecutorSeals(null, "", "");
+        assertEquals("java", executorSeals.getJavaCommand());
+    }
 }
