@@ -115,6 +115,7 @@
                                 <from>openjdk:8-jre-alpine</from><!--change it to a docker base image you want - this is just a small image which contains java-->
                                 <assembly><descriptorRef>hobbit</descriptorRef></assembly>
                                 <env><OAEI_MAIN>${oaei.mainClass}</OAEI_MAIN></env>
+                                <!-- if you develop for SPIMBENCH benchmark, then use de.uni_mannheim.informatik.dws.melt.hobbit_wrapper.spimbench.HobbitSPIMBENCHWrapper as last parameter -->
                                 <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter de.uni_mannheim.informatik.dws.melt.hobbit_wrapper.HobbitWrapper</shell></cmd>
                                 <workdir>/maven</workdir>
                             </build>
