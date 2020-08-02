@@ -20,7 +20,7 @@ public enum SimilarHierarchyFilterApproach {
     /**
      * Average of the lowest match in both hierarchies:
      * The lower position in the hierarchy, the higher the confidence.
-     * Computed by the {@link Agony} class. May yield better results than {@link DEPTH_DEPENDEND_MATCHES} but is slower.
+     * Computed by the {@link Agony} class. May yield better results than DEPTH_DEPENDEND_MATCHES but is slower.
      */
     HIERARCHY_LEVEL_DEPENDED_MATCHES;
     
