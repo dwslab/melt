@@ -520,8 +520,8 @@ def align_embeddings():
             projected_source, projected_target = linear_projection(source_vectors, target_vectors, inputAlignment)
         elif function == 'neural_net_projection':
             projected_source, projected_target = neural_net_projection(source_vectors, target_vectors, inputAlignment)
-        elif function == 'neural_net_projection':
-            projected_source, projected_target = neural_net_projection(source_vectors, target_vectors, inputAlignment)
+        elif function == 'cca_projection':
+            projected_source, projected_target = cca_projection(source_vectors, target_vectors, inputAlignment)
         elif function == 'analyze':
             analyze(source_vectors, target_vectors, inputAlignment)
             return '[]'
