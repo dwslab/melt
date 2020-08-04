@@ -21,12 +21,55 @@ import org.slf4j.LoggerFactory;
 public class BadHostsFilter extends MatcherYAAAJena {
     private static final Logger LOGGER = LoggerFactory.getLogger(BadHostsFilter.class);
 
-    @Override
-    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        return filter(source, target, inputAlignment);
+    /**
+     * if true, filter all correspondences where the host can not be determined
+     */
+    private boolean strict;
+    
+    /**
+     * Initialises the BadHostsFilter in a non strict mode.
+     * This means if the host of source or target in a correspondence can not be determined, then the correspondence is added to the filtered alignment.
+     */
+    public BadHostsFilter(){
+        this.strict = false;
     }
     
+    /**
+     * Constructor
+     * @param strict if true, filter all correspondences where the host can not be determined. 
+     * If false, also include correspondences where the host could not be determined.
+     */
+    public BadHostsFilter(boolean strict){
+        this.strict = strict;
+    }
+    
+    @Override
+    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
+        return filter(source, target, inputAlignment, this.strict);
+    }
+    
+    
+    /**
+     * Filters the alignment based on similar hosts in a non strict mode
+     * (if the host of source or target in a correspondence can not be determined, then the correspondence is added to the filtered alignment).
+     * @param source the source ontology
+     * @param target the target ontology
+     * @param inputAlignment the alignment to be filtered
+     * @return the filtered alignment.
+     */
     public static Alignment filter(OntModel source, OntModel target, Alignment inputAlignment){
+        return filter(source, target, inputAlignment, false);
+    }
+    
+    /**
+     * Filters the alignment based on similar hosts.
+     * @param source the source ontology
+     * @param target the target ontology
+     * @param inputAlignment the alignment to be filtered
+     * @param strict if true, filter all correspondences where the host can not be determined
+     * @return the filtered alignment.
+     */
+    public static Alignment filter(OntModel source, OntModel target, Alignment inputAlignment, boolean strict){
         String sourceHostURI = getHostURIOfModel(source);
         String targetHostURI = getHostURIOfModel(target);
         if(sourceHostURI.isEmpty() || targetHostURI.isEmpty()){
@@ -36,9 +79,10 @@ public class BadHostsFilter extends MatcherYAAAJena {
         Alignment resultAlignment = new Alignment();
         for(Correspondence c : inputAlignment){
             String sourceHost = getHostOfURI(c.getEntityOne());
-            String targetHost = getHostOfURI(c.getEntityOne());
+            String targetHost = getHostOfURI(c.getEntityTwo());
             if(sourceHost.isEmpty() || targetHost.isEmpty()){
-                resultAlignment.add(c); // could not check if host is equals -> do not filter it
+                if(strict == false)
+                    resultAlignment.add(c); // could not check if host is equals -> do not filter it
                 continue;
             }
             if(sourceHost.equals(sourceHostURI) && targetHost.equals(targetHostURI)){

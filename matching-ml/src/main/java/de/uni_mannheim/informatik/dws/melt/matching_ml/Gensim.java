@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -99,6 +100,56 @@ public class Gensim {
      */
     private File resourcesDirectory = new File(DEFAULT_RESOURCES_DIRECTORY);
 
+    
+    
+    /************************************
+     * Embedding alignment
+     ***********************************/
+    
+    /**
+     * Align two knowledge graph embeddings
+     * @param vectorPathSource the source path to a vector file
+     * @param vectorPathTarget the target path to a vector file
+     * @param function function which is used to translate the embeddings
+     * @param alignment the alignment with initial mapping
+     * @return alignment
+     * @throws Exception in case of errors
+     */
+    public Alignment alignModel(String vectorPathSource, String vectorPathTarget, String function, Alignment alignment) throws Exception{
+        ObjectNode root = JSON_MAPPER.createObjectNode();
+        root.put("vectorPathSource", vectorPathSource);
+        root.put("vectorPathTarget", vectorPathTarget);
+        root.put("function", function);
+        ArrayNode array = root.putArray("alignment");
+        for(Correspondence c : alignment){
+            array.addArray().add(c.getEntityOne()).add(c.getEntityTwo());
+        }       
+        String jsonContent = JSON_MAPPER.writeValueAsString(root);
+        
+        HttpPost request = new HttpPost(serverUrl + "/align-embeddings");
+        request.setEntity(new StringEntity(jsonContent,ContentType.APPLICATION_JSON));
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                } else return parseJSON(resultString);
+            }
+        }
+    }
+    
+    private Alignment parseJSON(String resultString)throws Exception{
+        JsonNode array = JSON_MAPPER.readTree(resultString);
+        Alignment alignment = new Alignment();
+        for(JsonNode element : array){
+            alignment.add(element.get(0).asText(), element.get(1).asText(), element.get(2).asDouble());
+        }
+        return alignment;
+    }
+    
     
     /************************************
      * Vector space model
@@ -615,16 +666,16 @@ public class Gensim {
         File serverResourceDirectory = this.resourcesDirectory;
         serverResourceDirectory.mkdirs();
 
-        exportResource(serverResourceDirectory, "python_server.py");
+        exportResource(serverResourceDirectory, "python_server_melt.py");
         exportResource(serverResourceDirectory, "requirements.txt");
 
         httpClient = HttpClients.createDefault(); // has to be re-instantiated
         String canonicalPath;
-        File serverFile = new File(serverResourceDirectory, "python_server.py");
+        File serverFile = new File(serverResourceDirectory, "python_server_melt.py");
         try {
             if (!serverFile.exists()) {
                 LOGGER.error("Server File does not exist. Cannot start server. ABORTING. Please make sure that " +
-                        "the 'python_server.py' file is placed in directory '" + DEFAULT_RESOURCES_DIRECTORY + "'.");
+                        "the 'python_server_melt.py' file is placed in directory '" + DEFAULT_RESOURCES_DIRECTORY + "'.");
                 return false;
             }
             canonicalPath = serverFile.getCanonicalPath();

@@ -284,7 +284,7 @@ class GensimTest {
         // reinitialize
         File externalResourcesDirectory = new File("./ext/");
         gensim = Gensim.getInstance(externalResourcesDirectory);
-        File serverFile = new File(externalResourcesDirectory, "python_server.py");
+        File serverFile = new File(externalResourcesDirectory, "python_server_melt.py");
         assertTrue(serverFile.exists());
 
         // shut down again to keep using default resources directory

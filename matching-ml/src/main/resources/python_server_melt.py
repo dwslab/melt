@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from gensim import corpora, models, similarities, matutils
+from scipy import linalg
 import csv
 import numpy as np
 import logging
@@ -153,7 +154,7 @@ def is_in_vocabulary():
     return str(concept in vectors.vocab)
 
 
-def get_vectors(model_path, vector_path):
+def get_vectors(model_path=None, vector_path=None):
     """Will return the gensim vectors given model_path and vector_path where only one variable is filled.
     The Java backend makes sure that the correct variable of the both is filled. This method also handles the
     caching of models and vectors.
@@ -500,6 +501,192 @@ def read_concept_file(path_to_concept_file):
             result.append(lemma)
     logging.info("Concept file read: " + str(path_to_concept_file))
     return result
+
+############################################
+#          Align Embeddings
+############################################
+
+@app.route('/align-embeddings', methods=['POST'])
+def align_embeddings():
+    try:
+        content = request.get_json()
+        
+        source_vectors = get_vectors(vector_path=content['vectorPathSource'])
+        target_vectors = get_vectors(vector_path=content['vectorPathTarget'])
+        inputAlignment = content['alignment']
+        function = content['function']
+        
+        if function == 'linear_projection':
+            projected_source, projected_target = linear_projection(source_vectors, target_vectors, inputAlignment)
+        elif function == 'neural_net_projection':
+            projected_source, projected_target = neural_net_projection(source_vectors, target_vectors, inputAlignment)
+        elif function == 'neural_net_projection':
+            projected_source, projected_target = neural_net_projection(source_vectors, target_vectors, inputAlignment)
+        elif function == 'analyze':
+            analyze(source_vectors, target_vectors, inputAlignment)
+            return '[]'
+        else:
+            return "ERROR Function not available"
+        
+        results = []
+        for source_uri in projected_source.vocab:
+            most_similar_target = projected_target.most_similar(positive=[projected_source[source_uri]], topn=1)[0]
+            results.append((source_uri, most_similar_target[0], most_similar_target[1]))
+        return jsonify(results)
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
+
+
+def __normr(arr):
+    return arr / linalg.norm(arr, axis=1, ord=2, keepdims=True)
+
+
+def __canoncorr(X, Y):
+    # Based on sourceforge.net/p/octave/statistics/ci/release-1.4.0/tree/inst/canoncorr.m
+
+    #sio.savemat('np_vector.mat', {'X': X, 'Y': Y})
+    #additional constraint because otherwise line ' A = linalg.solve(Rx, U[:, :d]) ' does not work
+    assert (X.shape[0] > X.shape[1] and Y.shape[0] > Y.shape[1]), \
+        'Vector dimension must be greater than trainings lexicon - maybe decrease vector size.'
+
+    k = X.shape[0]
+    m = X.shape[1]
+    n = Y.shape[1]
+    d = min(m, n)
+
+    assert (X.shape[0] == Y.shape[0])  # both array should have same number of rows
+
+
+    X = X - X.mean(axis=0, keepdims=True)  # center X = remove mean
+    Y = Y - Y.mean(axis=0, keepdims=True)  # center Y = remove mean
+
+    Qx, Rx = linalg.qr(X, mode='economic')
+    Qy, Ry = linalg.qr(Y, mode='economic')
+
+    U, S, V = linalg.svd(Qx.T.dot(Qy),
+                         full_matrices=False)  # full_matrices=False should correspind to svd(...,0)   #, lapack_driver='gesvd'
+    V = V.T  # because svd returns transposed V (called Vh)
+
+    A = linalg.solve(Rx, U[:, :d])
+    B = linalg.solve(Ry, V[:, :d])
+
+    f = np.sqrt(k - 1)
+    A = np.multiply(A, f)
+    B = np.multiply(B, f)
+
+    return A, B
+
+
+def __project_embeddings_to_lexicon_subset(word_vector_source, word_vector_target, lexicon):
+    source_subset_vectors = []
+    target_subset_vectors = []
+    for lang_source_word, lang_target_word in lexicon:
+        if lang_source_word not in word_vector_source or lang_target_word not in word_vector_target:
+            continue
+        source_subset_vectors.append(word_vector_source[lang_source_word])
+        target_subset_vectors.append(word_vector_target[lang_target_word])
+    return np.array(source_subset_vectors), np.array(target_subset_vectors)
+
+
+def __create_keyed_vector(old_keyed_vector, new_matrix):
+    vector_size = new_matrix.shape[1]
+    keyed_vector = models.KeyedVectors(vector_size)
+    keyed_vector.vector_size = vector_size
+    keyed_vector.vocab = old_keyed_vector.vocab
+    keyed_vector.index2word = old_keyed_vector.index2word
+    keyed_vector.vectors = new_matrix
+    assert (len(old_keyed_vector.vocab), vector_size) == keyed_vector.vectors.shape
+    return keyed_vector
+
+def analyze(word_vector_src, word_vector_tgt, lexicon):
+    from sklearn.decomposition import PCA
+    import matplotlib.pyplot as plt
+    
+    matrix_src, matrix_tgt = __project_embeddings_to_lexicon_subset(word_vector_src, word_vector_tgt, lexicon)
+    matrix_diff = matrix_src - matrix_tgt
+    
+    diff_vector_list = []
+    for src, dst in lexicon:
+        if src in word_vector_src and dst in word_vector_tgt:
+            diff_vector_list.append(word_vector_src[src] - word_vector_tgt[dst])
+    t = np.array(diff_vector_list)
+    logging.info(matrix_diff)
+    logging.info(t)
+
+    principalComponents = PCA(n_components=2).fit_transform(matrix_diff)
+
+    plt.scatter(principalComponents[:, 0], principalComponents[:, 1])
+    for i in range(principalComponents.shape[0]):
+        # get text after last slash or hashtag in source uri
+        source_fragment = lexicon[i][0].rsplit('/',1)[-1].rsplit('#',1)[-1] 
+        plt.annotate(source_fragment, (principalComponents[i, 0], principalComponents[i, 1]))
+    plt.savefig('analyze.png')
+    
+
+def linear_projection(word_vector_src, word_vector_tgt, lexicon):
+    matrix_src, matrix_tgt = __project_embeddings_to_lexicon_subset(word_vector_src, word_vector_tgt, lexicon)
+    if matrix_src.size == 0 or matrix_tgt.size == 0:
+        raise Exception('the embeddings do not contain enough vector for the input alignment')
+    
+    x_mpi = linalg.pinv(matrix_src)  # Moore Penrose Pseudoinverse
+    w = np.dot(x_mpi, matrix_tgt)  # linear map matrix W
+
+    source_projected = __create_keyed_vector(word_vector_src, np.dot(word_vector_src.vectors, w))
+    return source_projected, word_vector_tgt
+
+
+def neural_net_projection(word_vector_src, word_vector_tgt, lexicon):
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout
+    from keras.optimizers import SGD
+    from keras import losses
+
+    matrix_src, matrix_tgt = __project_embeddings_to_lexicon_subset(word_vector_src, word_vector_tgt, lexicon)
+    if matrix_src.size == 0 or matrix_tgt.size == 0:
+        raise Exception('the embeddings do not contain enough vector for the input alignment')
+    
+    #TODO: optimze model
+    model = Sequential()
+    model.add(Dense(word_vector_src.vector_size, input_dim=word_vector_src.vector_size, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(word_vector_src.vector_size, input_dim=word_vector_src.vector_size, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(word_vector_src.vector_size, input_dim=word_vector_src.vector_size, activation='relu'))
+
+    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+    model.compile(loss=losses.mean_squared_error,
+                  optimizer=sgd,
+                  metrics=[losses.mean_squared_error])
+
+    model.fit(matrix_src, matrix_tgt, epochs=2000, batch_size=128)
+
+    source_projected = model.predict(word_vector_src.vectors)
+    source_projected_keyed_vector = create_keyed_vector(word_vector_src, source_projected)
+    return source_projected_keyed_vector, word_vector_tgt
+
+
+def cca_projection(word_vector_source, word_vector_target, lexicon, top_correlation_ratio = 0.5):
+    word_vector_source.init_sims(replace=True)
+    word_vector_target.init_sims(replace=True)
+
+    source_subset, target_subset = __project_embeddings_to_lexicon_subset(word_vector_source, word_vector_target, lexicon)
+    if source_subset.size == 0 or target_subset.size == 0:
+        raise Exception('the embeddings do not contain enough vector for the input alignment')
+
+    A, B = __canoncorr(target_subset, source_subset)
+
+    amount_A = int(np.ceil(top_correlation_ratio * A.shape[1]))
+    U = (word_vector_target.vectors - word_vector_target.vectors.mean(axis=0, keepdims=True)).dot(A[:, 0:amount_A])
+    U = __normr(U)
+    projected_target_vectors = __create_keyed_vector(word_vector_target, U)
+
+    amount_B = int(np.ceil(top_correlation_ratio * B.shape[1]))
+    V = (word_vector_source.vectors - word_vector_source.vectors.mean(axis=0, keepdims=True)).dot(B[:, 0:amount_B])
+    V = __normr(V)
+    projected_source_vectors = __create_keyed_vector(word_vector_source, V)
+
+    return projected_source_vectors, projected_target_vectors
 
 
 @app.route('/hello', methods=['GET'])

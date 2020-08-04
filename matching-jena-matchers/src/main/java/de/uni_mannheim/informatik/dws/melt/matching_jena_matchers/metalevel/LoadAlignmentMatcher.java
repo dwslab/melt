@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
