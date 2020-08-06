@@ -1,5 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml;
 
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.Word2VecConfiguration;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.Word2VecType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

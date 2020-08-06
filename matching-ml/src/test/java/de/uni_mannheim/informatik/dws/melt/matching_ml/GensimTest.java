@@ -1,5 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml;
 
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.Gensim;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.Word2VecConfiguration;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.Word2VecType;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;

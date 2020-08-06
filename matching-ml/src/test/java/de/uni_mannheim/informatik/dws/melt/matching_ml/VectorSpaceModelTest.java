@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml;
 
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.VectorSpaceModelMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;

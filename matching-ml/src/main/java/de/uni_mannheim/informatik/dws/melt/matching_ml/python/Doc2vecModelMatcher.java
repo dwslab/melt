@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_ml;
+package de.uni_mannheim.informatik.dws.melt.matching_ml.python;
 
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;

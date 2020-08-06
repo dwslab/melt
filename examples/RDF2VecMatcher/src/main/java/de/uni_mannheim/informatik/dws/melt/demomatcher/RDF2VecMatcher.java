@@ -17,17 +17,21 @@ import org.apache.jena.ontology.OntModel;
  */
 public class RDF2VecMatcher extends MatcherYAAAJena {
 
-    public Alignment inputAlignment = new Alignment();
+    public Alignment initialAlignment = new Alignment();
 
-    public RDF2VecMatcher(Alignment inputAlignment){
-        this.inputAlignment = inputAlignment;
+    public RDF2VecMatcher(){
+    }
+
+    public RDF2VecMatcher(Alignment initialAlignment){
+        this.initialAlignment = initialAlignment;
     }
 
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties p) throws Exception {
-        if(this.inputAlignment.size() == 0 && inputAlignment.size() > 0){
-            this.inputAlignment = inputAlignment;
-        }
+        Alignment usedAlignment;
+        if(inputAlignment != null && inputAlignment.size() > 0){
+            usedAlignment = inputAlignment;
+        } else usedAlignment = this.initialAlignment;
 
         // create directory in which the walks for the source will be generated into (and also the model)
         File sourceWalkDirectory = new File("./sourceDirectory");
@@ -40,7 +44,7 @@ public class RDF2VecMatcher extends MatcherYAAAJena {
         // RDF2vec Instance with ontMOdel and directory for walks
         RDF2Vec rdf2Vec = new RDF2Vec(source, sourceWalkDirectory);
         Word2VecConfiguration config = new Word2VecConfiguration();
-        config.setVectorDimension(500);
+        config.setVectorDimension(50);
         rdf2Vec.setConfiguration(config);
 
         // trigger source training
@@ -51,12 +55,12 @@ public class RDF2VecMatcher extends MatcherYAAAJena {
 
         de.uni_mannheim.informatik.dws.jrdf2vec.training.Gensim.shutDown();
 
-        Alignment alignment = Gensim.getInstance().alignModel("./sourceDirectory/model.kv", "./targetDirectory/model.kv", "linear_projection", this.inputAlignment);
+        Alignment alignment = Gensim.getInstance().alignModel("./sourceDirectory/model.kv", "./targetDirectory/model.kv", "linear_projection", usedAlignment);
         
         FileUtils.deleteDirectory(sourceWalkDirectory);
         FileUtils.deleteDirectory(targetWalks);
         Gensim.shutDown();
-        
+
         return alignment;
     }
 }

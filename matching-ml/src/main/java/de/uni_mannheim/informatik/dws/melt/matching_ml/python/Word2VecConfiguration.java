@@ -1,7 +1,5 @@
-package de.uni_mannheim.informatik.dws.melt.matching_ml;
+package de.uni_mannheim.informatik.dws.melt.matching_ml.python;
 
-import java.util.Arrays;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
