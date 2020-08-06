@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_ml;
+package de.uni_mannheim.informatik.dws.melt.matching_ml.python;
 
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -6,7 +6,7 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Corresponde
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
+
 import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

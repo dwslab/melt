@@ -1,8 +1,7 @@
-package de.uni_mannheim.informatik.dws.melt.matching_ml;
+package de.uni_mannheim.informatik.dws.melt.matching_ml.python;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,9 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
-import java.util.function.Function;
+
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ontology.OntModel;

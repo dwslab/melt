@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_ml;
+package de.uni_mannheim.informatik.dws.melt.matching_ml.python;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,7 +91,7 @@ public class Gensim {
 
     /**
      * Indicates whether the shutdown hook has been initialized.
-     * This flag is required in order to have only one hook despite multiple reinitializations.
+     * This flag is required in order to have only one hook despite multiple re-initializations.
      */
     private boolean isHookStarted = false;
     

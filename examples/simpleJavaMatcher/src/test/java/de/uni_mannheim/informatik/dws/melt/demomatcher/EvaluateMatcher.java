@@ -26,7 +26,7 @@ public class EvaluateMatcher {
     }
     
     @Test
-    public void optimzeMatcher(){
+    public void optimizeMatcher(){
         GridSearch gridSearch = new GridSearch(LevenshteinMatcher.class);
         gridSearch.addParameter("threshold", Arrays.asList(0.1, 0.3, 0.5, 0.7, 1.0));
         ExecutionResultSet executionResultSet = gridSearch.runGridSequential(TrackRepository.Conference.V1.getTestCase("cmt-conference"));
