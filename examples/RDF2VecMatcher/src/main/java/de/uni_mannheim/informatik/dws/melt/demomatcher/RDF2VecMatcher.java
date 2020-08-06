@@ -44,7 +44,7 @@ public class RDF2VecMatcher extends MatcherYAAAJena {
         // RDF2vec Instance with ontMOdel and directory for walks
         RDF2Vec rdf2Vec = new RDF2Vec(source, sourceWalkDirectory);
         Word2VecConfiguration config = new Word2VecConfiguration();
-        config.setVectorDimension(50);
+        config.setVectorDimension(100);
         rdf2Vec.setConfiguration(config);
 
         // trigger source training

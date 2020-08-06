@@ -4,7 +4,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.LocalTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
@@ -33,36 +32,40 @@ class RDF2VecMatcherTest {
 
         List<TestCase> evalList = new ArrayList<>();
 
+        /*
         int i = 0;
         trackLoop:
-        for (Track track : TrackRepository.Multifarm.getMultifarmTrackForLanguage("de-en")) {
 
-            for (TestCase tc : track.getTestCases()) {
+            for (TestCase tc : TrackRepository.Multifarm.getSameOntologies()) {
+            //for (TestCase tc : track.ge) {
                 i++;
                 try {
                     Alignment sample = tc.getParsedReferenceAlignment().sampleByFraction(0.5);
                     File f = File.createTempFile("ref_sample", ".rdf");
                     sample.serialize(f);
-                    evalList.add(new TestCase(tc.getName(), tc.getSource(), tc.getTarget(), tc.getReference(), track, f.toURI(), GoldStandardCompleteness.COMPLETE));
+                    evalList.add(new TestCase(tc.getName(), tc.getSource(), tc.getTarget(), tc.getReference(), tc.getTrack(), f.toURI(), GoldStandardCompleteness.COMPLETE));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (i == 3){
-                    break trackLoop;
-                }
-            }
+                //if (i == 3){
+                //    break trackLoop;
+                //}
+            //}
         }
+        */
 
+        TestCase tc = TrackRepository.Anatomy.Default.getFirstTestCase();
+        Alignment sample = tc.getParsedReferenceAlignment().sampleByFraction(0.75);
 
         matchers.put("ReferenceSample", new ForwardMatcher());
         //matchers.put("RDF2Vec", new MatcherPipelineYAAAJenaConstructor(new ExactStringMatcher(), new ReferenceSampleMatcher(sample)));
-        matchers.put("RDF2VecPostProcessed", new MatcherPipelineYAAAJenaConstructor(new RDF2VecMatcher(),
-                new BadHostsFilter(true), new AnnonymousNodeFilter(), new ConfidenceFilter(0.85), new NaiveDescendingExtractor()));
+        matchers.put("RDF2VecPostProcessed", new MatcherPipelineYAAAJenaConstructor(new RDF2VecMatcher(sample),
+                new BadHostsFilter(true), new AnnonymousNodeFilter(), new ConfidenceFilter(0.9), new NaiveDescendingExtractor()));
 
-        ExecutionResultSet results = Executor.run(evalList, matchers);
+        ExecutionResultSet results = Executor.run(TrackRepository.Anatomy.Default, matchers);
 
         EvaluatorCSV e = new EvaluatorCSV(results);
-        e.setBaselineMatcher(new ForwardMatcher());
+        e.setBaselineMatcher(new ForwardMatcher(sample));
         e.writeToDirectory();
     }
 
