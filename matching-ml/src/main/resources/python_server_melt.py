@@ -662,7 +662,7 @@ def neural_net_projection(word_vector_src, word_vector_tgt, lexicon):
     model.fit(matrix_src, matrix_tgt, epochs=2000, batch_size=128)
 
     source_projected = model.predict(word_vector_src.vectors)
-    source_projected_keyed_vector = create_keyed_vector(word_vector_src, source_projected)
+    source_projected_keyed_vector = __create_keyed_vector(word_vector_src, source_projected)
     return source_projected_keyed_vector, word_vector_tgt
 
 
