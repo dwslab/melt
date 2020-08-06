@@ -86,7 +86,7 @@ public class AlignmentTest {
     private Correspondence three = new Correspondence("http://www.left.com/e3", "http://www.right.com/e3");
     
     @Test
-    void substraction() {
+    void subtraction() {
         Alignment alignment_1 = new Alignment();
         alignment_1.add(one);
         alignment_1.add(two);
@@ -213,7 +213,7 @@ public class AlignmentTest {
     
     @Test
     void getCorrespondencesRelationTest(){
-        //run once with indices and once without inidices
+        //run once with indices and once without indices.
         for(int i=0; i<2; i++){
             Alignment a = i > 0 ? new Alignment(false, false, false, false) : new Alignment();
             Correspondence x = new Correspondence("x_left", "x_right", CorrespondenceRelation.EQUIVALENCE);

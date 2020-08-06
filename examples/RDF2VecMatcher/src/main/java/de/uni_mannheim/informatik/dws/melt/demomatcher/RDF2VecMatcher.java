@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.demomatcher;
 
 import de.uni_mannheim.informatik.dws.jrdf2vec.RDF2Vec;
+import de.uni_mannheim.informatik.dws.jrdf2vec.training.Word2VecConfiguration;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.Gensim;
 
@@ -15,9 +16,19 @@ import org.apache.jena.ontology.OntModel;
  * A simple string matcher using String equivalence as matching criterion.
  */
 public class RDF2VecMatcher extends MatcherYAAAJena {
-    
+
+    public Alignment inputAlignment = new Alignment();
+
+    public RDF2VecMatcher(Alignment inputAlignment){
+        this.inputAlignment = inputAlignment;
+    }
+
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties p) throws Exception {
+        if(this.inputAlignment.size() == 0 && inputAlignment.size() > 0){
+            this.inputAlignment = inputAlignment;
+        }
+
         // create directory in which the walks for the source will be generated into (and also the model)
         File sourceWalkDirectory = new File("./sourceDirectory");
         sourceWalkDirectory.mkdir();
@@ -28,14 +39,19 @@ public class RDF2VecMatcher extends MatcherYAAAJena {
 
         // RDF2vec Instance with ontMOdel and directory for walks
         RDF2Vec rdf2Vec = new RDF2Vec(source, sourceWalkDirectory);
+        Word2VecConfiguration config = new Word2VecConfiguration();
+        config.setVectorDimension(500);
+        rdf2Vec.setConfiguration(config);
 
         // trigger source training
         String sourceModel = rdf2Vec.train();
 
         // trigger target training
         String targetModel = rdf2Vec.trainNew(target, targetWalks);
-        
-        Alignment alignment = Gensim.getInstance().alignModel("./sourceDirectory/model.kv", "./targetDirectory/model.kv", "linear_projection", inputAlignment);
+
+        de.uni_mannheim.informatik.dws.jrdf2vec.training.Gensim.shutDown();
+
+        Alignment alignment = Gensim.getInstance().alignModel("./sourceDirectory/model.kv", "./targetDirectory/model.kv", "linear_projection", this.inputAlignment);
         
         FileUtils.deleteDirectory(sourceWalkDirectory);
         FileUtils.deleteDirectory(targetWalks);
