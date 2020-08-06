@@ -99,7 +99,18 @@ public class KGvec2goClient {
     }
 
 
+    /**
+     * Receive a vector in the form of a double array.
+     * @param word Word for lookup.
+     * @param dataset Dataset for lookup.
+     * @return Null in case of failure, else vector.
+     */
     public Double[] getVector(String word, KGvec2goDatasets dataset){
+        // sanity check
+        if(word == null || dataset == null){
+            return null;
+        }
+
         // check buffer
         if(isInBuffer(word, dataset)){
             return getFromBuffer(word, dataset);
@@ -145,6 +156,18 @@ public class KGvec2goClient {
 
 
     /**
+     *
+     * @param word1 Lookup word 1.
+     * @param word2 Lookup word 2.
+     * @param datasets Dataset to be used for lookup.
+     * @return Similarity.
+     */
+    public Double getSimilarity(String word1, String word2, KGvec2goDatasets datasets){
+        return cosineSimilarity(getVector(word1, datasets), getVector(word2, datasets));
+    }
+
+
+    /**
      * Look in the cache whether a vector already exists for the given word in the given dataset.
      * @param word for which the vector shall be looked up.
      * @param dataset in which shall be looked.
@@ -182,6 +205,31 @@ public class KGvec2goClient {
             LOGGER.warn(word + " already contained in the cache for dataset " + dataset.toString() + ".\nTrigger overwrite action.");
         }
         vectorCache.put(key, vector);
+    }
+
+    /**
+     * Calculates the cosine similarity between two vectors.
+     * @param vector1 First vector.
+     * @param vector2 Second vector.
+     * @return Cosine similarity as double.
+     */
+    public static Double cosineSimilarity(Double[] vector1, Double[] vector2){
+        if(vector1 == null || vector2 == null){
+            return null;
+        }
+        if(vector1.length != vector2.length){
+            LOGGER.error("ERROR - the vectors must be of the same dimension.");
+            throw new ArithmeticException("The vectors must be of the same dimension");
+        }
+        double dotProduct = 0.0;
+        double norm1 = 0.0;
+        double norm2 = 0.0;
+        for (int i = 0; i < vector1.length; i++) {
+            dotProduct += vector1[i] * vector2[i];
+            norm1 = norm1 +  Math.pow(vector1[i], 2);
+            norm2 = norm2 + Math.pow(vector2[i], 2);
+        }
+        return dotProduct / ( Math.sqrt(norm1) * Math.sqrt(norm2) );
     }
 
 }
