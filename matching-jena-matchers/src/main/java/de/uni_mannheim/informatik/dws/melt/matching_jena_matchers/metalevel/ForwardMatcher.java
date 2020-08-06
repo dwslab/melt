@@ -1,10 +1,14 @@
-package de.uni_mannheim.informatik.dws.melt.demomatcher;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.jena.ontology.OntModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -17,11 +21,33 @@ public class ForwardMatcher extends MatcherYAAAJena {
      */
     public Alignment alignmentToBeUsed;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ForwardMatcher.class);
+
     /**
      * Constructor
      * Alignment to be forwarded must be given in match operation.
      */
     public ForwardMatcher(){
+    }
+
+    /**
+     * Constructor
+     * @param fileToLoadAlignmentFrom Alignment file.
+     */
+    public ForwardMatcher(File fileToLoadAlignmentFrom){
+        try {
+            alignmentToBeUsed = new Alignment(fileToLoadAlignmentFrom);
+        } catch (SAXException | IOException exception){
+            LOGGER.error("Could not load the specified alignment file.", exception);
+        }
+    }
+
+    /**
+     * Constructor
+     * @param filePathToLoadAlignmentFrom Alignment file path.
+     */
+    public ForwardMatcher(String filePathToLoadAlignmentFrom){
+        this(new File(filePathToLoadAlignmentFrom));
     }
 
     /**

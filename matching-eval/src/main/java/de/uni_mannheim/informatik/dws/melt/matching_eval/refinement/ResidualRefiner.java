@@ -53,19 +53,22 @@ public class ResidualRefiner implements Refiner {
 
     @Override
     public ExecutionResult refine(ExecutionResult toBeRefined) {
-
-        // get baseline if not there
-        if(baseline == null) baseline = Executor.runSingle(toBeRefined.getTestCase(), baselineMatcher, "baseLineMatcher");
+        ExecutionResult usedBaseline;
+        if(this.baseline != null){
+            usedBaseline = this.baseline;
+        } else {
+            usedBaseline = Executor.runSingle(toBeRefined.getTestCase(), baselineMatcher, "baseLineMatcher");
+        }
 
         // new reference alignment: old - trivial matches
         Alignment nonTrivialReferenceAlignment = new Alignment(toBeRefined.getReferenceAlignment());
 
         // note: it does not matter whether the baseline is correct in this case b/c the reference alignment contains only correct mappings
-        nonTrivialReferenceAlignment.removeAll(baseline.getSystemAlignment());
+        nonTrivialReferenceAlignment.removeAll(usedBaseline.getSystemAlignment());
 
         // to be consistent: new system alignment: old - trivial matches
         Alignment nonTrivialSystemAlignment = new Alignment(toBeRefined.getSystemAlignment());
-        Alignment correctTrivialAlignments = new Alignment(baseline.getSystemAlignment());
+        Alignment correctTrivialAlignments = new Alignment(usedBaseline.getSystemAlignment());
 
         // retain all: intersection between system and reference
         correctTrivialAlignments.retainAll(toBeRefined.getReferenceAlignment());
