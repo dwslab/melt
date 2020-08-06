@@ -34,7 +34,8 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.wrapper
-de.uni_mannheim.informatik.dws.melt.matching_ml
+de.uni_mannheim.informatik.dws.melt.matching_ml.kgvec2go
+de.uni_mannheim.informatik.dws.melt.matching_ml.python
 de.uni_mannheim.informatik.dws.melt.matching_owlapi
 de.uni_mannheim.informatik.dws.melt.matching_validation
 de.uni_mannheim.informatik.dws.melt.matching_yaaa
