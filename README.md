@@ -207,11 +207,10 @@ in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2
 
 ### OAEI Track Repository
 The [`TrackRepository`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/tracks/TrackRepository.java) 
-checks whether the required ontologies and alignments are available in the cache folder (~/oaei_track_cache); if data is missing, it is automatically downloading and 
+checks whether the required ontologies and alignments are available in the cache folder (`~/oaei_track_cache); if data is missing, it is automatically downloading and 
 caching it for the next access.
 
 Exemplary call using the `TrackRepository`:
-
 ```
 // access the Anatomy track
 TrackRepository.Anatomy.Default;

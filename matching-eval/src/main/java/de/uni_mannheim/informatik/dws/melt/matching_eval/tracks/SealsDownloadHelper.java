@@ -53,7 +53,7 @@ public class SealsDownloadHelper {
         try (QueryExecution qexec = QueryExecutionFactory.create(queryString, m)) {
             ResultSet results = qexec.execSelect();
             //ResultSetFormatter.out(System.out, results) ;
-            for (; results.hasNext(); ) {
+            while(results.hasNext()) {
                 QuerySolution soln = results.nextSolution();
                 Literal l = soln.getLiteral("suiteItemName");
                 names.add(l.getString());
@@ -75,20 +75,26 @@ public class SealsDownloadHelper {
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
+            LOGGER.error("Malformed URL.", e);
         }
         return null;
     }
 
-    private static String encode(String string) {
-        if (string == null) {
-            return string;
+    /**
+     * Create an URL encoding for the given String.
+     * @param stringToEncode String to be encoded.
+     * @return Encoded String.
+     */
+    private static String encode(String stringToEncode) {
+        if (stringToEncode == null) {
+            return null;
         }
         try {
-            return URLEncoder.encode(string, "UTF-8");
+            return URLEncoder.encode(stringToEncode, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            LOGGER.error("Endoding error occurred.", e);
+            LOGGER.error("Encoding error occurred.", e);
         }
-        return string;
+        return stringToEncode;
     }
 
     private static String createLocation(String originalUrl, String... parts) {
