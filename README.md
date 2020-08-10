@@ -239,6 +239,7 @@ Name | Repository | Suite-ID | Version-ID
 [largebio](http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/) | `http://oaei.webdatacommons.org/tdrs/` | `largebio` |  <ul><li>`largebio-all_tasks_2016` </li><li>`largebio-fma_nci_small_2016`</li><li>`largebio-fma_nci_whole_2016`</li><li>`largebio-fma_snomed_small_2016`</li><li>`largebio-fma_snomed_whole_2016`</li><li>`largebio-snomed_nci_small_2016`</li><li>`largebio-snomed_nci_whole_2016`</li></ul>
 [complex](http://oaei.ontologymatching.org/2019/complex/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `geolink`</br> `hydrography`</br>`popgeolink`</br>`popenslaved`</br>`popconference`|  `geolink-v1`</br>`hydrography-v1`</br>`popgeolink-v1`</br>`popenslaved-v1`</br>`popconference-[0-20-40-60-80-100]-v1`
 [GeoLinkCruise](http://oaei.ontologymatching.org/2020/geolinkcruise/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `geolinkcruise`| `geolinkcruise-v1`
+Laboratory | `http://oaei.webdatacommons.org/tdrs/` | `laboratory`| `laboratory-v1`
 
 Available multifarm language pairs:<br/>
 `ar-cn`, `ar-cz`, `ar-de`, `ar-en`, `ar-es`, `ar-fr`, `ar-nl`, `ar-pt`, `ar-ru`, `cn-cz`, `cn-de`, `cn-en`, `cn-es`, 

@@ -45,11 +45,6 @@ public abstract class Track {
     static {
         File cacheFolder = new File(System.getProperty("user.home"), "oaei_track_cache");
         setCacheFolder(cacheFolder);
-        try {
-            LOGGER.info("Track cache folder is: " + cacheFolder.getCanonicalPath());
-        } catch (IOException e) {
-            LOGGER.error("Could not get canonical file path of cache folder. Program will resume normally.", e);
-        }
         setSkipTestCasesWithoutRefAlign(true);
     }
 
@@ -122,6 +117,11 @@ public abstract class Track {
             throw new IllegalArgumentException("CacheFolder should be a directory.");
         }
         cacheFolder = directory;
+        try {
+            LOGGER.info("Track cache folder is: " + cacheFolder.getCanonicalPath());
+        } catch (IOException e) {
+            LOGGER.error("Could not get canonical file path of cache folder. Program will resume normally.", e);
+        }
     }
     
     public static void setSkipTestCasesWithoutRefAlign(boolean skip){
