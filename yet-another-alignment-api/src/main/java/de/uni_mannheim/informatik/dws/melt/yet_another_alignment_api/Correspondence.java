@@ -59,7 +59,7 @@ public class Correspondence {
      * @param relation The relation that holds between the two entities.
      * @param extensions extensions in key1, value1, key2, value2, ... format
      */
-    public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, String... extensions) {
+    public Correspondence(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Object... extensions) {
         this(entityOne, entityTwo, confidence, relation, parseExtensions(extensions), null);
     }
     
@@ -84,7 +84,7 @@ public class Correspondence {
      * @param confidence The confidence of the mapping.
      * @param extensions extensions in key1, value1, key2, value2, ... format
      */
-    public Correspondence(String entityOne, String entityTwo, double confidence, String... extensions) {
+    public Correspondence(String entityOne, String entityTwo, double confidence, Object... extensions) {
         this(entityOne, entityTwo, confidence, CorrespondenceRelation.EQUIVALENCE, parseExtensions(extensions));
     }
 
@@ -142,14 +142,14 @@ public class Correspondence {
         this("", "", 1.0);
     }
     
-    private static Map<String,Object> parseExtensions(String[] arr){
+    private static Map<String,Object> parseExtensions(Object[] arr){
         Map<String, Object> map = new HashMap<>();
         for (int i = 0; i < arr.length; i+=2) {
             if(i+1 >= arr.length){
                 LOGGER.error("Uneven number of extension arguments. Exepect are Key1, Value1, Key2, Value2, ....->Discard last extension");
                 break;
             }
-            map.put(arr[i], arr[i + 1]);
+            map.put(arr[i].toString(), arr[i + 1]);
         }
         return map;
     }
@@ -248,6 +248,15 @@ public class Correspondence {
                 DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + 
                 key + 
                 DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX
+        ); 
+    }
+    
+    public double getAdditionalConfidenceOrDefault(String key, double defaultValue) { 
+        return (double)this.extensions.getOrDefault(
+                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + 
+                key + 
+                DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX,
+                defaultValue
         ); 
     }
     
