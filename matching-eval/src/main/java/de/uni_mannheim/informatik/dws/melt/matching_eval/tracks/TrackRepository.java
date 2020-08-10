@@ -472,7 +472,10 @@ public class TrackRepository{
         
          /**The Knowledge Graph Track contains isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
         public static Track V3 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3", true, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
-        
+
+        /**The Knowledge Graph Track contains isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
+        public static Track V4 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v4", true, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+
         /**The Knowledge Graph Track contains isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
         public static Track V3_NonMatch_Small = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3-nonmatch-small", true, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
         

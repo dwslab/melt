@@ -27,9 +27,9 @@
 
         <!-- RDF2Vec dependency -->
         <dependency>
-            <groupId>com.github.dwslab</groupId>
+            <groupId>de.uni-mannheim.informatik.dws</groupId>
             <artifactId>jRDF2Vec</artifactId>
-            <version>jrdf2vec-1.0</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
 
         <!-- dependency for jena matchers - for other matchers you can replace it with artifactId: matching-base -->
@@ -67,6 +67,12 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.25</version>
         </dependency>
 
