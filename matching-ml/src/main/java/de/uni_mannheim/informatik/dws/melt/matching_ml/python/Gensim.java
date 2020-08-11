@@ -588,8 +588,8 @@ public class Gensim {
     /**
      * Obtain the canonical model path.
      *
-     * @param filePath The path to the gensim model or gensim vector file.
-     * @return The canonical model path as String.
+     * @param file the file to get the canonical path from
+     * @return The canonical path as String.
      */
     private String getCanonicalPath(File file) {
         if (!file.exists() || file.isDirectory()) {
