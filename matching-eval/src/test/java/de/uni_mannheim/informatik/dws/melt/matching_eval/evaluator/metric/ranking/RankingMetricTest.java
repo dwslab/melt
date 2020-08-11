@@ -35,7 +35,7 @@ public class RankingMetricTest {
         reference.add(new Correspondence("s", "t"));        
         
         
-        RankingMetric ranker = new RankingMetric(false, SameConfidenceRanking.ALPHABETICALLY);
+        RankingMetric ranker = new RankingMetric(SameConfidenceRanking.ALPHABETICALLY);
         TestCase tcDummy = TrackRepository.Anatomy.Default.getFirstTestCase();
         RankingResult result = ranker.get(new ExecutionResult(tcDummy, "TestMatcher", system, reference));
         
