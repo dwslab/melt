@@ -134,9 +134,9 @@ public class Executor {
             return new ExecutionResultSet();
         }
         ExecutionResultSet r = new ExecutionResultSet();
-        for(Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()){
-            for(Track track : tracks){
-                for (TestCase tc : track.getTestCases()) {
+        for(Track track : tracks){
+            for (TestCase tc : track.getTestCases()) {
+                for(Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()){
                     ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher.getValue(), matcher.getKey());
                     if(er != null)
                         r.add(er);
@@ -163,8 +163,8 @@ public class Executor {
             return new ExecutionResultSet();
         }
         ExecutionResultSet r = new ExecutionResultSet();
-        for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
-            for (TestCase tc : testCases) {
+        for (TestCase tc : testCases) {
+            for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
                 ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher.getValue(), matcher.getKey());
                 if(er != null)
                     r.add(er);
