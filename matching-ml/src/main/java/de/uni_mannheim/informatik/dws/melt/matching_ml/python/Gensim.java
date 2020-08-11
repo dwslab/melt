@@ -103,6 +103,40 @@ public class Gensim {
     
     
     /************************************
+     * learn ML model for Alignment
+     ***********************************/
+    
+    /**
+     * Learn a ML model for a given training file.
+     * This file should be comma separated and containing a header.
+     * The class attribute should be named "target".
+     * @param trainFile the train file
+     * @param predictFile the file to predict
+     * @param cv number of cross validations
+     * @param jobs number of parallel jobs to run
+     * @return a list of double
+     * @throws Exception throws exception in case of errors
+     */
+    public List<Integer> learnAndApplyMLModel(File trainFile, File predictFile, int cv, int jobs) throws Exception{
+        HttpGet request = new HttpGet(serverUrl + "/machine-learning");
+        request.addHeader("trainingsFile", getCanonicalPath(trainFile));
+        request.addHeader("predictFile", getCanonicalPath(predictFile));
+        request.addHeader("cv", Integer.toString(cv));
+        request.addHeader("jobs", Integer.toString(jobs));
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                } else return JSON_MAPPER.readValue(resultString, JSON_MAPPER.getTypeFactory().constructCollectionType(List.class, Integer.class));
+            }
+        }
+    }
+    
+    /************************************
      * Embedding alignment
      ***********************************/
     
@@ -548,6 +582,24 @@ public class Gensim {
         } catch (IOException e) {
             LOGGER.error("Could not derive canonical model path.", e);
             return filePath;
+        }
+    }
+    
+    /**
+     * Obtain the canonical model path.
+     *
+     * @param file the file to get the canonical path from
+     * @return The canonical path as String.
+     */
+    private String getCanonicalPath(File file) {
+        if (!file.exists() || file.isDirectory()) {
+            LOGGER.error("ERROR: The specified model path does not exist or is a directory.");
+        }
+        try {
+            return file.getCanonicalPath();
+        } catch (IOException e) {
+            LOGGER.error("Could not derive canonical model path.", e);
+            return file.getAbsolutePath();
         }
     }
 

@@ -6,11 +6,8 @@
         <version>2.6-SNAPSHOT</version>
     </parent>
     <artifactId>matching-yaaa</artifactId>
-
-    <name>MELT - Matching EvaLuation Toolkit | Yet Another Alignment API (YAAA)</name>
-    <description>Simple alignment API (Yet Another Alignment API, YAAA) offering data structures for Ontology Alignments as well as additional alignment-related services.</description>
-
-
+    <name>MELT - Matching EvaLuation Toolkit | Matching YAAA Module</name>
+    <description>This module contains classes related to matcher development with YAAA.</description>
     <dependencies>
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>

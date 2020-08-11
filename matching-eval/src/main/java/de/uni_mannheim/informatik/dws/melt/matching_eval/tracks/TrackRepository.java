@@ -364,7 +364,7 @@ public class TrackRepository{
         }
     }
     
-        /**
+    /**
      * Disease and Phenotype track.
      * The Pistoia Alliance Ontologies Alignment project team organises and sponsors this track based on a real use case where it is required to find alignments between disease and phenotype ontologies.
      * Specifically, the selected ontologies are:
@@ -481,6 +481,14 @@ public class TrackRepository{
         
         /**The Knowledge Graph Track contains isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
         public static Track V3_NonMatch_Large = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3-nonmatch-large", true, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+    }
+    
+    /**
+     * Laboratory Analytics Domain track.
+     */
+    public static class Laboratory {        
+        /** Version V1 of Laboratory Track */
+        public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "laboratory", "laboratory-v1");
     }
     
     public static class SystematicBenchmark {

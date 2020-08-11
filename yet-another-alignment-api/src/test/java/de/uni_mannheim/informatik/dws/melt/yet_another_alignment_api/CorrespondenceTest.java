@@ -39,6 +39,10 @@ class CorrespondenceTest {
         assertEquals(2, c.getAdditionalConfidences().size());
         assertTrue(c.getAdditionalConfidences().containsKey("mykey"));
         assertTrue(c.getAdditionalConfidences().containsKey("test"));
+        
+        //test getordefaut
+        assertEquals(0.5, c.getAdditionalConfidenceOrDefault("notExistent", 0.5));
+        assertEquals(0.6, c.getAdditionalConfidenceOrDefault("test", 0.5));
     }
     
     @Test

@@ -688,6 +688,98 @@ def cca_projection(word_vector_source, word_vector_target, lexicon, top_correlat
 
     return projected_source_vectors, projected_target_vectors
 
+############################################
+#          Machine LEARNING
+############################################
+
+@app.route('/machine-learning', methods=['GET'])
+def machine_learning():
+    try:
+        import pandas as pd
+        from sklearn import preprocessing, svm, tree
+        from sklearn.naive_bayes import GaussianNB
+        from sklearn.model_selection import GridSearchCV
+        from sklearn.pipeline import Pipeline
+        from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+        from sklearn.neural_network import MLPClassifier
+        import math
+        
+        cv = int(request.headers.get('cv'))
+        n_jobs = int(request.headers.get('jobs'))
+        
+        df_train = pd.read_csv(request.headers.get('trainingsFile'))
+        y_train = df_train['target']
+        X_train = df_train.drop(columns=['target'])
+        
+        X_test = pd.read_csv(request.headers.get('predictFile'))
+
+        number_of_classes = len(np.unique(y_train))
+        number_of_attributes = int(X_train.shape[1])
+        default_layer_size = int(round(((number_of_attributes + number_of_classes) / 2) + 1))
+        sqrt_layer_size = int(round(math.sqrt(number_of_attributes + number_of_classes)))
+
+        random_state = 42
+        
+        params_grid = [
+            {
+                'estimator': [svm.SVC()],
+                'estimator__random_state': [random_state],
+                'estimator__C':[2**-5, 2**-3, 2**-1, 2**1, 2**3, 2**5, 2**7, 2**9, 2**11, 2**13, 2**15],
+                'estimator__gamma':[2**-15, 2**-13, 2**-11, 2**-9, 2**-7, 2**-5, 2**-3, 2**-1, 2**1, 2**3],
+                'scaler': [None, preprocessing.MinMaxScaler()]
+            },
+            {
+               'estimator': [GaussianNB()],
+               'scaler': [None, preprocessing.MinMaxScaler()]
+            },
+            {
+                'estimator': [tree.DecisionTreeClassifier()],
+                'estimator__random_state': [random_state],
+                'estimator__max_depth':list(range(1,20,1)),
+                'estimator__min_samples_leaf':list(range(1,20,1)),
+                'scaler': [None, preprocessing.MinMaxScaler()]
+            },
+            {
+                'estimator': [RandomForestClassifier()],
+                'estimator__random_state': [random_state],
+                'estimator__n_estimators': list(range(1, 100, 10)),
+                'estimator__min_samples_leaf': list(range(1, 10, 1)),
+                'scaler': [None, preprocessing.MinMaxScaler()]
+            },
+            {
+                'estimator': [GradientBoostingClassifier()],
+                'estimator__random_state': [random_state],
+                'estimator__n_estimators': list(range(1, 100, 5)),
+                'estimator__max_depth': list(range(1, 20, 5)),
+                'scaler': [None, preprocessing.MinMaxScaler()]
+            },
+            {
+                'estimator': [MLPClassifier()],
+                'estimator__random_state': [random_state],
+                'estimator__solver': ['lbfgs'],
+                'estimator__hidden_layer_sizes': [(default_layer_size), (default_layer_size, sqrt_layer_size), (sqrt_layer_size)],
+                'scaler': [None, preprocessing.MinMaxScaler()]
+            }
+        ]
+        
+        grid = GridSearchCV(
+            Pipeline([('scaler', preprocessing.MaxAbsScaler()), ('estimator', svm.SVC())]),
+            param_grid=params_grid,
+            scoring='f1',
+            cv=cv,
+            n_jobs=n_jobs,
+            refit=True)
+            #verbose=1)
+        grid.fit(X_train, y_train)
+
+        logging.info("cross validation: best f1 score: {}", grid.best_score_)
+        logging.info("cross validation: chosen model: {}", grid.best_params_)
+        
+        y_predict = grid.best_estimator_.predict(X_test)
+        return jsonify(y_predict.tolist())
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
 
 @app.route('/hello', methods=['GET'])
 def hello_demo():
