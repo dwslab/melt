@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranki
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.Metric;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.ArrayList;
@@ -18,12 +19,11 @@ public class RankingMetric extends Metric<RankingResult>{
     
     private static Logger LOGGER = LoggerFactory.getLogger(RankingMetric.class);
     
-    private static double logOf2 = Math.log(2);    
-    protected boolean partialGoldStandard;
+    private static double logOf2 = Math.log(2);
+    
     protected SameConfidenceRanking sameConfidenceRanking;
     
-    public RankingMetric(boolean partialGoldStandard, SameConfidenceRanking sameConfidenceRanking){
-        this.partialGoldStandard = partialGoldStandard;
+    public RankingMetric(SameConfidenceRanking sameConfidenceRanking){
         this.sameConfidenceRanking = sameConfidenceRanking;
     }
 
@@ -31,7 +31,7 @@ public class RankingMetric extends Metric<RankingResult>{
     protected RankingResult compute(ExecutionResult executionResult) {
         
         Alignment systemAlignment = executionResult.getSystemAlignment();
-        if(this.partialGoldStandard){
+        if(executionResult.getTestCase().getGoldStandardCompleteness() != GoldStandardCompleteness.COMPLETE){
             systemAlignment = getSystemResultReducedToGoldStandardEntities(executionResult);
         }
         Alignment referenceAlignment = executionResult.getReferenceAlignment();

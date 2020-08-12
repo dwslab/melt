@@ -1,6 +1,9 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -590,5 +593,18 @@ public class TrackRepository{
         }
         
         return tracks;
+    }
+    
+    
+    public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction){
+        Alignment sample = tc.getParsedReferenceAlignment().sampleByFraction(0.5);
+        try {
+            File f = File.createTempFile("ref_sample", ".rdf");
+            sample.serialize(f);
+            return new TestCase(tc.getName(), tc.getSource(), tc.getTarget(), tc.getReference(), tc.getTrack(), f.toURI(), tc.getGoldStandardCompleteness());
+        } catch (IOException ex) {
+            LOGGER.error("Could not write sample reference alignment to file", ex);
+            return tc;
+        }
     }
 }

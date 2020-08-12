@@ -24,32 +24,22 @@ public class EvaluatorRank extends Evaluator{
     
     private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorRank.class);
     
-    private boolean partialGoldStandard;
 
     /**
-     * Constructor which needs the results as well as the info if the gold standard for al testcases is partial or not.
-     * @param results the execution result set
-     * @param partialGoldStandard true if testcase in this executionresultset is a partial gold standard
-     */
-    public EvaluatorRank(ExecutionResultSet results, boolean partialGoldStandard) {
-        super(results);
-        this.partialGoldStandard = partialGoldStandard;
-    }
-
-    /**
-     * Initialize the evaluator with a full gold standard (not partial).
+     * Constructor
      * @param results the execution result set
      */
     public EvaluatorRank(ExecutionResultSet results) {
-        this(results, false);
+        super(results);
     }
+
 
     @Override
     public void writeResultsToDirectory(File baseDirectory) {
         
-        RankingMetric random = new RankingMetric(partialGoldStandard, SameConfidenceRanking.RANDOM);
-        RankingMetric alphabetically = new RankingMetric(partialGoldStandard, SameConfidenceRanking.ALPHABETICALLY);
-        RankingMetric top = new RankingMetric(partialGoldStandard, SameConfidenceRanking.TOP);
+        RankingMetric random = new RankingMetric(SameConfidenceRanking.RANDOM);
+        RankingMetric alphabetically = new RankingMetric(SameConfidenceRanking.ALPHABETICALLY);
+        RankingMetric top = new RankingMetric(SameConfidenceRanking.TOP);
         
         try {
             if(!baseDirectory.exists()){
