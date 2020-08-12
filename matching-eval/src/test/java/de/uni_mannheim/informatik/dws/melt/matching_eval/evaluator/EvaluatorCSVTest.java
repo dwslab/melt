@@ -8,6 +8,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.SealsTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BaselineStringMatcher;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.ExactStringMatcher;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -237,6 +238,7 @@ class EvaluatorCSVTest {
             LOGGER.error("Could not clean up after test. Test directory 'testBaseDirectory' still exists on disk.", ioe);
         }
     }
+
 
     /**
      * Helper method. Return the position in the array given a string.

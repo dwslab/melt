@@ -65,7 +65,7 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
      * @return The Execution result instance.
      */
     public ExecutionResult get(TestCase testCase, String matcherName, Refiner... refinements){
-        ResultSet<ExecutionResult> r = this.retrieve(query(testCase,matcherName, refinements));
+        ResultSet<ExecutionResult> r = this.retrieve(query(testCase, matcherName, refinements));
         if(r.isNotEmpty())
             return r.uniqueResult();
         

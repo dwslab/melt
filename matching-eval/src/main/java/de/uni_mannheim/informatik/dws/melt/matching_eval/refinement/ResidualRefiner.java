@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.refinement;
 
+import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
@@ -20,12 +21,17 @@ public class ResidualRefiner implements Refiner {
     /**
      * The baseline execution results.
      */
-    private ExecutionResult baseline;
+    private ExecutionResult baselineExecutionResult;
 
     /**
-     * Baseline Matcher that is used to calculate the {@link ResidualRefiner#baseline}.
+     * Baseline Matcher that is used to calculate the {@link ResidualRefiner#baselineExecutionResult}.
      */
     private IOntologyMatchingToolBridge baselineMatcher;
+
+    /**
+     * An optional variable for lookups to improve the performance.
+     */
+    private ExecutionResultSet executionResultSetForLookups;
 
     /**
      * Default Logger
@@ -34,30 +40,38 @@ public class ResidualRefiner implements Refiner {
 
     /**
      * Constructor.
+     *
      * @param baselineExecutionResult The baseline that shall be used to determine the residuals.
      */
-    public ResidualRefiner(ExecutionResult baselineExecutionResult){
-        this.baseline = baselineExecutionResult;
+    public ResidualRefiner(ExecutionResult baselineExecutionResult) {
+        this.baselineExecutionResult = baselineExecutionResult;
         this.baselineMatcher = baselineExecutionResult.getMatcher();
     }
 
+
     /**
      * Constructor
+     *
      * @param baselineMatcher The baseline matcher that shall be used to determine the residuals.
      */
-    public ResidualRefiner(IOntologyMatchingToolBridge baselineMatcher){
-        this.baseline = null;
+    public ResidualRefiner(IOntologyMatchingToolBridge baselineMatcher) {
+        this.baselineExecutionResult = null;
         this.baselineMatcher = baselineMatcher;
+        this.executionResultSetForLookups = new ExecutionResultSet();
     }
 
 
     @Override
     public ExecutionResult refine(ExecutionResult toBeRefined) {
         ExecutionResult usedBaseline;
-        if(this.baseline != null){
-            usedBaseline = this.baseline;
+        if (this.baselineExecutionResult != null) {
+            usedBaseline = this.baselineExecutionResult;
         } else {
-            usedBaseline = Executor.runSingle(toBeRefined.getTestCase(), baselineMatcher, "baseLineMatcher");
+            usedBaseline = this.executionResultSetForLookups.get(toBeRefined.getTestCase(), "baseLineMatcher");
+            if (usedBaseline == null) {
+                usedBaseline = Executor.runSingle(toBeRefined.getTestCase(), baselineMatcher, "baseLineMatcher");
+                this.executionResultSetForLookups.add(usedBaseline);
+            }
         }
 
         // new reference alignment: old - trivial matches
@@ -98,7 +112,7 @@ public class ResidualRefiner implements Refiner {
             return false;
         }
         final ResidualRefiner other = (ResidualRefiner) obj;
-        if(other.baselineMatcher != this.baselineMatcher){
+        if (other.baselineMatcher != this.baselineMatcher) {
             return false;
         }
         return true;
@@ -109,6 +123,5 @@ public class ResidualRefiner implements Refiner {
         return "ResidualRefiner()";
     }
 
-    
-    
+
 }
