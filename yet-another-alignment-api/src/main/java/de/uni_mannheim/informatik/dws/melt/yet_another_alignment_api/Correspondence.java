@@ -215,11 +215,9 @@ public class Correspondence {
         extensions.put(extensionUri, extensionValue);
     }
     
-    
-
 
     /**
-     * Adds an additional confidence based on a specif class.
+     * Adds an additional confidence based on a specific class.
      * @param matcherClass the class of the matcher
      * @param confidence the additional confidence
      */
@@ -238,7 +236,12 @@ public class Correspondence {
                 DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + key + DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX,
                 confidence);
     }
-    
+
+    /**
+     * Get a confidence given the name of the matcher.
+     * @param matcherClass Class of the matcher.
+     * @return The confidence if found.
+     */
     public Double getAdditionalConfidence(Class matcherClass) { 
         return getAdditionalConfidence(matcherClass.getSimpleName());
     }
@@ -265,6 +268,12 @@ public class Correspondence {
             "(.*)" + 
             DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX
     );
+
+
+    /**
+     * Returns all added confidences (but not all extension values).
+     * @return All confidences that were added using e.g. {@link Correspondence#addAdditionalConfidence(String, double)}.
+     */
     public Map<String,Double> getAdditionalConfidences() { 
         Map<String,Double> confidences = new HashMap<>();
         for(Entry<String, Object> e : this.extensions.entrySet()){
@@ -276,8 +285,7 @@ public class Correspondence {
         return confidences;
     }
     
-    
-    
+
     /**
      * Adds an additional explanation 
      * @param matcherClass the class of the matcher
