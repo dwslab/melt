@@ -29,19 +29,19 @@ public class Doc2vecModelMatcher extends DocumentSimilarityBase {
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         createCorpusFileIfNecessary(source, target);
         String modelName = "corpora";
-        Gensim gensim = Gensim.getInstance();
-        gensim.trainDoc2VecModel(modelName, this.corpusFile.getCanonicalPath(), this.configuration);
-        updateConfidences(gensim, modelName, inputAlignment);
-        Gensim.shutDown();
+        PythonServer pythonServer = PythonServer.getInstance();
+        pythonServer.trainDoc2VecModel(modelName, this.corpusFile.getCanonicalPath(), this.configuration);
+        updateConfidences(pythonServer, modelName, inputAlignment);
+        PythonServer.shutDown();
         return inputAlignment;
     }
     
-    private void updateConfidences(Gensim gensim, String modelName, Alignment inputAlignment){
+    private void updateConfidences(PythonServer pythonServer, String modelName, Alignment inputAlignment){
         //make the order explicit
         List<Correspondence> list = new ArrayList<>(inputAlignment);
         List<Double> confidences = null;
         try {
-            confidences = gensim.queryDoc2VecModel(modelName, list);
+            confidences = pythonServer.queryDoc2VecModel(modelName, list);
         } catch (Exception ex) {
             LOGGER.error("Server failure in queryVectorSpaceModel. No confidences are updated.", ex);
             return;

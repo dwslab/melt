@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml;
 
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.Gensim;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.Word2VecConfiguration;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.Word2VecType;
 import org.apache.commons.io.FileUtils;
@@ -18,39 +18,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-class GensimTest {
+class PythonServerTest {
 
-    private static Gensim gensim;
+    private static PythonServer pythonServer;
 
     @BeforeAll
     public static void setup(){
-        gensim = Gensim.getInstance();
+        pythonServer = PythonServer.getInstance();
     }
 
     @AfterAll
     public static void tearDown(){
-        gensim.shutDown();
+        pythonServer.shutDown();
     }
 
-    private static Logger LOGGER = LoggerFactory.getLogger(GensimTest.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(PythonServerTest.class);
 
     @Test
     /**
      * Default test with cache.
      */
     void isInVocabulary() {
-        gensim.setVectorCaching(true);
+        pythonServer.setVectorCaching(true);
         // test case 1: model file
         String pathToModel = getPathOfResource("test_model");
-        assertTrue(gensim.isInVocabulary("Europe", pathToModel));
-        assertTrue(gensim.isInVocabulary("united", pathToModel));
-        assertFalse(gensim.isInVocabulary("China", pathToModel));
+        assertTrue(pythonServer.isInVocabulary("Europe", pathToModel));
+        assertTrue(pythonServer.isInVocabulary("united", pathToModel));
+        assertFalse(pythonServer.isInVocabulary("China", pathToModel));
 
         // test case 2: vector file
         String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
-        assertTrue(gensim.isInVocabulary("Europe", pathToVectorFile));
-        assertTrue(gensim.isInVocabulary("united", pathToVectorFile));
-        assertFalse(gensim.isInVocabulary("China", pathToVectorFile));
+        assertTrue(pythonServer.isInVocabulary("Europe", pathToVectorFile));
+        assertTrue(pythonServer.isInVocabulary("united", pathToVectorFile));
+        assertFalse(pythonServer.isInVocabulary("China", pathToVectorFile));
     }
 
     @Test
@@ -58,18 +58,18 @@ class GensimTest {
      * Default test without cache.
      */
     void isInVocabularyNoCaching() {
-        gensim.setVectorCaching(false);
+        pythonServer.setVectorCaching(false);
         // test case 1: model file
         String pathToModel = getPathOfResource("test_model");
-        assertTrue(gensim.isInVocabulary("Europe", pathToModel));
-        assertTrue(gensim.isInVocabulary("united", pathToModel));
-        assertFalse(gensim.isInVocabulary("China", pathToModel));
+        assertTrue(pythonServer.isInVocabulary("Europe", pathToModel));
+        assertTrue(pythonServer.isInVocabulary("united", pathToModel));
+        assertFalse(pythonServer.isInVocabulary("China", pathToModel));
 
         // test case 2: vector file
         String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
-        assertTrue(gensim.isInVocabulary("Europe", pathToVectorFile));
-        assertTrue(gensim.isInVocabulary("united", pathToVectorFile));
-        assertFalse(gensim.isInVocabulary("China", pathToVectorFile));
+        assertTrue(pythonServer.isInVocabulary("Europe", pathToVectorFile));
+        assertTrue(pythonServer.isInVocabulary("united", pathToVectorFile));
+        assertFalse(pythonServer.isInVocabulary("China", pathToVectorFile));
     }
 
 
@@ -78,49 +78,49 @@ class GensimTest {
      * Default test with cache.
      */
     void getSimilarity() {
-        gensim.setVectorCaching(true);
+        pythonServer.setVectorCaching(true);
         // test case 1: model file
         String pathToModel = getPathOfResource("test_model");
-        double similarity = gensim.getSimilarity("Europe", "united", pathToModel);
+        double similarity = pythonServer.getSimilarity("Europe", "united", pathToModel);
         assertTrue(similarity > 0);
 
         // test case 2: vector file
         String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
-        similarity = gensim.getSimilarity("Europe", "united", pathToVectorFile);
+        similarity = pythonServer.getSimilarity("Europe", "united", pathToVectorFile);
         assertTrue(similarity > 0);
     }
 
 
     @Test
     void getSimilarityNoCaching() {
-        gensim.setVectorCaching(false);
+        pythonServer.setVectorCaching(false);
         // test case 1: model file
         String pathToModel = getPathOfResource("test_model");
-        double similarity = gensim.getSimilarity("Europe", "united", pathToModel);
+        double similarity = pythonServer.getSimilarity("Europe", "united", pathToModel);
         assertTrue(similarity > 0);
 
         // test case 2: vector file
         String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
-        similarity = gensim.getSimilarity("Europe", "united", pathToVectorFile);
+        similarity = pythonServer.getSimilarity("Europe", "united", pathToVectorFile);
         assertTrue(similarity > 0);
     }
 
 
     @Test
     void testMultipleShutdownCallsAndRestarts() {
-        gensim.setVectorCaching(false);
+        pythonServer.setVectorCaching(false);
         // test case 1: model file
-        gensim.shutDown();
-        gensim = Gensim.getInstance();
+        pythonServer.shutDown();
+        pythonServer = PythonServer.getInstance();
         String pathToModel = getPathOfResource("test_model");
-        double similarity = gensim.getSimilarity("Europe", "united", pathToModel);
+        double similarity = pythonServer.getSimilarity("Europe", "united", pathToModel);
         assertTrue(similarity > 0);
 
         // test case 2: vector file
-        gensim.shutDown();
-        gensim = Gensim.getInstance();
+        pythonServer.shutDown();
+        pythonServer = PythonServer.getInstance();
         String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
-        similarity = gensim.getSimilarity("Europe", "united", pathToVectorFile);
+        similarity = pythonServer.getSimilarity("Europe", "united", pathToVectorFile);
         assertTrue(similarity > 0);
     }
 
@@ -130,21 +130,21 @@ class GensimTest {
      * Default test with cache.
      */
     void getVector() {
-        gensim.setVectorCaching(true);
+        pythonServer.setVectorCaching(true);
         // test case 1: vector file
         String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
-        Double[] europeVector = gensim.getVector("Europe", pathToVectorFile);
+        Double[] europeVector = pythonServer.getVector("Europe", pathToVectorFile);
         assertEquals(100, europeVector.length);
 
-        Double[] unitedVector = gensim.getVector("united", pathToVectorFile);
+        Double[] unitedVector = pythonServer.getVector("united", pathToVectorFile);
 
-        double similarityJava = (gensim.cosineSimilarity(europeVector, unitedVector));
-        double similarityPyhton = (gensim.getSimilarity("Europe", "united", pathToVectorFile));
+        double similarityJava = (pythonServer.cosineSimilarity(europeVector, unitedVector));
+        double similarityPyhton = (pythonServer.getSimilarity("Europe", "united", pathToVectorFile));
         assertEquals(similarityJava, similarityPyhton, 0.0001);
 
         // test case 2: model file
         String pathToModel = getPathOfResource("test_model");
-        europeVector = gensim.getVector("Europe", pathToModel);
+        europeVector = pythonServer.getVector("Europe", pathToModel);
         assertEquals(100, europeVector.length);
     }
 
@@ -154,21 +154,21 @@ class GensimTest {
      * Test without cache.
      */
     void getVectorNoCaching() {
-        gensim.setVectorCaching(false);
+        pythonServer.setVectorCaching(false);
         // test case 1: vector file
         String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
-        Double[] europeVector = gensim.getVector("Europe", pathToVectorFile);
+        Double[] europeVector = pythonServer.getVector("Europe", pathToVectorFile);
         assertEquals(100, europeVector.length);
 
-        Double[] unitedVector = gensim.getVector("united", pathToVectorFile);
+        Double[] unitedVector = pythonServer.getVector("united", pathToVectorFile);
 
-        double similarityJava = (gensim.cosineSimilarity(europeVector, unitedVector));
-        double similarityPython = (gensim.getSimilarity("Europe", "united", pathToVectorFile));
+        double similarityJava = (pythonServer.cosineSimilarity(europeVector, unitedVector));
+        double similarityPython = (pythonServer.getSimilarity("Europe", "united", pathToVectorFile));
         assertEquals(similarityJava, similarityPython, 0.0001);
 
         // test case 2: model file
         String pathToModel = getPathOfResource("test_model");
-        europeVector = gensim.getVector("Europe", pathToModel);
+        europeVector = pythonServer.getVector("Europe", pathToModel);
         assertEquals(100, europeVector.length);
     }
 
@@ -177,21 +177,21 @@ class GensimTest {
         // "normal" training task
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
         String fileToWrite = "./freudeWord2vec.kv";
-        assertTrue(gensim.trainWord2VecModel(fileToWrite, testFilePath, new Word2VecConfiguration(Word2VecType.CBOW)));
+        assertTrue(pythonServer.trainWord2VecModel(fileToWrite, testFilePath, new Word2VecConfiguration(Word2VecType.CBOW)));
 
         File vectorFile = new File(fileToWrite);
         File modelFile = new File(fileToWrite.substring(0, fileToWrite.length() - 3));
         assertTrue(vectorFile.exists(), "No vector file was written.");
         assertTrue(modelFile.exists(), "No model file was written.");
-        assertTrue(gensim.getSimilarity("Menschen", "Brüder", fileToWrite) > -1.0);
+        assertTrue(pythonServer.getSimilarity("Menschen", "Brüder", fileToWrite) > -1.0);
 
-        gensim.writeModelAsTextFile(fileToWrite, "./testTextVectors.txt");
+        pythonServer.writeModelAsTextFile(fileToWrite, "./testTextVectors.txt");
         File writtenFile = new File("./testTextVectors.txt");
         assertTrue(writtenFile.exists());
         assertTrue(getNumberOfLines(writtenFile) > 10);
 
         String entityFile = getPathOfResource("freudeSubset.txt");
-        gensim.writeModelAsTextFile(fileToWrite, "./testTextVectors2.txt", entityFile);
+        pythonServer.writeModelAsTextFile(fileToWrite, "./testTextVectors2.txt", entityFile);
         File writtenFile2 = new File("./testTextVectors2.txt");
         assertTrue(writtenFile2.exists());
         assertTrue(getNumberOfLines(writtenFile2) <= 2);
@@ -207,25 +207,25 @@ class GensimTest {
     void trainWord2VecModelSG() {
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
         String vectorFilePath = "./freudeWord2vec_sg.kv";
-        assertTrue(gensim.trainWord2VecModel(vectorFilePath, testFilePath, new Word2VecConfiguration(Word2VecType.SG)));
+        assertTrue(pythonServer.trainWord2VecModel(vectorFilePath, testFilePath, new Word2VecConfiguration(Word2VecType.SG)));
 
         File vectorFile = new File(vectorFilePath);
         File modelFile = new File(vectorFilePath.substring(0, vectorFilePath.length() - 3));
         assertTrue(vectorFile.exists(), "No vector file was written.");
         assertTrue(modelFile.exists(), "No model file was written.");
-        double similarity = gensim.getSimilarity("Menschen", "Brüder", vectorFilePath);
+        double similarity = pythonServer.getSimilarity("Menschen", "Brüder", vectorFilePath);
         assertTrue(similarity > -1.0, "Problem with the simliarity. Similarity: " + similarity);
 
         //contains "Hymne" (count = 1)
-        assertTrue(gensim.isInVocabulary("Hymne", vectorFilePath));
+        assertTrue(pythonServer.isInVocabulary("Hymne", vectorFilePath));
 
         //contains "Freude" (count > 3)
-        assertTrue(gensim.isInVocabulary("Freude", vectorFilePath));
+        assertTrue(pythonServer.isInVocabulary("Freude", vectorFilePath));
 
         //contains "Bösewicht," (count = 1)
-        assertTrue(gensim.isInVocabulary("Bösewicht,", vectorFilePath));
+        assertTrue(pythonServer.isInVocabulary("Bösewicht,", vectorFilePath));
 
-        int vocabularySize = gensim.getVocabularySize(vectorFilePath);
+        int vocabularySize = pythonServer.getVocabularySize(vectorFilePath);
         assertTrue(vocabularySize > 100);
 
         // cleaning up
@@ -238,23 +238,23 @@ class GensimTest {
         String testFilePath = getPathOfResource("walk_directory_test");
         if(testFilePath == null) fail("Test resource not found.");
         String vectorFilePath = "./w2v_directory_test.kv";
-        assertTrue(gensim.trainWord2VecModel(vectorFilePath, testFilePath, new Word2VecConfiguration(Word2VecType.SG)));
+        assertTrue(pythonServer.trainWord2VecModel(vectorFilePath, testFilePath, new Word2VecConfiguration(Word2VecType.SG)));
         File vectorFile = new File(vectorFilePath);
         File modelFile = new File(vectorFilePath.substring(0, vectorFilePath.length() - 3));
         assertTrue(vectorFile.exists(), "No vector file was written.");
         assertTrue(modelFile.exists(), "No model file was written.");
 
         //contains "Hymne" (count = 1) in file "an_die_freude.txt"
-        assertTrue(gensim.isInVocabulary("Hymne", vectorFilePath));
+        assertTrue(pythonServer.isInVocabulary("Hymne", vectorFilePath));
 
         //contains "Freude" (count > 3) in file "an_die_freude.txt"
-        assertTrue(gensim.isInVocabulary("Freude", vectorFilePath));
+        assertTrue(pythonServer.isInVocabulary("Freude", vectorFilePath));
 
         // contains "Stolz" (count = 1) in file "auf_die_europa.txt"
-        assertTrue(gensim.isInVocabulary("Stolz", vectorFilePath));
+        assertTrue(pythonServer.isInVocabulary("Stolz", vectorFilePath));
 
         // contains "Europen" (count = 1) in file "auf_die_europa.txt"
-        assertTrue(gensim.isInVocabulary("Europen", vectorFilePath));
+        assertTrue(pythonServer.isInVocabulary("Europen", vectorFilePath));
 
         // cleaning up
         modelFile.delete();
@@ -265,13 +265,13 @@ class GensimTest {
     void trainWord2VecModelCBOW() {
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
         String vectorFilePath = "./freudeWord2vec.kv";
-        assertTrue(gensim.trainWord2VecModel(vectorFilePath, testFilePath, new Word2VecConfiguration(Word2VecType.CBOW)));
+        assertTrue(pythonServer.trainWord2VecModel(vectorFilePath, testFilePath, new Word2VecConfiguration(Word2VecType.CBOW)));
 
         File vectorFile = new File(vectorFilePath);
         File modelFile = new File(vectorFilePath.substring(0, vectorFilePath.length() - 3));
         assertTrue(vectorFile.exists(), "No vector file was written.");
         assertTrue(modelFile.exists(), "No model file was written.");
-        double similarity = gensim.getSimilarity("Menschen", "Brüder", vectorFilePath);
+        double similarity = pythonServer.getSimilarity("Menschen", "Brüder", vectorFilePath);
         assertTrue(similarity > -1.0, "Problem with the simliarity. Similarity: " + similarity);
 
         // cleaning up
@@ -282,16 +282,16 @@ class GensimTest {
     @Test
     void externalResourcesDirectory(){
         // shut down
-        gensim.shutDown();
+        pythonServer.shutDown();
 
         // reinitialize
         File externalResourcesDirectory = new File("./ext/");
-        gensim = Gensim.getInstance(externalResourcesDirectory);
+        pythonServer = PythonServer.getInstance(externalResourcesDirectory);
         File serverFile = new File(externalResourcesDirectory, "python_server_melt.py");
         assertTrue(serverFile.exists());
 
         // shut down again to keep using default resources directory
-        gensim.shutDown();
+        pythonServer.shutDown();
 
         try {
             FileUtils.deleteDirectory(externalResourcesDirectory);

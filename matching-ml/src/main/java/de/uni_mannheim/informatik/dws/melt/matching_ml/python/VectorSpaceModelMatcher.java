@@ -23,19 +23,19 @@ public class VectorSpaceModelMatcher extends DocumentSimilarityBase {
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         createCorpusFileIfNecessary(source, target);
         String modelName = "corpora";
-        Gensim gensim = Gensim.getInstance();
-        gensim.trainVectorSpaceModel(modelName, this.corpusFile.getCanonicalPath());
-        updateConfidences(gensim, modelName, inputAlignment);
-        Gensim.shutDown();
+        PythonServer pythonServer = PythonServer.getInstance();
+        pythonServer.trainVectorSpaceModel(modelName, this.corpusFile.getCanonicalPath());
+        updateConfidences(pythonServer, modelName, inputAlignment);
+        PythonServer.shutDown();
         return inputAlignment;
     }
     
-    private void updateConfidences(Gensim gensim, String modelName, Alignment inputAlignment){
+    private void updateConfidences(PythonServer pythonServer, String modelName, Alignment inputAlignment){
         //make the order explicit
         List<Correspondence> list = new ArrayList<>(inputAlignment);
         List<Double> confidences = null;
         try {
-            confidences = gensim.queryVectorSpaceModel(modelName, list);
+            confidences = pythonServer.queryVectorSpaceModel(modelName, list);
         } catch (Exception ex) {
             LOGGER.error("Server failure in queryVectorSpaceModel. No confidences are updated.", ex);
             return;

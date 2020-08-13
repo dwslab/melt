@@ -102,9 +102,9 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena {
         List<Correspondence> testAlignment = new ArrayList(inputAlignment); // make order explicit
         writeDataset(testAlignment, testFile, false);
 
-        List<Integer> prediction = Gensim.getInstance().learnAndApplyMLModel(trainingFile, testFile, this.crossValidationNumber, this.numberOfParallelJobs);
+        List<Integer> prediction = PythonServer.getInstance().learnAndApplyMLModel(trainingFile, testFile, this.crossValidationNumber, this.numberOfParallelJobs);
         
-        Gensim.shutDown();
+        PythonServer.shutDown();
         trainingFile.delete();
         testFile.delete();
         
