@@ -596,8 +596,8 @@ public class TrackRepository{
     }
     
     
-    public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction){
-        Alignment sample = tc.getParsedReferenceAlignment().sampleByFraction(0.5);
+    public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction, Random randomSeed){
+        Alignment sample = tc.getParsedReferenceAlignment().sampleByFraction(0.5, randomSeed);
         try {
             File f = File.createTempFile("ref_sample", ".rdf");
             sample.serialize(f);
@@ -606,5 +606,13 @@ public class TrackRepository{
             LOGGER.error("Could not write sample reference alignment to file", ex);
             return tc;
         }
+    }
+    
+    public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction, long randomSeed){
+        return  generateTestCaseWithSampledReferenceAlignment(tc, fraction, new Random(randomSeed));
+    }
+    
+    public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction){
+        return  generateTestCaseWithSampledReferenceAlignment(tc, fraction, new Random());
     }
 }

@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -513,11 +514,22 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @return a new Alignment which contains the sampled correspondences.
      */
     public Alignment sample(int n){
+        return sample(n, new Random());
+    }
+    
+    /**
+     * Returns a random sample of correspondences.
+     * If the parameter n is greater than the alignment size, an IllegalArgumentException is thrown.
+     * @param n the number of correspondences to be returned. Should be smaller than the size of this alignment.
+     * @param rnd the source of randomness.
+     * @return a new Alignment which contains the sampled correspondences.
+     */
+    public Alignment sample(int n, Random rnd){
         if(n > this.size() || n < 0) {
             throw new IllegalArgumentException("Parameter n is out of range (smaller zero or greater than the size of current alignment.");
         }
         ArrayList<Correspondence> correspondenceList = new ArrayList<>(this);
-        Collections.shuffle(correspondenceList);
+        Collections.shuffle(correspondenceList, rnd);
         Alignment samples = new Alignment(this, false);
         samples.addAll(correspondenceList.subList(0, n));
         return samples;
@@ -530,10 +542,21 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @return a new Alignment which contains the sampled correspondences.
      */
     public Alignment sampleByFraction(double fraction){
+        return sampleByFraction(fraction, new Random());
+    }
+    
+    /**
+     * Returns a random sample of correspondences.
+     * If the parameter n is greater than the alignment size, the full alignment (copy of this alignment) is returned.
+     * @param fraction the number of correspondences to be returned. Should be smaller than the size of this alignment.
+     * @param rnd the source of randomness.
+     * @return a new Alignment which contains the sampled correspondences.
+     */
+    public Alignment sampleByFraction(double fraction, Random rnd){
         if(fraction < 0.0 || fraction > 1.0) {
             throw new IllegalArgumentException("Fraction is out of range (smaller zero or greater one");
         }
-        return sample((int)Math.round((double)this.size() * fraction));
+        return sample((int)Math.round((double)this.size() * fraction), rnd);
     }
     
     /**

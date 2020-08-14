@@ -49,7 +49,6 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
     
     /**
      * Constructor
-     *
      * @param properties Desired RDF properties together with their "feature names" in the order you desire.
      */
     public ExplainerResourceProperty(List<NamePropertyTuple> properties) {
@@ -58,6 +57,19 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
             add(npt.name, npt.property);
         }
     }
+        
+    
+    /**
+     * Use the given properties and choose the local name of the proeprty as the name.
+     * @param properties Desired properties
+     */
+    public ExplainerResourceProperty(Property... properties) {
+        this();
+        for (Property p : properties) {
+            add(p.getLocalName(), p);
+        }
+    }
+    
 
     /**
      * Add an RDF feature.

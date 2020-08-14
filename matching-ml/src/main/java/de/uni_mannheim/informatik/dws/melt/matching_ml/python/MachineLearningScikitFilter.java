@@ -54,6 +54,15 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena {
         });
     }
     
+    public MachineLearningScikitFilter(Alignment trainingAlignment) {
+        this(new MatcherYAAAJena() {
+            @Override
+            public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
+                return trainingAlignment;
+            }
+        });
+    }
+    
     public MachineLearningScikitFilter(MatcherYAAAJena trainingGenerator) {
         this(trainingGenerator, null);
     }    
@@ -89,7 +98,7 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena {
         if(confidenceNames == null || confidenceNames.isEmpty())
             confidenceNames = getConfidenceKeys(trainingAlignment);
         if(confidenceNames.isEmpty()){
-            LOGGER.warn("No attributes available for learning.");
+            LOGGER.warn("No attributes available for learning. Return unfiltered alignment.");
             return inputAlignment;
         }
         File trainingFile = new File("trainingsFile.csv");
@@ -106,17 +115,15 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena {
         testFile.delete();
         
         Alignment filteredAlignment = new Alignment(inputAlignment, false);
-        Iterator<Integer> predictionIterator=prediction.iterator();
-        Iterator<Correspondence> testAlignmentIterator = testAlignment.iterator();
-        while(predictionIterator.hasNext() && testAlignmentIterator.hasNext()) {
-            int pred = predictionIterator.next();
-            Correspondence correspondence = testAlignmentIterator.next();
-            if(pred == 1){
-                filteredAlignment.add(correspondence);
+        if(testAlignment.size() != prediction.size()){
+            LOGGER.warn("Size of prediction from scikit learn and test alignemnt do not have the same size. Return unfiltered alignment.");
+            return inputAlignment;
+        }
+        for(int i=0; i < prediction.size(); i++){
+            if(prediction.get(i) == 1){
+                filteredAlignment.add(testAlignment.get(i));
             }
         }
-        
-        
         return filteredAlignment;
     }
     

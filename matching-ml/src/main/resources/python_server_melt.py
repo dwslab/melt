@@ -749,8 +749,8 @@ def machine_learning():
             {
                 'estimator': [GradientBoostingClassifier()],
                 'estimator__random_state': [random_state],
-                'estimator__n_estimators': list(range(1, 100, 5)),
-                'estimator__max_depth': list(range(1, 20, 5)),
+                'estimator__n_estimators': list(range(1, 102, 20)),
+                'estimator__max_depth': list(range(1, 22, 5)),
                 'scaler': [None, preprocessing.MinMaxScaler()]
             },
             {
@@ -772,8 +772,8 @@ def machine_learning():
             #verbose=1)
         grid.fit(X_train, y_train)
 
-        logging.info("cross validation: best f1 score: {}", grid.best_score_)
-        logging.info("cross validation: chosen model: {}", grid.best_params_)
+        logging.info("cross validation: best f1 score: %s", grid.best_score_)
+        logging.info("cross validation: chosen model: %s", grid.best_params_)
         
         y_predict = grid.best_estimator_.predict(X_test)
         return jsonify(y_predict.tolist())
