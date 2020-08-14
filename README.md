@@ -308,7 +308,7 @@ Contains [Jena-based](https://jena.apache.org/) classes related to matcher devel
 Contains modularized matchers that can be used to quickly assemble matching systems. Note that it is possible to easily chain those matchers building a matching pipeline.
 
 ### matching-ml
-The machine learning extension for MELT. Currently, [gensim](https://radimrehurek.com/gensim/) is supported. The ML extension allows to communicate with a Python backend.
+The machine learning extension for MELT. Currently, [pythonServer](https://radimrehurek.com/pythonServer/) is supported. The ML extension allows to communicate with a Python backend.
 
 ### matching-owlapi
 Contains OWL-API-based classes related to matcher development as well as additional services such as caching of source and target ontologies.  

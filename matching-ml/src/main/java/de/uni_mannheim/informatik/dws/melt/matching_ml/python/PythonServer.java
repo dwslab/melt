@@ -34,18 +34,18 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 
 /**
- * A client class to communicate with python <a href="https://radimrehurek.com/gensim/">gensim</a> library.
- * Singleton pattern.
+ * A client class to communicate with python libraries such as <a href="https://radimrehurek.com/gensim/">gensim</a>.
+ * This class follows a singleton pattern.
  * Communication is performed through HTTP requests.
  * In case you need a different python environment or python executable, create a file in directory python_server
  * named {@code python_command.txt} and write your absolute path of the python executable in that file.
  */
-public class Gensim {
+public class PythonServer {
 
     /**
      * Default logger
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(Gensim.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(PythonServer.class);
     
     /**
      * Default resources directory (where the python files will be copied to by default) and where the resources
@@ -62,7 +62,7 @@ public class Gensim {
     /**
      * Constructor
      */
-    private Gensim() {
+    private PythonServer() {
         // do nothing; do not start the server (yet)
     }
 
@@ -622,7 +622,7 @@ public class Gensim {
     /**
      * Instance (singleton pattern.
      */
-    private static Gensim instance;
+    private static PythonServer instance;
 
     /**
      * Client to communicate with the server.
@@ -634,8 +634,8 @@ public class Gensim {
      *
      * @return Gensim instance.
      */
-    public static Gensim getInstance() {
-        if (instance == null) instance = new Gensim();
+    public static PythonServer getInstance() {
+        if (instance == null) instance = new PythonServer();
         if (isShutDown) instance.startServer();
         return instance;
     }
@@ -645,8 +645,8 @@ public class Gensim {
      * @param resourcesDirectory Directory where the files shall be copied to.
      * @return Gensim Instance
      */
-    public static Gensim getInstance(File resourcesDirectory){
-        if (instance == null) instance = new Gensim();
+    public static PythonServer getInstance(File resourcesDirectory){
+        if (instance == null) instance = new PythonServer();
         instance.setResourcesDirectory(resourcesDirectory);
         if (isShutDown) instance.startServer();
         return instance;

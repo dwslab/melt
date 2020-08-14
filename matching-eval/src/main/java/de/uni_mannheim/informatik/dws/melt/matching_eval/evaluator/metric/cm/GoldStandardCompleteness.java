@@ -14,14 +14,29 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm;
  */
 public enum GoldStandardCompleteness {
     /**
-     * The GS is complete and thus all correspondences *NOT* in gold standard are wrong.
+     * The GS is complete and thus all correspondences <em>NOT</em> in gold standard are wrong.
      */
     COMPLETE,
-    PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE,
-    PARTIAL_SOURCE_COMPLETE_TARGET_INCOMPLETE,
-    PARTIAL_SOURCE_INCOMPLETE_TARGET_COMPLETE,
+
     /**
-     * Partial GS where correspondences NOT in GS cannot be juged.
+     * The gold standard is not complete, but the matched elements are.
+     * For example if there is a correspondence {@code <a, b, =>}, each match involving {@code a} that is not
+     * in the reference is incorrect and the same accounts for {@code b}.
+     */
+    PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE,
+
+    /**
+     * Every correspondence involving an element of the complete side that is not available in the reference can be regarded as wrong.
+     */
+    PARTIAL_SOURCE_COMPLETE_TARGET_INCOMPLETE,
+
+    /**
+     * Every correspondence involving an element of the complete side that is not available in the reference can be regarded as wrong.
+     */
+    PARTIAL_SOURCE_INCOMPLETE_TARGET_COMPLETE,
+
+    /**
+     * Partial GS where correspondences NOT in GS cannot be judged.
      */
     PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE;
     
@@ -37,19 +52,19 @@ public enum GoldStandardCompleteness {
     
     /**
      * If the source is complete, there are no further correct correspondences
-     * concerning one source element exept of that/those in the gold standard.
+     * concerning one source element except of that/those in the gold standard.
      * 
      * Example:
      * <ul>
-     *  <li>Alignemnt: &lt;a,b,=,1.0&gt;</li>
-     *  <li>System: &lt;a,b,=,1.0&gt;, &lt;a,c,=,1.0&gt;</li>
+     *   <li>Alignment: &lt;a,b,=,1.0&gt;</li>
+     *   <li>System: &lt;a,b,=,1.0&gt;, &lt;a,c,=,1.0&gt;</li>
      * </ul>
      * The systems result is interpreted as follows:
      * TP: &lt;a,b,=,1.0&gt;
      * FP: &lt;a,c,=,1.0&gt;
      * Every other/additional involving 'a' would be regarded as FP.
      * @return true, if there are no further correct correspondences
-     * concerning one source element exept of that/those in the gold standard
+     * concerning one source element except of that/those in the gold standard
      */
     public boolean isSourceComplete(){
         if(this==PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE ||
@@ -61,11 +76,11 @@ public enum GoldStandardCompleteness {
     
     /**
      * If the target is complete, there are no further correct correspondences
-     * concerning one target element exept of that/those in the gold standard.
+     * concerning one target element except of that/those in the gold standard.
      * 
      * Example:
      * <ul>
-     *  <li>Alignemnt: &lt;a,b,=,1.0&gt;</li>
+     *  <li>Alignment: &lt;a,b,=,1.0&gt;</li>
      *  <li>System: &lt;a,b,=,1.0&gt;, &lt;c, b,=,1.0&gt;</li>
      * </ul>
      * The systems result is interpreted as follows:

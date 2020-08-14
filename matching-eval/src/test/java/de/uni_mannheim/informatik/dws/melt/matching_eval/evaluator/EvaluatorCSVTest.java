@@ -244,7 +244,7 @@ class EvaluatorCSVTest {
      * Helper method. Return the position in the array given a string.
      * @param title String to be looked for.
      * @param array Array to be searched in.
-     * @return -1 if not found, else position (starting couting with 0).
+     * @return -1 if not found, else position (starting counting with 0).
      */
     private static int getPosition(String title, String[] array){
         int result = 0;

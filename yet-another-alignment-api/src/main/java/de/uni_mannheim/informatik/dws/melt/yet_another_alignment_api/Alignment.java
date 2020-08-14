@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -604,7 +603,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * Create the subtraction between the two given alignments. Only copies the alignment and not further infos like onto or extensions.
      * @param alignment_1 Set 1.
      * @param alignment_2 Set 2.
-     * @return Substraction alignment.
+     * @return Subtraction alignment.
      */
     public static Alignment subtraction(Alignment alignment_1, Alignment alignment_2) {
         Alignment result = new Alignment();
