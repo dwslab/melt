@@ -45,9 +45,10 @@ public class HobbitWrapper extends AbstractSystemAdapter {
     @Override
     public void receiveGeneratedData(byte[] data) {
         try {
-            LOGGER.info("Starting receiveGeneratedData...");
+            LOGGER.info("Starting receiveGeneratedData");
             ByteBuffer dataBuffer = ByteBuffer.wrap(data);
-            String format = RabbitMQUtils.readString(dataBuffer);//TODO For the OAEI we just receive some "dummy" source data
+            //TODO For the OAEI we just receive some "dummy" source data
+            String format = RabbitMQUtils.readString(dataBuffer);
 
             while (dataBuffer.hasRemaining()) {
                 String queueName = RabbitMQUtils.readString(dataBuffer);
@@ -58,18 +59,15 @@ public class HobbitWrapper extends AbstractSystemAdapter {
                 // Start a parallel thread that receives the data for us
                 receivers.put(queueName, new FileReceiverCallableState(executor.submit(callable), callable));
             }
-            LOGGER.info("Received '" + receivers.size() + "' queue names for the matching tasks");
+            LOGGER.info("Received {} queue names for the matching tasks", receivers.size());
         } catch (IOException ex) {
-            LOGGER.error(ex.toString());
+            LOGGER.error("Error in receiveGeneratedData", ex);
         }
     }
 
     @Override
     public void receiveGeneratedTask(String taskId, byte[] data) {
-        LOGGER.info("Starting receiveGeneratedTask..");
-
-        Set<String> allowed_instance_types = new HashSet<String>();
-
+        LOGGER.info("Starting receiveGeneratedTask");
         ByteBuffer taskBuffer = ByteBuffer.wrap(data);
         //read the buffer in order (8 elements)
         //1. Format
@@ -89,16 +87,29 @@ public class HobbitWrapper extends AbstractSystemAdapter {
         //8. Queue name (task name and id to receive the files)
         //We should have defined above a Thread to receive the files in that queue, otherwise the task will not be processed (see below) 
         String queueName = RabbitMQUtils.readString(taskBuffer);
-
+        
         // Allowed instance types (i.e., class URIs)
+        Set<String> allowedInstanceTypes = new HashSet();
         if (isMatchingInstancesRequired) {
             while (taskBuffer.hasRemaining()) {
-                //Update allowed_instance_types
-                allowed_instance_types.add(RabbitMQUtils.readString(taskBuffer));
+                allowedInstanceTypes.add(RabbitMQUtils.readString(taskBuffer));
             }
-        }
-        LOGGER.info("Parsed task " + taskId + ". Queue name: " + queueName + ". Source: " + sourceName + ". Target: " + targetName);
+        }    
+        LOGGER.info("parsed task: '{}' queue name: '{}' format: '{}'", taskId, queueName, format);
+        LOGGER.info("sourceName: '{}' targetName: '{}'", sourceName, targetName);
+        LOGGER.info("match: classes: '{}' datatype properties: {} object properties: {} instances: {} allowed instance types size: {}", 
+                isMatchingClassesRequired, isMatchingDataPropertiesRequired, isMatchingObjectPropertiesRequired, isMatchingInstancesRequired, allowedInstanceTypes.size());
 
+        //update HobbitOptions
+        OaeiOptions.setFormat(format);
+        OaeiOptions.setSourceName(sourceName);
+        OaeiOptions.setTargetName(targetName);
+        OaeiOptions.setMatchingClassesRequired(isMatchingClassesRequired);
+        OaeiOptions.setMatchingDataPropertiesRequired(isMatchingDataPropertiesRequired);
+        OaeiOptions.setMatchingObjectPropertiesRequired(isMatchingObjectPropertiesRequired);
+        OaeiOptions.setMatchingInstancesRequired(isMatchingInstancesRequired);
+        OaeiOptions.setAllowedInstanceTypes(allowedInstanceTypes);
+        
         try {
             if (receivers.containsKey(queueName)) {
                 FileReceiverCallableState status = receivers.get(queueName);
@@ -111,61 +122,37 @@ public class HobbitWrapper extends AbstractSystemAdapter {
                     LOGGER.error("Exception while trying to receive data in queue " + queueName + ". Aborting.", e);
                 }
             } else {
-                LOGGER.error("The given queue name does not exist: " + queueName);
+                LOGGER.error("The given queue name does not exist: {}", queueName);
             }
-            LOGGER.info("Received data for task " + taskId + ". Queue/task name: " + queueName);
+            LOGGER.info("Received data for task '{}' queue name: '{}'", taskId, queueName);
 
             String resultsPath = System.getProperty("user.dir") + File.separator + "results";
             //SourceName and targetName play an important role as the order of files in receivedFiles 
             File file_source = new File(resultsPath + File.separator + sourceName);
             File file_target = new File(resultsPath + File.separator + targetName);
 
-            LOGGER.info("Received source file " + file_source.getAbsolutePath() + " exists? " + file_source.exists());
-            LOGGER.info("Received target file " + file_target.getAbsolutePath() + " exists? " + file_target.exists());
+            LOGGER.info("Received source file '{}' test for existence: {}", file_source.getAbsolutePath(), file_source.exists());
+            LOGGER.info("Received target file '{}' test for existence: {}", file_target.getAbsolutePath(), file_target.exists());
 
-            //LogMap requires URIs of input ontologies
-            URI sourcePath = file_source.toURI();
-            URI targetPath = file_target.toURI();
-
-            LOGGER.info("Task " + taskId + " received from task generator");
-            LOGGER.info("Files in queue '" + queueName + "' received from task generator");
-            LOGGER.info("Source " + sourcePath.toString());
-            LOGGER.info("Target " + targetPath.toString());
-            LOGGER.info("Flags: isMatchingClassesRequired " + isMatchingClassesRequired
-                    + ",  isMatchingDataPropertiesRequired " + isMatchingDataPropertiesRequired
-                    + ",  isMatchingObjectPropertiesRequired " + isMatchingObjectPropertiesRequired
-                    + ",  isMatchingInstancesRequired " + isMatchingInstancesRequired
-                    + ",  restricted_instance_types " + allowed_instance_types.size());
-            
-            //update HobbitOptions
-            OaeiOptions.setFormat(format);
-            OaeiOptions.setSourceName(sourceName);
-            OaeiOptions.setTargetName(targetName);
-            OaeiOptions.setMatchingClassesRequired(isMatchingClassesRequired);
-            OaeiOptions.setMatchingDataPropertiesRequired(isMatchingDataPropertiesRequired);
-            OaeiOptions.setMatchingObjectPropertiesRequired(isMatchingObjectPropertiesRequired);
-            OaeiOptions.setMatchingInstancesRequired(isMatchingInstancesRequired);
-            OaeiOptions.setAllowedInstanceTypes(allowed_instance_types);
-            
-            File result = runTool(sourcePath, targetPath);
+            File result = runTool(file_source.toURI(), file_target.toURI());
             
             if(result != null){
                 byte[][] resultsArray = new byte[1][];
                 String str_results = FileUtils.readFileToString(result);
-                String first2000 = str_results.substring(0, Math.min(str_results.length(), 2000));
-                LOGGER.info("My results (truncated to 2000 characters) are: " + first2000.replace("\n", ""));
+                String first500 = str_results.substring(0, Math.min(str_results.length(), 500));
+                LOGGER.info("My results (truncated to 500 characters) are: " + first500.replace("\n", ""));
                 resultsArray[0] = FileUtils.readFileToByteArray(result);
                 byte[] results = RabbitMQUtils.writeByteArrays(resultsArray);
 
                 try {
                     sendResultToEvalStorage(taskId, results);
-                    LOGGER.info("HobbitWrapper: results sent to evaluation storage. Task " + taskId + ". Queue/Task name: " + queueName);
+                    LOGGER.info("HobbitWrapper: results sent to evaluation storage. Task '{}' queue name: '{}'", taskId, queueName);
                 } catch (IOException e) {
                     LOGGER.error("Exception while sending storage space cost to evaluation storage. Task " + taskId, e);
                 }
             }
         } catch (IOException ex) {
-            LOGGER.error(ex.toString());
+            LOGGER.error("Something wrong in receiveGeneratedTask", ex);
         }
     }
     
@@ -193,7 +180,6 @@ public class HobbitWrapper extends AbstractSystemAdapter {
             LOGGER.error("Could not access class " + implementingClass, ex);
             return null;
         }
-        //logger.error("This is a test ", new Exception("Search for it"));
         URL result;
         try {
             result = bridge.align(source.toURL(), target.toURL());
