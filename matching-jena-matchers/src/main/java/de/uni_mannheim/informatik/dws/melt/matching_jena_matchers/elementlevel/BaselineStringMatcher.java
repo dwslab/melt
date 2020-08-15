@@ -58,7 +58,6 @@ public class BaselineStringMatcher extends MatcherYAAAJena {
         }
     }
 
-
     /**
      * Normalizes a string and returns a bag of words.
      * @param stringToBeNormalized The string that shall be normalized.
