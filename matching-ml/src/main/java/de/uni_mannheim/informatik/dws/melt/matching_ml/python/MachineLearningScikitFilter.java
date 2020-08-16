@@ -67,6 +67,15 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena {
         });
     }
     
+    public MachineLearningScikitFilter(Alignment trainingAlignment, int crossValidationNumber, int numberOfParallelJobs) {
+        this(new MatcherYAAAJena() {
+            @Override
+            public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
+                return trainingAlignment;
+            }
+        }, null, crossValidationNumber, numberOfParallelJobs);
+    }
+    
     public MachineLearningScikitFilter(MatcherYAAAJena trainingGenerator) {
         this(trainingGenerator, null);
     }    

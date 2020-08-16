@@ -762,6 +762,7 @@ def machine_learning():
             }
         ]
         
+        logging.info("run grid search with cv: %s and jobs: %s", cv, n_jobs)
         grid = GridSearchCV(
             Pipeline([('scaler', preprocessing.MaxAbsScaler()), ('estimator', svm.SVC())]),
             param_grid=params_grid,

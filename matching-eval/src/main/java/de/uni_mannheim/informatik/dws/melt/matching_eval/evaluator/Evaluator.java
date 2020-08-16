@@ -32,9 +32,7 @@ public abstract class Evaluator {
      */
     private static File resultsDirectory;
     static {
-        String dateAndTime = "results_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-        setDefaultResultsDirectory(Paths.get("results", dateAndTime).toFile()); //default results folder has now time stamp
-        //setDefaultResultsDirectory(new File("results"));
+        setDefaultResultsDirectory(new File("results"));
     }
 
     /**
@@ -65,7 +63,8 @@ public abstract class Evaluator {
      * Perform an evaluation and persist the results of the evaluator in the default directory.
      */
     public void writeToDirectory(){
-        this.writeToDirectory(resultsDirectory);
+        String dateAndTime = "results_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+        this.writeToDirectory(new File(resultsDirectory, dateAndTime));
     }
 
     /**
