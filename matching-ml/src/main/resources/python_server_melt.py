@@ -797,4 +797,6 @@ def hello_demo():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, port=41193)
+    # threaded=False because otherwise GridSearchCV do not run in parallel
+    # see https://stackoverflow.com/questions/50665837/using-flask-with-joblib
+    app.run(debug=False, port=41193, threaded=False)
