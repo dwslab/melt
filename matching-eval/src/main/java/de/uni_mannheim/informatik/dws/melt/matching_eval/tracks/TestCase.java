@@ -121,7 +121,7 @@ public class TestCase {
     
     @Override
     public String toString() {
-        return "Testcase " + name + " of " + track.toString() + "(src: " + source + " dst: " + target + " ref: " + reference + ")";
+        return "Testcase " + name + " of " + track.toString() + "(src: " + source + " dst: " + target + " input: " + inputAlignment + " ref: " + reference +  ")";
     }
     
     //convenient methods for retrieving parsed ontologies

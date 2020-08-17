@@ -597,7 +597,7 @@ public class TrackRepository{
     
     
     public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction, Random randomSeed){
-        Alignment sample = tc.getParsedReferenceAlignment().sampleByFraction(0.5, randomSeed);
+        Alignment sample = tc.getParsedReferenceAlignment().sampleByFraction(fraction, randomSeed);
         try {
             File f = File.createTempFile("ref_sample", ".rdf");
             sample.serialize(f);
