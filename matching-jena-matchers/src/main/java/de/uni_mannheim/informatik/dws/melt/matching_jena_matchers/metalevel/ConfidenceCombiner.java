@@ -28,7 +28,7 @@ public class ConfidenceCombiner extends MatcherYAAAJena {
      * Constructor
      * @param statistic choose any implementation from univariatestatistic listed 
      *      <a href="http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math4/stat/descriptive/UnivariateStatistic.html">here</a>.
-     * @param additionalConfidenceNames 
+     * @param additionalConfidenceNames confidence names to care about.
      */
     public ConfidenceCombiner(UnivariateStatistic statistic, Set<String> additionalConfidenceNames) {
         this.statistic = statistic;
