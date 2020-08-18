@@ -763,6 +763,7 @@ def machine_learning():
         ]
         
         logging.info("run grid search with cv: %s and jobs: %s", cv, n_jobs)
+        print("run grid search with cv: %s and jobs: %s" % (cv, n_jobs))
         grid = GridSearchCV(
             Pipeline([('scaler', preprocessing.MaxAbsScaler()), ('estimator', svm.SVC())]),
             param_grid=params_grid,
@@ -775,6 +776,8 @@ def machine_learning():
 
         logging.info("cross validation: best f1 score: %s", grid.best_score_)
         logging.info("cross validation: chosen model: %s", grid.best_params_)
+        print("cross validation: best f1 score: %s" % grid.best_score_)
+        print("cross validation: chosen model: %s" % grid.best_params_)
         
         y_predict = grid.best_estimator_.predict(X_test)
         return jsonify(y_predict.tolist())

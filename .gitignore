@@ -21,15 +21,16 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
-# benchmark
-benchmarkCache
-trackCache
-results
-matching-eval/results/
+# melt specific / benchmark
+benchmarkCache/
+trackCache/
+results/
+sealsResults/
+melt-resources/
+
 current_result.rdf
 result.rdf
 
-#generated webpages
 dashboard.html
 
 #java
@@ -77,14 +78,7 @@ documentation/.~lock.melt_ml_architecture_image.odp#
 python_command.txt
 index.index.0
 
-# resources
-*/melt-resources/*
-
 # include travis file
 !.travis.yml
 !.github/workflows/maven.yml
 !.gitignore
-
-# result files
-/matching-eval/sealsResults
-/results
