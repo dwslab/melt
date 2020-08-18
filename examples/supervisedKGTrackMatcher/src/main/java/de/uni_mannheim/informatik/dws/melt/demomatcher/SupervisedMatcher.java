@@ -4,6 +4,7 @@ import com.googlecode.cqengine.query.QueryFactory;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConceptType;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.TypeFilter;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.NaiveDescendingExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.MachineLearningScikitFilter;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -48,7 +49,12 @@ public class SupervisedMatcher extends MatcherYAAAJena{
                 );
             }
         }
-        MachineLearningScikitFilter filter = new MachineLearningScikitFilter(trainingAlignment);
-        return filter.match(source, target, recallAlignment, properties);
+        MachineLearningScikitFilter filter = new MachineLearningScikitFilter(trainingAlignment, 5, 40);
+        
+        Alignment filteredAlignment = filter.match(source, target, recallAlignment, properties);
+        
+        filteredAlignment = NaiveDescendingExtractor.filter(filteredAlignment);
+        
+        return filteredAlignment;
     }
 }

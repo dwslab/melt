@@ -43,7 +43,9 @@ public class Main {
         //CacheInit.populateKGTrack("E:\\tmp_tdb\\");
         
         //analyzeIsolatedFeatures();
-        analyzeSupervisedLearningMatcher();
+        analyzeSupervisedLearningMatcher(0.2);
+        analyzeSupervisedLearningMatcher(0.4);
+        analyzeSupervisedLearningMatcher(0.6);
     }
     
     
@@ -58,24 +60,19 @@ public class Main {
         
         
         ExecutionResultSet results = Executor.run(testCases, matchers);
-        results.addAll(Executor.run(testCases, new BaseMatcher()));
         
         EvaluatorCSV e = new EvaluatorCSV(results);
         e.setResourceExplainers(Arrays.asList(new ExplainerResourceProperty(RDFS.label, SKOS.altLabel), new ExplainerResourceType()));
-        e.writeToDirectory();        
+        e.writeToDirectory();
     }
     
     
-    private static void analyzeSupervisedLearningMatcher(){
-        
-        
+    private static void analyzeSupervisedLearningMatcher(double fraction){
         List<TestCase> testCases = new ArrayList();
         for(TestCase tc : TrackRepository.Knowledgegraph.V3.getTestCases()){
-            //sample 40 % reference alignemnt
-            testCases.add(TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, 0.4, 1324567));
+            testCases.add(TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, fraction, 1324567));
         }
-        //testCases.add(TrackRepository.generateTestCaseWithSampledReferenceAlignment(TrackRepository.Knowledgegraph.V3.getTestCase("memoryalpha-memorybeta"), 0.4, 1324567));
-        
+
         ExecutionResultSet results = Executor.run(testCases, new SupervisedMatcher());
         results.addAll(Executor.run(testCases, new BaseMatcher()));
         
