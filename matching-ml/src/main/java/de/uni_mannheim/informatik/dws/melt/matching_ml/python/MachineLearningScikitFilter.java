@@ -8,11 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.jena.ontology.OntModel;
@@ -108,7 +105,7 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena {
         
         Alignment trainingAlignment = trainingGenerator.match(source, target, inputAlignment, properties);
         if(confidenceNames == null || confidenceNames.isEmpty())
-            confidenceNames = getConfidenceKeys(trainingAlignment);
+            confidenceNames = new ArrayList(trainingAlignment.getDistinctCorrespondenceConfidenceKeys());
         if(confidenceNames.isEmpty()){
             LOGGER.warn("No attributes available for learning. Return unfiltered alignment.");
             return inputAlignment;
@@ -177,18 +174,5 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena {
             if(includeTarget)
                 LOGGER.info("Created training set with {} positive and {} negative examples ({} attribute(s)).", positive, negative, confidenceNames.size());
         }
-    }
-
-    /**
-     * Obtain all keys of the additional confidence.
-     * @param alignment The alignment from which the additional keys shall be extracted.
-     * @return A list of keys that can be used to obtain the set confidences.
-     */
-    private List<String> getConfidenceKeys(Alignment alignment){
-        Set<String> keySet = new HashSet();
-        for(Correspondence c : alignment){
-            keySet.addAll(c.getAdditionalConfidences().keySet());
-        }
-        return new ArrayList<>(keySet);
     }
 }

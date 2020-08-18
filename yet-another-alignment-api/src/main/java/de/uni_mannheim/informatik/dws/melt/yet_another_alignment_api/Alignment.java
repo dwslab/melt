@@ -571,6 +571,18 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
+     * Returns all used (sub-) extension keys of correspondences which can be used with method getAdditionalConfidence.
+     * @return a set of all correspondence (sub-) extension keys.
+     */
+    public Set<String> getDistinctCorrespondenceConfidenceKeys(){
+        Set<String> keys = new HashSet();
+        for(Correspondence c : this){
+            keys.addAll(c.getAdditionalConfidences().keySet());
+        }
+        return keys;
+    }
+    
+    /**
      * Reverse the alignment (switches sources with targets) and does not change the relation.
      * It creates a new Alignment.
      * If the relation should be changed use the {@link #reverse()} method.
