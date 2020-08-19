@@ -20,10 +20,20 @@ def match_rdflib(source_graph, target_graph, input_alignment):
     return alignment
     #return [('http://one.de', 'http://two.de', '=', 1.0)]
 
-
+def get_file_from_url(location):
+    from urllib.parse import unquote
+    from urllib.request import url2pathname, urlopen
+    if location.startswith("file:"):
+        return open(url2pathname(unquote(urlparse(location).path)))
+    else:
+        return urlopen(location)
 
 def match(source_url, target_url, input_alignment_url):
     logging.info("Python matcher info: Match " + source_url + " to " + target_url)
+
+    #in case you want the file object use
+    #source_file = get_file_from_url(source_url)
+    #target_file = get_file_from_url(target_url)
 
     source_graph = Graph()
     source_graph.parse(source_url)
