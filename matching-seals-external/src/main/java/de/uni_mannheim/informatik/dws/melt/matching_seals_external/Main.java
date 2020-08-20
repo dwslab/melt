@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
-    private static final Path filePath = Paths.get("external", "oaei_mainClass.txt");
 
     public static void main(String[] args) {
         if(args.length != 3 || args.length == 4){
@@ -33,22 +32,11 @@ public class Main {
     }
 
     private static IOntologyMatchingToolBridge getBridge(String implementingClass) {
-        /*
-        String implementingClass = "";
-        try {
-            implementingClass = new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
-        } catch (IOException ex) {
-            System.err.println("File " + filePath.toString() + " could not be read. Error message: " + ex.getMessage());
-            return null;
-        }
-        */
         implementingClass = implementingClass.replace("\r", "").replace("\n", "").trim();
         if(implementingClass.length() == 0){
              System.err.println("The name of the implementing class is empty");
              return null;
         }
-        
-        
         IOntologyMatchingToolBridge bridge;
         try {
             Class clazz = Class.forName(implementingClass);
