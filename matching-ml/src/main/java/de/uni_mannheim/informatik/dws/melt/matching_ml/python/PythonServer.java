@@ -739,10 +739,10 @@ public class PythonServer {
         String pythonCommand = getPythonCommand();
         List<String> command = Arrays.asList(pythonCommand, canonicalPath);
         ProcessBuilder pb = new ProcessBuilder(command);
+        pb.directory(new File(System.getProperty("user.dir")));
         updateEnvironmentPath(pb.environment(), pythonCommand);
-        //List<String> command = Arrays.asList("python", "--version");
-        //ProcessBuilder pb = new ProcessBuilder(command);
-        //pb.environment().put("PATH", "{FOLDER CONTAINING PYTHON EXE}" + File.pathSeparator + pb.environment().get("PATH"));
+        LOGGER.info("Start PythonServer in folder {} with command {}", pb.directory().toString(), String.join(" ", command));
+        
         try {
             pb.inheritIO();
             this.serverProcess = pb.start();
