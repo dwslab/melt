@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 public abstract class MatcherExternal extends MatcherURL {    
     private static final String NEWLINE = System.getProperty("line.separator");
     private static final Pattern URL_PATTERN = Pattern.compile("(?:https?|ftp|file)://?[^\\s]*",Pattern.CASE_INSENSITIVE);
+    private static final Pattern MULTIPLE_WHITESPACES = Pattern.compile(" +");
     
     private static final String RUNTIME_XMX = getRuntimeArgument("xmx");
     private static final String RUNTIME_XMS = getRuntimeArgument("xms");
@@ -174,12 +175,14 @@ public abstract class MatcherExternal extends MatcherURL {
      * @return the replaced string
      */
     protected String replaceString(String s){
-        return s.replace("\r", "").replace("\n", "")
+        String text = s.replace("\r", "").replace("\n", "")
                 .replace("{File.pathSeparator}", File.pathSeparator)
                 .replace("{File.separator}", File.separator)
                 .replace("{xmx}", RUNTIME_XMX)
                 .replace("{xms}", RUNTIME_XMS)
                 .trim();
+        //replace multiple whitespaces by one
+        return MULTIPLE_WHITESPACES.matcher(text).replaceAll(" ");
     }
     
     /**
@@ -200,7 +203,7 @@ public abstract class MatcherExternal extends MatcherURL {
      * @return the replaced string
      */
     protected String replaceString(String s, URL source, URL target, URL inputAlignment){
-        return s.replace("\r", "").replace("\n", "")
+        String text = s.replace("\r", "").replace("\n", "")
                 .replace("{File.pathSeparator}", File.pathSeparator)
                 .replace("{File.separator}", File.separator)
                 .replace("{xmx}", RUNTIME_XMX)
@@ -209,5 +212,7 @@ public abstract class MatcherExternal extends MatcherURL {
                 .replace("{target}", target.toString())
                 .replace("{inputAlignment}", inputAlignment == null ? "" : inputAlignment.toString())
                 .trim();
+        //replace multiple whitespaces by one
+        return MULTIPLE_WHITESPACES.matcher(text).replaceAll(" ");
     }
 }
