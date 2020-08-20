@@ -28,6 +28,13 @@ class KGvec2goClientTest {
         result = KGvec2goClient.getInstance().getVector("AABBCCDDEEFF", KGvec2goDatasets.DBPEDIA);
         assertNull(result);
 
+        // erroneous requests
+        assertNull(KGvec2goClient.getInstance().getVector(null, null));
+        assertNull(KGvec2goClient.getInstance().getVector("car", null));
+        assertNull(KGvec2goClient.getInstance().getVector(null, KGvec2goDatasets.DBPEDIA));
+        assertNull(KGvec2goClient.getInstance().getVector("", KGvec2goDatasets.DBPEDIA));
+        assertNull(KGvec2goClient.getInstance().getVector(" ", KGvec2goDatasets.DBPEDIA));
+
 
         // ---------
         //   ALOD

@@ -12,7 +12,7 @@ import org.apache.jena.ontology.OntModel;
 
 /**
  * Naive ascending extraction as shown in "Analyzing Mapping Extraction Approaches" (C. Meilicke, H. Stuckenschmidt).
- * It iterates over the sorted (ascending) correspondences and and uses the correspondence with the highest cofidence.
+ * It iterates over the sorted (ascending) correspondences and and uses the correspondence with the highest confidence.
  * Afterwards removes every other correspondence with the same source or target.
  * @see <a href="http://ceur-ws.org/Vol-304/paper3.pdf">Analyzing Mapping Extraction Approaches (C. Meilicke, H. Stuckenschmidt)</a>
  */

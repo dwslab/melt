@@ -54,7 +54,7 @@ public class PythonServer {
     private static final String DEFAULT_RESOURCES_DIRECTORY = "./melt-resources/";
 
     /**
-     * Objectmapper from jackson to generate JSON.
+     * ObjectMapper from jackson to generate JSON.
      */
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     
