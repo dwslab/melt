@@ -130,7 +130,7 @@ public abstract class MatcherExternal extends MatcherURL {
         else{
             pb.redirectInput(Redirect.INHERIT);
         }
-        System.err.println("Start external matcher with command: " + String.join(" ", command));
+        System.err.println("Start external matcher in folder " + pb.directory().toString() + " with command: " + String.join(" ", command));
         return pb.start();
     }
     
