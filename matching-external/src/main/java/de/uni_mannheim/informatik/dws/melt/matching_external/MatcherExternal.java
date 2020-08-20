@@ -124,6 +124,7 @@ public abstract class MatcherExternal extends MatcherURL {
         //pb.redirectInput(Redirect.INHERIT); // no need because the process gets no further input than the process parameters
         //pb.redirectOutput(Redirect.INHERIT); // no need because we want to collect it
         //pb.redirectError(Redirect.INHERIT); // redirect err pipe because of all logging etc
+        pb.directory(new File(System.getProperty("user.dir")));
         if(isUsingStdOut()){
             pb.redirectError(Redirect.INHERIT);
         }
