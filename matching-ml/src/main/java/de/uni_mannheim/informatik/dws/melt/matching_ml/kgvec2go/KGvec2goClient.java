@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_ml.kgvec2go;
 
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -107,7 +108,7 @@ public class KGvec2goClient {
      */
     public Double[] getVector(String word, KGvec2goDatasets dataset){
         // sanity check
-        if(word == null || dataset == null){
+        if(word == null || word.trim().equals("") || dataset == null) {
             return null;
         }
 
@@ -135,20 +136,26 @@ public class KGvec2goClient {
             LOGGER.error("Problem with http request.", ioe);
         }
 
-        if(resultString != null){
-            if(dataset != KGvec2goDatasets.WORDNET) {
-                KGvec2goVectorResponseEntity vre = gson.fromJson(resultString, KGvec2goVectorResponseEntity.class);
-                writeToBuffer(word, dataset, vre.vector);
-                return vre.vector;
-            } else {
-                KGvec2goVectorResponseEntityArray vre = gson.fromJson(resultString, KGvec2goVectorResponseEntityArray.class);
-                if(vre == null || vre.result == null || vre.result.length == 0){
-                    writeToBuffer(word, dataset, null);
-                    return null;
+        try {
+            if (resultString != null) {
+                if (dataset != KGvec2goDatasets.WORDNET) {
+                    KGvec2goVectorResponseEntity vre = gson.fromJson(resultString, KGvec2goVectorResponseEntity.class);
+                    writeToBuffer(word, dataset, vre.vector);
+                    return vre.vector;
+                } else {
+                    KGvec2goVectorResponseEntityArray vre = gson.fromJson(resultString, KGvec2goVectorResponseEntityArray.class);
+                    if (vre == null || vre.result == null || vre.result.length == 0) {
+                        writeToBuffer(word, dataset, null);
+                        return null;
+                    }
+                    writeToBuffer(word, dataset, vre.result[0].vector);
+                    return vre.result[0].vector;
                 }
-                writeToBuffer(word, dataset, vre.result[0].vector);
-                return vre.result[0].vector;
             }
+        } catch (JsonSyntaxException jse){
+            LOGGER.error("Syntax exception occurred with the following result string: " + resultString + "\nThe following request URL was used:\n" + requestUrl, jse);
+            // important: continue but do not write to buffer
+            return null;
         }
         writeToBuffer(word, dataset, null);
         return null;

@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Faster implementation than {@link HungarianExtractor} for generating a one to one alignment.
+ * Faster implementation than {@link HungarianExtractor} for generating a one-to-one alignment.
  * The implementation is based on http://www.mpi-inf.mpg.de/~mehlhorn/Optimization/bipartite_weighted.ps (page 13-19).
  * @see <a href="http://ceur-ws.org/Vol-551/om2009_Tpaper5.pdf">Paper: Efficient Selection of Mappings and Automatic Quality-driven Combination of Matching Methods</a>
  */
@@ -47,15 +47,14 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena {
                 MwbNode target = targetNodeMapping.computeIfAbsent(c.getEntityOne(), __ -> new MwbNode());
                 source.addSuccesor(new MwbEdge(source, target, c)); //directed edge from source(A) to target(B)
             }
-        }else{
+        } else {
             for(Correspondence c : inputAlignment.getCorrespondencesRelation(CorrespondenceRelation.EQUIVALENCE)){
                 MwbNode source = sourceNodeMapping.computeIfAbsent(c.getEntityOne(), __ -> new MwbNode());
                 MwbNode target = targetNodeMapping.computeIfAbsent(c.getEntityTwo(), __ -> new MwbNode());
                 source.addSuccesor(new MwbEdge(source, target, c)); //directed edge from source(A) to target(B)
             }
         }
-        
-        
+
         switch(heuristic){
             case NAIVE:
                 double maxConfidence = Collections.max(inputAlignment.getDistinctConfidencesAsSet());
@@ -67,7 +66,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena {
                 for(MwbNode a : sourceNodeMapping.values()){
                     MwbEdge eMax = null;
                     double cMax = 0.0;
-                    for(MwbEdge e : a.getSuccesor()){
+                    for(MwbEdge e : a.getSuccessor()){
                         if(e.getWeight() > cMax){
                             eMax = e;
                             cMax = e.getWeight();
@@ -98,7 +97,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena {
         //selected correspondences are edges from target(B) to source(A)
         Alignment result = new Alignment(inputAlignment, false);
         for(MwbNode b : targetNodeMapping.values()){
-            Set<MwbEdge> selectedEdges = b.getSuccesor();
+            Set<MwbEdge> selectedEdges = b.getSuccessor();
             if(selectedEdges.size() > 1){
                 LOGGER.warn("There is more than one match - this should not happen... (Correspondence: {})", selectedEdges.iterator().next().getCorrespondence());
             }
@@ -153,7 +152,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena {
                 break;
             }else{
                 //continue the shortest path computation                
-                Iterator<MwbEdge> edges = b.getSuccesor().iterator();
+                Iterator<MwbEdge> edges = b.getSuccessor().iterator();
                 if(edges.hasNext() == false){
                     LOGGER.error("Nod eb should have successor. This should not happen.");
                     continue;                    
@@ -197,7 +196,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena {
     }
     
     private static void relaxAllEdges(MwbNode a1, Stack<MwbNode> RB, PriorityQueue<MwbNode> PQ){
-        for(MwbEdge e : a1.getSuccesor()) {
+        for(MwbEdge e : a1.getSuccessor()) {
             MwbNode b = e.getTarget();
             double db = a1.getDistance() + (a1.getPotential() + b.getPotential() - e.getWeight());
             if(b.getPredecessor() == null){

@@ -9,9 +9,9 @@ import java.util.Set;
  */
 class MwbNode implements Comparable<MwbNode>{
     /**
-     * The graph structure (modeled only as succesors).
+     * The graph structure (modeled only as successor).
      */
-    private Set<MwbEdge> succesor;    
+    private Set<MwbEdge> successor;
     /**
      * The potenial as given in the algorithm.
      */
@@ -31,7 +31,7 @@ class MwbNode implements Comparable<MwbNode>{
     
 
     public MwbNode() {
-        this.succesor = new HashSet<>();
+        this.successor = new HashSet<>();
         this.potential = 0.0;
         this.distance = 0.0;
         this.free = true;
@@ -39,11 +39,11 @@ class MwbNode implements Comparable<MwbNode>{
     }
 
     public void addSuccesor(MwbEdge e){
-        this.succesor.add(e);
+        this.successor.add(e);
     }
 
     public void removeSuccesor(MwbEdge e){
-        this.succesor.remove(e);
+        this.successor.remove(e);
     }    
 
     public double getPotential() {
@@ -77,12 +77,12 @@ class MwbNode implements Comparable<MwbNode>{
         this.predecessor = predecessor;
     }
 
-    public Set<MwbEdge> getSuccesor() {
-        return succesor;
+    public Set<MwbEdge> getSuccessor() {
+        return successor;
     }
 
-    public void setSuccesor(Set<MwbEdge> succesor) {
-        this.succesor = succesor;
+    public void setSuccessor(Set<MwbEdge> successor) {
+        this.successor = successor;
     }
 
     @Override

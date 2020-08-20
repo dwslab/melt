@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Gridsearch for ontology matching with an arbitrary amount of parameter and values to optimize.
+ * GridSearch for ontology matching with an arbitrary amount of parameter and values to optimize.
  * Important: when using parallel processing, ensure that the matcher does not write to the same results file.
  *
  * @author Sven Hertling
@@ -137,9 +137,9 @@ public class GridSearch {
      * bean. This effectively means bean.setA(3).</li>
      * </ul>
      * (this is from org.apache.commons.beanutils.PropertyUtilsBean)
-     * @param name Possibly nested name of the property to be modified
-     * @param paramValues Values to which the property is to be set
-     * @return GridSearch object (for builder pattern)
+     * @param name Possibly nested name of the property to be modified.
+     * @param paramValues Values to which the property is to be set.
+     * @return GridSearch object (for builder pattern).
      */
     public GridSearch addParameter(String name, Object... paramValues){
         return addParameter(name, Arrays.asList(paramValues));
@@ -191,7 +191,7 @@ public class GridSearch {
      * new MyMatcher(2, "y")
      * new MyMatcher(3, "y")
      * }</pre>
-     * In case you just want to provide constructro paramters which should not be changed, use {@link #addStaticConstructorParameter(java.lang.Object...) }
+     * In case you just want to provide constructor parameters which should not be changed, use {@link #addStaticConstructorParameter(java.lang.Object...) }
      * @param paramValues The parameters for the constructor in the correct order.
      * @return Edited {@code GridSearch} instance.
      */
@@ -221,7 +221,7 @@ public class GridSearch {
      * new MyMatcher(2, "y")
      * new MyMatcher(3, "y")
      * }</pre>
-     * In case you just want to provide constructro paramters which should not be changed, use {@link #addStaticConstructorParameter(java.lang.Object...) }
+     * In case you just want to provide constructor parameters which should not be changed, use {@link #addStaticConstructorParameter(java.lang.Object...) }
      * @param paramValues The parameters for the constructor in the correct order.
      * @param clazz The type of all the values.
      * @return Edited {@code GridSearch} instance.
@@ -355,7 +355,7 @@ public class GridSearch {
      */
     public ExecutionResultSet updateExecutionResultSet(ExecutionResultSet set){
         for(List<Object> paramSetting : cartesianProduct(0, this.paramValues)){
-            Collections.reverse(paramSetting); //TODO: optimze
+            Collections.reverse(paramSetting); //TODO: optimize
             int counter = 0;
             for(ExecutionResult result : set.getGroup(getMatcherNameWithSettings(paramSetting))){
                 for(int i=0; i < paramSetting.size(); i++){

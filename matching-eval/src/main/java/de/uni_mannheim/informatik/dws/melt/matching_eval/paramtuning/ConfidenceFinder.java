@@ -17,7 +17,7 @@ import java.util.Set;
 
 
 /**
- * This class offers static functionality to analyze and opimize matchers in terms of their confidences (and
+ * This class offers static functionality to analyze and optimize matchers in terms of their confidences (and
  * confidence thresholds).
  */
 public class ConfidenceFinder{
