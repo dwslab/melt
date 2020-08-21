@@ -744,7 +744,8 @@ public class PythonServer {
         LOGGER.info("Start PythonServer in folder {} with command {}", pb.directory().toString(), String.join(" ", command));
         
         try {
-            pb.inheritIO();
+            pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+            pb.redirectError(ProcessBuilder.Redirect.INHERIT);
             this.serverProcess = pb.start();
             final int maxTrials = 5;
             for (int i = 0; i < maxTrials; i++) {
