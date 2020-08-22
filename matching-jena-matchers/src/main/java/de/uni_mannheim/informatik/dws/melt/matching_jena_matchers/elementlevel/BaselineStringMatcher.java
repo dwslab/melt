@@ -65,6 +65,11 @@ public class BaselineStringMatcher extends MatcherYAAAJena {
      */
     public static BagOfWords normalize(String stringToBeNormalized) {
         if (stringToBeNormalized == null) return null;
+        /*
+        Might not exactly be needed, as in case of a full label match (including language) should work fine anyway
+        However, in case the words are processed separately, not removing the language tag might lead to unexpected results
+        */
+        stringToBeNormalized = stringToBeNormalized.contains("@") ? stringToBeNormalized.substring(0, stringToBeNormalized.indexOf("@")) : stringToBeNormalized; //remove language tag
         stringToBeNormalized = stringToBeNormalized.replaceAll("(?<!^)(?<!\\s)(?=[A-Z][a-z])", "_"); // convert camelCase to under_score_case
         stringToBeNormalized = stringToBeNormalized.replace(" ", "_");
         stringToBeNormalized = stringToBeNormalized.toLowerCase();
