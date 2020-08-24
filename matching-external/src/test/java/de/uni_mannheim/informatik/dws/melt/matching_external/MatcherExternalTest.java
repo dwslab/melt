@@ -2,8 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_external;
 
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -33,18 +31,11 @@ public class MatcherExternalTest {
     
     @Test
     void getLastUrlTest() throws MalformedURLException {
-        MatcherExternal e = new SimpleExternalMatcher();
-        assertEquals(URI.create("file://foo.bar").toURL(), e.getLastUrlInString("Test file://test.de\nand so on\nfile://foo.bar\nnext line with some content."));
-        assertEquals(URI.create("file:/tmp/alignment3572747689589156227.rdf").toURL(), e.getLastUrlInString(matcherresult));
+
+        assertEquals(URI.create("file://foo.bar").toURL(), ProcessOutputCollector.findLastURL("Test file://test.de\nand so on\nfile://foo.bar\nnext line with some content."));
+        assertEquals(URI.create("file:/tmp/alignment3572747689589156227.rdf").toURL(), ProcessOutputCollector.findLastURL(matcherresult));
         for(String uri : possibleURIs){
-            assertEquals(URI.create(uri).toURL(), e.getLastUrlInString("test\nFoo" + uri + " bar\n test\n"));
-        }
-    }    
-    
-    class SimpleExternalMatcher extends MatcherExternal{
-        @Override
-        protected List<String> getCommand(URL source, URL target, URL inputAlignment) throws Exception {
-            return new ArrayList<>();
+            assertEquals(URI.create(uri).toURL(), ProcessOutputCollector.findLastURL("test\nFoo" + uri + " bar\n test\n"));
         }
     }
 }

@@ -1,31 +1,27 @@
 package de.uni_mannheim.informatik.dws.melt.matching_external;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherURL;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.ProcessBuilder.Redirect;
 import java.lang.management.ManagementFactory;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Matcher for running external matchers (require the subclass to create a command to execute).
  */
-public abstract class MatcherExternal extends MatcherURL {    
-    private static final String NEWLINE = System.getProperty("line.separator");
-    private static final Pattern URL_PATTERN = Pattern.compile("(?:https?|ftp|file)://?[^\\s]*",Pattern.CASE_INSENSITIVE);
+public abstract class MatcherExternal extends MatcherURL {
     private static final Pattern MULTIPLE_WHITESPACES = Pattern.compile(" +");
     
     private static final String RUNTIME_XMX = getRuntimeArgument("xmx");
     private static final String RUNTIME_XMS = getRuntimeArgument("xms");
+    
+    
+    private ProcessOutputCollector resultOutputCollector; // usually std out
+    private ProcessOutputRedirect logOutputCollector; // usually std err
     
     /**
      * Returns a runtime argument of the java virtual maschine like -Xmx (which specifies java heap size) and not main program arguments.
@@ -64,50 +60,36 @@ public abstract class MatcherExternal extends MatcherURL {
     
     @Override
     public URL match(URL source, URL target, URL inputAlignment) throws Exception {
+        
         Process process = startProcess(source, target, inputAlignment);
+        if(isUsingStdOut()){
+            this.resultOutputCollector = new ProcessOutputCollector(process.getInputStream(), "ExternalMatcher (OUT): ", System.out);
+            this.logOutputCollector = new ProcessOutputRedirect(process.getErrorStream(), "ExternalMatcher (ERR): ", System.out);
+        }else{
+            this.resultOutputCollector = new ProcessOutputCollector(process.getErrorStream(), "ExternalMatcher (ERR): ", System.out);
+            this.logOutputCollector = new ProcessOutputRedirect(process.getInputStream(), "ExternalMatcher (OUT): ", System.out);
+        }
+        this.resultOutputCollector.start();
+        this.logOutputCollector.start();
         
         int errCode = process.waitFor(); // wait for the matcher to finish
         if(errCode != 0){
             System.err.println("External Matcher return with error code " + Integer.toString(errCode) + ". Continue....");
         }
-        String resultOfProcess = getResultOfProcess(process);
-        resultOfProcess = resultOfProcess.trim(); //remove all spaces and newline at the start or end of the string
         
-        if(resultOfProcess.isEmpty())
-            throw new IllegalArgumentException("The external matcher returned an empty result.");
-        
-        URL returnValue = null;
-        try {
-            returnValue = new URL(resultOfProcess);
-        } catch (MalformedURLException ex) {
-            System.err.println("The external matcher did not return solely a file URL. Probably configure your matcher to log all messages to std out or std err. Try now to find a URL in the result which is printed below:");
-            System.err.println(resultOfProcess);//printed because log messages are probably contained therein
-            returnValue = getLastUrlInString(resultOfProcess);
-            if(returnValue == null){
-                System.err.println("Did not find any URL in the result of the process. Backup is to use the result as file content. Be warned....");
-                returnValue = getUrlOfTempFileWithContent(resultOfProcess);
+        URL lastURL = this.resultOutputCollector.getURL();
+        if(lastURL == null){
+            if(isUsingStdOut()){
+                System.err.println("Could not find a (file) URL in standard output of external matcher. Check log messages prefixed with ExternalMatcher (OUT).");
+                throw new IllegalArgumentException("Could not find a (file) URL in standard output of external matcher.");
             }else{
-                System.err.println("Found following URL: " + returnValue);
+                System.err.println("Could not find a (file) URL in error output of external matcher. Check log messages prefixed with ExternalMatcher (ERR).");
+                throw new IllegalArgumentException("Could not find a (file) URL in error output of external matcher.");
             }
         }
+        System.err.println("Found following URL: " + lastURL);
         closeAllStreams(process);
-        return returnValue;
-    }
-    
-    protected URL getLastUrlInString(String text){        
-        Matcher matcher = URL_PATTERN.matcher(text);
-        String urlString = null;
-        while (matcher.find()) {
-            urlString = matcher.group();
-        }        
-        if(urlString == null){
-            return null;
-        }
-        try {
-            return new URL(urlString);
-        } catch (MalformedURLException ex) {
-            return null;
-        }
+        return lastURL;
     }
     
     protected URL getUrlOfTempFileWithContent(String content) throws IOException{
@@ -121,41 +103,12 @@ public abstract class MatcherExternal extends MatcherURL {
     protected Process startProcess(URL source, URL target, URL inputAlignment) throws Exception{
         //https://examples.javacodegeeks.com/core-java/lang/processbuilder/java-lang-processbuilder-example/
         List<String> command = getCommand(source, target, inputAlignment);
-        ProcessBuilder pb = new ProcessBuilder(command);//"python", "C:\\dev\\OntMatching\\ontMatching\\test.py", source.toString(), target.toString(), inputAlignment.toString());
-        //pb.redirectInput(Redirect.INHERIT); // no need because the process gets no further input than the process parameters
-        //pb.redirectOutput(Redirect.INHERIT); // no need because we want to collect it
-        //pb.redirectError(Redirect.INHERIT); // redirect err pipe because of all logging etc
+        ProcessBuilder pb = new ProcessBuilder(command);
         pb.directory(new File(System.getProperty("user.dir")));
-        if(isUsingStdOut()){
-            pb.redirectError(Redirect.INHERIT);
-        }
-        else{
-            pb.redirectInput(Redirect.INHERIT);
-        }
         System.err.println("Start external matcher in folder " + pb.directory().toString() + " with command: " + String.join(" ", command));
         return pb.start();
     }
     
-    protected String getResultOfProcess(Process process) throws IOException{
-        if(isUsingStdOut()){
-            return streamToString(process.getInputStream());
-        }
-        else{
-            return streamToString(process.getErrorStream());
-        }
-    }
-    
-    protected String streamToString(InputStream stream) throws IOException {        
-        StringBuilder sb = new StringBuilder();
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(stream))) {
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                    sb.append(NEWLINE);
-            }
-        }
-        return sb.toString();
-    }
     protected void closeAllStreams(Process p){
         try { p.getErrorStream().close(); } catch (IOException ex) {}
         try { p.getInputStream().close(); } catch (IOException ex) {}
