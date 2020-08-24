@@ -210,7 +210,7 @@ public class ExecutorSeals {
     /**
      * Constructor
      * The default timeout of 12 hours will be used.
-     * @param javaCommand           Command to start java.
+     * @param javaCommand    Command to start java.
      * @param sealsClientJar The file to the local SEALS client JAR file.
      * @param sealsHome      SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).
      */
@@ -231,7 +231,7 @@ public class ExecutorSeals {
     /**
      * Constructor
      *
-     * @param javaCommand           Command to start java.
+     * @param javaCommand        Command to start java.
      * @param sealsClientJarPath The path to the local SEALS client JAR file.
      * @param sealsHomePath      SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).
      */
@@ -259,10 +259,10 @@ public class ExecutorSeals {
      * Evaluate matcher(s) using the local SEALS client.
      * The file parameter can be a zip file or a directory.
      * If it is a directory and the directory represents a matcher, it will be executed.
-     * Otherwise the directory will be scaned for matcher subdirectories and/or zip files (which are unzipped).
+     * Otherwise the directory will be scanned for matcher subdirectories and/or zip files (which are unzipped).
      * The unzipping happens with every execution to ensure that the matcher is executed as submitted 
      * (in case some files are not closed corrected due to a previous run).
-     * @param track            The track on which the matcher shall be run.
+     * @param track   The track on which the matcher shall be run.
      * @param matcher The directory containing the matcher(s).
      * @return Execution Result Set instance for the matcher on the track.
      */
