@@ -16,8 +16,9 @@ Found a bug? Don't hesitate to <a href="https://github.com/dwslab/melt/issues">o
 ```
 Hertling, Sven; Portisch, Jan; Paulheim, Heiko. MELT - Matching EvaLuation Toolkit. SEMANTICS. Karlsruhe, Germany. 2019.
 ```
-An open-access version of the paper is available <a href="https://link.springer.com/content/pdf/10.1007%2F978-3-030-33220-4_17.pdf">here</a>.
-The accompanying presentation can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/MELT_presentation_semantics.pdf">documentation directory</a>.
+An open-access version of the paper is available <a href="https://link.springer.com/content/pdf/10.1007%2F978-3-030-33220-4_17.pdf">here</a>.<br/>
+The accompanying presentation can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/MELT_presentation_semantics.pdf">documentation directory</a>.<br/>
+You can find the LaTex bib entry of the paper [here](/documentation/melt_semantics_19.bib).
 
 *Demo Paper (MELT Dashboard)*
 ```
@@ -25,7 +26,9 @@ Portisch, Jan; Hertling, Sven; Paulheim, Heiko. Visual Analysis of Ontology Matc
 ``` 
 An open-access version of the paper is available <a href="https://arxiv.org/pdf/2004.12628.pdf">here</a>.<br/>
 The poster can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/eswc_2020_melt_dashboard_poster.pdf">documentation directory</a>.<br/>
-A simple demo for the <a href="http://oaei.ontologymatching.org/2019/anatomy/index.html">OAEI 2019 Anatomy</a> and <a href="http://oaei.ontologymatching.org/2019/conference/index.html">OAEI 2019 Conference</a> tracks can be found <a href="https://dwslab.github.io/melt/anatomy_conference_dashboard.html">here</a>.
+A simple demo for the <a href="http://oaei.ontologymatching.org/2019/anatomy/index.html">OAEI 2019 Anatomy</a> and <a href="http://oaei.ontologymatching.org/2019/conference/index.html">OAEI 2019 Conference</a> tracks can be found <a href="https://dwslab.github.io/melt/anatomy_conference_dashboard.html">here</a>.<br/>
+You can find the LaTex bib entry of the paper [here](/documentation/melt_dashboard_20.bib).
+
 
 ## Code Examples
 The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for different tasks and that can be used as barebone project for specific applications. 
@@ -141,8 +144,7 @@ analyzed using a spreadsheet program such as <a href="https://www.libreoffice.or
 memory issues with `EvaluatorCSV` on very large evaluation problems. Note that this evaluator offers less
 functionality than the default evaluator.
 - `EvaluatorMcNemarSignificance`: An evaluator for statistical significance tests.
- This evaluator allows to check whether multiple alignments
-are significantly different.
+ This evaluator allows checking whether multiple alignments are significantly different.
 - `DashboardBuilder`: This evaluator generates an interactive Web UI (*MELT Dashboard*) to analyze alignments
 in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2019
 <a href="http://oaei.ontologymatching.org/2019/anatomy/index.html">anatomy</a> and <a href="http://oaei.ontologymatching.org/2019/conference/index.html">conference</a> track <a href="https://dwslab.github.io/melt/anatomy_conference_dashboard.html">here</a>.
@@ -207,7 +209,7 @@ in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2
 
 ### OAEI Track Repository
 The [`TrackRepository`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/tracks/TrackRepository.java) 
-checks whether the required ontologies and alignments are available in the cache folder (`~/oaei_track_cache); if data is missing, it is automatically downloading and 
+checks whether the required ontologies and alignments are available in the cache folder (`~/oaei_track_cache`); if data is missing, it is automatically downloading and 
 caching it for the next access.
 
 Exemplary call using the `TrackRepository`:
@@ -268,9 +270,9 @@ by adapting the [`TestLocalFile`](/matching-validation/src/test/java/de/uni_mann
 and running `runAll.cmd` in the Windows shell. The release versions to be tested can be edited in the corresponding
 [`pom.xml`](/matching-validation/pom.xml).
 
-### Gensim Integration
-The MELT-ML module exposes some machine learning functionality that is implemented in python. This is achieved
-through the start of a python process within java. The communication is performed through local HTTP calls. This
+### Python Integration
+The MELT-ML module exposes some machine learning functionality that is implemented in Python. This is achieved
+through the start of a python process within Java. The communication is performed through local HTTP calls. This
 is also shown in the following figure. 
 
 ![image](documentation/melt_ml_architecture.png)
