@@ -4,8 +4,6 @@ import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import eu.sealsproject.platform.res.tool.api.ToolBridgeException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Main {
 
@@ -13,7 +11,8 @@ public class Main {
         if(args.length != 3 || args.length == 4){
             System.err.println("Did not get an implementing class and 2 or 3 input URLs.");
             return;
-        }        
+        }
+        System.err.println("The following parameters have been received: " + String.join(" | ", args));
         IOntologyMatchingToolBridge matcher = getBridge(args[0]);
         if (matcher == null) {
             return;
