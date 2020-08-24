@@ -87,8 +87,9 @@ public class ConfidenceCombiner extends MatcherYAAAJena {
             if(confidences != null){
                 double computedStatistic = confidences.compute(statistic);
                 c.setConfidence(computedStatistic);
-            }            
-            newAlignment.add(c);
+            }
+            // add the correspondence to a new alignemnt to also update the indices (e.g. for confidence)
+            newAlignment.add(c); 
         }
         return newAlignment;
     }

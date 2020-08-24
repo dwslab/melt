@@ -17,9 +17,21 @@ public class Counter<T> {
     protected Map<T, MutableInt> counts;
     protected long overallCount;
 
+    /**
+     * Create a new counter object with a default initial capacity. 
+     */
     public Counter(){
         this.counts = new HashMap<>();
         this.overallCount = 0;
+    }
+    
+    /**
+     * Create a new counter object from the given iterable.
+     * @param iterable any iterable of type T
+     */
+    public Counter(Iterable<T> iterable){
+        this();
+        addAll(iterable);
     }
     
     /**
