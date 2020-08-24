@@ -151,6 +151,27 @@ in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2
 
 *Note that it is possible to build your own evaluator and call functions from the existing evaluators.*
 
+#### Minimal Evaluation Example
+The following code example will execute the `SimpleStringMatcher` on the `Anatomy` track
+and run the default evaluation using `EvaluatorCSV`. A results directory will be generated containing
+among others:
+- `trackPerformanceCube.csv`<br/>Track evaluation KPIs such as (macro/micro) Precision, Recall, or F1 for the track.
+- `testCasePerformanceCube.csv`<br/>Test case evaluation KPIs such as Precision, Recall, or F1. 
+- `alignmentCube.csv`<br/>Detailed evaluation per correspondence. You can use a spreadsheet program to filter, for example, for only true positives.
+
+
+```java
+// imports...
+public class EvaluationPlayground {
+    public static void main(String[] args) {
+        ExecutionResultSet result = Executor.run(TrackRepository.Anatomy.Default, new SimpleStringMatcher());
+        EvaluatorCSV evaluatorCSV = new EvaluatorCSV(result);
+        evaluatorCSV.writeToDirectory();
+    }
+}
+```
+
+
 ## Packaging matchers for SEALS
 
 ### Steps
