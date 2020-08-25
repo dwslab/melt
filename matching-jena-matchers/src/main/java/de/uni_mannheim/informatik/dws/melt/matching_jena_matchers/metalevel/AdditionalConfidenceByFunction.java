@@ -29,7 +29,7 @@ public class AdditionalConfidenceByFunction extends MatcherYAAAJena{
     /**
      * This adds a confidence by a given function.
      * The key for the confidence is AdditionalConfidenceByResourceFunction (so only use it once in a pipeline).
-     * @param function the function to compute the confidence. Class {@link AdditionalConfidenceByResourceFunction } has also some default functions.
+     * @param function the function to compute the confidence. Class {@code AdditionalConfidenceByFunction} has also some default functions.
      */
     public AdditionalConfidenceByFunction(Function<OntResource,Double> function){
         this(new AbstractMap.SimpleEntry<>("AdditionalConfidenceByFunction", function));
