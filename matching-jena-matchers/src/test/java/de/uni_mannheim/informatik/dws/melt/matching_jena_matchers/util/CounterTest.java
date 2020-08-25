@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,42 @@ public class CounterTest {
         assertEquals(4, c.getCount("two"));
         
         //List<Integer> randomList = new Random().ints().limit(6000000).boxed().collect(Collectors.toList());
+    }
+    
+    @Test
+    void testSecondComparator(){     
+        //sorty by size ascending
+        Comparator<String> comp = (c1, c2) -> Integer.compare(c1.length(), c2.length());
+        Counter<String> c = new Counter(comp);
+        c.addAll(Arrays.asList("aaaaaa", "aaaaaa", "bbbbbbb", "bbbbbbb", "c", "c", "dd", "dd"));
+        
+        List<String> expected = Arrays.asList("c", "dd", "aaaaaa", "bbbbbbb");
+        List<String> actual = c.mostCommonElements();
+        assertEquals(expected, actual);
+        
+        //-----
+        //sorty by size descending
+        comp = (c1, c2) -> Integer.compare(c2.length(), c1.length());
+        c = new Counter(comp);
+        c.addAll(Arrays.asList("aaaaaa", "aaaaaa", "bbbbbbb", "bbbbbbb", "c", "c", "dd", "dd"));
+        
+        expected = Arrays.asList("bbbbbbb", "aaaaaa", "dd", "c");
+        actual = c.mostCommonElements();
+        assertEquals(expected, actual);
+        
+        //----------
+        //sort by characters
+        
+        comp = (c1, c2) -> c1.compareTo(c2);
+        c = new Counter(comp);
+        c.addAll(Arrays.asList("aaaaaa", "aaaaaa", "bbbbbbb", "bbbbbbb", "c", "c", "dd", "dd"));
+        
+        expected = Arrays.asList("aaaaaa", "bbbbbbb", "c", "dd");
+        actual = c.mostCommonElements();
+        assertEquals(expected, actual);
+        
+        actual = c.mostCommonElementsByPercentage(0.2);
+        assertEquals(expected, actual);
     }
     
     @Test

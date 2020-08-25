@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class Counter<T> {
     protected Map<T, MutableInt> counts;
     protected long overallCount;
+    protected Comparator<Entry<T, ? extends Comparable>> mapComparator;
 
     /**
      * Create a new counter object with a default initial capacity. 
@@ -23,6 +25,20 @@ public class Counter<T> {
     public Counter(){
         this.counts = new HashMap<>();
         this.overallCount = 0;
+        this.mapComparator = (c1, c2) -> c2.getValue().compareTo(c1.getValue());
+    }
+    
+    /**
+     * Create a new counter object with a default initial capacity.
+     * @param elementComparator the comparator to use if the count is the same
+     */
+    public Counter(Comparator<T> elementComparator){
+        this.counts = new HashMap<>();
+        this.overallCount = 0;
+        this.mapComparator = (c1, c2) -> {
+            int res = c2.getValue().compareTo(c1.getValue()); //compare the counts in descending order
+            return (res != 0) ? res : elementComparator.compare(c1.getKey(), c2.getKey()); //then comparing by 
+        };
     }
     
     /**
@@ -31,6 +47,16 @@ public class Counter<T> {
      */
     public Counter(Iterable<T> iterable){
         this();
+        addAll(iterable);
+    }
+    
+    /**
+     * Create a new counter object from the given iterable.
+     * @param iterable any iterable of type T
+     * @param elementComparator the comparator to use if the count is the same 
+     */
+    public Counter(Iterable<T> iterable, Comparator<T> elementComparator){
+        this(elementComparator);
         addAll(iterable);
     }
     
@@ -102,8 +128,8 @@ public class Counter<T> {
      */
     public List<Entry<T, Integer>> mostCommon(int n) {
         return counts.entrySet().stream()
+                .sorted(this.mapComparator)
                 .map(e -> new SimpleEntry<>(e.getKey(), e.getValue().get()))
-                .sorted((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()))
                 .limit(n)
                 .collect(Collectors.toList());
     }
@@ -115,8 +141,8 @@ public class Counter<T> {
      */
     public List<Entry<T, Integer>> mostCommon() {
         return counts.entrySet().stream()
+                .sorted(this.mapComparator)
                 .map(e -> new SimpleEntry<>(e.getKey(), e.getValue().get()))
-                .sorted((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()))
                 .collect(Collectors.toList());
     }
     
@@ -137,7 +163,7 @@ public class Counter<T> {
             }
         }
         return list.stream()
-            .sorted((e1, e2) -> Double.compare(e2.getValue(), e1.getValue()))
+            .sorted(this.mapComparator)
             .collect(Collectors.toList());
     }
     
@@ -160,9 +186,20 @@ public class Counter<T> {
      */
     public List<T> mostCommonElements(int n) {
         return counts.entrySet().stream()
-                .map(e -> new SimpleEntry<>(e.getKey(), e.getValue().get()))
-                .sorted((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()))
+                .sorted(this.mapComparator)
+                .map(e -> e.getKey())
                 .limit(n)
+                .collect(Collectors.toList());
+    }
+    
+    /**
+     * Return a list ordered by their number of occurences.
+     * Ordered from the most common to the least.
+     * @return list of elements
+     */
+    public List<T> mostCommonElements() {
+        return counts.entrySet().stream()
+                .sorted(this.mapComparator)
                 .map(e -> e.getKey())
                 .collect(Collectors.toList());
     }
@@ -173,7 +210,7 @@ public class Counter<T> {
      */
     public T mostCommonElement() {
         return counts.entrySet().stream()
-                .sorted((e1, e2) -> Integer.compare(e2.getValue().get(), e1.getValue().get()))
+                .sorted(this.mapComparator)
                 .map(e -> e.getKey())
                 .findFirst().orElse(null);
     }
@@ -183,10 +220,15 @@ public class Counter<T> {
         return this.mostCommon().toString();
     }
     
-    class MutableInt {
+    class MutableInt implements Comparable<MutableInt>{
         private int value = 1;
         public void increment() { ++value; }
         public void increment(int increment) { value+=increment; }
         public int get() { return value; }
+
+        @Override
+        public int compareTo(MutableInt o) {
+            return Integer.compare(this.value, o.value);
+        }
     }
 }
