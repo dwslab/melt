@@ -67,4 +67,15 @@ class CorrespondenceTest {
         assertEquals("<one,two,1.0,=>", c.toString());
         assertEquals("<one,two,1.0,=,{http://test.com=0.7}>", c.toStringWithExtensions());
     }
+    
+    @Test
+    void testAddAdditonalConfidenceIfHigher() {
+        Correspondence c = new Correspondence("one", "two");
+        c.addAdditionalConfidenceIfHigher("test", 0.6);
+        c.addAdditionalConfidenceIfHigher("test", 0.3);
+        assertEquals(0.6, c.getAdditionalConfidence("test"));
+        
+        c.addAdditionalConfidenceIfHigher("test", 0.7);
+        assertEquals(0.7, c.getAdditionalConfidence("test"));
+    }
 }

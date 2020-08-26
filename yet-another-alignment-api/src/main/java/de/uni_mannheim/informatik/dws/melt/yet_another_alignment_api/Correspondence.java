@@ -233,10 +233,37 @@ public class Correspondence {
      */
     public void addAdditionalConfidence(String key, double confidence) {
         addExtensionValue(
-                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + key + DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX,
+                getAdditionalConfidenceURL(key),
                 confidence);
     }
-
+    
+    /**
+     * Adds an additional confidence associated with any specific string value only if the confidence is higher.
+     * This should be used if one class puts multiple confidence values. 
+     * @param key the key which should be associated with the confidence
+     * @param confidence the additional confidence
+     */
+    public void addAdditionalConfidenceIfHigher(String key, double confidence) {
+        String url = getAdditionalConfidenceURL(key);
+        Object o = extensions.get(url);
+        if(o == null){
+            extensions.put(url, confidence);
+        }else{
+            if((double)o < confidence){
+                extensions.put(url, confidence);
+            }
+        }
+    }
+    
+    /**
+     * Adds an additional confidence based on a specific class only if the confidence is higher.
+     * @param matcherClass the class of the matcher
+     * @param confidence the additional confidence
+     */
+    public void addAdditionalConfidenceIfHigher(Class matcherClass, double confidence) {
+        addAdditionalConfidenceIfHigher(matcherClass.getSimpleName(), confidence);
+    }
+    
     /**
      * Get a confidence given the name of the matcher.
      * @param matcherClass Class of the matcher.
@@ -246,21 +273,28 @@ public class Correspondence {
         return getAdditionalConfidence(matcherClass.getSimpleName());
     }
     
+    /**
+     * Returns the additional confidence based on the key (which is used in addAdditionalConfidence).
+     * The key is NOT the full URL in the correspondence extensions.
+     * @param key part of the confidence URL
+     * @return the confidence or null if not existent
+     */
     public Double getAdditionalConfidence(String key) { 
-        return (Double)this.extensions.get(
-                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + 
-                key + 
-                DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX
-        ); 
+        return (Double)this.extensions.get(getAdditionalConfidenceURL(key));
     }
     
     public double getAdditionalConfidenceOrDefault(String key, double defaultValue) { 
-        return (double)this.extensions.getOrDefault(
-                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + 
-                key + 
-                DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX,
-                defaultValue
-        ); 
+        return (double)this.extensions.getOrDefault(getAdditionalConfidenceURL(key), defaultValue); 
+    }
+    
+    /**
+     * Returns the full URL for an additional confidence.
+     * The key is just a part of the full URL.
+     * @param key the key which is a part of the full URL.
+     * @return the full URL
+     */
+    public static String getAdditionalConfidenceURL(String key){
+        return DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + key + DefaultExtensions.MeltExtensions.ADDITIONAL_CONFIDENCE_SUFFIX;
     }
     
     private static final Pattern CONFIDENCE_KEY_PATTERN = Pattern.compile(
@@ -272,6 +306,8 @@ public class Correspondence {
 
     /**
      * Returns all added confidences (but not all extension values).
+     * The key of the returned map contains just the name of the confidence 
+     * and is not the full URL contained in correspondence extensions.
      * @return All confidences that were added using e.g. {@link Correspondence#addAdditionalConfidence(String, double)}.
      */
     public Map<String,Double> getAdditionalConfidences() { 
@@ -301,9 +337,7 @@ public class Correspondence {
      * @param explanation the explanation for a correspondence
      */
     public void addAdditionalExplanation(String key, String explanation) {
-        addExtensionValue(
-                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + key + DefaultExtensions.MeltExtensions.ADDITIONAL_EXPLANATION_SUFFIX, 
-                explanation);
+        addExtensionValue(getAdditionalExplanationURL(key), explanation);
     }
     
     public String getAdditionalExplanation(Class matcherClass) { 
@@ -311,11 +345,17 @@ public class Correspondence {
     }
     
     public String getAdditionalExplanation(String key) { 
-        return (String)this.extensions.get(
-                DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + 
-                key + 
-                DefaultExtensions.MeltExtensions.ADDITIONAL_EXPLANATION_SUFFIX
-        ); 
+        return (String)this.extensions.get(getAdditionalExplanationURL(key)); 
+    }
+    
+    /**
+     * Returns the full URL for an additional explanation.
+     * The key is just a part of the full URL.
+     * @param key the key which is a part of the full URL.
+     * @return the full URL
+     */
+    public static String getAdditionalExplanationURL(String key){
+        return DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + key + DefaultExtensions.MeltExtensions.ADDITIONAL_EXPLANATION_SUFFIX;
     }
     
     private static final Pattern EXPLANATION_KEY_PATTERN = Pattern.compile(

@@ -6,6 +6,7 @@ import com.github.liblevenshtein.transducer.factory.TransducerBuilder;
 import de.uni_mannheim.informatik.dws.melt.matching_base.OaeiOptions;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,14 +47,24 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     
     protected boolean matchClasses = true;
     protected boolean matchProperties = true;
-    protected boolean matchInstances = true;    
+    protected boolean matchInstances = true;
+    
     protected boolean earlyStopping = true;
+    protected boolean crossIndexMatch = false;
     
     /**
      * A list of fucntions which gets an ontModel and returns an iterator over elements which should be matched like classes, instances, proeprties etc.
      */
     protected List<Function<OntModel, Iterator<? extends Resource>>> matchableResourceIterators = new ArrayList();
     
+    public ScalableStringProcessingMatcher(Iterable<PropertySpecificStringProcessing> processingElements, boolean earlyStopping, boolean crossIndexMatch){
+        this.earlyStopping = earlyStopping;
+        this.processingElements = processingElements;
+        this.usedValueExtractors = new HashSet<>();
+        for(PropertySpecificStringProcessing p: processingElements){
+            this.usedValueExtractors.addAll(p.getValueExtractors());
+        }
+    }
     
     public ScalableStringProcessingMatcher(Iterable<PropertySpecificStringProcessing> processingElements, boolean earlyStopping){
         this.earlyStopping = earlyStopping;
@@ -137,22 +148,41 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
                     Set<Object> searchObjects = new HashSet<>();
                     if(o == null)
                         continue;
-                    searchObjects.add(o);
                     if(o instanceof String){
                         String oString = (String)o;
                         if(StringUtils.isBlank(oString))
                             continue;
+                        searchObjects.add(o);
                         ITransducer transducer = levenshteinIndex.get(processing);
                         if(transducer != null){
                             for(Object s : transducer.transduce(oString)){
                                 searchObjects.add(s);
                             }
                         }
+                    }else{
+                        searchObjects.add(o);
                     }
-                    for(Object object : searchObjects){
-                        for(String sourceURI : tokenIndex.getOrDefault(object, new HashSet<>())){
-                            findMatch = true;
-                            alignment.addOrUseHighestConfidence(sourceURI, targetURI, processing.getConfidence());
+                    
+                    if(crossIndexMatch){
+                        for(Entry<PropertySpecificStringProcessing, Map<Object, Set<String>>> entry: index.entrySet()){
+                            tokenIndex = entry.getValue();
+                            //use min confidence of index processing and query processing
+                            double confidence = Math.min(processing.getConfidence(), entry.getKey().getConfidence());
+                            for(Object object : searchObjects){
+                                for(String sourceURI : tokenIndex.getOrDefault(object, new HashSet<>())){
+                                    findMatch = true;
+                                    Correspondence c = alignment.addOrUseHighestConfidence(sourceURI, targetURI, confidence);
+                                    c.addAdditionalConfidenceIfHigher(this.getClass(), confidence);
+                                }
+                            }
+                        }
+                    }else{
+                        for(Object object : searchObjects){
+                            for(String sourceURI : tokenIndex.getOrDefault(object, new HashSet<>())){
+                                findMatch = true;
+                                Correspondence c = alignment.addOrUseHighestConfidence(sourceURI, targetURI, processing.getConfidence());
+                                c.addAdditionalConfidenceIfHigher(this.getClass(), processing.getConfidence());
+                            }
                         }
                     }
                 }
@@ -254,6 +284,15 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     public void setEarlyStopping(boolean earlyStopping) {
         this.earlyStopping = earlyStopping;
     }
+
+    public boolean isCrossIndexMatch() {
+        return crossIndexMatch;
+    }
+
+    public void setCrossIndexMatch(boolean crossIndexMatch) {
+        this.crossIndexMatch = crossIndexMatch;
+    }
+    
     /**
      * Adds a function which gets an ontModel and returns an iterator over elements which should be matched like classes, instances, properties etc.
      * @param f a function which gets an ontModel and returns an iterator over elements which should be matched

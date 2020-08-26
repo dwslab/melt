@@ -21,7 +21,7 @@ def match_rdflib(source_graph, target_graph, input_alignment):
     #return [('http://one.de', 'http://two.de', '=', 1.0)]
 
 def get_file_from_url(location):
-    from urllib.parse import unquote
+    from urllib.parse import unquote, urlparse
     from urllib.request import url2pathname, urlopen
     if location.startswith("file:"):
         return open(url2pathname(unquote(urlparse(location).path)))

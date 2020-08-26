@@ -204,9 +204,10 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param confidence The confidence of the mapping.
      * @param relation The relation that holds between the two entities.
      * @param extensions extensions
+     * @return the updated correspondence
      */
-    public void addOrModify(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String,Object> extensions) {
-        addOrModify(new Correspondence(entityOne, entityTwo, confidence, relation, extensions));
+    public Correspondence addOrModify(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String,Object> extensions) {
+        return addOrModify(new Correspondence(entityOne, entityTwo, confidence, relation, extensions));
     }
     
     /**
@@ -214,9 +215,10 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param entityOne URI of the entity from the source ontology as String.
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param extensions extensions
+     * @return the updated correspondence
      */
-    public void addOrModify(String entityOne, String entityTwo, Map<String,Object> extensions) {
-        addOrModify(new Correspondence(entityOne, entityTwo, 1.0, CorrespondenceRelation.EQUIVALENCE, extensions));
+    public Correspondence addOrModify(String entityOne, String entityTwo, Map<String,Object> extensions) {
+        return addOrModify(new Correspondence(entityOne, entityTwo, 1.0, CorrespondenceRelation.EQUIVALENCE, extensions));
     }
     
     /**
@@ -225,11 +227,12 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param extensionKey The key of the extension
      * @param extensionValue The value of the extension
+     * @return the updated correspondence
      */
-    public void addOrModify(String entityOne, String entityTwo, String extensionKey, Object extensionValue) {
+    public Correspondence addOrModify(String entityOne, String entityTwo, String extensionKey, Object extensionValue) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
         c.addExtensionValue(extensionKey, extensionValue);
-        addOrModify(c);
+        return addOrModify(c);
     }
     
     /**
@@ -238,11 +241,12 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param matcherClass The class of the matcher.
      * @param confidence The additional confidence.
+     * @return the updated correspondence
      */
-    public void addAdditionalConfidence(String entityOne, String entityTwo, Class matcherClass, double confidence) {
+    public Correspondence addAdditionalConfidence(String entityOne, String entityTwo, Class matcherClass, double confidence) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
         c.addAdditionalConfidence(matcherClass, confidence);
-        addOrModify(c);
+        return addOrModify(c);
     }
     
     /**
@@ -251,11 +255,12 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param matcherClass the class of the matcher
      * @param explanation the explanation for a correspondence
+     * @return the updated correspondence
      */
-    public void addAdditionalExplanation(String entityOne, String entityTwo, Class matcherClass, String explanation) {
+    public Correspondence addAdditionalExplanation(String entityOne, String entityTwo, Class matcherClass, String explanation) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
         c.addAdditionalExplanation(matcherClass, explanation);
-        addOrModify(c);
+        return addOrModify(c);
     }
     
     /**
@@ -265,19 +270,21 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param matcherClass the class of the matcher
      * @param confidence the additional confidence
      * @param explanation the explanation for a correspondence
+     * @return the updated correspondence
      */
-    public void addAdditionalConfidenceAndExplanation(String entityOne, String entityTwo, Class matcherClass, double confidence, String explanation) {
+    public Correspondence addAdditionalConfidenceAndExplanation(String entityOne, String entityTwo, Class matcherClass, double confidence, String explanation) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
         c.addAdditionalConfidence(matcherClass, confidence);
         c.addAdditionalExplanation(matcherClass, explanation);
-        addOrModify(c);
+        return addOrModify(c);
     }
     
     /**
      * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
      * @param correspondence Correspondence to be added.
+     * @return the updated correspondence
      */
-    public void addOrModify(Correspondence correspondence) {
+    public Correspondence addOrModify(Correspondence correspondence) {
         ResultSet<Correspondence> r = this.retrieve(
                 QueryFactory.and(
                     QueryFactory.equal(Correspondence.SOURCE, correspondence.getEntityOne()),
@@ -287,13 +294,14 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         Iterator<Correspondence> iterator = r.iterator();
         if (!iterator.hasNext()) {
            this.add(correspondence);
-           return;            
+           return correspondence;            
         }
         Correspondence result = iterator.next();
         this.remove(result);
         result.getExtensions().putAll(correspondence.getExtensions());
         result.setConfidence(correspondence.getConfidence());
         this.add(result);
+        return result;
     }
     
     
@@ -301,8 +309,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * Adds the correspondence if not existant.
      * In case it already exists, adds the extensions values and updates confidence value(but only if it increases the confidence value).
      * @param c Correspondence to be added
+     * @return the updated Correspondence
      */
-    public void addOrUseHighestConfidence(Correspondence c) {
+    public Correspondence addOrUseHighestConfidence(Correspondence c) {
         ResultSet<Correspondence> r = this.retrieve(
                 QueryFactory.and(
                     QueryFactory.equal(Correspondence.SOURCE, c.getEntityOne()),
@@ -312,7 +321,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         Iterator<Correspondence> iterator = r.iterator();
         if (!iterator.hasNext()) {
            this.add(c);
-           return;
+           return c;
         }
         Correspondence result = iterator.next();
         result.getExtensions().putAll(c.getExtensions());
@@ -322,6 +331,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
             this.add(result);
             //this.update(Arrays.asList(result), Arrays.asList(result));
         }
+        return result;
     }
     
     /**
@@ -330,9 +340,10 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param entityOne URI of the entity from the source ontology as String.
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param confidence The confidence of the mapping.
+     * @return the updated Correspondence
      */
-    public void addOrUseHighestConfidence(String entityOne, String entityTwo, double confidence) {
-        addOrUseHighestConfidence(new Correspondence(entityOne, entityTwo, confidence));
+    public Correspondence addOrUseHighestConfidence(String entityOne, String entityTwo, double confidence) {
+        return addOrUseHighestConfidence(new Correspondence(entityOne, entityTwo, confidence));
     }
     
     

@@ -65,6 +65,38 @@ public class ScalableStringProcessingMatcherTest {
     }
     
     @Test
+    void testCrossIndexMatch() throws Exception {
+        OntModel source = ModelFactory.createOntologyModel();
+        source.createIndividual("http://source.de/one", OWL.Thing)
+                .addLiteral(SKOS.altLabel, "This is a test");
+        
+        //---------
+        
+        OntModel target = ModelFactory.createOntologyModel();
+        target.createIndividual("http://target.de/one", OWL.Thing)
+                .addLiteral(RDFS.label, "This is a test");
+        
+        
+        ScalableStringProcessingMatcher matcher = new ScalableStringProcessingMatcher(Arrays.asList(
+                new PropertySpecificStringProcessing(text -> text, 1.0, RDFS.label),
+                new PropertySpecificStringProcessing(text -> text, 0.9, SKOS.altLabel)
+        ), false);
+        
+        //test no cross index
+        Alignment a = matcher.match(source, target, new Alignment(), new Properties());
+        assertTrue(a.isEmpty());
+        
+        //test cross index
+        matcher.setCrossIndexMatch(true);        
+        a = matcher.match(source, target, new Alignment(), new Properties());
+        
+        Correspondence c = a.getCorrespondence("http://source.de/one", "http://target.de/one", CorrespondenceRelation.EQUIVALENCE);
+        
+        assertTrue(c != null);
+        assertEquals(0.9, c.getConfidence());
+    }
+    
+    @Test
     void testProcessing() throws Exception {
         OntModel source = ModelFactory.createOntologyModel();
         source.createIndividual("http://source.de/one", OWL.Thing)
