@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 /**
@@ -26,9 +28,19 @@ public class KGvec2goClient {
     private final static Logger LOGGER = LoggerFactory.getLogger(KGvec2goClient.class);
 
     /**
+     * Protocol for requests.
+     */
+    public final static String PROTOCOL = "http";
+
+    /**
+     * Address of server url.
+     */
+    public final static String DOMAIN = "kgvec2go.org";
+
+    /**
      * The URL that shall be used to perform the requests.
      */
-    private final static String SERVER_URL = "http://kgvec2go.org";
+    public final static String SERVER_URL = PROTOCOL + "://" + DOMAIN;
 
     /**
      * Local vector cache.
@@ -47,7 +59,7 @@ public class KGvec2goClient {
     private static boolean isShutDown = true;
 
     /**
-     * Instance (singleton pattern.
+     * Instance (singleton pattern).
      */
     private static KGvec2goClient instance;
 
@@ -59,7 +71,7 @@ public class KGvec2goClient {
     /**
      * Get the instance.
      *
-     * @return Gensim instance.
+     * @return Client instance.
      */
     public static KGvec2goClient getInstance() {
         if (instance == null) instance = new KGvec2goClient();
@@ -68,7 +80,7 @@ public class KGvec2goClient {
     }
 
     /**
-     * Private constructor for singleton pattern
+     * Private constructor for singleton pattern.
      */
     private KGvec2goClient(){
     }
@@ -88,7 +100,7 @@ public class KGvec2goClient {
     /**
      * Shut down the server.
      */
-    private void shutDown(){
+    public void shutDown(){
         isShutDown = true;
         instance = null;
         try {
@@ -99,6 +111,36 @@ public class KGvec2goClient {
         }
     }
 
+    /**
+     * Simple test whether the server can be reached and is responding.
+     * @return True if server can be reached, else false.
+     */
+    public boolean isServiceAvailable(){
+        String requestUrl = SERVER_URL;
+        String resultString;
+
+        HttpGet request = new HttpGet(requestUrl);
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                LOGGER.error("No server response.");
+            } else {
+                resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error") || resultString.contains("Not Found")) {
+                    LOGGER.error("A connection could be established but the KGvec2go main page (" + requestUrl + ") seems not to be working:\n", resultString);
+                }
+            }
+            if(getVector("car", KGvec2goDatasets.ALOD) == null){
+                LOGGER.error("The vector REST service cannot be reached. (Tried to get vector for \"car\" for the ALDO dataset.)");
+                return false;
+            }
+        } catch (IOException ioe) {
+            LOGGER.error("Problem with http request. The service seems to be unavailable. Make sure that your device " +
+                    "is connected to the Internet.", ioe);
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Receive a vector in the form of a double array.
@@ -118,10 +160,10 @@ public class KGvec2goClient {
         }
 
         // perform web request
-        String requestUrl = SERVER_URL + "/rest/get-vector/" + dataset.toString() + "/" + word;
+        String requestUrlString = getEncodedURIString("/rest/get-vector/" + dataset.toString() + "/" + word);
 
         String resultString = null;
-        HttpGet request = new HttpGet(requestUrl);
+        HttpGet request = new HttpGet(requestUrlString);
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             HttpEntity entity = response.getEntity();
             if (entity == null) {
@@ -153,7 +195,7 @@ public class KGvec2goClient {
                 }
             }
         } catch (JsonSyntaxException jse){
-            LOGGER.error("Syntax exception occurred with the following result string: " + resultString + "\nThe following request URL was used:\n" + requestUrl, jse);
+            LOGGER.error("Syntax exception occurred with the following result string: " + resultString + "\nThe following request URL was used:\n" + requestUrlString, jse);
             // important: continue but do not write to buffer
             return null;
         }
@@ -237,6 +279,27 @@ public class KGvec2goClient {
             norm2 = norm2 + Math.pow(vector2[i], 2);
         }
         return dotProduct / ( Math.sqrt(norm1) * Math.sqrt(norm2) );
+    }
+
+    public static URI getEncodedURI(String path) throws URISyntaxException{
+        URI uri = null;
+        uri = new URI(PROTOCOL, DOMAIN, path, null);
+        return uri;
+    }
+
+    /**
+     * If there is a syntax error, the given {@code uriString} is returned.
+     * @param path to be appended to {@link KGvec2goClient#SERVER_URL}.
+     * @return Encoded URI as String.
+     */
+    public static String getEncodedURIString(String path){
+        try {
+            URI uri = getEncodedURI(path);
+            return uri.toASCIIString();
+        } catch (URISyntaxException e) {
+            LOGGER.error("Trying plain URI string due to URI syntax exception: ", e);
+            return PROTOCOL + "://" + DOMAIN + path;
+        }
     }
 
 }

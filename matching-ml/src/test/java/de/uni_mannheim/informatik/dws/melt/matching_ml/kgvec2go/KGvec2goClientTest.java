@@ -2,6 +2,9 @@ package de.uni_mannheim.informatik.dws.melt.matching_ml.kgvec2go;
 
 import org.junit.jupiter.api.Test;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class KGvec2goClientTest {
@@ -43,7 +46,11 @@ class KGvec2goClientTest {
         // request existing entity
         result = KGvec2goClient.getInstance().getVector("Germany", KGvec2goDatasets.ALOD);
         assertNotNull(result);
+
         result = KGvec2goClient.getInstance().getVector("germany", KGvec2goDatasets.ALOD);
+        assertNotNull(result);
+
+        result = KGvec2goClient.getInstance().getVector("european union", KGvec2goDatasets.ALOD);
         assertNotNull(result);
 
         // request non-existing entity
@@ -138,9 +145,12 @@ class KGvec2goClientTest {
         assertNull(kgvec2go.getSimilarity("USA", null, KGvec2goDatasets.WIKTIONARY));
         assertNull(kgvec2go.getSimilarity(null, "USA", KGvec2goDatasets.WIKTIONARY));
         assertNull(kgvec2go.getSimilarity("AAABBBCCC", "USA", KGvec2goDatasets.WIKTIONARY));
-
     }
 
+    @Test
+    void isServiceAvailable(){
+        assertTrue(KGvec2goClient.getInstance().isServiceAvailable());
+    }
 
     @Test
     void cosineSimilarity(){
@@ -151,4 +161,24 @@ class KGvec2goClientTest {
         assertEquals(0.8639, KGvec2goClient.cosineSimilarity(v1, v2), 0.00001);
         assertThrows(ArithmeticException.class, () -> KGvec2goClient.cosineSimilarity(v1, v3));
     }
+
+    @Test
+    void getEncodedURIString(){
+        assertEquals("http://kgvec2go.org/rest/get-vector/ALOD/hello%20world", KGvec2goClient.getEncodedURIString("/rest/get-vector/" + KGvec2goDatasets.ALOD.toString() + "/" + "hello world"));
+    }
+
+    @Test
+    void getEncodedURI(){
+        try {
+            assertEquals(new URI("http://kgvec2go.org/rest/get-vector/ALOD/hello%20world"), KGvec2goClient.getEncodedURI("/rest/get-vector/" + KGvec2goDatasets.ALOD.toString() + "/" + "hello world"));
+        } catch (URISyntaxException use){
+            fail(use);
+        }
+    }
+
+    @Test
+    void shutDown(){
+        KGvec2goClient.getInstance().shutDown();
+    }
+
 }
