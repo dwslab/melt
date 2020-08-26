@@ -230,5 +230,10 @@ public class Counter<T> {
         public int compareTo(MutableInt o) {
             return Integer.compare(this.value, o.value);
         }
+
+        @Override
+        public String toString() {
+            return Integer.toString(value);
+        }
     }
 }
