@@ -51,7 +51,7 @@ public class ExecutorSeals {
     /**
      * Default logger.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Executor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorSeals.class);
 
     /**
      * Time out for the external seals process. The timeout is applied for each testcase and not track.
@@ -319,8 +319,7 @@ public class ExecutorSeals {
     public ExecutionResultSet run(TestCase testCase, File matcher) {
         ExecutionResultSet resultSet = new ExecutionResultSet();
         
-        for(Entry<File, String> entry : getMatcherDirectories(matcher).entrySet()){  
-            LOGGER.info("Run matcher {} (directory: {}) on testcase {}", entry.getValue(), entry.getKey(), testCase);
+        for(Entry<File, String> entry : getMatcherDirectories(matcher).entrySet()){
             resultSet.add(runUnzippedMatcher(testCase, entry.getKey(), entry.getValue()));
         }
         return resultSet;
@@ -394,6 +393,8 @@ public class ExecutorSeals {
      * @return ExecutionResult
      */
     protected ExecutionResult runUnzippedMatcher(TestCase testCase, File matcherDirectory, String matcherName) {
+        LOGGER.info("Run matcher {} (directory: {}) on testcase {} (track {})",
+                matcherName, matcherDirectory, testCase.getName(), testCase.getTrack().getName());
 
         // results folder
         File resultsFolder = Paths.get(this.resultsDirectory.getAbsolutePath(), testCase.getName()).toFile();
@@ -442,7 +443,8 @@ public class ExecutorSeals {
         String timeoutText = this.getTimeoutAsText();
 
         LOGGER.info("Run SEALS with command: {}",String.join(" ", builder.command()));
-        LOGGER.info("Waiting for completion of matcher {} on test case {} with a timeout of {}.",matcherName, testCase.getName(), timeoutText);
+        LOGGER.info("Waiting for completion of matcher {} on test case {} with a timeout of {}." ,
+                matcherName, testCase.getName(), timeoutText);
         
         boolean matcherFinishesInTime = true;
         Process process;

@@ -6,8 +6,10 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimila
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import org.apache.jena.ontology.Individual;
@@ -166,7 +168,18 @@ public class SimilarNeighboursFilter extends BaseFilterWithSetComparison{
                 for(Object o : literalIntersection){
                     neighboursPrint.add(o.toString());
                 }
-                correspondence.addAdditionalExplanation(this.getClass(), "[" + String.join(",", neighboursPrint) + "]");
+                //reduce to max 20
+                if(neighboursPrint.size() > 20){
+                    StringJoiner sj = new StringJoiner(",");
+                    Iterator<String> iter = neighboursPrint.iterator();
+                    for (int j = 0; j < 20; j++) {
+                        sj.add(iter.next());
+                    }
+                    correspondence.addAdditionalExplanation(this.getClass(), "[" + sj.toString() + "] (reduced to max 20 neighbours)");
+                }else{
+                    correspondence.addAdditionalExplanation(this.getClass(), "[" + String.join(",", neighboursPrint) + "]");
+                }
+                
             }
             
             //sum up resource mappings and literal mappings
