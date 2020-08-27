@@ -497,6 +497,35 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
+     * Removes all correspondence extensions.
+     */
+    public void removeCorrespondenceExtensions() {
+        for(Correspondence c : this){
+            c.removeExtensions();
+        }
+    }
+    
+    /**
+     * Remove all correspondence extensions which appear in blacklist.
+     * @param blacklist the extension keys to be removed.
+     */
+    public void removeCorrespondenceExtensions(Iterable<String> blacklist){
+        for(Correspondence c : this){
+            c.removeExtensions(blacklist);
+        }
+    }
+    
+    /**
+     * Removes all correspondence extensions, but keep the extensions with keys appearing in whitelist.
+     * @param whitelist the extensions keys which should be kept
+     */
+    public void removeCorrespondenceExtensionsNotIn(Set<String> whitelist){
+        for(Correspondence c : this){
+            c.removeExtensionsNotIn(whitelist);
+        }
+    }
+    
+    /**
      * Returns a new alignment which contains only correspondences above or equal the given threshold (it will not modify the current object).
      * @param threshold Threshold for cutting (correspondences greater than or equal the threshold will be added).
      * @return A new alignment with filtered correspondences. This alignment stays untouched from the operation.

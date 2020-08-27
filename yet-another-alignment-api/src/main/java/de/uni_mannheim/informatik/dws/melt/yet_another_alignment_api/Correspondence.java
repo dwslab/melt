@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
@@ -374,6 +375,34 @@ public class Correspondence {
         return explanations;
     }
     
+    /**
+     * Clears the extension of this correspondence.
+     */
+    public void removeExtensions(){
+        this.extensions.clear();
+    }
+    
+    /**
+     * Remove all extensions which appear in blacklist.
+     * @param blacklist the extension keys to be removed.
+     */
+    public void removeExtensions(Iterable<String> blacklist){
+        for(String key : blacklist){
+            this.extensions.remove(key);
+        }
+    }
+    
+    /**
+     * Removes all extensions, but keep the extensions with keys appearing in whitelist.
+     * @param whitelist the extensions keys which should be kept
+     */
+    public void removeExtensionsNotIn(Set<String> whitelist){
+        for(Entry<String, Object> entry : this.extensions.entrySet()){
+            if(whitelist.contains(entry.getKey()) == false){
+                this.extensions.remove(entry.getKey());
+            }
+        }
+    }
 
     public Map<String, Object> getExtensions() { return this.extensions; }
 
