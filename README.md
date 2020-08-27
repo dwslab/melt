@@ -147,13 +147,13 @@ functionality than the default evaluator.
  This evaluator allows checking whether multiple alignments are significantly different.
 - `DashboardBuilder`: This evaluator generates an interactive Web UI (*MELT Dashboard*) to analyze alignments
 in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2019
-<a href="http://oaei.ontologymatching.org/2019/anatomy/index.html">anatomy</a> and <a href="http://oaei.ontologymatching.org/2019/conference/index.html">conference</a> track <a href="https://dwslab.github.io/melt/anatomy_conference_dashboard.html">here</a>.
+<a href="http://oaei.ontologymatching.org/2019/anatomy/index.html">Anatomy</a> and <a href="http://oaei.ontologymatching.org/2019/conference/index.html">Conference</a> track <a href="https://dwslab.github.io/melt/anatomy_conference_dashboard.html">here</a>.
 
 *Note that it is possible to build your own evaluator and call functions from the existing evaluators.*
 
 #### Minimal Evaluation Example
 The following code example will execute the `SimpleStringMatcher` on the `Anatomy` track
-and run the default evaluation using `EvaluatorCSV`. A results directory will be generated containing
+and run the default evaluation using `EvaluatorCSV`. A `results` directory will be generated containing
 among others:
 - `trackPerformanceCube.csv`<br/>Track evaluation KPIs such as (macro/micro) Precision, Recall, or F1 for the track.
 - `testCasePerformanceCube.csv`<br/>Test case evaluation KPIs such as Precision, Recall, or F1. 
@@ -253,7 +253,7 @@ public class SealsPlayground {
   - for SEALS upload the generated seals file ```{artifactId}-{version}-seals.zip``` in the target folder
   - for Hobbit call ```mvn deploy```
 
-### Evaluate your matcher in HOBBIT
+### Evaluate Your Matcher in HOBBIT
 
 - you can start an experiment in hobbit online platform
   - go to page [http://master.project-hobbit.eu/](http://master.project-hobbit.eu/), log in and choose `Benchmarks`
@@ -369,7 +369,9 @@ Contains [Jena-based](https://jena.apache.org/) classes related to matcher devel
 Contains modularized matchers that can be used to quickly assemble matching systems. Note that it is possible to easily chain those matchers building a matching pipeline.
 
 ### matching-ml
-The machine learning extension for MELT. Currently, [gensim](https://radimrehurek.com/gensim/) is supported. The ML extension allows to communicate with a Python backend.
+The machine learning extension for MELT. The ML extension allows communicating with a Python backend.
+Currently, [gensim](https://radimrehurek.com/gensim/) is supported. The module also contains a client to consume
+<a href="http://kgvec2go.org/">KGvec2go</a> vectors.
 
 ### matching-owlapi
 Contains OWL-API-based classes related to matcher development as well as additional services such as caching of source and target ontologies.  
@@ -381,7 +383,7 @@ Contains various validation services to validate new tracks and test cases. Vali
 Maven Plugin for creating a ZIP-file for the [SEALS platform](http://www.seals-project.eu/).
 
 ### hobbit-assembly
-Maven Plugin for defining which files the docker image should contain (for [HOBBIT platform](https://project-hobbit.eu)).
+Maven Plugin for defining which files the docker image should contain (for the [HOBBIT platform](https://project-hobbit.eu)).
 
 ### hobbit-wrapper
 Contains a wrapper for HOBBIT platform (implements the interface used in HOBBIT and transforms the calls to MatcherURL interface).
@@ -398,7 +400,7 @@ Tool for submitting a Track/Testcase in HOBBIT (only interesting for OAEI track 
 
 ## Frequently Asked Questions (FAQs)
 
-**I have a muliple SEALS packages and I want to use MELT's group evaluation functionalities. What is the simplest way 
+**I have a multiple SEALS packages and I want to use MELT's group evaluation functionalities. What is the simplest way 
 to do so?**<br/>
 SEALS packages were wrapped for the SEALS platform. If the matchers were not developed using MELT or you are not sure 
 whether they were developed with MELT, one option is to create the alignment files by executing the matchers 
