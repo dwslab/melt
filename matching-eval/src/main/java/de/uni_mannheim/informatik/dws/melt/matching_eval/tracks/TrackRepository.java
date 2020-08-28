@@ -114,8 +114,8 @@ public class TrackRepository{
         }
 
         /**
-         * Returns a specific track. If no combination for {@Code firstLanguage-secondLanguage} is found,
-         * {@Code secondLanguage-firstLanguage} is used.
+         * Returns a specific track. If no combination for {@code firstLanguage-secondLanguage} is found,
+         * {@code secondLanguage-firstLanguage} is used.
          * @param firstLanguage The first language of the track. Available options: ar, cn cz, de, en, es, fr, nl, pt.
          * @param secondLanguage The second language of the track. Available options: ar, cn cz, de, en, es, fr, nl, pt.
          * @return The specified track if it exists, else null.
