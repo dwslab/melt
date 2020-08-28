@@ -1,10 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.condition.OS.MAC;
 
 /**
  * Developer note:
@@ -31,6 +28,7 @@ class TrackRepositoryTest {
         assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("en").size() == 9);
         assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("EN").size() == 9);
         assertTrue(TrackRepository.Multifarm.getMultifarmTrackForLanguage("ENG").size() == 0);
+        assertNull(TrackRepository.Multifarm.getMultifarmTrackForLanguage(null));
 
         boolean appears = false;
         for(Track track : TrackRepository.Multifarm.getMultifarmTrackForLanguage("de")){
@@ -47,11 +45,19 @@ class TrackRepositoryTest {
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de-EN").getName().equals("de-en"));
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("DE-EN").getName().equals("de-en"));
         assertNull(TrackRepository.Multifarm.getSpecificMultifarmTrack("ABCXYZ"));
+        assertNull(TrackRepository.Multifarm.getSpecificMultifarmTrack(null));
 
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de", "en").getName().equals("de-en"));
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("de", "EN").getName().equals("de-en"));
         assertTrue(TrackRepository.Multifarm.getSpecificMultifarmTrack("DE", "EN").getName().equals("de-en"));
         assertNull(TrackRepository.Multifarm.getSpecificMultifarmTrack("ABC", "XYZ"));
+        assertNull(TrackRepository.Multifarm.getSpecificMultifarmTrack("de", null));
+        assertNull(TrackRepository.Multifarm.getSpecificMultifarmTrack(null, "de"));
+        assertNull(TrackRepository.Multifarm.getSpecificMultifarmTrack(null, null));
+
+        assertNotNull(TrackRepository.Multifarm.getSpecificMultifarmTrack("ar", "en"));
+        assertNotNull(TrackRepository.Multifarm.getSpecificMultifarmTrack("en", "ar"));
+        assertEquals(TrackRepository.Multifarm.getSpecificMultifarmTrack("en", "ar"), TrackRepository.Multifarm.getSpecificMultifarmTrack("ar", "en"));
     }
 
     
