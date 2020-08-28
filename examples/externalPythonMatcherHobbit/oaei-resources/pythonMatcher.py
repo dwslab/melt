@@ -47,7 +47,15 @@ def match(source_url, target_url, input_alignment_url):
     #if input_alignment_url is not None:
 
     resulting_alignment = match_rdflib(source_graph, target_graph, input_alignment)
-
+    
+    # in case you have the results in a pandas dataframe, make sure you have the columns
+    # source (uri), target (uri), relation (usually the string '='), confidence (floating point number)
+    # in case relation or confidence is missing use: df["relation"] = '='  and  df["confidence"] = 1.0
+    # then select the columns in the right order (like df[['source', 'target', 'relation', 'confidence']])
+    # because serialize_mapping_to_tmp_file expects an iterbale of source, target, relation, confidence
+    # and then call .itertuples(index=False)
+    # example: alignment_file_url = serialize_mapping_to_tmp_file(df[['source', 'target', 'relation', 'confidence']].itertuples(index=False))
+    
     alignment_file_url = serialize_mapping_to_tmp_file(resulting_alignment)
     return alignment_file_url
     
