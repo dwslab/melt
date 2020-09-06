@@ -83,10 +83,11 @@ public class TrackRepository{
          * @return The specified track if it exists.
          */
         public static Track getSpecificMultifarmTrack(String languagePair){
+            if(languagePair == null) return null;
             languagePair = languagePair.trim().toLowerCase();
             if(languagePairs.contains(languagePair))
                 return getTrackByLanguagePair(languagePair);
-            LOGGER.warn("Language Pair is not found - returning null Track");
+            LOGGER.warn("Language pair " + languagePair + " could not found - returning null.");
             return null;
         }
 
@@ -97,6 +98,7 @@ public class TrackRepository{
          * @return A list of tracks which contain the specified language.
          */
         public static List<Track> getMultifarmTrackForLanguage(String language){
+            if (language == null) return null;
             language = language.trim().toLowerCase();
             ArrayList<String> resultTrackNames = new ArrayList<>();
             ArrayList<Track> result = new ArrayList<>();
@@ -112,15 +114,24 @@ public class TrackRepository{
         }
 
         /**
-         * Returns a specific track.
+         * Returns a specific track. If no combination for {@code firstLanguage-secondLanguage} is found,
+         * {@code secondLanguage-firstLanguage} is used.
          * @param firstLanguage The first language of the track. Available options: ar, cn cz, de, en, es, fr, nl, pt.
          * @param secondLanguage The second language of the track. Available options: ar, cn cz, de, en, es, fr, nl, pt.
-         * @return The specified track if it exists.
+         * @return The specified track if it exists, else null.
          */
         public static Track getSpecificMultifarmTrack(String firstLanguage, String secondLanguage){
+            if(firstLanguage == null || secondLanguage == null) return null;
             firstLanguage = firstLanguage.trim().toLowerCase();
             secondLanguage = secondLanguage.trim().toLowerCase();
-            return getSpecificMultifarmTrack(firstLanguage + "-" + secondLanguage);
+            String pairString = firstLanguage + "-" + secondLanguage;
+            Track result =  getSpecificMultifarmTrack(pairString);
+            if(result == null){
+                String newPairString = secondLanguage + "-" + firstLanguage;
+                LOGGER.warn("No track found for language pair: " + pairString + ". Trying now" + newPairString + ".");
+                return getSpecificMultifarmTrack(newPairString);
+            }
+            return result;
         }
         
         public static List<TestCase> getSameOntologies(){
