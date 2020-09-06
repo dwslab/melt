@@ -42,7 +42,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScalableStringProcessingMatcher.class);
     
-    protected Iterable<PropertySpecificStringProcessing> processingElements;
+    protected Iterable<PropertySpecificStringProcessingMultipleReturn> processingElements;
     protected Set<ValueExtractor> usedValueExtractors;
     
     protected boolean matchClasses = true;
@@ -57,25 +57,25 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
      */
     protected List<Function<OntModel, Iterator<? extends Resource>>> matchableResourceIterators = new ArrayList();
     
-    public ScalableStringProcessingMatcher(Iterable<PropertySpecificStringProcessing> processingElements, boolean earlyStopping, boolean crossIndexMatch){
+    public ScalableStringProcessingMatcher(Iterable<PropertySpecificStringProcessingMultipleReturn> processingElements, boolean earlyStopping, boolean crossIndexMatch){
         this.earlyStopping = earlyStopping;
         this.processingElements = processingElements;
         this.usedValueExtractors = new HashSet<>();
-        for(PropertySpecificStringProcessing p: processingElements){
+        for(PropertySpecificStringProcessingMultipleReturn p: processingElements){
             this.usedValueExtractors.addAll(p.getValueExtractors());
         }
     }
     
-    public ScalableStringProcessingMatcher(Iterable<PropertySpecificStringProcessing> processingElements, boolean earlyStopping){
+    public ScalableStringProcessingMatcher(Iterable<PropertySpecificStringProcessingMultipleReturn> processingElements, boolean earlyStopping){
         this.earlyStopping = earlyStopping;
         this.processingElements = processingElements;
         this.usedValueExtractors = new HashSet<>();
-        for(PropertySpecificStringProcessing p: processingElements){
+        for(PropertySpecificStringProcessingMultipleReturn p: processingElements){
             this.usedValueExtractors.addAll(p.getValueExtractors());
         }
     }
     
-    public ScalableStringProcessingMatcher(Iterable<PropertySpecificStringProcessing> processingElements){
+    public ScalableStringProcessingMatcher(Iterable<PropertySpecificStringProcessingMultipleReturn> processingElements){
         this(processingElements, true);
     }
     
@@ -103,7 +103,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     
     public void matchResources(Iterator<? extends Resource> sourceResources, Iterator<? extends Resource> targetResources, Alignment alignment) {
         //processing -> tokens/ids -> (list of resources)
-        Map<PropertySpecificStringProcessing, Map<Object, Set<String>>> index = new HashMap<>();
+        Map<PropertySpecificStringProcessingMultipleReturn, Map<Object, Set<String>>> index = new HashMap<>();
         
 
         //source
@@ -113,20 +113,20 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
                 continue;
             String sourceURI = source.getURI();            
             Map<ValueExtractor, Set<String>> valueMap = extractAllValues(source);
-            for(PropertySpecificStringProcessing processing : this.processingElements){
+            for(PropertySpecificStringProcessingMultipleReturn processing : this.processingElements){
                 Map<Object, Set<String>> tokenIndex = index.computeIfAbsent(processing, k->new HashMap<>());
                 for(String sourceLabels : getLiterals(processing, valueMap)){
                     if(StringUtils.isBlank(sourceLabels))
                         continue;
-                    Object o = processing.getProcessing().apply(sourceLabels);
-                    if(isObjectEmpty(o))
-                        continue;
-                    tokenIndex.computeIfAbsent(o, k-> new HashSet<>()).add(sourceURI);
+                    for(Object o : processing.getProcessing().apply(sourceLabels)){
+                        if(isObjectEmpty(o) == false)
+                            tokenIndex.computeIfAbsent(o, k-> new HashSet<>()).add(sourceURI);
+                    }
                 }
             }
         }
         
-        Map<PropertySpecificStringProcessing, ITransducer> levenshteinIndex = buildLevenshteinIndex(index);
+        Map<PropertySpecificStringProcessingMultipleReturn, ITransducer> levenshteinIndex = buildLevenshteinIndex(index);
         
         while (targetResources.hasNext()) {
             Resource target = targetResources.next();
@@ -135,7 +135,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
             String targetURI = target.getURI();
             
             Map<ValueExtractor, Set<String>> valueMap = extractAllValues(target);
-            for(PropertySpecificStringProcessing processing : this.processingElements){
+            for(PropertySpecificStringProcessingMultipleReturn processing : this.processingElements){
                 Map<Object, Set<String>> tokenIndex = index.get(processing);
                 if(tokenIndex == null)
                     continue;
@@ -143,45 +143,45 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
                 for(String targetLabel : getLiterals(processing, valueMap)){
                     if(StringUtils.isBlank(targetLabel))
                         continue;
-                    Object o = processing.getProcessing().apply(targetLabel);
-                    
-                    Set<Object> searchObjects = new HashSet<>();
-                    if(o == null)
-                        continue;
-                    if(o instanceof String){
-                        String oString = (String)o;
-                        if(StringUtils.isBlank(oString))
+                    for(Object o : processing.getProcessing().apply(targetLabel)){
+                        Set<Object> searchObjects = new HashSet<>();
+                        if(o == null)
                             continue;
-                        searchObjects.add(o);
-                        ITransducer transducer = levenshteinIndex.get(processing);
-                        if(transducer != null){
-                            for(Object s : transducer.transduce(oString)){
-                                searchObjects.add(s);
+                        if(o instanceof String){
+                            String oString = (String)o;
+                            if(StringUtils.isBlank(oString))
+                                continue;
+                            searchObjects.add(o);
+                            ITransducer transducer = levenshteinIndex.get(processing);
+                            if(transducer != null){
+                                for(Object s : transducer.transduce(oString)){
+                                    searchObjects.add(s);
+                                }
                             }
+                        }else{
+                            searchObjects.add(o);
                         }
-                    }else{
-                        searchObjects.add(o);
-                    }
-                    
-                    if(crossIndexMatch){
-                        for(Entry<PropertySpecificStringProcessing, Map<Object, Set<String>>> entry: index.entrySet()){
-                            tokenIndex = entry.getValue();
-                            //use min confidence of index processing and query processing
-                            double confidence = Math.min(processing.getConfidence(), entry.getKey().getConfidence());
+
+                        if(crossIndexMatch){
+                            for(Entry<PropertySpecificStringProcessingMultipleReturn, Map<Object, Set<String>>> entry: index.entrySet()){
+                                tokenIndex = entry.getValue();
+                                //use min confidence of index processing and query processing
+                                double confidence = Math.min(processing.getConfidence(), entry.getKey().getConfidence());
+                                for(Object object : searchObjects){
+                                    for(String sourceURI : tokenIndex.getOrDefault(object, new HashSet<>())){
+                                        findMatch = true;
+                                        Correspondence c = alignment.addOrUseHighestConfidence(sourceURI, targetURI, confidence);
+                                        c.addAdditionalConfidenceIfHigher(this.getClass(), confidence);
+                                    }
+                                }
+                            }
+                        }else{
                             for(Object object : searchObjects){
                                 for(String sourceURI : tokenIndex.getOrDefault(object, new HashSet<>())){
                                     findMatch = true;
-                                    Correspondence c = alignment.addOrUseHighestConfidence(sourceURI, targetURI, confidence);
-                                    c.addAdditionalConfidenceIfHigher(this.getClass(), confidence);
+                                    Correspondence c = alignment.addOrUseHighestConfidence(sourceURI, targetURI, processing.getConfidence());
+                                    c.addAdditionalConfidenceIfHigher(this.getClass(), processing.getConfidence());
                                 }
-                            }
-                        }
-                    }else{
-                        for(Object object : searchObjects){
-                            for(String sourceURI : tokenIndex.getOrDefault(object, new HashSet<>())){
-                                findMatch = true;
-                                Correspondence c = alignment.addOrUseHighestConfidence(sourceURI, targetURI, processing.getConfidence());
-                                c.addAdditionalConfidenceIfHigher(this.getClass(), processing.getConfidence());
                             }
                         }
                     }
@@ -192,17 +192,17 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
         }
     }
     
-    private Map<PropertySpecificStringProcessing, ITransducer> buildLevenshteinIndex(Map<PropertySpecificStringProcessing,Map<Object, Set<String>>> index){
+    private Map<PropertySpecificStringProcessingMultipleReturn, ITransducer> buildLevenshteinIndex(Map<PropertySpecificStringProcessingMultipleReturn,Map<Object, Set<String>>> index){
         //choose all processing with levenshtein
-        Set<PropertySpecificStringProcessing> levenshteinProcessings = new HashSet();
-        for(PropertySpecificStringProcessing processing : this.processingElements){
+        Set<PropertySpecificStringProcessingMultipleReturn> levenshteinProcessings = new HashSet();
+        for(PropertySpecificStringProcessingMultipleReturn processing : this.processingElements){
             if(processing.getMaxLevenshteinDistance() > 0){
                 levenshteinProcessings.add(processing);
             }
         }
         
-        Map<PropertySpecificStringProcessing, ITransducer> levenshteinIndex = new HashMap<>();
-        for(PropertySpecificStringProcessing processsing : levenshteinProcessings){
+        Map<PropertySpecificStringProcessingMultipleReturn, ITransducer> levenshteinIndex = new HashMap<>();
+        for(PropertySpecificStringProcessingMultipleReturn processsing : levenshteinProcessings){
             List<String> texts = new ArrayList<>();
             int minLength = processsing.getMinLengthForLevenshtein();
             for(Object o : index.get(processsing).keySet()){
@@ -226,7 +226,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
     }
     
     
-    protected Set<String> getLiterals(PropertySpecificStringProcessing processing, Map<ValueExtractor, Set<String>> valueMap){
+    protected Set<String> getLiterals(PropertySpecificStringProcessingMultipleReturn processing, Map<ValueExtractor, Set<String>> valueMap){
         Set<String> values = new HashSet<>();
         for(ValueExtractor extractor : processing.getValueExtractors()){
             values.addAll(valueMap.get(extractor));

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Helper methods for graph analysis.
+ * @deprecated use DotGraphUtil instead.
  */
 public class AgonyUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(AgonyUtil.class);

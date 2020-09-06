@@ -164,4 +164,32 @@ public class TestExtractors {
 //            System.out.println(i + ";" + Double.toString(seconds).replace(".", ","));
 //        }
 //     }
+    
+//    test runtime and correctness of all extractors  
+//    public static void main(String[] args) throws IOException, SAXException {
+//        System.out.println("size;runtimeHungarian;runtimeBipartiteNaive;runtimeBipartiteSimple;HungarianBipartiteNaiveSame;HungarianBipartiteSimpleSame");
+//        for (int i = 100; i < 5000; i += 100) {
+//            Alignment random = randomAlignment(i, 10000, 1000);
+//            long startTime = 0;
+//
+//            startTime = System.currentTimeMillis();
+//            Alignment filteredHungarian = HungarianExtractor.filter(random);
+//            double secondsFilteredHungarian = (System.currentTimeMillis() - startTime) / (double) 1000;
+//
+//            startTime = System.currentTimeMillis();
+//            Alignment filteredBipartiteNaive = MaxWeightBipartiteExtractor.filter(random, MwbInitHeuristic.NAIVE);
+//            double secondsFilteredBipartiteNaive = (System.currentTimeMillis() - startTime) / (double) 1000;
+//
+//            startTime = System.currentTimeMillis();
+//            Alignment filteredBipartiteSimple = MaxWeightBipartiteExtractor.filter(random, MwbInitHeuristic.SIMPLE);
+//            double secondsFilteredBipartiteSimple = (System.currentTimeMillis() - startTime) / (double) 1000;
+//
+//            System.out.println(i + ";"
+//                    + Double.toString(secondsFilteredHungarian).replace(".", ",") + ";"
+//                    + Double.toString(secondsFilteredBipartiteNaive).replace(".", ",") + ";"
+//                    + Double.toString(secondsFilteredBipartiteSimple).replace(".", ",") + ";"
+//                    + filteredHungarian.equals(filteredBipartiteNaive) + ";"
+//                    + filteredHungarian.equals(filteredBipartiteSimple));
+//        }
+//    }
 }

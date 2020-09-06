@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Properties;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -119,5 +120,31 @@ public class ScalableStringProcessingMatcherTest {
         a = matcher.match(source, target, new Alignment(), new Properties());
         assertTrue(a.contains(new Correspondence("http://source.de/one", "http://target.de/one", CorrespondenceRelation.EQUIVALENCE)));
         assertEquals(1, a.size());
+    }
+    
+    @Test
+    void testMultipleReturn() throws Exception {
+        OntModel source = ModelFactory.createOntologyModel();
+        source.createIndividual("http://source.de/one", OWL.Thing)
+                .addLiteral(RDFS.label, "a");        
+        //---------
+        OntModel target = ModelFactory.createOntologyModel();
+        target.createIndividual("http://target.de/one", OWL.Thing)
+                .addLiteral(RDFS.label, "b");
+        
+        ScalableStringProcessingMatcher matcher = new ScalableStringProcessingMatcher(Arrays.asList(
+                new PropertySpecificStringProcessingMultipleReturn(text -> {
+                    if(text.equals("a")){
+                        return new HashSet(Arrays.asList("a", "x"));
+                    }else if(text.equals("b")){
+                        return new HashSet(Arrays.asList("b", "x"));
+                    }
+                    return new HashSet(Arrays.asList(text));
+                }, 1.0, RDFS.label)
+        ));
+        Alignment a = matcher.match(source, target, new Alignment(), new Properties());
+        assertTrue(a.contains(new Correspondence("http://source.de/one", "http://target.de/one", CorrespondenceRelation.EQUIVALENCE)));
+        assertEquals(1, a.size());
+        
     }
 }
