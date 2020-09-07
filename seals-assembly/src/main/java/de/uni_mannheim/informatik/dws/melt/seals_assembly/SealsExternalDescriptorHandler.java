@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.maven.plugins.assembly.filter.ContainerDescriptorHandler;
 import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.ArchiverException;
@@ -95,11 +96,9 @@ public class SealsExternalDescriptorHandler extends SealsDescriptorHandler {
     protected File getFileFromResource(String path) throws IOException{
         File f = File.createTempFile("matching_file", ".jar");
         f.deleteOnExit();
-        try (InputStream s = getClass().getClassLoader().getResourceAsStream(path)){            
-            byte[] buffer = new byte[s.available()];
-            s.read(buffer);
+        try (InputStream s = getClass().getClassLoader().getResourceAsStream(path)){
             try (OutputStream outStream = new FileOutputStream(f)) {
-                outStream.write(buffer);
+                IOUtils.copy(s, outStream);
             }
             return f;
         }
