@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
@@ -125,6 +127,11 @@ public class WiktionarySynsetCSV {
         return loadCsvFile(new File(csvFile));
     }
     
+    /**
+     * Load the csv file and returns a map with key as original word and value as a set of synonyms.
+     * @param csvFile the csv file to load
+     * @return map of original word to synonyms
+     */
     public static Map<String, Set<String>> loadCsvFile(File csvFile){
         Map<String, Set<String>> synset = new HashMap();
         try(Reader in = new InputStreamReader(new FileInputStream(csvFile), "UTF-8")){
@@ -143,6 +150,71 @@ public class WiktionarySynsetCSV {
             LOGGER.warn("Could not read csv file", ex);
         }
         return synset;
+    }
+    
+    /**
+     * Load a csv file of synonyms and returns a map where the key is a word/phrase and the value is the corresponding sysnset representative.
+     * Usually this is named as synset_id.
+     * If a word appears multiple times, then multiple values appear in the set.
+     * @param csvFile the csv file to load
+     * @return map where the key is a word/phrase and the value is the corresponding sysnset representative 
+     */
+    public static Map<String, Set<String>> loadCsvFileAsReplacementMapWithAllKeys(File csvFile){
+        return loadCsvFileAsReplacementMapWithAllKeys(csvFile, cell->cell.toLowerCase(Locale.ENGLISH).trim());
+    }
+    
+    /**
+     * Load a csv file of synonyms and returns a map where the key is a word/phrase and the value is the corresponding sysnset representative.
+     * Usually this is named as synset_id.
+     * If a word appears multiple times, then multiple values appear in the set.
+     * @param csvFile the csv file to load
+     * @param preprocessing the function which is applied to every synonym
+     * @return map where the key is a word/phrase and the value is the corresponding sysnset representative 
+     */
+    public static Map<String, Set<String>> loadCsvFileAsReplacementMapWithAllKeys(File csvFile, Function<String, String> preprocessing){
+        Map<String, Set<String>> wordToSynset = new HashMap();
+        try(Reader in = new InputStreamReader(new FileInputStream(csvFile), "UTF-8")){
+            int lineNumber = 1;
+            for (CSVRecord row : CSVFormat.DEFAULT.parse(in)) {
+                for(String cell : row){
+                    String cellNormalized = preprocessing.apply(cell);
+                    if(cellNormalized.length() > 0){
+                        wordToSynset.computeIfAbsent(cellNormalized, __->new HashSet<>()).add("synset_" + lineNumber);
+                    }
+                }
+                lineNumber++;
+            }
+        } catch (IOException ex) {
+            LOGGER.warn("Could not read csv file", ex);
+        }
+        return wordToSynset;
+    }
+    
+    /**
+     * Load a csv file of synonyms and returns a map where the key is a word/phrase and the value is the corresponding sysnset representative.
+     * Usually this is named as synset_id.
+     * If a word appears multiple times, then only the last occurance is used.
+     * Therefore it is recommendable to load a transitive closure of a synonym file.
+     * @param csvFile the csv file to load
+     * @return map where the key is a word/phrase and the value is the corresponding sysnset representative 
+     */
+    public static Map<String, String> loadCsvFileAsReplacementMap(File csvFile){
+        Map<String, String> wordToSynset = new HashMap();
+        try(Reader in = new InputStreamReader(new FileInputStream(csvFile), "UTF-8")){
+            int lineNumber = 1;
+            for (CSVRecord row : CSVFormat.DEFAULT.parse(in)) {
+                for(String cell : row){
+                    String cellNormalized = cell.trim();
+                    if(cellNormalized.length() > 0){
+                        wordToSynset.put(cellNormalized, "synset_" + lineNumber);
+                    }
+                }
+                lineNumber++;
+            }
+        } catch (IOException ex) {
+            LOGGER.warn("Could not read csv file", ex);
+        }
+        return wordToSynset;
     }
     
     /**

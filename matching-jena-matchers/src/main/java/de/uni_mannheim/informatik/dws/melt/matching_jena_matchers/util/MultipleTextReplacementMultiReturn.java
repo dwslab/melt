@@ -31,33 +31,49 @@ public class MultipleTextReplacementMultiReturn {
      * If the keys share the same prefix the one which comes first is used for replacement.
      * E.g. aa -&gt; x and aaa -&gt; y and input will be aaa, it will return aax
      * @param replacements map where key is the text to search for and value is the replacement text.
+     * @param wholeWordsOnly if true, matches only whole words. if false, then also text within a word can be matched
      */
-    public MultipleTextReplacementMultiReturn(List<Entry<String, Set<String>>> replacements){
+    public MultipleTextReplacementMultiReturn(List<Entry<String, Set<String>>> replacements, boolean wholeWordsOnly){
         StringJoiner textualPattern = new StringJoiner("|");
         this.replacementLookup = new HashMap();
         for(Entry<String, Set<String>> replacement : replacements){
-            textualPattern.add(Pattern.quote(replacement.getKey()));
+            if(wholeWordsOnly){
+                textualPattern.add("\\b" + Pattern.quote(replacement.getKey()) + "\\b");
+            }else{
+                textualPattern.add(Pattern.quote(replacement.getKey()));
+            }
+            
             Set<String> replaceSet = this.replacementLookup.computeIfAbsent(replacement.getKey(), __->new HashSet());
             for(String r : replacement.getValue()){
                 replaceSet.add(Matcher.quoteReplacement(r));
             }
         }
+        //LOGGER.info("PAttern: {}", "(" + textualPattern.toString() + ")");
         //pattern looks like this: (one|two|three|a|b|c)
         this.pattern = Pattern.compile("(" + textualPattern.toString() + ")");
+    }
+    
+    public MultipleTextReplacementMultiReturn(List<Entry<String, Set<String>>> replacements){
+        this(replacements, false);
     }
     
     /**
      * Initializes this object with a replacement map.
      * @param replacements map where key is the text to search for and value is the replacement text.
+     * @param wholeWordsOnly if true, matches only whole words. if false, then also text within a word can be matched
      */
-    public MultipleTextReplacementMultiReturn(Map<String, Set<String>> replacements){
+    public MultipleTextReplacementMultiReturn(Map<String, Set<String>> replacements, boolean wholeWordsOnly){
         this(replacements.entrySet().stream().sorted(new Comparator<Entry<String, Set<String>>>() {
             @Override
             public int compare(Entry<String, Set<String>> o1, Entry<String, Set<String>> o2) {
                 //larger key (in term of string length) should be first
                 return Integer.compare(o2.getKey().length(), o1.getKey().length()); 
             }
-        }).collect(Collectors.toList()));
+        }).collect(Collectors.toList()), wholeWordsOnly);
+    }
+    
+    public MultipleTextReplacementMultiReturn(Map<String, Set<String>> replacements){
+        this(replacements, false);
     }
     
     public Set<String> replace(String text){

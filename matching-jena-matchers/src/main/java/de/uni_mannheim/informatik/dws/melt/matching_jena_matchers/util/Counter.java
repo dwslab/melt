@@ -83,6 +83,23 @@ public class Counter<T> {
             c.increment();
         }
     }
+    
+    /**
+     * Add this element to the counter multiple times.
+     * @param t the element to add
+     * @param howOften  how often this element should be added.
+     */
+    public void add(T t, int howOften) {
+        if(howOften < 1)
+            throw new IllegalArgumentException("Argument howOften is smaller than 1.");
+        this.overallCount += howOften;
+        MutableInt c = this.counts.get(t);
+        if(c == null){
+            this.counts.put(t, new MutableInt(howOften));
+        }else{
+            c.increment(howOften);
+        }
+    }
 
     /**
      * Get the count for a specific element.
@@ -244,7 +261,11 @@ public class Counter<T> {
     }
     
     class MutableInt implements Comparable<MutableInt>{
-        private int value = 1;
+        private int value;
+        
+        public MutableInt(){this.value = 1;}        
+        public MutableInt(int initial){this.value = initial;}
+        
         public void increment() { ++value; }
         public void increment(int increment) { value+=increment; }
         public int get() { return value; }

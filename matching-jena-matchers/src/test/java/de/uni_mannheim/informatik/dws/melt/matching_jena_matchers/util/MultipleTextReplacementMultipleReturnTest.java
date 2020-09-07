@@ -46,4 +46,23 @@ public class MultipleTextReplacementMultipleReturnTest {
         assertTrue(replacements.contains("remember: assist and be quiet !"));
         assertTrue(replacements.contains("remember: assist and be silent !"));
     }
+    
+    
+    @Test
+    void testMultiReplacementWholeWord() {
+        Map<String, Set<String>> replacement = new HashMap();
+        replacement.put("help", new HashSet(Arrays.asList("xxx", "yyy")));
+        replacement.put("quiet", new HashSet(Arrays.asList("111", "222")));
+        
+        MultipleTextReplacementMultiReturn replacer = new MultipleTextReplacementMultiReturn(replacement, false);
+        Set<String> replacements = replacer.replace("helper quietly");
+        
+        assertEquals(4, replacements.size());
+        
+        replacer = new MultipleTextReplacementMultiReturn(replacement, true);
+        replacements = replacer.replace("helper quietly");
+        
+        assertEquals(1, replacements.size());
+        
+    }
 }
