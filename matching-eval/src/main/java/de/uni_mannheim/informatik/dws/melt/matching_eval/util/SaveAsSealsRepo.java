@@ -65,8 +65,8 @@ public class SaveAsSealsRepo {
     }
 
     private static void saveSuiteFile(Track track, File suitefile){
-        Velocity.setProperty("resource.loader", "classpath");
-        Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());        
+        Velocity.setProperty("resource.loaders", "classpath");
+        Velocity.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());        
         Velocity.init();
         
         VelocityContext context = new VelocityContext();

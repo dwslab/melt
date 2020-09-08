@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * The AlignmentAnalyzerResult is the output of the {@link AlignmentAnalyzerMetric}.
@@ -141,56 +142,66 @@ public class AlignmentAnalyzerResult {
         StringBuilder result = new StringBuilder();
         
         // header
-        result.append(String.format("Alignment Report for %s on track %s for test case \n\n", 
+        result.append(String.format("Alignment Report for %s on track %s (%s) for test case %s%n%n", 
                 executionResult.getMatcherName(),
                 executionResult.getTestCase().getTrack().getName(),
+                executionResult.getTestCase().getTrack().getVersion(),
                 executionResult.getTestCase().getName()));
         
         // base line
-        result.append("Number of correspondences: " + this.getNumberOfCorrespondences() + "\n\n");
+        result.append(String.format("Number of correspondences: %d%n%n", this.getNumberOfCorrespondences()));
 
         // heterogeneity
         if(this.isHomogenousAlingment) {
-            result.append("The mapping is homogenous.\n\n");
+            result.append(String.format("The mapping is homogenous.%n%n"));
         } else {
-            result.append("The mapping is heterogenous.\n\n");
+            result.append(String.format("The mapping is heterogenous.%n%n"));
         }
 
         // mapping type distribution
-        result.append("Distribution of mapping types:\n");
-        for (String key : this.getFrequenciesOfMappingTypes().keySet()) {
-            result.append(key + " (" + this.getFrequenciesOfMappingTypes().get(key) + ")\n");
+        result.append(String.format("Distribution of mapping types:%n"));
+        for (Entry<String, Integer> freq : this.getFrequenciesOfMappingTypes().entrySet()) {
+            result.append(String.format("%s (%d)%n", freq.getKey(), freq.getValue()));
         }
-        result.append("\n");
+        result.append(String.format("%n"));
 
         // relations
         if(isAlwaysEqualityRelation()) {
-            result.append("All correspondences are made up of equivalence relations.\n");
+            result.append(String.format("All correspondences are made up of equivalence relations.%n%n"));
         } else {
-            result.append("Distribution of mapping relations:\n");
-            for (CorrespondenceRelation key : this.getFrequenciesOfRelations().keySet()) {
-                result.append(key + " (" + this.getFrequenciesOfRelations().get(key) + ")\n");
+            result.append(String.format("Distribution of mapping relations:%n"));
+            for (Entry<CorrespondenceRelation, Integer> freq : this.getFrequenciesOfRelations().entrySet()) {
+                result.append(String.format("%s (%d)%n", freq.getKey(), freq.getValue()));
             }
-            result.append("\n");
+            result.append(String.format("%n%n"));
         }
-        result.append("\n");
-
+        
         if(isConfidenceScoresAreAlwaysOne()){
-            result.append("The confidence of all correspondences is 1.0.\n\n");
+            result.append(String.format("The confidence of all correspondences is 1.0%n%n"));
         } else {
-            result.append("The minimum confidence is " + this.getMinimumConfidence() + "\n");
-            result.append("The maximum confidence is " + this.getMaximumConfidence() + "\n\n");
+            result.append(String.format("The minimum confidence is %f%n",this.getMinimumConfidence()));
+            result.append(String.format("The maximum confidence is %f%n%n", this.getMaximumConfidence()));
         }
         
         if(this.urisNotFound.isEmpty()){
-            result.append("All URIs in the correspondence are found in source or target.");
+            result.append(String.format("All URIs in the correspondence are found in source or target.%n"));
         } else {
-            result.append("The following URIs are not found in source nor target: " + this.urisNotFound);
+            result.append(String.format("The following URIs are not found in source nor target: %s%n",this.urisNotFound));
         }
+        
         if(this.isSwitchOfSourceTargetBetter()){
-            result.append("More left(entity one) in correspondence are found in target ontology. A switch of entity one and two in alignment makes sense!");
-        }        
-
+            result.append(String.format("More left entites(entity one) in alignment are found in target ontology."
+                    + "A switch of entity one and two in alignment makes sense! URIs in correct order: %d URIs incorrect order %d%n%n",
+                    this.urisCorrectPosition, this.urisIncorrectPosition));
+        }else{
+            result.append(String.format("A switch of entity one and two in alignment makes NO sense! URIs in correct order: %d URIs incorrect order: %d%n%n",
+                    this.urisCorrectPosition, this.urisIncorrectPosition));
+        }
+        
+        result.append(String.format("Arity analysis:%n"));
+        for (Entry<Arity, Integer> arity : this.arityCounts.entrySet()) {
+            result.append(String.format("%s (%d)%n", arity.getKey(), arity.getValue()));
+        }
         return result.toString();
     }
 
