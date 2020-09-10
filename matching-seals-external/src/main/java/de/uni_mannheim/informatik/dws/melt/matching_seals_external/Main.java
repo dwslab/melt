@@ -5,6 +5,10 @@ import eu.sealsproject.platform.res.tool.api.ToolBridgeException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * This class is used as wrapper for the SEALS external matcher build process.
+ * It follows the MELT ExternalMatcher communication protocol.
+ */
 public class Main {
 
     public static void main(String[] args) {

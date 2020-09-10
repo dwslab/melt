@@ -415,6 +415,13 @@ a later point in time. You can also set the maximum time you want MELT to alloca
 does not finish within the given time limit, MELT will stop the process and proceed with the next test case or matcher.
 `ExecutorSeals` can read zipped, unzipped (or a mix of both) SEALS packages.<br/>
 
+**I am running a SEALS matcher that was packaged with MELT and uses some python component. On my system, the
+default python command does not refer to Python 3. How can this situatino be resolved?**<br/>
+A folder `melt-resouces` in the working directory (perhaps `$SEALS_HOME`) has to be created. In there a file `python_command.txt` containing your full 
+python path should be placed. This applies to all MELT packaged matchers that use the ML module. 
+In other cases, you can also try to create a directory `oaei-resources` rather than `melt-resources`
+and place the python_command.txt` there.
+
 **Is there more documentation?**<br/>
 MELT is far more powerful than documented here. This `README` is intended to give an overview of the framework.
 For specific code snippets, have a look at the examples. Note that classes, interfaces, and methods are extensively 
