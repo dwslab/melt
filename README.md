@@ -416,7 +416,7 @@ does not finish within the given time limit, MELT will stop the process and proc
 `ExecutorSeals` can read zipped, unzipped (or a mix of both) SEALS packages.<br/>
 
 **I am running a SEALS matcher that was packaged with MELT and uses some python component. On my system, the
-default python command does not refer to Python 3. How can this situatino be resolved?**<br/>
+default python command does not refer to Python 3. How can this situation be resolved?**<br/>
 A folder `melt-resouces` in the working directory (perhaps `$SEALS_HOME`) has to be created. In there a file `python_command.txt` containing your full 
 python path should be placed. This applies to all MELT packaged matchers that use the ML module. 
 In other cases, you can also try to create a directory `oaei-resources` rather than `melt-resources`
