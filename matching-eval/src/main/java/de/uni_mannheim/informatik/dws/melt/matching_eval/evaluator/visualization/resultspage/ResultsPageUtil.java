@@ -37,9 +37,14 @@ public class ResultsPageUtil {
     private List<TestCase> testcases;
     private boolean isMicro;
     
-    public ResultsPageUtil(ExecutionResultSet results, ConfusionMatrixMetric cmMetric, boolean isMicro){
+    /**
+     * Constructor
+     * @param results the execution result set
+     * @param isMicro true means to compute micro, false means macro
+     */
+    public ResultsPageUtil(ExecutionResultSet results, boolean isMicro){
         this.results = results;
-        this.cmMetric = cmMetric;
+        this.cmMetric = new ConfusionMatrixMetric();
         this.matchers = getOrderedMatchers();
         this.testcases = getOrderedTestCases();
         this.isMicro = isMicro;
@@ -108,7 +113,8 @@ public class ResultsPageUtil {
     }
     
     public ExecutionResult getMatcherRefinement(String matcher, TestCase testcase, String refinement){
-        LOGGER.info("Compute refinements for {} testcase {} for refinement {}", matcher, testcase, refinement);
+        LOGGER.info("Compute refinements for {} testcase {} of track {}({}) for refinement {}", 
+                matcher, testcase.getName(), testcase.getTrack().getName(), testcase.getTrack().getVersion(), refinement);
         if(refinement.equals("class")){
             return this.results.get(testcase, matcher, new TypeRefiner(ResourceType.CLASS));
         }else if(refinement.equals("property")){

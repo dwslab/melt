@@ -64,8 +64,8 @@ public class DashboardBuilder extends Evaluator {
      */
     public DashboardBuilder(EvaluatorCSV evaluatorCSV, String titleOfPage, String additionalText){
         super(evaluatorCSV.getResults());
-        Velocity.setProperty("resource.loader", "classpath");
-        Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());        
+        Velocity.setProperty("resource.loaders", "classpath");
+        Velocity.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());        
         Velocity.init();
         
         template = Velocity.getTemplate("templates/dashboard/dashboard.vm");

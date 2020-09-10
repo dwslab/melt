@@ -71,7 +71,7 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         
         r = this.retrieve(query(testCase, matcherName, EMPTY_REFINEMENT));
         if(r.isEmpty()){
-            LOGGER.info("No raw execution result is contained in executionResultSet");
+            //LOGGER.info("No raw execution result is contained in executionResultSet");
             return null;
         }        
         ExecutionResult er = r.uniqueResult();

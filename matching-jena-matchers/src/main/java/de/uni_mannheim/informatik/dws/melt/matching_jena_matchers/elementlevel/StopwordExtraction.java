@@ -128,9 +128,16 @@ public class StopwordExtraction extends MatcherYAAAJena {
         return inputAlignment;
     }
     
+    public void storeExtractedStopwords(Iterable<? extends Resource> resources, String key){
+        DataStore.getGlobal().put(key, extractStopwords(resources));
+    }
     
     public void storeExtractedStopwords(Iterator<? extends Resource> resources, String key){
         DataStore.getGlobal().put(key, extractStopwords(resources));
+    }
+    
+    public Set<String> extractStopwords(Iterable<? extends Resource> resources){
+        return extractStopwords(resources.iterator());
     }
     
     public Set<String> extractStopwords(Iterator<? extends Resource> resources){
@@ -171,7 +178,7 @@ public class StopwordExtraction extends MatcherYAAAJena {
                 .sorted(Entry.<String, Integer>comparingByValue().reversed())
                 .collect(Collectors.toList());
         
-        LOGGER.debug("Sorted tokens (#resources: {}): {}", countResources, sortedTokenCount);
+        LOGGER.debug("Sorted tokens (#resources: {}): {}", countResources, sortedTokenCount.stream().limit(30).collect(Collectors.toList()));
         
         for(Entry<String, Integer> tokenCount : sortedTokenCount){
             if(this.topNStopwords != 0 && finalStopwords.size() >= this.topNStopwords)

@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualizatio
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.Evaluator;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrixMetric;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,8 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
- * @author shertlin
+ * Results page generator in Latex.
  */
 public class ResultsPageLatex extends Evaluator {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResultsPageLatex.class);
@@ -25,18 +23,18 @@ public class ResultsPageLatex extends Evaluator {
     protected VelocityEngine velocityEngine;
     protected ResultsPageUtil resultsPageUtil;
     
-    public ResultsPageLatex(ExecutionResultSet results, ConfusionMatrixMetric confusionMatrixMetric, boolean isMicro) {
+    public ResultsPageLatex(ExecutionResultSet results, boolean isMicro) {
         super(results);
-        this.resultsPageUtil = new ResultsPageUtil(results, confusionMatrixMetric, isMicro);
+        this.resultsPageUtil = new ResultsPageUtil(results, isMicro);
         velocityEngine = new VelocityEngine();
-        velocityEngine.setProperty("resource.loader", "classpath");
-        velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());  
+        velocityEngine.setProperty("resource.loaders", "classpath");
+        velocityEngine.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());  
         velocityEngine.init();        
     }
     
     
     public ResultsPageLatex(ExecutionResultSet results) {
-        this(results, new ConfusionMatrixMetric(), false);
+        this(results, false);
     }
 
     @Override

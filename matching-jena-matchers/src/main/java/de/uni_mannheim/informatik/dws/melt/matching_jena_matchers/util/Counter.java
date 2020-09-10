@@ -83,6 +83,23 @@ public class Counter<T> {
             c.increment();
         }
     }
+    
+    /**
+     * Add this element to the counter multiple times.
+     * @param t the element to add
+     * @param howOften  how often this element should be added.
+     */
+    public void add(T t, int howOften) {
+        if(howOften < 1)
+            throw new IllegalArgumentException("Argument howOften is smaller than 1.");
+        this.overallCount += howOften;
+        MutableInt c = this.counts.get(t);
+        if(c == null){
+            this.counts.put(t, new MutableInt(howOften));
+        }else{
+            c.increment(howOften);
+        }
+    }
 
     /**
      * Get the count for a specific element.
@@ -147,6 +164,28 @@ public class Counter<T> {
     }
     
     /**
+     * Return a list ordered by their number of occurences.
+     * The list only contains elements with the highest number of occurences.
+     * E.g. (a, a, a, b, b, b, c) results in a list of (a, b)
+     * @return list of elements with their counts
+     */
+    public List<Entry<T, Integer>> mostCommonWithHighestCount() {
+        List<Entry<T, Integer>> mostCommon = new ArrayList();
+        int highestCount = -1;
+        for(Entry<T, Integer> entry : mostCommon()){
+            if(highestCount < 0){
+                mostCommon.add(entry);
+                highestCount = entry.getValue();
+            }else if(highestCount == entry.getValue()){
+                mostCommon.add(entry);
+            }else{
+                break;
+            }
+        }
+        return mostCommon;
+    }
+    
+    /**
      * Return a list of the elements with a given percentage and their frequency (higher or same frequency).
      * @param percentage between zero and one. 0.95 means 95 percent.
      * @return list of entries with frequency
@@ -204,6 +243,7 @@ public class Counter<T> {
                 .collect(Collectors.toList());
     }
     
+    
     /**
      * Return the most common element.
      * @return most common element or null if counter is empty.
@@ -221,7 +261,11 @@ public class Counter<T> {
     }
     
     class MutableInt implements Comparable<MutableInt>{
-        private int value = 1;
+        private int value;
+        
+        public MutableInt(){this.value = 1;}        
+        public MutableInt(int initial){this.value = initial;}
+        
         public void increment() { ++value; }
         public void increment(int increment) { value+=increment; }
         public int get() { return value; }

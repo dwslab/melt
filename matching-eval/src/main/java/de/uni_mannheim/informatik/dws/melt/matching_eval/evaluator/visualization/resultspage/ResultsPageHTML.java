@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualizatio
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.Evaluator;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrixMetric;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,8 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
- * @author shertlin
+ * Results page generator for HTML.
  */
 public class ResultsPageHTML extends Evaluator {
    private static final Logger LOGGER = LoggerFactory.getLogger(ResultsPageHTML.class);
@@ -26,27 +24,30 @@ public class ResultsPageHTML extends Evaluator {
     protected ResultsPageUtil resultsPageUtil;
     protected boolean matcherHorizontal;
     
-    public ResultsPageHTML(ExecutionResultSet results, ConfusionMatrixMetric confusionMatrixMetric, boolean isMicro, boolean matcherHorizontal) {
+    /**
+     * Constructor
+     * @param results the execution result set
+     * @param isMicro true means to compute micro, false means macro
+     * @param matcherHorizontal true means horizontal matcher else the matcher represents the columns
+     */
+    public ResultsPageHTML(ExecutionResultSet results, boolean isMicro, boolean matcherHorizontal) {
         super(results);
-        this.resultsPageUtil = new ResultsPageUtil(results, confusionMatrixMetric, isMicro);
+        this.resultsPageUtil = new ResultsPageUtil(results, isMicro);
         this.matcherHorizontal = matcherHorizontal;
         velocityEngine = new VelocityEngine();
-        velocityEngine.setProperty("resource.loader", "classpath");
-        velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());  
+        velocityEngine.setProperty("resource.loaders", "classpath");
+        velocityEngine.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());  
         velocityEngine.init();        
     }
     
-    public ResultsPageHTML(ExecutionResultSet results, ConfusionMatrixMetric confusionMatrixMetric, boolean isMicro) {
-        this(results, confusionMatrixMetric, isMicro, true);
-    }
-    
-    public ResultsPageHTML(ExecutionResultSet results, ConfusionMatrixMetric confusionMatrixMetric) {
-        this(results, confusionMatrixMetric, false);
+    public ResultsPageHTML(ExecutionResultSet results, boolean isMicro) {
+        this(results, isMicro, true);
     }
     
     public ResultsPageHTML(ExecutionResultSet results) {
-        this(results, new ConfusionMatrixMetric());
+        this(results, false);
     }
+    
 
     @Override
     public void writeResultsToDirectory(File baseDirectory) {
