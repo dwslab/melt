@@ -12,7 +12,7 @@ Found a bug? Don't hesitate to <a href="https://github.com/dwslab/melt/issues">o
 
 **How to Cite?** <br/>
 
-*Main Paper*
+*MELT (Main Paper)*
 ```
 Hertling, Sven; Portisch, Jan; Paulheim, Heiko. MELT - Matching EvaLuation Toolkit. SEMANTICS. Karlsruhe, Germany. 2019.
 ```
@@ -20,7 +20,7 @@ An open-access version of the paper is available <a href="https://link.springer.
 The accompanying presentation can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/MELT_presentation_semantics.pdf">documentation directory</a>.<br/>
 You can find the LaTex bib entry of the paper [here](/documentation/melt_semantics_19.bib).
 
-*Demo Paper (MELT Dashboard)*
+*MELT Dashboard*
 ```
 Portisch, Jan; Hertling, Sven; Paulheim, Heiko. Visual Analysis of Ontology Matching Results with the MELT Dashboard. ESWC 2020 - Posters and Demos. Heraklion, Greece. 2020.
 ``` 
@@ -29,6 +29,10 @@ The poster can be found in the <a href="https://github.com/dwslab/melt/blob/mast
 A simple demo for the <a href="http://oaei.ontologymatching.org/2019/anatomy/index.html">OAEI 2019 Anatomy</a> and <a href="http://oaei.ontologymatching.org/2019/conference/index.html">OAEI 2019 Conference</a> tracks can be found <a href="https://dwslab.github.io/melt/anatomy_conference_dashboard.html">here</a>.<br/>
 You can find the LaTex bib entry of the paper [here](/documentation/melt_dashboard_20.bib).
 
+*MELT-ML*
+```
+Hertling, Sven; Portisch, Jan; Paulheim, Heiko. Supervised Ontology and Instance Matching with MELT. OM-2020: The Fifteenth International Wokshop on Ontology Matching collocated with the 19th International Semantic Web Conference ISWC-2020. 2020. [to appear]
+``` 
 
 ## Code Examples
 The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for different tasks and that can be used as barebone project for specific applications. 
