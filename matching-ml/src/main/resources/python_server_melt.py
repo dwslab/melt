@@ -6,8 +6,7 @@ import numpy as np
 import logging
 import os
 
-
-logging.basicConfig(handlers=[logging.FileHandler(__file__ + '.log', 'w', 'utf-8')], format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
+logging.basicConfig(handlers=[logging.FileHandler(__file__ + '.log', 'a+', 'utf-8')], format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
 
 # default boilerplate code
 app = Flask(__name__)
@@ -762,16 +761,16 @@ def machine_learning():
             }
         ]
         
-        logging.info("run grid search with cv: %s and jobs: %s", cv, n_jobs)
-        print("run grid search with cv: %s and jobs: %s" % (cv, n_jobs))
+        logging.info("Run grid search with cv: %s and jobs: %s", cv, n_jobs)
+        print("Run grid search with cv: %s and jobs: %s" % (cv, n_jobs))
         grid = GridSearchCV(
             Pipeline([('scaler', preprocessing.MaxAbsScaler()), ('estimator', svm.SVC())]),
             param_grid=params_grid,
             scoring='f1',
             cv=cv,
             n_jobs=n_jobs,
-            refit=True)
-            #verbose=1)
+            refit=True,
+            verbose=1)
         grid.fit(X_train, y_train)
 
         logging.info("cross validation: best f1 score: %s", grid.best_score_)

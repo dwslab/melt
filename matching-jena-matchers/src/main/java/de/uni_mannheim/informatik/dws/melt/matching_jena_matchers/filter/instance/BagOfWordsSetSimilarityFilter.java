@@ -23,7 +23,7 @@ import org.apache.jena.rdf.model.StmtIterator;
 
 /**
  * Filters individual/instance mappings by comparing literals.
- * The literals are selected by the correspodning properties (leave empty to select all).
+ * The literals are selected by the corresponding properties (leave empty to select all).
  * The set of tokens created for each individual are compared with the {@link SetSimilarity}.
  */
 public class BagOfWordsSetSimilarityFilter extends BaseFilterWithSetComparison {

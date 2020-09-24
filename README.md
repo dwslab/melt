@@ -33,6 +33,8 @@ You can find the LaTex bib entry of the paper [here](/documentation/melt_dashboa
 ```
 Hertling, Sven; Portisch, Jan; Paulheim, Heiko. Supervised Ontology and Instance Matching with MELT. OM-2020: The Fifteenth International Wokshop on Ontology Matching collocated with the 19th International Semantic Web Conference ISWC-2020. 2020. [to appear]
 ``` 
+An open-access version of the paper is available <a href="https://arxiv.org/pdf/2009.11102.pdf">here</a>.<br/>
+
 
 ## Code Examples
 The [examples folder](/examples/) contains reference examples that you can use to better understand how MELT can be used for different tasks and that can be used as barebone project for specific applications. 

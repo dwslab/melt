@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Properties;
 import org.apache.jena.ontology.OntModel;
 
-public class SupervisedMatcher extends MatcherYAAAJena{
+public class SupervisedMatcher extends MatcherYAAAJena {
 
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
@@ -38,23 +38,20 @@ public class SupervisedMatcher extends MatcherYAAAJena{
         ));
         
         Alignment trainingAlignment = new Alignment();
-        for(Correspondence c : alternatives){
-            if(inputAlignment.contains(c)){
+        for(Correspondence c : alternatives) {
+            if(inputAlignment.contains(c)) {
                 trainingAlignment.add(
                         new Correspondence(c.getEntityOne(), c.getEntityTwo(), c.getConfidence(), CorrespondenceRelation.EQUIVALENCE, c.getExtensions())
                 );
-            }else{
+            } else {
                 trainingAlignment.add(
                         new Correspondence(c.getEntityOne(), c.getEntityTwo(), c.getConfidence(), CorrespondenceRelation.INCOMPAT, c.getExtensions())
                 );
             }
         }
         MachineLearningScikitFilter filter = new MachineLearningScikitFilter(trainingAlignment, 5, 40);
-        
         Alignment filteredAlignment = filter.match(source, target, recallAlignment, properties);
-        
         filteredAlignment = NaiveDescendingExtractor.filter(filteredAlignment);
-        
         return filteredAlignment;
     }
 }
