@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Check if already matched individuals has a similar hierarchy (class hierarchy).
+ * Check if already matched individuals have a similar hierarchy (class hierarchy).
  * For different computation methods see {@link SimilarHierarchyFilterApproach}.
  */
 public class SimilarHierarchyFilter extends MatcherYAAAJena{

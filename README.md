@@ -12,7 +12,7 @@ Found a bug? Don't hesitate to <a href="https://github.com/dwslab/melt/issues">o
 
 **How to Cite?** <br/>
 
-*Main Paper*
+*MELT (Main Paper)*
 ```
 Hertling, Sven; Portisch, Jan; Paulheim, Heiko. MELT - Matching EvaLuation Toolkit. SEMANTICS. Karlsruhe, Germany. 2019.
 ```
@@ -20,7 +20,7 @@ An open-access version of the paper is available <a href="https://link.springer.
 The accompanying presentation can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/MELT_presentation_semantics.pdf">documentation directory</a>.<br/>
 You can find the LaTex bib entry of the paper [here](/documentation/melt_semantics_19.bib).
 
-*Demo Paper (MELT Dashboard)*
+*MELT Dashboard*
 ```
 Portisch, Jan; Hertling, Sven; Paulheim, Heiko. Visual Analysis of Ontology Matching Results with the MELT Dashboard. ESWC 2020 - Posters and Demos. Heraklion, Greece. 2020.
 ``` 
@@ -28,6 +28,12 @@ An open-access version of the paper is available <a href="https://arxiv.org/pdf/
 The poster can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/eswc_2020_melt_dashboard_poster.pdf">documentation directory</a>.<br/>
 A simple demo for the <a href="http://oaei.ontologymatching.org/2019/anatomy/index.html">OAEI 2019 Anatomy</a> and <a href="http://oaei.ontologymatching.org/2019/conference/index.html">OAEI 2019 Conference</a> tracks can be found <a href="https://dwslab.github.io/melt/anatomy_conference_dashboard.html">here</a>.<br/>
 You can find the LaTex bib entry of the paper [here](/documentation/melt_dashboard_20.bib).
+
+*MELT-ML*
+```
+Hertling, Sven; Portisch, Jan; Paulheim, Heiko. Supervised Ontology and Instance Matching with MELT. OM-2020: The Fifteenth International Wokshop on Ontology Matching collocated with the 19th International Semantic Web Conference ISWC-2020. 2020. [to appear]
+``` 
+An open-access version of the paper is available <a href="https://arxiv.org/pdf/2009.11102.pdf">here</a>.<br/>
 
 
 ## Code Examples
@@ -414,6 +420,13 @@ any evaluator. When calling `run()`, system alignment files and any output will 
 a later point in time. You can also set the maximum time you want MELT to allocate to a particular matcher. If the matcher
 does not finish within the given time limit, MELT will stop the process and proceed with the next test case or matcher.
 `ExecutorSeals` can read zipped, unzipped (or a mix of both) SEALS packages.<br/>
+
+**I am running a SEALS matcher that was packaged with MELT and uses some python component. On my system, the
+default python command does not refer to Python 3. How can this situation be resolved?**<br/>
+A folder `melt-resouces` in the working directory (perhaps `$SEALS_HOME`) has to be created. In there a file `python_command.txt` containing your full 
+python path should be placed. This applies to all MELT packaged matchers that use the ML module. 
+In other cases, you can also try to create a directory `oaei-resources` rather than `melt-resources`
+and place the python_command.txt` there.
 
 **Is there more documentation?**<br/>
 MELT is far more powerful than documented here. This `README` is intended to give an overview of the framework.

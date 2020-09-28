@@ -14,7 +14,7 @@ import eu.sealsproject.platform.res.tool.impl.AbstractPlugin;
  *
  * @author Sven Hertling
  */
-public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatchingToolBridge{
+public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatchingToolBridge {
 
     /**
      * Aligns two ontologies specified via their URL and returns the URL of the

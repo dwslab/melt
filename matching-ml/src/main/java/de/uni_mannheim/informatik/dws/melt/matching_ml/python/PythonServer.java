@@ -742,7 +742,10 @@ public class PythonServer {
         pb.directory(new File(System.getProperty("user.dir")));
         updateEnvironmentPath(pb.environment(), pythonCommand);
         LOGGER.info("Start PythonServer in folder {} with command {}", pb.directory().toString(), String.join(" ", command));
-        
+        LOGGER.info("If the python command is \"wrong\" for your machine (e.g. python refers to python2), place a file under ./melt-resources/python_command.txt " +
+                "with your command and create the melt-resources folder if it does not exist. This has to be done in the working directory - in case of " +
+                "SEALS this would be in $SEALS_HOME.");
+
         try {
             pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
             pb.redirectError(ProcessBuilder.Redirect.INHERIT);

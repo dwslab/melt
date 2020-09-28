@@ -63,7 +63,7 @@ public class ProcessOutputCollector extends Thread {
                 } catch (IOException ex) {
                     System.err.println("Cannot write to tmp file: " + ex.getMessage());
                 }
-            }else{
+            } else {
                 if(this.outStream != null){
                     this.outStream.println(this.messagePrefix + message);
                 }
@@ -87,7 +87,7 @@ public class ProcessOutputCollector extends Thread {
                 System.err.println("Cannot convert path to URL: " + ex.getMessage());
                 return null;
             }
-        }else{
+        } else {
             try {
                 return new URL(this.lastLine);
             } catch (MalformedURLException ex) {
@@ -96,7 +96,10 @@ public class ProcessOutputCollector extends Thread {
         }
     }
     
-    public static URL findLastURL(String text){        
+    public static URL findLastURL(String text){
+        if(text == null){
+            return null;
+        }
         Matcher matcher = URL_PATTERN.matcher(text);
         List<String> urlMatches = new ArrayList();
         while (matcher.find()) {

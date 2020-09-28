@@ -28,6 +28,9 @@ import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.SKOS;
 
+/**
+ * This class is also the main class that will be run when executing the JAR.
+ */
 public class Main {
     private static Property abstractProp = ModelFactory.createDefaultModel().createProperty("http://dbkwik.webdatacommons.org/ontology/abstract");
     
@@ -41,26 +44,21 @@ public class Main {
     
     public static void main(String[] args){                
         //CacheInit.populateKGTrack("E:\\tmp_tdb\\");
-        
         //analyzeIsolatedFeatures();
         analyzeSupervisedLearningMatcher(0.2);
-        analyzeSupervisedLearningMatcher(0.4);
-        analyzeSupervisedLearningMatcher(0.6);
+        //analyzeSupervisedLearningMatcher(0.4);
+        //analyzeSupervisedLearningMatcher(0.6);
     }
     
     
     private static void analyzeIsolatedFeatures(){
         List<TestCase> testCases = TrackRepository.Knowledgegraph.V3.getTestCases();
-        
         Map<String, IOntologyMatchingToolBridge> matchers = new HashMap();
         for(MatcherYAAAJena featureGenerator : FEATURE_GENERATORS){
             matchers.put(featureGenerator.getClass().getSimpleName(), new OneFeatureMatcher(featureGenerator));
         }
         matchers.put("BaseMatcher", new BaseMatcher());
-        
-        
         ExecutionResultSet results = Executor.run(testCases, matchers);
-        
         EvaluatorCSV e = new EvaluatorCSV(results);
         e.setResourceExplainers(Arrays.asList(new ExplainerResourceProperty(RDFS.label, SKOS.altLabel), new ExplainerResourceType()));
         e.writeToDirectory();
@@ -72,10 +70,8 @@ public class Main {
         for(TestCase tc : TrackRepository.Knowledgegraph.V3.getTestCases()){
             testCases.add(TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, fraction, 1324567));
         }
-
         ExecutionResultSet results = Executor.run(testCases, new SupervisedMatcher());
         results.addAll(Executor.run(testCases, new BaseMatcher()));
-        
         EvaluatorCSV e = new EvaluatorCSV(results);//, new ConfusionMatrixMetric(true, true));
         e.setBaselineMatcher(new ForwardMatcher());
         e.setResourceExplainers(Arrays.asList(new ExplainerResourceProperty(RDFS.label, SKOS.altLabel), new ExplainerResourceType()));
