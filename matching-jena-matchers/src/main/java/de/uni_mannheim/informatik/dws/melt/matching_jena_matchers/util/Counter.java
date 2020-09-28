@@ -164,9 +164,10 @@ public class Counter<T> {
     }
     
     /**
-     * Return a list ordered by their number of occurences.
-     * The list only contains elements with the highest number of occurences.
-     * E.g. (a, a, a, b, b, b, c) results in a list of (a, b)
+     * Return a list of the most common elements with the highest count.
+     * Usually this is only one element but if there are multiple ones with the same count,
+     * then this function will return them all.
+     * E.g. (a, a, a, b, b, b, c) results in a list of ((a,3), (b, 3)).
      * @return list of elements with their counts
      */
     public List<Entry<T, Integer>> mostCommonWithHighestCount() {
@@ -186,13 +187,14 @@ public class Counter<T> {
     }
     
     /**
-     * Return a list of the elements with a given percentage and their frequency (higher or same frequency).
+     * Return a list of the elements with a higher or equal frequency/percentage than the given one
+     * together with their frequency.
      * @param percentage between zero and one. 0.95 means 95 percent.
      * @return list of entries with frequency
      */
     public List<Entry<T, Double>> mostCommonByPercentage(double percentage) {
         if (percentage < 0.0 || percentage > 1.0)
-            throw new IndexOutOfBoundsException("Percentage: " + percentage);
+            throw new IllegalArgumentException("Percentage: " + percentage);
         
         List<Entry<T, Double>> list = new ArrayList();
         for(Entry<T, MutableInt> count : this.counts.entrySet()){
@@ -207,7 +209,7 @@ public class Counter<T> {
     }
     
     /**
-     * Return a list of the elements with a given percentage.
+     * Return a list of the elements with a higher or equal frequency/percentage than the given one.
      * @param percentage between zero and one. 0.95 menas 95 percent.
      * @return list of entries
      */
@@ -215,6 +217,28 @@ public class Counter<T> {
         return mostCommonByPercentage(percentage).stream()
                 .map(e -> e.getKey())
                 .collect(Collectors.toList());
+    }
+    
+    /**
+     * Return a list of elements which have a higher (or equal) frequency than the specified one but not more than the specified amount(parameter topN).
+     * If one of those two parameters is zero, then it will not be taken into account. Especially if both are zero, then all elements will be returned.
+     * @param percentage between zero and one. 0.95 means 95 percent.
+     * @param topN  the maximum number of common elements to return
+     * @return list of elements (element with highest count first)
+     */
+    public List<T> mostCommonElementsByPercentageOrTopN(double percentage, int topN) {
+        if(topN == 0){
+            return this.mostCommonElementsByPercentage(percentage);
+        }else if(percentage == 0){
+            if(topN == 0)
+                return this.mostCommonElements(); // if both are zero then return all
+            return this.mostCommonElements(topN);
+        }else{
+            return mostCommonByPercentage(percentage).stream()
+                .limit(topN)
+                .map(e -> e.getKey())
+                .collect(Collectors.toList());
+        }
     }
     
     /**
@@ -253,6 +277,34 @@ public class Counter<T> {
                 .sorted(this.mapComparator)
                 .map(e -> e.getKey())
                 .findFirst().orElse(null);
+    }
+    
+    
+    /**
+     * Return a list of elements with their frequency.
+     * Only elements are returned where the frequency is between the given min and max arguments
+     * (greter or equal to min and less or equal to max).
+     * Ordered from the most common to the least.
+     * @param min the min frequency (inclusive)
+     * @param max the max frequency (inclusive)
+     * @return list of elements with their frequency
+     */
+    public List<Entry<T, Double>> betweenFrequency(double min, double max) {
+        if (min < 0.0 || min > 1.0)
+            throw new IllegalArgumentException("min argument not between zero and one: " + min);
+        if (max < 0.0 || max > 1.0)
+            throw new IllegalArgumentException("max argument not between zero and one: " + min);
+                
+        List<Entry<T, Double>> list = new ArrayList();
+        for(Entry<T, MutableInt> count : this.counts.entrySet()){
+            double frequency = (double)count.getValue().get() / (double) this.overallCount;
+            if(min <= frequency && frequency <= max){
+                list.add(new SimpleEntry(count.getKey(), frequency));
+            }
+        }
+        return list.stream()
+            .sorted(this.mapComparator)
+            .collect(Collectors.toList());
     }
 
     @Override

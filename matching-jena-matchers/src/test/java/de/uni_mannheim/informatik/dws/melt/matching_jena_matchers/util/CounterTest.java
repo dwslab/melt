@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -86,4 +87,37 @@ public class CounterTest {
         assertEquals(Arrays.asList(), c.mostCommonElements(10));
     }
     
+    
+    @Test
+    void testZeroN(){
+        Counter<String> c = new Counter();
+        c.addAll(Arrays.asList("one", "one", "two", "two", "two", "three"));
+        
+        assertEquals(3,c.mostCommonElementsByPercentage(0.0).size());
+        assertEquals(0,c.mostCommonElements(0).size());
+        
+        assertEquals(3,c.mostCommonElementsByPercentageOrTopN(0,0).size());
+    }
+    
+    @Test
+    void testExceptions(){
+        Counter<String> c = new Counter();
+        c.addAll(Arrays.asList("one", "one", "two", "two", "two", "three"));
+        
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            c.mostCommonElements(-20);
+        });
+        
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            c.mostCommonByPercentage(-0.1);
+        });
+        
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            c.mostCommonByPercentage(2.0);
+        });
+        
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            c.mostCommonElementsByPercentageOrTopN(-0.2, -3);
+        });
+    }
 }
