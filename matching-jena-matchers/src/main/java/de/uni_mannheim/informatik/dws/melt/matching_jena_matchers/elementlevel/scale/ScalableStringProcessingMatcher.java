@@ -205,7 +205,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
         for(PropertySpecificStringProcessingMultipleReturn processsing : levenshteinProcessings){
             List<String> texts = new ArrayList<>();
             int minLength = processsing.getMinLengthForLevenshtein();
-            for(Object o : index.get(processsing).keySet()){
+            for(Object o : index.getOrDefault(processsing, new HashMap()).keySet()){
                 if(o instanceof String){
                     String text = (String)o;
                     if(text.length() > minLength){
