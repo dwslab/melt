@@ -136,6 +136,59 @@ public class PythonServer {
         }
     }
     
+    /**
+     * Learn a ML model for a given training file and stores it in the given model file.
+     * The training file should be comma separated and containing a header.
+     * The class attribute should be named "target".
+     * @param trainFile the train file
+     * @param modelFile where to store the model
+     * @param cv number of cross validations
+     * @param jobs number of parallel jobs to run
+     * @throws Exception throws exception in case of errors
+     */
+    public void trainAndStoreMLModel(File trainFile, File modelFile, int cv, int jobs) throws Exception{
+        HttpGet request = new HttpGet(serverUrl + "/ml-train-and-store-model");
+        request.addHeader("trainingsFile", getCanonicalPath(trainFile));
+        request.addHeader("modelFile", modelFile.getAbsolutePath());
+        request.addHeader("cv", Integer.toString(cv));
+        request.addHeader("jobs", Integer.toString(jobs));
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Apply a stored model to a new file (predict file).
+     * @param predictFile the predict file
+     * @param modelFile where to store the model
+     * @return a list of integers which represents the classes
+     * @throws Exception throws exception in case of errors
+     */
+    public List<Integer> applyStoredMLModel(File modelFile, File predictFile) throws Exception{
+        HttpGet request = new HttpGet(serverUrl + "/ml-load-and-apply-model");
+        request.addHeader("predictFile", getCanonicalPath(predictFile));
+        request.addHeader("modelFile", getCanonicalPath(modelFile));
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                } else return JSON_MAPPER.readValue(resultString, JSON_MAPPER.getTypeFactory().constructCollectionType(List.class, Integer.class));
+            }
+        }
+    }
+    
     /************************************
      * Embedding alignment
      ***********************************/
@@ -750,7 +803,7 @@ public class PythonServer {
             pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
             pb.redirectError(ProcessBuilder.Redirect.INHERIT);
             this.serverProcess = pb.start();
-            final int maxTrials = 5;
+            final int maxTrials = 10;
             for (int i = 0; i < maxTrials; i++) {
                 HttpGet request = new HttpGet(serverUrl + "/melt_ml.html");
                 CloseableHttpClient httpClient = HttpClients.createDefault();

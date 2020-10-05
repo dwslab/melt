@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -106,39 +105,122 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filt
     
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        
         Alignment trainingAlignment = trainingGenerator.match(source, target, inputAlignment, properties);
+        return trainAndApplyMLModel(trainingAlignment, inputAlignment, this.confidenceNames, this.crossValidationNumber, this.numberOfParallelJobs);
+    }
+    
+    
+    /**
+     * Trains a machine learning model in python and applies it to the predictAlignment to filter it.
+     * @param trainAlignment Correspondences with an EQUIVALENCE relation are treated as positives. All other relations are treated as negatives.
+     * @param predictAlignment the alignment to filter
+     * @param confidenceNames the confidence names of the alignment to use (leave empty to use all additional confidences from trainAlignment.
+     * @param crossValidationNumber the number of folds when doing a cross validation.
+     * @param numberOfParallelJobs number of parallel jobs.
+     * @return the filtered alignment
+     */
+    public static Alignment trainAndApplyMLModel(Alignment trainAlignment, Alignment predictAlignment, List<String> confidenceNames, int crossValidationNumber, int numberOfParallelJobs){
         if(confidenceNames == null || confidenceNames.isEmpty())
-            confidenceNames = new ArrayList(trainingAlignment.getDistinctCorrespondenceConfidenceKeys());
+            confidenceNames = new ArrayList(trainAlignment.getDistinctCorrespondenceConfidenceKeys());
         if(confidenceNames.isEmpty()){
             LOGGER.warn("No attributes available for learning. Return unfiltered alignment.");
-            return inputAlignment;
+            return predictAlignment;
         }
-        File trainingFile = new File("trainingsFile.csv");
-        writeDataset(new ArrayList(trainingAlignment), trainingFile, true);
-        
-        File testFile = new File("testFile.csv");
-        List<Correspondence> testAlignment = new ArrayList(inputAlignment); // make order explicit
-        writeDataset(testAlignment, testFile, false);
+        try{
+            File trainingFile = File.createTempFile("trainingsFile", ".csv");
+            writeDataset(new ArrayList(trainAlignment), trainingFile, true, confidenceNames);
 
-        List<Integer> prediction = PythonServer.getInstance().learnAndApplyMLModel(trainingFile, testFile, this.crossValidationNumber, this.numberOfParallelJobs);
-        
-        PythonServer.shutDown();
-        trainingFile.delete();
-        testFile.delete();
-        
-        Alignment filteredAlignment = new Alignment(inputAlignment, false);
-        if(testAlignment.size() != prediction.size()){
-            LOGGER.warn("Size of prediction from scikit learn and test alignemnt do not have the same size. Return unfiltered alignment.");
-            return inputAlignment;
+            File testFile = File.createTempFile("testFile", ".csv");
+            List<Correspondence> testAlignment = new ArrayList(predictAlignment); // make order explicit
+            writeDataset(testAlignment, testFile, false, confidenceNames);
+
+            List<Integer> predictions = PythonServer.getInstance().learnAndApplyMLModel(trainingFile, testFile, crossValidationNumber, numberOfParallelJobs);
+
+            trainingFile.delete();
+            testFile.delete();
+            
+            return filterAlignment(predictAlignment, testAlignment, predictions);
+        } catch (Exception ex) {
+            LOGGER.error("learnAndApplyMLModel failed. Return unfiltered alignment.", ex);
+            return predictAlignment;
+        }        
+    }
+
+    
+    /**
+     * Trains a machine learning model in python based on the given alignment and then stores the best model in a file.
+     * @param alignment Correspondences with an EQUIVALENCE relation are treated as positives. All other relations are treated as negatives.
+     * @param modelFile the file to store the best model.
+     * @param confidenceNames the confidence names of the alignment to use (leave empty to use all additional confidences from trainAlignment.
+     * @param crossValidationNumber the number of folds when doing a cross validation.
+     * @param numberOfParallelJobs number of parallel jobs.
+     * @return the confidences names which are used (can be directly used as input for confidenceNames in applyStoredMLModel)
+     */
+    public static List<String> trainAndStoreMLModel(Alignment alignment, File modelFile, List<String> confidenceNames, int crossValidationNumber, int numberOfParallelJobs){
+        if(confidenceNames == null || confidenceNames.isEmpty())
+            confidenceNames = new ArrayList(alignment.getDistinctCorrespondenceConfidenceKeys());
+        if(confidenceNames.isEmpty()){
+            LOGGER.warn("No attributes available for learning. Did not create any model file.");
+            return confidenceNames;
+        }        
+        try{
+            File trainingFile = File.createTempFile("trainingsFile", ".csv");
+            writeDataset(new ArrayList(alignment), trainingFile, true, confidenceNames);
+            PythonServer.getInstance().trainAndStoreMLModel(trainingFile, modelFile, crossValidationNumber, numberOfParallelJobs);
+            trainingFile.delete();
+        } catch (Exception ex) {
+            LOGGER.error("trainAndStoreMLModel failed. Did not create any model file.", ex);
         }
-        for(int i=0; i < prediction.size(); i++){
-            if(prediction.get(i) == 1){
-                filteredAlignment.add(testAlignment.get(i));
+        return confidenceNames;
+    }
+    
+    /**
+     * Load a machine learning model from a file (trained/generated with trainAndStoreMLModel) and apply it to the alignment which is then filtered.
+     * @param modelFile the file to load the ML model.
+     * @param predictAlignment the alignment which should be filtered.
+     * @param confidenceNames the confidence names of the alignment to use (have to be the same as in training - order has to be the same).
+     * @return the filtered alignment.
+     */
+    public static Alignment applyStoredMLModel(File modelFile, Alignment predictAlignment, List<String> confidenceNames){
+        if(modelFile.exists() == false){
+            LOGGER.warn("Model file does not exist. Return unfiltered alignment.");
+            return predictAlignment;
+        }
+        if(confidenceNames.isEmpty()){
+            
+        }
+        try{
+            File predictFile = new File("testFile.csv");
+            List<Correspondence> predictAlignmentOrdered = new ArrayList(predictAlignment); // make order explicit
+            writeDataset(predictAlignmentOrdered, predictFile, false, confidenceNames);
+
+            List<Integer> predictions = PythonServer.getInstance().applyStoredMLModel(modelFile, predictFile);
+
+            predictFile.delete();
+
+            return filterAlignment(predictAlignment, predictAlignmentOrdered, predictions);
+        } catch (Exception ex) {
+            LOGGER.error("applyStoredMLModel failed. Return unfiltered alignment.", ex);
+            return predictAlignment;
+        }
+    }
+        
+    
+    
+    private static Alignment filterAlignment(Alignment fullAlignment, List<Correspondence> orderedAlignment, List<Integer> predictions){
+        if(orderedAlignment.size() != predictions.size()){
+            LOGGER.warn("Size of correspondences and predictions do not have the same size. Return unfiltered alignment.");
+            return fullAlignment;
+        }
+        Alignment filteredAlignment = new Alignment(fullAlignment, false);
+        for(int i=0; i < predictions.size(); i++){
+            if(predictions.get(i) == 1){//positive class
+                filteredAlignment.add(orderedAlignment.get(i));
             }
         }
         return filteredAlignment;
     }
+    
 
     /**
      * Writes the given alignment to a file.
@@ -148,7 +230,7 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filt
      * @param includeTarget If true, the label (0 for negatives, 1 for positives) will be persisted.
      * @throws IOException Exception in case of problems while writing.
      */
-    public void writeDataset(List<Correspondence> alignment, File file, boolean includeTarget) throws IOException{
+    private static void writeDataset(List<Correspondence> alignment, File file, boolean includeTarget, List<String> confidenceNames) throws IOException{
         try(CSVPrinter csvPrinter = CSVFormat.DEFAULT.print(file, StandardCharsets.UTF_8)){            
             List<String> header = new ArrayList<>();
             header.addAll(confidenceNames);
@@ -175,8 +257,12 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filt
                 }
                 csvPrinter.printRecord(record);
             }
-            if(includeTarget)
-                LOGGER.info("Created training set with {} positive and {} negative examples ({} attribute(s)).", positive, negative, confidenceNames.size());
+            if(includeTarget){
+                LOGGER.info("Created training file with {} positive and {} negative examples ({} attribute(s)).", positive, negative, confidenceNames.size());
+            } else{
+                LOGGER.info("Created predict file with {} examples ({} attribute(s)).", alignment.size(), confidenceNames.size());
+            }
         }
     }
+    
 }

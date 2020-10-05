@@ -693,8 +693,60 @@ def cca_projection(word_vector_source, word_vector_target, lexicon, top_correlat
 
 @app.route('/machine-learning', methods=['GET'])
 def machine_learning():
+    import pandas as pd
     try:
-        import pandas as pd
+        cv = int(request.headers.get('cv'))
+        n_jobs = int(request.headers.get('jobs'))  
+        train_df = pd.read_csv(request.headers.get('trainingsFile'))
+        model = run_grid_search(train_df, cv, n_jobs)
+        
+        X_test = pd.read_csv(request.headers.get('predictFile'))
+        y_predict = model.predict(X_test)
+        return jsonify(y_predict.tolist())
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
+
+
+@app.route('/ml-train-and-store-model', methods=['GET'])
+def ml_train_and_store_model():
+    import pandas as pd
+    try:
+        cv = int(request.headers.get('cv'))
+        n_jobs = int(request.headers.get('jobs'))     
+        train_df = pd.read_csv(request.headers.get('trainingsFile'))   
+        model = run_grid_search(train_df, cv, n_jobs)
+        from joblib import dump
+        dump(model, request.headers.get('modelFile')) 
+        return "True"
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
+
+# cache for machine learning models
+ml_cache = {}
+
+@app.route('/ml-load-and-apply-model', methods=['GET'])
+def ml_load_and_apply_model():
+    import pandas as pd
+    try:
+        model_file = request.headers.get('modelFile')
+        if model_file in ml_cache:
+            model = ml_cache[model_file]
+        else:
+            from joblib import load
+            model = load(model_file) 
+            ml_cache[model_file] = model
+       
+        X_test = pd.read_csv(request.headers.get('predictFile'))
+        y_predict = model.predict(X_test)
+        return jsonify(y_predict.tolist())
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
+
+def run_grid_search(df_train, cv, n_jobs):
+    try:
         from sklearn import preprocessing, svm, tree
         from sklearn.naive_bayes import GaussianNB
         from sklearn.model_selection import GridSearchCV
@@ -702,16 +754,10 @@ def machine_learning():
         from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
         from sklearn.neural_network import MLPClassifier
         import math
-        
-        cv = int(request.headers.get('cv'))
-        n_jobs = int(request.headers.get('jobs'))
-        
-        df_train = pd.read_csv(request.headers.get('trainingsFile'))
+
         y_train = df_train['target']
         X_train = df_train.drop(columns=['target'])
         
-        X_test = pd.read_csv(request.headers.get('predictFile'))
-
         number_of_classes = len(np.unique(y_train))
         number_of_attributes = int(X_train.shape[1])
         default_layer_size = int(round(((number_of_attributes + number_of_classes) / 2) + 1))
@@ -778,8 +824,7 @@ def machine_learning():
         print("cross validation: best f1 score: %s" % grid.best_score_)
         print("cross validation: chosen model: %s" % grid.best_params_)
         
-        y_predict = grid.best_estimator_.predict(X_test)
-        return jsonify(y_predict.tolist())
+        return grid.best_estimator_
     except Exception as e:
         import traceback
         return "ERROR " + traceback.format_exc()
