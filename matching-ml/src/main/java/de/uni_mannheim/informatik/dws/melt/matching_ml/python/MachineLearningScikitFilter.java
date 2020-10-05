@@ -228,6 +228,7 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filt
      *                  All other relations are treated as negatives.
      * @param file File to write.
      * @param includeTarget If true, the label (0 for negatives, 1 for positives) will be persisted.
+     * @param confidenceNames the confidence names of the alignment to use.
      * @throws IOException Exception in case of problems while writing.
      */
     private static void writeDataset(List<Correspondence> alignment, File file, boolean includeTarget, List<String> confidenceNames) throws IOException{
