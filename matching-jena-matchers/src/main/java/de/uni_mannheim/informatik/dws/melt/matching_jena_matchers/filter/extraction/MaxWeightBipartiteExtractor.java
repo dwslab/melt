@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -21,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * The implementation is based on http://www.mpi-inf.mpg.de/~mehlhorn/Optimization/bipartite_weighted.ps (page 13-19).
  * @see <a href="http://ceur-ws.org/Vol-551/om2009_Tpaper5.pdf">Paper: Efficient Selection of Mappings and Automatic Quality-driven Combination of Matching Methods</a>
  */
-public class MaxWeightBipartiteExtractor extends MatcherYAAAJena {
+public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MaxWeightBipartiteExtractor.class);
     

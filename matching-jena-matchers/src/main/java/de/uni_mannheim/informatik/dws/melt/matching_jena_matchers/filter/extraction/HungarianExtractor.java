@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -17,11 +18,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This implementation uses the Hungarian algortithm to find a one to one mapping.
+ * This implementation uses the Hungarian algorithm to find a one to one mapping.
  * The runtime highly depends on the lower number of concepts (source or target) of the alignment as well as the number of correspondences.
  * If a better runtime is needed, use {@link MaxWeightBipartiteExtractor}.
  */
-public class HungarianExtractor extends MatcherYAAAJena {
+public class HungarianExtractor extends MatcherYAAAJena implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HungarianExtractor.class);
     

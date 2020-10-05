@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -12,9 +13,10 @@ import java.util.Set;
 import org.apache.jena.ontology.OntModel;
 
 /**
- * Scales the correspondence confidence values linearly to an given interval (by default [0,1]).
+ * Scales the additional correspondence confidence values (that were produced by other filters/matchers) linearly to a
+ * given interval (by default [0,1]).
  */
-public class ScaleAdditionalConfidence extends MatcherYAAAJena{
+public class ScaleAdditionalConfidence extends MatcherYAAAJena implements Filter {
 
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {

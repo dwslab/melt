@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * ));
  * }</pre>
  */
-public class ScalableStringProcessingMatcher extends MatcherYAAAJena{
+public class ScalableStringProcessingMatcher extends MatcherYAAAJena {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScalableStringProcessingMatcher.class);
     

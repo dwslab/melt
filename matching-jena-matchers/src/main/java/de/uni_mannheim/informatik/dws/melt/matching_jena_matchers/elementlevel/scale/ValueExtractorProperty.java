@@ -14,7 +14,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.StmtIterator;
 
 /**
- * Extracts all values from a specific proeprty as long as it is a literal.
+ * Extracts all values from a specific property as long as it is a literal.
  */
 public class ValueExtractorProperty implements ValueExtractor{
 
