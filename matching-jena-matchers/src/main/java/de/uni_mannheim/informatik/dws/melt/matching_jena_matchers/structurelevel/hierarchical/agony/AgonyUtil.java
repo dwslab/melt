@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import org.slf4j.Logger;
@@ -13,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Helper methods for graph analysis.
- * @deprecated use DotGraphUtil instead.
+ * @deprecated use {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.DotGraphUtil} instead.
  */
 public class AgonyUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(AgonyUtil.class);

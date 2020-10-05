@@ -10,14 +10,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-public class MachineLearningScikitFilter extends MatcherYAAAJena {
+/**
+ * This filter learns and applies a classifier given a training sample and an existing alignment.
+ */
+public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filter {
 
     /**
      * Default logger.

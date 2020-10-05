@@ -4,12 +4,14 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.Properties;
+
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import org.apache.jena.ontology.OntModel;
 
 /**
  * Filters only class, instance or property matches.
  */
-public class TypeFilter extends MatcherYAAAJena{
+public class TypeFilter extends MatcherYAAAJena implements Filter {
 
     private ConceptType type;
     private boolean subsumeProperties;

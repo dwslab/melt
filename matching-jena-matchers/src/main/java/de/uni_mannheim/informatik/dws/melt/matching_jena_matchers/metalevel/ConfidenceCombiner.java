@@ -7,6 +7,8 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Corresponde
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import org.apache.commons.math3.stat.descriptive.UnivariateStatistic;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.util.ResizableDoubleArray;
@@ -18,7 +20,7 @@ import org.slf4j.LoggerFactory;
  * Combines the additional confidences and set the overall correspondence confidence to be the mean of the selected confidences.
  * Can also be used to set the 
  */
-public class ConfidenceCombiner extends MatcherYAAAJena {
+public class ConfidenceCombiner extends MatcherYAAAJena implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfidenceCombiner.class);
     
     private UnivariateStatistic statistic;
@@ -60,7 +62,7 @@ public class ConfidenceCombiner extends MatcherYAAAJena {
     }
     
     /**
-     * Calulates the mean of all additional confidences.
+     * Calculates the mean of all additional confidences.
      */
     public ConfidenceCombiner(){
         this(new Mean(), null);

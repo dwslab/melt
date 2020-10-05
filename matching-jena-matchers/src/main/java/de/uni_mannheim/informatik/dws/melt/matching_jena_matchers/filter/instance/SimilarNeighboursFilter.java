@@ -187,7 +187,7 @@ public class SimilarNeighboursFilter extends BaseFilterWithSetComparison{
             int countTargetNeighbours = targetNeighbours.getUriResources().size() + targetNeighbours.getLiterals().size();
             int countIntersection = resourceIntersection + literalIntersection.size();
             
-            double value = setSimilatity.compute(countIntersection, countSourceNeighbours, countTargetNeighbours);
+            double value = setSimilarity.compute(countIntersection, countSourceNeighbours, countTargetNeighbours);
             if(value >= this.threshold){
                 correspondence.addAdditionalConfidence(this.getClass(), value);
                 filteredAlignment.add(correspondence);

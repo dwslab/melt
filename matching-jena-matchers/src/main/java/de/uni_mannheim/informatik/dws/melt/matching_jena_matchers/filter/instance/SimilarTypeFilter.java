@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instan
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.BaseFilterWithSetComparison;
 import com.googlecode.cqengine.query.QueryFactory;
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimilarity;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -19,10 +20,10 @@ import org.apache.jena.vocabulary.RDF;
  * Checks for each instance mapping, how many already matched types it has in common.
  * For comparing a type hierarchy, choose SimilarHierarchyFilter.
  */
-public class SimilarTypeFilter extends BaseFilterWithSetComparison{
+public class SimilarTypeFilter extends BaseFilterWithSetComparison implements Filter {
 
     /**
-     * The minmum confidence for which a class mapping is counted. Compared with greater or equal.
+     * The minimum confidence for which a class mapping is counted. Compared with greater or equal.
      */
     private double minClassConfidence;    
     
@@ -37,8 +38,8 @@ public class SimilarTypeFilter extends BaseFilterWithSetComparison{
         this.typeProperty = typeProperty;
     }
     
-    public SimilarTypeFilter(double threshold, SetSimilarity setSimilatity) {
-        this(0.0d, RDF.type, threshold, setSimilatity);
+    public SimilarTypeFilter(double threshold, SetSimilarity setSimilarity) {
+        this(0.0d, RDF.type, threshold, setSimilarity);
     }
     
     public SimilarTypeFilter() {
@@ -74,7 +75,7 @@ public class SimilarTypeFilter extends BaseFilterWithSetComparison{
             //in case of n:m mappings only the minimum amount of resource is the number of the intersection.
             int resourceIntersection = Math.min(mappedSources.size(), mappedTargets.size());
             
-            double value = setSimilatity.compute(resourceIntersection, sourceTypes.size(), targetTypes.size());
+            double value = setSimilarity.compute(resourceIntersection, sourceTypes.size(), targetTypes.size());
             if(value >= this.threshold){
                 correspondence.addAdditionalConfidence(this.getClass(), value);
                 filteredAlignment.add(correspondence);

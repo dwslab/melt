@@ -3,11 +3,12 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimilarity;
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 
 /**
  * Basic filter for instances which compares sets like neighbours or properties.
  */
-public abstract class BaseFilterWithSetComparison extends MatcherYAAAJena {
+public abstract class BaseFilterWithSetComparison extends MatcherYAAAJena implements Filter {
     /**
      * The threshold which should be larger or equal to be a valid match.
      * Computation is based on set similarity.
@@ -17,13 +18,12 @@ public abstract class BaseFilterWithSetComparison extends MatcherYAAAJena {
     /**
      * The set similarity to choose when computing similarity value between the two distinct property sets.
      */
-    protected SetSimilarity setSimilatity;
+    protected SetSimilarity setSimilarity;
 
-    public BaseFilterWithSetComparison(double threshold, SetSimilarity setSimilatity) {
+    public BaseFilterWithSetComparison(double threshold, SetSimilarity setSimilarity) {
         this.threshold = threshold;
-        this.setSimilatity = setSimilatity;
+        this.setSimilarity = setSimilarity;
     }
-    
 
     public double getThreshold() {
         return threshold;
@@ -33,15 +33,11 @@ public abstract class BaseFilterWithSetComparison extends MatcherYAAAJena {
         this.threshold = threshold;
     }
 
-    public SetSimilarity getSetSimilatity() {
-        return setSimilatity;
+    public SetSimilarity getSetSimilarity() {
+        return setSimilarity;
     }
 
-    public void setSetSimilatity(SetSimilarity setSimilatity) {
-        this.setSimilatity = setSimilatity;
+    public void setSetSimilarity(SetSimilarity setSimilarity) {
+        this.setSimilarity = setSimilarity;
     }
-    
-    
-    
-    
 }

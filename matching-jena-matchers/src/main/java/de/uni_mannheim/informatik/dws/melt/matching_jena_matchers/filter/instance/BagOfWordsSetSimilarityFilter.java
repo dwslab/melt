@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.BaseFilterWithSetComparison;
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimilarity;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -26,7 +27,7 @@ import org.apache.jena.rdf.model.StmtIterator;
  * The literals are selected by the corresponding properties (leave empty to select all).
  * The set of tokens created for each individual are compared with the {@link SetSimilarity}.
  */
-public class BagOfWordsSetSimilarityFilter extends BaseFilterWithSetComparison {
+public class BagOfWordsSetSimilarityFilter extends BaseFilterWithSetComparison implements Filter {
     
     /**
      * The properties to choose when computing the tokens.
@@ -76,7 +77,7 @@ public class BagOfWordsSetSimilarityFilter extends BaseFilterWithSetComparison {
             Set<String> sourceTokens = getTokens(sourceIndividual);
             Set<String> targetTokens = getTokens(targetIndividual);
             
-            double value = this.setSimilatity.compute(sourceTokens, targetTokens);
+            double value = this.setSimilarity.compute(sourceTokens, targetTokens);
             if(value >= this.threshold){
                 //DEBUG
                 //corr.addExtensionValue(DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + "sourceTokens", getSortedTokens(sourceTokens));

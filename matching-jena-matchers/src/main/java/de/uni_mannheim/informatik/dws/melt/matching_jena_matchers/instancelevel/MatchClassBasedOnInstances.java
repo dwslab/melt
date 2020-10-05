@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * @see <a>http://cs.emis.de/LNI/Proceedings/Proceedings103/gi-proc-103-026.pdf</a>
  * @see <a>https://link.springer.com/content/pdf/10.1007%2Fs13740-012-0011-z.pdf</a>
  */
-public class MatchClassBasedOnInstances extends MatcherYAAAJena{
+public class MatchClassBasedOnInstances extends MatcherYAAAJena {
     private static final Logger LOGGER = LoggerFactory.getLogger(MatchClassBasedOnInstances.class);
 
     /**

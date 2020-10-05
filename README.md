@@ -99,6 +99,27 @@ are displayed in the figure below.
 ![image](documentation/matcher_hierarchy.png)
 
 
+#### Default Matchers and Filters
+MELT offers a wide range of-out-of-the-box matchers and filters.
+
+A **filter** is a matcher that does not add new correspondences to the alignment but instead
+further processes the given alignment by (1) removing correspondences and/or (2) adding new feature weights to
+existing correspondences. MELT default filters implement the [Filter](/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/Filter.java) interface.
+
+**List of Matchers (Selection)**
+- [`ParisMatcher`](/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.java)<br/>
+Wrapper of the Paris matching system.
+
+**List of Filters (Selection)** 
+- [`MachineLearningScikitFilter`](/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/MachineLearningScikitFilter.java)<br/>
+This filter learns and applies a classifier given a training sample and an existing alignment. You can refer to
+our article *Supervised Ontology and Instance Matching with MELT* for a more detailed
+description and application examples. In the [example](/examples) directory, you can find the implementations of the 
+matchers described in the article.
+- [`NaiveDescendingExtractor`](/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/NaiveDescendingExtractor.java)<br/>
+It iterates over the sorted (descending) correspondences and and uses the correspondence with the highest confidence.
+Afterwards removes every other correspondence with the same source or target.
+
 ## External Matcher Development
 MELT allows to develop a matcher in any other programming language and wrap it as a SEALS or HOBBIT package. 
 Therefore, class [`MatcherExternal`](/matching-external/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_external/MatcherExternal.java) 

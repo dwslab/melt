@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.util.iterator.ExtendedIterator;
@@ -18,7 +19,11 @@ import org.slf4j.LoggerFactory;
  * This filter removes correspondences where the source or target has not the same host of the OntModels.
  * E.g. it removes rdf:type=rdf:type or foaf:knows=foaf:knows
  */
-public class BadHostsFilter extends MatcherYAAAJena {
+public class BadHostsFilter extends MatcherYAAAJena implements Filter {
+
+    /**
+     * Default logger
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(BadHostsFilter.class);
 
     /**
@@ -47,8 +52,7 @@ public class BadHostsFilter extends MatcherYAAAJena {
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         return filter(source, target, inputAlignment, this.strict);
     }
-    
-    
+
     /**
      * Filters the alignment based on similar hosts in a non strict mode
      * (if the host of source or target in a correspondence can not be determined, then the correspondence is added to the filtered alignment).

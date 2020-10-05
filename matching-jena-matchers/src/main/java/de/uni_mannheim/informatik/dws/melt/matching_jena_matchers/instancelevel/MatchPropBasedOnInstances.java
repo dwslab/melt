@@ -4,7 +4,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.DefaultHashMap;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -18,12 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.regex.Matcher;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntProperty;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Statement;
@@ -33,7 +29,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 /**
  * Matches properties based on same subject and object and the distribution.
  */
-public class MatchPropBasedOnInstances extends MatcherYAAAJena{
+public class MatchPropBasedOnInstances extends MatcherYAAAJena {
 
     private File debugFile;
     

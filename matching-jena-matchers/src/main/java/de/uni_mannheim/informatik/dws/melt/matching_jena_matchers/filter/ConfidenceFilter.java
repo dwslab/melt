@@ -6,6 +6,7 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Corresponde
 
 import java.util.Properties;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import org.apache.jena.ontology.OntModel;
 
 /**
@@ -14,7 +15,7 @@ import org.apache.jena.ontology.OntModel;
  *
  * Thresholds can be set per type.
  */
-public class ConfidenceFilter extends MatcherYAAAJena {
+public class ConfidenceFilter extends MatcherYAAAJena implements Filter {
 
     private double thresholdClass;
     private double thresholdObjectProperty;

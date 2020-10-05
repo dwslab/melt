@@ -2,12 +2,10 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instan
 
 import com.googlecode.cqengine.query.QueryFactory;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.Agony;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyUtil;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.URIUtil;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
-import java.io.File;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * Check if already matched individuals have a similar hierarchy (class hierarchy).
  * For different computation methods see {@link SimilarHierarchyFilterApproach}.
  */
-public class SimilarHierarchyFilter extends MatcherYAAAJena{
+public class SimilarHierarchyFilter extends MatcherYAAAJena implements Filter {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(SimilarHierarchyFilter.class);
 
@@ -225,6 +223,4 @@ public class SimilarHierarchyFilter extends MatcherYAAAJena{
     public String toString() {
         return "SimilarHierarchyFilter";
     }
-    
-    
 }

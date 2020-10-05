@@ -1,7 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.BaseFilterWithSetComparison;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.SetSimilarity;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Filter which deletes instance mappings if they have no matched properties in common.
  */
-public class CommonPropertiesFilter extends BaseFilterWithSetComparison {
+public class CommonPropertiesFilter extends BaseFilterWithSetComparison implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonPropertiesFilter.class);
 
     /**
@@ -91,7 +91,7 @@ public class CommonPropertiesFilter extends BaseFilterWithSetComparison {
                 continue;
             }
             
-            double sim = sharedProperties(individualSource, individualTarget, inputAlignment, this.excludeSameURIMapping, this.minPropertyConfidence, this.setSimilatity);
+            double sim = sharedProperties(individualSource, individualTarget, inputAlignment, this.excludeSameURIMapping, this.minPropertyConfidence, this.setSimilarity);
             if(sim >= this.threshold){
                 c.addAdditionalConfidence(this.getClass(), sim);
                 finalAlignment.add(c);

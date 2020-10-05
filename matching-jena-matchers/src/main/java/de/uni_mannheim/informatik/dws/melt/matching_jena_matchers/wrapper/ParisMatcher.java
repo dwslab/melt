@@ -16,11 +16,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.riot.RDFDataMgr;
@@ -60,7 +58,7 @@ public class ParisMatcher extends MatcherYAAAJena {
     /**
      * Constructor with all attributes.
      * Be careful with the second parameter because the provided folder is deleted after a run.
-     * Thus specifiy a non existent folder which is created and then removed.
+     * Thus specify a non existent folder which is created and then removed.
      * @param pathToParisJar Path to the Paris matcher jar file. If file is not existent then version 0.3 it will be downloaded.
      * @param tmpFolderForResultsDeleted Folder in which the ontologies and output file of PARIS are stored. It is removed after a run. BE CAREFUL!!!
      * @param javaCommand The java command which is usually just "java" but can also be a fully qualified path to a java runtime.

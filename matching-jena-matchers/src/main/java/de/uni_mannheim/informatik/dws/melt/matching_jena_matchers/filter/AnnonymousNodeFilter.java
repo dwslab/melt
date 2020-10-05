@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +14,14 @@ import java.util.Properties;
  * This filter removes correspondences where the source or target has not the same host of the OntModels.
  * E.g. it removes rdf:type=rdf:type or foaf:knows=foaf:knows
  */
-public class AnnonymousNodeFilter extends MatcherYAAAJena {
+public class AnnonymousNodeFilter extends MatcherYAAAJena implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnonymousNodeFilter.class);
 
-
+    /**
+     * Constructor
+     */
     public AnnonymousNodeFilter(){
-
     }
-
     
     /**
      * Filters the alignment based on similar hosts.

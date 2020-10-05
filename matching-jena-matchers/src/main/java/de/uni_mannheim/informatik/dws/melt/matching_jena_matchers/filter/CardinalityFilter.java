@@ -2,16 +2,10 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.NaiveDescendingExtractor;
-import de.uni_mannheim.informatik.dws.melt.matching_yaaa.MatcherYAAA;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceConfidenceComparator;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Properties;
-import java.util.Set;
+
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import org.apache.jena.ontology.OntModel;
 
 /**
@@ -19,7 +13,7 @@ import org.apache.jena.ontology.OntModel;
  * This might not be the best solution.
  * @deprecated use {@link NaiveDescendingExtractor}.
  */
-public class CardinalityFilter extends MatcherYAAAJena{
+public class CardinalityFilter extends MatcherYAAAJena implements Filter {
 
    @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties p) throws Exception {
