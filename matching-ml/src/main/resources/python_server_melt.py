@@ -842,6 +842,10 @@ def hello_demo():
     print(name_to_greet)
     return "Hello " + str(name_to_greet) + "!"
 
+@app.errorhandler(Exception)
+def handle_exception(e):
+    """Return JSON instead of HTML for general errors."""
+    return "ERROR: " + str(e), 500
 
 if __name__ == "__main__":
     # threaded=False because otherwise GridSearchCV do not run in parallel
