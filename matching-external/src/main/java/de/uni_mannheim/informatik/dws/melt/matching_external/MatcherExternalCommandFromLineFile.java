@@ -23,6 +23,7 @@ public class MatcherExternalCommandFromLineFile extends MatcherExternalCommandFr
     
     @Override
     protected List<String> getCommand(URL source, URL target, URL inputAlignment) throws Exception {
+        System.err.println("If you want to modify the following external run command, change file " + filePath.toAbsolutePath().toString() +" or in the SEALS package conf/external/external_command.txt");
         List<String> command = new ArrayList<>();
         try (BufferedReader reader = newBufferedReader(filePath, StandardCharsets.UTF_8)) {            
             for (;;) {

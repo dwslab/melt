@@ -27,6 +27,7 @@ public class MatcherExternalCommandFromFile extends MatcherExternal {
     
     @Override
     protected List<String> getCommand(URL source, URL target, URL inputAlignment) throws Exception {
+        System.err.println("If you want to modify the following external run command, change file " + filePath.toAbsolutePath().toString() +" or in the SEALS package conf/external/external_command.txt");
         String fileContent = new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
         List<String> command = new ArrayList(Arrays.asList(replaceString(fileContent).split(" ")));
         command.add(source.toString());

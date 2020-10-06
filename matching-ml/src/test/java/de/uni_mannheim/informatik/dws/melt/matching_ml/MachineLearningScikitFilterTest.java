@@ -15,9 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MachineLearningScikitFilterTest {
     
     @Test
-    void isConfidenceCorrectlySet() throws Exception {
-        
-             
+    void testEndToEnd() throws Exception {             
         Random rand = new Random(42);
         
         Alignment train = new Alignment();
@@ -64,7 +62,7 @@ public class MachineLearningScikitFilterTest {
             assertTrue(filtered.contains(c));
         }
         for(Correspondence c : negative){
-            assertTrue(filtered.contains(c) == false);
+            assertFalse(filtered.contains(c));
         }
         //Test trainAndStoreMLModel and applyStoredMLModel
         
@@ -79,7 +77,7 @@ public class MachineLearningScikitFilterTest {
             assertTrue(filtered.contains(c));
         }
         for(Correspondence c : negative){
-            assertTrue(filtered.contains(c) == false);
+            assertFalse(filtered.contains(c));
         }
         
         modelFile.delete();
