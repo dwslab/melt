@@ -26,7 +26,7 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
-            <version>8.4.1</version>
+            <version>8.6.3</version>
         </dependency>
         
         <!-- only for testing - can be removed -->
