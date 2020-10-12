@@ -48,7 +48,7 @@ public class SealsTrack extends Track {
     }    
 
     @Override
-    protected void downloadToCache() throws IOException {
+    protected void downloadToCache() {
         LOGGER.info("Downloading track {}", testDataCollectionName);
         SealsDownloadHelper bmd = new SealsDownloadHelper(tdrsLocation, testDataCollectionName, testDataVersionNumber);
         for(String testCaseId : bmd.getTestCases()){
@@ -70,7 +70,12 @@ public class SealsTrack extends Track {
         }
         LOGGER.info("Finished downloading track {}", testDataCollectionName);
     }
-    
+
+    /**
+     * Check whether the given URL can be reached.
+     * @param url The URL that shall be checked.
+     * @return True if a connection can be established, else false.
+     */
     private static boolean exists(URL url)
     {
         try

@@ -74,7 +74,7 @@ public abstract class Track {
     protected boolean useDuplicateFreeStorageLayout;
     
     /**
-     * Completness of the gold standard for all test cases.
+     * Completeness of the gold standard for all test cases.
      */
     protected GoldStandardCompleteness goldStandardCompleteness;
     
@@ -455,8 +455,7 @@ public abstract class Track {
             return filename;
         return filename.substring(0, extensionPos);
     }
-            
-    
+
     protected static String getNiceRemoteLocation(String url){
         try {
             return new URL(url).getHost();
@@ -464,14 +463,16 @@ public abstract class Track {
             return url;
         }
     }
-    
+
+    public static File getCacheFolder() {
+        return cacheFolder;
+    }
 
     @Override
     public String toString() {
         return "Track " + name;
     }
 
-    
     //override equals and hashcode: track is equal when name is equal
 
     @Override
