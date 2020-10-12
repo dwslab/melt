@@ -297,8 +297,23 @@ public class ExecutorSeals {
      * @return Execution Result Set instance for the matcher on the track.
      */
     public ExecutionResultSet run(Track track, File matcherDirectory) {
+        return run(track.getTestCases(), matcherDirectory);
+    }
+    
+    /**
+     * Evaluate matcher(s) using the local SEALS client.
+     * The file parameter can be a zip file or a directory.
+     * If it is a directory and the directory represents a matcher, it will be executed.
+     * Otherwise the directory will be scaned for matcher subdirectories and/or zip files (which are unzipped).
+     * The unzipping happens with every execution to ensure that the matcher is executed as submitted 
+     * (in case some files are not closed corrected due to a previous run).
+     * @param testCases        The testcases on which the matcher shall be run.
+     * @param matcherDirectory The directory containing the matcher(s).
+     * @return Execution Result Set instance for the matcher on the track.
+     */
+    public ExecutionResultSet run(List<TestCase> testCases, File matcherDirectory) {
         ExecutionResultSet resultSet = new ExecutionResultSet();
-        for (TestCase testCase : track.getTestCases()) {
+        for (TestCase testCase : testCases) {
             resultSet.addAll(run(testCase, matcherDirectory));
         }
         return resultSet;
