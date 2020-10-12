@@ -6,7 +6,11 @@ import numpy as np
 import logging
 import os
 
-logging.basicConfig(handlers=[logging.FileHandler(__file__ + '.log', 'a+', 'utf-8')], format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
+logging.basicConfig(
+    handlers=[logging.FileHandler(__file__ + ".log", "a+", "utf-8")],
+    format="%(asctime)s %(levelname)s:%(message)s",
+    level=logging.INFO,
+)
 
 # default boilerplate code
 app = Flask(__name__)
@@ -18,7 +22,7 @@ active_models = {}
 active_vectors = {}
 
 
-@app.route('/melt_ml.html')
+@app.route("/melt_ml.html")
 def display_server_status():
     """Can be used to check whether the server is running. Also works in a Web browser.
 
@@ -31,8 +35,7 @@ def display_server_status():
 
 
 class MySentences(object):
-    """Data structure to iterate over the lines of a file in a memory-friendly way. The files can be gzipped.
-    """
+    """Data structure to iterate over the lines of a file in a memory-friendly way. The files can be gzipped."""
 
     def __init__(self, file_or_directory_path):
         """Constructor
@@ -52,26 +55,38 @@ class MySentences(object):
                     logging.info("Processing file: " + file_name)
                     if file_name[-2:] in "gz":
                         logging.info("Gzip file detected! Using gzip.open().")
-                        for line in gzip.open(os.path.join(self.file_or_directory_path, file_name), mode='rt', encoding="utf-8"):
-                            line = line.rstrip('\n')
+                        for line in gzip.open(
+                            os.path.join(self.file_or_directory_path, file_name),
+                            mode="rt",
+                            encoding="utf-8",
+                        ):
+                            line = line.rstrip("\n")
                             words = line.split(" ")
                             yield words
                     else:
-                        for line in open(os.path.join(self.file_or_directory_path, file_name), mode='rt', encoding="utf-8"):
-                            line = line.rstrip('\n')
+                        for line in open(
+                            os.path.join(self.file_or_directory_path, file_name),
+                            mode="rt",
+                            encoding="utf-8",
+                        ):
+                            line = line.rstrip("\n")
                             words = line.split(" ")
                             yield words
             else:
                 logging.info("Processing file: " + self.file_or_directory_path)
                 if self.file_or_directory_path[-2:] in "gz":
                     logging.info("Gzip file detected! Using gzip.open().")
-                    for line in gzip.open(self.file_or_directory_path, mode='rt', encoding="utf-8"):
-                        line = line.rstrip('\n')
+                    for line in gzip.open(
+                        self.file_or_directory_path, mode="rt", encoding="utf-8"
+                    ):
+                        line = line.rstrip("\n")
                         words = line.split(" ")
                         yield words
                 else:
-                    for line in open(self.file_or_directory_path, mode='rt', encoding="utf-8"):
-                        line = line.rstrip('\n')
+                    for line in open(
+                        self.file_or_directory_path, mode="rt", encoding="utf-8"
+                    ):
+                        line = line.rstrip("\n")
                         words = line.split(" ")
                         yield words
         except Exception:
@@ -79,14 +94,16 @@ class MySentences(object):
             logging.error(self.file_or_directory_path)
             logging.exception("Stack Trace:")
 
-@app.route('/get-vocabulary-size', methods=['GET'])
+
+@app.route("/get-vocabulary-size", methods=["GET"])
 def get_vocab_size():
-    model_path = request.headers.get('model_path')
-    vector_path = request.headers.get('vector_path')
+    model_path = request.headers.get("model_path")
+    vector_path = request.headers.get("vector_path")
     vectors = get_vectors(model_path, vector_path)
     return str(len(vectors.vocab))
 
-@app.route('/train-word2vec', methods=['GET'])
+
+@app.route("/train-word2vec", methods=["GET"])
 def train_word_2_vec():
     """Method to train a word2vec model given one file to be used for training. Parameters are expected in the request
     header.
@@ -97,30 +114,54 @@ def train_word_2_vec():
         'True' as string if operation was successful, else 'False' (as string).
     """
     try:
-        model_path = request.headers.get('model_path') # where the model will be stored
-        vector_path = request.headers.get('vector_path') # where the vector file will be stored
-        file_path = request.headers.get('file_path')
-        vector_dimension = request.headers.get('vector_dimension')
-        number_of_threads = request.headers.get('number_of_threads')
-        window_size = request.headers.get('window_size')
-        iterations = request.headers.get('iterations')
-        negatives = request.headers.get('negatives')
-        cbow_or_sg = request.headers.get('cbow_or_sg')
-        min_count = request.headers.get('min_count')
-        sample = request.headers.get('sample')
+        model_path = request.headers.get("model_path")  # where the model will be stored
+        vector_path = request.headers.get(
+            "vector_path"
+        )  # where the vector file will be stored
+        file_path = request.headers.get("file_path")
+        vector_dimension = request.headers.get("vector_dimension")
+        number_of_threads = request.headers.get("number_of_threads")
+        window_size = request.headers.get("window_size")
+        iterations = request.headers.get("iterations")
+        negatives = request.headers.get("negatives")
+        cbow_or_sg = request.headers.get("cbow_or_sg")
+        min_count = request.headers.get("min_count")
+        sample = request.headers.get("sample")
 
         sentences = MySentences(file_path)
         logging.info("Sentences object initialized.")
 
-        if cbow_or_sg == 'sg':
-            model = models.Word2Vec(min_count=int(min_count), sample=float(sample), size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=1, negative=int(negatives), iter=int(iterations))
+        if cbow_or_sg == "sg":
+            model = models.Word2Vec(
+                min_count=int(min_count),
+                sample=float(sample),
+                size=int(vector_dimension),
+                workers=int(number_of_threads),
+                window=int(window_size),
+                sg=1,
+                negative=int(negatives),
+                iter=int(iterations),
+            )
         else:
-            model = models.Word2Vec(min_count=int(min_count), sample=float(sample), size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), sg=0, cbow_mean=1, alpha = 0.05, negative=int(negatives), iter=int(iterations))
+            model = models.Word2Vec(
+                min_count=int(min_count),
+                sample=float(sample),
+                size=int(vector_dimension),
+                workers=int(number_of_threads),
+                window=int(window_size),
+                sg=0,
+                cbow_mean=1,
+                alpha=0.05,
+                negative=int(negatives),
+                iter=int(iterations),
+            )
 
         logging.info("Model object initialized. Building Vocabulary...")
         model.build_vocab(sentences)
         logging.info("Vocabulary built. Training now...")
-        model.train(sentences=sentences, total_examples=model.corpus_count, epochs=model.epochs)
+        model.train(
+            sentences=sentences, total_examples=model.corpus_count, epochs=model.epochs
+        )
         logging.info("Model trained.")
 
         model.save(model_path)
@@ -136,8 +177,7 @@ def train_word_2_vec():
         return "False"
 
 
-
-@app.route('/is-in-vocabulary', methods=['GET'])
+@app.route("/is-in-vocabulary", methods=["GET"])
 def is_in_vocabulary():
     """Check whether there is a vector for the given concept.
 
@@ -146,9 +186,9 @@ def is_in_vocabulary():
         boolean
         True if concept in model vocabulary, else False.
     """
-    concept = request.headers.get('concept')
-    model_path = request.headers.get('model_path')
-    vector_path = request.headers.get('vector_path')
+    concept = request.headers.get("concept")
+    model_path = request.headers.get("model_path")
+    vector_path = request.headers.get("vector_path")
     vectors = get_vectors(model_path, vector_path)
     return str(concept in vectors.vocab)
 
@@ -175,17 +215,17 @@ def get_vectors(model_path=None, vector_path=None):
         # logging.info("Found vector file in cache.")
         vectors = active_vectors[vector_path]
     else:
-        vectors = models.KeyedVectors.load(vector_path, mmap='r')
+        vectors = models.KeyedVectors.load(vector_path, mmap="r")
         active_vectors[vector_path] = vectors
     return vectors
 
 
-@app.route('/get-similarity', methods=['GET'])
+@app.route("/get-similarity", methods=["GET"])
 def get_similarity_given_model():
 
-    concept_1 = request.headers.get('concept_1')
-    concept_2 = request.headers.get('concept_2')
-    model_path = request.headers.get('model_path')
+    concept_1 = request.headers.get("concept_1")
+    concept_2 = request.headers.get("concept_2")
+    model_path = request.headers.get("model_path")
     vector_path = request.headers.get("vector_path")
     vectors = get_vectors(model_path=model_path, vector_path=vector_path)
 
@@ -194,8 +234,10 @@ def get_similarity_given_model():
         return 0.0
 
     if concept_1 is None or concept_2 is None:
-        message = "ERROR! concept_1 and/or concept_2 not found in header. " \
-                  "Similarity cannot be calculated."
+        message = (
+            "ERROR! concept_1 and/or concept_2 not found in header. "
+            "Similarity cannot be calculated."
+        )
         print(message)
         logging.error(message)
         return message
@@ -214,10 +256,10 @@ def get_similarity_given_model():
     return str(similarity)
 
 
-@app.route('/get-vector', methods=['GET'])
+@app.route("/get-vector", methods=["GET"])
 def get_vector_given_model():
-    concept = request.headers.get('concept')
-    model_path = request.headers.get('model_path')
+    concept = request.headers.get("concept")
+    model_path = request.headers.get("model_path")
     vector_path = request.headers.get("vector_path")
     vectors = get_vectors(model_path=model_path, vector_path=vector_path)
 
@@ -226,8 +268,7 @@ def get_vector_given_model():
         return 0.0
 
     if concept is None:
-        message = "ERROR! concept not found in header. " \
-                  "Vector cannot be retrieved."
+        message = "ERROR! concept not found in header. " "Vector cannot be retrieved."
         print(message)
         logging.error(message)
         return message
@@ -243,53 +284,64 @@ def get_vector_given_model():
         result += " " + str(element)
     return result[1:]
 
+
 # Doc2vec models
 
-class Doc2VecCsvCorpus(object):
 
+class Doc2VecCsvCorpus(object):
     def __init__(self, file_path):
         self.file_path = file_path
 
     def __iter__(self):
-        with open(self.file_path, encoding='utf-8') as csvfile:
-            readCSV = csv.reader(csvfile, delimiter=',')
+        with open(self.file_path, encoding="utf-8") as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=",")
             for i, row in enumerate(readCSV):
                 yield models.doc2vec.TaggedDocument(row[1].split(), [row[0]])
 
 
-@app.route('/train-doc2vec-model', methods=['GET'])
+@app.route("/train-doc2vec-model", methods=["GET"])
 def train_doc2vec_model():
-    input_file_path = request.headers.get('input_file_path')
-    model_path = request.headers.get('model_path')
-    
-    vector_dimension = request.headers.get('vector_dimension')
-    min_count = request.headers.get('min_count')
-    number_of_threads = request.headers.get('number_of_threads')
-    window_size = request.headers.get('window_size')
-    iterations = request.headers.get('iterations')
-    negatives = request.headers.get('negatives')
-    cbow_or_sg = request.headers.get('cbow_or_sg')
-    
-    corpus = Doc2VecCsvCorpus(input_file_path)
-    dm = 1 if cbow_or_sg == 'sg' else 0
-    
-    #train the model:
-    model = models.doc2vec.Doc2Vec(documents=corpus, dm=dm, min_count=int(min_count), vector_size=int(vector_dimension), workers=int(number_of_threads), window=int(window_size), negative=int(negatives), epochs=int(iterations))
+    input_file_path = request.headers.get("input_file_path")
+    model_path = request.headers.get("model_path")
 
-    #model.save(model_path + '.model')
+    vector_dimension = request.headers.get("vector_dimension")
+    min_count = request.headers.get("min_count")
+    number_of_threads = request.headers.get("number_of_threads")
+    window_size = request.headers.get("window_size")
+    iterations = request.headers.get("iterations")
+    negatives = request.headers.get("negatives")
+    cbow_or_sg = request.headers.get("cbow_or_sg")
+
+    corpus = Doc2VecCsvCorpus(input_file_path)
+    dm = 1 if cbow_or_sg == "sg" else 0
+
+    # train the model:
+    model = models.doc2vec.Doc2Vec(
+        documents=corpus,
+        dm=dm,
+        min_count=int(min_count),
+        vector_size=int(vector_dimension),
+        workers=int(number_of_threads),
+        window=int(window_size),
+        negative=int(negatives),
+        epochs=int(iterations),
+    )
+
+    # model.save(model_path + '.model')
     active_models[model_path] = model
     return "True"
 
-@app.route('/query-doc2vec-model-batch', methods=['POST'])
+
+@app.route("/query-doc2vec-model-batch", methods=["POST"])
 def query_doc2vec_model_batch():
     try:
         content = request.get_json()
-        model = active_models.get(content['modelPath'])
+        model = active_models.get(content["modelPath"])
         if model is None:
             return "ERROR! Model not active"
         result_list = []
-        for (source, target) in content['documentIds']:
-            #logging.info("processing: %s and %s", source, target)
+        for (source, target) in content["documentIds"]:
+            # logging.info("processing: %s and %s", source, target)
             try:
                 doc2vec_similarity = float(model.docvecs.similarity(source, target))
                 result_list.append(doc2vec_similarity)
@@ -300,31 +352,34 @@ def query_doc2vec_model_batch():
         return str(e)
 
 
-
 # TF-IDF and LSI models
 
-@app.route('/train-vector-space-model', methods=['GET'])
+
+@app.route("/train-vector-space-model", methods=["GET"])
 def train_vector_space_model():
-    input_file_path = request.headers.get('input_file_path')
-    model_path = request.headers.get('model_path')
+    input_file_path = request.headers.get("input_file_path")
+    model_path = request.headers.get("model_path")
 
     dictionary = __createDictionary(input_file_path)
     corpus = CsvCorpus(dictionary, input_file_path)
     tfidf = models.TfidfModel(dictionary=dictionary)
     tfidf_corpus = tfidf[corpus]
 
-    index = similarities.Similarity('index.index', tfidf_corpus, num_features=len(dictionary))
+    index = similarities.Similarity(
+        "index.index", tfidf_corpus, num_features=len(dictionary)
+    )
     # index = similarities.SparseMatrixSimilarity(tfidf_corpus, num_features=len(dictionary))
     # index = similarities.MatrixSimilarity(tfidf_corpus, num_features=len(dictionary))
     active_models[model_path] = (corpus, index)
     return "True"
 
-@app.route('/query-vector-space-model', methods=['GET'])
+
+@app.route("/query-vector-space-model", methods=["GET"])
 def query_vector_space_model():
     try:
-        model_path = request.headers.get('model_path')
-        document_id_one = request.headers.get('document_id_one')
-        document_id_two = request.headers.get('document_id_two')  # can be None
+        model_path = request.headers.get("model_path")
+        document_id_one = request.headers.get("document_id_one")
+        document_id_two = request.headers.get("document_id_two")  # can be None
 
         model = active_models.get(model_path)
         if model is None:
@@ -348,72 +403,249 @@ def query_vector_space_model():
         return str(e)
 
 
-@app.route('/query-vector-space-model-batch', methods=['POST'])
+@app.route("/query-vector-space-model-batch", methods=["POST"])
 def query_vector_space_model_batch():
     try:
         content = request.get_json()
-        
-        model = active_models.get(content['modelPath'])
+
+        model = active_models.get(content["modelPath"])
         if model is None:
             return "ERROR! Model not active"
         (corpus, index) = model
-        
+
         result_list = []
-        for (source, target) in content['documentIds']:
-            #logging.info("processing: %s and %s", source, target)
+        for (source, target) in content["documentIds"]:
+            # logging.info("processing: %s and %s", source, target)
             source_position = corpus.id2pos.get(source)
             target_position = corpus.id2pos.get(target)
-            #logging.info("pos: %s and %s", source_position, target_position)
+            # logging.info("pos: %s and %s", source_position, target_position)
             if source_position is None or target_position is None:
                 result_list.append(-2.0)
                 continue
-            
-            #first variant - very slow:
-            #sims = index.similarity_by_id(source_position)
-            #resulting_sim = sims[target_position]
-            
-            #second variant with scikit learn
+
+            # first variant - very slow:
+            # sims = index.similarity_by_id(source_position)
+            # resulting_sim = sims[target_position]
+
+            # second variant with scikit learn
             # from sklearn.metrics.pairwise import cosine_similarity
-            #vec_one = index.vector_by_id(source_position)
-            #vec_two = index.vector_by_id(target_position)
-            #resulting_sim = cosine_similarity(vec_one, vec_two) 
-            
+            # vec_one = index.vector_by_id(source_position)
+            # vec_two = index.vector_by_id(target_position)
+            # resulting_sim = cosine_similarity(vec_one, vec_two)
+
             # third variant - best runtime
-            vec_one = matutils.scipy2sparse(index.vector_by_id(corpus.id2pos.get(source)))
-            vec_two = matutils.scipy2sparse(index.vector_by_id(corpus.id2pos.get(target)))
+            vec_one = matutils.scipy2sparse(
+                index.vector_by_id(corpus.id2pos.get(source))
+            )
+            vec_two = matutils.scipy2sparse(
+                index.vector_by_id(corpus.id2pos.get(target))
+            )
             resulting_sim = matutils.cossim(vec_one, vec_two)
-            
+
             result_list.append(resulting_sim)
         return jsonify(result_list)
     except Exception as e:
         return str(e)
 
-english_stopwords = {'has', 'mightn', 'me', 'here', 'other', 'very', 'but', 'ours', 'he', 'his', 'there', 'you', 'some',
-                     'don', 'such', 'under', 'their', 'themselves', "mustn't", 'had', "shan't", "she's", 'yourselves',
-                     'by', 'about', 'needn', 're', "weren't", 'any', 'herself', "don't", 'am', 'hadn', 'what', 'each',
-                     'weren', "hadn't", 'between', 'both', 'in', 'can', 'the', 'does', 'too', 'shouldn', 'once', 'when',
-                     's', 'it', 'as', 'same', 'haven', "hasn't", "didn't", "wasn't", 'on', 'shan', 'they', 'of', 'was',
-                     "aren't", 'out', 'before', 'our', 'aren', 'ourselves', 'wouldn', 'we', 'didn', 'having', 'above',
-                     'just', 'below', 'why', 'against', "wouldn't", 'were', 'yours', 'few', 'm', 'doesn', 'my', 'nor',
-                     'then', "you'll", 'your', "isn't", "haven't", 'him', "doesn't", 'i', 'wasn', 'who', 'will',
-                     "that'll", 'if', 'hasn', 'been', 'myself', 'd', 'where', 'into', 't', 'ain', "couldn't", 'being',
-                     'how', 'y', 'which', "you've", 'an', 'or', 'from', 'no', 'ma', 'doing', 'through', 'all', 'most',
-                     'theirs', 'than', 'are', 'to', 'while', "shouldn't", 'that', 'so', 'and', 'only', 'until', 've',
-                     'isn', 'should', 'her', 'yourself', 'have', 'over', 'because', "you'd", 'be', 'more', 'a',
-                     'himself', 'those', 'these', 'not', 'its', 'own', 'for', 'she', 'down', 'hers', "you're", 'whom',
-                     'after', 'this', 'at', 'do', 'll', "it's", 'up', 'couldn', 'with', 'itself', 'again', 'off', 'is',
-                     'during', 'further', 'mustn', 'won', 'did', "mightn't", "needn't", "should've", 'them', 'now', 'o',
-                     "won't"}
+
+english_stopwords = {
+    "has",
+    "mightn",
+    "me",
+    "here",
+    "other",
+    "very",
+    "but",
+    "ours",
+    "he",
+    "his",
+    "there",
+    "you",
+    "some",
+    "don",
+    "such",
+    "under",
+    "their",
+    "themselves",
+    "mustn't",
+    "had",
+    "shan't",
+    "she's",
+    "yourselves",
+    "by",
+    "about",
+    "needn",
+    "re",
+    "weren't",
+    "any",
+    "herself",
+    "don't",
+    "am",
+    "hadn",
+    "what",
+    "each",
+    "weren",
+    "hadn't",
+    "between",
+    "both",
+    "in",
+    "can",
+    "the",
+    "does",
+    "too",
+    "shouldn",
+    "once",
+    "when",
+    "s",
+    "it",
+    "as",
+    "same",
+    "haven",
+    "hasn't",
+    "didn't",
+    "wasn't",
+    "on",
+    "shan",
+    "they",
+    "of",
+    "was",
+    "aren't",
+    "out",
+    "before",
+    "our",
+    "aren",
+    "ourselves",
+    "wouldn",
+    "we",
+    "didn",
+    "having",
+    "above",
+    "just",
+    "below",
+    "why",
+    "against",
+    "wouldn't",
+    "were",
+    "yours",
+    "few",
+    "m",
+    "doesn",
+    "my",
+    "nor",
+    "then",
+    "you'll",
+    "your",
+    "isn't",
+    "haven't",
+    "him",
+    "doesn't",
+    "i",
+    "wasn",
+    "who",
+    "will",
+    "that'll",
+    "if",
+    "hasn",
+    "been",
+    "myself",
+    "d",
+    "where",
+    "into",
+    "t",
+    "ain",
+    "couldn't",
+    "being",
+    "how",
+    "y",
+    "which",
+    "you've",
+    "an",
+    "or",
+    "from",
+    "no",
+    "ma",
+    "doing",
+    "through",
+    "all",
+    "most",
+    "theirs",
+    "than",
+    "are",
+    "to",
+    "while",
+    "shouldn't",
+    "that",
+    "so",
+    "and",
+    "only",
+    "until",
+    "ve",
+    "isn",
+    "should",
+    "her",
+    "yourself",
+    "have",
+    "over",
+    "because",
+    "you'd",
+    "be",
+    "more",
+    "a",
+    "himself",
+    "those",
+    "these",
+    "not",
+    "its",
+    "own",
+    "for",
+    "she",
+    "down",
+    "hers",
+    "you're",
+    "whom",
+    "after",
+    "this",
+    "at",
+    "do",
+    "ll",
+    "it's",
+    "up",
+    "couldn",
+    "with",
+    "itself",
+    "again",
+    "off",
+    "is",
+    "during",
+    "further",
+    "mustn",
+    "won",
+    "did",
+    "mightn't",
+    "needn't",
+    "should've",
+    "them",
+    "now",
+    "o",
+    "won't",
+}
+
 
 def __createDictionary(file_path, stopwords=english_stopwords):
-    with open(file_path, encoding='utf-8') as f:
+    with open(file_path, encoding="utf-8") as f:
         # collect statistics about all tokens
-        readCSV = csv.reader(f, delimiter=',')
+        readCSV = csv.reader(f, delimiter=",")
         dictionary = corpora.Dictionary(line[1].lower().split() for line in readCSV)
     # remove stop words and words that appear only once
-    stop_ids = [dictionary.token2id[stopword] for stopword in stopwords if stopword in dictionary.token2id]
+    stop_ids = [
+        dictionary.token2id[stopword]
+        for stopword in stopwords
+        if stopword in dictionary.token2id
+    ]
     once_ids = [tokenid for tokenid, docfreq in dictionary.dfs.items() if docfreq == 1]
-    dictionary.filter_tokens(stop_ids + once_ids)  # remove stop words and words that appear only once
+    dictionary.filter_tokens(
+        stop_ids + once_ids
+    )  # remove stop words and words that appear only once
     dictionary.compactify()  # remove gaps in id sequence after words that were removed
     return dictionary
 
@@ -421,7 +653,9 @@ def __createDictionary(file_path, stopwords=english_stopwords):
 def __sims2scores(sims, pos2id, topsims, eps=1e-7):
     """Convert raw similarity vector to a list of (docid, similarity) results."""
     result = []
-    sims = abs(sims)  # TODO or maybe clip? are opposite vectors "similar" or "dissimilar"?!
+    sims = abs(
+        sims
+    )  # TODO or maybe clip? are opposite vectors "similar" or "dissimilar"?!
     for pos in np.argsort(sims)[::-1]:
         if pos in pos2id and sims[pos] > eps:  # ignore deleted/rewritten documents
             # convert positions of resulting docs back to ids
@@ -439,17 +673,20 @@ class CsvCorpus(object):
         self.pos2id = {}  # map index position (integer) to document id (string)
 
     def __iter__(self):
-        with open(self.file_path, encoding='utf-8') as csvfile:
-            readCSV = csv.reader(csvfile, delimiter=',')
+        with open(self.file_path, encoding="utf-8") as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=",")
             for i, row in enumerate(readCSV):
                 if row[0] in self.id2pos:
-                    logging.info("Document ID %s already in file - the last one is used only", row[0])
+                    logging.info(
+                        "Document ID %s already in file - the last one is used only",
+                        row[0],
+                    )
                 self.id2pos[row[0]] = i
                 self.pos2id[i] = row[0]
                 yield self.dictionary.doc2bow(row[1].lower().split())
 
 
-@app.route('/write-model-as-text-file', methods=['GET'])
+@app.route("/write-model-as-text-file", methods=["GET"])
 def write_vectors_as_text_file():
     """
     Writes all vectors of the model to a text file: one vector per line
@@ -459,7 +696,7 @@ def write_vectors_as_text_file():
     boolean
         'True' as string if operation was successful, else 'False' (as string).
     """
-    model_path = request.headers.get('model_path')
+    model_path = request.headers.get("model_path")
     vector_path = request.headers.get("vector_path")
     file_to_write = request.headers.get("file_to_write")
     entity_file = request.headers.get("entity_file")
@@ -473,7 +710,10 @@ def write_vectors_as_text_file():
                 for element in np.nditer(vector):
                     final_string += str(element) + " "
             else:
-                logging.info("WARN: The following concept has not been found in the vector space: " + concept)
+                logging.info(
+                    "WARN: The following concept has not been found in the vector space: "
+                    + concept
+                )
             final_string += "\n"
         # write final string to file
     else:
@@ -485,55 +725,70 @@ def write_vectors_as_text_file():
                 for element in np.nditer(vector):
                     final_string += str(element) + " "
             else:
-                logging.info("WARN: The following concept has not been found in the vector space: " + concept)
+                logging.info(
+                    "WARN: The following concept has not been found in the vector space: "
+                    + concept
+                )
                 logging.info("Trying to resolve new URI.")
             final_string += "\n"
     with open(file_to_write, "w+") as f:
         f.write(final_string)
     return "True"
 
+
 def read_concept_file(path_to_concept_file):
     result = []
-    with open(path_to_concept_file, errors='ignore') as concept_file:
+    with open(path_to_concept_file, errors="ignore") as concept_file:
         for lemma in concept_file:
             lemma = lemma.replace("\n", "").replace("\r", "")
             result.append(lemma)
     logging.info("Concept file read: " + str(path_to_concept_file))
     return result
 
+
 ############################################
 #          Align Embeddings
 ############################################
 
-@app.route('/align-embeddings', methods=['POST'])
+
+@app.route("/align-embeddings", methods=["POST"])
 def align_embeddings():
     try:
         content = request.get_json()
-        
-        source_vectors = get_vectors(vector_path=content['vectorPathSource'])
-        target_vectors = get_vectors(vector_path=content['vectorPathTarget'])
-        inputAlignment = content['alignment']
-        function = content['function']
-        
-        if function == 'linear_projection':
-            projected_source, projected_target = linear_projection(source_vectors, target_vectors, inputAlignment)
-        elif function == 'neural_net_projection':
-            projected_source, projected_target = neural_net_projection(source_vectors, target_vectors, inputAlignment)
-        elif function == 'cca_projection':
-            projected_source, projected_target = cca_projection(source_vectors, target_vectors, inputAlignment)
-        elif function == 'analyze':
+
+        source_vectors = get_vectors(vector_path=content["vectorPathSource"])
+        target_vectors = get_vectors(vector_path=content["vectorPathTarget"])
+        inputAlignment = content["alignment"]
+        function = content["function"]
+
+        if function == "linear_projection":
+            projected_source, projected_target = linear_projection(
+                source_vectors, target_vectors, inputAlignment
+            )
+        elif function == "neural_net_projection":
+            projected_source, projected_target = neural_net_projection(
+                source_vectors, target_vectors, inputAlignment
+            )
+        elif function == "cca_projection":
+            projected_source, projected_target = cca_projection(
+                source_vectors, target_vectors, inputAlignment
+            )
+        elif function == "analyze":
             analyze(source_vectors, target_vectors, inputAlignment)
-            return '[]'
+            return "[]"
         else:
             return "ERROR Function not available"
-        
+
         results = []
         for source_uri in projected_source.vocab:
-            most_similar_target = projected_target.most_similar(positive=[projected_source[source_uri]], topn=1)[0]
+            most_similar_target = projected_target.most_similar(
+                positive=[projected_source[source_uri]], topn=1
+            )[0]
             results.append((source_uri, most_similar_target[0], most_similar_target[1]))
         return jsonify(results)
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
 
 
@@ -544,27 +799,28 @@ def __normr(arr):
 def __canoncorr(X, Y):
     # Based on sourceforge.net/p/octave/statistics/ci/release-1.4.0/tree/inst/canoncorr.m
 
-    #sio.savemat('np_vector.mat', {'X': X, 'Y': Y})
-    #additional constraint because otherwise line ' A = linalg.solve(Rx, U[:, :d]) ' does not work
-    assert (X.shape[0] > X.shape[1] and Y.shape[0] > Y.shape[1]), \
-        'Vector dimension must be greater than trainings lexicon - maybe decrease vector size.'
+    # sio.savemat('np_vector.mat', {'X': X, 'Y': Y})
+    # additional constraint because otherwise line ' A = linalg.solve(Rx, U[:, :d]) ' does not work
+    assert (
+        X.shape[0] > X.shape[1] and Y.shape[0] > Y.shape[1]
+    ), "Vector dimension must be greater than trainings lexicon - maybe decrease vector size."
 
     k = X.shape[0]
     m = X.shape[1]
     n = Y.shape[1]
     d = min(m, n)
 
-    assert (X.shape[0] == Y.shape[0])  # both array should have same number of rows
-
+    assert X.shape[0] == Y.shape[0]  # both array should have same number of rows
 
     X = X - X.mean(axis=0, keepdims=True)  # center X = remove mean
     Y = Y - Y.mean(axis=0, keepdims=True)  # center Y = remove mean
 
-    Qx, Rx = linalg.qr(X, mode='economic')
-    Qy, Ry = linalg.qr(Y, mode='economic')
+    Qx, Rx = linalg.qr(X, mode="economic")
+    Qy, Ry = linalg.qr(Y, mode="economic")
 
-    U, S, V = linalg.svd(Qx.T.dot(Qy),
-                         full_matrices=False)  # full_matrices=False should correspind to svd(...,0)   #, lapack_driver='gesvd'
+    U, S, V = linalg.svd(
+        Qx.T.dot(Qy), full_matrices=False
+    )  # full_matrices=False should correspind to svd(...,0)   #, lapack_driver='gesvd'
     V = V.T  # because svd returns transposed V (called Vh)
 
     A = linalg.solve(Rx, U[:, :d])
@@ -577,11 +833,16 @@ def __canoncorr(X, Y):
     return A, B
 
 
-def __project_embeddings_to_lexicon_subset(word_vector_source, word_vector_target, lexicon):
+def __project_embeddings_to_lexicon_subset(
+    word_vector_source, word_vector_target, lexicon
+):
     source_subset_vectors = []
     target_subset_vectors = []
     for lang_source_word, lang_target_word in lexicon:
-        if lang_source_word not in word_vector_source or lang_target_word not in word_vector_target:
+        if (
+            lang_source_word not in word_vector_source
+            or lang_target_word not in word_vector_target
+        ):
             continue
         source_subset_vectors.append(word_vector_source[lang_source_word])
         target_subset_vectors.append(word_vector_target[lang_target_word])
@@ -598,13 +859,16 @@ def __create_keyed_vector(old_keyed_vector, new_matrix):
     assert (len(old_keyed_vector.vocab), vector_size) == keyed_vector.vectors.shape
     return keyed_vector
 
+
 def analyze(word_vector_src, word_vector_tgt, lexicon):
     from sklearn.decomposition import PCA
     import matplotlib.pyplot as plt
-    
-    matrix_src, matrix_tgt = __project_embeddings_to_lexicon_subset(word_vector_src, word_vector_tgt, lexicon)
+
+    matrix_src, matrix_tgt = __project_embeddings_to_lexicon_subset(
+        word_vector_src, word_vector_tgt, lexicon
+    )
     matrix_diff = matrix_src - matrix_tgt
-    
+
     diff_vector_list = []
     for src, dst in lexicon:
         if src in word_vector_src and dst in word_vector_tgt:
@@ -618,20 +882,28 @@ def analyze(word_vector_src, word_vector_tgt, lexicon):
     plt.scatter(principalComponents[:, 0], principalComponents[:, 1])
     for i in range(principalComponents.shape[0]):
         # get text after last slash or hashtag in source uri
-        source_fragment = lexicon[i][0].rsplit('/',1)[-1].rsplit('#',1)[-1] 
-        plt.annotate(source_fragment, (principalComponents[i, 0], principalComponents[i, 1]))
-    plt.savefig('analyze.png')
-    
+        source_fragment = lexicon[i][0].rsplit("/", 1)[-1].rsplit("#", 1)[-1]
+        plt.annotate(
+            source_fragment, (principalComponents[i, 0], principalComponents[i, 1])
+        )
+    plt.savefig("analyze.png")
+
 
 def linear_projection(word_vector_src, word_vector_tgt, lexicon):
-    matrix_src, matrix_tgt = __project_embeddings_to_lexicon_subset(word_vector_src, word_vector_tgt, lexicon)
+    matrix_src, matrix_tgt = __project_embeddings_to_lexicon_subset(
+        word_vector_src, word_vector_tgt, lexicon
+    )
     if matrix_src.size == 0 or matrix_tgt.size == 0:
-        raise Exception('The embeddings do not contain enough vectors for the input alignment.')
+        raise Exception(
+            "The embeddings do not contain enough vectors for the input alignment."
+        )
 
     x_mpi = linalg.pinv(matrix_src)  # Moore Penrose Pseudoinverse
     w = np.dot(x_mpi, matrix_tgt)  # linear map matrix W
 
-    source_projected = __create_keyed_vector(word_vector_src, np.dot(word_vector_src.vectors, w))
+    source_projected = __create_keyed_vector(
+        word_vector_src, np.dot(word_vector_src.vectors, w)
+    )
     return source_projected, word_vector_tgt
 
 
@@ -641,109 +913,160 @@ def neural_net_projection(word_vector_src, word_vector_tgt, lexicon):
     from keras.optimizers import SGD
     from keras import losses
 
-    matrix_src, matrix_tgt = __project_embeddings_to_lexicon_subset(word_vector_src, word_vector_tgt, lexicon)
+    matrix_src, matrix_tgt = __project_embeddings_to_lexicon_subset(
+        word_vector_src, word_vector_tgt, lexicon
+    )
     if matrix_src.size == 0 or matrix_tgt.size == 0:
-        raise Exception('the embeddings do not contain enough vector for the input alignment')
-    
-    #TODO: optimize model
+        raise Exception(
+            "the embeddings do not contain enough vector for the input alignment"
+        )
+
+    # TODO: optimize model
     model = Sequential()
-    model.add(Dense(word_vector_src.vector_size, input_dim=word_vector_src.vector_size, activation='relu'))
+    model.add(
+        Dense(
+            word_vector_src.vector_size,
+            input_dim=word_vector_src.vector_size,
+            activation="relu",
+        )
+    )
     model.add(Dropout(0.5))
-    model.add(Dense(word_vector_src.vector_size, input_dim=word_vector_src.vector_size, activation='relu'))
+    model.add(
+        Dense(
+            word_vector_src.vector_size,
+            input_dim=word_vector_src.vector_size,
+            activation="relu",
+        )
+    )
     model.add(Dropout(0.5))
-    model.add(Dense(word_vector_src.vector_size, input_dim=word_vector_src.vector_size, activation='relu'))
+    model.add(
+        Dense(
+            word_vector_src.vector_size,
+            input_dim=word_vector_src.vector_size,
+            activation="relu",
+        )
+    )
 
     sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-    model.compile(loss=losses.mean_squared_error,
-                  optimizer=sgd,
-                  metrics=[losses.mean_squared_error])
+    model.compile(
+        loss=losses.mean_squared_error,
+        optimizer=sgd,
+        metrics=[losses.mean_squared_error],
+    )
 
     model.fit(matrix_src, matrix_tgt, epochs=2000, batch_size=128)
 
     source_projected = model.predict(word_vector_src.vectors)
-    source_projected_keyed_vector = __create_keyed_vector(word_vector_src, source_projected)
+    source_projected_keyed_vector = __create_keyed_vector(
+        word_vector_src, source_projected
+    )
     return source_projected_keyed_vector, word_vector_tgt
 
 
-def cca_projection(word_vector_source, word_vector_target, lexicon, top_correlation_ratio = 0.5):
+def cca_projection(
+    word_vector_source, word_vector_target, lexicon, top_correlation_ratio=0.5
+):
     word_vector_source.init_sims(replace=True)
     word_vector_target.init_sims(replace=True)
 
-    source_subset, target_subset = __project_embeddings_to_lexicon_subset(word_vector_source, word_vector_target, lexicon)
+    source_subset, target_subset = __project_embeddings_to_lexicon_subset(
+        word_vector_source, word_vector_target, lexicon
+    )
     if source_subset.size == 0 or target_subset.size == 0:
-        raise Exception('the embeddings do not contain enough vector for the input alignment')
+        raise Exception(
+            "the embeddings do not contain enough vector for the input alignment"
+        )
 
     A, B = __canoncorr(target_subset, source_subset)
 
     amount_A = int(np.ceil(top_correlation_ratio * A.shape[1]))
-    U = (word_vector_target.vectors - word_vector_target.vectors.mean(axis=0, keepdims=True)).dot(A[:, 0:amount_A])
+    U = (
+        word_vector_target.vectors
+        - word_vector_target.vectors.mean(axis=0, keepdims=True)
+    ).dot(A[:, 0:amount_A])
     U = __normr(U)
     projected_target_vectors = __create_keyed_vector(word_vector_target, U)
 
     amount_B = int(np.ceil(top_correlation_ratio * B.shape[1]))
-    V = (word_vector_source.vectors - word_vector_source.vectors.mean(axis=0, keepdims=True)).dot(B[:, 0:amount_B])
+    V = (
+        word_vector_source.vectors
+        - word_vector_source.vectors.mean(axis=0, keepdims=True)
+    ).dot(B[:, 0:amount_B])
     V = __normr(V)
     projected_source_vectors = __create_keyed_vector(word_vector_source, V)
 
     return projected_source_vectors, projected_target_vectors
 
+
 ############################################
 #          Machine LEARNING
 ############################################
 
-@app.route('/machine-learning', methods=['GET'])
+
+@app.route("/machine-learning", methods=["GET"])
 def machine_learning() -> str:
     import pandas as pd
+
     try:
-        cv = int(request.headers.get('cv'))
-        n_jobs = int(request.headers.get('jobs'))
-        train_df = pd.read_csv(request.headers.get('trainingsFile'))
+        cv = int(request.headers.get("cv"))
+        n_jobs = int(request.headers.get("jobs"))
+        train_df = pd.read_csv(request.headers.get("trainingsFile"))
         model = run_grid_search(train_df, cv, n_jobs)
 
-        X_test = pd.read_csv(request.headers.get('predictFile'))
+        X_test = pd.read_csv(request.headers.get("predictFile"))
         y_predict = model.predict(X_test)
         return jsonify(y_predict.tolist())
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
 
 
-@app.route('/ml-train-and-store-model', methods=['GET'])
+@app.route("/ml-train-and-store-model", methods=["GET"])
 def ml_train_and_store_model():
     import pandas as pd
+
     try:
-        cv = int(request.headers.get('cv'))
-        n_jobs = int(request.headers.get('jobs'))
-        train_df = pd.read_csv(request.headers.get('trainingsFile'))
+        cv = int(request.headers.get("cv"))
+        n_jobs = int(request.headers.get("jobs"))
+        train_df = pd.read_csv(request.headers.get("trainingsFile"))
         model = run_grid_search(train_df, cv, n_jobs)
         from joblib import dump
-        dump(model, request.headers.get('modelFile'))
+
+        dump(model, request.headers.get("modelFile"))
         return "True"
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
+
 
 # cache for machine learning models
 ml_cache = {}
 
-@app.route('/ml-load-and-apply-model', methods=['GET'])
+
+@app.route("/ml-load-and-apply-model", methods=["GET"])
 def ml_load_and_apply_model():
     import pandas as pd
+
     try:
-        model_file = request.headers.get('modelFile')
+        model_file = request.headers.get("modelFile")
         if model_file in ml_cache:
             model = ml_cache[model_file]
         else:
             from joblib import load
+
             model = load(model_file)
             ml_cache[model_file] = model
 
-        X_test = pd.read_csv(request.headers.get('predictFile'))
+        X_test = pd.read_csv(request.headers.get("predictFile"))
         y_predict = model.predict(X_test)
         return jsonify(y_predict.tolist())
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
+
 
 def run_grid_search(df_train, cv, n_jobs):
     try:
@@ -755,81 +1078,117 @@ def run_grid_search(df_train, cv, n_jobs):
         from sklearn.neural_network import MLPClassifier
         import math
 
-        y_train = df_train['target']
-        X_train = df_train.drop(columns=['target'])
+        y_train = df_train["target"]
+        X_train = df_train.drop(columns=["target"])
 
         number_of_classes = len(np.unique(y_train))
         number_of_attributes = int(X_train.shape[1])
-        default_layer_size = int(round(((number_of_attributes + number_of_classes) / 2) + 1))
-        sqrt_layer_size = int(round(math.sqrt(number_of_attributes + number_of_classes)))
+        default_layer_size = int(
+            round(((number_of_attributes + number_of_classes) / 2) + 1)
+        )
+        sqrt_layer_size = int(
+            round(math.sqrt(number_of_attributes + number_of_classes))
+        )
 
         random_state = 42
-        
+
         params_grid = [
             {
-                'estimator': [svm.SVC()],
-                'estimator__random_state': [random_state],
-                'estimator__C':[2**-5, 2**-3, 2**-1, 2**1, 2**3, 2**5, 2**7, 2**9, 2**11, 2**13, 2**15],
-                'estimator__gamma':[2**-15, 2**-13, 2**-11, 2**-9, 2**-7, 2**-5, 2**-3, 2**-1, 2**1, 2**3],
-                'scaler': [None, preprocessing.MinMaxScaler()]
+                "estimator": [svm.SVC()],
+                "estimator__random_state": [random_state],
+                "estimator__C": [
+                    2 ** -5,
+                    2 ** -3,
+                    2 ** -1,
+                    2 ** 1,
+                    2 ** 3,
+                    2 ** 5,
+                    2 ** 7,
+                    2 ** 9,
+                    2 ** 11,
+                    2 ** 13,
+                    2 ** 15,
+                ],
+                "estimator__gamma": [
+                    2 ** -15,
+                    2 ** -13,
+                    2 ** -11,
+                    2 ** -9,
+                    2 ** -7,
+                    2 ** -5,
+                    2 ** -3,
+                    2 ** -1,
+                    2 ** 1,
+                    2 ** 3,
+                ],
+                "scaler": [None, preprocessing.MinMaxScaler()],
             },
             {
-               'estimator': [GaussianNB()],
-               'scaler': [None, preprocessing.MinMaxScaler()]
+                "estimator": [GaussianNB()],
+                "scaler": [None, preprocessing.MinMaxScaler()],
             },
             {
-                'estimator': [tree.DecisionTreeClassifier()],
-                'estimator__random_state': [random_state],
-                'estimator__max_depth':list(range(1,20,1)),
-                'estimator__min_samples_leaf':list(range(1,20,1)),
-                'scaler': [None, preprocessing.MinMaxScaler()]
+                "estimator": [tree.DecisionTreeClassifier()],
+                "estimator__random_state": [random_state],
+                "estimator__max_depth": list(range(1, 20, 1)),
+                "estimator__min_samples_leaf": list(range(1, 20, 1)),
+                "scaler": [None, preprocessing.MinMaxScaler()],
             },
             {
-                'estimator': [RandomForestClassifier()],
-                'estimator__random_state': [random_state],
-                'estimator__n_estimators': list(range(1, 100, 10)),
-                'estimator__min_samples_leaf': list(range(1, 10, 1)),
-                'scaler': [None, preprocessing.MinMaxScaler()]
+                "estimator": [RandomForestClassifier()],
+                "estimator__random_state": [random_state],
+                "estimator__n_estimators": list(range(1, 100, 10)),
+                "estimator__min_samples_leaf": list(range(1, 10, 1)),
+                "scaler": [None, preprocessing.MinMaxScaler()],
             },
             {
-                'estimator': [GradientBoostingClassifier()],
-                'estimator__random_state': [random_state],
-                'estimator__n_estimators': list(range(1, 102, 20)),
-                'estimator__max_depth': list(range(1, 22, 5)),
-                'scaler': [None, preprocessing.MinMaxScaler()]
+                "estimator": [GradientBoostingClassifier()],
+                "estimator__random_state": [random_state],
+                "estimator__n_estimators": list(range(1, 102, 20)),
+                "estimator__max_depth": list(range(1, 22, 5)),
+                "scaler": [None, preprocessing.MinMaxScaler()],
             },
             {
-                'estimator': [MLPClassifier()],
-                'estimator__random_state': [random_state],
-                'estimator__solver': ['lbfgs'],
-                'estimator__hidden_layer_sizes': [(default_layer_size), (default_layer_size, sqrt_layer_size), (sqrt_layer_size)],
-                'scaler': [None, preprocessing.MinMaxScaler()]
-            }
+                "estimator": [MLPClassifier()],
+                "estimator__random_state": [random_state],
+                "estimator__solver": ["lbfgs"],
+                "estimator__hidden_layer_sizes": [
+                    (default_layer_size),
+                    (default_layer_size, sqrt_layer_size),
+                    (sqrt_layer_size),
+                ],
+                "scaler": [None, preprocessing.MinMaxScaler()],
+            },
         ]
-        
+
         logging.info("Run grid search with cv: %s and jobs: %s", cv, n_jobs)
         print("Run grid search with cv: %s and jobs: %s" % (cv, n_jobs))
         grid = GridSearchCV(
-            Pipeline([('scaler', preprocessing.MaxAbsScaler()), ('estimator', svm.SVC())]),
+            Pipeline(
+                [("scaler", preprocessing.MaxAbsScaler()), ("estimator", svm.SVC())]
+            ),
             param_grid=params_grid,
-            scoring='f1',
+            scoring="f1",
             cv=cv,
             n_jobs=n_jobs,
             refit=True,
-            verbose=1)
+            verbose=1,
+        )
         grid.fit(X_train, y_train)
 
         logging.info("cross validation: best f1 score: %s", grid.best_score_)
         logging.info("cross validation: chosen model: %s", grid.best_params_)
         print("cross validation: best f1 score: %s" % grid.best_score_)
         print("cross validation: chosen model: %s" % grid.best_params_)
-        
+
         return grid.best_estimator_
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
 
-@app.route('/hello', methods=['GET'])
+
+@app.route("/hello", methods=["GET"])
 def hello_demo() -> str:
     """A demo program that will return Hello <name> when called.
 
@@ -838,14 +1197,16 @@ def hello_demo() -> str:
     greeting : str
         A simple greeting.
     """
-    name_to_greet = request.headers.get('name')
+    name_to_greet = request.headers.get("name")
     print(name_to_greet)
     return "Hello " + str(name_to_greet) + "!"
+
 
 @app.errorhandler(Exception)
 def handle_exception(e):
     """Return JSON instead of HTML for general errors."""
     return "ERROR: " + str(e), 500
+
 
 if __name__ == "__main__":
     # threaded=False because otherwise GridSearchCV do not run in parallel
