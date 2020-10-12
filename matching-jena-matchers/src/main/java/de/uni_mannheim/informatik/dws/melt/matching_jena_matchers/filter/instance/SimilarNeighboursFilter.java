@@ -26,15 +26,15 @@ import org.apache.jena.rdf.model.StmtIterator;
  * 
  * Source_Subject ------Source_Property------Source_Object
  *      |                                         |
- * subjectCorrespondence                      objecCorrespondence
+ * subjectCorrespondence                     objectCorrespondence
  *      |                                         |
  * Target_Subject ------Target_Property------Target_Object
  * 
  */
-public class SimilarNeighboursFilter extends BaseFilterWithSetComparison{
+public class SimilarNeighboursFilter extends BaseFilterWithSetComparison {
 
     /**
-     * The minmum confidence for which a resource(neighbour) mapping is counted. Compared with greater or equal.
+     * The minimum confidence for which a resource(neighbour) mapping is counted. Compared with greater or equal.
      */
     private double minResourceConfidence;    
     /**
@@ -61,7 +61,7 @@ public class SimilarNeighboursFilter extends BaseFilterWithSetComparison{
 
     /**
      * Constructor
-     * @param minResourceConfidence the confidence for which a neighour is counted as a mapping (greater or equal).
+     * @param minResourceConfidence the confidence for which a neighbour is counted as a mapping (greater or equal).
      * @param shouldPropertyBeCounted Predicate to decide which properties should be counted.
      * @param literalProcessingFunction A function which processes a literal and returns some comparable (equals/hashCode) representation (usually a normalized text) .
      * @param excludeNeighbours A function which returns a set of elements (uri as string and/or text filtered with literalprocessing function) which should be ignored.
@@ -70,12 +70,12 @@ public class SimilarNeighboursFilter extends BaseFilterWithSetComparison{
      * @param useResource use resources
      * @param useLiteral use literals
      * @param threshold The filtering threshold which should be larger or equal to be a valid match. Computation is based on set similarity.
-     * @param setSimilatity The set similarity to choose when computing similarity value between the two distinct property sets.
+     * @param setSimilarity The set similarity to choose when computing similarity value between the two distinct property sets.
      */
     public SimilarNeighboursFilter(double minResourceConfidence, Predicate<Property> shouldPropertyBeCounted, Function<Literal, Object> literalProcessingFunction,
             Function<Resource, Set<Object>> excludeNeighbours, boolean useIngoing, boolean useOutgoing, boolean useResource, boolean useLiteral, 
-            double threshold, SetSimilarity setSimilatity) {
-        super(threshold, setSimilatity);
+            double threshold, SetSimilarity setSimilarity) {
+        super(threshold, setSimilarity);
         this.minResourceConfidence = minResourceConfidence;
         this.shouldPropertyBeCounted = shouldPropertyBeCounted;
         this.literalProcessingFunction = literalProcessingFunction;
@@ -93,17 +93,17 @@ public class SimilarNeighboursFilter extends BaseFilterWithSetComparison{
      * @param literalProcessingFunction A function which processes a literal and returns some comparable (equals/hashCode) representation (usually a normalized text) .
      * @param excludeNeighbours A function which returns a set of elements (uri and text) which should be ignored.
      * @param threshold The filtering threshold which should be larger or equal to be a valid match. Computation is based on set similarity.
-     * @param setSimilatity The set similarity to choose when computing similarity value between the two distinct property sets.
+     * @param setSimilarity The set similarity to choose when computing similarity value between the two distinct property sets.
      */
     public SimilarNeighboursFilter(double minResourceConfidence, Predicate<Property> shouldPropertyBeCounted, Function<Literal, Object> literalProcessingFunction,
-            Function<Resource, Set<Object>> excludeNeighbours, double threshold, SetSimilarity setSimilatity) {
+            Function<Resource, Set<Object>> excludeNeighbours, double threshold, SetSimilarity setSimilarity) {
         this(minResourceConfidence, shouldPropertyBeCounted, literalProcessingFunction,
-                excludeNeighbours, true, true, true, true, threshold, setSimilatity);
+                excludeNeighbours, true, true, true, true, threshold, setSimilarity);
     }
     
     /**
      * Constructor
-     * @param minResourceConfidence the confidence for which a neighour is counted as a mapping (greater or equal).
+     * @param minResourceConfidence the confidence for which a neighbour is counted as a mapping (greater or equal).
      * @param shouldPropertyBeCounted Predicate to decide which properties should be counted.
      * @param threshold The filtering threshold which should be larger or equal to be a valid match. Computation is based on set similarity.
      * @param setSimilatity The set similarity to choose when computing similarity value between the two distinct property sets.
@@ -117,8 +117,8 @@ public class SimilarNeighboursFilter extends BaseFilterWithSetComparison{
         this(0.0, p -> true, literalProcessingFunction, r->new HashSet(), threshold, setSimilatity);
     }
     
-    public SimilarNeighboursFilter(double threshold, SetSimilarity setSimilatity){
-        this(0.0, p -> true, l->l.getLexicalForm(), r->new HashSet(), threshold, setSimilatity);
+    public SimilarNeighboursFilter(double threshold, SetSimilarity setSimilarity){
+        this(0.0, p -> true, l->l.getLexicalForm(), r->new HashSet(), threshold, setSimilarity);
     }
     
     public SimilarNeighboursFilter() {
@@ -207,12 +207,12 @@ public class SimilarNeighboursFilter extends BaseFilterWithSetComparison{
                 if(shouldPropertyBeCounted.test(s.getPredicate()) == false)
                     continue;
                 RDFNode object = s.getObject();
-                if(object.isURIResource() && useResource){
+                if(object.isURIResource() && useResource) {
                     if(object.asResource().equals(individual) == false){ // check for reflexive edges
                         if(ignoreNeighbours.contains(object.asResource().getURI()) == false)
                             neighbours.addResource(object.asResource().getURI());
                     }
-                }else if(object.isLiteral() && useLiteral){
+                } else if(object.isLiteral() && useLiteral) {
                     Object processedLiteral = literalProcessingFunction.apply(object.asLiteral());
                     if(ignoreNeighbours.contains(processedLiteral) == false)
                         neighbours.addLiteral(processedLiteral);

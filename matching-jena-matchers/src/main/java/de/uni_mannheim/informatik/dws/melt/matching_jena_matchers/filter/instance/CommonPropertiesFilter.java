@@ -21,30 +21,32 @@ import org.slf4j.LoggerFactory;
  * Filter which deletes instance mappings if they have no matched properties in common.
  */
 public class CommonPropertiesFilter extends BaseFilterWithSetComparison implements Filter {
+
+    /**
+     * Default logger
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonPropertiesFilter.class);
 
     /**
-     * If true, this excludes correspodences which maps to the same URI.
+     * If true, this excludes correspondences which maps to the same URI.
      * e.g. rdf:type = rdf:type
      */
     private boolean excludeSameURIMapping;
     
     /**
-     * The minmum confidence for which a property mapping is counted.
+     * The minimum confidence for which a property mapping is counted.
      */
     private double minPropertyConfidence;
-    
-    
 
     /**
-     * Constructor with all neccessary parameters.
+     * Constructor with all necessary parameters.
      * @param threshold The threshold which should be larger or equal to be a valid match.
-     * @param setSimilatity The set similarity to choose when computing similarity value between the two distinct property sets.
+     * @param setSimilarity The set similarity to choose when computing similarity value between the two distinct property sets.
      * @param excludeSameURIMapping If true, this excludes correspodences which maps to the same URI e.g. rdf:type = rdf:type
      * @param minPropertyConfidence The minmum confidence for which a property mapping is counted.
      */
-    public CommonPropertiesFilter(double threshold, SetSimilarity setSimilatity, boolean excludeSameURIMapping, double minPropertyConfidence) {
-        super(threshold, setSimilatity);
+    public CommonPropertiesFilter(double threshold, SetSimilarity setSimilarity, boolean excludeSameURIMapping, double minPropertyConfidence) {
+        super(threshold, setSimilarity);
         this.excludeSameURIMapping = excludeSameURIMapping;
         this.minPropertyConfidence = minPropertyConfidence;
     }
@@ -52,15 +54,15 @@ public class CommonPropertiesFilter extends BaseFilterWithSetComparison implemen
     /**
      * Constructor with reduced parameters. Only threshold and setSimilarity is used.
      * @param threshold The threshold which should be larger or equal to be a valid match.
-     * @param setSimilatity The set similarity to choose when computing similarity value between the two distinct property sets.
+     * @param setSimilarity The set similarity to choose when computing similarity value between the two distinct property sets.
      */
-    public CommonPropertiesFilter(double threshold, SetSimilarity setSimilatity) {
-        this(threshold, setSimilatity, true, 0.0);
+    public CommonPropertiesFilter(double threshold, SetSimilarity setSimilarity) {
+        this(threshold, setSimilarity, true, 0.0);
     }
     
     /**
      * Constructor with reduced parameters. It count all Property mappings in the alignment (regardless of their confidence - at least non negative) and
-     * excludes correspodences which maps to the same URI e.g. rdf:type = rdf:type
+     * excludes correspondences which maps to the same URI e.g. rdf:type = rdf:type
      * @param minNumberOfCommonProperties Minimum number of properties which two instances has to have to be a valid and non filtered match.
      */
     public CommonPropertiesFilter(double minNumberOfCommonProperties) {
@@ -69,7 +71,7 @@ public class CommonPropertiesFilter extends BaseFilterWithSetComparison implemen
     
     /**
      * Constructor with default parameters. It count all Property mappings in the alignment (regardless of their confidence - at least non negative) and
-     * excludes correspodences which maps to the same URI e.g. rdf:type = rdf:type. 
+     * excludes correspondences which maps to the same URI e.g. rdf:type = rdf:type.
      * Furthermore it needs to have at least one overlapping property.
      */
     public CommonPropertiesFilter() {

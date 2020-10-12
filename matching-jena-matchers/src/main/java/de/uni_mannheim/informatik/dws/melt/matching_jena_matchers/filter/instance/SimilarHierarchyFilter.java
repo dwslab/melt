@@ -34,18 +34,21 @@ import org.slf4j.LoggerFactory;
  * For different computation methods see {@link SimilarHierarchyFilterApproach}.
  */
 public class SimilarHierarchyFilter extends MatcherYAAAJena implements Filter {
-    
+
+    /**
+     * Default logger
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(SimilarHierarchyFilter.class);
 
     /**
-     * Property connecting the instance to the hierarhcy (usually rdf:type).
+     * Property connecting the instance to the hierarchy (usually rdf:type).
      */
     protected Property instanceToHierarchyProperty;
     
     /**
      * Property connecting the hierarchy together (usually rdfs:subClassOf).
      */
-    protected Property hierarchyPropery;
+    protected Property hierarchyProperty;
     
     /**
      * A matcher which selects or creates some correspondences which forms an alignment for the hierarchy nodes.
@@ -64,7 +67,7 @@ public class SimilarHierarchyFilter extends MatcherYAAAJena implements Filter {
     
     public SimilarHierarchyFilter(){
         this.instanceToHierarchyProperty = RDF.type;
-        this.hierarchyPropery = RDFS.subClassOf;
+        this.hierarchyProperty = RDFS.subClassOf;
         this.hierarchyMatcher = new MatcherYAAAJena() {
             @Override
             public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
@@ -74,9 +77,9 @@ public class SimilarHierarchyFilter extends MatcherYAAAJena implements Filter {
         this.approach = SimilarHierarchyFilterApproach.DEPTH_DEPENDEND_MATCHES;
     }
 
-    public SimilarHierarchyFilter(Property instanceToHierarchyProperty, Property hierarchyPropery, MatcherYAAAJena hierarchyMatcher, SimilarHierarchyFilterApproach approach, double threshold) {
+    public SimilarHierarchyFilter(Property instanceToHierarchyProperty, Property hierarchyProperty, MatcherYAAAJena hierarchyMatcher, SimilarHierarchyFilterApproach approach, double threshold) {
         this.instanceToHierarchyProperty = instanceToHierarchyProperty;
-        this.hierarchyPropery = hierarchyPropery;
+        this.hierarchyProperty = hierarchyProperty;
         this.hierarchyMatcher = hierarchyMatcher;
         this.approach = approach;
         this.threshold = threshold;
@@ -94,8 +97,7 @@ public class SimilarHierarchyFilter extends MatcherYAAAJena implements Filter {
                 finalAlignment.add(correspondence);
                 continue;
             }
-                
-            
+
             Map<String, Double> sourceHierarchyWeights;
             Map<String, Double> targetHierarchyWeights;
             if(this.approach == SimilarHierarchyFilterApproach.HIERARCHY_LEVEL_DEPENDED_MATCHES){
@@ -155,7 +157,7 @@ public class SimilarHierarchyFilter extends MatcherYAAAJena implements Filter {
         List<Entry<Resource, Resource>> hierarchyGraph = new ArrayList<>();
         while(!q.isEmpty()){
             Resource current = q.poll();
-            for(Resource succ : getObjectAsResource(current.listProperties(this.hierarchyPropery))){
+            for(Resource succ : getObjectAsResource(current.listProperties(this.hierarchyProperty))){
                 if(visited.contains(succ) == false){
                     visited.add(succ);
                     q.add(succ);
@@ -185,7 +187,7 @@ public class SimilarHierarchyFilter extends MatcherYAAAJena implements Filter {
         }
         while(!q.isEmpty()){
             Resource current = q.poll();
-            for(Resource succ : getObjectAsResource(current.listProperties(this.hierarchyPropery))){
+            for(Resource succ : getObjectAsResource(current.listProperties(this.hierarchyProperty))){
                 if(visited.contains(succ) == false){
                     depths.put(succ, depths.get(current) + 1);
                     visited.add(succ);                    

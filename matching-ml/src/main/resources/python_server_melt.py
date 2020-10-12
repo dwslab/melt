@@ -626,7 +626,7 @@ def analyze(word_vector_src, word_vector_tgt, lexicon):
 def linear_projection(word_vector_src, word_vector_tgt, lexicon):
     matrix_src, matrix_tgt = __project_embeddings_to_lexicon_subset(word_vector_src, word_vector_tgt, lexicon)
     if matrix_src.size == 0 or matrix_tgt.size == 0:
-        raise Exception('the embeddings do not contain enough vector for the input alignment')
+        raise Exception('The embeddings do not contain enough vectors for the input alignment.')
     
     x_mpi = linalg.pinv(matrix_src)  # Moore Penrose Pseudoinverse
     w = np.dot(x_mpi, matrix_tgt)  # linear map matrix W
@@ -645,7 +645,7 @@ def neural_net_projection(word_vector_src, word_vector_tgt, lexicon):
     if matrix_src.size == 0 or matrix_tgt.size == 0:
         raise Exception('the embeddings do not contain enough vector for the input alignment')
     
-    #TODO: optimze model
+    #TODO: optimize model
     model = Sequential()
     model.add(Dense(word_vector_src.vector_size, input_dim=word_vector_src.vector_size, activation='relu'))
     model.add(Dropout(0.5))
@@ -692,7 +692,7 @@ def cca_projection(word_vector_source, word_vector_target, lexicon, top_correlat
 ############################################
 
 @app.route('/machine-learning', methods=['GET'])
-def machine_learning():
+def machine_learning() -> str:
     try:
         import pandas as pd
         from sklearn import preprocessing, svm, tree
@@ -785,7 +785,7 @@ def machine_learning():
         return "ERROR " + traceback.format_exc()
 
 @app.route('/hello', methods=['GET'])
-def hello_demo():
+def hello_demo() -> str:
     """A demo program that will return Hello <name> when called.
 
     Returns
