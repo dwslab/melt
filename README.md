@@ -447,7 +447,7 @@ whether they were developed with MELT, one option is to create the alignment fil
 using the SEALS client. Afterwards, you can read the alignment files (e.g. method `loadFromFolder` of class 
 [`Executor`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.java)).<br/>
 Alternatively (and more easily), you can install the SEALS client and run the SEALS packages from within MELT using 
-[`ExecutorSeals`]((/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutorSeals.java)). This executor 
+[`ExecutorSeals`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutorSeals.java). This executor 
 will start the evaluation in SEALS directly from the framework and can be used to conveniently evaluate one or more
 matchers. Like the default `Executor`, `ExecutorSeals` will return an `ExecutionResultSet` that can then be further processed by 
 any evaluator. When calling `run()`, system alignment files and any output will also be stored on disk and can be reused at 
