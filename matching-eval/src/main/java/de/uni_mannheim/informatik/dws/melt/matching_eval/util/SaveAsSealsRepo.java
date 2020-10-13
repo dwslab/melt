@@ -1,18 +1,13 @@
 
 package de.uni_mannheim.informatik.dws.melt.matching_eval.util;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.*;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -27,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * Creates a track in folder test so that it can be used for the SEALS/MELT Track Repository.
  */
 public class SaveAsSealsRepo {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Track.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SaveAsSealsRepo.class);
 
     public static void main(String[] args) throws IOException{
         //save(TrackRepository.Largebio.V2016.FMA_NCI_SMALL, "./z_fma_nci_small/");
@@ -39,6 +34,11 @@ public class SaveAsSealsRepo {
         //save(TrackRepository.Complex.Popenslaved, "./Popenslaved_upload/");
     }
 
+    /**
+     * Simple utility function to save a track as SEALS repository track.
+     * @param track Any track (can be a SealsTrack).
+     * @param folder The folder containing the track data.
+     */
     public static void save(Track track, String folder){
         try {
             for(TestCase testCase : track.getTestCases()){
@@ -64,7 +64,7 @@ public class SaveAsSealsRepo {
         }
     }
 
-    private static void saveSuiteFile(Track track, File suitefile){
+    private static void saveSuiteFile(Track track, File suiteFile){
         Velocity.setProperty("resource.loaders", "classpath");
         Velocity.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());        
         Velocity.init();
@@ -74,7 +74,7 @@ public class SaveAsSealsRepo {
         
         Template suiteFileTemplate = Velocity.getTemplate("templates/seals/seals_suite_file.vm");
         
-        try(Writer writer = new FileWriter(suitefile)){
+        try(Writer writer = new FileWriter(suiteFile)){
             suiteFileTemplate.merge( context, writer );
         } catch (IOException ex) {
             LOGGER.error("Could not write to file.", ex);

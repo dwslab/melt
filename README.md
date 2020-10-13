@@ -3,7 +3,9 @@
 [![Java CI](https://github.com/janothan/kgvec2go-walks/workflows/Java%20CI/badge.svg)](https://github.com/dwslab/melt/actions)
 [![Coverage Status](https://coveralls.io/repos/github/dwslab/melt/badge.svg?branch=master)](https://coveralls.io/github/dwslab/melt?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/de.uni-mannheim.informatik.dws.melt/matching-eval)](https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![License](https://img.shields.io/github/license/dwslab/melt)](https://github.com/dwslab/melt/blob/master/LICENSE)
+
 
 MELT is a powerful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.
 It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.
@@ -333,7 +335,7 @@ Name | Repository | Suite-ID | Version-ID
 [biodiv](http://oaei.ontologymatching.org/2018/biodiv/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `biodiv` | `2018`
 [link](https://project-hobbit.eu/challenges/om2019/) | `http://oaei.webdatacommons.org/tdrs/` | `link` | `2017`
 [phenotype](https://sws.ifi.uio.no/oaei/phenotype/) | `http://oaei.webdatacommons.org/tdrs/` | `phenotype` | <ul><li>`phenotype-hp-mp-2017-bioportal`</li><li>`phenotype-doid-ordo-2017-bioportal`</li></ul>
-[multifarm](http://oaei.ontologymatching.org/2018/multifarm/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `multifarm` | `<language_pair>-v2`
+[multifarm](http://oaei.ontologymatching.org/2018/multifarm/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `<language_pair>` | `<language_pair>-v2`
 [largebio](http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/) | `http://oaei.webdatacommons.org/tdrs/` | `largebio` |  <ul><li>`largebio-all_tasks_2016` </li><li>`largebio-fma_nci_small_2016`</li><li>`largebio-fma_nci_whole_2016`</li><li>`largebio-fma_snomed_small_2016`</li><li>`largebio-fma_snomed_whole_2016`</li><li>`largebio-snomed_nci_small_2016`</li><li>`largebio-snomed_nci_whole_2016`</li></ul>
 [complex](http://oaei.ontologymatching.org/2019/complex/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `geolink`</br> `hydrography`</br>`popgeolink`</br>`popenslaved`</br>`popconference`|  `geolink-v1`</br>`hydrography-v1`</br>`popgeolink-v1`</br>`popenslaved-v1`</br>`popconference-[0-20-40-60-80-100]-v1`
 [GeoLinkCruise](http://oaei.ontologymatching.org/2020/geolinkcruise/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `geolinkcruise`| `geolinkcruise-v1`
@@ -445,7 +447,7 @@ whether they were developed with MELT, one option is to create the alignment fil
 using the SEALS client. Afterwards, you can read the alignment files (e.g. method `loadFromFolder` of class 
 [`Executor`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.java)).<br/>
 Alternatively (and more easily), you can install the SEALS client and run the SEALS packages from within MELT using 
-[`ExecutorSeals`]((/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutorSeals.java)). This executor 
+[`ExecutorSeals`](/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutorSeals.java). This executor 
 will start the evaluation in SEALS directly from the framework and can be used to conveniently evaluate one or more
 matchers. Like the default `Executor`, `ExecutorSeals` will return an `ExecutionResultSet` that can then be further processed by 
 any evaluator. When calling `run()`, system alignment files and any output will also be stored on disk and can be reused at 

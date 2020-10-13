@@ -9,44 +9,52 @@ from xml.sax.saxutils import quoteattr
 
 
 def __get_ontology_string(onto, name):
-    onto_string = ''
+    onto_string = ""
     if onto is None:
         return onto_string
     if len(onto) > 0:
-        onto_string += '  <' + name + '>\n'
+        onto_string += "  <" + name + ">\n"
         onto_string += '    <Ontology rdf:about="' + onto[0] + '">\n'
         if len(onto) > 1:
-            onto_string += '      <location>' + onto[1] + '</location>\n'
+            onto_string += "      <location>" + onto[1] + "</location>\n"
             if len(onto) > 3:
-                onto_string += '      <formalism>\n'
-                onto_string += '        <Formalism align:name="' + onto[2] + '" align:uri="' + onto[3] + '"/>\n'
-                onto_string += '      </formalism>\n'
-        onto_string += '    </Ontology>\n'
-        onto_string += '  </' + name + '>\n'
+                onto_string += "      <formalism>\n"
+                onto_string += (
+                    '        <Formalism align:name="'
+                    + onto[2]
+                    + '" align:uri="'
+                    + onto[3]
+                    + '"/>\n'
+                )
+                onto_string += "      </formalism>\n"
+        onto_string += "    </Ontology>\n"
+        onto_string += "  </" + name + ">\n"
     return onto_string
 
 
 def __get_extension_string(extension):
-    ext_string = ''
+    ext_string = ""
     if extension is None:
         return ext_string
     for key, value in extension:
-        ext_string += "  <"+key+">" + value + "</" + key + ">\n"
+        ext_string += "  <" + key + ">" + value + "</" + key + ">\n"
     return ext_string
 
 
 def __get_xml_intro(onto_one=None, onto_two=None, extension=None):
-    return """<?xml version=\"1.0\" encoding=\"utf-8\"?>
+    return (
+        """<?xml version=\"1.0\" encoding=\"utf-8\"?>
     <rdf:RDF xmlns="http://knowledgeweb.semanticweb.org/heterogeneity/alignment"
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
       xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
 <Alignment>
   <xml>yes</xml>
   <level>0</level>
-  <type>??</type>""" + \
-           __get_extension_string(extension) + \
-           __get_ontology_string(onto_one, 'onto1') + \
-           __get_ontology_string(onto_two, 'onto2')
+  <type>??</type>"""
+        + __get_extension_string(extension)
+        + __get_ontology_string(onto_one, "onto1")
+        + __get_ontology_string(onto_two, "onto2")
+    )
 
 
 def __get_mapping_string(source, target, relation, confidence):
@@ -58,7 +66,12 @@ def __get_mapping_string(source, target, relation, confidence):
       <relation>%s</relation>
       <measure rdf:datatype="xsd:float">%s</measure>
     </Cell>
-  </map>""" % (quoteattr(source), quoteattr(target), relation, confidence)
+  </map>""" % (
+        quoteattr(source),
+        quoteattr(target),
+        relation,
+        confidence,
+    )
 
 
 def __get_xml_outro():
@@ -68,7 +81,9 @@ def __get_xml_outro():
 """
 
 
-def serialize_mapping_to_file(file_path, alignment, onto_one=None, onto_two=None, extension=None):
+def serialize_mapping_to_file(
+    file_path, alignment, onto_one=None, onto_two=None, extension=None
+):
     """
     Serialize a alignment (iterable of (source, target, relation, confidence)) to a given file.
     :param file_path: represent the path of the file as a string
@@ -77,14 +92,16 @@ def serialize_mapping_to_file(file_path, alignment, onto_one=None, onto_two=None
     :param onto_two: description of ontology two as (id, url, formalismName, formalismURI)
     :param extension: iterable of (key, value) describing the alignment
     """
-    with open(file_path, 'w', encoding='utf-8') as out_file:
+    with open(file_path, "w", encoding="utf-8") as out_file:
         out_file.write(__get_xml_intro(onto_one, onto_two, extension))
         for source, target, relation, confidence in alignment:
             out_file.write(__get_mapping_string(source, target, relation, confidence))
         out_file.write(__get_xml_outro())
 
 
-def serialize_mapping_to_tmp_file(alignment, onto_one=None, onto_two=None, extension=None):
+def serialize_mapping_to_tmp_file(
+    alignment, onto_one=None, onto_two=None, extension=None
+):
     """
     Serialize a alignment (iterable of (source, target, relation, confidence)) to a file in the systems temp folder
     (which is not deleted) and return a file url of that file.
@@ -94,7 +111,9 @@ def serialize_mapping_to_tmp_file(alignment, onto_one=None, onto_two=None, exten
     :param extension: iterable of (key, value) describing the alignment
     :return: file url of the generated alignment file like file://tmp/alignment_123.rdf
     """
-    with tempfile.NamedTemporaryFile('w', prefix='alignment_', suffix='.rdf', delete=False) as out_file:
+    with tempfile.NamedTemporaryFile(
+        "w", prefix="alignment_", suffix=".rdf", delete=False
+    ) as out_file:
         out_file.write(__get_xml_intro(onto_one, onto_two, extension))
         for source, target, relation, confidence in alignment:
             out_file.write(__get_mapping_string(source, target, relation, confidence))
@@ -106,53 +125,72 @@ def serialize_mapping_to_tmp_file(alignment, onto_one=None, onto_two=None, exten
 
 
 class AlignmentHandler(object):
-
     def __init__(self):
-        self.base = '{http://knowledgeweb.semanticweb.org/heterogeneity/alignment}'
-        self.rdf = '{http://www.w3.org/1999/02/22-rdf-syntax-ns#}'
-        self.text = ''
+        self.base = "{http://knowledgeweb.semanticweb.org/heterogeneity/alignment}"
+        self.rdf = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"
+        self.text = ""
         self.alignment = []
-        self.one_cell = ['', '', '', '']
+        self.one_cell = ["", "", "", ""]
         self.extension = {}
-        self.onto1 = ''
-        self.onto2 = ''
-        self.onto_temp = ['', '']
-        self.used_tags = set([self.base + name for name in ['entity1', 'entity2', 'relation', 'measure',
-                                                            'Cell', 'map', 'Alignment', 'xml', 'level', 'type', 'onto1',
-                                                            'onto2', 'Ontology', 'location', 'formalism', 'Formalism']])
-        self.used_tags.add(self.rdf + 'RDF')
+        self.onto1 = ""
+        self.onto2 = ""
+        self.onto_temp = ["", ""]
+        self.used_tags = set(
+            [
+                self.base + name
+                for name in [
+                    "entity1",
+                    "entity2",
+                    "relation",
+                    "measure",
+                    "Cell",
+                    "map",
+                    "Alignment",
+                    "xml",
+                    "level",
+                    "type",
+                    "onto1",
+                    "onto2",
+                    "Ontology",
+                    "location",
+                    "formalism",
+                    "Formalism",
+                ]
+            ]
+        )
+        self.used_tags.add(self.rdf + "RDF")
 
     def start(self, name, attrs):
-        if name == self.base + 'entity1':
-            self.one_cell[0] = attrs[self.rdf + 'resource']  # .encode('utf-8')
-        elif name == self.base + 'entity2':
-            self.one_cell[1] = attrs[self.rdf + 'resource']  # .encode('utf-8')
-        elif name == self.base + 'Ontology':
-            self.onto_temp[0] = attrs[self.rdf + 'about']  # .encode('utf-8')
-        self.text = ''
+        if name == self.base + "entity1":
+            self.one_cell[0] = attrs[self.rdf + "resource"]  # .encode('utf-8')
+        elif name == self.base + "entity2":
+            self.one_cell[1] = attrs[self.rdf + "resource"]  # .encode('utf-8')
+        elif name == self.base + "Ontology":
+            self.onto_temp[0] = attrs[self.rdf + "about"]  # .encode('utf-8')
+        self.text = ""
 
     def end(self, name):
-        if name == self.base + 'relation':
+        if name == self.base + "relation":
             self.one_cell[2] = self.text.strip()
-        elif name == self.base + 'measure':
+        elif name == self.base + "measure":
             self.one_cell[3] = self.text.strip()
-        elif name == self.base + 'Cell':
+        elif name == self.base + "Cell":
             self.alignment.append(self.one_cell)
-            self.one_cell = ['', '', '', '']
-        elif name == self.base + 'location':
+            self.one_cell = ["", "", "", ""]
+        elif name == self.base + "location":
             self.onto_temp[1] = self.text.strip()
-        elif name == self.base + 'onto1':
-            if self.onto_temp[0] == '' and self.onto_temp[1] == '':
+        elif name == self.base + "onto1":
+            if self.onto_temp[0] == "" and self.onto_temp[1] == "":
                 self.onto_temp[0] = self.text.strip()
             self.onto1 = list(self.onto_temp)
-        elif name == self.base + 'onto2':
-            if self.onto_temp[0] == '' and self.onto_temp[1] == '':
+        elif name == self.base + "onto2":
+            if self.onto_temp[0] == "" and self.onto_temp[1] == "":
                 self.onto_temp[0] = self.text.strip()
             self.onto2 = list(self.onto_temp)
-        elif name == self.base + 'measure':
+        elif name == self.base + "measure":
             self.one_cell[3] = self.text.strip()
         elif name not in self.used_tags:
-            key = name[name.index('}') + 1:]
+            key = name[name.index("}") + 1 :]
             self.extension[key] = self.text
 
     def data(self, chars):
@@ -170,7 +208,7 @@ def parse_mapping_from_string(s):
     onto2 similar to onto1, extension (iterable of key, values) )
     """
     handler = AlignmentHandler()
-    etree.parse(BytesIO(s.encode('utf-8')), etree.XMLParser(target=handler))
+    etree.parse(BytesIO(s.encode("utf-8")), etree.XMLParser(target=handler))
     return handler.alignment, handler.onto1, handler.onto2, handler.extension
 
 
