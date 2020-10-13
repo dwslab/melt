@@ -99,8 +99,6 @@
 
     <build>
         <plugins>
-
-            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -114,17 +112,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <id>maven.mannheim.releases</id>
-            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
-        </repository>
     </repositories>
-    
-    <pluginRepositories>
-        <pluginRepository>
-            <id>maven.mannheim.releases</id>
-            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
-        </pluginRepository>
-    </pluginRepositories>
     
 </project>

@@ -8,7 +8,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <matching.version>2.4</matching.version>
+        <matching.version>2.5</matching.version>
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
     
@@ -100,16 +100,5 @@
             <name>University Leipzig, AKSW Maven2 Repository</name>
             <url>http://maven.aksw.org/repository/internal</url>
         </repository>
-        <repository>
-            <id>maven.mannheim.releases</id>
-            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
-        </repository>
     </repositories>
-    
-    <pluginRepositories>
-        <pluginRepository>
-            <id>maven.mannheim.releases</id>
-            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

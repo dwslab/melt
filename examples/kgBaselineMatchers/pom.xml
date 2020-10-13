@@ -10,7 +10,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <matching.version>2.1-SNAPSHOT</matching.version> <!-- version for all matching related packages -->
+        <matching.version>2.5</matching.version> <!-- version for all matching related packages -->
         <!-- possible values: "BaselineLabel", "BaselineAltLabel", "BaselineAnchorLabel" -->
         <oaei.mainClass>de.uni_mannheim.informatik.dws.melt.kgbaseline.BaselineAnchorLabel</oaei.mainClass>
     </properties>
@@ -48,18 +48,4 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>maven.mannheim.releases</id>
-            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
-        </repository>
-    </repositories>
-    
-    <pluginRepositories>
-        <pluginRepository>
-            <id>maven.mannheim.releases</id>
-            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
-        </pluginRepository>
-    </pluginRepositories>
-    
 </project>

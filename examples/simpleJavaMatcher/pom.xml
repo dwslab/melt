@@ -183,20 +183,6 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>maven.mannheim.releases</id>
-            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
-        </repository>
-    </repositories>
-    
-    <pluginRepositories>
-        <pluginRepository>
-            <id>maven.mannheim.releases</id>
-            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
-        </pluginRepository>
-    </pluginRepositories>
-    
 </project>
 
 <!-- config example for settings file which is usually located at ~/.m2/settings.xml (you can create the file if it does not exist)
