@@ -66,7 +66,12 @@ public class ExplainerResourceProperty implements IExplainerResourceWithJenaOnto
     public ExplainerResourceProperty(Property... properties) {
         this();
         for (Property p : properties) {
-            add(p.getLocalName(), p);
+            String propertyName = p.getLocalName();
+            if(propertyName.length() > 1){
+                //make first letter uppercase:
+                propertyName = propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
+            }
+            add(propertyName, p);
         }
     }
     

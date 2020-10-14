@@ -8,6 +8,7 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Corresponde
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.Metric;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.apache.commons.text.StringEscapeUtils;
@@ -29,6 +31,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 /**
  * The AlignmentAnalyzerMetric is capable of calculating statistics about a finished alignment.
@@ -43,7 +46,22 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
 
     @Override
     public AlignmentAnalyzerResult compute(ExecutionResult executionResult) {
-        Alignment alignment = executionResult.getSystemAlignment();
+        Alignment alignment = new Alignment();
+        String parsingErrorMessage = "";
+        if(executionResult.getOriginalSystemAlignment() != null){
+            
+            try {
+                AlignmentParser.parse(executionResult.getOriginalSystemAlignment());
+            } catch (SAXException | IOException ex) {
+                parsingErrorMessage = ex.getMessage();
+            }
+        }else if(executionResult.getSystemAlignment() != null){
+            alignment = executionResult.getSystemAlignment();
+        }else{
+            LOGGER.warn("originalSystemAlignment and systemAlignment is null - empty alignment will be analyzed.");
+            alignment = new Alignment();
+        }
+        
         double minimumConfidence = 1.0; // needs to be 1.0 for analyze() method
         double maximumConfidence = 0.0; // needs to be 0.0 for analyze() method
         boolean isHomogenousAlingment = true; // needs to be true for analyze() to work
@@ -136,9 +154,11 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
 
         AlignmentAnalyzerResult result = new AlignmentAnalyzerResult(
                 executionResult, minimumConfidence, maximumConfidence, frequenciesOfRelations, 
-                isHomogenousAlingment, frequenciesOfMappingTypes, urisCorrectPosition, urisIncorrectPosition, urisNotFound, arityCounts);
+                isHomogenousAlingment, frequenciesOfMappingTypes, urisCorrectPosition, urisIncorrectPosition, urisNotFound, 
+                arityCounts, parsingErrorMessage);
         return result;
     }
+    
     
     public static void writeAnalysisFile(ExecutionResultSet resultSet, File outFile){
         AlignmentAnalyzerMetric metric = new AlignmentAnalyzerMetric();
@@ -159,19 +179,27 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
                     LOGGER.info("Check result {}", r);
                     
                     AlignmentAnalyzerResult analyse = metric.get(r);
-                    //analyse.logErroneousReport();
-                    if(analyse.isSwitchOfSourceTargetBetter()){
+                    if(analyse.hasParsingError()){
+                        writer.write("Parsing error,");
+                        
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(matcher).append(",").append(testcase.getName())
+                                .append(",Parsing error: " + analyse.getParsingErrorMessage())
+                                .append(newline);
+                        appendix.add(sb.toString());
+                    }
+                    else if(analyse.isSwitchOfSourceTargetBetter()){
                         writer.write("Need switch,");
                     }else if(analyse.getUrisNotFound().isEmpty() == false){
                         writer.write(analyse.getUrisNotFound().size() + " URIs not found,"); 
                         
                         //create appendix
                         StringBuilder sb = new StringBuilder();
-                        sb.append(matcher).append(",").append(testcase.getName()).append(",");
+                        sb.append(matcher).append(",").append(testcase.getName()).append(",URIs not found: ");
                         for(String uri : analyse.getUrisNotFound()){
                             sb.append(StringEscapeUtils.escapeCsv(uri)).append(",");
                         }
-                        sb.append(newline);                        
+                        sb.append(newline);
                         appendix.add(sb.toString());
                     }else{
                         writer.write("OK,"); 

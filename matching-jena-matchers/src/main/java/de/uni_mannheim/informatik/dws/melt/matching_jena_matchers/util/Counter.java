@@ -312,6 +312,22 @@ public class Counter<T> {
         return this.mostCommon().toString();
     }
     
+     private static final String NEWLINE = System.getProperty("line.separator");
+     
+    /**
+     * ToString method which returns the counter well formatted in multiple lines to have a better overview.
+     * @return a string which contains the counter information in multiple lines.
+     */
+    public String toStringMultiline(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[").append(NEWLINE);
+        for(Entry<T, Integer> e : this.mostCommon()){
+            sb.append("    ").append(e.getKey()).append("=").append(e.getValue()).append(",").append(NEWLINE);
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+    
     class MutableInt implements Comparable<MutableInt>{
         private int value;
         

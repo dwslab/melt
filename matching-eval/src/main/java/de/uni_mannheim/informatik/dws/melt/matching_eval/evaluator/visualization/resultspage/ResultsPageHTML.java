@@ -50,7 +50,7 @@ public class ResultsPageHTML extends Evaluator {
     
 
     @Override
-    public void writeResultsToDirectory(File baseDirectory) {
+    protected void writeResultsToDirectory(File baseDirectory) {
         writeToFile(new File(baseDirectory, "resultspage.html"));        
     }
     

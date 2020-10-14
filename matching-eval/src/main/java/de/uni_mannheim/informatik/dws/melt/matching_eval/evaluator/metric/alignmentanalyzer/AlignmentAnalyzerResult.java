@@ -78,6 +78,11 @@ public class AlignmentAnalyzerResult {
     private Map<Arity, Integer> arityCounts;
     
     /**
+     * If this string is not empty, then it contains the parsing error message.
+     */
+    private String parsingErrorMessage;
+    
+    /**
      * Constructor
      * @param executionResult Execution result that was analyzed.
      * @param minimumConfidence The minimum confidence score that is used in the given alignment.
@@ -89,11 +94,13 @@ public class AlignmentAnalyzerResult {
      * @param urisIncorrectPosition How often source and target URIs were incorrect in the alignment file.
      * @param urisNotFound List of URIs that cannot be found in the ontologies to be matched.
      * @param arityCounts Distribution of arities.
+     * @param parsingErrorMessage the parsing error message if one exists
      */
     AlignmentAnalyzerResult(ExecutionResult executionResult, double minimumConfidence,
                             double maximumConfidence, Map<CorrespondenceRelation, Integer> frequenciesOfRelations,
                             boolean isHomogenousAlingment, Map<String, Integer> frequenciesOfMappingTypes,
-                            int urisCorrectPosition, int urisIncorrectPosition, List<String> urisNotFound, Map<Arity, Integer> arityCounts){
+                            int urisCorrectPosition, int urisIncorrectPosition, List<String> urisNotFound,
+                            Map<Arity, Integer> arityCounts, String parsingErrorMessage){
         this.executionResult = executionResult;
         this.minimumConfidence = minimumConfidence;
         this.maximumConfidence = maximumConfidence;
@@ -104,6 +111,7 @@ public class AlignmentAnalyzerResult {
         this.urisIncorrectPosition = urisIncorrectPosition;
         this.urisNotFound = urisNotFound;
         this.arityCounts = arityCounts;
+        this.parsingErrorMessage = parsingErrorMessage;
     }
 
     @Override
@@ -114,6 +122,10 @@ public class AlignmentAnalyzerResult {
 
     public String getErroneousReport() {
         StringBuilder sb = new StringBuilder();
+        if(this.parsingErrorMessage.length() > 0){
+            sb.append("Parsing error").append(this.executionResult);
+            return sb.toString();
+        }
         if(this.isSwitchOfSourceTargetBetter()){
             sb.append("Need switch: ").append(this.executionResult);
         }
@@ -147,6 +159,12 @@ public class AlignmentAnalyzerResult {
                 executionResult.getTestCase().getTrack().getName(),
                 executionResult.getTestCase().getTrack().getVersion(),
                 executionResult.getTestCase().getName()));
+        
+        if(this.hasParsingError()) {
+            result.append(String.format("The mapping has the following parsing error:%n"));
+            result.append(this.getParsingErrorMessage());
+            return result.toString();
+        }
         
         // base line
         result.append(String.format("Number of correspondences: %d%n%n", this.getNumberOfCorrespondences()));
@@ -367,5 +385,22 @@ public class AlignmentAnalyzerResult {
     public Map<Arity, Integer> getArityCounts() {
         return arityCounts;
     }
+
+    /**
+     * If this string is not empty, then it contains the parsing error message.
+     * @return the parsing error message
+     */
+    public String getParsingErrorMessage() {
+        return parsingErrorMessage;
+    }
+    
+    /**
+     * Return true, if there is a parsing error.
+     * @return return true, if there is a parsing error.
+     */
+    public boolean hasParsingError(){
+        return parsingErrorMessage.length() > 0;
+    }
+    
     
 }

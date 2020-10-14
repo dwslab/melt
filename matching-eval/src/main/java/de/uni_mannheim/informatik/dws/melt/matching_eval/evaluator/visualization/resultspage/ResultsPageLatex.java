@@ -38,7 +38,7 @@ public class ResultsPageLatex extends Evaluator {
     }
 
     @Override
-    public void writeResultsToDirectory(File baseDirectory) {
+    protected void writeResultsToDirectory(File baseDirectory) {
         writeToFile(new File(baseDirectory, "resultspage.tex"));        
     }
     
