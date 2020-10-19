@@ -147,4 +147,15 @@ public class ConfusionMatrix {
         
         return ConfusionMatrixMetric.calculateConfusionMatrixFromMappings(subTruePositive, subFalsePositive, subFalseNegative, numberOfCorrespondences);
     }
+
+    @Override
+    public String toString() {
+        return "ConfusionMatrix: TP:" + truePositive.size() + 
+                ", FP=" + falsePositive.size() + ", FN=" + falseNegative.size() + 
+                ", PREC=" + String.format("%.4f", precision) + 
+                ", REC=" + String.format("%.4f", recall) + 
+                ", F1=" + String.format("%.4f", getF1measure());
+    }
+    
+    
 }

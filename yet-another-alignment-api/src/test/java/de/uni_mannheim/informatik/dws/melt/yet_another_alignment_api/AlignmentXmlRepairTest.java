@@ -30,4 +30,21 @@ public class AlignmentXmlRepairTest {
         assertEquals(3, b.size());
     }
     
+    private static final String NEWLINE = System.getProperty("line.separator");
+    
+    @Test
+    public void alreadyEncodedTest(){
+        String init = "<entity1 rdf:resource=\"http://dbkwik.webdatacommons.org/memory-alpha.wikia.com/resource/Cloak_&amp;_Dagger\"/>";
+        String result = AlignmentXmlRepair.repair(init);        
+        String expected = "<entity1 rdf:resource=\"http://dbkwik.webdatacommons.org/memory-alpha.wikia.com/resource/Cloak_&amp;_Dagger\"/>" + NEWLINE;
+        assertEquals(expected, result);
+    }
+    
+    @Test
+    public void encodedTest(){
+        String init = "<entity1 rdf:resource=\"http://dbkwik.webdatacommons.org/memory-alpha.wikia.com/resource/Cloak_&_Dagger\"/>";
+        String result = AlignmentXmlRepair.repair(init);        
+        String expected = "<entity1 rdf:resource=\"http://dbkwik.webdatacommons.org/memory-alpha.wikia.com/resource/Cloak_&amp;_Dagger\"/>" + NEWLINE;
+        assertEquals(expected, result);
+    }
 }

@@ -235,6 +235,10 @@ public class DcjsElement {
         this.anchorClass.add(newAnchorClass.trim());
     }
     
+    public boolean hasAnchorClass(String anchorClassToCheck) {
+        return this.anchorClass.contains(anchorClassToCheck.trim());
+    }
+    
     public void clearAnchorClass() {
         this.anchorClass.clear();
     }

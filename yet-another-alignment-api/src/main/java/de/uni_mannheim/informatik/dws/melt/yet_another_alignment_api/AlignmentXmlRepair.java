@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +16,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.text.StringEscapeUtils;
@@ -72,10 +74,10 @@ public class AlignmentXmlRepair {
      */ 
     public static String repair(File inFile){
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            repair(new FileInputStream(inFile),out);
-        } catch (FileNotFoundException ex) {
-            LOGGER.error("File to repair not found", ex);
+        try(FileInputStream in = new FileInputStream(inFile)) {
+            repair(in,out);
+        } catch (IOException ex) {
+            LOGGER.error("IOException for file to repair", ex);
         }
         return new String(out.toByteArray(), StandardCharsets.UTF_8);
     }
@@ -87,6 +89,12 @@ public class AlignmentXmlRepair {
      */    
     public static void repair(String filePathAlignment, String filePathOut){
         repair(new File(filePathAlignment), new File(filePathOut));
+    }
+    
+    public static String repair(String text){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        repair(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)), stream);
+        return new String(stream.toByteArray(), StandardCharsets.UTF_8);
     }
     
     /**
@@ -132,10 +140,12 @@ public class AlignmentXmlRepair {
         }
     }
     
+    private static Pattern ESCAPED_AMPERSAND = Pattern.compile("&amp;");
+            
     private static String repairXMLAttribute(String attribute){
         return new StringBuilder()
             .append("rdf:resource=\"")
-            .append(StringEscapeUtils.ESCAPE_XML10.translate(attribute))
+            .append(StringEscapeUtils.ESCAPE_XML10.translate(ESCAPED_AMPERSAND.matcher(attribute).replaceAll("&")))
             .append("\"").toString();
     }
     

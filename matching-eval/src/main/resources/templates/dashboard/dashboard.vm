@@ -11,6 +11,9 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
         <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        #if($loadingSpinner)
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js" integrity="sha512-NsDQfBXe4PQn8FUJztT36NXQiXQim8UFYB3eKmei+z/Ev2mMaNgElhcxSQWorYn3wycB2z4l7U8BV/kOKSDjYg==" crossorigin="anonymous"></script>
+        #end
 
         <!--dc.js (no integrity check because of underspecified/changing versions)-->
         <script src="https://unpkg.com/d3@5/dist/d3.js"></script>
@@ -39,7 +42,7 @@
         </style>
     </head>
     <body>
-        <div class="container-fluid">
+        <div class="container-fluid" id="meltDashboard">
             <div class="row">
                 <h2>$title</h2>
                 #if($additionalText)
@@ -90,6 +93,16 @@
                 var meltColors = ["#2ca02c","#ff7f0e","#1f77b4","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf",
                                   "#98df8a","#ffbb78","#aec7e8","#ff9896","#c5b0d5","#c49c94","#f7b6d2","#c7c7c7","#dbdb8d","#9edae5"];
                 dc.config.defaultColors(meltColors);//d3.schemeCategory10); 
+                #if($loadingSpinner)
+                // loader settings
+                var opts = {
+                  lines: 15, // The number of lines to draw
+                  length: 50, // The length of each line
+                  radius: 20, // The radius of the inner circle
+                  speed: 1, // Rounds per second
+                };
+                var spinner = new Spinner(opts).spin(document.getElementById('meltDashboard'));
+                #end
                 #if($remoteLocation)
                 d3.csv("$remoteLocation").then(function(experiments) {
                 #elseif($compressedRemoteLocation)
@@ -100,6 +113,9 @@
                 var experiments = d3.csvParse(strData);
                 #else
                 var experiments = d3.csvParse(d3.select('pre#data').text());
+                #end
+                #if($loadingSpinner)
+                spinner.stop();
                 #end
                 ndx         = crossfilter(experiments);
 
@@ -120,7 +136,6 @@
                 $element.name
                     #foreach( $method in $element.jsMethods )
                     .$method#if(!$foreach.hasNext);#end
-
                     #end
 
                 #end

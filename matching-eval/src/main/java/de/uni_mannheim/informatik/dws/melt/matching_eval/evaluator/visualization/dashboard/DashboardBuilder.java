@@ -54,6 +54,8 @@ public class DashboardBuilder extends Evaluator {
     
     protected String title;
     protected String additionalText;
+    
+    protected boolean dataLoadingIndicator;
 
     /**
      * Constructor
@@ -75,6 +77,7 @@ public class DashboardBuilder extends Evaluator {
         this.currentRow = new ArrayList<>();
         this.title = titleOfPage;
         this.additionalText = additionalText;
+        this.dataLoadingIndicator = false;
         
         addDefaultDashboard();
     }
@@ -474,9 +477,18 @@ public class DashboardBuilder extends Evaluator {
     
     public DashboardBuilder newRow(){
         if(this.currentRow.size() > 0){
-            if(this.currentRow.size()> 4){
+            if(this.currentRow.size() > 3){
+                boolean hasTableInRow = false;
                 for(DcjsElement e : this.currentRow){
-                    e.addAnchorClass("col");
+                    if(e.hasAnchorClass("table")){
+                        hasTableInRow = true;
+                        break;
+                    }
+                }
+                if(!hasTableInRow){
+                    for(DcjsElement e : this.currentRow){
+                        e.addAnchorClass("col");
+                    }
                 }
             }
             this.rows.add(this.currentRow);
@@ -484,6 +496,23 @@ public class DashboardBuilder extends Evaluator {
         }
         return this;
     }
+    
+    public DashboardBuilder setTitle(String newTitle){
+        this.title = newTitle;
+        return this;
+    }
+    
+    public DashboardBuilder setAdditionalText(String newAdditionalText){
+        this.additionalText = newAdditionalText;
+        return this;
+    }
+    
+    public DashboardBuilder setDataLoadingIndicator(boolean newState){
+        this.dataLoadingIndicator = newState;
+        return this;
+    }
+    
+    
     
     @Override
     public void writeResultsToDirectory(File baseDirectory) {
@@ -590,6 +619,7 @@ public class DashboardBuilder extends Evaluator {
         context.put("title", title);
         context.put("additionalText", additionalText);
         context.put("dcjsElements", rows);
+        context.put("loadingSpinner", this.dataLoadingIndicator);
         context.put("dimensionDefinition", this.getAllDimensionDefinitions());
         context.put("groupDefinition", this.getAllGroupDefinitions());
         context.put("jsHelperFileNames", this.getAllJsHelperFileNames());

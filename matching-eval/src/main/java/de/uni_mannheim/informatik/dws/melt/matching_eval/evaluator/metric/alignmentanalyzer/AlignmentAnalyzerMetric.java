@@ -49,9 +49,8 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
         Alignment alignment = new Alignment();
         String parsingErrorMessage = "";
         if(executionResult.getOriginalSystemAlignment() != null){
-            
             try {
-                AlignmentParser.parse(executionResult.getOriginalSystemAlignment());
+                alignment = AlignmentParser.parse(executionResult.getOriginalSystemAlignment());
             } catch (SAXException | IOException ex) {
                 parsingErrorMessage = ex.getMessage();
             }
@@ -142,7 +141,7 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
             }else{
                 arity = Arity.ManyToOne;
                 for(String target : targets){
-                    if(size(alignment.getCorrespondencesTarget(targets.get(0))) > 1){
+                    if(size(alignment.getCorrespondencesTarget(target)) > 1){
                         //n:m
                         arity = Arity.ManyToMany;
                         break;
@@ -208,7 +207,7 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
                 writer.write(newline);                
             }
             writer.write(newline+newline);
-            writer.write("matcher, testcase, missing urls" + newline);
+            writer.write("matcher,testcase,info" + newline);
             for(String a : appendix){
                 writer.write(a);
             }
