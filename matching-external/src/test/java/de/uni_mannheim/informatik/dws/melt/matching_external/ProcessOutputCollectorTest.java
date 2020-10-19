@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test the external matcher (especially the search url functions)
  */
-public class MatcherExternalTest {
+public class ProcessOutputCollectorTest {
     
     private String matcherresult = "2019-09-10 07:28:56 INFO  OntologyCacheJena:56 - Reading model into cache (http://repositories.seals-project.eu/tdrs/testdata/persistent/conference/conference-v1/suite/cmt-confof/component/source/)\n" +
 " 2019-09-10 07:28:56 INFO  OntologyCacheJena:56 - Reading model into cache (http://repositories.seals-project.eu/tdrs/testdata/persistent/conference/conference-v1/suite/cmt-confof/component/target/)\n" +

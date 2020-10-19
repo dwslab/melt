@@ -91,6 +91,9 @@
                 <exclude>eu.sealsproject.platform.res:res-tool-bundle-validator</exclude><!--1.1.1-->
                 <exclude>eu.sealsproject.platform.res:res-tool-impl</exclude><!--1.1.1-->
                 <exclude>eu.sealsproject.platform.res:res-tool-utils-core</exclude><!--1.1.1-->
+                <exclude>de.uni-mannheim.informatik.dws.melt:res-tool-api</exclude><!--1.1.1-->
+                <exclude>de.uni-mannheim.informatik.dws.melt:res-domain-api</exclude><!--1.1.1-->
+                <exclude>de.uni-mannheim.informatik.dws.melt:res-tool-impl</exclude><!--1.1.1-->
                 <exclude>javax.activation:activation</exclude><!--1.1-->
                 <exclude>javax.xml.bind:jaxb-api</exclude><!--2.1-->
                 <exclude>javax.xml.stream:stax-api</exclude><!--1.0-2-->

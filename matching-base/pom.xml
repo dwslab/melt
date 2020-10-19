@@ -10,26 +10,19 @@
     <description>Contains the basic interfaces to implement a matcher e.g. MatcherURL.</description>
     <dependencies>
         <dependency>
-            <groupId>eu.sealsproject.platform.res</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>res-tool-api</artifactId>
             <version>1.1.1</version>
         </dependency>
         <dependency>
-            <groupId>eu.sealsproject.platform.res</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>res-domain-api</artifactId>
             <version>1.1.1</version>
         </dependency>
         <dependency>
-            <groupId>eu.sealsproject.platform.res</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>res-tool-impl</artifactId>
             <version>1.1.1</version>
         </dependency>
     </dependencies>
-    
-    <repositories>
-        <repository>
-            <id>maven.mannheim.releases</id>
-            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/releases</url>
-        </repository>
-    </repositories>
 </project>
