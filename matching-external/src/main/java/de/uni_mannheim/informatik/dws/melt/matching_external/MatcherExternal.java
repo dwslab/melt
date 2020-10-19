@@ -24,7 +24,7 @@ public abstract class MatcherExternal extends MatcherURL {
     private ProcessOutputRedirect logOutputCollector; // usually std err
     
     /**
-     * Returns a runtime argument of the java virtual maschine like -Xmx (which specifies java heap size) and not main program arguments.
+     * Returns a runtime argument of the java virtual machine like -Xmx (which specifies java heap size) and not main program arguments.
      * It is checked if the given argument(parameter) is contained in one of the arguments of the program.
      * If this is the case, it is returned (the full argument like "-Xmx100G" when "xmx" is the parameter of this function).
      * @param argument the runtime argument to check for (like "xmx")
@@ -74,7 +74,7 @@ public abstract class MatcherExternal extends MatcherURL {
         
         int errCode = process.waitFor(); // wait for the matcher to finish
         if(errCode != 0){
-            System.err.println("External Matcher return with error code " + Integer.toString(errCode) + ". Continue....");
+            System.err.println("External Matcher return with error code " + errCode + ". Continue....");
         }
         
         URL lastURL = this.resultOutputCollector.getURL();
