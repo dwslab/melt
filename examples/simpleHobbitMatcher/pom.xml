@@ -17,7 +17,7 @@
         <oaei.license>GNU Lesser General Public License 2.1 or above</oaei.license> <!--optional license appearing in the seals descriptor file -->
 
         <maven.deploy.skip>true</maven.deploy.skip><!-- needed to call mvn deploy without having a distributionManagement -->
-        <matching.version>2.5</matching.version> <!-- version for all matching related packages -->
+        <matching.version>2.6</matching.version> <!-- version for all matching related packages -->
     </properties>
     
     <!-- Accessing the resources:

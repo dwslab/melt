@@ -42,7 +42,7 @@ bin/
 #Logging
 log.txt
 matching-eval/log.txt
-log4j.properties
+#log4j.properties
 
 # Python
 playground.py

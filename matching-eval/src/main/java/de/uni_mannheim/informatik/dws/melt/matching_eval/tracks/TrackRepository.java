@@ -495,6 +495,9 @@ public class TrackRepository{
         
         /**The Knowledge Graph Track contains isolated knowledge graphs with instance and schema data. The goal of the task is to match both the instances and the schema.**/
         public static Track V3_NonMatch_Large = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "v3-nonmatch-large", true, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+        
+        /**This track contains only one testcase with a very small set of entities to check if matchers return at least something.**/
+        public static Track SMALL_TEST = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "small-test", false, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
     }
     
     /**
@@ -532,11 +535,12 @@ public class TrackRepository{
     /**
      * This method returns all tracks defined in TrackRepository with java reflections.
      * It uses all public static fields (of type Track or Collection of Track) in all nested classes.
+     * This method further caches the tracks and do not execute the reflection each and every time.
      * @return a set of Tracks defined in this class.
      */
     public static Set<Track> getDefinedTracks(){
         if(definedTracks == null){
-            definedTracks = retriveDefinedTracks();
+            definedTracks = retrieveDefinedTracks(TrackRepository.class.getDeclaredClasses());
         }
         return definedTracks;
     }
@@ -560,15 +564,16 @@ public class TrackRepository{
     
     
     /**
-     * This method retrives all tracks defined in TrackRepository with java reflections.
-     * It uses all public static fields (of type Track or Collection of Track) in all nested classes.
-     * @return Set of defined Tracks.
+     * This method retrieves all tracks defined in the provided classes or any subclass of it.
+     * It searches for fields which are defined as public static and has the type track or any collection of type track.
+     * @param initialClasses the initial class to search defined tracks in it.
+     * @return a set of tracks which are defined in 
      */
-    private static Set<Track> retriveDefinedTracks(){
+    public static Set<Track> retrieveDefinedTracks(Class<?>... initialClasses){
         Set<Track> tracks = new HashSet<>();
         
         Queue<Class<?>> classesToInspect = new LinkedList();
-        Collections.addAll(classesToInspect, TrackRepository.class.getDeclaredClasses());
+        Collections.addAll(classesToInspect, initialClasses);
         while(!classesToInspect.isEmpty()){
             Class<?> clazz = classesToInspect.poll();
             //LOGGER.info("Inspect class {} for static Track instance (full path : {}).", clazz.getSimpleName(), clazz.getName());
