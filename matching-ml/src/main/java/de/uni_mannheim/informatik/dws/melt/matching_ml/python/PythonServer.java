@@ -452,6 +452,7 @@ public class PythonServer {
         request.addHeader("cbow_or_sg", configuration.getType().toString());
         request.addHeader("min_count", "" + configuration.getMinCount());
         request.addHeader("sample", "" + configuration.getSample());
+        request.addHeader("epochs", "" + configuration.getEpochs());
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             HttpEntity entity = response.getEntity();

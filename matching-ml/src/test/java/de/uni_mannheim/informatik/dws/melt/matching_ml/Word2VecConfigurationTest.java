@@ -83,4 +83,13 @@ class Word2VecConfigurationTest {
         configuration.setSample(0.00000001);
         assertEquals(0.00000001, configuration.getSample(), "Expected: 0.00000001 but actual: " + configuration.getSample());
     }
+
+    @Test
+    void setEpochs() {
+        Word2VecConfiguration configuration = new Word2VecConfiguration(Word2VecType.SG);
+        configuration.setEpochs(10);
+        assertEquals(10, configuration.getEpochs());
+        configuration.setEpochs(-1);
+        assertEquals(Word2VecConfiguration.EPOCHS_DEFAULT, configuration.getEpochs());
+    }
 }

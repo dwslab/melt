@@ -83,7 +83,17 @@ public class Word2VecConfiguration {
     /**
      * Default for {@link Word2VecConfiguration#sample} parameter.
      */
-    public static final double SAMPLE_DEFAULT =  0.001;
+    public static final double SAMPLE_DEFAULT =  0.0;
+
+    /**
+     * The epochs to be used for the training.
+     */
+    private int epochs = EPOCHS_DEFAULT;
+
+    /**
+     * Default for {@link Word2VecConfiguration#epochs} parameter.
+     */
+    public static final int EPOCHS_DEFAULT = 5;
 
     /**
      * Default Constructor.
@@ -202,8 +212,19 @@ public class Word2VecConfiguration {
 
     public void setSample(double sample) {
         if(sample < 0.0) {
-            LOGGER.warn("The sample must be greater than 0 or equal 0. Using default: 0.");
-            this.sample = 0.001;
+            LOGGER.warn("The sample must be greater than 0 or equal 0. Using default: " + SAMPLE_DEFAULT + ".");
+            this.sample = SAMPLE_DEFAULT;
         } else this.sample = sample;
+    }
+
+    public int getEpochs() {
+        return epochs;
+    }
+
+    public void setEpochs(int epochs) {
+        if(epochs < 1){
+            LOGGER.warn("Epochs must be greater than 1. Using default: " + EPOCHS_DEFAULT + ".");
+            this.epochs = EPOCHS_DEFAULT;
+        } else this.epochs = epochs;
     }
 }
