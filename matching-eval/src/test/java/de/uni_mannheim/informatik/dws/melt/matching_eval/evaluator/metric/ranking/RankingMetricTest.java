@@ -5,8 +5,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,8 +31,7 @@ public class RankingMetricTest {
         reference.add(new Correspondence("k", "l"));
         reference.add(new Correspondence("q", "r"));
         reference.add(new Correspondence("s", "t"));        
-        
-        
+
         RankingMetric ranker = new RankingMetric(SameConfidenceRanking.ALPHABETICALLY);
         TestCase tcDummy = TrackRepository.Anatomy.Default.getFirstTestCase();
         RankingResult result = ranker.get(new ExecutionResult(tcDummy, "TestMatcher", system, reference));
@@ -42,7 +39,15 @@ public class RankingMetricTest {
         assertEquals(2.44, result.getDcg(), 0.1d);
         assertEquals(0.53, result.getNdcg(), 0.1d);
         assertEquals(0.62, result.getAveragePrecision(), 0.1d);
+        assertEquals(2.0 / 5.0, result.getrPrecision());
+        assertEquals(2.0 / 5.0, result.getPrecisionAtK());
+        assertEquals(2.0 / 5.0, result.getRecallAtK());
+        assertEquals(5, result.getkOfHitsAtK()); // will take the size of the reference alignment as K
+        assertEquals(2, result.getHitsAtK());
+        assertEquals(1.0, result.getReciprocalRank());
+        double f1atK = (2.0*(4.0 / 25.0))/(2*(2.0 / 5.0));
+        assertEquals(f1atK, result.getF1AtK(), 0.00000001);
+        assertEquals(f1atK, result.getFmeasureAtK(1.0), 0.00000001);
     }
-    
     
 }

@@ -20,23 +20,42 @@ import org.slf4j.LoggerFactory;
  * Currently it contains DCG, nDCG, MAP in three variants:
  * random, alphabetically, top (this only comes into play when there are correspondences with the same confidence).
  */
-public class EvaluatorRank extends Evaluator{
+public class EvaluatorRank extends Evaluator {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorRank.class);
-    
+
+    /**
+     * The strategies to be evaluated for cases in which two correspondences carry the same confidence.
+     */
+    private SameConfidenceRanking[] sameConfidenceRankingList;
 
     /**
      * Constructor
-     * @param results the execution result set
+     * @param results The results to be evaluated.
+     * @param sameConfidenceRankingList The confidence ranking strategies to be applied in case of multiple correspondences
+     *                                  with the same confidence. If multiple strategies are given, all will be evaluated
+     *                                  and appear in the resulting CSV file (for comparison).
+     *
      */
-    public EvaluatorRank(ExecutionResultSet results) {
+    public EvaluatorRank(ExecutionResultSet results, SameConfidenceRanking... sameConfidenceRankingList) {
         super(results);
+        this.sameConfidenceRankingList = sameConfidenceRankingList;
     }
 
+    /**
+     * Convenience Constructor. Clashes with multiple correspondences carrying the same score will be resolved by
+     * alphabetical ordering.
+     * @param results The execution result set.
+     */
+    public EvaluatorRank(ExecutionResultSet results) {
+        this(results, SameConfidenceRanking.ALPHABETICALLY);
+    }
 
     @Override
     public void writeResultsToDirectory(File baseDirectory) {
-        
+
+        // TODO
+
         RankingMetric random = new RankingMetric(SameConfidenceRanking.RANDOM);
         RankingMetric alphabetically = new RankingMetric(SameConfidenceRanking.ALPHABETICALLY);
         RankingMetric top = new RankingMetric(SameConfidenceRanking.TOP);
@@ -45,7 +64,7 @@ public class EvaluatorRank extends Evaluator{
             if(!baseDirectory.exists()){
                 baseDirectory.mkdirs();
             } else if (baseDirectory.isFile()) {
-                LOGGER.error("The baseDirectory needs to be a directory, not a file. ABORTING writing process.");
+                LOGGER.error("The base directory needs to be a directory, not a file. ABORTING writing process.");
                 return;
             }
 
@@ -55,15 +74,16 @@ public class EvaluatorRank extends Evaluator{
                     "DCG-random", "NDCG-random", "Average Precision-random", 
                     "DCG-alphabetically", "NDCG-alphabetically", "Average Precision-alphabetically", 
                     "DCG-top", "NDCG-top", "Average Precision-top"));
-            for (ExecutionResult er : results.getUnrefinedResults()) {
-                RankingResult randomResult = random.get(er);
-                RankingResult alphabeticallyResult = alphabetically.get(er);
-                RankingResult topResult = top.get(er);
+            for (ExecutionResult executionResult : results.getUnrefinedResults()) {
+                RankingResult randomResult = random.get(executionResult);
+                RankingResult alphabeticallyResult = alphabetically.get(executionResult);
+                RankingResult topResult = top.get(executionResult);
                 
-                printer.printRecord(Arrays.asList(er.getTestCase().getTrack().getName(), er.getTestCase().getName(), er.getMatcherName(), er.getRefinements(),
+                printer.printRecord(Arrays.asList(executionResult.getTestCase().getTrack().getName(), executionResult.getTestCase().getName(),
+                        executionResult.getMatcherName(), executionResult.getRefinements(),
                         randomResult.getDcg(), randomResult.getNdcg(),randomResult.getAveragePrecision(),
                         alphabeticallyResult.getDcg(), alphabeticallyResult.getNdcg(),alphabeticallyResult.getAveragePrecision(),
-                        topResult.getDcg(), topResult.getNdcg(),topResult.getAveragePrecision()
+                        topResult.getDcg(), topResult.getNdcg(), topResult.getAveragePrecision()
                         
                 ));
             }
