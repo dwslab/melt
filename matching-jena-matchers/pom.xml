@@ -47,6 +47,25 @@
             <version>1.18.12</version>
         </dependency>
         
+         <!-- testing weka -->
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-dev</artifactId>
+            <version>3.9.4</version>
+        </dependency>
+        <!-- following dependency only necessary if SVM is used -->
+        <!--dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>LibSVM</artifactId>
+            <version>1.0.10</version>
+        </dependency-->
+        
+        <!--dependency>
+            <groupId>org.codelibs</groupId>
+            <artifactId>ranklib</artifactId>
+            <version>2.10.1</version>
+        </dependency-->
+        
         <!-- used in confidence combiner -->
         <dependency>
             <groupId>org.apache.commons</groupId>
