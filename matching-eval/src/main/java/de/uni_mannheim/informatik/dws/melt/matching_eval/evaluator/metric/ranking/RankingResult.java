@@ -62,11 +62,15 @@ public class RankingResult {
 
     /**
      * Constructor
-     * @param dcg value.
-     * @param ndcg value
-     * @param averagePrecision value.
-     * @param hitsAtK value.
-     * @param reciprocalRank value
+     * @param dcg Value to be set.
+     * @param ndcg Value to be set.
+     * @param averagePrecision Value to be set.
+     * @param reciprocalRank Value to be set.
+     * @param rPrecision Value to be set.
+     * @param hitsAtK Value to be set.
+     * @param precisionAtK Value to be set.
+     * @param recallAtK Value to be set.
+     * @param kOfHitsAtK Value to be set.
      */
     public RankingResult(double dcg, double ndcg, double averagePrecision, double reciprocalRank, double rPrecision, double hitsAtK, double precisionAtK, double recallAtK, int kOfHitsAtK) {
         this.dcg = dcg;
@@ -135,8 +139,10 @@ public class RankingResult {
         return precisionAtK;
     }
 
+
     /**
      * Get the reciprocal rank, see <a href="https://en.wikipedia.org/wiki/Mean_reciprocal_rank">Wikipedia</a>.
+     * @return Reciprocal Rank as double.
      */
     public double getReciprocalRank() {
         return reciprocalRank;
@@ -145,6 +151,7 @@ public class RankingResult {
     /**
      * Get R-Precision,
      * see <a href="https://en.wikipedia.org/wiki/Evaluation_measures_(information_retrieval)#R-Precision">Wikipedia</a>.
+     * @return rPrecision as double.
      */
     public double getrPrecision() {
         return rPrecision;

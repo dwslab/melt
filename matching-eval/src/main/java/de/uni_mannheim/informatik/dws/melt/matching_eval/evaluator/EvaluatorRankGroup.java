@@ -2,10 +2,17 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator;
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
+
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking.RankingMetric;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking.RankingMetricGroup;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking.RankingResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking.SameConfidenceRanking;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.Refiner;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,21 +21,42 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.Refiner;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
- * A rank evaluator which writes a file resultsRanking.csv.
- * It contains the rankings for each executed testcase.
- * Currently it contains DCG, nDCG, MAP in three variants:
- * random, alphabetically, top (this only comes into play when there are correspondences with the same confidence).
+ * An evaluator that calculates rank metrics on an per-element basis for each element of a specified source ontology.
+ * An example is provided below. If you look for a plain general implementation of NDCG and DCG (not grouped per source node), you have to
+ * use {@link EvaluatorRank}.
+ * Example: Be O1 and O2 different ontologies that are to be matched.
+ *
+ * <pre>
+ * O1:a----------O2:a (FP)
+ *        |
+ *        ------O2:b (TP)
+ *
+ * O1:b----------O2:b (FP)
+ *       |
+ *       ------O2:c (TP)
+ *       |
+ *       ------O2:d (TP)
+ * </pre>
+ * <pre>
+ * Reference Alignment:
+ * (O1:a, O2:b, =)
+ * (O1:b, O2:c, =)
+ * (O1:b, O2:d, =)
+ * </pre>
+ * <pre>
+ * Given a HITS@2 configuration with source=O1 (examples of many KPIs calculated):
+ * P@2 = (1/2 + 1/2)/2 = 1/2
+ * HITS@2 = 1
+ * F1@2 = (2 * P@2 * R@2)/(P@2 + R@2)
+ * </pre>
  */
-public class EvaluatorRank extends Evaluator {
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorRank.class);
+public class EvaluatorRankGroup extends Evaluator {
+
+    /**
+     * Default logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorRankGroup.class);
 
     /**
      * The strategies to be evaluated for cases in which two correspondences carry the same confidence.
@@ -38,7 +66,12 @@ public class EvaluatorRank extends Evaluator {
     /**
      * The CSV file name which will be written to the results directory.
      */
-    public static final String RESULT_FILE_NAME = "resultsRanking.csv";
+    public static final String RESULT_FILE_NAME = "resultsRankingGroup.csv";
+
+    /**
+     * K of HITS@K-based metrics.
+     */
+    private int kOfHitsAtK;
 
     /**
      * Refinement operations to be applied.
@@ -47,37 +80,41 @@ public class EvaluatorRank extends Evaluator {
 
     /**
      * Constructor
-     * @param results The results to be evaluated.
+     *
+     * @param results                   The results to be evaluated.
+     * @param kOfHitsAtK                K of HTIS@K (must be a positive integer &gt; 0)
      * @param sameConfidenceRankingList The confidence ranking strategies to be applied in case of multiple correspondences
      *                                  with the same confidence. If multiple strategies are given, all will be evaluated
      *                                  and appear in the resulting CSV file (for comparison).
-     *
      */
-    public EvaluatorRank(ExecutionResultSet results, SameConfidenceRanking... sameConfidenceRankingList) {
+    public EvaluatorRankGroup(ExecutionResultSet results, int kOfHitsAtK, SameConfidenceRanking... sameConfidenceRankingList) {
         super(results);
         this.sameConfidenceRankingList = sameConfidenceRankingList;
+        this.kOfHitsAtK = kOfHitsAtK;
     }
 
     /**
      * Convenience Constructor. Clashes with multiple correspondences carrying the same score will be resolved by
      * alphabetical ordering.
-     * @param results The execution result set.
+     *
+     * @param results    The results of the matching process.
+     * @param kOfHitsAtK K of HTIS@K (must be a positive integer &gt; 0)
      */
-    public EvaluatorRank(ExecutionResultSet results) {
-        this(results, SameConfidenceRanking.ALPHABETICALLY);
+    public EvaluatorRankGroup(ExecutionResultSet results, int kOfHitsAtK) {
+        this(results, kOfHitsAtK, SameConfidenceRanking.ALPHABETICALLY);
     }
 
     @Override
-    public void writeResultsToDirectory(File baseDirectory) {
+    protected void writeResultsToDirectory(File baseDirectory) {
 
         // initialize metrics
-        RankingMetric[] metrics = new RankingMetric[sameConfidenceRankingList.length];
-        for(int i = 0; i < metrics.length; i++){
-            metrics[i] = new RankingMetric(sameConfidenceRankingList[i]);
+        RankingMetricGroup[] metrics = new RankingMetricGroup[sameConfidenceRankingList.length];
+        for (int i = 0; i < metrics.length; i++) {
+            metrics[i] = new RankingMetricGroup(sameConfidenceRankingList[i], this.kOfHitsAtK);
         }
-        
+
         try {
-            if(!baseDirectory.exists()){
+            if (!baseDirectory.exists()) {
                 baseDirectory.mkdirs();
             } else if (baseDirectory.isFile()) {
                 LOGGER.error("The base directory needs to be a directory, not a file. ABORTING writing process.");
@@ -89,8 +126,8 @@ public class EvaluatorRank extends Evaluator {
 
             // print the header of the CSV file
             ArrayList<String> columnHeaders = new ArrayList<>();
-            columnHeaders.addAll(Arrays.asList("Track", "Test Case", "Matcher"));
-            for(SameConfidenceRanking confidenceRanking : sameConfidenceRankingList){
+            columnHeaders.addAll(Arrays.asList("Track", "Test Case", "Matcher", "Refiners"));
+            for (SameConfidenceRanking confidenceRanking : sameConfidenceRankingList) {
                 columnHeaders.add(confidenceRanking.toString() + " - DCG");
                 columnHeaders.add(confidenceRanking.toString() + " - NDCG");
                 columnHeaders.add(confidenceRanking.toString() + " - Average Precision");
@@ -106,7 +143,7 @@ public class EvaluatorRank extends Evaluator {
 
             // now calculate the performance numbers
             for (ExecutionResult executionResult : results.getUnrefinedResults()) {
-                 runMetricAndPrintToFile(metrics, executionResult, "-", printer);
+                runMetricAndPrintToFile(metrics, executionResult, "-", printer);
                 if (refinerList != null && refinerList.size() > 0) {
                     for (Refiner[] refiners : refinerList) {
                         ExecutionResult refinedResult = results.get(executionResult, refiners);
@@ -117,8 +154,8 @@ public class EvaluatorRank extends Evaluator {
             }
             printer.flush();
             printer.close();
-        } catch (IOException ioe){
-            LOGGER.error("Problem with results writer.", ioe);
+        } catch (IOException e) {
+            LOGGER.error("An error occurred while writing the results.", e);
         }
     }
 
@@ -131,14 +168,14 @@ public class EvaluatorRank extends Evaluator {
      * @param printer         Printer to be used for printing.
      * @throws IOException IOException may be thrown while printing.
      */
-    private void runMetricAndPrintToFile(RankingMetric[] metrics, ExecutionResult executionResult, String refinerString, CSVPrinter printer) throws IOException {
+    private void runMetricAndPrintToFile(RankingMetricGroup[] metrics, ExecutionResult executionResult, String refinerString, CSVPrinter printer) throws IOException {
         ArrayList<String> resultRow = new ArrayList<>();
         resultRow.addAll(Arrays.asList(
                 executionResult.getTrack().getName(),
                 executionResult.getTestCase().getName(),
                 executionResult.getMatcherName(),
                 refinerString));
-        for (RankingMetric metric : metrics) {
+        for (RankingMetricGroup metric : metrics) {
             RankingResult result = metric.get(executionResult);
             resultRow.add("" + result.getDcg());
             resultRow.add("" + result.getNdcg());

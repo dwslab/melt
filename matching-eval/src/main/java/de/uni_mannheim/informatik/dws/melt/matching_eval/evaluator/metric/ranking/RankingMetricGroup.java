@@ -6,7 +6,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 
 
-public class GroupRankingMetric extends Metric<RankingResult> {
+public class RankingMetricGroup extends Metric<RankingResult> {
 
     /**
      * The strategy to resolve conflicts in case correspondences carry the same confidence.
@@ -21,8 +21,9 @@ public class GroupRankingMetric extends Metric<RankingResult> {
     /**
      * Constructor
      * @param sameConfidenceRanking The ranking to be chosen in case correspondences carry the same confidence.
+     * @param kOfHitsAtK K of HITS@K.
      */
-    public GroupRankingMetric(SameConfidenceRanking sameConfidenceRanking, int kOfHitsAtK){
+    public RankingMetricGroup(SameConfidenceRanking sameConfidenceRanking, int kOfHitsAtK){
         this.sameConfidenceRanking = sameConfidenceRanking;
         this.kOfHitsAtK = kOfHitsAtK;
     }

@@ -68,8 +68,7 @@ public class SameConfidenceRankingTest {
         
         Alignment reference = new Alignment();
         reference.add("c", "d");
-        
-        
+
         List<Correspondence> alphabetically = new ArrayList<>();
         alphabetically.add(new Correspondence("g", "h"));
         alphabetically.add(new Correspondence("a", "b"));
@@ -78,8 +77,7 @@ public class SameConfidenceRankingTest {
         alphabetically.add(new Correspondence("i", "j"));       
         List<Correspondence> actual = SameConfidenceRanking.ALPHABETICALLY.sortAlignment(system, reference);        
         assertEquals(alphabetically, actual);
-        
-        
+
         List<Correspondence> top = new ArrayList<>();
         top.add(new Correspondence("g", "h"));
         top.add(new Correspondence("c", "d"));//this is now first because top
