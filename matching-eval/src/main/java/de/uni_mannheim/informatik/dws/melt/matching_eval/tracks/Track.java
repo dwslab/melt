@@ -252,7 +252,7 @@ public abstract class Track {
      * This function returns the distinct ontologies for the whole track.This means if you have testcases like A-B, B-C and A-C, then it would return the ontologies A,B,and C.<br>
      * IMPORTANT: this only works if the testcase name consists of the source and target names separated by "-".
      * This is the case for conference and KG track and maybe some others.
-     * @return 
+     * @return list of URLs which points to the ontologies.
      */
     public List<URL> getDistinctOntologies(){
         List<URL> distinctOntologies = new ArrayList();
