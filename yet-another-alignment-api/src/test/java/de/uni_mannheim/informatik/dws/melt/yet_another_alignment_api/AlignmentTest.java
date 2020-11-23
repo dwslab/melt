@@ -1,11 +1,14 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.junit.jupiter.api.Test;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -260,4 +263,30 @@ public class AlignmentTest {
         assertThrows(IllegalArgumentException.class, () -> a.sampleByFraction(-0.1)); //too low
     }
 
+    @Test
+    void sampleContainsTest(){
+        //this test checks that when you sample 20 percent and then 40 percent with the same randomness,
+        //then the first 20 percent should be contained in the 40 percent and not another random subset.
+        
+        Alignment a = new Alignment();
+        
+        //List<Correspondence> correspondences = new ArrayList();
+        for(int i=0; i< 100; i++){
+            a.add("http://left.com/" + Integer.toString(i), "http://right.com/" + Integer.toString(i));
+        }
+ 
+        Alignment twenty = a.sampleByFraction(0.2, new Random(1234));
+        Alignment fourty = a.sampleByFraction(0.4, new Random(1234));
+        Alignment sixty = a.sampleByFraction(0.6, new Random(1234));
+        Alignment eighty = a.sampleByFraction(0.8, new Random(1234));
+        
+        assertTrue(eighty.containsAll(sixty));
+        assertTrue(eighty.containsAll(fourty));
+        assertTrue(eighty.containsAll(twenty));
+        
+        assertTrue(sixty.containsAll(fourty));
+        assertTrue(sixty.containsAll(twenty));
+        
+        assertTrue(fourty.containsAll(twenty));
+    }
 }

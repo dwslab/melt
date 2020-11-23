@@ -16,9 +16,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -244,6 +246,39 @@ public abstract class Track {
             LOGGER.warn("Could not generate encoded name and version string of track.", ex);
             return this.getName() + "_" + this.getVersion();
         }
+    }
+    
+    /**
+     * This function returns the distinct ontologies for the whole track.This means if you have testcases like A-B, B-C and A-C, then it would return the ontologies A,B,and C.<br>
+     * IMPORTANT: this only works if the testcase name consists of the source and target names separated by "-".
+     * This is the case for conference and KG track and maybe some others.
+     * @return 
+     */
+    public List<URL> getDistinctOntologies(){
+        List<URL> distinctOntologies = new ArrayList();
+        Set<String> alreadySeen = new HashSet();
+        for(TestCase testCase : getTestCases()){
+            String[] sourceTargetNames = testCase.getName().split("-");
+            if(sourceTargetNames.length != 2){
+                LOGGER.warn("Test case name contains none or more than one '-' character which is not possible when requesting distinct ontologies."
+                        + " We just skip this test case. Name of the test case: {} Name of the track: {}", testCase.getName(), testCase.getTrack().getName());
+                continue;
+            }
+            try {
+                if(alreadySeen.contains(sourceTargetNames[0]) == false){
+                    distinctOntologies.add(testCase.getSource().toURL());
+                    alreadySeen.add(sourceTargetNames[0]);
+                }            
+                if(alreadySeen.contains(sourceTargetNames[1]) == false){
+                    distinctOntologies.add(testCase.getTarget().toURL());
+                    alreadySeen.add(sourceTargetNames[1]);
+                }
+            } catch (MalformedURLException ex) {
+                LOGGER.warn("Cannot convert URI to URL at test case {}. Just skipping.", testCase.getName());
+                continue;
+            }
+        }
+        return distinctOntologies;
     }
     
     protected List<TestCase> readFromCache(){ return readFromDefaultLayout(); } // can be overwritten if download does not use default layout

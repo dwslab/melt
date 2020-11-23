@@ -160,7 +160,7 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filt
         if(confidenceNames == null || confidenceNames.isEmpty())
             confidenceNames = new ArrayList(alignment.getDistinctCorrespondenceConfidenceKeys());
         if(confidenceNames.isEmpty()){
-            LOGGER.warn("No attributes available for learning. Did not create any model file.");
+            LOGGER.error("No attributes available for learning. Did not create any model file.");
             return confidenceNames;
         }        
         try{
@@ -183,11 +183,12 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filt
      */
     public static Alignment applyStoredMLModel(File modelFile, Alignment predictAlignment, List<String> confidenceNames){
         if(modelFile.exists() == false){
-            LOGGER.warn("Model file does not exist. Return unfiltered alignment.");
+            LOGGER.error("Model file does not exist. Return unfiltered alignment.");
             return predictAlignment;
         }
         if(confidenceNames.isEmpty()){
-            
+            LOGGER.error("No confidence names for prediction are provided. Return unfiltered alignment.");
+            return predictAlignment;
         }
         try{
             File predictFile = new File("testFile.csv");

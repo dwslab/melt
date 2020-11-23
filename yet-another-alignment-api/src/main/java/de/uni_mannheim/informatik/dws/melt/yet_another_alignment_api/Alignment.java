@@ -559,6 +559,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     /**
      * Returns a random sample of correspondences.
      * If the parameter n is greater than the alignment size, an IllegalArgumentException is thrown.
+     * If the random parameter is always in the same state e.g. always providing a fresh instance with the same seed like new Random(1234)
+     * or setting the seed of one random instance always to the same value,  then a smaller subset (sample with 10 percent) will 
+     * be contained in the larger subset (sample with 20 percent).
      * @param n the number of correspondences to be returned. Should be smaller than the size of this alignment.
      * @param rnd the source of randomness.
      * @return a new Alignment which contains the sampled correspondences.
@@ -587,6 +590,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     /**
      * Returns a random sample of correspondences.
      * If the parameter n is greater than the alignment size, the full alignment (copy of this alignment) is returned.
+     * If the random parameter is always in the same state e.g. always providing a fresh instance with the same seed like new Random(1234)
+     * or setting the seed of one random instance always to the same value,  then a smaller subset (sample with 10 percent) will 
+     * be contained in the larger subset (sample with 20 percent).
      * @param fraction the number of correspondences to be returned. Should be smaller than the size of this alignment.
      * @param rnd the source of randomness.
      * @return a new Alignment which contains the sampled correspondences.

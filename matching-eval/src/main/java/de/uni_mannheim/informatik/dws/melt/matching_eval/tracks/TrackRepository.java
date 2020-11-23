@@ -612,6 +612,15 @@ public class TrackRepository{
     }
     
     
+    /**
+     * Generates a test case where the input alignment of the test case is filled with a fraction of the reference alignment.
+     * @param tc the base test case to use.
+     * @param fraction the fraction of the reference alignment ( a value between zero and one).
+     * @param randomSeed the random seed object. If it is always in the same state e.g. always providing a fresh instance with the same seed like new Random(1234)
+     * or setting the seed of one random instance always to the same value,  then a smaller subset (sample with 10 percent) will 
+     * be contained in the larger subset (sample with 20 percent).
+     * @return the testcase with same parameters as the base test case but with a generated input alignment.
+     */
     public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction, Random randomSeed){
         Alignment sample = tc.getParsedReferenceAlignment().sampleByFraction(fraction, randomSeed);
         try {
@@ -624,10 +633,25 @@ public class TrackRepository{
         }
     }
     
+    /**
+     * Generates a test case where the input alignment of the test case is filled with a fraction of the reference alignment.
+     * @param tc the base test case to use.
+     * @param fraction the fraction of the reference alignment ( a value between zero and one).
+     * @param randomSeed the random seed number. If it is the same number,  hen a smaller subset (sample with 10 percent) will 
+     * be contained in the larger subset (sample with 20 percent).
+     * @return the testcase with same parameters as the base test case but with a generated input alignment.
+     */
     public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction, long randomSeed){
         return  generateTestCaseWithSampledReferenceAlignment(tc, fraction, new Random(randomSeed));
     }
     
+    /**
+     * Generates a test case where the input alignment of the test case is filled with a fraction of the reference alignment.
+     * The seed for randomness will be generated.
+     * @param tc the base test case to use.
+     * @param fraction the fraction of the reference alignment ( a value between zero and one).
+     * @return the testcase with same parameters as the base test case but with a generated input alignment.
+     */
     public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction){
         return  generateTestCaseWithSampledReferenceAlignment(tc, fraction, new Random());
     }
