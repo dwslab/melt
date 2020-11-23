@@ -579,6 +579,19 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     
     /**
      * Returns a random sample of correspondences.
+     * If the parameter n is greater than the alignment size, an IllegalArgumentException is thrown.
+     * If the random parameter is always in the same, then a smaller subset (sample with 10 percent) will 
+     * be contained in the larger subset (sample with 20 percent).
+     * @param n the number of correspondences to be returned. Should be smaller than the size of this alignment.
+     * @param seed the seed for random.
+     * @return a new Alignment which contains the sampled correspondences.
+     */
+    public Alignment sample(int n, long seed){
+        return sample(n, new Random(seed));
+    }
+    
+    /**
+     * Returns a random sample of correspondences.
      * If the parameter n is greater than the alignment size, the full alignment (copy of this alignment) is returned.
      * @param fraction the number of correspondences to be returned. Should be smaller than the size of this alignment.
      * @return a new Alignment which contains the sampled correspondences.
@@ -602,6 +615,19 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
             throw new IllegalArgumentException("Fraction is out of range (smaller zero or greater one");
         }
         return sample((int)Math.round((double)this.size() * fraction), rnd);
+    }
+    
+    /**
+     * Returns a random sample of correspondences.
+     * If the parameter n is greater than the alignment size, the full alignment (copy of this alignment) is returned.
+     * If the random parameter is always the same, then a smaller subset (sample with 10 percent) will 
+     * be contained in the larger subset (sample with 20 percent).
+     * @param fraction the number of correspondences to be returned. Should be smaller than the size of this alignment.
+     * @param seed the source of randomness.
+     * @return a new Alignment which contains the sampled correspondences.
+     */
+    public Alignment sampleByFraction(double fraction, long seed){
+        return sampleByFraction(fraction, new Random(seed));
     }
     
     /**
