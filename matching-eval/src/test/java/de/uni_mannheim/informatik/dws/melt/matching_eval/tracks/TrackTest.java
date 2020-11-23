@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
@@ -9,16 +10,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TrackTest {
 
+    
     @Test
     public void testDistinctTracks(){
         List<URL> distinctOntologies = TrackRepository.Conference.V1.getDistinctOntologies();
-        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-conference/source.rdf"));
-        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-conference/target.rdf"));
-        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-confof/target.rdf"));
-        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-edas/target.rdf"));
-        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-ekaw/target.rdf"));
-        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-iasted/target.rdf"));
-        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-sigkdd/target.rdf"));
+        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-conference" + File.separator + "source.rdf"));
+        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-conference" + File.separator + "target.rdf"));
+        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-confof" + File.separator + "target.rdf"));
+        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-edas" + File.separator + "target.rdf"));
+        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-ekaw" + File.separator + "target.rdf"));
+        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-iasted" + File.separator + "target.rdf"));
+        assertTrue(isLastPartSomeWhereInList(distinctOntologies, "cmt-sigkdd" + File.separator + "target.rdf"));
     }
     
     private boolean isLastPartSomeWhereInList(List<URL> list, String lastPart){
