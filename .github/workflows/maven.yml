@@ -15,13 +15,13 @@ jobs:
       with:
         java-version: 1.8
     - name: Cache Maven packages
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: |
           ~/.m2
           ~/.cache/pip
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2
+        restore-keys: ${{ runner.os }}-m2-
 #    From a runtime perspective, it would make sense to cache OAEI files. However, in order to test also the
 #    TrackRepostitory and related classes, we decided not to cache those files.
 #    - name: Cache OAEI
