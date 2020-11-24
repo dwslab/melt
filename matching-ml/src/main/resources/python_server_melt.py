@@ -919,7 +919,7 @@ def neural_net_projection(word_vector_src, word_vector_tgt, lexicon):
     )
     if matrix_src.size == 0 or matrix_tgt.size == 0:
         raise Exception(
-            "the embeddings do not contain enough vector for the input alignment"
+            "The embeddings do not contain enough vector for the input alignment."
         )
 
     # TODO: optimize model
