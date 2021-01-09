@@ -32,13 +32,29 @@ public class LocalTrack extends Track {
      * @param name Name of the track.
      * @param version Version of the track.
      * @param folderToTestCases The test case folder has to follow a specific structure: It contains a folder for each
-     *                          test case. the Folder's name will be the test case's name. In each test case folder,
+     *                          test case. The Folder's name will be the test case's name. In each test case folder,
      *                          there has to be a file named source.rdf, target.rdf, and alignment.rdf.
-     * @param goldStandardCompleteness completness of the gold standard.
+     * @param goldStandardCompleteness Completeness of the gold standard.
      */
     public LocalTrack(String name, String version, File folderToTestCases, GoldStandardCompleteness goldStandardCompleteness){
         super("http://localhost/", name, version, false, goldStandardCompleteness);
         this.folderToTestCases = folderToTestCases;
+    }
+
+    /**
+     * Default Constructor
+     * @param name Name of the track.
+     * @param version Version of the track.
+     * @param folderToTestCasesPath The test case folder path.
+     *                              It has to follow a specific structure:
+     *                              It contains a folder for each test case.
+     *                              The Folder's name will be the test case's name. In each test case folder,
+     *                              there has to be a file named source.rdf, target.rdf, and alignment.rdf.
+     * @param goldStandardCompleteness Completeness of the gold standard.
+     */
+    public LocalTrack(String name, String version, String folderToTestCasesPath, GoldStandardCompleteness goldStandardCompleteness){
+        super("http://localhost/", name, version, false, goldStandardCompleteness);
+        this.folderToTestCases = new File(folderToTestCasesPath);
     }
     
     /**
