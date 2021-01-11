@@ -33,7 +33,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Generates a CSV (first element is source - all others are synonyms) based on a DBnary Dump File.
+ * Generates a CSV (first element is source - all others are synonyms) based on a
+ * <a href="http://kaiko.getalp.org/about-dbnary/">DBnary</a> dump file.
+ * You can read more about DBnary in the following article:
+ * <a href="http://www.semantic-web-journal.net/system/files/swj648.pdf">Sérasset Gilles (2014).
+ * DBnary: Wiktionary as a Lemon-Based Multilingual Lexical Resource in RDF. to appear in Semantic Web Journal
+ * (special issue on Multilingual Linked Open Data).</a>
  */
 public class WiktionarySynsetCSV {
     private static final Logger LOGGER = LoggerFactory.getLogger(WiktionarySynsetCSV.class);
@@ -61,7 +66,7 @@ public class WiktionarySynsetCSV {
     
     
     /**
-     * Extracts synsonyms from a dbnary dump and writes the synonyms to a csv file.
+     * Extracts synonyms from a dbnary dump and writes the synonyms to a csv file.
      * @param path path to the the dbnary dump
      * @param csvFile csv file which contains the synonyms as source, syn1, syn2, syn3
      */
