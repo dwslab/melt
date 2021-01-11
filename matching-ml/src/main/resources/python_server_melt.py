@@ -127,7 +127,7 @@ def train_word_2_vec():
         cbow_or_sg = request.headers.get("cbow_or_sg")
         min_count = request.headers.get("min_count")
         sample = request.headers.get("sample")
-        epochs = request.headers.get('epochs')
+        epochs = request.headers.get("epochs")
 
         sentences = MySentences(file_path)
         logging.info("Sentences object initialized.")
@@ -192,6 +192,17 @@ def is_in_vocabulary():
     vector_path = request.headers.get("vector_path")
     vectors = get_vectors(model_path, vector_path)
     return str(concept in vectors.vocab)
+
+
+@app.route("/get-vocabulary-terms", methods=["GET"])
+def get_vocabulary_terms():
+    model_path = request.headers.get("model_path")
+    vector_path = request.headers.get("vector_path")
+    vectors = get_vectors(model_path, vector_path)
+    result = ""
+    for word in vectors.vocab:
+        result += word + "\n"
+    return result
 
 
 def get_vectors(model_path=None, vector_path=None):

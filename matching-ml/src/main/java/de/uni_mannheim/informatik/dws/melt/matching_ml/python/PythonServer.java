@@ -22,11 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.apache.http.client.methods.HttpPost;
@@ -605,6 +601,47 @@ public class PythonServer {
             return false;
         }
     }
+
+
+    /**
+     * Returns the full vocabulary of the specified model as HashSet (e.g. for fast indexing).
+     * Be aware that this operation can be very memory-consuming for very large models.
+     *
+     * Note: If you want to just check whether a concept exists in the vocabulary, it is better to call
+     * {@link PythonServer#isInVocabulary(String, String)}.Note further that you do not need to build your own
+     * cache if the PythonServer has enabled vector caching (you can check this with {@link PythonServer#isVectorCaching()}.
+     *
+     * @param modelOrVectorPath The path to the model or vector file. Note that the vector file MUST end with .kv in
+     *      *                   order to be recognized as vector file.
+     * @return Returns all vocabulary entries without vectors in a String HashSet.
+     */
+    public HashSet<String> getVocabularyTerms(String modelOrVectorPath){
+        HashSet<String> result = new HashSet<>();
+        HttpGet request = new HttpGet(serverUrl + "/get-vocabulary-terms");
+        addModelToRequest(request, modelOrVectorPath);
+
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                LOGGER.error("No server response. Returning empty set.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    LOGGER.error(resultString);
+                } else {
+                    result.addAll(Arrays.asList(resultString.split("\\n")));
+                }
+            }
+        } catch (IOException ioe) {
+            LOGGER.error("Problem with http request. Returning empty set.", ioe);
+        } catch (Exception e){
+            LOGGER.error("Another exception occurred.", e);
+        }
+        finally {
+            return result;
+        }
+    }
+
 
     /**
      * Given a path to a model or vector file, this method determines whether it is a model or a vector file and
