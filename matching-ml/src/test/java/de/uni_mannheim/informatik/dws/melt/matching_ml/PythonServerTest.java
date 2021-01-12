@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -203,6 +204,7 @@ class PythonServerTest {
         vectorFile.delete();
     }
 
+
     @Test
     void trainWord2VecModelSG() {
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
@@ -233,6 +235,7 @@ class PythonServerTest {
         vectorFile.delete();
     }
 
+
     @Test
     void trainWord2VecModelWithWalkDirectory() {
         String testFilePath = getPathOfResource("walk_directory_test");
@@ -261,6 +264,7 @@ class PythonServerTest {
         vectorFile.delete();
     }
 
+
     @Test
     void trainWord2VecModelCBOW() {
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
@@ -279,6 +283,7 @@ class PythonServerTest {
         vectorFile.delete();
     }
 
+
     @Test
     void externalResourcesDirectory(){
         // shut down
@@ -293,12 +298,26 @@ class PythonServerTest {
         // shut down again to keep using default resources directory
         pythonServer.shutDown();
 
+        // we need to restart for subsequent tests
+        pythonServer = PythonServer.getInstance();
+
         try {
             FileUtils.deleteDirectory(externalResourcesDirectory);
         } catch (IOException e) {
             LOGGER.error("Failed to clean up external resources directory.", e);
         }
     }
+
+
+    @Test
+    void getVocabularyTerms(){
+        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
+        HashSet<String> result = pythonServer.getVocabularyTerms(pathToVectorFile);
+
+        assertTrue(result.size() > 0);
+        assertTrue(result.contains("Europe"));
+    }
+
 
     /**
      * Helper method to obtain the canonical path of a (test) resource.
@@ -316,6 +335,7 @@ class PythonServerTest {
             return null;
         }
     }
+
 
     /**
      * Helper method to obtain the number of read lines.

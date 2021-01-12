@@ -15,7 +15,7 @@ public abstract class Metric<MetricResult> {
         
     /**
      * Triggers the computation of the metric for an individual execution result.
-     * The metic should always use the {@link ExecutionResult#getSystemAlignment()} and {@link ExecutionResult#getReferenceAlignment()} methods.
+     * The metric should always use the {@link ExecutionResult#getSystemAlignment()} and {@link ExecutionResult#getReferenceAlignment()} methods.
      * @param executionResult Execution result for which the calculation shall be performed.
      * @return The metric result.
      */
