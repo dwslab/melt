@@ -1,6 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 /**
  * Store accessible to all matchers where variables and results can be persisted in.
@@ -12,6 +14,15 @@ public class DataStore {
      * Constructor
      */
     public DataStore(){
+    }
+    
+    /**
+     * Initialize the Datastore with Properties
+     * @param p the properties to be populated.
+     */
+    public DataStore(Properties p){
+        for(Entry<Object, Object> entry : p.entrySet())
+            this.centralStore.put(entry.getKey().toString(), entry.getValue());
     }
 
     /**
@@ -55,7 +66,15 @@ public class DataStore {
     public Object get(String key, Class clazz){
         return clazz.cast(centralStore.get(key));
     }
-
+    
+    //
+    /**
+     * This method does not cast the object, but the calling method.
+     * See also <a href="https://stackoverflow.com/questions/35860805/casting-a-generic-class-cast-vs-class-cast">this stackoverflow question</a>.
+     * @param <T> The generic parameter.
+     * @param key  Key used to retrieve value.
+     * @return Value stored for key.
+     */
     public <T> T get(String key){
         return (T) centralStore.get(key);
     }
@@ -74,6 +93,16 @@ public class DataStore {
      */
     public void clear(){
         centralStore = new HashMap<>();
+    }
+    
+    /**
+     * Transform this Datastore into a Properties object.
+     * @return the converted Properties object.
+     */
+    public Properties toProperties(){
+        Properties properties = new Properties();
+        properties.putAll(this.centralStore);
+        return properties;
     }
 
 }
