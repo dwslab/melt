@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_yaaa;
 
-import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 
 import java.net.URL;
@@ -11,7 +10,7 @@ import java.util.Properties;
  * A matcher template for matchers that are based on YAAA.
  * @author Sven Hertling
  */
-public abstract class MatcherPipelineYAAA extends MatcherYAAA implements IMatcher<Alignment, URL> {
+public abstract class MatcherPipelineYAAA extends MatcherYAAA{
 
     protected List<MatcherYAAA> matchers = initializeMatchers();
     

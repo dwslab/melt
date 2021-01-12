@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_yaaa;
 
-import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherFile;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
@@ -14,7 +13,7 @@ import java.util.Properties;
  * A matcher template for matchers that are based on the YAAA Framework.
  * @author Sven Hertling
  */
-public abstract class MatcherYAAA extends MatcherFile implements IMatcher<Alignment, URL> {
+public abstract class MatcherYAAA extends MatcherFile{
 
     @Override
     public void match(URL source, URL target, URL inputAlignment, File alignmentFile) throws Exception {
@@ -45,7 +44,6 @@ public abstract class MatcherYAAA extends MatcherFile implements IMatcher<Alignm
      * @return The resulting mapping of the matching process.
      * @throws Exception An exception that was risen while matching.
      */
-    @Override
     public abstract Alignment match(URL source, URL target, Alignment inputAlignment, Properties properties) throws Exception ;
     
 }
