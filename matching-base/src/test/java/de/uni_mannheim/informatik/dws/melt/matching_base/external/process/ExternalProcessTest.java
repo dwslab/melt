@@ -61,10 +61,17 @@ public class ExternalProcessTest {
     }
     
     @Test
+    void testQuote() {
+        ExternalProcess p = new ExternalProcess();
+        p.addArgumentLine("-v      -k   'quote\"inside'");        
+        assertEquals(Arrays.asList("-v", "-k", "quote\"inside"), p.getArguments());
+    }
+    
+    @Test
     void testWhitespace() {
         ExternalProcess p = new ExternalProcess();
         p.addArgumentLine("-v      -k   \"test with whitespace\"");        
-        assertEquals(Arrays.asList("-v", "-k", "\"test with whitespace\""), p.getArguments());
+        assertEquals(Arrays.asList("-v", "-k", "test with whitespace"), p.getArguments());
     }
     
     @Test

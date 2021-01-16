@@ -99,7 +99,7 @@ public class ExternalProcess {
     
     public ExternalProcess(List<String> arguments){
         this();
-        this.arguments.add(new ArgumentScope(arguments, true, false));
+        this.arguments.add(new ArgumentScope(arguments, false));
     }
     
     /**
@@ -502,46 +502,30 @@ public class ExternalProcess {
      * addArgument section
      ****************************/
     
+    
     /**
      * Add one single argument like '-v' or 'test'.
      * @param argument the argument
      */
     public void addArgument(String argument){
-        addArgument(argument, true);
+        addArguments(Arrays.asList(argument));
     }
-    
-    /**
-     * Add one single argument like '-v' or 'test'.
-     * @param argument the argument
-     * @param handleQuoting if true and the argument contains whitespaces, it will be quoted.
-     */
-    public void addArgument(String argument, boolean handleQuoting){
-        addArguments(Arrays.asList(argument), handleQuoting);
-    }
+
     
     /**
      * Add multiple arguments at once. They are all not in a scope.
-     * @param arguments
+     * @param arguments the arguments
      */
     public void addArguments(List<String> arguments){
-        addArguments(arguments, true);
+        this.arguments.add(new ArgumentScope(arguments, false));
     }
     
     /**
      * Add multiple arguments at once. They are all not in a scope.
-     * @param arguments
+     * @param arguments the arguments
      */
     public void addArguments(String... arguments){
-        addArguments(Arrays.asList(arguments), true);
-    }
-    
-    /**
-     * Add multiple arguments at once. They are all not in a scope.
-     * @param arguments
-     * @param handleQuoting if true and the argument contains whitespaces, it will be quoted.
-     */
-    public void addArguments(List<String> arguments, boolean handleQuoting){
-        this.arguments.add(new ArgumentScope(arguments, handleQuoting, false));
+        this.arguments.add(new ArgumentScope(Arrays.asList(arguments), false));
     }
     
     
@@ -549,23 +533,14 @@ public class ExternalProcess {
      * addArgumentScope section
      ****************************/
     
+    
     /**
      * Adds multiple arguments in one scope. If one argument contains a variable like ${test}, 
      * then all arguments in this scope are only added if all variables in this scope can be replaced.
      * @param argumentLine the arguments as one string. they will be splitted by whitespaces.
      */
     public void addArgumentScope(String argumentLine){
-        addArgumentScope(argumentLine, true);
-    }
-    
-    /**
-     * Adds multiple arguments in one scope. If one argument contains a variable like ${test}, 
-     * then all arguments in this scope are only added if all variables in this scope can be replaced.
-     * @param argumentLine the arguments as one string. they will be splitted by whitespaces.
-     * @param handleQuoting if true and the argument contains whitespaces, it will be quoted.
-     */
-    public void addArgumentScope(String argumentLine, boolean handleQuoting){
-        addArgumentScope(parseCommandLine(argumentLine), handleQuoting);
+        addArgumentScope(parseCommandLine(argumentLine));
     }
     
     /**
@@ -574,17 +549,7 @@ public class ExternalProcess {
      * @param arguments the arguments
      */
     public void addArgumentScope(List<String> arguments){
-        addArgumentScope(arguments, true);
-    }
-    
-    /**
-     * Adds multiple arguments in one scope. If one argument contains a variable like ${test}, 
-     * then all arguments in this scope are only added if all variables in this scope can be replaced.
-     * @param arguments the arguments
-     * @param handleQuoting if true and the argument contains whitespaces, it will be quoted.
-     */
-    public void addArgumentScope(List<String> arguments, boolean handleQuoting){
-        this.arguments.add(new ArgumentScope(arguments, handleQuoting, true));
+        this.arguments.add(new ArgumentScope(arguments, true));
     }
     
     
@@ -592,43 +557,33 @@ public class ExternalProcess {
      * addArgumentLine section
      ****************************/
     
+   
     /**
      * Adds an argument line which is one (huge) string containing multiple arguments.
      * The line is splitted by whitespace but quotations are respected.
      * An argument line can contain scopes (scopes are only printed if all variables in a scope can be replaced).
      * @param argumentLine the argument line as one string
      */
-    public void addArgumentLine(String argumentLine){
-        addArgumentLine(argumentLine, true);
-    }
-    
-    /**
-     * Adds an argument line which is one (huge) string containing multiple arguments.
-     * The line is splitted by whitespace but quotations are respected.
-     * An argument line can contain scopes (scopes are only printed if all variables in a scope can be replaced).
-     * @param argumentLine the argument line as one string
-     * @param handleQuoting if true and the argument contains whitespaces, it will be quoted.
-     */
-    public void addArgumentLine(String argumentLine, boolean handleQuoting){        
+    public void addArgumentLine(String argumentLine){        
         //search for argument scopes like $[.......] which is one scope.
         int startScope = 0;
         int openScope = 0;
         int endScope = 0;
         while((openScope = argumentLine.indexOf("$[", startScope)) >= 0){
-            this.addArgumentLine(argumentLine.substring(startScope, openScope), handleQuoting, false);
+            this.addArgumentLine(argumentLine.substring(startScope, openScope), false);
             
             endScope = argumentLine.indexOf(']', openScope);
             if(endScope < 0){
                 throw new IllegalArgumentException("Argument line has a starting scope $[ but no closing scope ] : " + argumentLine);
             }
-            this.addArgumentLine(argumentLine.substring(openScope + 2, endScope), handleQuoting, true);
+            this.addArgumentLine(argumentLine.substring(openScope + 2, endScope), true);
             startScope = endScope + 1;
         }
-        this.addArgumentLine(argumentLine.substring(startScope, argumentLine.length()), handleQuoting, false);
+        this.addArgumentLine(argumentLine.substring(startScope, argumentLine.length()), false);
     }
     
-    private void addArgumentLine(String argumentLine, boolean handleQuoting, boolean inScope){
-        this.arguments.add(new ArgumentScope(parseCommandLine(argumentLine), handleQuoting, inScope));
+    private void addArgumentLine(String argumentLine, boolean inScope){
+        this.arguments.add(new ArgumentScope(parseCommandLine(argumentLine), inScope));
     }
     
     /****************************
@@ -912,17 +867,15 @@ class ArgumentScope {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArgumentScope.class);
 
     private List<String> arguments;
-    private boolean handleQuoting;
     private boolean inScope;
 
-    public ArgumentScope(Iterable<String> arguments, boolean handleQuoting, boolean inScope){            
+    public ArgumentScope(Iterable<String> arguments, boolean inScope){            
         this.arguments = new ArrayList();
         for(String arg : arguments){
             arg = arg.trim();
             if(!arg.isEmpty())
                 this.arguments.add(arg);
         }
-        this.handleQuoting = handleQuoting;
         this.inScope = inScope;
     }
 
@@ -964,11 +917,7 @@ class ArgumentScope {
             }
             subsitutedArgument.append(argument.substring(startScope, argument.length()));
             
-            if(this.handleQuoting){
-                subsitutedArguments.add(quote(subsitutedArgument.toString()));
-            }else{
-                subsitutedArguments.add(subsitutedArgument.toString());
-            }
+            subsitutedArguments.add(subsitutedArgument.toString());
         }
         return subsitutedArguments;
     }
@@ -984,30 +933,5 @@ class ArgumentScope {
                 return result;
         }
         return null;
-    }
-    
-    private static final String SINGLE_QUOTE = "\'";
-    private static final String DOUBLE_QUOTE = "\"";
-    
-    private static String quote(String text){
-        String cleanedText = text.trim();
-        while (cleanedText.startsWith(SINGLE_QUOTE) || cleanedText.startsWith(DOUBLE_QUOTE)) {
-            cleanedText = cleanedText.substring(1);
-        }
-        while (cleanedText.endsWith(SINGLE_QUOTE) || cleanedText.endsWith(DOUBLE_QUOTE)) {
-            cleanedText = cleanedText.substring(0, cleanedText.length() - 1);
-        }
-
-        StringBuilder buf = new StringBuilder();
-        if (cleanedText.contains(DOUBLE_QUOTE)) {
-            if (cleanedText.contains(SINGLE_QUOTE)) {
-                throw new IllegalArgumentException("There are single and double quotes in the argument");
-            }
-            return buf.append(SINGLE_QUOTE).append(cleanedText).append(SINGLE_QUOTE).toString();
-        } else if (cleanedText.contains(SINGLE_QUOTE) || cleanedText.contains(" ")) {
-            return buf.append(DOUBLE_QUOTE).append(cleanedText).append(DOUBLE_QUOTE).toString();
-        } else {
-            return cleanedText;
-        }
     }
 }
