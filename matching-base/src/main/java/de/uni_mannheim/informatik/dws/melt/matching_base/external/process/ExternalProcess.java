@@ -270,7 +270,10 @@ public class ExternalProcess {
      * ***********************************/
     
     
-    
+    /**
+     * Terminates the process.
+     * @param process the process to terminate
+     */
     private void terminateProcess(Process process){
         if(process == null)
             return;
@@ -439,6 +442,7 @@ public class ExternalProcess {
      * When starting a python process within a conda virtual environment, it is usually necessary to run conda activate env-name.
      * But since we only have the python executable, we have to modify the path variable as the activate command would do.
      * Call it after all arguments are specified.
+     * @param firstArgument the first argument which should be the path to the python executable 
      * @see <a href="https://github.com/conda/conda/blob/7cb5f66dd46727ce8f16b969e084555e6221cfc5/conda/activate.py#L396">https://github.com/conda/conda/blob/7cb5f66dd46727ce8f16b969e084555e6221cfc5/conda/activate.py#L396</a>
      * @see <a href="https://stackoverflow.com/a/56479886/11951900">https://stackoverflow.com/a/56479886/11951900</a>
      */
