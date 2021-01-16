@@ -29,11 +29,11 @@ public class ExternalProcessTest {
     public void checkArgumentParsing() throws TimeoutException{
         ArgumentCollector arguments = new ArgumentCollector();
         ExternalProcess process = new ExternalProcess();
-        process.addArguments("java", "PrintArguments", "foo", "bar", "with whitespace", "\"with quotes\"");
+        process.addArguments("java", "PrintArguments", "foo", "bar", "with whitespace");
         process.addStdOutConsumer(arguments);
         process.setWorkingDirectory(new File("src/test/resources"));
         process.run();
-        assertEquals(Arrays.asList("foo", "bar", "with whitespace", "with quotes"), arguments.getOutput());
+        assertEquals(Arrays.asList("foo", "bar", "with whitespace"), arguments.getOutput());
     }
     
     @Test
