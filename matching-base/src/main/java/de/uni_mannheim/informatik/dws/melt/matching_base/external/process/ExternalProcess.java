@@ -116,15 +116,15 @@ public class ExternalProcess {
         if(IS_LINUX){
             commands.add("setsid");
         }
-        List<String> arguments = this.getArguments();
-        if(arguments.isEmpty()){
+        List<String> substitutedArguments = this.getArguments();
+        if(substitutedArguments.isEmpty()){
             throw new IllegalArgumentException("No arguments to start an external process");
         }
-        if(arguments.get(0).contains("python")){
+        if(substitutedArguments.get(0).contains("python")){
             //just to be sure...
-            this.addEnvironmentVariableFromCondaActivate(arguments.get(0));
+            this.addEnvironmentVariableFromCondaActivate(substitutedArguments.get(0));
         }
-        commands.addAll(arguments);
+        commands.addAll(substitutedArguments);
                         
         ProcessBuilder pb = new ProcessBuilder(commands);
         if(this.workingDirectory != null)
@@ -132,6 +132,17 @@ public class ExternalProcess {
         if(this.environment != null && !this.environment.isEmpty())
             pb.environment().putAll(this.environment);
 
+        
+        //LOGGER.info("Execute now following external process:\ncommand: {}\ndirectory: {}\ncustom environment variables: {}",
+        //        String.join(" ", substitutedArguments),
+        //        this.workingDirectory == null ? new File("./") : this.workingDirectory,
+        //        this.environment == null ? "no" : this.environment);
+        LOGGER.info("Execute now following external process (command, directory, custom environment variables):");
+        LOGGER.info("command        : {}", String.join(" ", substitutedArguments));
+        LOGGER.info("directory      : {}", this.workingDirectory == null ? new File("./") : this.workingDirectory);
+        LOGGER.info("environmentVars: {}", this.environment == null ? "no custom variables" : this.environment);
+                
+                
         Process process;
         try {
             process = pb.start();
@@ -141,8 +152,8 @@ public class ExternalProcess {
         }
         
         try{
-            Thread outCollectorThread = startReadingThread(process.getInputStream(), "ExternalProcessStdOutCollector", this.outConsumer);
-            Thread errCollectorThread = startReadingThread(process.getErrorStream(), "ExternalProcessStdErrCollector", this.errConsumer);
+            Thread outCollectorThread = startReadingThread(process.getInputStream(), "ProcessStdOut", this.outConsumer);
+            Thread errCollectorThread = startReadingThread(process.getErrorStream(), "ProcessStdErr", this.errConsumer);
             
             boolean matcherFinishesInTime = true;
             try {
@@ -220,6 +231,7 @@ public class ExternalProcess {
      */
     public void setTimeout(long timeout, TimeUnit timeoutTimeUnit) {
         this.timeout = timeout;
+        this.timeoutTimeUnit = timeoutTimeUnit;
     }
 
     /**
