@@ -528,39 +528,44 @@ public class Executor {
         }
         return results;
     }
-
+    
     /**
      * Given a matcher, this method returns its name.
-     *
-     * @param matcher Matcher whose name shall be retrieved.
+     * It will first check if there is a specific toString method (e.g. not defined by Object class.
+     * If this is not the case then, it will return the simple name of the class.
+     * If this also does not exist(e.g. lamda definition), then it will return a fallback matcher name.
+     * @param matcherInstance the matcher instance whose name shall be retrieved.
      * @return The name as String.
      */
-    public static String getMatcherName(IOntologyMatchingToolBridge matcher) {
+    public static String getMatcherName(Object matcherInstance) {
+        return getMatcherName(matcherInstance.getClass());
+    }
+    
+    /**
+     * Given a matcher, this method returns its name.
+     * It will first check if there is a specific toString method (e.g. not defined by Object class.
+     * If this is not the case then, it will return the simple name of the class.
+     * If this also does not exist(e.g. lamda definition), then it will return a fallback matcher name.
+     * @param matcherClass the matcher class whose name shall be retrieved.
+     * @return The name as String.
+     */
+    public static String getMatcherName(Class matcherClass) {
         //https://stackoverflow.com/questions/22866925/detect-if-object-has-overriden-tostring
         try {
-            if (matcher.getClass().getMethod("toString").getDeclaringClass() != Object.class) {
-                return matcher.toString();
+            if (matcherClass.getMethod("toString").getDeclaringClass() != Object.class) {
+                return matcherClass.toString();
             }
         } catch (NoSuchMethodException | SecurityException ex) {
             LOGGER.debug("No access to toString method of matcher.", ex);
         }
-        return getMatcherName(matcher.getClass());
-    }
-
-    /**
-     * Given a matcher, this method returns its name.
-     *
-     * @param matcher Matcher whose name shall be retrieved.
-     * @return The name as String.
-     */
-    public static String getMatcherName(Class<? extends IOntologyMatchingToolBridge> matcher) {
-        String name = matcher.getSimpleName();
+        String name = matcherClass.getSimpleName();
         if (name == null)
             return FALLBACK_MATCHER_NAME;
         if (name.trim().isEmpty())
             return FALLBACK_MATCHER_NAME;
         return name;
     }
+    
 
     /**
      * Deletes all system results which are stored usually in the tmp folder.

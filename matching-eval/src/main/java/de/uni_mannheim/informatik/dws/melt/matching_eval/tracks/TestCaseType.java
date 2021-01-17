@@ -6,7 +6,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 public enum TestCaseType {
     SOURCE,
     TARGET,
-    REFERENCE;
+    REFERENCE,
+    PARAMETERS;
 
     @Override
     public String toString() {

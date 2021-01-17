@@ -45,6 +45,7 @@ public class BioDivTrack extends Track {
                 this.saveInDefaultLayout(source, testCaseId, TestCaseType.SOURCE);
                 this.saveInDefaultLayout(target, testCaseId, TestCaseType.TARGET);
                 this.saveInDefaultLayout(fileEntry, testCaseId, TestCaseType.REFERENCE);
+                //no parameters file available
             }
         }
     }

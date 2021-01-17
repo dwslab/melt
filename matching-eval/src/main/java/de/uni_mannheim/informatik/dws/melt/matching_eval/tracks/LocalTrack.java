@@ -98,6 +98,7 @@ public class LocalTrack extends Track {
             File source_file = new File(f, TestCaseType.SOURCE.toFileName());
             File target_file = new File(f, TestCaseType.TARGET.toFileName());
             File reference_file = new File(f, TestCaseType.REFERENCE.toFileName());
+            File parameters_file = new File(f, TestCaseType.PARAMETERS.toFileName());
 
             if(source_file.exists() == false || target_file.exists() == false){
                 LOGGER.error("There was a problem reading local test case: " + f.getName() + ". Files " +
@@ -117,7 +118,8 @@ public class LocalTrack extends Track {
                     reference_file.exists() ? reference_file.toURI() : null, 
                     this,
                     null,
-                    this.goldStandardCompleteness
+                    this.goldStandardCompleteness,
+                    parameters_file.exists() ? parameters_file.toURI() : null
                     ));
         }
         return testCases;
