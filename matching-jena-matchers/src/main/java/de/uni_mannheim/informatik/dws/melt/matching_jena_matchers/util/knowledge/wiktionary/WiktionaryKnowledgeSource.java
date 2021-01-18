@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * Class utilizing dbnary.
- * Dbnary endpoint for tests:
+ * Class utilizing DBnary.
+ * DBnary endpoint for tests:
  */
 public class WiktionaryKnowledgeSource extends KnowledgeSource {
 
@@ -28,11 +28,6 @@ public class WiktionaryKnowledgeSource extends KnowledgeSource {
      * directory where the TDB database with the wiktionary files lies
      */
     public String tdbDirectoryPath;
-
-    /**
-     * Default TDB path to be used.
-     */
-    public static final String DEFAULT_TDB_DIRECTORY_PATH = "/Users/janportisch/Documents/Data/Dbnary/dbnary_tdb";
 
     /**
      * Buffer for synonyms.
@@ -81,13 +76,6 @@ public class WiktionaryKnowledgeSource extends KnowledgeSource {
             tdbDataset.begin(ReadWrite.READ);
 
             linker = new WiktionaryLinker(this);
-    }
-
-    /**
-     * Constructor
-     */
-    public WiktionaryKnowledgeSource() {
-        this(DEFAULT_TDB_DIRECTORY_PATH);
     }
 
 

@@ -768,7 +768,7 @@ public class StringOperations {
     /**
      * Removes the stopwords from the given HashSet.
      *
-     * @param hashSetWithStopwords HashSet from which the stopwords shall be remvoed.
+     * @param hashSetWithStopwords HashSet from which the stopwords shall be removed.
      * @return Cleared HashSet
      */
     public static HashSet<String> clearHashSetFromStopwords(HashSet<String> hashSetWithStopwords) {
