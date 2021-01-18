@@ -364,7 +364,6 @@ class StringOperationsTest {
         set1.add("vehicle");
 
         assertEquals("a, car, is, vehicle".length(), StringOperations.getCommaSeparatedString(set1).length());
-
     }
 
 }

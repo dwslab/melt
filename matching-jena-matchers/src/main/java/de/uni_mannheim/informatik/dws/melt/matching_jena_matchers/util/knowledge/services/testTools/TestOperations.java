@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 /**
@@ -12,7 +14,7 @@ import java.util.Set;
  */
 public class TestOperations {
 
-    private static Logger LOG = LoggerFactory.getLogger(TestOperations.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestOperations.class);
 
     /**
      * Checks whether two sets contain the same contents.
@@ -22,19 +24,19 @@ public class TestOperations {
      */
     public static boolean setContainsSameContent(Set s1, Set s2){
         if(s1.size() != s2.size()){
-            LOG.error("Sets have different size.");
+            LOGGER.error("Sets have different size.");
             return false;
         }
 
         for(Object o : s1){
             if(!s2.contains(o)){
-                LOG.error(o.toString() + " not contained in both sets.");
+                LOGGER.error(o.toString() + " not contained in both sets.");
 
-                LOG.error("Contents of set 1:");
-                s1.stream().forEach(x -> LOG.error(x.toString()));
+                LOGGER.error("Contents of set 1:");
+                s1.stream().forEach(x -> LOGGER.error(x.toString()));
 
-                LOG.error("Contents of set 2:");
-                s2.stream().forEach(x -> LOG.error(x.toString()));
+                LOGGER.error("Contents of set 2:");
+                s2.stream().forEach(x -> LOGGER.error(x.toString()));
 
                 return false;
             }
@@ -58,7 +60,7 @@ public class TestOperations {
         } else {
             for (int i = 0; i < array_1.length; i++) {
                 if (!array_1[i].equals(array_2[i])) {
-                    LOG.info(array_1[i] + " != " + array_2[i]);
+                    LOGGER.info(array_1[i] + " != " + array_2[i]);
                     return false;
                 }
             }
@@ -82,7 +84,7 @@ public class TestOperations {
         } else {
             for (int i = 0; i < array_1.length; i++) {
                 if (array_1[i] != (array_2[i])) {
-                    LOG.info(array_1[i] + " != " + array_2[i]);
+                    LOGGER.info(array_1[i] + " != " + array_2[i]);
                     return false;
                 }
             }
@@ -126,5 +128,27 @@ public class TestOperations {
      */
     private void printStringArray(String[] stringArray){
         Arrays.stream(stringArray).forEach(System.out::println);
+    }
+
+    /**
+     * Returns the key from the specified resource bundle.
+     * @param resourceBundle The resource bundle name.
+     * @param key The key to be looked up.
+     * @return Null if nothing was found or if there was an Exception - else value as String.
+     */
+    public static String getStringKeyFromResourceBundle(String resourceBundle, String key){
+        if(resourceBundle.endsWith(".properties")){
+            resourceBundle = resourceBundle.substring(0, resourceBundle.length() - 11);
+        }
+        if(resourceBundle == null || key == null){
+            return null;
+        }
+        try {
+            String s = ResourceBundle.getBundle(resourceBundle).getString(key);
+            return s;
+        } catch (MissingResourceException mre){
+            LOGGER.error("Cannot find resource file: " + resourceBundle + ".properties or key '" + key + "'");
+            return null;
+        }
     }
 }

@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.knowledge
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.knowledge.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.knowledge.Language;
 import org.apache.jena.query.*;
+//import org.apache.jena.tdb.TDB2Factory;
 import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +73,7 @@ public class WiktionaryKnowledgeSource extends KnowledgeSource {
             hypernymyBuffer = new HashMap<>();
 
             // dataset and model creation
+            //tdbDataset = TDB2Factory.connectDataset(tdbDirectoryPath);
             tdbDataset = TDBFactory.createDataset(tdbDirectoryPath);
             tdbDataset.begin(ReadWrite.READ);
 

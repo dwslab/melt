@@ -82,3 +82,6 @@ index.index.0
 !.travis.yml
 !.github/workflows/maven.yml
 !.gitignore
+
+# properties file
+local_config.properties

@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.knowledge.wiktionary;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.knowledge.services.testTools.TestOperations;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,15 @@ class WiktionaryLinkerTest {
 
     @BeforeAll
     public static void prepare() {
-        wiktionary = new WiktionaryKnowledgeSource();
+        String key = "wiktionaryTdbDirectory";
+        String tdbpath = TestOperations.getStringKeyFromResourceBundle("config", key);
+        if(tdbpath == null){
+            tdbpath = TestOperations.getStringKeyFromResourceBundle("local_config", key);
+        }
+        if(tdbpath == null){
+            fail("Cannot find config.properties or local_config.properties with key " + key);
+        }
+        wiktionary = new WiktionaryKnowledgeSource(tdbpath);
         linker = new WiktionaryLinker(wiktionary);
     }
 

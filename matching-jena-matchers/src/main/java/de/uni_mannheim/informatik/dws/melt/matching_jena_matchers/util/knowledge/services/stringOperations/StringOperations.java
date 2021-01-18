@@ -3,12 +3,17 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.knowledg
 
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.knowledge.services.nlp.PorterStemmer;
+import org.apache.commons.io.FileUtils;
 import org.simmetrics.metrics.Levenshtein;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,6 +27,8 @@ import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.kn
  */
 public class StringOperations {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(StringOperations.class);
+
     // signal words that separate entities
     private static final HashSet<String> separatingWords = new HashSet<String>(Arrays.asList("of", "Of", "and", "And")); // further:
     // "under",
@@ -29,7 +36,7 @@ public class StringOperations {
     // "beneath",
     // "below"
     private static HashSet<String> stopwords;
-    private static final String PATH_TO_STOPWORD_FILE = "./conf/stopwords/stopwords.txt";
+    private static final String PATH_TO_STOPWORD_FILE = "stopwords.txt";
 
     /**
      * Function which indicates whether a phrase is in camel case or not.
@@ -837,9 +844,19 @@ public class StringOperations {
      * Intialize reading stopwords file if it has not been read before.
      */
     private static void lazyInitStopwords() {
-        if (stopwords == null) {
-            TermFromFileReader termFromFileReader = new TermFromFileReader(PATH_TO_STOPWORD_FILE);
-            stopwords = termFromFileReader.getReadLines();
+        if (stopwords == null || stopwords.size() == 0) {
+            try {
+                File result = FileUtils.toFile(StringOperations.class.getClassLoader().getResource(PATH_TO_STOPWORD_FILE).toURI().toURL());
+                if(!result.exists()){
+                    LOGGER.error("Did not find file: " + PATH_TO_STOPWORD_FILE + " in the class path.");
+                }
+                TermFromFileReader termFromFileReader = new TermFromFileReader(result);
+                stopwords = termFromFileReader.getReadLines();
+            } catch (MalformedURLException e) {
+                LOGGER.error("Could not initialize stopwords.", e);
+            } catch (URISyntaxException e) {
+                LOGGER.error("Could not initialize stopwords.", e);
+            }
         }
     }
 
