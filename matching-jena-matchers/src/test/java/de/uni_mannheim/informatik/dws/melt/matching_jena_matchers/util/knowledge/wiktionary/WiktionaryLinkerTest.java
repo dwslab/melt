@@ -18,9 +18,9 @@ class WiktionaryLinkerTest {
     @BeforeAll
     public static void prepare() {
         String key = "wiktionaryTdbDirectory";
-        String tdbpath = TestOperations.getStringKeyFromResourceBundle("config", key);
+        String tdbpath = TestOperations.getStringKeyFromResourceBundle("local_config", key);
         if(tdbpath == null){
-            tdbpath = TestOperations.getStringKeyFromResourceBundle("local_config", key);
+            tdbpath = TestOperations.getStringKeyFromResourceBundle("config", key);
         }
         if(tdbpath == null){
             fail("Cannot find config.properties or local_config.properties with key " + key);
