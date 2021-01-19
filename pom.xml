@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
     <artifactId>matching-parent</artifactId>
@@ -174,12 +175,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M4</version>
-            </plugin>
-
             <!-- for checkstyle reports -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -218,24 +213,63 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
                 <version>1.20</version>
                 <executions>
-                  <execution>
-                    <id>aggregate-download-licenses</id>
-                    <goals>
-                      <goal>aggregate-download-licenses</goal>
-                    </goals>
-                  </execution>
+                    <execution>
+                        <id>aggregate-download-licenses</id>
+                        <goals>
+                            <goal>aggregate-download-licenses</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
 
     <profiles>
+
+        <!-- Background Knowledge Test Case Execution -->
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.0.0-M4</version>
+                        <configuration>
+                            <excludes>WiktionaryLinkerTest.java</excludes>
+                            <excludes>WiktionaryKnowledgeSourceTest.java</excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Background Knowledge Test Case Execution -->
+        <profile>
+            <id>run-bk-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.0.0-M4</version>
+                        <configuration>
+                            <includes>WiktionaryLinkerTest.java</includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <!-- GPG Signature on release -->
         <profile>
             <id>release-sign-artifacts</id>

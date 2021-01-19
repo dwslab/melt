@@ -1,7 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.knowledge.services.stringOperations;
 
-
-
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.knowledge.services.nlp.PorterStemmer;
 import org.apache.commons.io.FileUtils;
 import org.simmetrics.metrics.Levenshtein;
@@ -841,7 +839,7 @@ public class StringOperations {
     }
 
     /**
-     * Intialize reading stopwords file if it has not been read before.
+     * Initialize reading stopwords file if it has not been read before.
      */
     private static void lazyInitStopwords() {
         if (stopwords == null || stopwords.size() == 0) {
