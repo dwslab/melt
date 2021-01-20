@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.CardinalityFilter;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.io.IOException;
 

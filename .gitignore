@@ -85,3 +85,8 @@ index.index.0
 
 # properties file
 local_config.properties
+
+# background knowledge: do not track buffers / persistences
+/matching-jena-matchers/persitences
+/persistences
+*.mapdb
