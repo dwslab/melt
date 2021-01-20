@@ -25,7 +25,6 @@ public class WebIsAlodEmbeddingLinker extends LabelToConceptLinkerEmbeddings {
         return result;
     }
 
-
     @Override
     public String getNameOfLinker() {
         return this.nameOfLinker;

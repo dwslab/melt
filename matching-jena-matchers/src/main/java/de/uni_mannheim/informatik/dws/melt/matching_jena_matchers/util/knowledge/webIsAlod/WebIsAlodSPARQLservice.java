@@ -442,18 +442,10 @@ public class WebIsAlodSPARQLservice {
                 "select distinct ?c where {\n" +
                         "?c <http://www.w3.org/2000/01/rdf-schema#label> \"" + label + "\"\n" +
                         "}";
-        LOGGER.info("Running the following query:\n" + queryString);
+        //LOGGER.info("Running the following query:\n" + queryString);
         QueryExecution qe = QueryExecutionFactory.sparqlService(webIsAlodEndpoint.toString(), queryString);
         ResultSet results = safeExecution(qe);
-        LOGGER.info("Completed.");
-        /*
-        try {
-            LOGGER.info("Sleep now.");
-            TimeUnit.SECONDS.sleep(1);
-        } catch (Exception e){
-            System.out.println(e);
-        }
-        */
+        //LOGGER.info("Completed.");
 
         if (!results.hasNext()) {
             // Query was not successful.
