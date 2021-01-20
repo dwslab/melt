@@ -347,6 +347,16 @@ public abstract class Track {
                     testCaseName + ".rdf").toFile();
             if(file.exists() == false)
                 saveToFile(in, file);
+        }else if(type == TestCaseType.PARAMETERS){
+            File file = Paths.get(
+                    cacheFolder.getAbsolutePath(),
+                    encode(this.remoteLocation),
+                    encode(this.name),
+                    encode(this.version),
+                    "parameters",
+                    testCaseName + ".rdf").toFile();
+            if(file.exists() == false)
+                saveToFile(in, file);
         }
     }
 
@@ -399,6 +409,7 @@ public abstract class Track {
             File source_file = new File(f, TestCaseType.SOURCE.toFileName());
             File target_file = new File(f, TestCaseType.TARGET.toFileName());
             File reference_file = new File(f, TestCaseType.REFERENCE.toFileName());
+            File parameters_file = new File(f, TestCaseType.PARAMETERS.toFileName());
             
             if(source_file.exists() == false || target_file.exists() == false){
                 LOGGER.error("Cache is corrupted - source or target file is not there - continue (to solve it, delete the cache folder)");
@@ -415,7 +426,8 @@ public abstract class Track {
                     reference_file.exists() ? reference_file.toURI() : null,
                     this,
                     null,
-                    this.goldStandardCompleteness));
+                    this.goldStandardCompleteness,
+                    parameters_file.exists() ? parameters_file.toURI() : null));
         }
         return testCases;
     }
@@ -464,13 +476,19 @@ public abstract class Track {
                 LOGGER.error("Cache is corrupted - source, target or reference file is not there - continue (to solve it, delete the cache folder)");
                 continue;
             }
+            
+            File parametersFile = Paths.get(cacheFolder.getAbsolutePath(),
+                    encode(this.remoteLocation),encode(this.name), encode(this.version),
+                    "parameters", referenceFile.getName()).toFile();
+            
             testCases.add(new TestCase(fileNameWithoutExtension,
                     sourceFile.toURI(),
                     targetFile.toURI(),
                     referenceFile.toURI(),
                     this,
                     null,
-                    this.goldStandardCompleteness));
+                    this.goldStandardCompleteness,
+                    parametersFile.exists() ? parametersFile.toURI() : null));
         }
         return testCases;
     }

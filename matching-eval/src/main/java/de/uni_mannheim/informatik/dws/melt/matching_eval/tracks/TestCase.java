@@ -57,6 +57,13 @@ public class TestCase {
      * How complete is the gold standard for this test case.
      */
     private GoldStandardCompleteness goldStandardCompleteness;
+    
+    /**
+     * URI pointing to the parameter file. Can be null (which means no parameters at all).
+     * It is formatted as a Proprerties file from java (but can also be read from python etc.
+     * similar to a ini file without sections.
+     */
+    private URI parameters;
 
     /**
      * Constructor
@@ -67,8 +74,9 @@ public class TestCase {
      * @param track The track to which the test case belongs.
      * @param inputAlignment The input alignment for the matcher.
      * @param goldStandardCompleteness How complete is the gold standard for this test case.
+     * @param parameters the parameters which the matcher get.
      */
-    public TestCase(String name, URI source, URI target, URI reference, Track track, URI inputAlignment, GoldStandardCompleteness goldStandardCompleteness) {
+    public TestCase(String name, URI source, URI target, URI reference, Track track, URI inputAlignment, GoldStandardCompleteness goldStandardCompleteness, URI parameters) {
         this.name = name;
         this.track = track;
         this.source = source;
@@ -79,7 +87,7 @@ public class TestCase {
     }
 
     /**
-     * Constructor with a complete gold standard and not input alignment.
+     * Constructor with a complete gold standard and no input alignment.
      * @param name Name of the test case.
      * @param source URI to the source ontology.
      * @param target URI to the target ontology.
@@ -87,7 +95,7 @@ public class TestCase {
      * @param track The track to which the test case belongs.
      */
     public TestCase(String name, URI source, URI target, URI reference, Track track) {
-        this(name, source, target, reference, track, null, GoldStandardCompleteness.COMPLETE);
+        this(name, source, target, reference, track, null, GoldStandardCompleteness.COMPLETE, null);
     }
 
     
@@ -117,7 +125,11 @@ public class TestCase {
 
     public GoldStandardCompleteness getGoldStandardCompleteness() {
         return goldStandardCompleteness;
-    }    
+    }
+
+    public URI getParameters() {
+        return parameters;
+    }
     
     @Override
     public String toString() {

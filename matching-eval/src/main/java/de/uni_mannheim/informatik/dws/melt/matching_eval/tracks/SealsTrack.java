@@ -56,6 +56,7 @@ public class SealsTrack extends Track {
             URL source = bmd.getDataItem(testCaseId, "source");
             URL target = bmd.getDataItem(testCaseId, "target");
             URL reference = bmd.getDataItem(testCaseId, "reference");
+            URL parameters = bmd.getDataItem(testCaseId, "parameters");
             
             if(exists(source) == false || exists(target) == false){
                 LOGGER.error("Source or Target is not defined - continue");
@@ -66,6 +67,9 @@ public class SealsTrack extends Track {
             this.saveInDefaultLayout(target, testCaseId, TestCaseType.TARGET);
             if(exists(reference)){
                 this.saveInDefaultLayout(reference, testCaseId, TestCaseType.REFERENCE);
+            }
+            if(exists(parameters)){
+                this.saveInDefaultLayout(parameters, testCaseId, TestCaseType.PARAMETERS);
             }
         }
         LOGGER.info("Finished downloading track {}", testDataCollectionName);

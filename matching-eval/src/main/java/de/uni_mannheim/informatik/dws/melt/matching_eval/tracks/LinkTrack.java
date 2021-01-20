@@ -62,6 +62,7 @@ public class LinkTrack extends Track {
         if(filename.equals(this.filenameReference))
             return TestCaseType.REFERENCE;        
         return null;
+        //no parameters file available
     }
         
 }

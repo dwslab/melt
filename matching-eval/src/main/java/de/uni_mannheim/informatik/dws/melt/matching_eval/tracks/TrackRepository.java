@@ -626,7 +626,7 @@ public class TrackRepository{
         try {
             File f = File.createTempFile("ref_sample", ".rdf");
             sample.serialize(f);
-            return new TestCase(tc.getName(), tc.getSource(), tc.getTarget(), tc.getReference(), tc.getTrack(), f.toURI(), tc.getGoldStandardCompleteness());
+            return new TestCase(tc.getName(), tc.getSource(), tc.getTarget(), tc.getReference(), tc.getTrack(), f.toURI(), tc.getGoldStandardCompleteness(), tc.getParameters());
         } catch (IOException ex) {
             LOGGER.error("Could not write sample reference alignment to file", ex);
             return tc;
