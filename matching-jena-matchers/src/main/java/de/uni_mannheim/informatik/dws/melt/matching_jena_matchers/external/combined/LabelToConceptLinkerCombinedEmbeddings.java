@@ -1,7 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.combined;
 
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinkerEmbeddings;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.LabelToConceptLinkerEmbeddings;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.LeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.MaxGramLeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;

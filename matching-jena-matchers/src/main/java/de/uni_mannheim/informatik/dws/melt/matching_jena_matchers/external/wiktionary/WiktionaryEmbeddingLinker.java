@@ -1,7 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiktionary;
 
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinkerEmbeddings;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.LabelToConceptLinkerEmbeddings;
 
 public class WiktionaryEmbeddingLinker extends LabelToConceptLinkerEmbeddings {
 

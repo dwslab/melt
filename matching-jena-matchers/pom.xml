@@ -11,9 +11,16 @@
     <description>Contains modularized (jena-based) matchers that can be used to quickly assemble matching systems. </description>
 
     <dependencies>
+
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-jena</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>matching-ml</artifactId>
             <version>${project.version}</version>
         </dependency>
 

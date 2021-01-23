@@ -1,7 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet;
 
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinkerEmbeddings;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.LabelToConceptLinkerEmbeddings;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.StringModifier;
 
 public class WordNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings {

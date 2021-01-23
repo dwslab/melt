@@ -31,6 +31,13 @@
             <artifactId>matching-owlapi</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>matching-jena-matchers</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <!--dependency>
             <groupId>se.liu.ida</groupId>
             <artifactId>AlignmentCube</artifactId>
@@ -151,13 +158,6 @@
             <version>1.7.5</version>
         </dependency>
         -->
-
-        <dependency>
-            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-            <artifactId>matching-jena-matchers</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
 
         <!--dependency>
             <groupId>com.github.VisualDataWeb</groupId>

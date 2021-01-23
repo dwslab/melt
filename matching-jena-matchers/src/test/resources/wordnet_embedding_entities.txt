@@ -1,0 +1,7 @@
+wn-lemma:minstrel#minstrel-n
+wn-lemma:tubeless#tubeless-a
+wn-lemma:Europe#Europe-n
+wn-lemma:Cryptophyceae#Cryptophyceae-n
+wn-lemma:all-round(a)#all-round(a)-s
+wn-lemma:day_of_the_week#day_of_the_week-n
+wn-lemma:hip_to(p)#hip_to(p)-s

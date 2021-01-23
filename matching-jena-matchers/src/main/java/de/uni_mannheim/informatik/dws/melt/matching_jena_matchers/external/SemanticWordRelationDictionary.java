@@ -7,7 +7,7 @@ import java.util.HashSet;
  * @author Jan Portisch
  *
  */
-public abstract class SemanticWordRelationDictionary {
+public abstract class SemanticWordRelationDictionary implements ExternalResource, SynonymCapability {
 
 	/**
 	 * Checks whether the given word is available in the dictionary.

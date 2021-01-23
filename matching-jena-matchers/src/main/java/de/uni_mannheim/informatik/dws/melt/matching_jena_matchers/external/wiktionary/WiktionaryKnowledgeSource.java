@@ -164,7 +164,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                         "}\r\n" +
                         "}\r\n" +
                         "}";
-        System.out.println(queryString);
+        //System.out.println(queryString);
         Query query = QueryFactory.create(queryString);
         QueryExecution queryExecution = QueryExecutionFactory.create(query, tdbDataset);
         ResultSet queryResult = queryExecution.execSelect();

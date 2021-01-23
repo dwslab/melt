@@ -235,7 +235,7 @@ public class WikidataLinker implements LabelToConceptLinker {
     }
 
     /**
-     * Link with altternative label.
+     * Link with alternative label.
      * @param label Label.
      * @param language Language.
      * @return A list of URIs in String format.
