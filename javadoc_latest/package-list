@@ -30,6 +30,7 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.scale
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.combined
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.dataStructures
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.io
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers
