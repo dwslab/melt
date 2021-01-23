@@ -3,7 +3,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embe
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResource;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SynonymCapability;
-//import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

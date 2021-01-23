@@ -5,3 +5,7 @@ wn-lemma:Cryptophyceae#Cryptophyceae-n
 wn-lemma:all-round(a)#all-round(a)-s
 wn-lemma:day_of_the_week#day_of_the_week-n
 wn-lemma:hip_to(p)#hip_to(p)-s
+wn-lemma:car#car-n
+wn-lemma:Union#Union-n
+wn-lemma:union#union-n
+wn-lemma:European_Union#European_Union-n

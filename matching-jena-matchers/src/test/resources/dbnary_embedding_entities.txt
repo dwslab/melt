@@ -1,3 +1,5 @@
 http://kaiko.getalp.org/dbnary/eng/Europe
 http://kaiko.getalp.org/dbnary/eng/trichostrongylid
 http://kaiko.getalp.org/dbnary/eng/firkins
+http://kaiko.getalp.org/dbnary/eng/European_Union
+http://kaiko.getalp.org/dbnary/eng/car

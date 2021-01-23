@@ -62,13 +62,18 @@ class LabelToConceptLinkerEmbeddingsTest {
 
     @Test
     void linkToPotentiallyMultipleConcepts() {
-        String pathToWiktionaryEntityFile = "/Users/janportisch/Documents/PhD/LREC_2020/Language_Models/wiktionary/dbnary_entities.txt";
+                /**
+                /Users/janportisch/Documents/PhD/LREC_2020/Language_Models/wiktionary/dbnary_entities.txt
+                /Users/janportisch/Documents/PhD/LREC_2020/Language_Models/wordnet/wordnet_entities.txt
+                /Users/janportisch/Documents/PhD/Language_Models_old/alod/alodc_entities.txt
+                 */
+        String pathToWiktionaryEntityFile = loadFile("dbnary_embedding_entities.txt").getAbsolutePath();
         WiktionaryEmbeddingLinker wiktionaryLinker = new WiktionaryEmbeddingLinker(pathToWiktionaryEntityFile);
 
-        String pathToWordnetEntityFile = "/Users/janportisch/Documents/PhD/LREC_2020/Language_Models/wordnet/wordnet_entities.txt";
+        String pathToWordnetEntityFile = loadFile("wordnet_embedding_entities.txt").getAbsolutePath();
         WordNetEmbeddingLinker wordnetLinker = new WordNetEmbeddingLinker(pathToWordnetEntityFile);
 
-        String pathToAlodEntityFile = "/Users/janportisch/Documents/PhD/Language_Models_old/alod/alodc_entities.txt";
+        String pathToAlodEntityFile = loadFile("alodc_embedding_entities.txt").getAbsolutePath();
         WebIsAlodEmbeddingLinker webIsAlodLinker =  new WebIsAlodEmbeddingLinker(pathToAlodEntityFile);
 
         // test 1: Europe
