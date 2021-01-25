@@ -42,7 +42,13 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.12</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.javatuples</groupId>
+            <artifactId>javatuples</artifactId>
+            <version>1.2</version>
+        </dependency>
+
         <!-- Dependencies during test -->
         <dependency>
             <groupId>com.google.code.gson</groupId>

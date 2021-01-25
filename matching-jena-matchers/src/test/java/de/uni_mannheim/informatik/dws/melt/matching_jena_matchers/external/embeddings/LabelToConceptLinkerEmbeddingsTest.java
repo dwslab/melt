@@ -62,11 +62,6 @@ class LabelToConceptLinkerEmbeddingsTest {
 
     @Test
     void linkToPotentiallyMultipleConcepts() {
-                /**
-                /Users/janportisch/Documents/PhD/LREC_2020/Language_Models/wiktionary/dbnary_entities.txt
-                /Users/janportisch/Documents/PhD/LREC_2020/Language_Models/wordnet/wordnet_entities.txt
-                /Users/janportisch/Documents/PhD/Language_Models_old/alod/alodc_entities.txt
-                 */
         String pathToWiktionaryEntityFile = loadFile("dbnary_embedding_entities.txt").getAbsolutePath();
         WiktionaryEmbeddingLinker wiktionaryLinker = new WiktionaryEmbeddingLinker(pathToWiktionaryEntityFile);
 
