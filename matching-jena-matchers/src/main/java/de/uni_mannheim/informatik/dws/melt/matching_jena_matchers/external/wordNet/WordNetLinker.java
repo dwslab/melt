@@ -18,17 +18,8 @@ import java.util.HashSet;
  */
 public class WordNetLinker implements LabelToConceptLinker {
 
+
 	private static Logger LOGGER = LoggerFactory.getLogger(WordNetLinker.class);
-
-    public static void main(String[] args) {
-        WordNetKnowledgeSource dictionary = new WordNetKnowledgeSource("/Users/janportisch/Documents/Data/Wordnet/dict");
-        WordNetLinker linker = new WordNetLinker(dictionary);
-        for (String s : linker.linkToPotentiallyMultipleConcepts("council of the european union")) {
-            System.out.println(s);
-        }
-        dictionary.close();
-    }
-
 
     /**
      * The WordNet dictionary instance that is to be used.
@@ -49,6 +40,9 @@ public class WordNetLinker implements LabelToConceptLinker {
 
     @Override
     public String linkToSingleConcept(String labelToBeLinked) {
+        if(labelToBeLinked == null || labelToBeLinked.trim().equals("")){
+            return null;
+        }
         String key = labelToBeLinked;
         if (singleConceptBuffer.containsKey(key)) {
             return singleConceptBuffer.get(key);
@@ -80,7 +74,7 @@ public class WordNetLinker implements LabelToConceptLinker {
 
     @Override
     public HashSet<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
-        if (labelToBeLinked == null) return null;
+        if (labelToBeLinked == null ||labelToBeLinked.trim().equals("")) return null;
         HashSet<String> result = linkLabelToTokensLeftToRight(labelToBeLinked);
         int possibleConceptParts = StringOperations.clearArrayFromStopwords(StringOperations.tokenizeBestGuess(labelToBeLinked)).length;
 

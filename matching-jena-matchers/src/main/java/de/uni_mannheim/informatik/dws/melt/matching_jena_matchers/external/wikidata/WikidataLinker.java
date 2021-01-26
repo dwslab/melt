@@ -127,11 +127,15 @@ public class WikidataLinker implements LabelToConceptLinker {
      * @return One link representing one or more concepts on Wikidata.
      */
     public String linkToSingleConcept(String labelToBeLinked, Language language) {
+        if(labelToBeLinked == null || language == null || labelToBeLinked.trim().equals("")){
+            return null;
+        }
         String key = multiConceptPrefix + labelToBeLinked + "_" + language.toSparqlChar2();
 
         // cache lookup
         if(multiLinkStore.containsKey(key)){
-            return key;
+            if (multiLinkStore.get(key) == null) return null;
+            else return key;
         }
 
         // run modification sequence
@@ -218,7 +222,6 @@ public class WikidataLinker implements LabelToConceptLinker {
         }
         return result;
     }
-
 
     /**
      * Given a label, a set of Wikidata concepts (= URIs as String) will be returned that carry that label.

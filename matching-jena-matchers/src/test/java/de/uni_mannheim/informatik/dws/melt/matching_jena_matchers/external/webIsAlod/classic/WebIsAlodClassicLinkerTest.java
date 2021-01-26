@@ -25,6 +25,8 @@ class WebIsAlodClassicLinkerTest {
         assertEquals("http://webisa.webdatacommons.org/concept/european_union_", linker.linkToSingleConcept("european_Union"));
         assertEquals("http://webisa.webdatacommons.org/concept/european_union_", linker.linkToSingleConcept("European_Union"));
         assertEquals("http://webisa.webdatacommons.org/concept/european_union_", linker.linkToSingleConcept("EUropean_UniOn"));
+        assertNull(linker.linkToSingleConcept(""));
+        assertNull(linker.linkToSingleConcept(null));
     }
 
     @Test
@@ -34,8 +36,9 @@ class WebIsAlodClassicLinkerTest {
         assertTrue(result.contains("http://webisa.webdatacommons.org/concept/luxury_goods_"));
         assertTrue(result.size() == 1);
 
-        HashSet<String> result2 = linker.linkToPotentiallyMultipleConcepts("luxury goods ölkjölkjölkj");
-        assertNull(result2);
+        assertNull(linker.linkToPotentiallyMultipleConcepts("luxury goods ölkjölkjölkj"));
+        assertNull(linker.linkToPotentiallyMultipleConcepts(null));
+        assertNull(linker.linkToPotentiallyMultipleConcepts(""));
     }
 
 }

@@ -72,6 +72,8 @@ class WiktionaryLinkerTest {
         assertEquals("lumbar_puncture", linker.linkToSingleConcept("lumbarPuncture"));
         assertEquals("dog", linker.linkToSingleConcept("dog"));
         assertEquals("hound", linker.linkToSingleConcept("hound"));
+        assertNull(linker.linkToSingleConcept(null));
+        assertNull(linker.linkToSingleConcept(""));
     }
 
 
@@ -97,6 +99,10 @@ class WiktionaryLinkerTest {
         assertNull(result3);
         result3 = linker.linkToPotentiallyMultipleConcepts("House asdfffffffffff Lords dog");
         assertNull(result3);
+
+        // null
+        assertNull(linker.linkToPotentiallyMultipleConcepts(null));
+        assertNull(linker.linkToPotentiallyMultipleConcepts(""));
     }
 
 }

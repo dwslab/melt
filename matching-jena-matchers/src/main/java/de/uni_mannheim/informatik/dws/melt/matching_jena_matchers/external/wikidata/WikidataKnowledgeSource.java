@@ -8,12 +8,10 @@ import org.javatuples.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
+
 
     /**
      * Buffer for repeated synonymy requests.
@@ -56,7 +54,6 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     public boolean isInDictionary(String word) {
         return isInDictionary(word, Language.ENGLISH);
     }
-
 
     /**
      * Test whether the given word can be mapped (1-1) to a Wikidata concept (no smart mechanisms applied).
@@ -101,12 +98,10 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         return result;
     }
 
-
     @Override
     public HashSet<String> getSynonyms(String linkedConcept) {
         return getSynonyms(linkedConcept, Language.ENGLISH);
     }
-
 
     /**
      * Language-bound synonymy retrieval.
@@ -181,7 +176,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
      *          If multiple candidates apply, all are returned. If there is no closest common hypernym, null will be
      *          returned.
      */
-    public Pair<Set<String>, Integer> getClosestCommonHypernym(ArrayList<String> links, int limitOfHops){
+    public Pair<Set<String>, Integer> getClosestCommonHypernym(List<String> links, int limitOfHops){
 
         // The links for the next iteration, i.e. the concepts whose hyperconcepts will be looked for in the next
         //iteration.
@@ -211,9 +206,9 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
 
                     // simple logging
                     if (nextNextIteration != null && nextNextIteration.size() > 0) {
-                        System.out.println("\nHyperconcepts for " + link);
+                        LOGGER.debug("\nHyperconcepts for " + link);
                         for (String s : nextNextIteration) {
-                            System.out.println("\t" + s);
+                            LOGGER.debug("\t" + s);
                         }
                     }
 
@@ -302,13 +297,17 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
      *
      * @param linkedConcept The linked concept for which hypernyms shall be retrieved. The linked concept is a URI.
      * @return The found hypernyms as links (URIs). If it is planned to immediately use the lexical representation
-     *  use {@link WikidataKnowledgeSource#getHypernymsLexical(String, Language)}.
+     *  use {@link WikidataKnowledgeSource#getHypernymsLexical(String, Language)}. In case nothing was found,
+     *  an empty set will be returned.
      */
     @Override
     public HashSet<String> getHypernyms(String linkedConcept) {
         HashSet<String> result = new HashSet<>();
         if (linkedConcept.startsWith(WikidataLinker.multiConceptPrefix)) {
             HashSet<String> individualLinks = this.linker.getLinks(linkedConcept);
+            if(individualLinks == null){
+                return result;
+            }
             for (String individualLink : individualLinks) {
                 result.addAll(getHypernyms(individualLink));
             }
@@ -338,7 +337,6 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     public HashSet<String> getHypernymsLexical(String linkedConcept){
         return getHypernymsLexical(linkedConcept, Language.ENGLISH);
     }
-
 
     /**
      * Uses wdt:P31 (instance of) as well as wdt:P279 (subclass of).
@@ -434,7 +432,6 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         }
         return result;
     }
-
 
     @Override
     public void close() {

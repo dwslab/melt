@@ -26,6 +26,8 @@ public class WebIsAlodClassicLinker implements LabelToConceptLinker {
 
     @Override
     public String linkToSingleConcept(String labelToBeLinked) {
+        if(labelToBeLinked == null ||labelToBeLinked.trim().equals("")) return null;
+
         String result;
 
         // lookup 1: plain
@@ -43,6 +45,7 @@ public class WebIsAlodClassicLinker implements LabelToConceptLinker {
 
     @Override
     public HashSet<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
+        if(labelToBeLinked == null || labelToBeLinked.trim().equals("")) return null;
         HashSet<String> result = linkLabelToTokensLeftToRight(labelToBeLinked);
         int possibleConceptParts = StringOperations.clearArrayFromStopwords(StringOperations.tokenizeBestGuess(labelToBeLinked)).length;
 

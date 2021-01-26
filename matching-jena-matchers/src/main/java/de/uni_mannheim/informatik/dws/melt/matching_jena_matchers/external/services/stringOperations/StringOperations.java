@@ -1,14 +1,11 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.nlp.PorterStemmer;
-import org.apache.commons.io.FileUtils;
 import org.simmetrics.metrics.Levenshtein;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

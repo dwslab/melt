@@ -16,13 +16,19 @@ class WikidataLinkerTest {
 
         // checking for concrete instances
         HashSet<String> individualLinks1 = linker.getLinks(result1);
-        individualLinks1.contains("http://www.wikidata.org/entity/Q837171");
+        assertTrue(individualLinks1.contains("http://www.wikidata.org/entity/Q837171"));
 
         String result3 = linker.linkToSingleConcept("financial_services");
         assertNotNull(result3);
 
         String result4 = linker.linkToSingleConcept("FinancialServices");
         assertNotNull(result4);
+
+        // null tests
+        assertNull(linker.linkToSingleConcept("Some Concept That Does not Exist"));
+        assertNull(linker.linkToSingleConcept("Some Concept That Does not Exist"));
+        assertNull(linker.linkToSingleConcept(""));
+        assertNull(linker.linkToSingleConcept(null));
     }
 
     @Test

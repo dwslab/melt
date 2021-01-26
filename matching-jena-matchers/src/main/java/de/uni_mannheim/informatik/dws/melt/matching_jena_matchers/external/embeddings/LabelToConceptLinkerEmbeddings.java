@@ -20,17 +20,16 @@ import java.util.*;
  */
 public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLinker {
 
+
     /**
      * Default logger
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(LabelToConceptLinkerEmbeddings.class);
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(LabelToConceptLinkerEmbeddings.class);
 
     /**
      * The list of operations that is performed to find a concept in the dictionary.
      */
     LinkedList<StringModifier> stringModificationSequence;
-
 
     /**
      * Constructor
@@ -48,7 +47,6 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
         stringModificationSequence.add(new TokenizeConcatUnderscoreLowercaseModifier());
     }
 
-
     /**
      * Constructor
      *
@@ -58,12 +56,10 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
         this(new File(filePathToEntityFile));
     }
 
-
     /**
      * Data lookup.
      */
     public Map<String, String> lookupMap;
-
 
     /**
      * Normalization
@@ -72,7 +68,6 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
      * @return Normalized version of the String.
      */
     public abstract String normalize(String stringToBeNormalized);
-
 
     @Override
     public String linkToSingleConcept(String labelToBeLinked) {
@@ -96,7 +91,6 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
         return null;
     }
 
-
     /**
      * Splits the labelToBeLinked in ngrams up to infinite size and tries to link components.
      * This corresponds to a MAXGRAM_LEFT_TO_RIGHT_TOKENIZER or NGRAM_LEFT_TO_RIGHT_TOKENIZER OneToManyLinkingStrategy.
@@ -106,9 +100,8 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
      */
     private Set<String> linkLabelToTokensLeftToRight(String labelToBeLinked) {
         if (labelToBeLinked == null) return null;
-        LeftToRightTokenizer tokenizer;
         String[] tokens = StringOperations.tokenizeBestGuess(labelToBeLinked);
-        tokenizer = new MaxGramLeftToRightTokenizer(tokens, " ");
+        LeftToRightTokenizer tokenizer = new MaxGramLeftToRightTokenizer(tokens, " ");
         HashSet<String> result = new HashSet<>();
         String resultingConcept = "";
         String token = tokenizer.getInitialToken();
@@ -141,7 +134,6 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
         return null;
     }
 
-
     /**
      * Read the HashSet of concepts/entities from file.
      *
@@ -165,18 +157,16 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
                 result.put(key, readLine);
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.error("File not found exception occurred while reading the file into a HashMap.", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("An IOException occurred while reading the file into a HashMap.", e);
         }
         return result;
     }
 
-
     public LinkedList<StringModifier> getStringModificationSequence() {
         return stringModificationSequence;
     }
-
 
     public void setStringModificationSequence(LinkedList<StringModifier> stringModificationSequence) {
         this.stringModificationSequence = stringModificationSequence;

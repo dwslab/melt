@@ -56,6 +56,10 @@ class WordNetLinkerTest {
         assertNull(linker.linkToSingleConcept("hair_bulb"));
         assertNull(linker.linkToSingleConcept("hairBulb"));
         assertNull(linker.linkToSingleConcept("adfasdfaölkj"));
+
+        // null test
+        assertNull(linker.linkToSingleConcept(""));
+        assertNull(linker.linkToSingleConcept(null));
     }
 
 
@@ -92,7 +96,8 @@ class WordNetLinkerTest {
         assertTrue(result4.contains("bulb"));
 
         // null match
-        HashSet<String> result5 = linker.linkToPotentiallyMultipleConcepts("Hair_Bulb_ACDFDSDF");
-        assertNull(result5);
+        assertNull(linker.linkToPotentiallyMultipleConcepts("Hair_Bulb_ACDFDSDF"));
+        assertNull(linker.linkToPotentiallyMultipleConcepts(null));
+        assertNull(linker.linkToPotentiallyMultipleConcepts(""));
     }
 }
