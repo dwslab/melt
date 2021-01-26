@@ -1,9 +1,13 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wikidata;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
+import org.javatuples.Pair;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -87,5 +91,99 @@ class WikidataKnowledgeSourceTest {
         HashSet<String> result2 = wikidata.getLabelsForLink(wikidata.getLinker().linkToSingleConcept("financial services"), Language.ENGLISH);
         assertTrue(result2.size() > 0);
         assertTrue(result2.contains("financial services"));
+    }
+
+    /**
+     * This test requires a working internet connection.
+     * If the test fails, check whether the hypernyms of the three professors named changed on Wikidata.
+     */
+    @Test
+    void determineClosestCommonHypernym() {
+
+        // Unit test 1
+        // -----------
+        // Hops: 1
+        WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+        String[] clusterMemberTerms = {"Heiko Paulheim", "Christian Bizer", "Rainer Gemulla"};
+        int limitOfHops = 3;
+
+        // Step 1: Link the concepts into the knowledge source
+        ArrayList<String> links = wikidata.getConceptLinks(clusterMemberTerms);
+
+        // Step 2: Determine common hypernym
+        Pair<Set<String>, Integer> closestConcepts = wikidata.getClosestCommonHypernym(links, limitOfHops);
+
+        assertTrue(closestConcepts.getValue0().contains("http://www.wikidata.org/entity/Q5"));
+        assertEquals(1, closestConcepts.getValue1());
+
+        // Unit test 2
+        // -----------
+        // Hops: 2
+        String[] clusterMemberTerms2 = {"dog", "aquatic mammal"};
+        limitOfHops = 3;
+
+        // Step 1: Link the concepts into the knowledge source
+        links = wikidata.getConceptLinks(clusterMemberTerms2);
+
+        // Step 2: Determine common hypernym
+        closestConcepts = wikidata.getClosestCommonHypernym(links, limitOfHops);
+
+        assertTrue(closestConcepts.getValue0().contains("http://www.wikidata.org/entity/Q729"));
+        assertEquals(2, closestConcepts.getValue1());
+
+        // Unit test 3
+        // -----------
+        // Making sure that it also works with links.
+        links = new ArrayList<>();
+        links.add("http://www.wikidata.org/entity/Q23709849");
+        links.add("http://www.wikidata.org/entity/Q17744291");
+
+        // Determine common hypernym
+        closestConcepts = wikidata.getClosestCommonHypernym(links, limitOfHops);
+        assertTrue(closestConcepts.getValue0().contains("http://www.wikidata.org/entity/Q5"));
+        assertEquals(1, closestConcepts.getValue1());
+
+        // Unit test 4
+        // -----------
+        // Negative test.
+        links = new ArrayList<>();
+        links.add("http://www.wikidata.org/entity/Q23709849");
+        links.add("http://www.wikidata.org/entity/Q837171");
+        assertNull(wikidata.getClosestCommonHypernym(links, 2));
+    }
+
+
+    @Test
+    void determineCommonConcepts(){
+        HashMap<String, HashSet<String>> map = new HashMap<String, HashSet<String>>();
+
+        HashSet<String> set1 = new HashSet<String>();
+        set1.add("apple");
+        set1.add("fruit");
+        set1.add("car");
+        map.put("A", set1);
+
+        HashSet<String> set2 = new HashSet<String>();
+        set2.add("mercedes");
+        set2.add("benz");
+        set2.add("car");
+        set2.add("fruit");
+        map.put("B", set2);
+
+        HashSet<String> set3 = new HashSet<String>();
+        set3.add("audi");
+        set3.add("a6");
+        set3.add("fruit");
+        set3.add("bmw");
+        set3.add("7");
+        set3.add("car");
+        map.put("C", set3);
+
+        Set<String> result = WikidataKnowledgeSource.determineCommonConcepts(map);
+        assertTrue(result.size() == 2);
+        assertTrue(result.contains("car"));
+        assertTrue(result.contains("fruit"));
+
+        System.out.println("DONE");
     }
 }

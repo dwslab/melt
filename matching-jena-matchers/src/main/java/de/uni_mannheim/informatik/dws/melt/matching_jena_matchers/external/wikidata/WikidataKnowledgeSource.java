@@ -4,11 +4,14 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Seman
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
 import org.apache.jena.query.*;
+import org.javatuples.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
 
@@ -141,6 +144,160 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
 
 
     /**
+     * For multiple words look for all links.
+     * @param conceptsToBeLinked An array of concepts that shall be linked.
+     * @return A list of links that were found for the given concepts. Concepts that could not be linked are ignored.
+     * If none of the given concepts can be linked, the resulting ArrayList will be empty.
+     */
+    public ArrayList<String> getConceptLinks(String[] conceptsToBeLinked){
+
+        // result data structure
+        ArrayList<String> result = new ArrayList<>();
+
+        // linking mechanism
+        LabelToConceptLinker linker = getLinker();
+
+        // link each of the given labels in variable 'result'
+        for(String label : conceptsToBeLinked) {
+            String link = linker.linkToSingleConcept(label);
+            if(link == null) {
+                LOGGER.debug("Concept '" + label + "' could not be linked into the given knowledge graph.");
+            } else {
+                result.add(link);
+                LOGGER.debug("Concept '" + label + "' was linked to: " + link);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Determine the closest common hypernym.
+     * @param links The linked concepts for which the closest common hypernym shall be found.
+     * @param limitOfHops This is an expensive operation. You can limit the number of upward hops to perform.
+     * @return  The closest common hypernym together with the upwards-depth.
+     *          This is represented as pair:<br>
+     *          [0] Set of common concepts (String)<br>
+     *          [1] The depth as integer. If there is a direct hyperconcept, the depth will be equal to 1.<br>
+     *          If multiple candidates apply, all are returned. If there is no closest common hypernym, null will be
+     *          returned.
+     */
+    public Pair<Set<String>, Integer> getClosestCommonHypernym(ArrayList<String> links, int limitOfHops){
+
+        // The links for the next iteration, i.e. the concepts whose hyperconcepts will be looked for in the next
+        //iteration.
+        HashMap<String, HashSet<String>> linksForNextIteration = new HashMap<>();
+
+        // All hyperconcepts
+        HashMap<String, HashSet<String>> allHyperconcepts = new HashMap<>();
+        int currentHops = 0;
+
+        for (; currentHops < limitOfHops; currentHops++) {
+
+            LOGGER.debug("\n\nIteration " + (currentHops + 1));
+
+            for (String link : links) {
+
+                HashSet<String> nextNextIteration = new HashSet<>();
+                if (!linksForNextIteration.containsKey(link)) {
+                    // there is no next lookup defined -> use root link
+
+                    nextNextIteration = (getHypernyms(link));
+
+                    // set links for next iteration
+                    linksForNextIteration.put(link, nextNextIteration);
+
+                    // set links all hyperconcepts
+                    addOrPut(allHyperconcepts, link, nextNextIteration);
+
+                    // simple logging
+                    if (nextNextIteration != null && nextNextIteration.size() > 0) {
+                        System.out.println("\nHyperconcepts for " + link);
+                        for (String s : nextNextIteration) {
+                            System.out.println("\t" + s);
+                        }
+                    }
+
+                } else {
+                    // the next lookup iteration has been defined
+
+                    for (String nextConcept : linksForNextIteration.get(link)) {
+                        nextNextIteration.addAll(getHypernyms(nextConcept));
+                    }
+
+                    // set links for next iteration
+                    linksForNextIteration.put(link, nextNextIteration);
+
+                    // set links all hyperconcepts
+                    addOrPut(allHyperconcepts, link, nextNextIteration);
+
+                    // just logging:
+                    if (nextNextIteration.size() > 0) {
+                        LOGGER.debug("\nNew hyperconcepts for " + link);
+
+                        // just logging:
+                        for (String s : nextNextIteration) {
+                            LOGGER.debug("\t" + s);
+                        }
+                    }
+                }
+            }
+
+            // check whether a common hyperconcept has been found
+            Set<String> commonConcepts = determineCommonConcepts(allHyperconcepts);
+
+            if (commonConcepts.size() > 0) {
+                return new Pair<>(commonConcepts, currentHops + 1);
+            }
+        }
+        // nothing found, return an empty set
+        return null;
+    }
+
+    /**
+     * Helper method.
+     * @param map The map to which shall be added or put.
+     * @param key Key for the map.
+     * @param setToAdd What shall be added.
+     */
+    private static void addOrPut(HashMap<String, HashSet<String>> map, String key, HashSet<String> setToAdd){
+        if (setToAdd == null) return;
+        if (map.containsKey(key)) map.get(key).addAll(setToAdd);
+        else map.put(key, setToAdd);
+    }
+
+    /**
+     * Helper method. Given a map of concepts, the common concepts are determined and returned.
+     * Package modifier for better testing.
+     * @param data The data structure in which it shall be checked whether there are common concepts.
+     * @return Common concepts. Set is empty if there are non.
+     */
+    static Set<String> determineCommonConcepts(HashMap<String, HashSet<String>> data){
+        HashSet<String> result = new HashSet<>();
+        HashSet<String> alreadyProcessed = new HashSet<>();
+        for(HashMap.Entry<String, HashSet<String>> entry : data.entrySet()){
+            for(String concept : entry.getValue()){
+                if(!alreadyProcessed.contains(concept)) {
+                    // now check whether the current concept is contained everywhere
+                    boolean isCommonConcept = true;
+                    for (HashMap.Entry<String, HashSet<String>> entry2 : data.entrySet()) {
+                        if (!entry2.getValue().contains(concept)) {
+                            // not a common concept -> leave for loop early
+                            isCommonConcept = false;
+                            break;
+                        }
+                    }
+                    if(isCommonConcept){
+                        result.add(concept);
+                    }
+                    alreadyProcessed.add(concept);
+                }
+            }
+        }
+        return result;
+    }
+
+
+    /**
      * This will return the hypernyms as String.
      *
      * @param linkedConcept The linked concept for which hypernyms shall be retrieved. The linked concept is a URI.
@@ -177,8 +334,6 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         }
         return result;
     }
-
-
 
     public HashSet<String> getHypernymsLexical(String linkedConcept){
         return getHypernymsLexical(linkedConcept, Language.ENGLISH);

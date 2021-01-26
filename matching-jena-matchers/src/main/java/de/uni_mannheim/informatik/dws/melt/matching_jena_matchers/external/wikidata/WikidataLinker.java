@@ -18,6 +18,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+
+/**
+ * This linker links strings to Wikidata concepts.
+ * Artificial links are introduced here starting with {@link WikidataLinker#multiConceptPrefix}.
+ * The refer to a bag of links. All methods can work with URIs and with those multi-concept links!
+ *
+ * The {@link WikidataLinker#linkToSingleConcept(String)} method, for example, will return a multi label link.
+ * In order to obtain the <em>actual</em> Wikidata URIs, use method {@link WikidataLinker#getLinks(String)}.
+ */
 public class WikidataLinker implements LabelToConceptLinker {
 
     /**
