@@ -119,7 +119,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         }
 
         HashSet<String> result = new HashSet<>();
-        if (linkedConcept.startsWith(this.linker.multiConceptPrefix)) {
+        if (linkedConcept.startsWith(WikidataLinker.multiConceptPrefix)) {
             HashSet<String> individualLinks = this.linker.getLinks(linkedConcept);
             for (String individualLink : individualLinks) {
                 result.addAll(getSynonyms(individualLink, language));
@@ -143,14 +143,14 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     /**
      * This will return the hypernyms as String.
      *
-     * @param linkedConcept The linked concept for which hypernyms shall be retrieved.
+     * @param linkedConcept The linked concept for which hypernyms shall be retrieved. The linked concept is a URI.
      * @return The found hypernyms as links (URIs). If it is planned to immediately use the lexical representation
      *  use {@link WikidataKnowledgeSource#getHypernymsLexical(String, Language)}.
      */
     @Override
     public HashSet<String> getHypernyms(String linkedConcept) {
         HashSet<String> result = new HashSet<>();
-        if (linkedConcept.startsWith(this.linker.multiConceptPrefix)) {
+        if (linkedConcept.startsWith(WikidataLinker.multiConceptPrefix)) {
             HashSet<String> individualLinks = this.linker.getLinks(linkedConcept);
             for (String individualLink : individualLinks) {
                 result.addAll(getHypernyms(individualLink));
@@ -187,7 +187,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
 
     /**
      * Uses wdt:P31 (instance of) as well as wdt:P279 (subclass of).
-     * @param linkedConcept The concept that has already been linked.
+     * @param linkedConcept The concept that has already been linked (URI).
      * @param language Language of the strings.
      * @return A set.
      */
@@ -236,6 +236,11 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         return result;
     }
 
+    /**
+     * Given a URI, obtain the written representations, i.e., the labels.
+     * @param linkedConcept The URI for which labels shall be obtained.
+     * @return A set of labels.
+     */
     public HashSet<String> getLabelsForLink(String linkedConcept){
         return getLabelsForLink(linkedConcept, Language.ENGLISH);
     }

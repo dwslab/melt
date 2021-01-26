@@ -87,6 +87,5 @@ class WikidataKnowledgeSourceTest {
         HashSet<String> result2 = wikidata.getLabelsForLink(wikidata.getLinker().linkToSingleConcept("financial services"), Language.ENGLISH);
         assertTrue(result2.size() > 0);
         assertTrue(result2.contains("financial services"));
-
     }
 }

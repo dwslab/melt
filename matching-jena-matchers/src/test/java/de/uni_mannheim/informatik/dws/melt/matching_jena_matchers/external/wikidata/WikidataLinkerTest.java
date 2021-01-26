@@ -33,25 +33,27 @@ class WikidataLinkerTest {
         HashSet<String> links1 = linker.linkToPotentiallyMultipleConcepts("cocktail party");
         assertNotNull(links1);
         assertTrue(links1.size() > 0);
-        // chcking for concrete instances
+
+        // checking for concrete instances
         HashSet<String> individualLinks1 = linker.getLinks(links1);
-        individualLinks1.contains("http://www.wikidata.org/entity/Q837171");
+        assertTrue(individualLinks1.contains("http://www.wikidata.org/entity/Q1105365"));
+        assertFalse(individualLinks1.contains("http://www.wikidata.org/entity/Q837171"));
 
         // case 2: multi link test with stopwords
         HashSet<String> links2 = linker.linkToPotentiallyMultipleConcepts("peak of the Mount Everest");
         assertNotNull(links2);
         assertTrue(links2.size() > 0);
         HashSet<String> individualLinks2 = linker.getLinks(links2);
-        individualLinks2.contains("http://www.wikidata.org/entity/Q513");
-        individualLinks2.contains("http://www.wikidata.org/entity/Q207326");
+        assertTrue(individualLinks2.contains("http://www.wikidata.org/entity/Q513"));
+        assertTrue(individualLinks2.contains("http://www.wikidata.org/entity/Q207326"));
 
         // case 3: multi link test with other Writing
         HashSet<String> links3 = linker.linkToPotentiallyMultipleConcepts("peakOfTheMountEverest");
         assertNotNull(links3);
         assertTrue(links3.size() > 0);
         HashSet<String> individualLinks3 = linker.getLinks(links2);
-        individualLinks3.contains("http://www.wikidata.org/entity/Q513");
-        individualLinks3.contains("http://www.wikidata.org/entity/Q207326");
+        assertTrue(individualLinks3.contains("http://www.wikidata.org/entity/Q513"));
+        assertTrue(individualLinks3.contains("http://www.wikidata.org/entity/Q207326"));
     }
 
 }

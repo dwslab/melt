@@ -100,7 +100,7 @@ public class WikidataLinker implements LabelToConceptLinker {
     }
 
     /**
-     * Will link one label to a multilink concept.
+     * Will link one label to a multi-link concept.
      *
      * @param labelToBeLinked The label which shall be linked to a single concept.
      * @return Link as String.
@@ -146,7 +146,6 @@ public class WikidataLinker implements LabelToConceptLinker {
                 isFound = false;
             } else {
                 isFound = true;
-
             }
 
             if(isFound) {
@@ -213,7 +212,7 @@ public class WikidataLinker implements LabelToConceptLinker {
 
 
     /**
-     * Given a label, a set of Wikidata concepts (= URIs as Stirng) will be returned that carry that label.
+     * Given a label, a set of Wikidata concepts (= URIs as String) will be returned that carry that label.
      * @param label The label to be used for the lookup.
      * @param language The language of the given label.
      * @return A list of URIs in String form.
