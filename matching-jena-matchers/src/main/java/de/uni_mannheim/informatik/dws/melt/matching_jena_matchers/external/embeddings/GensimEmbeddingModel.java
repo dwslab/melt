@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class represents a single gensim embedding model.
@@ -95,6 +96,38 @@ public class GensimEmbeddingModel implements ExternalResource, SynonymCapability
     @Override
     public boolean isSynonymous(String linkedConcept1, String linkedConcept2) {
         return isStrongFormSynonymous(linkedConcept1, linkedConcept2);
+    }
+
+
+    /**
+     * Given two sets, save for each concept in the first set the highest similarity that can be found by comparing
+     * it with all concepts in the other set. Average the highest similarities.<br><br>
+     * Example:<br>
+     * Set 1: A, B; Set 2: C, D;<br>
+     * sim(A, C) = 0.75<br>
+     * sim(A, D) = 0.10<br>
+     * sim(B, C) = 0.25<br>
+     * sim(B, D) = 0.05<br>
+     * This method will return (0.75 + 0.25)/2 = 0.5
+     *
+     *
+     * @param links1 Set of links 1.
+     * @param links2 Set of links 2.
+     * @return Best average.
+     */
+    public double getBestCrossAverage(Set<String> links1, Set<String> links2){
+        double totalSimilarity = 0.0;
+        for(String link1 : links1){
+            double similarity = 0.0;
+            for(String link2 : links2){
+                double checkSimilarity = gensim.getSimilarity(link1, link2, this.modelFilePath);
+                if(checkSimilarity > similarity){
+                    similarity = checkSimilarity;
+                }
+            }
+            totalSimilarity += similarity;
+        }
+        return totalSimilarity / links1.size();
     }
 
 

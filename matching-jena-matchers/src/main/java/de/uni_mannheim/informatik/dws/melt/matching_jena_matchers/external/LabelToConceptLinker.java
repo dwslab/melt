@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external;
 
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  * General interface for all label-to-concept linkers.
@@ -22,7 +22,7 @@ public interface LabelToConceptLinker {
      * @param labelToBeLinked The label which shall be linked.
      * @return One or multiple linked concepts in a set. Null if it could not fully link the label.
      */
-    HashSet<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked);
+    Set<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked);
 
     /**
      * Get instance specific name of the linker.

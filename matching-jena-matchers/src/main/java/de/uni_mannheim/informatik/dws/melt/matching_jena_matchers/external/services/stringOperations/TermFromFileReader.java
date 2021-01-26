@@ -1,5 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.util.HashSet;
 
@@ -10,6 +13,7 @@ import java.util.HashSet;
  */
 public class TermFromFileReader {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TermFromFileReader.class);
     private HashSet<String> readLines =  new HashSet<String>();
     private File source; // file or directory
 
@@ -51,7 +55,6 @@ public class TermFromFileReader {
     public TermFromFileReader(InputStream inputStream){
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
             String readLine = "";
             while((readLine = bufferedReader.readLine()) != null){
                 if(!readLine.equals("")) {
@@ -59,9 +62,9 @@ public class TermFromFileReader {
                 }
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.error("File not found exception. Could not read terms from file.", e);
         } catch (IOException ioe){
-            ioe.printStackTrace();
+            LOGGER.error("IO exception. Could not read terms from file.", ioe);
         }
     }
 

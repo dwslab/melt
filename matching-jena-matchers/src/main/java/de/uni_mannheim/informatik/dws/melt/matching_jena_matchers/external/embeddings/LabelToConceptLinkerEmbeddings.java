@@ -13,9 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * LabelToConceptLinker with some additional functions required for embedding approaches.
@@ -64,7 +62,7 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
     /**
      * Data lookup.
      */
-    public HashMap<String, String> lookupMap;
+    public Map<String, String> lookupMap;
 
 
     /**
@@ -106,7 +104,7 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
      * @param labelToBeLinked Label that shall be linked.
      * @return A set of concept URIs that were found.
      */
-    private HashSet<String> linkLabelToTokensLeftToRight(String labelToBeLinked) {
+    private Set<String> linkLabelToTokensLeftToRight(String labelToBeLinked) {
         if (labelToBeLinked == null) return null;
         LeftToRightTokenizer tokenizer;
         String[] tokens = StringOperations.tokenizeBestGuess(labelToBeLinked);
@@ -128,9 +126,9 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
 
 
     @Override
-    public HashSet<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
+    public Set<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
         if (labelToBeLinked == null || labelToBeLinked.equals("")) return null;
-        HashSet<String> result = linkLabelToTokensLeftToRight(labelToBeLinked);
+        Set<String> result = linkLabelToTokensLeftToRight(labelToBeLinked);
         int possibleConceptParts = StringOperations.clearArrayFromStopwords(StringOperations.tokenizeBestGuess(labelToBeLinked)).length;
         int actualConceptParts = 0;
         for (String s : result) {
@@ -150,7 +148,7 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
      * @param file The file must be UTF-8 encoded.
      * @return The contents of the file as HashSet.
      */
-    private HashMap<String, String> readFileIntoHashMap(File file) {
+    private Map<String, String> readFileIntoHashMap(File file) {
         HashMap<String, String> result = new HashMap<>();
         if (!file.exists()) {
             LOGGER.error("The specified file: " + file.getAbsolutePath() + " does not exist.");
