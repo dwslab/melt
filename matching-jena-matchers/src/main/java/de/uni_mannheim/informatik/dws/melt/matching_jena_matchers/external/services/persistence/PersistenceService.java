@@ -21,12 +21,12 @@ public class PersistenceService {
     /**
      * Directory where all persistence database files will be saved.
      */
-    public final static String PERSISTENCE_DIRECTORY = "./persitences";
+    public final static String PERSISTENCE_DIRECTORY = "./persistences";
 
     /**
      * Logger.
      */
-    private static Logger LOGGER = LoggerFactory.getLogger("PersistenceService");
+    private static final Logger LOGGER = LoggerFactory.getLogger("PersistenceService");
 
     /**
      * Singleton instance.
@@ -99,9 +99,18 @@ public class PersistenceService {
      */
     public enum PreconfiguredPersistences {
 
-        ALOD_CLASSIC_SYONYMY_BUFFER, ALOD_CLASSIC_LABEL_URI_BUFFER,
-        ALOD_XL_SYONYMY_BUFFER, ALOD_XL_LABEL_URI_BUFFER,
-        ALOD_CLASSIC_HYPERNYMY_BUFFER, ALOD_XL_HYPERNYMY_BUFFER,
+        WIKIDATA_SYNONYMY_BUFFER,
+        WIKIDATA_HYPERNYMY_BUFFER,
+        WIKIDATA_LABEL_LINK_BUFFER,
+        WIKIDATA_ASK_BUFFER,
+
+        ALOD_CLASSIC_SYONYMY_BUFFER,
+        ALOD_CLASSIC_LABEL_URI_BUFFER,
+        ALOD_CLASSIC_HYPERNYMY_BUFFER,
+
+        ALOD_XL_SYONYMY_BUFFER,
+        ALOD_XL_LABEL_URI_BUFFER,
+        ALOD_XL_HYPERNYMY_BUFFER,
 
         /**
          * Stores existing and non-existing concepts.
@@ -136,13 +145,14 @@ public class PersistenceService {
                     return StringString.class;
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
                 case ALOD_XL_LABEL_URI_BUFFER:
-                    return String.class;
                 case BABELNET_SYNONYM_BUFFER:
                 case BABELNET_HYPERNYMY_BUFFER:
-                    return String.class;
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
-                    return String.class;
                 case BABELNET_MULTI_CONCEPT_BUFFER:
+                case WIKIDATA_HYPERNYMY_BUFFER:
+                case WIKIDATA_SYNONYMY_BUFFER:
+                case WIKIDATA_LABEL_LINK_BUFFER:
+                case WIKIDATA_ASK_BUFFER:
                     return String.class;
             }
             return null;
@@ -156,14 +166,15 @@ public class PersistenceService {
                 case ALOD_XL_HYPERNYMY_BUFFER:
                     return Serializer.JAVA;
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
+                case WIKIDATA_HYPERNYMY_BUFFER:
+                case WIKIDATA_SYNONYMY_BUFFER:
                 case ALOD_XL_LABEL_URI_BUFFER:
-                    return Serializer.STRING;
                 case BABELNET_SYNONYM_BUFFER:
                 case BABELNET_HYPERNYMY_BUFFER:
-                    return Serializer.STRING;
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
-                    return Serializer.STRING;
                 case BABELNET_MULTI_CONCEPT_BUFFER:
+                case WIKIDATA_LABEL_LINK_BUFFER:
+                case WIKIDATA_ASK_BUFFER:
                     return Serializer.STRING;
             }
             return null;
@@ -175,21 +186,22 @@ public class PersistenceService {
                 case ALOD_XL_SYONYMY_BUFFER:
                 case ALOD_CLASSIC_HYPERNYMY_BUFFER:
                 case ALOD_XL_HYPERNYMY_BUFFER:
+                case WIKIDATA_ASK_BUFFER:
                     return Serializer.BOOLEAN;
+                case BABELNET_SYNONYM_BUFFER:
+                case BABELNET_HYPERNYMY_BUFFER:
+                case BABELNET_MULTI_CONCEPT_BUFFER:
+                case WIKIDATA_HYPERNYMY_BUFFER:
+                case WIKIDATA_SYNONYMY_BUFFER:
+                case WIKIDATA_LABEL_LINK_BUFFER:
+                    return Serializer.JAVA;
+                case BABELNET_SINGLE_CONCEPT_BUFFER:
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
                 case ALOD_XL_LABEL_URI_BUFFER:
                     return Serializer.STRING;
-                case BABELNET_SYNONYM_BUFFER:
-                case BABELNET_HYPERNYMY_BUFFER:
-                    return Serializer.JAVA;
-                case BABELNET_SINGLE_CONCEPT_BUFFER:
-                    return Serializer.STRING;
-                case BABELNET_MULTI_CONCEPT_BUFFER:
-                    return Serializer.JAVA;
             }
             return null;
         }
-
 
         /**
          * Get the file path to the persistence.
@@ -218,6 +230,14 @@ public class PersistenceService {
                     return PERSISTENCE_DIRECTORY + "/babelnet_single_concept_buffer.mapdb";
                 case BABELNET_MULTI_CONCEPT_BUFFER:
                     return PERSISTENCE_DIRECTORY + "/babelnet_multi_concept_buffer.mapdb";
+                case WIKIDATA_SYNONYMY_BUFFER:
+                    return PERSISTENCE_DIRECTORY + "/wikidata_synonymy_buffer.mapdb";
+                case WIKIDATA_HYPERNYMY_BUFFER:
+                    return PERSISTENCE_DIRECTORY + "/wikidata_hypernymy_buffer.mapdb";
+                case WIKIDATA_LABEL_LINK_BUFFER:
+                    return PERSISTENCE_DIRECTORY + "/wikidata_label_link_buffer.mapdb";
+                case WIKIDATA_ASK_BUFFER:
+                    return PERSISTENCE_DIRECTORY + "/wikidata_ask_buffer.mapdb";
             }
             return null;
         }

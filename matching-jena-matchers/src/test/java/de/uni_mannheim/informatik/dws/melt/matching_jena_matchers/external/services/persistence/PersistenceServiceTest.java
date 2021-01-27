@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PersistenceServiceTest {
 
+
     @Test
     void testPreconfiguredPersistences(){
         for(PersistenceService.PreconfiguredPersistences persistence :  PersistenceService.PreconfiguredPersistences.values() ){

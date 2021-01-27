@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiki
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
 import org.apache.jena.query.*;
 import org.javatuples.Pair;
@@ -10,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices.safeAsk;
 
@@ -19,12 +22,17 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     /**
      * Buffer for repeated synonymy requests.
      */
-    HashMap<String, HashSet<String>> synonymyBuffer = new HashMap<>();
+    ConcurrentMap<String, HashSet<String>> synonymyBuffer;
 
     /**
      * Buffer for repeated hypernymy requests.
      */
-    HashMap<String, HashSet<String>> hypernymyBuffer = new HashMap<>();
+    ConcurrentMap<String, HashSet<String>> hypernymyBuffer;
+
+    /**
+     * Buffer for (expensive) ask queries.
+     */
+    ConcurrentMap<String, Boolean> askBuffer;
 
     /**
      * Linker for the Wikidata knowledge source.
@@ -45,6 +53,40 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
      * Name of the instance.
      */
     private String knowledgeSourceName = "WikidataKnowledgeSource";
+
+    /**
+     * Service responsible for disk buffers.
+     */
+    private PersistenceService persistenceService;
+
+    /**
+     * If the disk-buffer is disabled, no buffers are read/written from/to the disk.
+     * Default: true.
+     */
+    private boolean isDiskBufferEnabled = true;
+
+    /**
+     * Constructor
+     */
+    public WikidataKnowledgeSource(){
+        initializeBuffers();
+    }
+
+    /**
+     * Initialize buffers (either on-disk or memory).
+     */
+    private void initializeBuffers(){
+        persistenceService = PersistenceService.getService();
+        if(isDiskBufferEnabled){
+            this.synonymyBuffer = persistenceService.getMapDatabase(PersistenceService.PreconfiguredPersistences.WIKIDATA_SYNONYMY_BUFFER);
+            this.hypernymyBuffer = persistenceService.getMapDatabase(PersistenceService.PreconfiguredPersistences.WIKIDATA_HYPERNYMY_BUFFER);
+            this.askBuffer = persistenceService.getMapDatabase(PersistenceService.PreconfiguredPersistences.WIKIDATA_ASK_BUFFER);
+        } else {
+            this.synonymyBuffer = new ConcurrentHashMap<>();
+            this.hypernymyBuffer = new ConcurrentHashMap<>();
+            this.askBuffer = new ConcurrentHashMap<>();
+        }
+    }
 
     /**
      * Test whether the given word can be mapped (1-1) to a Wikidata concept (no smart mechanisms applied).
@@ -425,8 +467,8 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
      * Helper method. Only to be used in {@link WikidataKnowledgeSource#buildHypernymDepthQuery(String, String, int)}.
      *
      * @param template     Template to be used.
-     * @param superConcept Superconcept.
-     * @param subConcept   Subconcept.
+     * @param superConcept Super concept.
+     * @param subConcept   Sub concept.
      * @return Complete query.
      */
     private static String replaceConceptsAndCompleteQuery(String template, String superConcept, String subConcept) {
@@ -435,7 +477,6 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         result = result.replaceAll("<superconcept>", superConcept);
         return result + "}";
     }
-
 
     /**
      * Determine whether the specified superConcept is actually a superConcept given the specified subConcept.
@@ -449,6 +490,13 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
             LOGGER.error("The concepts cannot be null - one of them is. Returning false.");
             return false;
         }
+
+        // check the buffer
+        String key = "IS_HYPER_" + superConcept + "_" + subConcept + "_d" + depth;
+        if(askBuffer.containsKey(key)){
+            return askBuffer.get(key);
+        }
+
         Set<String> superUris = new HashSet<>();
         Set<String> subUris = new HashSet<>();
         boolean superIsUri = false;
@@ -462,6 +510,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
             if(individualLinks != null) subUris.addAll(individualLinks);
         } else subIsUri = true;
         if( (superUris.size() == 0 && !superIsUri) || (subUris.size() == 0 && !subIsUri) ){
+            askBuffer.put(key, false);
             return false;
         }
         if(superIsUri && subIsUri){
@@ -481,11 +530,13 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                     // let's recursively determine a solution
                     boolean intermediateResult = isHypernym(superConceptUri, subConceptUri, depth);
                     if (intermediateResult){
+                        askBuffer.put(key, true);
                         return true;
                     }
                 }
             }
         }
+        askBuffer.put(key, false);
         return false;
     }
 
@@ -517,9 +568,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
             subclassTriples += "     OPTIONAL{?c" + i + " wdt:P279 " + "?c" + (i + 1) + " .}\n";
         }
 
-        String query = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" +
-                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n" +
+        return  "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n" +
                 "SELECT DISTINCT " + selectParameters + " WHERE { \n" +
                 "  {\n" +
                 "     <" + wikidataUri + "> wdt:P31 ?c1 .\n" +
@@ -530,7 +579,6 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                 "     <" + wikidataUri + "> wdt:P279 ?c1 .\n" +
                 subclassTriples +
                 "}\n}";
-        return query;
     }
 
     /**
@@ -595,7 +643,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     public HashSet<String> getHypernymsLexical(String linkedConcept, Language language) {
         String key = linkedConcept + "_" + language.toSparqlChar2();
         HashSet<String> result = new HashSet<>();
-        if (linkedConcept.startsWith(this.linker.MULTI_CONCEPT_PREFIX)) {
+        if (linkedConcept.startsWith(WikidataLinker.MULTI_CONCEPT_PREFIX)) {
             Set<String> individualLinks = this.linker.getLinks(linkedConcept);
             for (String individualLink : individualLinks) {
                 result.addAll(getHypernymsLexical(individualLink, language));
@@ -656,7 +704,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
      */
     public HashSet<String> getLabelsForLink(String linkedConcept, Language language) {
         HashSet<String> result = new HashSet<>();
-        if (linkedConcept.startsWith(this.linker.MULTI_CONCEPT_PREFIX)) {
+        if (linkedConcept.startsWith(WikidataLinker.MULTI_CONCEPT_PREFIX)) {
             Set<String> individualLinks = this.linker.getLinks(linkedConcept);
             for (String individualLink : individualLinks) {
                 result.addAll(getLabelsForLink(individualLink, language));
@@ -696,5 +744,33 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     @Override
     public String getName() {
         return this.knowledgeSourceName;
+    }
+
+    public boolean isDiskBufferEnabled() {
+        return isDiskBufferEnabled;
+    }
+
+    /**
+     * Note that when you disable your buffer during runtime, the buffer will be reinitialized.
+     * @param diskBufferEnabled True for enablement, else false.
+     */
+    public void setDiskBufferEnabled(boolean diskBufferEnabled) {
+
+        // do nothing if already enabled and set enabled
+        if(diskBufferEnabled && this.isDiskBufferEnabled && ((WikidataLinker) this.getLinker()).isDiskBufferEnabled()) return;
+
+        // do nothing if already enabled and set enabled
+        if(!diskBufferEnabled && !this.isDiskBufferEnabled && !((WikidataLinker) this.getLinker()).isDiskBufferEnabled()) return;
+
+        // re-initialize buffers
+        this.isDiskBufferEnabled = diskBufferEnabled;
+        initializeBuffers();
+
+        // also organize the linker
+        ((WikidataLinker) this.getLinker()).setDiskBufferEnabled(diskBufferEnabled);
+
+        if(!diskBufferEnabled && persistenceService != null) {
+            persistenceService.close();
+        }
     }
 }

@@ -32,6 +32,7 @@ class WikidataKnowledgeSourceTest {
     @Test
     void getSynonyms() {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+        wikidata.setDiskBufferEnabled(false);
         HashSet<String> result1 = wikidata.getSynonyms(wikidata.getLinker().linkToSingleConcept("financial services"), Language.ENGLISH); // Q837171
         assertTrue(result1.size() > 0);
         assertTrue(result1.contains("FS industry"));
@@ -50,6 +51,7 @@ class WikidataKnowledgeSourceTest {
     @Test
     void getHypernymsLexical() {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+        wikidata.setDiskBufferEnabled(false);
         HashSet<String> result1 = wikidata.getHypernymsLexical(wikidata.getLinker().linkToSingleConcept("financial services"));
         assertTrue(result1.size() > 0);
         assertTrue(result1.contains("business service")); // label of Q25351891
@@ -71,6 +73,7 @@ class WikidataKnowledgeSourceTest {
     @Test
     void getHypernyms() {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+        wikidata.setDiskBufferEnabled(false);
         HashSet<String> result1 = wikidata.getHypernyms(wikidata.getLinker().linkToSingleConcept("financial services"));
         assertTrue(result1.size() > 0);
         assertTrue(result1.contains("http://www.wikidata.org/entity/Q268592"));
@@ -90,12 +93,14 @@ class WikidataKnowledgeSourceTest {
         assertNotNull(q1);
         assertNotNull(q2);
         assertNotNull(q3);
-        System.out.println(q3);
+        //System.out.println(q3);
     }
 
     @Test
     void isHypernym(){
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+        wikidata.setDiskBufferEnabled(false);
+        assertFalse(wikidata.isDiskBufferEnabled());
 
         // check with URIs
         // Q458 -P31-> Q1048835 -P279-> Q15642541 -P279-> Q1496967
@@ -134,7 +139,10 @@ class WikidataKnowledgeSourceTest {
     void buildHypernymyQuery(){
         String query = WikidataKnowledgeSource.buildInstanceOfSublcassOfCleanQuery("http://www.wikidata.org/entity/Q837171", 3);
         assertNotNull(query);
-        System.out.println(query);
+        //System.out.println(query);
+        query = WikidataKnowledgeSource.buildInstanceOfSublcassOfCleanQuery("http://www.wikidata.org/entity/Q837171", 1);
+        assertNotNull(query);
+        //System.out.println(query);
     }
 
     @Test
@@ -216,22 +224,22 @@ class WikidataKnowledgeSourceTest {
 
     @Test
     void determineCommonConcepts(){
-        HashMap<String, HashSet<String>> map = new HashMap<String, HashSet<String>>();
+        HashMap<String, HashSet<String>> map = new HashMap<>();
 
-        HashSet<String> set1 = new HashSet<String>();
+        HashSet<String> set1 = new HashSet<>();
         set1.add("apple");
         set1.add("fruit");
         set1.add("car");
         map.put("A", set1);
 
-        HashSet<String> set2 = new HashSet<String>();
+        HashSet<String> set2 = new HashSet<>();
         set2.add("mercedes");
         set2.add("benz");
         set2.add("car");
         set2.add("fruit");
         map.put("B", set2);
 
-        HashSet<String> set3 = new HashSet<String>();
+        HashSet<String> set3 = new HashSet<>();
         set3.add("audi");
         set3.add("a6");
         set3.add("fruit");
@@ -241,10 +249,8 @@ class WikidataKnowledgeSourceTest {
         map.put("C", set3);
 
         Set<String> result = WikidataKnowledgeSource.determineCommonConcepts(map);
-        assertTrue(result.size() == 2);
+        assertEquals(2, result.size());
         assertTrue(result.contains("car"));
         assertTrue(result.contains("fruit"));
-
-        System.out.println("DONE");
     }
 }

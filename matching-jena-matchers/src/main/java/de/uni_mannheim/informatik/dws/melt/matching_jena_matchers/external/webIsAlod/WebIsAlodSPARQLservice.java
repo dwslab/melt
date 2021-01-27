@@ -25,7 +25,7 @@ public class WebIsAlodSPARQLservice {
     /**
      * Default logger
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(WebIsAlodSPARQLservice.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebIsAlodSPARQLservice.class);
 
     /**
      * Synonymy Buffer
@@ -49,6 +49,9 @@ public class WebIsAlodSPARQLservice {
      */
     private boolean isDiskBufferEnabled = true;
 
+    /**
+     * Service responsible for disk buffers.
+     */
     PersistenceService persistenceService;
 
     /**
@@ -61,7 +64,6 @@ public class WebIsAlodSPARQLservice {
      */
     private static HashMap<WebIsAlodEndpoint, WebIsAlodSPARQLservice> instances;
 
-
     /**
      * Singleton Pattern to get Sparql service instance.
      *
@@ -71,7 +73,6 @@ public class WebIsAlodSPARQLservice {
     public static WebIsAlodSPARQLservice getInstance(WebIsAlodEndpoint sparqlWebIsAlodEndpoint) {
         return getInstance(sparqlWebIsAlodEndpoint, true);
     }
-
 
     /**
      * Singleton Pattern to get Sparql service instance.
@@ -97,7 +98,6 @@ public class WebIsAlodSPARQLservice {
         }
         return webIsAlodSPARQLservice;
     }
-
 
     /**
      * Private Constructor (singleton pattern).
@@ -133,7 +133,6 @@ public class WebIsAlodSPARQLservice {
         }
     }
 
-
     /**
      * Checks whether the concept behind the given URI is available on WebIsALOD.
      * Availability is defined as "has at least one broader concept".
@@ -144,7 +143,6 @@ public class WebIsAlodSPARQLservice {
     public boolean isConceptOnDataSet(String uri) {
         return hasBroaderConcepts(uri);
     }
-
 
     /**
      * Determines whether a concept has a hypernym.
@@ -165,7 +163,6 @@ public class WebIsAlodSPARQLservice {
         return result;
     }
 
-
     /**
      * Checks whether the two URIs are synonymous. If one or both URIs cannot be found in the data set, the default
      * answer is false.
@@ -180,7 +177,6 @@ public class WebIsAlodSPARQLservice {
         }
         return isSynonymous(webIsAlodEndpoint, uri1, uri2);
     }
-
 
     /**
      * Checks whether the two URIs are synonymous. If one or both URIs cannot be found in the data set, the default
@@ -217,8 +213,6 @@ public class WebIsAlodSPARQLservice {
         }
         return isHypernymous(webIsAlodEndpoint, uri1, uri2, 0.0);
     }
-
-
 
     /**
      * Internal method that can execute a synonymy ask query with a given minimum confidence threshold.
@@ -368,7 +362,6 @@ public class WebIsAlodSPARQLservice {
                 "}";
     }
 
-
     /**
      * Checks whether the URI in question is a concept of the ALOD XL webIsAlodEndpoint.
      *
@@ -451,10 +444,6 @@ public class WebIsAlodSPARQLservice {
         qe.close();
         return null;
     }
-
-
-
-
 
     /**
      * Checks whether there is a resource with the given URI available at the given endpoint.

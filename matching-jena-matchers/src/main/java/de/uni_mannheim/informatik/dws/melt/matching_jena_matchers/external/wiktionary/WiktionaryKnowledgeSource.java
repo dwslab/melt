@@ -13,13 +13,13 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Class utilizing DBnary.
  * DBnary endpoint for tests:
  */
 public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
+
 
     /**
      * Logger for this class.

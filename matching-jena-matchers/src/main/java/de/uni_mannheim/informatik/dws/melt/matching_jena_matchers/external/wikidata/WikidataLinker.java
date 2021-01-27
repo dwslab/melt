@@ -8,12 +8,15 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.TokenizeConcatSpaceCapitalizeModifier;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.TokenizeConcatSpaceLowercaseModifier;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.TokenizeConcatSpaceModifier;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
 import org.apache.jena.query.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 
 /**
@@ -52,13 +55,23 @@ public class WikidataLinker implements LabelToConceptLinker {
     public static final String MULTI_CONCEPT_PREFIX = "#ML_";
 
     /**
+     * Service responsible for disk buffers.
+     */
+    PersistenceService persistenceService;
+
+    /**
+     * If the disk-buffer is disabled, no buffers are read/written from/to the disk.
+     * Default: true.
+     */
+    private boolean isDiskBufferEnabled = true;
+
+    /**
      * Typically, one label refers to multiple wikidata concepts.
-     * Hence, they are summarized in this data structure with the multiconcept as key.
+     * Hence, they are summarized in this data structure with the multi-concept as key.
      * A multi-concept must start with the {@link WikidataLinker#MULTI_CONCEPT_PREFIX}.
-     * This data structure is static in order to ensure one store is used even if two linkers are set up by accident.
      * The data structure is also used as cache.
      */
-    private static HashMap<String, HashSet<String>> multiLinkStore = new HashMap<>();
+    private static ConcurrentMap<String, HashSet<String>> multiLinkStore;
 
     /**
      * Constructor
@@ -68,6 +81,18 @@ public class WikidataLinker implements LabelToConceptLinker {
         stringModificationSequence.add(new TokenizeConcatSpaceModifier());
         stringModificationSequence.add(new TokenizeConcatSpaceCapitalizeModifier());
         stringModificationSequence.add(new TokenizeConcatSpaceLowercaseModifier());
+    }
+
+    /**
+     * Initialization of buffers.
+     */
+    private void initializeBuffers(){
+        persistenceService = PersistenceService.getService();
+        if(isDiskBufferEnabled){
+            this.multiLinkStore = persistenceService.getMapDatabase(PersistenceService.PreconfiguredPersistences.WIKIDATA_LABEL_LINK_BUFFER);
+        } else {
+            this.multiLinkStore = new ConcurrentHashMap<>();
+        }
     }
 
     /**
@@ -131,7 +156,7 @@ public class WikidataLinker implements LabelToConceptLinker {
 
         // cache lookup
         if(multiLinkStore.containsKey(key)){
-            if (multiLinkStore.get(key) == null) return null;
+            if (multiLinkStore.get(key) == null || multiLinkStore.get(key).size() == 0) return null;
             else return key;
         }
 
@@ -163,7 +188,7 @@ public class WikidataLinker implements LabelToConceptLinker {
                 return key;
             }
         }
-        multiLinkStore.put(key, null);
+        multiLinkStore.put(key, new HashSet<>());
         return null;
     }
 
@@ -188,7 +213,6 @@ public class WikidataLinker implements LabelToConceptLinker {
         return null;
     }
 
-
     /**
      * Splits the labelToBeLinked in ngrams up to infinite size and tries to link components.
      * This corresponds to a MAXGRAM_LEFT_TO_RIGHT_TOKENIZER or NGRAM_LEFT_TO_RIGHT_TOKENIZER OneToManyLinkingStrategy.
@@ -206,10 +230,9 @@ public class WikidataLinker implements LabelToConceptLinker {
         tokenizer = new MaxGramLeftToRightTokenizer(tokens, " ");
 
         HashSet<String> result = new HashSet<>();
-        String resultingConcept = "";
         String token = tokenizer.getInitialToken();
         while(token != null){
-            resultingConcept = linkToSingleConcept(token, language);
+            String resultingConcept = linkToSingleConcept(token, language);
             if(resultingConcept == null || resultingConcept.length() == 0){
                 token = tokenizer.getNextTokenNotSuccessful();
             } else {
@@ -264,7 +287,6 @@ public class WikidataLinker implements LabelToConceptLinker {
         return result;
     }
 
-
     @Override
     public String getNameOfLinker() {
         return this.linkerName;
@@ -273,5 +295,22 @@ public class WikidataLinker implements LabelToConceptLinker {
     @Override
     public void setNameOfLinker(String nameOfLinker) {
         this.linkerName = nameOfLinker;
+    }
+
+    public boolean isDiskBufferEnabled() {
+        return isDiskBufferEnabled;
+    }
+
+    public void setDiskBufferEnabled(boolean diskBufferEnabled) {
+        if(diskBufferEnabled && this.isDiskBufferEnabled) return;
+        if(!diskBufferEnabled && !this.isDiskBufferEnabled) return;
+
+        // re-initialize buffers
+        this.isDiskBufferEnabled = diskBufferEnabled;
+        initializeBuffers();
+
+        if(!diskBufferEnabled && persistenceService != null) {
+            persistenceService.close();
+        }
     }
 }

@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SparqlServices {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(SparqlServices.class);
 
     /**
