@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class utilizing DBnary.
@@ -255,6 +256,8 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             return null;
         }
     }
+
+
 
     @Override
     public LabelToConceptLinker getLinker() {

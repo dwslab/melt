@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiki
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +16,7 @@ class WikidataLinkerTest {
         assertNotNull(result1);
 
         // checking for concrete instances
-        HashSet<String> individualLinks1 = linker.getLinks(result1);
+        Set<String> individualLinks1 = linker.getLinks(result1);
         assertTrue(individualLinks1.contains("http://www.wikidata.org/entity/Q837171"));
 
         String result3 = linker.linkToSingleConcept("financial_services");

@@ -77,6 +77,67 @@ class WikidataKnowledgeSourceTest {
     }
 
     @Test
+    void buildHypernymDepthQuery(){
+        // evaluates to true if executed
+        String q1 = WikidataKnowledgeSource.buildHypernymDepthQuery("http://www.wikidata.org/entity/Q1048835", "http://www.wikidata.org/entity/Q458", 1);
+
+        // evaluates to true if executed
+        String q2 = WikidataKnowledgeSource.buildHypernymDepthQuery("http://www.wikidata.org/entity/Q15642541", "http://www.wikidata.org/entity/Q458", 2);
+
+        // evaluates to true if executed
+        String q3 = WikidataKnowledgeSource.buildHypernymDepthQuery("http://www.wikidata.org/entity/Q1496967", "http://www.wikidata.org/entity/Q458", 3);
+
+        assertNotNull(q1);
+        assertNotNull(q2);
+        assertNotNull(q3);
+        System.out.println(q3);
+    }
+
+    @Test
+    void isHypernym(){
+        WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+
+        // check with URIs
+        // Q458 -P31-> Q1048835 -P279-> Q15642541 -P279-> Q1496967
+        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1048835", "http://www.wikidata.org/entity/Q458", 1));
+        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q15642541", "http://www.wikidata.org/entity/Q458", 2));
+        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1496967", "http://www.wikidata.org/entity/Q458", 3));
+
+        // check with links
+        String linkQ1048835 = wikidata.getLinker().linkToSingleConcept("political territorial entity");
+        String linkQ458 = wikidata.getLinker().linkToSingleConcept("European Union");
+        String linkQ1496967 = wikidata.getLinker().linkToSingleConcept("territorial entity");
+        String linkQ15642541 = wikidata.getLinker().linkToSingleConcept("human-geographic territorial entity");
+        assertTrue(wikidata.isHypernym(linkQ1048835, linkQ458, 1));
+        assertTrue(wikidata.isHypernym(linkQ15642541, linkQ458, 2));
+        assertTrue(wikidata.isHypernym(linkQ1496967, linkQ458, 3));
+
+        // combinations
+        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1048835", linkQ458, 1));
+        assertTrue(wikidata.isHypernym(linkQ15642541, "http://www.wikidata.org/entity/Q458", 2));
+        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1496967", linkQ458, 3));
+
+        // check false
+        assertFalse(wikidata.isHypernym("http://www.wikidata.org/entity/Q15642541", "http://www.wikidata.org/entity/Q458", 1));
+        assertFalse(wikidata.isHypernym("http://www.wikidata.org/entity/Q1496967", "http://www.wikidata.org/entity/Q458", 2));
+        assertFalse(wikidata.isHypernym("http://www.wikidata.org/entity/Q1496967", "http://www.wikidata.org/entity/Q92929240", 3));
+
+        // check error behavior
+        assertFalse(wikidata.isHypernym(null, "http://www.wikidata.org/entity/Q15642541", 1));
+        assertFalse(wikidata.isHypernym("http://www.wikidata.org/entity/Q15642541", null, 1));
+        assertFalse(wikidata.isHypernym(null, null, 1));
+        assertFalse(wikidata.isHypernym(null, null, -1));
+        assertFalse(wikidata.isHypernym("http://www.wikidata.org/entity/Q1496967", "http://www.wikidata.org/DOES_NOT_EXIST!", 3));
+    }
+
+    @Test
+    void buildHypernymyQuery(){
+        String query = WikidataKnowledgeSource.buildInstanceOfSublcassOfCleanQuery("http://www.wikidata.org/entity/Q837171", 3);
+        assertNotNull(query);
+        System.out.println(query);
+    }
+
+    @Test
     void getlabelsForLink() {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
         HashSet<String> result1 = wikidata.getLabelsForLink(wikidata.getLinker().linkToSingleConcept("financial services"), Language.GERMAN);

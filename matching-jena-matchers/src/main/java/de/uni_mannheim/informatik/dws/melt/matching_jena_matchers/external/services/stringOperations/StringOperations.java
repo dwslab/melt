@@ -491,6 +491,24 @@ public class StringOperations {
         return tagToConvert;
     }
 
+    /**
+     * Adds tags if they are not there yet. {@literal "<Hagrid>"} will be converted
+     * to {@literal "<Hagrid>"},  {@literal "Hagrid"} will be converted
+     * to {@literal "<Hagrid>"}, {@literal "<Hagrid"} will be converted
+     * to {@literal "<Hagrid>"} etc.
+     * @param addTagString String to which tags shall be added.
+     * @return Tagged string.
+     */
+    public static String addTagIfNotExists(String addTagString){
+        if(!addTagString.startsWith("<")){
+            addTagString = "<" + addTagString;
+        }
+        if(!addTagString.endsWith(">")){
+            addTagString = addTagString + ">";
+        }
+        return addTagString;
+    }
+
 
     /**
      * Removes the language annotation from a string. If the string does not have a

@@ -13,15 +13,12 @@ import org.apache.jena.query.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 
 
 /**
  * This linker links strings to Wikidata concepts.
- * Artificial links are introduced here starting with {@link WikidataLinker#multiConceptPrefix}.
+ * Artificial links are introduced here starting with {@link WikidataLinker#MULTI_CONCEPT_PREFIX}.
  * The refer to a bag of links. All methods can work with URIs and with those multi-concept links!
  *
  * The {@link WikidataLinker#linkToSingleConcept(String)} method, for example, will return a multi label link.
@@ -52,12 +49,12 @@ public class WikidataLinker implements LabelToConceptLinker {
     /**
      * Universal prefix for multi concepts.
      */
-    public static final String multiConceptPrefix = "#ML_";
+    public static final String MULTI_CONCEPT_PREFIX = "#ML_";
 
     /**
      * Typically, one label refers to multiple wikidata concepts.
      * Hence, they are summarized in this data structure with the multiconcept as key.
-     * A multi-concept must start with the {@link WikidataLinker#multiConceptPrefix}.
+     * A multi-concept must start with the {@link WikidataLinker#MULTI_CONCEPT_PREFIX}.
      * This data structure is static in order to ensure one store is used even if two linkers are set up by accident.
      * The data structure is also used as cache.
      */
@@ -78,9 +75,9 @@ public class WikidataLinker implements LabelToConceptLinker {
      * @param multiConceptLink The lookup link.
      * @return Individual links, empty set if there are none.
      */
-    public HashSet<String> getLinks(String multiConceptLink){
-        HashSet<String> result = new HashSet<>();
-        if(!multiConceptLink.startsWith(multiConceptPrefix)){
+    public Set<String> getLinks(String multiConceptLink){
+        Set<String> result = new HashSet<>();
+        if(!multiConceptLink.startsWith(MULTI_CONCEPT_PREFIX)){
             LOGGER.warn("The given link does not start with a prefix. Return null.");
             return result;
         }
@@ -99,7 +96,7 @@ public class WikidataLinker implements LabelToConceptLinker {
     public HashSet<String> getLinks(HashSet<String> multipleLinks){
         HashSet<String> result = new HashSet<>();
         for(String link : multipleLinks){
-            if(link.startsWith(multiConceptPrefix)){
+            if(link.startsWith(MULTI_CONCEPT_PREFIX)){
                 result.addAll(getLinks(link));
             } else {
                 result.add(link);
@@ -130,7 +127,7 @@ public class WikidataLinker implements LabelToConceptLinker {
         if(labelToBeLinked == null || language == null || labelToBeLinked.trim().equals("")){
             return null;
         }
-        String key = multiConceptPrefix + labelToBeLinked + "_" + language.toSparqlChar2();
+        String key = MULTI_CONCEPT_PREFIX + labelToBeLinked + "_" + language.toSparqlChar2();
 
         // cache lookup
         if(multiLinkStore.containsKey(key)){
