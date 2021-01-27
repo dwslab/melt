@@ -4,7 +4,8 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,11 +45,11 @@ class WikidataLinkerTest {
         }
     }
 
-    @Test
-    void linkToSingleConceptNoDiskBuffer() {
-        WikidataLinker linker = new WikidataLinker();
-        linker.setDiskBufferEnabled(false);
-        assertFalse(linker.isDiskBufferEnabled());
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void linkToSingleConcept(boolean isDiskBufferEnabled) {
+        WikidataLinker linker = new WikidataLinker(isDiskBufferEnabled);
+        assertEquals(isDiskBufferEnabled, linker.isDiskBufferEnabled());
 
         // default test
         String result1 = linker.linkToSingleConcept("financial services");
@@ -75,44 +76,11 @@ class WikidataLinkerTest {
         assertNull(linker.linkToSingleConcept(null));
     }
 
-    @Test
-    void linkToSingleConceptWithDiskBuffer() {
-        WikidataLinker linker = new WikidataLinker();
-        linker.setDiskBufferEnabled(true);
-        assertTrue(linker.isDiskBufferEnabled());
-
-        // default test
-        String result1 = linker.linkToSingleConcept("financial services");
-        assertNotNull(result1);
-
-        // quickly check buffer
-        result1 = linker.linkToSingleConcept("financial services");
-        assertNotNull(result1);
-
-        // checking for concrete instances
-        Set<String> individualLinks1 = linker.getLinks(result1);
-        assertTrue(individualLinks1.contains("http://www.wikidata.org/entity/Q837171"));
-
-        String result3 = linker.linkToSingleConcept("financial_services");
-        assertNotNull(result3);
-
-        String result4 = linker.linkToSingleConcept("FinancialServices");
-        assertNotNull(result4);
-
-        // null tests
-        assertNull(linker.linkToSingleConcept("Some Concept That Does not Exist"));
-        assertNull(linker.linkToSingleConcept("Some Concept That Does not Exist"));
-        assertNull(linker.linkToSingleConcept(""));
-        assertNull(linker.linkToSingleConcept(null));
-
-        PersistenceService.getService().close();
-    }
-
-    @Test
-    void linkToPotentiallyMultipleConcepts() {
-        WikidataLinker linker = new WikidataLinker();
-        linker.setDiskBufferEnabled(false);
-        assertFalse(linker.isDiskBufferEnabled());
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void linkToPotentiallyMultipleConcepts(boolean isDiskBufferEnabled) {
+        WikidataLinker linker = new WikidataLinker(isDiskBufferEnabled);
+        assertEquals(isDiskBufferEnabled, linker.isDiskBufferEnabled());
 
         // case 1: direct link test
         HashSet<String> links1 = linker.linkToPotentiallyMultipleConcepts("cocktail party");

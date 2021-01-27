@@ -77,6 +77,17 @@ public class WikidataLinker implements LabelToConceptLinker {
      * Constructor
      */
     public WikidataLinker(){
+        this(true);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param isDiskBufferEnabled True if the disk buffer shall be enabled.
+     */
+    public WikidataLinker(boolean isDiskBufferEnabled){
+        this.isDiskBufferEnabled = isDiskBufferEnabled;
+        initializeBuffers();
         stringModificationSequence = new LinkedList<>();
         stringModificationSequence.add(new TokenizeConcatSpaceModifier());
         stringModificationSequence.add(new TokenizeConcatSpaceCapitalizeModifier());

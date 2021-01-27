@@ -3,6 +3,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiki
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
 import org.javatuples.Pair;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,11 +98,12 @@ class WikidataKnowledgeSourceTest {
         //System.out.println(q3);
     }
 
-    @Test
-    void isHypernym(){
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void isHypernym(boolean isBufferEnabled){
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
-        wikidata.setDiskBufferEnabled(false);
-        assertFalse(wikidata.isDiskBufferEnabled());
+        wikidata.setDiskBufferEnabled(isBufferEnabled);
+        assertEquals(isBufferEnabled, wikidata.isDiskBufferEnabled());
 
         // check with URIs
         // Q458 -P31-> Q1048835 -P279-> Q15642541 -P279-> Q1496967
@@ -115,6 +118,9 @@ class WikidataKnowledgeSourceTest {
         String linkQ15642541 = wikidata.getLinker().linkToSingleConcept("human-geographic territorial entity");
         assertTrue(wikidata.isHypernym(linkQ1048835, linkQ458, 1));
         assertTrue(wikidata.isHypernym(linkQ15642541, linkQ458, 2));
+        assertTrue(wikidata.isHypernym(linkQ1496967, linkQ458, 3));
+
+        // run again to see whether buffer works
         assertTrue(wikidata.isHypernym(linkQ1496967, linkQ458, 3));
 
         // combinations
@@ -148,6 +154,9 @@ class WikidataKnowledgeSourceTest {
     @Test
     void getlabelsForLink() {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+        wikidata.setDiskBufferEnabled(false);
+        assertFalse(wikidata.isDiskBufferEnabled());
+
         HashSet<String> result1 = wikidata.getLabelsForLink(wikidata.getLinker().linkToSingleConcept("financial services"), Language.GERMAN);
         assertTrue(result1.size() > 0);
         assertTrue(result1.contains("Finanzgewerbe"));

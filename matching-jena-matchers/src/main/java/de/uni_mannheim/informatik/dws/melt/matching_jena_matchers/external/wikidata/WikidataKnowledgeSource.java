@@ -69,7 +69,20 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
      * Constructor
      */
     public WikidataKnowledgeSource(){
+        this(true);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param isDiskBufferEnabled True if the buffer shall be enabled.
+     */
+    public WikidataKnowledgeSource(boolean isDiskBufferEnabled){
+        this.isDiskBufferEnabled = isDiskBufferEnabled;
         initializeBuffers();
+        if(this.linker == null){
+            this.linker = new WikidataLinker();
+        }
     }
 
     /**
