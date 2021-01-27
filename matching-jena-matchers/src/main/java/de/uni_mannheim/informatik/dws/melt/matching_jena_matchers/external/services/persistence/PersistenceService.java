@@ -21,7 +21,7 @@ public class PersistenceService {
     /**
      * Directory where all persistence database files will be saved.
      */
-    public final static String PERSITENCE_DIRECTORY = "./persitences";
+    public final static String PERSISTENCE_DIRECTORY = "./persitences";
 
     /**
      * Logger.
@@ -57,7 +57,6 @@ public class PersistenceService {
         return service;
     }
 
-
     /**
      * Obtain a pre-configured persistence.
      *
@@ -81,7 +80,6 @@ public class PersistenceService {
                 .hashMap("map", desiredPersistence.getKeySerializer(), desiredPersistence.getValueSerializer())
                 .createOrOpen();
     }
-
 
     /**
      * Close all opened databases and shut down service.
@@ -201,25 +199,25 @@ public class PersistenceService {
         public String getFilePath() {
             switch (this) {
                 case ALOD_CLASSIC_SYONYMY_BUFFER:
-                    return PERSITENCE_DIRECTORY + "/webisalod_classic_synonymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + "/webisalod_classic_synonymy_buffer.mapdb";
                 case ALOD_XL_SYONYMY_BUFFER:
-                    return PERSITENCE_DIRECTORY + "/webisalod_xl_synonymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + "/webisalod_xl_synonymy_buffer.mapdb";
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
-                    return PERSITENCE_DIRECTORY + "/webisalod_classic_label_uri_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + "/webisalod_classic_label_uri_buffer.mapdb";
                 case ALOD_XL_LABEL_URI_BUFFER:
-                    return PERSITENCE_DIRECTORY + "/webisalod_xl_label_uri_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + "/webisalod_xl_label_uri_buffer.mapdb";
                 case ALOD_CLASSIC_HYPERNYMY_BUFFER:
-                    return PERSITENCE_DIRECTORY + "/webisalod_classic_hypernymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + "/webisalod_classic_hypernymy_buffer.mapdb";
                 case ALOD_XL_HYPERNYMY_BUFFER:
-                    return PERSITENCE_DIRECTORY + "/webisalod_xl_hypernymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + "/webisalod_xl_hypernymy_buffer.mapdb";
                 case BABELNET_SYNONYM_BUFFER:
-                    return PERSITENCE_DIRECTORY + "/babelnet_synonym_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + "/babelnet_synonym_buffer.mapdb";
                 case BABELNET_HYPERNYMY_BUFFER:
-                    return PERSITENCE_DIRECTORY + "/babelnet_hypernymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + "/babelnet_hypernymy_buffer.mapdb";
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
-                    return PERSITENCE_DIRECTORY + "/babelnet_single_concept_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + "/babelnet_single_concept_buffer.mapdb";
                 case BABELNET_MULTI_CONCEPT_BUFFER:
-                    return PERSITENCE_DIRECTORY + "/babelnet_multi_concept_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + "/babelnet_multi_concept_buffer.mapdb";
             }
             return null;
         }

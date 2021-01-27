@@ -18,6 +18,7 @@ import java.util.Set;
  */
 public class GensimEmbeddingModel implements ExternalResource, SynonymCapability {
 
+
     /**
      * Default logger.
      */
@@ -98,7 +99,6 @@ public class GensimEmbeddingModel implements ExternalResource, SynonymCapability
         return isStrongFormSynonymous(linkedConcept1, linkedConcept2);
     }
 
-
     /**
      * Given two sets, save for each concept in the first set the highest similarity that can be found by comparing
      * it with all concepts in the other set. Average the highest similarities.<br><br>
@@ -129,7 +129,6 @@ public class GensimEmbeddingModel implements ExternalResource, SynonymCapability
         }
         return totalSimilarity / links1.size();
     }
-
 
     /**
      * Note that the concepts have to be linked.
@@ -166,8 +165,7 @@ public class GensimEmbeddingModel implements ExternalResource, SynonymCapability
             // LOGGER.warn("Could not calculate similarity. Will return 0!"); // leads to excessive logging for combined strategies
             return 0.0;
         }
-        double similarity = gensim.getSimilarity(linkedWord_1, linkedWord_2, this.modelFilePath);
-        return similarity;
+        return gensim.getSimilarity(linkedWord_1, linkedWord_2, this.modelFilePath);
     }
 
     public double getThreshold() {

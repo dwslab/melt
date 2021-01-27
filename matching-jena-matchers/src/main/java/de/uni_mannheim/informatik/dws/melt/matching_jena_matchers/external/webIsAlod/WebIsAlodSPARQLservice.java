@@ -46,24 +46,7 @@ public class WebIsAlodSPARQLservice {
      */
     private boolean isDiskBufferEnabled = true;
 
-
-    /**
-     * TODO delete / just for dirty testing
-     *
-     * @param args args
-     */
-    public static void main(String[] args) {
-        WebIsAlodSPARQLservice service = new WebIsAlodSPARQLservice(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT, true);
-        System.out.println(service.isConceptOnDataSet("<http://webisa.webdatacommons.org/concept/option_contract_>"));
-        System.out.println(service.isConceptOnDataSet("<http://webisa.webdatacommons.org/concept/_contract_>"));
-        System.out.println(service.isSynonymous("<http://webisa.webdatacommons.org/concept/option_contract_>", "<http://webisa.webdatacommons.org/concept/_contract_>", 0.8));
-        System.out.println(service.getUriUsingLabel("car"));
-        System.out.println(service.getUriUsingLabel("car"));
-        service.close();
-    }
-
     PersistenceService persistenceService;
-
 
     /**
      * Instance Endpoint.

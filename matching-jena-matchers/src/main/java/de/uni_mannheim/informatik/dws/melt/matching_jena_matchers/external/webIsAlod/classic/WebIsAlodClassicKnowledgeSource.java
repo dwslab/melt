@@ -13,14 +13,6 @@ import java.util.HashSet;
  */
 public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDictionary {
 
-    /*
-    public static void main(String[] args) {
-        WebIsAlodClassicKnowledgeSource dictionary = new WebIsAlodClassicKnowledgeSource(0.8);
-        boolean result = dictionary.isSynonymous(dictionary.getLinker().linkToSingleConcept("administrator"), dictionary.getLinker().linkToSingleConcept("organizer"));
-        System.out.println(result);
-    }
-    */
-
 
     /**
      * The linker that links input strings to terms.
@@ -30,14 +22,12 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
     /**
      * SPARQL service instance required for requests.
      */
-    WebIsAlodSPARQLservice sparqLservice;
-
+    WebIsAlodSPARQLservice sparqlService;
 
     /**
      * minimum confidence for synonymy queries.
      */
     public double minimumConfidence = - 1.0;
-
 
     /**
      * Constructor
@@ -53,10 +43,9 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
      * A minimum required confidence of 0.0 is used as default.
      */
     public WebIsAlodClassicKnowledgeSource(){
-        sparqLservice = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT);
+        sparqlService = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT);
         linker = new WebIsAlodClassicLinker();
     }
-
 
     @Override
     public boolean isInDictionary(String word) {
@@ -81,9 +70,9 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
     @Override
     public boolean isSynonymous(String word1, String word2) {
         if(this.minimumConfidence <= 0) {
-            return sparqLservice.isSynonymous(word1, word2);
+            return sparqlService.isSynonymous(word1, word2);
         } else {
-            return sparqLservice.isSynonymous(word1, word2, minimumConfidence);
+            return sparqlService.isSynonymous(word1, word2, minimumConfidence);
         }
     }
 
@@ -91,10 +80,10 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
     public boolean isStrongFormSynonymous(String word1, String word2) {
         if(this.minimumConfidence <= 0) {
             // no distinction here
-            return sparqLservice.isSynonymous(word1, word2);
+            return sparqlService.isSynonymous(word1, word2);
         } else {
             // no distinction here
-            return sparqLservice.isSynonymous(word1, word2, minimumConfidence);
+            return sparqlService.isSynonymous(word1, word2, minimumConfidence);
         }
     }
 
@@ -107,13 +96,12 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
     public boolean isHypernymous(String linkedConcept_1, String linkedConcept_2) {
         if (this.minimumConfidence <= 0) {
             // no distinction here
-            return sparqLservice.isHypernymous(linkedConcept_1, linkedConcept_2);
+            return sparqlService.isHypernymous(linkedConcept_1, linkedConcept_2);
         } else {
             // no distinction here
-            return sparqLservice.isHypernymous(linkedConcept_1, linkedConcept_2, minimumConfidence);
+            return sparqlService.isHypernymous(linkedConcept_1, linkedConcept_2, minimumConfidence);
         }
     }
-
 
     //----------------------------------------------------------------------------
     // Getters and Setters
@@ -121,7 +109,7 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
 
     @Override
     public void close() {
-        sparqLservice.close();
+        sparqlService.close();
     }
 
     @Override

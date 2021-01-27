@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WikidataKnowledgeSourceTest {
 
+
     @Test
     void isInDictionary() {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
@@ -98,7 +99,7 @@ class WikidataKnowledgeSourceTest {
      * If the test fails, check whether the hypernyms of the three professors named changed on Wikidata.
      */
     @Test
-    void determineClosestCommonHypernym() {
+    void getClosestCommonHypernym() {
 
         // Unit test 1
         // -----------
@@ -151,7 +152,6 @@ class WikidataKnowledgeSourceTest {
         links.add("http://www.wikidata.org/entity/Q837171");
         assertNull(wikidata.getClosestCommonHypernym(links, 2));
     }
-
 
     @Test
     void determineCommonConcepts(){

@@ -24,19 +24,19 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     HashMap<String, HashSet<String>> hypernymyBuffer = new HashMap<>();
 
     /**
-     * Linker
+     * Linker for the Wikidata knowledge source.
      */
     private WikidataLinker linker = new WikidataLinker();
 
     /**
      * The public SPARQL endpoint.
      */
-    private static final String endpointUrl = "https://query.wikidata.org/bigdata/namespace/wdq/sparql/";
+    private static final String ENDPOINT_URL = "https://query.wikidata.org/bigdata/namespace/wdq/sparql/";
 
     /**
      * Default logger
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(WikidataKnowledgeSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WikidataKnowledgeSource.class);
 
     /**
      * Name of the instance.
@@ -77,7 +77,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         String queryString = "ASK WHERE { ?c <http://www.w3.org/2000/01/rdf-schema#label> \"" + word + "\"@" + language.toSparqlChar2() + " . }";
         //System.out.println(queryString);
         Query query = QueryFactory.create(queryString);
-        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(endpointUrl, query);
+        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
         boolean result = queryExecution.execAsk();
         return result;
     }
@@ -93,7 +93,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         String queryString = "ASK WHERE { ?c <http://www.w3.org/2004/02/skos/core#altLabel> \"" + word + "\"@" + language.toSparqlChar2() + " . }";
         //System.out.println(queryString);
         Query query = QueryFactory.create(queryString);
-        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(endpointUrl, query);
+        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
         boolean result = queryExecution.execAsk();
         return result;
     }
@@ -126,7 +126,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
             String queryString = "SELECT ?l WHERE { <" + linkedConcept + "> <http://www.w3.org/2004/02/skos/core#altLabel> ?l . FILTER(LANG(?l) = '" + language.toSparqlChar2() + "') }";
             //System.out.println(queryString);
             Query query = QueryFactory.create(queryString);
-            QueryExecution queryExecution = QueryExecutionFactory.sparqlService(endpointUrl, query);
+            QueryExecution queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
             ResultSet resultSet = queryExecution.execSelect();
             while (resultSet.hasNext()) {
                 QuerySolution solution = resultSet.next();
@@ -178,11 +178,11 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
      */
     public Pair<Set<String>, Integer> getClosestCommonHypernym(List<String> links, int limitOfHops){
 
-        // The links for the next iteration, i.e. the concepts whose hyperconcepts will be looked for in the next
+        // The links for the next iteration, i.e. the concepts whose hypernyms will be looked for in the next
         //iteration.
         HashMap<String, HashSet<String>> linksForNextIteration = new HashMap<>();
 
-        // All hyperconcepts
+        // All hypernyms
         HashMap<String, HashSet<String>> allHyperconcepts = new HashMap<>();
         int currentHops = 0;
 
@@ -201,7 +201,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                     // set links for next iteration
                     linksForNextIteration.put(link, nextNextIteration);
 
-                    // set links all hyperconcepts
+                    // set links all hypernyms
                     addOrPut(allHyperconcepts, link, nextNextIteration);
 
                     // simple logging
@@ -222,12 +222,12 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                     // set links for next iteration
                     linksForNextIteration.put(link, nextNextIteration);
 
-                    // set links all hyperconcepts
+                    // set links all hypernyms
                     addOrPut(allHyperconcepts, link, nextNextIteration);
 
                     // just logging:
                     if (nextNextIteration.size() > 0) {
-                        LOGGER.debug("\nNew hyperconcepts for " + link);
+                        LOGGER.debug("\nNew hypernyms for " + link);
 
                         // just logging:
                         for (String s : nextNextIteration) {
@@ -237,7 +237,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                 }
             }
 
-            // check whether a common hyperconcept has been found
+            // check whether a common hypernym has been found
             Set<String> commonConcepts = determineCommonConcepts(allHyperconcepts);
 
             if (commonConcepts.size() > 0) {
@@ -291,9 +291,8 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         return result;
     }
 
-
     /**
-     * This will return the hypernyms as String.
+     * This will return the direct hypernyms as String.
      *
      * @param linkedConcept The linked concept for which hypernyms shall be retrieved. The linked concept is a URI.
      * @return The found hypernyms as links (URIs). If it is planned to immediately use the lexical representation
@@ -322,7 +321,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                     "}";
             //System.out.println(queryString);
             Query query = QueryFactory.create(queryString);
-            QueryExecution queryExecution = QueryExecutionFactory.sparqlService(endpointUrl, query);
+            QueryExecution queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
             ResultSet resultSet = queryExecution.execSelect();
             while (resultSet.hasNext()) {
                 QuerySolution solution = resultSet.next();
@@ -334,6 +333,11 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         return result;
     }
 
+    /**
+     * Uses wdt:P31 (instance of) as well as wdt:P279 (subclass of).
+     * @param linkedConcept The concept that has already been linked (URI). The assumed language is English.
+     * @return A set of links.
+     */
     public HashSet<String> getHypernymsLexical(String linkedConcept){
         return getHypernymsLexical(linkedConcept, Language.ENGLISH);
     }
@@ -342,7 +346,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
      * Uses wdt:P31 (instance of) as well as wdt:P279 (subclass of).
      * @param linkedConcept The concept that has already been linked (URI).
      * @param language Language of the strings.
-     * @return A set.
+     * @return A set of links.
      */
     public HashSet<String> getHypernymsLexical(String linkedConcept, Language language) {
         String key = linkedConcept + "_" + language.toSparqlChar2();
@@ -376,7 +380,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                     "}";
             //System.out.println(queryString);
             Query query = QueryFactory.create(queryString);
-            QueryExecution queryExecution = QueryExecutionFactory.sparqlService(endpointUrl, query);
+            QueryExecution queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
             ResultSet resultSet = queryExecution.execSelect();
             while (resultSet.hasNext()) {
                 QuerySolution solution = resultSet.next();
@@ -421,7 +425,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                     "  FILTER(LANG(?l) = '" + language.toSparqlChar2() + "') }";
             //System.out.println(queryString);
             Query query = QueryFactory.create(queryString);
-            QueryExecution queryExecution = QueryExecutionFactory.sparqlService(endpointUrl, query);
+            QueryExecution queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
             ResultSet resultSet = queryExecution.execSelect();
             while (resultSet.hasNext()) {
                 QuerySolution solution = resultSet.next();

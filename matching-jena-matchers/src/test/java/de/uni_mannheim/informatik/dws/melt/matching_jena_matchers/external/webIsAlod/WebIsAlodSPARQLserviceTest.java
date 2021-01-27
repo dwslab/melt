@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod;
 
-import com.googlecode.cqengine.persistence.Persistence;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic.WebIsAlodClassicLinker;
 import org.apache.commons.io.FileUtils;
@@ -14,8 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,7 +37,7 @@ class WebIsAlodSPARQLserviceTest {
      * Delete the persistence directory.
      */
     private static void deletePersistenceDirectory() {
-        File result = new File(PersistenceService.PERSITENCE_DIRECTORY);
+        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
         if (result != null && result.exists() && result.isDirectory()) {
             try {
                 FileUtils.deleteDirectory(result);
