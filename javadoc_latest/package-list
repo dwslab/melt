@@ -41,6 +41,7 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.nlp
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.optimizer
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.setSimilarityMeasures
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringEquality
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools
