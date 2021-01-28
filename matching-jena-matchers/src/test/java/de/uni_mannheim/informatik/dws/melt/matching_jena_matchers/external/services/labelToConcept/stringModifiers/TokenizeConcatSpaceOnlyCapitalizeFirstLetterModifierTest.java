@@ -14,7 +14,6 @@ class TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifierTest {
         assertEquals("European union", modifier.modifyString("European_Union"));
         assertEquals("European union", modifier.modifyString("european union"));
         assertEquals("European union", modifier.modifyString("europeanUnion"));
-        assertEquals("EU", modifier.modifyString("EU"));
         assertEquals("European union", modifier.modifyString("europeanUnion"));
     }
 }

@@ -344,6 +344,8 @@ public class WikidataLinker implements LabelToConceptLinker {
 
     /**
      * This will check the labels as well as the alternative labels in one query.
+     * @param labels A set of labels that shall be used for the linking operation.
+     * @param language The language of the labels.
      * @return Set of URIs that have been found.
      */
     private Set<String> linkWithMultipleLabels(Set<String> labels, Language language){
