@@ -72,6 +72,7 @@ public class PersistenceService {
                 .fileDB(desiredPersistence.getFilePath())
                 .fileMmapEnable()
                 .fileLockDisable() // ignore file lock
+                .transactionEnable()
                 .checksumHeaderBypass() // ignore header checksum (should work in *most* cases in which writing was interrupted
                 .closeOnJvmShutdown()
                 .make();
