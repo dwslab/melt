@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.*;
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices.safeAsk;
 
 public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
@@ -91,9 +92,9 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     private void initializeBuffers(){
         persistenceService = PersistenceService.getService();
         if(isDiskBufferEnabled){
-            this.synonymyBuffer = persistenceService.getMapDatabase(PersistenceService.PreconfiguredPersistences.WIKIDATA_SYNONYMY_BUFFER);
-            this.hypernymyBuffer = persistenceService.getMapDatabase(PersistenceService.PreconfiguredPersistences.WIKIDATA_HYPERNYMY_BUFFER);
-            this.askBuffer = persistenceService.getMapDatabase(PersistenceService.PreconfiguredPersistences.WIKIDATA_ASK_BUFFER);
+            this.synonymyBuffer = persistenceService.getMapDatabase(WIKIDATA_SYNONYMY_BUFFER);
+            this.hypernymyBuffer = persistenceService.getMapDatabase(WIKIDATA_HYPERNYMY_BUFFER);
+            this.askBuffer = persistenceService.getMapDatabase(WIKIDATA_ASK_BUFFER);
         } else {
             this.synonymyBuffer = new ConcurrentHashMap<>();
             this.hypernymyBuffer = new ConcurrentHashMap<>();
@@ -763,6 +764,32 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         return isDiskBufferEnabled;
     }
 
+
+    private void commit(PersistenceService.PreconfiguredPersistences persistence){
+        switch (persistence){
+            case WIKIDATA_SYNONYMY_BUFFER:
+                persistenceService.commit(WIKIDATA_SYNONYMY_BUFFER);
+                return;
+            case WIKIDATA_ASK_BUFFER:
+                persistenceService.commit(WIKIDATA_ASK_BUFFER);
+                return;
+            case WIKIDATA_HYPERNYMY_BUFFER:
+                persistenceService.commit(WIKIDATA_HYPERNYMY_BUFFER);
+                return;
+        }
+    }
+
+    /**
+     * Commit data changes if active.
+     */
+    private void commit(){
+        if(isDiskBufferEnabled){
+            persistenceService.commit(WIKIDATA_SYNONYMY_BUFFER);
+            persistenceService.commit(WIKIDATA_HYPERNYMY_BUFFER);
+            persistenceService.commit(WIKIDATA_ASK_BUFFER);
+        }
+    }
+
     /**
      * Note that when you disable your buffer during runtime, the buffer will be reinitialized.
      * @param diskBufferEnabled True for enablement, else false.
@@ -781,9 +808,5 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
 
         // also organize the linker
         ((WikidataLinker) this.getLinker()).setDiskBufferEnabled(diskBufferEnabled);
-
-        if(!diskBufferEnabled && persistenceService != null) {
-            persistenceService.close();
-        }
     }
 }

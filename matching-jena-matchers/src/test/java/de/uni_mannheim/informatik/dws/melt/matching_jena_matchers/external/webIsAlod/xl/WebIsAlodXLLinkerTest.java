@@ -1,5 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.xl;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.WebIsAlodSPARQLservice;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

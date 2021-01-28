@@ -86,7 +86,6 @@ public class WebIsAlodXLLinker implements LabelToConceptLinker {
         return result;
     }
 
-
     /**
      * When looking up a resource on WebIsALOD using a plain label, that label needs to be stripped off from
      * invalid characters. This method does the job. Note that this method is endpoint specific.
@@ -107,7 +106,6 @@ public class WebIsAlodXLLinker implements LabelToConceptLinker {
         return outputString;
     }
 
-
     /**
      * Normalize for BabelNet lookup, i.e., lowercasing and camel-case resolution.
      * Dev-Remark: The BabelNet library utilizes space-separation.
@@ -121,7 +119,6 @@ public class WebIsAlodXLLinker implements LabelToConceptLinker {
         lookupString = lookupString.toLowerCase();
         return cleanLabelForLabelLookup(lookupString);
     }
-
 
     /**
      * Normalize for BabelNet lookup, i.e., lowercasing and camel-case resolution.

@@ -15,6 +15,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.WIKIDATA_LABEL_LINK_BUFFER;
+
 
 /**
  * This linker links strings to Wikidata concepts.
@@ -124,7 +126,7 @@ public class WikidataLinker implements LabelToConceptLinker {
     private void initializeBuffers(){
         persistenceService = PersistenceService.getService();
         if(isDiskBufferEnabled){
-            this.multiLinkStore = persistenceService.getMapDatabase(PersistenceService.PreconfiguredPersistences.WIKIDATA_LABEL_LINK_BUFFER);
+            this.multiLinkStore = persistenceService.getMapDatabase(WIKIDATA_LABEL_LINK_BUFFER);
         } else {
             this.multiLinkStore = new ConcurrentHashMap<>();
         }
@@ -235,11 +237,13 @@ public class WikidataLinker implements LabelToConceptLinker {
 
             if (isFound) {
                 multiLinkStore.put(key, multiLinkLinks);
+                commit();
                 return key;
             }
         }
         // linking not successful
         multiLinkStore.put(key, new HashSet<>());
+        commit();
         return null;
     }
 
@@ -261,10 +265,12 @@ public class WikidataLinker implements LabelToConceptLinker {
 
         if(multiLinkLinks.size() > 0){
             multiLinkStore.put(key, multiLinkLinks);
+            commit();
             return key;
         } else {
             // linking not successful
             multiLinkStore.put(key, new HashSet<>());
+            commit();
             return null;
         }
     }
@@ -425,6 +431,15 @@ public class WikidataLinker implements LabelToConceptLinker {
         return isDiskBufferEnabled;
     }
 
+    /**
+     * Commit data changes if active.
+     */
+    private void commit(){
+        if(isDiskBufferEnabled){
+            persistenceService.commit(WIKIDATA_LABEL_LINK_BUFFER);
+        }
+    }
+
     public void setDiskBufferEnabled(boolean diskBufferEnabled) {
         if(diskBufferEnabled && this.isDiskBufferEnabled) return;
         if(!diskBufferEnabled && !this.isDiskBufferEnabled) return;
@@ -432,9 +447,5 @@ public class WikidataLinker implements LabelToConceptLinker {
         // re-initialize buffers
         this.isDiskBufferEnabled = diskBufferEnabled;
         initializeBuffers();
-
-        if(!diskBufferEnabled && persistenceService != null) {
-            persistenceService.close();
-        }
     }
 }

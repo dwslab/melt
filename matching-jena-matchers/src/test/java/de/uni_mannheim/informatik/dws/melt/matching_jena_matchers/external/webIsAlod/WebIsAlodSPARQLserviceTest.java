@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic.WebIsAlodClassicLinker;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -25,11 +26,16 @@ class WebIsAlodSPARQLserviceTest {
 
     @BeforeAll
     static void setup() {
+        WebIsAlodSPARQLservice.closeAllServices();
+        PersistenceService.getService().closePersistenceService();
         deletePersistenceDirectory();
+        PersistenceService.getService();
     }
 
     @AfterAll
     static void tearDown() {
+        WebIsAlodSPARQLservice.closeAllServices();
+        PersistenceService.getService().closePersistenceService();
         deletePersistenceDirectory();
     }
 
@@ -50,6 +56,7 @@ class WebIsAlodSPARQLserviceTest {
     @Test
     void isSynonymousClassic() {
         WebIsAlodSPARQLservice service = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT, true);
+        assertTrue(service.isDiskBufferEnabled());
 
         //----------------------------------------------------------
         // Test 1: With Disk Buffer
@@ -123,7 +130,6 @@ class WebIsAlodSPARQLserviceTest {
         // service MUST be closed to allow for reinitialization with another endpoint
         service.close();
     }
-
 
     @Test
     @Disabled

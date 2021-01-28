@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 
@@ -34,15 +36,15 @@ public class PersistenceService {
     private static PersistenceService service;
 
     /**
-     * List of all active databases (required for collective close.).
+     * Map of all active databases (required for collective close and for commits).
      */
-    private ArrayList<DB> activeDatabases;
+    private Map<PreconfiguredPersistences, DB> activeDatabases;
 
     /**
      * Private constructor, singleton pattern.
      */
     private PersistenceService() {
-        activeDatabases = new ArrayList<>();
+        activeDatabases = new HashMap<>();
     }
 
     /**
@@ -64,34 +66,68 @@ public class PersistenceService {
      * @return Database
      */
     public ConcurrentMap getMapDatabase(PreconfiguredPersistences desiredPersistence) {
+        if(activeDatabases.containsKey(desiredPersistence)){
+            return activeDatabases.get(desiredPersistence)
+                    .hashMap("map", desiredPersistence.getKeySerializer(), desiredPersistence.getValueSerializer())
+                    .open();
+        }
 
-        if (new File(desiredPersistence.getFilePath()).getParentFile().mkdir())
+        if (new File(desiredPersistence.getFilePath()).getParentFile().mkdir()) {
             LOGGER.info("Persistence Directory Created");
+        }
         DB db;
         db = DBMaker
                 .fileDB(desiredPersistence.getFilePath())
                 .fileMmapEnable()
-                .fileLockDisable() // ignore file lock
+                //.fileLockDisable() // ignore file lock
                 .transactionEnable()
-                .checksumHeaderBypass() // ignore header checksum (should work in *most* cases in which writing was interrupted
+                //.checksumHeaderBypass() // ignore header checksum (should work in *most* cases in which writing was interrupted
                 .closeOnJvmShutdown()
                 .make();
-        activeDatabases.add(db);
+        activeDatabases.put(desiredPersistence, db);
         return db
                 .hashMap("map", desiredPersistence.getKeySerializer(), desiredPersistence.getValueSerializer())
                 .createOrOpen();
     }
 
+    public void commit(PreconfiguredPersistences persistence){
+        if(!activeDatabases.containsKey(persistence)){
+            LOGGER.warn("Cannot commit for " + persistence + " - DB not active.");
+            return;
+        }
+        activeDatabases.get(persistence).commit();
+    }
+
+    /**
+     * Close a single persistence.
+     * @param persistence The persistence to be closed.
+     */
+    public void closeDatabase(PreconfiguredPersistences persistence){
+
+        if(!activeDatabases.containsKey(persistence)){
+            LOGGER.warn("Cannot close persistence " + persistence + " - not active.");
+            return;
+        }
+        if(!activeDatabases.get(persistence).isClosed()){
+            activeDatabases.get(persistence).commit();
+        }
+        activeDatabases.get(persistence).close();
+        activeDatabases.remove(persistence);
+    }
+
     /**
      * Close all opened databases and shut down service.
      */
-    public void close() {
+    public void closePersistenceService() {
         // close all databases
-        for (DB db : activeDatabases) {
-            db.close();
+        for (DB db : activeDatabases.values()) {
+            if(!db.isClosed()){
+                db.commit();
+                db.close();
+            }
         }
-        // set instance to null
-        service = null;
+        // remove all active DBs
+        activeDatabases = new HashMap<>();
     }
 
     /**
@@ -99,7 +135,6 @@ public class PersistenceService {
      * DEV Remark: Run Unit Test after adding an additional persistence configuration.
      */
     public enum PreconfiguredPersistences {
-
         WIKIDATA_SYNONYMY_BUFFER,
         WIKIDATA_HYPERNYMY_BUFFER,
         WIKIDATA_LABEL_LINK_BUFFER,

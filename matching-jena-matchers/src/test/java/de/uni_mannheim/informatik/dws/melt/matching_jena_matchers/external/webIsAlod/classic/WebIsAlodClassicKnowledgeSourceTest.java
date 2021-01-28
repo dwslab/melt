@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.WebIsAlodSPARQLservice;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,11 +25,15 @@ class WebIsAlodClassicKnowledgeSourceTest {
 
     @BeforeAll
     static void setup() {
+        WebIsAlodSPARQLservice.closeAllServices();
+        PersistenceService.getService().closePersistenceService();
         deletePersistenceDirectory();
     }
 
     @AfterAll
     static void tearDown() {
+        WebIsAlodSPARQLservice.closeAllServices();
+        PersistenceService.getService().closePersistenceService();
         deletePersistenceDirectory();
     }
 

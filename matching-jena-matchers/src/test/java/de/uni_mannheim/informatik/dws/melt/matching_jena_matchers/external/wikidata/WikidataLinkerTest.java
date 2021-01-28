@@ -23,11 +23,13 @@ class WikidataLinkerTest {
 
     @BeforeAll
     static void setup() {
+        PersistenceService.getService().closePersistenceService();
         deletePersistenceDirectory();
     }
 
     @AfterAll
     static void tearDown() {
+        PersistenceService.getService().closePersistenceService();
         deletePersistenceDirectory();
     }
 
@@ -102,6 +104,8 @@ class WikidataLinkerTest {
         assertNull(linker.linkToSingleConcept("Some Concept That Does not Exist"));
         assertNull(linker.linkToSingleConcept(""));
         assertNull(linker.linkToSingleConcept(null));
+
+        PersistenceService.getService().closePersistenceService();
     }
 
     @ParameterizedTest
@@ -135,6 +139,8 @@ class WikidataLinkerTest {
         HashSet<String> individualLinks3 = linker.getUris(links2);
         assertTrue(individualLinks3.contains("http://www.wikidata.org/entity/Q513"));
         assertTrue(individualLinks3.contains("http://www.wikidata.org/entity/Q207326"));
+
+        PersistenceService.getService().closePersistenceService();
     }
 
 }
