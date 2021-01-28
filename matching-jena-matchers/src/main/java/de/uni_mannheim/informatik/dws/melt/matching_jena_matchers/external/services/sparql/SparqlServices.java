@@ -1,8 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql;
 
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

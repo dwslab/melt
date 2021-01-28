@@ -177,7 +177,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
 
         HashSet<String> result = new HashSet<>();
         if (linkedConcept.startsWith(WikidataLinker.MULTI_CONCEPT_PREFIX)) {
-            Set<String> individualLinks = this.linker.getLinks(linkedConcept);
+            Set<String> individualLinks = this.linker.getUris(linkedConcept);
             for (String individualLink : individualLinks) {
                 result.addAll(getSynonyms(individualLink, language));
             }
@@ -515,11 +515,11 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         boolean superIsUri = false;
         boolean subIsUri = false;
         if (superConcept.startsWith(WikidataLinker.MULTI_CONCEPT_PREFIX)) {
-            Set<String> individualLinks = this.linker.getLinks(superConcept);
+            Set<String> individualLinks = this.linker.getUris(superConcept);
             if (individualLinks != null) superUris.addAll(individualLinks);
         } else superIsUri = true;
         if(subConcept.startsWith(WikidataLinker.MULTI_CONCEPT_PREFIX)){
-            Set<String> individualLinks = this.linker.getLinks(subConcept);
+            Set<String> individualLinks = this.linker.getUris(subConcept);
             if(individualLinks != null) subUris.addAll(individualLinks);
         } else subIsUri = true;
         if( (superUris.size() == 0 && !superIsUri) || (subUris.size() == 0 && !subIsUri) ){
@@ -606,7 +606,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     public HashSet<String> getHypernyms(String linkedConcept) {
         HashSet<String> result = new HashSet<>();
         if (linkedConcept.startsWith(WikidataLinker.MULTI_CONCEPT_PREFIX)) {
-            Set<String> individualLinks = this.linker.getLinks(linkedConcept);
+            Set<String> individualLinks = this.linker.getUris(linkedConcept);
             if (individualLinks == null) {
                 return result;
             }
@@ -657,7 +657,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         String key = linkedConcept + "_" + language.toSparqlChar2();
         HashSet<String> result = new HashSet<>();
         if (linkedConcept.startsWith(WikidataLinker.MULTI_CONCEPT_PREFIX)) {
-            Set<String> individualLinks = this.linker.getLinks(linkedConcept);
+            Set<String> individualLinks = this.linker.getUris(linkedConcept);
             for (String individualLink : individualLinks) {
                 result.addAll(getHypernymsLexical(individualLink, language));
             }
@@ -718,7 +718,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     public HashSet<String> getLabelsForLink(String linkedConcept, Language language) {
         HashSet<String> result = new HashSet<>();
         if (linkedConcept.startsWith(WikidataLinker.MULTI_CONCEPT_PREFIX)) {
-            Set<String> individualLinks = this.linker.getLinks(linkedConcept);
+            Set<String> individualLinks = this.linker.getUris(linkedConcept);
             for (String individualLink : individualLinks) {
                 result.addAll(getLabelsForLink(individualLink, language));
             }

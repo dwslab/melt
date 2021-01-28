@@ -38,7 +38,6 @@ public class CapitalizeFirstLettersModifier implements StringModifier {
                 positions.add(m.start());
             }
 
-
             char[] charArray = stringToBeModified.toCharArray();
 
             // upper-case position one

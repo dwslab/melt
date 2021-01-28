@@ -509,6 +509,19 @@ public class StringOperations {
         return addTagString;
     }
 
+    /**
+     * Remove the plural in English words.
+     * @param stringToBeModified The string that shall be modified.
+     * @return Modified string.
+     */
+    public static String removeEnglishPlural(String stringToBeModified){
+        if(stringToBeModified.endsWith("ies")){
+            stringToBeModified = stringToBeModified.substring(0, stringToBeModified.length() - 3) + "y";
+        } else if(stringToBeModified.endsWith("s")){
+            stringToBeModified = stringToBeModified.substring(0, stringToBeModified.length() - 1);
+        }
+        return stringToBeModified;
+    }
 
     /**
      * Removes the language annotation from a string. If the string does not have a

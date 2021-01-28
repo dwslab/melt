@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TokenizeConcatSpaceCapitalizeModifierTest {
 
+
     @Test
     void modifyString() {
         TokenizeConcatSpaceCapitalizeModifier modifier = new TokenizeConcatSpaceCapitalizeModifier();
