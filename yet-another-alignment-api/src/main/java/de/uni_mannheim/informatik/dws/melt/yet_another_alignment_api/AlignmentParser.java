@@ -138,6 +138,43 @@ public class AlignmentParser {
         return a;
     }
     
+    
+    /**
+     * Parse alignment from CSV (comma separated file) without header. The order is: (source, target, confidence, relation).
+     * The extensions are not parsed.
+     * @param file the file to read from
+     * @return the parsed alignment
+     * @throws java.io.IOException thrown if some io error occurs.
+     */
+    public static Alignment parseCSVWithoutHeader(File file) throws IOException{
+        return parseCSVWithoutHeader(file, ',');
+    }
+    
+    /**
+     * Parse alignment from CSV (comma separated file) without header. The order is: (source, target, confidence, relation).
+     * The extensions are not parsed.
+     * @param file the file to read from
+     * @param delimiter the delimiter to use
+     * @return the parsed alignment
+     * @throws java.io.IOException thrown if some io error occurs.
+     */
+    public static Alignment parseCSVWithoutHeader(File file, char delimiter) throws IOException{
+        Alignment a = new Alignment();
+        try(CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(delimiter).parse(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))){
+            for (CSVRecord record : csvParser) {
+                Correspondence correspondence = new Correspondence(record.get(0).trim(), record.get(1).trim());
+                if(record.isSet(2)){
+                    correspondence.setConfidence(Double.parseDouble(record.get(2)));
+                }
+                if(record.isSet(3)){
+                    correspondence.setRelation(CorrespondenceRelation.parse(record.get(3).trim()));
+                }
+                a.add(correspondence);
+            }
+        }
+        return a;
+    }
+    
     /**
      * Parse alignment from TSV (tab separated file) without header.The columns are source \t target \t confidence \t relation.
      * The relation and confidence can be left out as long as the position stays the same (e.g. relation is always on index 3).
