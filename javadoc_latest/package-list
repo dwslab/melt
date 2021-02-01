@@ -1,10 +1,13 @@
 de.uni_mannheim.informatik.dws.melt.hobbit_wrapper
 de.uni_mannheim.informatik.dws.melt.hobbit_wrapper.spimbench
 de.uni_mannheim.informatik.dws.melt.matching_base
-de.uni_mannheim.informatik.dws.melt.matching_base.external.process
+de.uni_mannheim.informatik.dws.melt.matching_base.external.cli
+de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process
+de.uni_mannheim.informatik.dws.melt.matching_base.external.http
+de.uni_mannheim.informatik.dws.melt.matching_base.external.seals
 de.uni_mannheim.informatik.dws.melt.matching_base.hobbit_maven_plugin
-de.uni_mannheim.informatik.dws.melt.matching_base.seals
 de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer
+de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers
 de.uni_mannheim.informatik.dws.melt.matching_eval
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer
