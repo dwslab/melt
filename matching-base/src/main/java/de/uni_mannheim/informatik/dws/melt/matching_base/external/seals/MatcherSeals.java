@@ -1,8 +1,8 @@
 
-package de.uni_mannheim.informatik.dws.melt.matching_base.seals;
+package de.uni_mannheim.informatik.dws.melt.matching_base.external.seals;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherFile;
-import de.uni_mannheim.informatik.dws.melt.matching_base.external.process.ExternalProcess;
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process.ExternalProcess;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

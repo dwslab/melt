@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_base.external.process;
+package de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process;
 
 import java.io.BufferedReader;
 import java.io.File;

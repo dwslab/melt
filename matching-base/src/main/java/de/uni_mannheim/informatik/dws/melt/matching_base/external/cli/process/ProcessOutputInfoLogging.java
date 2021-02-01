@@ -1,12 +1,8 @@
-package de.uni_mannheim.informatik.dws.melt.matching_base.external.process;
+package de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- *
- * @author shertlin
- */
 public class ProcessOutputInfoLogging implements ProcessOutputConsumer{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessOutputInfoLogging.class);

@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_base.seals;
+package de.uni_mannheim.informatik.dws.melt.matching_base.external.seals;
 
 import java.io.File;
 import java.util.ArrayList;

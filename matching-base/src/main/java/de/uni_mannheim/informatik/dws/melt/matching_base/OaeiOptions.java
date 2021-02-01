@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Class which holds options for OAEI evaluation (usually set in HOBBIT wrapper)
+ * Class which holds options for OAEI evaluation (usually set in HOBBIT wrapper).
+ * @deprecated use parameters file instead.
  */
 public class OaeiOptions {
     
