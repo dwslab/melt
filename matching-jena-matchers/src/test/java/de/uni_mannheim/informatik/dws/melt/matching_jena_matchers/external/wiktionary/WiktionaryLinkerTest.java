@@ -46,7 +46,7 @@ class WiktionaryLinkerTest {
      * Delete the persistence directory.
      */
     private static void deletePersistenceDirectory() {
-        File result = new File(PersistenceService.PERSITENCE_DIRECTORY);
+        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
         if (result != null && result.exists() && result.isDirectory()) {
             try {
                 FileUtils.deleteDirectory(result);
@@ -72,6 +72,8 @@ class WiktionaryLinkerTest {
         assertEquals("lumbar_puncture", linker.linkToSingleConcept("lumbarPuncture"));
         assertEquals("dog", linker.linkToSingleConcept("dog"));
         assertEquals("hound", linker.linkToSingleConcept("hound"));
+        assertNull(linker.linkToSingleConcept(null));
+        assertNull(linker.linkToSingleConcept(""));
     }
 
 
@@ -97,6 +99,10 @@ class WiktionaryLinkerTest {
         assertNull(result3);
         result3 = linker.linkToPotentiallyMultipleConcepts("House asdfffffffffff Lords dog");
         assertNull(result3);
+
+        // null
+        assertNull(linker.linkToPotentiallyMultipleConcepts(null));
+        assertNull(linker.linkToPotentiallyMultipleConcepts(""));
     }
 
 }

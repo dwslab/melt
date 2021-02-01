@@ -1,17 +1,11 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.nlp.PorterStemmer;
-import org.apache.commons.io.FileUtils;
 import org.simmetrics.metrics.Levenshtein;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +29,7 @@ public class StringOperations {
     // "below"
     private static HashSet<String> stopwords;
     private static final String PATH_TO_STOPWORD_FILE = "stopwords.txt";
+    private static final String PATH_TO_STOPWORD_FILE_JAR = "/stopwords.txt"; // the slash is strictly required
 
     /**
      * Function which indicates whether a phrase is in camel case or not.
@@ -48,7 +43,7 @@ public class StringOperations {
         Matcher matcher = pattern.matcher(phrase);
         boolean containsLowerCaseLetterFollowedByUppercaseLetter = matcher.find();
 
-        if (containsLowerCaseLetterFollowedByUppercaseLetter == false) {
+        if (!containsLowerCaseLetterFollowedByUppercaseLetter) {
             // very seldom case for instance to catch abbreviations at the beginning like
             // "FXoption"
             pattern = Pattern.compile("[A-Z][A-Z][a-z]");
@@ -234,7 +229,7 @@ public class StringOperations {
      * instance, will not be used as splitter. For camel cased phrases with
      * abbreviations, all combinations are determined if no handler is defined.
      *
-     * @param phrase The phrase to be tokenized.
+     * @param phrase  The phrase to be tokenized.
      * @param handler The handler which determines how abbreviations shall be handled.
      * @return Tokens.
      */
@@ -259,7 +254,7 @@ public class StringOperations {
     /**
      * Tokenize and use camelCase and slashes as tokenization tokens.
      *
-     * @param phrase The phrase to be tokenized.
+     * @param phrase  The phrase to be tokenized.
      * @param handler Abbreviation handler.
      * @return String array of tokens.
      */
@@ -293,7 +288,7 @@ public class StringOperations {
     /**
      * Returns the number of tokens that were found in a phrase.
      *
-     * @param phrase The phrase to be checked.
+     * @param phrase  The phrase to be checked.
      * @param handler defines the handling of abbreviations. Note that
      *                AbbreviationHandler.CONSIDER_ALL leads to more tokens than
      *                actually exist because combinations are employed.
@@ -496,6 +491,37 @@ public class StringOperations {
         return tagToConvert;
     }
 
+    /**
+     * Adds tags if they are not there yet. {@literal "<Hagrid>"} will be converted
+     * to {@literal "<Hagrid>"},  {@literal "Hagrid"} will be converted
+     * to {@literal "<Hagrid>"}, {@literal "<Hagrid"} will be converted
+     * to {@literal "<Hagrid>"} etc.
+     * @param addTagString String to which tags shall be added.
+     * @return Tagged string.
+     */
+    public static String addTagIfNotExists(String addTagString){
+        if(!addTagString.startsWith("<")){
+            addTagString = "<" + addTagString;
+        }
+        if(!addTagString.endsWith(">")){
+            addTagString = addTagString + ">";
+        }
+        return addTagString;
+    }
+
+    /**
+     * Remove the plural in English words.
+     * @param stringToBeModified The string that shall be modified.
+     * @return Modified string.
+     */
+    public static String removeEnglishPlural(String stringToBeModified){
+        if(stringToBeModified.endsWith("ies")){
+            stringToBeModified = stringToBeModified.substring(0, stringToBeModified.length() - 3) + "y";
+        } else if(stringToBeModified.endsWith("s")){
+            stringToBeModified = stringToBeModified.substring(0, stringToBeModified.length() - 1);
+        }
+        return stringToBeModified;
+    }
 
     /**
      * Removes the language annotation from a string. If the string does not have a
@@ -632,16 +658,14 @@ public class StringOperations {
      * Checks whether two arrays have a similar writing. Every token is matched to its most similar token.
      * Tokens can be used multiple times.
      *
-     * @param sarray1 Array 1
-     * @param sarray2 Array 2
+     * @param sarray1   Array 1
+     * @param sarray2   Array 2
      * @param tolerance The minimal tolerance that is allowed.
      * @return True if the distance is less or equal to the allowed distance.
      */
     public static boolean hasSimilarTokenWriting(String[] sarray1, String[] sarray2, float tolerance) {
         float totalDistance = Math.max(getLevenshteinDistanceSimilarTokensOneWay(sarray1, sarray2), getLevenshteinDistanceSimilarTokensOneWay(sarray2, sarray1));
-        if (totalDistance <= tolerance) {
-            return true;
-        } else return false;
+        return totalDistance <= tolerance;
     }
 
     /**
@@ -843,23 +867,17 @@ public class StringOperations {
      */
     private static void lazyInitStopwords() {
         if (stopwords == null || stopwords.size() == 0) {
-            try {
-                File result = FileUtils.toFile(StringOperations.class.getClassLoader().getResource(PATH_TO_STOPWORD_FILE).toURI().toURL());
-                if(!result.exists()){
-                    LOGGER.error("Did not find file: " + PATH_TO_STOPWORD_FILE + " in the class path.");
-                }
-                TermFromFileReader termFromFileReader = new TermFromFileReader(result);
-                stopwords = termFromFileReader.getReadLines();
-            } catch (MalformedURLException e) {
-                LOGGER.error("Could not initialize stopwords.", e);
-            } catch (URISyntaxException e) {
-                LOGGER.error("Could not initialize stopwords.", e);
+            InputStream inputStream = StringOperations.class.getResourceAsStream(PATH_TO_STOPWORD_FILE_JAR);
+            if (inputStream == null) {
+                LOGGER.error("Did not find resource.");
             }
+            TermFromFileReader termFromFileReader = new TermFromFileReader(inputStream);
+            stopwords = termFromFileReader.getReadLines();
         }
     }
 
     /**
-     * Intialize reading stopwords.
+     * Initialize reading stopwords.
      */
     public static void initStopwords() {
         TermFromFileReader termFromFileReader = new TermFromFileReader(PATH_TO_STOPWORD_FILE);

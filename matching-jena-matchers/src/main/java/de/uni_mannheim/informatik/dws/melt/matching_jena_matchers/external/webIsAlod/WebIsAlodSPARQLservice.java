@@ -12,7 +12,10 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
+
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices.safeAsk;
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices.safeExecution;
+
 
 /**
  * This class performs SPARQL queries for the WebIsALOD data set.
@@ -22,7 +25,7 @@ public class WebIsAlodSPARQLservice {
     /**
      * Default logger
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(WebIsAlodSPARQLservice.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebIsAlodSPARQLservice.class);
 
     /**
      * Synonymy Buffer
@@ -46,24 +49,10 @@ public class WebIsAlodSPARQLservice {
      */
     private boolean isDiskBufferEnabled = true;
 
-
     /**
-     * TODO delete / just for dirty testing
-     *
-     * @param args args
+     * Service responsible for disk buffers.
      */
-    public static void main(String[] args) {
-        WebIsAlodSPARQLservice service = new WebIsAlodSPARQLservice(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT, true);
-        System.out.println(service.isConceptOnDataSet("<http://webisa.webdatacommons.org/concept/option_contract_>"));
-        System.out.println(service.isConceptOnDataSet("<http://webisa.webdatacommons.org/concept/_contract_>"));
-        System.out.println(service.isSynonymous("<http://webisa.webdatacommons.org/concept/option_contract_>", "<http://webisa.webdatacommons.org/concept/_contract_>", 0.8));
-        System.out.println(service.getUriUsingLabel("car"));
-        System.out.println(service.getUriUsingLabel("car"));
-        service.close();
-    }
-
     PersistenceService persistenceService;
-
 
     /**
      * Instance Endpoint.
@@ -75,7 +64,6 @@ public class WebIsAlodSPARQLservice {
      */
     private static HashMap<WebIsAlodEndpoint, WebIsAlodSPARQLservice> instances;
 
-
     /**
      * Singleton Pattern to get Sparql service instance.
      *
@@ -85,7 +73,6 @@ public class WebIsAlodSPARQLservice {
     public static WebIsAlodSPARQLservice getInstance(WebIsAlodEndpoint sparqlWebIsAlodEndpoint) {
         return getInstance(sparqlWebIsAlodEndpoint, true);
     }
-
 
     /**
      * Singleton Pattern to get Sparql service instance.
@@ -111,7 +98,6 @@ public class WebIsAlodSPARQLservice {
         }
         return webIsAlodSPARQLservice;
     }
-
 
     /**
      * Private Constructor (singleton pattern).
@@ -147,7 +133,6 @@ public class WebIsAlodSPARQLservice {
         }
     }
 
-
     /**
      * Checks whether the concept behind the given URI is available on WebIsALOD.
      * Availability is defined as "has at least one broader concept".
@@ -158,7 +143,6 @@ public class WebIsAlodSPARQLservice {
     public boolean isConceptOnDataSet(String uri) {
         return hasBroaderConcepts(uri);
     }
-
 
     /**
      * Determines whether a concept has a hypernym.
@@ -179,7 +163,6 @@ public class WebIsAlodSPARQLservice {
         return result;
     }
 
-
     /**
      * Checks whether the two URIs are synonymous. If one or both URIs cannot be found in the data set, the default
      * answer is false.
@@ -194,7 +177,6 @@ public class WebIsAlodSPARQLservice {
         }
         return isSynonymous(webIsAlodEndpoint, uri1, uri2);
     }
-
 
     /**
      * Checks whether the two URIs are synonymous. If one or both URIs cannot be found in the data set, the default
@@ -231,8 +213,6 @@ public class WebIsAlodSPARQLservice {
         }
         return isHypernymous(webIsAlodEndpoint, uri1, uri2, 0.0);
     }
-
-
 
     /**
      * Internal method that can execute a synonymy ask query with a given minimum confidence threshold.
@@ -317,7 +297,6 @@ public class WebIsAlodSPARQLservice {
         return result;
     }
 
-
     private static final String CLASSIC_CONFIDENCE = "<http://webisa.webdatacommons.org/ontology#>";
     private static final String XL_CONFIDENCE = "<http://webisa.webdatacommons.org/ontology/>";
 
@@ -356,8 +335,6 @@ public class WebIsAlodSPARQLservice {
         return query;
     }
 
-
-
     /**
      * Obtain a query to check for hypernymy.
      * @param uri1 URI of concept 1.
@@ -385,7 +362,6 @@ public class WebIsAlodSPARQLservice {
                 "}";
     }
 
-
     /**
      * Checks whether the URI in question is a concept of the ALOD XL webIsAlodEndpoint.
      *
@@ -406,7 +382,6 @@ public class WebIsAlodSPARQLservice {
         return false;
     }
 
-
     /**
      * Returns the URI to a given label under the premises that the label can be linked to a resource.
      * lse null will be returned.
@@ -417,7 +392,6 @@ public class WebIsAlodSPARQLservice {
     public String getUriUsingLabel(String label) {
         return getUriUsingLabel(this.webIsAlodEndpoint, label);
     }
-
 
     /**
      * Returns the URI to a given label under the premises that the label can be linked to a resource.
@@ -471,70 +445,6 @@ public class WebIsAlodSPARQLservice {
         return null;
     }
 
-
-    /**
-     * When executing queries it sometimes comes to exceptions (most likely http exceptions).
-     * This method executes in a safe environment and will retry after some seconds, when the execution fails.
-     *
-     * @param queryExecutionInstance Query execution object.
-     * @return True if ask query evaluates to true, else false.
-     */
-    public static boolean safeAsk(QueryExecution queryExecutionInstance) {
-        boolean result;
-        try {
-            result = queryExecutionInstance.execAsk();
-        } catch (Exception e) {
-            LOGGER.error("An exception occurred while querying. Waiting for 15 seconds...");
-            try {
-                TimeUnit.SECONDS.sleep(15);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
-            LOGGER.error("Retry.");
-            result = queryExecutionInstance.execAsk();
-        } // end of catch
-        return result;
-    }
-
-    /**
-     * When executing queries it sometimes comes to exceptions (most likely http exceptions).
-     * This method executes in a safe environment and will retry after some seconds, when the execution fails.
-     *
-     * @param askQuery The query to be asked.
-     * @return True if ask query evaluates to true, else false.
-     */
-    public boolean safeAsk(String askQuery) {
-        return safeAsk(QueryExecutionFactory.sparqlService(webIsAlodEndpoint.toString(), askQuery));
-    }
-
-
-    /**
-     * When executing queries it sometimes comes to exceptions (most likely http exceptions).
-     * This method executes in a safe environment and will retry after some seconds, when the execution fails.
-     *
-     * @param queryExecutionInstance Query Execution Object.
-     * @return ResultSet Object. Null, if no result after second attempt.
-     */
-    public static ResultSet safeExecution(QueryExecution queryExecutionInstance) {
-        ResultSet results;
-        try {
-            results = queryExecutionInstance.execSelect();
-        } catch (Exception e) {
-            // most likely a http exception
-            e.printStackTrace();
-            LOGGER.error("An exception occurred while querying. Waiting for 15 seconds...");
-            try {
-                TimeUnit.SECONDS.sleep(15);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
-            LOGGER.error("Retry");
-            results = queryExecutionInstance.execSelect();
-        }
-        return results;
-    }
-
-
     /**
      * Checks whether there is a resource with the given URI available at the given endpoint.
      *
@@ -542,9 +452,8 @@ public class WebIsAlodSPARQLservice {
      * @return True if URI exists, else false.
      */
     public boolean isURIinDictionary(String uri) {
-        return safeAsk("ask {" + StringOperations.convertToTag(uri) + " ?p ?o}");
+        return safeAsk("ASK {" + StringOperations.convertToTag(uri) + " ?p ?o}", this.webIsAlodEndpoint.toString());
     }
-
 
     /**
      * Clean-up and close db. This method will also shut down the WebIsAlodSPARQL service.
@@ -555,7 +464,6 @@ public class WebIsAlodSPARQLservice {
         }
         instances.remove(this.webIsAlodEndpoint);
     }
-
 
     //---------------------------------------------------------------------------------
     // Data Structures
@@ -593,11 +501,9 @@ public class WebIsAlodSPARQLservice {
         }
     }
 
-
     //---------------------------------------------------------------------------------
     // Data Structures
     //---------------------------------------------------------------------------------
-
 
     public boolean isDiskBufferEnabled() {
         return isDiskBufferEnabled;

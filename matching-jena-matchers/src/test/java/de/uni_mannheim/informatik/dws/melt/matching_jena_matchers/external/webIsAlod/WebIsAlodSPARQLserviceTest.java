@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod;
 
-import com.googlecode.cqengine.persistence.Persistence;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic.WebIsAlodClassicLinker;
 import org.apache.commons.io.FileUtils;
@@ -14,8 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,12 +37,12 @@ class WebIsAlodSPARQLserviceTest {
      * Delete the persistence directory.
      */
     private static void deletePersistenceDirectory() {
-        File result = new File(PersistenceService.PERSITENCE_DIRECTORY);
-        if (result != null && result.exists() && result.isDirectory()) {
+        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        if (result.exists() && result.isDirectory()) {
             try {
                 FileUtils.deleteDirectory(result);
             } catch (IOException e) {
-                LOGGER.error("Failed to remove persistence directory.");
+                LOGGER.error("Failed to remove persistence directory.", e);
             }
         }
     }
@@ -123,7 +120,6 @@ class WebIsAlodSPARQLserviceTest {
         assertFalse(service.isSynonymous(linker.linkToSingleConcept("option contract"), linker.linkToSingleConcept("contract"), 0.8));
         assertTrue(service.isSynonymous(linker.linkToSingleConcept("option contract"), linker.linkToSingleConcept("contract"), 0.5));
 
-
         // service MUST be closed to allow for reinitialization with another endpoint
         service.close();
     }
@@ -175,7 +171,6 @@ class WebIsAlodSPARQLserviceTest {
         // service MUST be closed to allow for reinitialization with another endpoint
         service.close();
     }
-
 
     @Test
     void isURIinDictionaryClassic() {

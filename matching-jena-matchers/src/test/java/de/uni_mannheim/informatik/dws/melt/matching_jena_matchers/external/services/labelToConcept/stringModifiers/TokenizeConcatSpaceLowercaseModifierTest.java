@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TokenizeConcatSpaceLowercaseModifierTest {
 
+
     @Test
     void modifyString() {
         TokenizeConcatSpaceLowercaseModifier modifier = new TokenizeConcatSpaceLowercaseModifier();

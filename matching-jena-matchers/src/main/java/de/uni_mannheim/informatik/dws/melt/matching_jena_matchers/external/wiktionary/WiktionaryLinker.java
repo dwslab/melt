@@ -21,6 +21,7 @@ import java.util.LinkedList;
  */
 public class WiktionaryLinker implements LabelToConceptLinker {
 
+
 	/**
 	 * Default name of the linker.
 	 */
@@ -52,6 +53,7 @@ public class WiktionaryLinker implements LabelToConceptLinker {
 
 	@Override
 	public String linkToSingleConcept(String labelToBeLinked) {
+		if(labelToBeLinked == null || labelToBeLinked.trim().equals("")) return null;
 		String modifiedConcept;
 		for(StringModifier modifier : stringModificationSequence) {
 			modifiedConcept = modifier.modifyString(labelToBeLinked);
@@ -62,9 +64,9 @@ public class WiktionaryLinker implements LabelToConceptLinker {
 		return null;
 	}
 
-
 	@Override
 	public HashSet<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
+		if(labelToBeLinked == null || labelToBeLinked.trim().equals("")) return null;
 		HashSet<String> result = linkLabelToTokensLeftToRight(labelToBeLinked);
 		int possibleConceptParts = StringOperations.clearArrayFromStopwords(StringOperations.tokenizeBestGuess(labelToBeLinked)).length;
 
@@ -79,7 +81,6 @@ public class WiktionaryLinker implements LabelToConceptLinker {
 		}
 		return null;
 	}
-
 
 	/**
 	 * Splits the labelToBeLinked in ngrams up to infinite size and tries to link components.
@@ -120,7 +121,6 @@ public class WiktionaryLinker implements LabelToConceptLinker {
 	public void setNameOfLinker(String nameOfLinker) {
 		this.nameOfLinker = nameOfLinker;
 	}
-
 
 	/**
 	 * Normalize for WordNet lookup, i.e., lowercasing and camel-case resolution.

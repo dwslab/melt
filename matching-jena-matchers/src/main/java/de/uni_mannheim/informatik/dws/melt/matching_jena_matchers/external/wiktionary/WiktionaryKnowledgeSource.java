@@ -20,10 +20,11 @@ import java.util.HashSet;
  */
 public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
 
+
     /**
      * Logger for this class.
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(WiktionaryKnowledgeSource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WiktionaryKnowledgeSource.class);
 
     /**
      * directory where the TDB database with the wiktionary files lies
@@ -217,9 +218,10 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      * @return A set of hypernyms.
      */
     public HashSet<String> getHypernyms(String linkedConcept, Language language) {
+        if(linkedConcept == null) return null;
         linkedConcept = encodeWord(linkedConcept);
-        if (hypernymyBuffer.containsKey(linkedConcept + "_" + linkedConcept.toString())) {
-            return hypernymyBuffer.get(linkedConcept + "_" + linkedConcept.toString());
+        if (hypernymyBuffer.containsKey(linkedConcept + "_" + linkedConcept)) {
+            return hypernymyBuffer.get(linkedConcept + "_" + linkedConcept);
         }
         HashSet<String> result = new HashSet<>();
         String queryString = "PREFIX dbnary: <http://kaiko.getalp.org/dbnary#>\n" +
@@ -254,6 +256,8 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             return null;
         }
     }
+
+
 
     @Override
     public LabelToConceptLinker getLinker() {

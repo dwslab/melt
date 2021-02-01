@@ -3,6 +3,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webI
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.LabelToConceptLinkerEmbeddings;
 
+import java.io.File;
+
 /**
  * Linker for WebIsALOD Embeddings
  */
@@ -12,10 +14,18 @@ public class WebIsAlodEmbeddingLinker extends LabelToConceptLinkerEmbeddings {
 
     /**
      * Constructor
-     * @param entityFilePath Empty file path.
+     * @param entityFilePath Entity file path.
      */
     public WebIsAlodEmbeddingLinker(String entityFilePath){
         super(entityFilePath);
+    }
+
+    /**
+     * Constructor.
+     * @param entityFile Entity file.
+     */
+    public WebIsAlodEmbeddingLinker(File entityFile){
+        super(entityFile.getAbsolutePath());
     }
 
     @Override

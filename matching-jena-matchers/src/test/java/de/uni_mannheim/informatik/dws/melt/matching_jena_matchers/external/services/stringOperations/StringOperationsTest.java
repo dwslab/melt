@@ -336,6 +336,14 @@ class StringOperationsTest {
     }
 
     @Test
+    void addTagIfNotExists(){
+        assertEquals("<Hagrid>", StringOperations.addTagIfNotExists("Hagrid"));
+        assertEquals("<Hagrid>", StringOperations.addTagIfNotExists("<Hagrid"));
+        assertEquals("<Hagrid>", StringOperations.addTagIfNotExists("Hagrid>"));
+        assertEquals("<Hagrid>", StringOperations.addTagIfNotExists("<Hagrid>"));
+    }
+
+    @Test
     void clearHashSetFromStopwords(){
         HashSet<String> set1 = new HashSet<>();
         set1.add("a");

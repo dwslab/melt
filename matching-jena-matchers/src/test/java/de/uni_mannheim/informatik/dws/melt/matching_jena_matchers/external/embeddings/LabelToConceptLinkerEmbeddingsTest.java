@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -73,9 +73,9 @@ class LabelToConceptLinkerEmbeddingsTest {
 
         // test 1: Europe
         String term = "European Union car";
-        HashSet<String> wiktionary1_links = wiktionaryLinker.linkToPotentiallyMultipleConcepts(term);
-        HashSet<String> wordnet1_links = wordnetLinker.linkToPotentiallyMultipleConcepts(term);
-        HashSet<String> webIsAlod1_links = webIsAlodLinker.linkToPotentiallyMultipleConcepts(term);
+        Set<String> wiktionary1_links = wiktionaryLinker.linkToPotentiallyMultipleConcepts(term);
+        Set<String> wordnet1_links = wordnetLinker.linkToPotentiallyMultipleConcepts(term);
+        Set<String> webIsAlod1_links = webIsAlodLinker.linkToPotentiallyMultipleConcepts(term);
         assertNotNull(wiktionary1_links);
         assertNotNull(wordnet1_links);
         assertNotNull(webIsAlod1_links);
