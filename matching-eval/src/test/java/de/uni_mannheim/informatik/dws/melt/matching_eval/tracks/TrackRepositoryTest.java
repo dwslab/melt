@@ -1,7 +1,11 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.xml.sax.SAXException;
 
 /**
  * Developer note:
@@ -101,5 +105,34 @@ class TrackRepositoryTest {
         assertEquals(1, TrackRepository.Complex.GeoLink.getTestCases().size());
         assertEquals(1, TrackRepository.Complex.PopgeoLink.getTestCases().size());
         assertEquals(4, TrackRepository.Complex.Hydrography.getTestCases().size());
+    }
+    
+    
+    @Test
+    public void generateTestCaseWithSampledReferenceAlignmentEvaluateOnlyRemainingTest() throws MalformedURLException, SAXException, IOException{
+        TestCase tc = TrackRepository.Anatomy.Default.getFirstTestCase();
+        
+        TestCase thirty = TrackRepository.generateTestCaseWithSampledReferenceAlignmentEvaluateOnlyRemaining(tc, 0.3, 1234);
+        Alignment reference = thirty.getParsedReferenceAlignment();
+        Alignment inputAlignment = new Alignment(thirty.getInputAlignment().toURL());
+        
+        Alignment intersection = Alignment.intersection(inputAlignment, reference);
+        assertEquals(0, intersection.size());
+    }
+    
+    @Test
+    public void generateTestCaseWithSampledReferenceAlignmentTest() throws MalformedURLException, SAXException, IOException{
+        TestCase tc = TrackRepository.Anatomy.Default.getFirstTestCase();
+        
+        TestCase thirty = TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, 0.3, 1234);
+        Alignment reference = thirty.getParsedReferenceAlignment();
+        Alignment inputAlignment = new Alignment(thirty.getInputAlignment().toURL());
+        
+        Alignment intersection = Alignment.intersection(inputAlignment, reference);
+        assertEquals(inputAlignment.size(), intersection.size());
+                
+        TestCase fifty = TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, 0.5, 1234);
+        Alignment inputAlignmentFifty = new Alignment(fifty.getInputAlignment().toURL());
+        assertTrue(inputAlignmentFifty.containsAll(inputAlignment));
     }
 }

@@ -10,12 +10,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.zip.GZIPOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
@@ -42,7 +44,7 @@ public class DashboardBuilder extends Evaluator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardBuilder.class);
     
-    protected EvaluatorCSV evaluatorCSV;
+    protected Supplier<String> csvSupplier;
     
     protected Template template;
     
@@ -56,6 +58,24 @@ public class DashboardBuilder extends Evaluator {
     protected String additionalText;
     
     protected boolean dataLoadingIndicator;
+    
+    
+    
+    public DashboardBuilder(Supplier<String> csvSupplier, ExecutionResultSet executionResultSet, String titleOfPage, String additionalText){
+        super(executionResultSet);
+        Velocity.setProperty("resource.loaders", "classpath");
+        Velocity.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());        
+        Velocity.init();
+        this.template = Velocity.getTemplate("templates/dashboard/dashboard.vm");
+        this.csvSupplier = csvSupplier;
+        this.rows = new ArrayList<>();
+        this.currentRow = new ArrayList<>();
+        this.title = titleOfPage;
+        this.additionalText = additionalText;
+        this.dataLoadingIndicator = false;
+        
+        addDefaultDashboard();
+    }
 
     /**
      * Constructor
@@ -65,21 +85,10 @@ public class DashboardBuilder extends Evaluator {
      * @param additionalText additionalText
      */
     public DashboardBuilder(EvaluatorCSV evaluatorCSV, String titleOfPage, String additionalText){
-        super(evaluatorCSV.getResults());
-        Velocity.setProperty("resource.loaders", "classpath");
-        Velocity.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());        
-        Velocity.init();
-        
-        template = Velocity.getTemplate("templates/dashboard/dashboard.vm");
-        this.evaluatorCSV = evaluatorCSV;
-        this.evaluatorCSV.setPrintCorrespondenceExtensions(false);
-        this.rows = new ArrayList<>();
-        this.currentRow = new ArrayList<>();
-        this.title = titleOfPage;
-        this.additionalText = additionalText;
-        this.dataLoadingIndicator = false;
-        
-        addDefaultDashboard();
+        this(() -> {
+            evaluatorCSV.setPrintCorrespondenceExtensions(false); 
+            return evaluatorCSV.getAlignmentsCubeAsString().trim();
+        }, evaluatorCSV.getResults(), titleOfPage, additionalText);
     }
 
     /**
@@ -107,6 +116,23 @@ public class DashboardBuilder extends Evaluator {
     public DashboardBuilder(EvaluatorCSV evaluatorCSV){
         this(evaluatorCSV, "MELT Dashboard", "");
     }
+    
+    /**
+     * Constructor which just uses an csv file and not the whole EvaluatorCSV.
+     * @param csvFile the csv file
+     * @param titleOfPage title of the page
+     * @param additionalText additional text for the page
+     */
+    public DashboardBuilder(File csvFile, String titleOfPage, String additionalText){
+        this(()-> {
+            try{
+                return new String(Files.readAllBytes(csvFile.toPath()), StandardCharsets.UTF_8);
+            }catch(IOException ex){
+                LOGGER.error("Could not read csv file", ex);
+                return "";
+            }
+        },null, titleOfPage, additionalText);
+    } 
     
     public DashboardBuilder addDefaultDashboard(){
         this.addSelectMenu("trackSelection", "Track", "width:190px");
@@ -538,7 +564,7 @@ public class DashboardBuilder extends Evaluator {
         newRow();
 
         VelocityContext context = prepareVelocityContext();
-        context.put("csvData", this.evaluatorCSV.getAlignmentsCubeAsString().trim());
+        context.put("csvData", this.csvSupplier.get());
         /*context.put("csvData", "Track,TestCase,left_label,left_comment,left_explicit_type,left_uri,relation,confidence,right_uri,right_label,right_comment,right explicit type,result\n" +
 "conference,conference-sigkdd,[],[],[http://www.w3.org/2002/07/owl-Class],http://conference-Review,=,1.0,http://sigkdd-Review,[],[],[http://www.w3.org/2002/07/owl-Class],true positive\n" +
 "conference,conference-sigkdd,[],[],[http://www.w3.org/2002/07/owl-Class],http://conference-Committee,=,1.0,http://sigkdd-Committee,[],[],[http://www.w3.org/2002/07/owl-Class],true positive\n" +
@@ -562,7 +588,7 @@ public class DashboardBuilder extends Evaluator {
         newRow();
         
         try(Writer writer = new BufferedWriter(new FileWriter(csvFile))){
-            writer.write(this.evaluatorCSV.getAlignmentsCubeAsString().trim());
+            writer.write(this.csvSupplier.get());
         } catch (IOException ex) {
             LOGGER.error("Could not write to file.", ex);
         }
@@ -586,7 +612,7 @@ public class DashboardBuilder extends Evaluator {
         newRow();
         
         try(Writer writer = new BufferedWriter(new FileWriter(csvFile))){
-            String csv = this.evaluatorCSV.getAlignmentsCubeAsString().trim();
+            String csv = this.csvSupplier.get();
             writer.write(Base64.getEncoder().encodeToString(getGzippedByteArray(csv)));
         } catch (IOException ex) {
             LOGGER.error("Could not write to file.", ex);
