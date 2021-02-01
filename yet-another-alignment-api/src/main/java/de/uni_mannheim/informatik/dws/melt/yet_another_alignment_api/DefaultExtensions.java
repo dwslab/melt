@@ -15,12 +15,12 @@ public class DefaultExtensions {
         /**
          * STRING identifying the version of the alignment.
          */
-        VERSION("http://exmo.inrialpes.fr/align/ext/1.0/#version "),
+        VERSION("http://exmo.inrialpes.fr/align/ext/1.0/#version"),
 
         /**
          * CLASSNAME of the generating matching method (or operation).
          */
-        METHOD("http://exmo.inrialpes.fr/align/ext/1.0/#method "),
+        METHOD("http://exmo.inrialpes.fr/align/ext/1.0/#method"),
 
         /**
          * STRING identifying the method version.
@@ -30,7 +30,7 @@ public class DefaultExtensions {
         /**
          * URI the alignment from which this one is issued, if applicable
          */
-        DERIVED_FROM("http://exmo.inrialpes.fr/align/ext/1.0/#derivedFrom "),
+        DERIVED_FROM("http://exmo.inrialpes.fr/align/ext/1.0/#derivedFrom"),
 
         /**
          * STRING the parameters used with the generating method.
