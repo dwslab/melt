@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_seals_external;
+package de.uni_mannheim.informatik.dws.melt.receiver.cli;
 
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import eu.sealsproject.platform.res.tool.api.ToolBridgeException;
