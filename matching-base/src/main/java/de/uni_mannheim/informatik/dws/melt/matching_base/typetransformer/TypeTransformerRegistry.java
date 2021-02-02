@@ -110,37 +110,78 @@ public class TypeTransformerRegistry {
     }
     
     public static ObjectTransformationRoute transformObject(Object source, Class<?> target){
-        return transformObject(Arrays.asList(source), target, new Properties());
+        return transformObject(source, target, new Properties());
     }
     public static ObjectTransformationRoute transformObject(Object source, Class<?> target, Properties parameters){
-        return transformObject(Arrays.asList(source), target, parameters);
+        return transformObject(source, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
+    }
+    public static ObjectTransformationRoute transformObject(Object source, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+        TransformationRoute route = transformClass(source.getClass(), target, parameters, hierarchyTransformationCost, allowMultiStep);
+        if(route == null)
+            return null;
+        return new ObjectTransformationRoute(route, source);
     }
     
-    public static ObjectTransformationRoute transformObject(Iterable<Object> sources, Class<?> target, Properties parameters){
-        return transformObject(sources, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
+    
+    public static ObjectTransformationRoute transformObjectMultipleRepresentations(Iterable<Object> sources, Class<?> target){
+        return transformObjectMultipleRepresentations(sources, target, new Properties());
     }
     
-    public static ObjectTransformationRoute transformObject(Iterable<Object> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+    public static ObjectTransformationRoute transformObjectMultipleRepresentations(Iterable<Object> sources, Class<?> target, Properties parameters){
+        return transformObjectMultipleRepresentations(sources, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
+    }
+    
+    /**
+     * Transforms an object with multiple representations to one class.
+     * This means, you have multiple objects representing the same information and want to choose the right one with the lowest transformation cost.
+     * @param sources the possible objects which all contains the same information (but in different classes).
+     * @param target the target class in which the object should be converted.
+     * @param parameters optional parameters for the conversion.
+     * @param hierarchyTransformationCost hierarchy transformation cost: see {@link TypeTransformerRegistry#HIERARCHY_TRANSFORMATION_COST}
+     * @param allowMultiStep allow multi step: see {@link TypeTransformerRegistry#ALLOW_MULTI_STEP}
+     * @return ObjectTransformationRoute which contains the transformers as well as the source object. The actual transformation is not yet executed.
+     */
+    public static ObjectTransformationRoute transformObjectMultipleRepresentations(Iterable<Object> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
         Map<Class<?>, Object> mapping = new HashMap<>();
         for(Object o : sources){
             mapping.put(o.getClass(), o); // override if multiple object of the same class appears
         }
-        TransformationRoute route = transformClass(mapping.keySet(), target, parameters, hierarchyTransformationCost, allowMultiStep);
+        TransformationRoute route = transformClassMultipleRepresentations(mapping.keySet(), target, parameters, hierarchyTransformationCost, allowMultiStep);
         if(route == null)
             return null;
         return new ObjectTransformationRoute(route, mapping.get(route.getSource()));
     }
     
+    /*************************
+     * Tranform class section
+     *************************/
+    
+    
+    /**
+     * Return the transformation from a given class to a target class.
+     * @param source the source class
+     * @param target the target class
+     * @return the transformation route
+     */
     public static TransformationRoute transformClass(Class<?> source, Class<?> target){
         return transformClass(source, target, new Properties());
     }
     
     public static TransformationRoute transformClass(Class<?> source, Class<?> target, Properties parameters){
-        return transformClass(Arrays.asList(source), target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
+        return transformClass(source, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
     }
     
-    public static TransformationRoute transformClass(Iterable<Class<?>> sources, Class<?> target, Properties parameters){
-        return transformClass(sources, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
+    public static TransformationRoute transformClass(Class<?> source, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+        return transformClassMultipleRepresentations(Arrays.asList(source), target, parameters, hierarchyTransformationCost, allowMultiStep);
+    }
+    
+    
+    public static TransformationRoute transformClassMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target){
+        return transformClassMultipleRepresentations(sources, target, new Properties());
+    }
+    
+    public static TransformationRoute transformClassMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target, Properties parameters){
+        return transformClassMultipleRepresentations(sources, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
     }
     
     /**
@@ -152,7 +193,7 @@ public class TypeTransformerRegistry {
      * @param allowMultiStep allow multiple type transformers - see also {@link TypeTransformerRegistry#ALLOW_MULTI_STEP}
      * @return null if there is no path, otherwise instance of TransformationRoute (which can contain no transformers, when the source is a subclass of target class)
      */
-    public static TransformationRoute transformClass(Iterable<Class<?>> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+    public static TransformationRoute transformClassMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
         if(allowMultiStep == false)
             return transformInOneStep(sources, target, parameters, hierarchyTransformationCost);
         
@@ -278,7 +319,7 @@ public class TypeTransformerRegistry {
     
     /**
      * Cache for Superclasses and interfaces for a given class.
-     * Since tehre are ussually not so many classes, this information can directly be cache without much memory consumption.
+     * Since there are ussually not so many classes, this information can directly be cache without much memory consumption.
      */
     private static Map<Class<?>, Map<Class<?>, Integer>> SUPER_CLASSES_CACHE = new HashMap();
 

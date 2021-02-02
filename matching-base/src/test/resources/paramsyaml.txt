@@ -1,0 +1,4 @@
+
+# first key:
+http://oaei.ontologymatching.org/matchingClasses: true
+http://oaei.ontologymatching.org/matchingInstanceTypes: [ "http://example.com/one", "http://example.com/two" ]

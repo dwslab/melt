@@ -41,6 +41,7 @@ public class URI2PropertiesTransformer implements TypeTransformer<URI, Propertie
         try{
             Properties p = new Properties();
             p.putAll(new Yaml().load(content));
+            return p;
         }catch(JSONException ex){
             LOGGER.debug("Could not parse YAML - continue...");
         }
