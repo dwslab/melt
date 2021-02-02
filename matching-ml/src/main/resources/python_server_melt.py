@@ -1200,6 +1200,49 @@ def run_grid_search(df_train, cv, n_jobs):
         return "ERROR " + traceback.format_exc()
 
 
+@app.route("/run-openea", methods=["GET"])
+def run_openea():
+    try:
+        from openea.modules.args.args_hander import load_args
+        from openea.modules.load.kgs import read_kgs_from_folder
+        from openea.models.trans import TransD, TransE, TransH, TransR
+        from openea.models.semantic import DistMult, HolE, SimplE, RotatE
+        from openea.models.neural import ConvE, ProjE
+        from openea.approaches import AlignE, BootEA, JAPE, Attr2Vec, MTransE, IPTransE, GCN_Align, AttrE, IMUSE, SEA, MultiKE, RSN4EA, GMNN, KDCoE, RDGCN, BootEA_RotatE, BootEA_TransH, AliNet
+        from openea.models.basic_model import BasicModel
+        
+        models = { 'TransD' : TransD, 'TransE' : TransE, 'TransH' : TransH, 'TransR' : TransR, # openea.models.trans
+                   'DistMult' : DistMult, 'HolE' : HolE, 'SimplE' : SimplE, 'RotatE' : RotatE, # openea.models.semantic
+                   'ConvE' : ConvE, 'ProjE' : ProjE, # openea.models.neural
+                   'AlignE' : AlignE, 'BootEA' : BootEA, 'JAPE' : JAPE, 'Attr2Vec' : Attr2Vec, # openea.approaches
+                   'MTransE' : MTransE, 'IPTransE' : IPTransE, 'GCN_Align' : GCN_Align, 'AttrE' : AttrE,
+                   'IMUSE' : IMUSE, 'SEA' : SEA, 'MultiKE' : MultiKE, 'RSN4EA' : RSN4EA,
+                   'GMNN' : GMNN, 'KDCoE' : KDCoE, 'RDGCN' : RDGCN, 'BootEA_RotatE' : BootEA_RotatE,
+                   'BootEA_TransH' : BootEA_TransH, 'AliNet' : AliNet,
+                   'BasicModel' : BasicModel } # openea.models.basic_model
+
+        args = load_args(request.headers.get("argumentFile"))
+        kgs = read_kgs_from_folder(args.training_data, args.dataset_division, args.alignment_module, args.ordered, remove_unlinked=False)
+        model = models[args.embedding_module]()
+        model.set_args(args)
+        model.set_kgs(kgs)
+        model.init()
+        model.run()
+
+        model.out_folder = args.output # do not use folder hierarchy with datetime
+        model.predict(
+            top_k=getattr(args, 'predict_top_k', None),
+            min_sim_value=getattr(args, 'predict_min_sim_value', None),
+            output_file_name='topk.tsv'
+        )
+        #model.test()
+        if "save" in request.headers:
+            model.save()
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
+
+
 @app.route("/hello", methods=["GET"])
 def hello_demo() -> str:
     """A demo program that will return Hello <name> when called.

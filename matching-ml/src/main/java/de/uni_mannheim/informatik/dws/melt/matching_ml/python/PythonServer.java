@@ -99,6 +99,36 @@ public class PythonServer {
     
     
     /************************************
+     * OpenEA section
+     ***********************************/
+    
+    /**
+     * Run the openEA library.
+     * @param argumentFile the argument file to use
+     * @param save saves the embeddings to files
+     * @throws Exception in case something goes wrong.
+     */
+    public void runOpenEAModel(File argumentFile, boolean save) throws Exception{
+        HttpGet request = new HttpGet(serverUrl + "/run-openea");
+        request.addHeader("argumentFile", getCanonicalPath(argumentFile));
+        if(save)
+            request.addHeader("save", "True");
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                }
+            }
+        }
+    }
+    
+    
+    
+    /************************************
      * learn ML model for Alignment
      ***********************************/
     

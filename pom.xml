@@ -14,9 +14,9 @@
     </properties>
 
     <modules>
-        <module>hobbit-assembly</module>
         <module>hobbit-maven-plugin</module>
         <module>hobbit-wrapper</module>
+        <module>matching-assembly</module>
         <module>matching-base</module>
         <module>matching-eval</module>
         <module>matching-external</module>
@@ -26,7 +26,6 @@
         <module>matching-owlapi</module>
         <module>matching-validation</module>
         <module>matching-yaaa</module>
-        <module>seals-assembly</module>
         <module>yet-another-alignment-api</module>
     </modules>
 

@@ -1,4 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
+import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -60,8 +61,7 @@ public class TestCase {
     
     /**
      * URI pointing to the parameter file. Can be null (which means no parameters at all).
-     * It is formatted as a Proprerties file from java (but can also be read from python etc.
-     * similar to a ini file without sections.
+     * The format can currently be JSON and YAML. The available keys are listed in {@link ParameterConfigKeys}
      */
     private URI parameters;
 

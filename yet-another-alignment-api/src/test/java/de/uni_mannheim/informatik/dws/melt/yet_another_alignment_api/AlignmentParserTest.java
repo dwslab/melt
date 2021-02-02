@@ -2,19 +2,34 @@ package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
 import java.io.ByteArrayInputStream;
 import org.xml.sax.SAXException;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AlignmentParserTest {
     
     private static final String newline = System.getProperty("line.separator");
+    
+    @Test
+    public void testTSVParsing() throws IOException{
+        File f = new File(AlignmentParserTest.class.getResource("/tsv_parsing.tsv").getFile());
+        Alignment a = AlignmentParser.parseCSVWithoutHeader(f, '\t');
+        assertEquals(5, a.size());
+        for(Correspondence c : a){
+            if(c.getEntityOne().equals("http://dbpedia.org/resource/E491311")){
+                assertEquals(1.0, c.getConfidence());
+            }else{
+                assertTrue(c.getConfidence() > 0.3);
+                assertTrue(c.getConfidence() < 0.35);
+            }
+            assertTrue(c.getEntityOne().startsWith("http://dbpedia.org/resource/"));
+            assertTrue(c.getEntityTwo().startsWith("http://www.wikidata.org/entity/"));
+        }
+    }
     
     @Test
     public void testExtensionValues() throws SAXException, IOException {

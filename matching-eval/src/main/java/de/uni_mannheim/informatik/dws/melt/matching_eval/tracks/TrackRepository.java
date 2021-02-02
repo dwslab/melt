@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -614,30 +615,32 @@ public class TrackRepository{
     
     /**
      * Generates a test case where the input alignment of the test case is filled with a fraction of the reference alignment.
+     * The references alignment is still the same, meaning that also the provided correspondences as inputAlignment are also evaluated.
      * @param tc the base test case to use.
-     * @param fraction the fraction of the reference alignment ( a value between zero and one).
+     * @param fraction the fraction of the reference alignment ( a value between zero and one) which is provided as inputAlignment.
      * @param randomSeed the random seed object. If it is always in the same state e.g. always providing a fresh instance with the same seed like new Random(1234)
      * or setting the seed of one random instance always to the same value,  then a smaller subset (sample with 10 percent) will 
      * be contained in the larger subset (sample with 20 percent).
      * @return the testcase with same parameters as the base test case but with a generated input alignment.
      */
-    public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction, Random randomSeed){
+    private static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction, Random randomSeed){
         Alignment sample = tc.getParsedReferenceAlignment().sampleByFraction(fraction, randomSeed);
         try {
-            File f = File.createTempFile("ref_sample", ".rdf");
-            sample.serialize(f);
-            return new TestCase(tc.getName(), tc.getSource(), tc.getTarget(), tc.getReference(), tc.getTrack(), f.toURI(), tc.getGoldStandardCompleteness(), tc.getParameters());
+            File inputAlignmentFile = File.createTempFile("alignment_input_from_reference", ".rdf");
+            sample.serialize(inputAlignmentFile);
+            return new TestCase(tc.getName(), tc.getSource(), tc.getTarget(), tc.getReference(), tc.getTrack(), inputAlignmentFile.toURI(), tc.getGoldStandardCompleteness(), tc.getParameters());
         } catch (IOException ex) {
-            LOGGER.error("Could not write sample reference alignment to file", ex);
+            LOGGER.error("Could not write alignment to file. Returning initial testcase", ex);
             return tc;
         }
     }
     
     /**
      * Generates a test case where the input alignment of the test case is filled with a fraction of the reference alignment.
+     * The references alignment is still the same, meaning that also the provided correspondences as inputAlignment are also evaluated.
      * @param tc the base test case to use.
-     * @param fraction the fraction of the reference alignment ( a value between zero and one).
-     * @param randomSeed the random seed number. If it is the same number,  hen a smaller subset (sample with 10 percent) will 
+     * @param fraction the fraction of the reference alignment ( a value between zero and one) which is provided as inputAlignment.
+     * @param randomSeed the random seed number. If it is the same number, then a smaller subset (sample with 10 percent) will 
      * be contained in the larger subset (sample with 20 percent).
      * @return the testcase with same parameters as the base test case but with a generated input alignment.
      */
@@ -647,12 +650,76 @@ public class TrackRepository{
     
     /**
      * Generates a test case where the input alignment of the test case is filled with a fraction of the reference alignment.
+     * The references alignment is still the same, meaning that also the provided correspondences as inputAlignment are also evaluated.
      * The seed for randomness will be generated.
      * @param tc the base test case to use.
-     * @param fraction the fraction of the reference alignment ( a value between zero and one).
+     * @param fraction the fraction of the reference alignment ( a value between zero and one) which is provided as inputAlignment.
      * @return the testcase with same parameters as the base test case but with a generated input alignment.
      */
     public static TestCase generateTestCaseWithSampledReferenceAlignment(TestCase tc, double fraction){
         return  generateTestCaseWithSampledReferenceAlignment(tc, fraction, new Random());
+    }
+    
+    
+    
+    /**
+     * Generates a test case where the input alignment of the test case is filled with a fraction of the reference alignment.
+     * The references alignment (which is evaluated) is now only the correspondences which are NOT provided as inputAlignment.
+     * @param tc the base test case to use.
+     * @param fraction the fraction of the reference alignment ( a value between zero and one) which is provided as inputAlignment.
+     * @param randomSeed the random seed object. If it is always in the same state e.g. always providing a fresh instance with the same seed like new Random(1234)
+     * or setting the seed of one random instance always to the same value,  then a smaller subset (sample with 10 percent) will 
+     * be contained in the larger subset (sample with 20 percent).
+     * @return the testcase with same parameters as the base test case but with a generated input alignment.
+     */
+    private static TestCase generateTestCaseWithSampledReferenceAlignmentEvaluateOnlyRemaining(TestCase tc, double fraction, Random randomSeed){
+        if(fraction < 0.0 || fraction > 1.0) {
+            throw new IllegalArgumentException("Fraction is out of range (smaller zero or greater one)");
+        }
+        
+        ArrayList<Correspondence> correspondenceList = new ArrayList<>(tc.getParsedReferenceAlignment());
+        Collections.shuffle(correspondenceList, randomSeed);
+        
+        Alignment inputAlignment = new Alignment(tc.getParsedReferenceAlignment(), false);
+        Alignment referenceAlignment = new Alignment(tc.getParsedReferenceAlignment(), false);
+        
+        int splitPoint = (int)Math.round((double)correspondenceList.size() * fraction);
+        inputAlignment.addAll(correspondenceList.subList(0, splitPoint));
+        referenceAlignment.addAll(correspondenceList.subList(splitPoint, correspondenceList.size()));
+
+        try {
+            File inputAlignmentFile = File.createTempFile("alignment_input_from_reference", ".rdf");
+            inputAlignment.serialize(inputAlignmentFile);
+            File referenceAlignmentFile = File.createTempFile("alignment_reference_rest", ".rdf");
+            referenceAlignment.serialize(referenceAlignmentFile);
+            return new TestCase(tc.getName(), tc.getSource(), tc.getTarget(), referenceAlignmentFile.toURI(), tc.getTrack(), inputAlignmentFile.toURI(), tc.getGoldStandardCompleteness(), tc.getParameters());
+        } catch (IOException ex) {
+            LOGGER.error("Could not write alignment to file. Returning initial testcase", ex);
+            return tc;
+        }
+    }
+    
+    /**
+     * Generates a test case where the input alignment of the test case is filled with a fraction of the reference alignment.
+     * The references alignment (which is evaluated) is now only the correspondences which are NOT provided as inputAlignment.
+     * @param tc the base test case to use.
+     * @param fraction the fraction of the reference alignment ( a value between zero and one) which is provided as inputAlignment.
+     * @param randomSeed the random seed number. If it is the same number, then a smaller subset (sample with 10 percent) will 
+     * be contained in the larger subset (sample with 20 percent).
+     * @return the testcase with same parameters as the base test case but with a generated input alignment.
+     */
+    public static TestCase generateTestCaseWithSampledReferenceAlignmentEvaluateOnlyRemaining(TestCase tc, double fraction, long randomSeed){
+        return generateTestCaseWithSampledReferenceAlignmentEvaluateOnlyRemaining(tc, fraction, new Random(randomSeed));
+    }
+    
+    /**
+     * Generates a test case where the input alignment of the test case is filled with a fraction of the reference alignment.
+     * The references alignment (which is evaluated) is now only the correspondences which are NOT provided as inputAlignment.
+     * @param tc the base test case to use.
+     * @param fraction the fraction of the reference alignment ( a value between zero and one) which is provided as inputAlignment.
+     * @return the testcase with same parameters as the base test case but with a generated input alignment.
+     */
+    public static TestCase generateTestCaseWithSampledReferenceAlignmentEvaluateOnlyRemaining(TestCase tc, double fraction){
+        return generateTestCaseWithSampledReferenceAlignmentEvaluateOnlyRemaining(tc, fraction, new Random());
     }
 }
