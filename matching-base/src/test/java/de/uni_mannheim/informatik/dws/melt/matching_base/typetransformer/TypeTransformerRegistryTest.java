@@ -1,14 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer;
 
-
-
-
-import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AbstractTypeTransformer;
-import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.ObjectTransformationRoute;
-import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TransformationRoute;
-import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformer;
-import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,7 +51,7 @@ public class TypeTransformerRegistryTest {
         TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(SourceSuperClass.class, TargetSubClass.class, 20));
 
         for(Boolean b : Arrays.asList(true, false)){
-            TransformationRoute r = TypeTransformerRegistry.transformClass(
+            TransformationRoute r = TypeTransformerRegistry.transformClassMultipleRepresentations(
                 Arrays.asList(SourceSubClass.class), 
                 TargetSubClass.class, 
                 new Properties(), 
@@ -72,7 +63,7 @@ public class TypeTransformerRegistryTest {
             assertEquals(1, r.getTransformations().size());
             
             //no hierarchy allowed
-            r = TypeTransformerRegistry.transformClass(
+            r = TypeTransformerRegistry.transformClassMultipleRepresentations(
                 Arrays.asList(SourceSubClass.class), 
                 TargetSubClass.class, 
                 new Properties(), 
@@ -89,11 +80,11 @@ public class TypeTransformerRegistryTest {
         TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(MiddleClass.class, TargetSubClass.class));
         
         SourceSubClass s = new SourceSubClass();
-        ObjectTransformationRoute route = TypeTransformerRegistry.transformObject(
+        ObjectTransformationRoute route = TypeTransformerRegistry.transformObjectMultipleRepresentations(
                 Arrays.asList(s), TargetSubClass.class, new Properties(),-1, true);
         assertNull(route);
         
-        route = TypeTransformerRegistry.transformObject(
+        route = TypeTransformerRegistry.transformObjectMultipleRepresentations(
                 Arrays.asList(s, new Object()), TargetSubClass.class, new Properties(),5, true);
         assertEquals(s, route.getInitialObject());
         assertNotNull(route.getTransformedObject());
@@ -104,11 +95,11 @@ public class TypeTransformerRegistryTest {
     @Test
     public void testHierarchy() throws Exception{
         SourceSubClass c = new SourceSubClass();
-        assertNull(TypeTransformerRegistry.transformObject(Arrays.asList(c), SourceSuperClass.class, new Properties(), -1, true));
-        assertNull(TypeTransformerRegistry.transformObject(Arrays.asList(c), SourceSuperClass.class, new Properties(), -1, false));
+        assertNull(TypeTransformerRegistry.transformObjectMultipleRepresentations(Arrays.asList(c), SourceSuperClass.class, new Properties(), -1, true));
+        assertNull(TypeTransformerRegistry.transformObjectMultipleRepresentations(Arrays.asList(c), SourceSuperClass.class, new Properties(), -1, false));
         
         for(Boolean b : Arrays.asList(true, false)){
-            ObjectTransformationRoute r = TypeTransformerRegistry.transformObject(Arrays.asList(c), SourceSuperClass.class, new Properties(), 10, true);
+            ObjectTransformationRoute r = TypeTransformerRegistry.transformObjectMultipleRepresentations(Arrays.asList(c), SourceSuperClass.class, new Properties(), 10, true);
 
             assertNotNull(r);
             assertEquals(SourceSubClass.class, r.getSource());
@@ -147,7 +138,7 @@ public class TypeTransformerRegistryTest {
             }
         });
         
-        TransformationRoute r = TypeTransformerRegistry.transformClass(
+        TransformationRoute r = TypeTransformerRegistry.transformClassMultipleRepresentations(
                 Arrays.asList(SourceSubClass.class), 
                 TargetSubClass.class, 
                 new Properties(), 
@@ -161,7 +152,7 @@ public class TypeTransformerRegistryTest {
         Properties params = new Properties();
         params.put("test", "test");
         
-        r = TypeTransformerRegistry.transformClass(
+        r = TypeTransformerRegistry.transformClassMultipleRepresentations(
                 Arrays.asList(SourceSubClass.class), 
                 TargetSubClass.class, 
                 params, 
