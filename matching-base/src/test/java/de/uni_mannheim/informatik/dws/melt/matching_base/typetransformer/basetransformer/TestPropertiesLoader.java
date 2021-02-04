@@ -9,13 +9,18 @@ import java.util.Arrays;
 import java.util.Properties;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestPropertiesLoader {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestPropertiesLoader.class);
+    
     @Test
     public void testPropertiesLoader() throws Exception{
         URI paramsURI = Paths.get("src", "test", "resources", "paramsyaml.txt").toUri();
         if(paramsURI == null)
             throw new Exception("test resource is missing");
+        LOGGER.info("Type transformer: {}", TypeTransformerRegistry.getAllRegisteredTypeTransformersAsString());        
         ObjectTransformationRoute route = TypeTransformerRegistry.transformObject(paramsURI, Properties.class);
         if(route == null)
             throw new Exception("route is null");

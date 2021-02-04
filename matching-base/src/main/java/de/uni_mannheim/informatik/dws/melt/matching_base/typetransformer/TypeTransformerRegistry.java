@@ -57,6 +57,28 @@ public class TypeTransformerRegistry {
     }
     
     /**
+     * Get all registered tranformers. For debugging purposes.
+     * @return all registered transformers.
+     */
+    public static Set<TypeTransformer> getAllRegisteredTypeTransformers(){
+        Set<TypeTransformer> transformers = new HashSet();
+        for(Map<Class<?>,Set<TypeTransformer>> entry : TRANFORMERS.values()){
+            for(Set<TypeTransformer> typetransformers : entry.values()){
+                transformers.addAll(typetransformers);
+            }
+        }
+        return transformers;
+    }
+    
+    public static String getAllRegisteredTypeTransformersAsString(){
+        Set<String> classes = new HashSet();
+        for(TypeTransformer o : getAllRegisteredTypeTransformers()){
+            classes.add(o.getClass().getName());
+        }
+        return classes.toString();
+    }
+    
+    /**
      * The additional tranformation cost (determined by the environment variable MELT_TRANSFORMATION_HIERARCHY_COST )to add
      * if hierarchy is allowed e.g. when we have a {@link TypeTransformer} between
      * A (source) and B(target) and we allow hierarchy then it is also possible to transform between any subclass of A and any superclass of B.
