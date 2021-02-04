@@ -164,6 +164,28 @@ public class TypeTransformerRegistryTest {
         assertEquals(1, r.getTransformations().size());
     }
     
+    @Test
+    public void testNullValues(){
+        assertEquals(null, TypeTransformerRegistry.transformObject(null, null));
+        assertEquals(null, TypeTransformerRegistry.transformObject(null, List.class));
+        assertEquals(null, TypeTransformerRegistry.transformObject(new Object(), null));
+        
+        assertEquals(null, TypeTransformerRegistry.transformObjectMultipleRepresentations(null, null));
+        assertEquals(null, TypeTransformerRegistry.transformObjectMultipleRepresentations(null, List.class));
+        assertEquals(null, TypeTransformerRegistry.transformObjectMultipleRepresentations(Arrays.asList(), null));
+        assertEquals(null, TypeTransformerRegistry.transformObjectMultipleRepresentations(Arrays.asList(), List.class));
+        
+        
+        assertEquals(null, TypeTransformerRegistry.transformClass(null, null));
+        assertEquals(null, TypeTransformerRegistry.transformClass(null, List.class));
+        assertEquals(null, TypeTransformerRegistry.transformClass(List.class, null));
+        
+        assertEquals(null, TypeTransformerRegistry.transformClassMultipleRepresentations(null, null));
+        assertEquals(null, TypeTransformerRegistry.transformClassMultipleRepresentations(null, List.class));
+        assertEquals(null, TypeTransformerRegistry.transformClassMultipleRepresentations(Arrays.asList(), null));
+        assertEquals(null, TypeTransformerRegistry.transformClassMultipleRepresentations(Arrays.asList(), List.class));
+    }
+    
     
     /**
      * This is a non repeatable test because it creates random graphs.

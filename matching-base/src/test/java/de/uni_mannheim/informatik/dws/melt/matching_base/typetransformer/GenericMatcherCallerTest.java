@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GenericMatcherCallerTest {
     @Test
-    public void getAllSuperClassesAndIterfacesTest() throws MalformedURLException, Exception{
+    public void testGenericMatcherCaller() throws MalformedURLException, Exception{
         TypeTransformerRegistry.clear();
         TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(URL.class, MyModel.class));
         TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(URL.class, MyAlignment.class));
@@ -25,13 +26,13 @@ public class GenericMatcherCallerTest {
                 "de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.myTestMatcher");
         
         for(Object matcher : possibleMatchers){
-            Object o = GenericMatcherCaller.runMatcher(matcher, 
-                Arrays.asList(URI.create("http://source.com").toURL()), 
-                Arrays.asList(URI.create("http://target.com").toURL()),
+            AlignmentAndParameters o = GenericMatcherCaller.runMatcherMultipleRepresentations(matcher, 
+                new HashSet(Arrays.asList(URI.create("http://source.com").toURL())), 
+                new HashSet(Arrays.asList(URI.create("http://target.com").toURL())),
                 URI.create("http://myAlignment.com").toURL(), 
                 new Properties());
-            assertNotNull(o);
-            assertTrue(o instanceof MyAlignment);
+            assertNotNull(o.getAlignment());
+            assertTrue(o.getAlignment() instanceof MyAlignment);
         }
     }
 }
