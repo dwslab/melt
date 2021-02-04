@@ -256,6 +256,13 @@ public class WikidataLinker implements LabelToConceptLinker {
     private String linkToSingleConceptByRunningAllModifications(String labelToBeLinked, Language language){
         String key = MULTI_CONCEPT_PREFIX + labelToBeLinked + "_" + language.toSparqlChar2() + "_all_modifications";
 
+        if(multiLinkStore.containsKey(key)){
+            LOGGER.debug("Found in buffer: " + key);
+            if(multiLinkStore.get(key).size() == 0){
+                return null;
+            } else return key;
+        }
+
         Set<String> allModifications = new HashSet<>();
         for(StringModifier modifier : stringModificationSet){
             allModifications.add(modifier.modifyString(labelToBeLinked));

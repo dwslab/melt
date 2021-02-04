@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
@@ -8,7 +9,8 @@
     <artifactId>matching-jena-matchers</artifactId>
 
     <name>MELT - Matching EvaLuation Toolkit | Jena Matchers Module</name>
-    <description>Contains modularized (jena-based) matchers that can be used to quickly assemble matching systems. </description>
+    <description>Contains modularized (jena-based) matchers that can be used to quickly assemble matching systems.
+    </description>
 
     <dependencies>
 
@@ -36,13 +38,13 @@
             <artifactId>commons-csv</artifactId>
             <version>1.8</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
             <version>8.4.1</version>
         </dependency>
-        
+
         <!-- only for testing - can be removed -->
         <dependency>
             <groupId>org.apache.lucene</groupId>
@@ -61,8 +63,8 @@
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
         </dependency>
-        
-         <!-- testing weka -->
+
+        <!-- testing weka -->
         <dependency>
             <groupId>nz.ac.waikato.cms.weka</groupId>
             <artifactId>weka-dev</artifactId>
@@ -74,13 +76,13 @@
             <artifactId>LibSVM</artifactId>
             <version>1.0.10</version>
         </dependency-->
-        
+
         <!--dependency>
             <groupId>org.codelibs</groupId>
             <artifactId>ranklib</artifactId>
             <version>2.10.1</version>
         </dependency-->
-        
+
         <!-- used in confidence combiner -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -93,7 +95,6 @@
             <artifactId>jena-tdb</artifactId>
             <version>3.17.0</version>
         </dependency>
-
 
         <!-- embedded database -->
         <dependency>
@@ -120,6 +121,151 @@
             <version>1.2</version>
         </dependency>
 
+        <!-- BabelNet dependency, hosted at the University of Mannheim -->
+        <dependency>
+            <groupId>it.uniroma1.lcl</groupId>
+            <artifactId>babelnet</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
+        <!-- BabelNet dependency, hosted at the University of Mannheim -->
+        <dependency>
+            <groupId>it.uniroma1.lcl</groupId>
+            <artifactId>lcl-jlt</artifactId>
+            <version>2.4</version>
+        </dependency>
+
+        <!-- BabelNet dependency, hosted at the University of Mannheim -->
+        <dependency>
+            <groupId>com.babelscape</groupId>
+            <artifactId>babelscape-data-commons</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils-core</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.8</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.5</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+            <version>1.8</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.3</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging-api</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.2</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>56.1</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>7.2.0</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>7.2.0</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queries</artifactId>
+            <version>7.2.0</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>7.2.0</version>
+        </dependency>
+
+        <!-- BabelNet Lib Dependency -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-sandbox</artifactId>
+            <version>7.2.0</version>
+        </dependency>
+
+
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>thirdparty</id>
+            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/thirdparty/</url>
+        </repository>
+    </repositories>
 
 </project>

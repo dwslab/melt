@@ -1,8 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResource;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResourceWithSynonymCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SynonymCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ import java.util.Set;
  * This class represents a single gensim embedding model.
  * It allows for simplified usage in matching systems.
  */
-public class GensimEmbeddingModel implements ExternalResource, SynonymCapability {
+public class GensimEmbeddingModel implements ExternalResourceWithSynonymCapability {
 
 
     /**

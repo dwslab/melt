@@ -508,6 +508,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         // check the buffer
         String key = "IS_HYPER_" + superConcept + "_" + subConcept + "_d" + depth;
         if(askBuffer.containsKey(key)){
+            LOGGER.debug("Serving from buffer: " + key);
             return askBuffer.get(key);
         }
 
@@ -525,12 +526,16 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
         } else subIsUri = true;
         if( (superUris.size() == 0 && !superIsUri) || (subUris.size() == 0 && !subIsUri) ){
             askBuffer.put(key, false);
+            commit();
             return false;
         }
         if(superIsUri && subIsUri){
             // we have two URIs: end of recursion
             String queryString = buildHypernymDepthQuery(superConcept, subConcept, depth);
-            return safeAsk(queryString, ENDPOINT_URL);
+            boolean result = safeAsk(queryString, ENDPOINT_URL);
+            askBuffer.put(key, result);
+            commit();
+            return result;
         } else {
             // we have at least one link, we need to add the link to the URI set so that it works in mixed cases (one link and one URI)
             if(superIsUri){
@@ -545,19 +550,21 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                     boolean intermediateResult = isHypernym(superConceptUri, subConceptUri, depth);
                     if (intermediateResult){
                         askBuffer.put(key, true);
+                        commit();
                         return true;
                     }
                 }
             }
         }
         askBuffer.put(key, false);
+        commit();
         return false;
     }
 
     /**
      * The query obtained is so that the depth is upwards followed. There is no mixture of wdt:P31 (instance of) and
      * wdt:P279 (subclass of). That means, that only super-instances are upwards followed UNION superclasses are upwards
-     * followed. The "instace-of" of a super-class cannot be found with this query!
+     * followed. The "instance-of" of a super-class cannot be found with this query!
      * <p>
      * DEV remark: This is a bit too involved for an easy-to-understand API. This is currently not used. Look at the
      * unit test to better understand what the query does.

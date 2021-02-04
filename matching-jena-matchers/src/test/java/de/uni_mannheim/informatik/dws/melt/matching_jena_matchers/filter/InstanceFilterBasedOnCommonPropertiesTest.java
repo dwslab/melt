@@ -33,9 +33,7 @@ public class InstanceFilterBasedOnCommonPropertiesTest {
         
         assertEquals(2, filtered.size());
     }
-    
-    
-    
+
     private OntModel generate(String namespace){
         OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);        
         Resource r = model.createResource(namespace + "instanceOne");
@@ -48,5 +46,4 @@ public class InstanceFilterBasedOnCommonPropertiesTest {
         
         return model;
     }
-    
 }

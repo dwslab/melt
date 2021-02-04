@@ -247,7 +247,9 @@
                             <excludes>WiktionaryLinkerTest.java</excludes>
                             <excludes>WiktionaryKnowledgeSourceTest.java</excludes>
                             <excludes>WordNetLinkerTest.java</excludes>
-                            <excludes>WordNetKnowledgeSourceTest</excludes>
+                            <excludes>WordNetKnowledgeSourceTest.java</excludes>
+                            <excludes>BabelNetLinkerTest.java</excludes>
+                            <excludes>BabelNetKnowledgeSourceTest.java</excludes>
                         </configuration>
                     </plugin>
                 </plugins>

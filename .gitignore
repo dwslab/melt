@@ -88,5 +88,10 @@ local_config.properties
 
 # background knowledge: do not track buffers / persistences
 /matching-jena-matchers/persitences
+/matching-jena-matchers/persistences
 /persistences
 *.mapdb
+babelnet.var.properties
+jlt.var.properties
+matching-jena-matchers/config/babelnet.properties
+matching-jena-matchers/config/babelnet.var.properties
