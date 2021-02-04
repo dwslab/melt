@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -43,44 +44,54 @@ public class MatcherHTTPCall extends MatcherURL{
      * If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
      */
     private boolean sendContent;
+    
+    /**
+     * The RequestConfig which contains timeouts to be used in http call.
+     */
+    private RequestConfig requestConfig;
+    
+    
+    /**
+     * Creates a matcher which wraps a matching service available at the given URI with timeout options.
+     * @param uri URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
+     * @param sendContent  If true, then the content of the file URI is read and transferred.
+     *      If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
+     * @param socketTimeout the time in milliseconds waiting for data – after the connection is established; 
+     *      maximum time between two data packets. Zero means infinite timeout. Negative usually means systems default.
+     * @param connectTimeout the timeout in milliseconds until a connection is established.
+     *      Zero means infinite timeout. Negative usually means systems default.
+     * @param connectionRequestTimeout timeout in milliseconds when requesting a connection from the connection manager.
+     *      Zero means infinite timeout. Negative usually means systems default.
+     */
+    public MatcherHTTPCall(URI uri, boolean sendContent, int socketTimeout, int connectTimeout, int connectionRequestTimeout) {
+        this.uri = uri;
+        this.sendContent = sendContent;
+        this.requestConfig = RequestConfig.custom()
+                .setSocketTimeout(socketTimeout)
+                .setConnectTimeout(connectTimeout)
+                .setConnectionRequestTimeout(connectionRequestTimeout)
+                .build();
+    }
+    
 
     /**
      * Creates a matcher which wraps a matching service available at the given URI.
-     * @param uri URI where the matching service is located.
+     * No timeout is applied.
+     * @param uri URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
      * @param sendContent  If true, then the content of the file URI is read and transferred. 
-     * If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
+     *      If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
      */
     public MatcherHTTPCall(URI uri, boolean sendContent) {
-        this.uri = uri;
-        this.sendContent = sendContent;
+        this(uri, sendContent, 0, 0, 0);
     }
     
     /**
      * Creates a matcher which wraps a matching service available at the given URI.
-     * @param uri URI where the matching service is located.
-     * @param sendContent  If true, then the content of the file URI is read and transferred. 
-     * If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
-     */
-    public MatcherHTTPCall(String uri, boolean sendContent) {
-        this(URI.create(uri), sendContent);
-    }
-    
-    /**
-     * Creates a matcher which wraps a matching service available at the given URI.
-     * Only the URIs of the test case are transferred to the system.
-     * @param uri URI where the matching service is located.
+     * Only the URIs of the test case are transferred to the system and no timeout is applied.
+     * @param uri URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
      */
     public MatcherHTTPCall(URI uri) {
         this(uri, false);
-    }
-    
-    /**
-     * Creates a matcher which wraps a matching service available at the given URI.
-     * Only the URIs of the test case are transferred to the system.
-     * @param uri URI where the matching service is located.
-     */
-    public MatcherHTTPCall(String uri) {
-        this(URI.create(uri));
     }
     
     
@@ -114,8 +125,8 @@ public class MatcherHTTPCall extends MatcherURL{
                 params.add(new BasicNameValuePair(entry.getKey().toString(), entry.getValue().toString()));
             }
             request.setEntity(new UrlEncodedFormEntity(params));
-        }
-        
+        }        
+        request.setConfig(this.requestConfig);        
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             HttpEntity entity = response.getEntity();
             if (entity == null) {
@@ -138,7 +149,4 @@ public class MatcherHTTPCall extends MatcherURL{
             }
         }
     }
-    
-    
-    
 }

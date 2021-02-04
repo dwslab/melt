@@ -1,11 +1,16 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
+import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcherCaller;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -19,36 +24,104 @@ public class GenericMatcherCaller {
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericMatcherCaller.class);
     
     /**
-     * Calls a matcher objetc with the provided arguments.
+     * Calls a matcher object with the provided arguments.
      * @param matcher the matcher can be: <ul>
-     *  <li>a string: which is the the fully qualified name of class which implements {@link IMatcher} interface or {@link IOntologyMatchingToolBridge}</li>
-     *  <li>a class: class object of class which implements {@link IMatcher} interface or {@link IOntologyMatchingToolBridge}</li>
-     *  <li>an instance: instance object of class which implements {@link IMatcher} interface or {@link IOntologyMatchingToolBridge}</li>
+     *  <li>an object / instance which implements/extends {@link IMatcher}, {@link IMatcherCaller}, or {@link IOntologyMatchingToolBridge}</li>
+     *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
+     *  <li>a string: the fully qualified name of a class which implements one of the above interfaces/classes like de.uni_mannheim.informatik.dws.melt.matching_base.MyMatcher - a new instance of this class will be created.</li>
      * </ul>
-     * @param sourceOntology this is an iterable of objects which all represents the same ontology
-     * @param targetOntology this is an iterable of objects which all represents the same ontology
+     * @param sourceOntology this object represents the source ontology
+     * @param targetOntology this object represents the taregt ontology
      * @return the object which is returned by the matcher. This can be any arbitrary object, but you can call the TypeTransformerRegistry to get the representation you want.
      * @throws Exception in case something goes wrong
      */
-    public static Object runMatcher(Object matcher, Object sourceOntology, Object targetOntology) throws Exception{
-        return runMatcher(matcher, Arrays.asList(sourceOntology), Arrays.asList(targetOntology), null, null);
+    public static AlignmentAndParameters runMatcher(Object matcher, Object sourceOntology, Object targetOntology) throws Exception{
+        return runMatcher(matcher, sourceOntology, targetOntology, null, null);
+    }
+    
+    /**
+     * Calls a matcher object with the provided arguments.
+     * @param matcher the matcher can be: <ul>
+     *  <li>an object / instance which implements/extends {@link IMatcher}, {@link IMatcherCaller}, or {@link IOntologyMatchingToolBridge}</li>
+     *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
+     *  <li>a string: the fully qualified name of a class which implements one of the above interfaces/classes like de.uni_mannheim.informatik.dws.melt.matching_base.MyMatcher - a new instance of this class will be created.</li>
+     * </ul>
+     * @param sourceOntology this object represents the source ontology
+     * @param targetOntology this object represents the taregt ontology
+     * @param inputAlignment the object which represents an input alignment. Can be null.
+     * @return the object which is returned by the matcher. This can be any arbitrary object, but you can call the TypeTransformerRegistry to get the representation you want.
+     * @throws Exception in case something goes wrong
+     */
+    public static AlignmentAndParameters runMatcher(Object matcher, Object sourceOntology, Object targetOntology, Object inputAlignment) throws Exception{
+        return runMatcher(matcher, sourceOntology, targetOntology, inputAlignment, null);
+    }
+    
+    /**
+     * Calls a matcher object with the provided arguments.
+     * @param matcher the matcher can be: <ul>
+     *  <li>an object / instance which implements/extends {@link IMatcher}, {@link IMatcherCaller}, or {@link IOntologyMatchingToolBridge}</li>
+     *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
+     *  <li>a string: the fully qualified name of a class which implements one of the above interfaces/classes like de.uni_mannheim.informatik.dws.melt.matching_base.MyMatcher - a new instance of this class will be created.</li>
+     * </ul>
+     * @param sourceOntology this object represents the source ontology
+     * @param targetOntology this object represents the taregt ontology
+     * @param inputAlignment the object which represents an input alignment. Can be null.
+     * @param parameters an objetc which represents parameters. Can be null.
+     * @return the object which is returned by the matcher. This can be any arbitrary object, but you can call the TypeTransformerRegistry to get the representation you want.
+     * @throws Exception in case something goes wrong
+     */
+    public static AlignmentAndParameters runMatcher(Object matcher, Object sourceOntology, Object targetOntology, Object inputAlignment, Object parameters) throws Exception{
+        return runMatcherMultipleRepresentations(matcher, new HashSet(Arrays.asList(sourceOntology)), new HashSet(Arrays.asList(targetOntology)), inputAlignment, parameters);
     }
     
     /**
      * Calls a matcher objetc with the provided arguments.
      * @param matcher the matcher can be: <ul>
-     *  <li>a string: which is the the fully qualified name of class which implements {@link IMatcher} interface or {@link IOntologyMatchingToolBridge}</li>
-     *  <li>a class: class object of class which implements {@link IMatcher} interface or {@link IOntologyMatchingToolBridge}</li>
-     *  <li>an instance: instance object of class which implements {@link IMatcher} interface or {@link IOntologyMatchingToolBridge}</li>
+     *  <li>an object / instance which implements/extends {@link IMatcher}, {@link IMatcherCaller}, or {@link IOntologyMatchingToolBridge}</li>
+     *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
+     *  <li>a string: the fully qualified name of a class which implements one of the above interfaces/classes like de.uni_mannheim.informatik.dws.melt.matching_base.MyMatcher - a new instance of this class will be created.</li>
      * </ul>
-     * @param sourceOntology this is an iterable of objects which all represents the same ontology
-     * @param targetOntology this is an iterable of objects which all represents the same ontology
-     * @param inputAlignment the object which represents an input alignment. Can be null.
-     * @param parameter an objetc which represents parameters. Can be null.
+     * @param sourceOntology this is an iterable of objects which all represents the same source ontology / knowledge graph
+     * @param targetOntology this is an iterable of objects which all represents the same target ontology / knowledge graph
      * @return the object which is returned by the matcher. This can be any arbitrary object, but you can call the TypeTransformerRegistry to get the representation you want.
      * @throws Exception in case something goes wrong
      */
-    public static Object runMatcher(Object matcher, Iterable<Object> sourceOntology, Iterable<Object> targetOntology, Object inputAlignment, Object parameter) throws Exception{
+    public static AlignmentAndParameters runMatcherMultipleRepresentations(Object matcher, Set<Object> sourceOntology, Set<Object> targetOntology) throws Exception{
+        return runMatcherMultipleRepresentations(matcher, sourceOntology, targetOntology, null, null);
+    }
+    
+    /**
+     * Calls a matcher objetc with the provided arguments.
+     * @param matcher the matcher can be: <ul>
+     *  <li>an object / instance which implements/extends {@link IMatcher}, {@link IMatcherCaller}, or {@link IOntologyMatchingToolBridge}</li>
+     *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
+     *  <li>a string: the fully qualified name of a class which implements one of the above interfaces/classes like de.uni_mannheim.informatik.dws.melt.matching_base.MyMatcher - a new instance of this class will be created.</li>
+     * </ul>
+     * @param sourceOntology this is an iterable of objects which all represents the same source ontology / knowledge graph
+     * @param targetOntology this is an iterable of objects which all represents the same target ontology / knowledge graph
+     * @param inputAlignment the object which represents an input alignment. Can be null.
+     * @return the object which is returned by the matcher. This can be any arbitrary object, but you can call the TypeTransformerRegistry to get the representation you want.
+     * @throws Exception in case something goes wrong
+     */
+    public static AlignmentAndParameters runMatcherMultipleRepresentations(Object matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment) throws Exception{
+        return runMatcherMultipleRepresentations(matcher, sourceOntology, targetOntology, inputAlignment, null);
+    }
+    
+    /**
+     * Calls a matcher objetc with the provided arguments.
+     * @param matcher the matcher can be: <ul>
+     *  <li>an object / instance which implements/extends {@link IMatcher}, {@link IMatcherCaller}, or {@link IOntologyMatchingToolBridge}</li>
+     *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
+     *  <li>a string: the fully qualified name of a class which implements one of the above interfaces/classes like de.uni_mannheim.informatik.dws.melt.matching_base.MyMatcher - a new instance of this class will be created.</li>
+     * </ul>
+     * @param sourceOntology this is an iterable of objects which all represents the same source ontology / knowledge graph
+     * @param targetOntology this is an iterable of objects which all represents the same target ontology / knowledge graph
+     * @param inputAlignment the object which represents an input alignment. Can be null.
+     * @param parameters an objetc which represents parameters. Can be null.
+     * @return the object which is returned by the matcher. This can be any arbitrary object, but you can call the TypeTransformerRegistry to get the representation you want.
+     * @throws Exception in case something goes wrong
+     */
+    public static AlignmentAndParameters runMatcherMultipleRepresentations(Object matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment, Object parameters) throws Exception{
         Object matcherInstance = matcher;
         if(matcher instanceof String){
             try {
@@ -66,160 +139,148 @@ public class GenericMatcherCaller {
             }
         }
         
-        //TODO: maybe check hierarchy
         if(matcherInstance instanceof IMatcher){
-            return runMatcher((IMatcher)matcherInstance, sourceOntology, targetOntology,inputAlignment, parameter);
+            return runIMatcher((IMatcher)matcherInstance, sourceOntology, targetOntology, inputAlignment, parameters);
+        }else if(matcherInstance instanceof IMatcherCaller){
+            return runIMatcherCaller((IMatcherCaller)matcherInstance, sourceOntology, targetOntology, inputAlignment, parameters);
         }else if(matcherInstance instanceof IOntologyMatchingToolBridge){
-            return runMatcher((IOntologyMatchingToolBridge)matcherInstance, sourceOntology, targetOntology, inputAlignment, parameter);
+            return runIOntologyMatchingToolBridge((IOntologyMatchingToolBridge)matcherInstance, sourceOntology, targetOntology, inputAlignment, parameters);
         }else{
             LOGGER.error("The given matcher instance does not implement IMatcher nor IOntologyMatchingToolBridge. The given class is {}. The matcher will not be called.", matcherInstance.getClass());
             return null;
         }
     }
     
-    public static Object runMatcher(IOntologyMatchingToolBridge matcher, Iterable<Object> sourceOntology, Iterable<Object> targetOntology, Object inputAlignment, Object parameter) throws Exception{
-        //TODO: use parameters from parameter above (the ones from the matcher / which are also used for transformation)
-        Object transformedSource = getTransformedObject(sourceOntology, URL.class, new Properties());
+    private static AlignmentAndParameters runIMatcherCaller(IMatcherCaller matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment, Object parameters) throws Exception{
+        if(sourceOntology == null || sourceOntology.isEmpty() || targetOntology == null || targetOntology.isEmpty()){
+            LOGGER.warn("source or target representatives are null or empty. Matcher {} is not called.", matcher.getClass());
+            return null;
+        }
+        if(inputAlignment == null)
+            inputAlignment = new Object();
+        if(parameters == null)
+            parameters = new Object();
+        return matcher.match(sourceOntology, targetOntology, inputAlignment, parameters);
+    }
+    
+    private static AlignmentAndParameters runIOntologyMatchingToolBridge(IOntologyMatchingToolBridge matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment, Object parameters) throws Exception{
+        Properties p = TypeTransformerRegistry.transformParametersObjectToProperties(parameters);
+        
+        Object transformedSource = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(sourceOntology, URL.class, p);
         if(transformedSource == null)
             return null;
-        Object transformedTarget = getTransformedObject(targetOntology, URL.class, new Properties());
+        Object transformedTarget = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(targetOntology, URL.class, p);
         if(transformedTarget == null)
             return null;
         
-        if(inputAlignment == null){
-            return matcher.align((URL)transformedSource, (URL)transformedTarget);
+        URL result = null;
+        if(inputAlignment == null || inputAlignment.getClass() == Object.class){
+            result = matcher.align((URL)transformedSource, (URL)transformedTarget);
         }else{
-            Object transformedInputAlignment = getTransformedObjectGivenOne(inputAlignment, URL.class, new Properties());
+            Object transformedInputAlignment = TypeTransformerRegistry.getTransformedObject(inputAlignment, URL.class, p);
             if(transformedInputAlignment == null)
                 return null;
-            return matcher.align((URL)transformedSource, (URL)transformedTarget, (URL)transformedInputAlignment);
+            result = matcher.align((URL)transformedSource, (URL)transformedTarget, (URL)transformedInputAlignment);
         }
         //no parameters for IOntologyMatchingToolBridge
+        
+        return new AlignmentAndParameters(result, parameters); // just return the same input parameters
     }
         
-    public static Object runMatcher(IMatcher matcher, Iterable<Object> sourceOntology, Iterable<Object> targetOntology, Object inputAlignment, Object parameter) throws Exception{
-        Method matchMethod = getMatcherMethod(matcher.getClass());
+    private static AlignmentAndParameters runIMatcher(IMatcher matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment, Object parameters) throws Exception{
+        Method matchMethod = getIMatcherMethod(matcher.getClass());
         if(matchMethod == null){
             LOGGER.error("Could not find match method of object which implements IMatcher. The matcher is not called");
             return null;
         }
-        LOGGER.debug("Choosing the following method to call the matcher: {}", matchMethod);
+        LOGGER.debug("Choosing the following method to extract the parameter types: {}", matchMethod);
         Class<?>[] paramTypes = matchMethod.getParameterTypes();
         
-        //TODO: use parameters from parameter above (the ones from the matcher / which are also used for transformation)
-        Object transformedSource = getTransformedObject(sourceOntology, paramTypes[0], new Properties());
+        Properties p = TypeTransformerRegistry.transformParametersObjectToProperties(parameters);
+        
+        Object transformedSource = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(sourceOntology, paramTypes[0], p);
         if(transformedSource == null)
             return null;
-        Object transformedTarget = getTransformedObject(targetOntology, paramTypes[1], new Properties());
+        Object transformedTarget = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(targetOntology, paramTypes[1], p);
         if(transformedTarget == null)
             return null;
         
         //optional params
         Object transformedInputAlignment = null;
-        if(inputAlignment == null){
+        if(inputAlignment == null || inputAlignment.getClass() == Object.class){
             //try to create an instance
             try{
                 transformedInputAlignment = paramTypes[2].newInstance();
             }catch(IllegalAccessException | InstantiationException | ExceptionInInitializerError | SecurityException ex){
-                LOGGER.warn("The optional inputAlignment parameter is null and thus a new instance of type {} was created which did not worked out. Try to call the matcher with null value.", paramTypes[2], ex);
+                LOGGER.warn("The optional inputAlignment parameter is null or object and thus a new instance of type {} was created which did not worked out (if you own the class, then you can add an empty constructor). Try to call the matcher with null value.", paramTypes[2], ex);
                 transformedInputAlignment = null;
             }
         }else{
-            transformedInputAlignment = getTransformedObjectGivenOne(inputAlignment, paramTypes[2], new Properties());
+            transformedInputAlignment = TypeTransformerRegistry.getTransformedObject(inputAlignment, paramTypes[2], p);
             if(transformedInputAlignment == null)
                 return null;
         }
         
         Object transformedParameter = null;
-        if(inputAlignment == null){
+        //if the parameters object equals the object class, then it cannot contain any valuable information and we can try to create a new instance of the specified type.
+        if(parameters == null || parameters.getClass() == Object.class){
             //try to create an instance
             try{
                 transformedParameter = paramTypes[3].newInstance();
             }catch(IllegalAccessException | InstantiationException | ExceptionInInitializerError | SecurityException ex){
-                LOGGER.warn("The optional params parameter is null and thus a new instance of type {} was created which did not worked out. Try to call the matcher with null value.", paramTypes[2], ex);
+                LOGGER.warn("The optional params parameter is null or object and thus a new instance of type {} was created which did not worked out (if you own the class, then you can add an empty constructor). Try to call the matcher with null value.", paramTypes[2], ex);
                 transformedParameter = null;
             }
         }else{
-            transformedParameter = getTransformedObjectGivenOne(parameter, paramTypes[3], new Properties());
+            transformedParameter = TypeTransformerRegistry.getTransformedObject(parameters, paramTypes[3], p);
             if(transformedParameter == null)
                 return null;
         }
         
-        return matcher.match(transformedSource, transformedTarget, transformedInputAlignment, transformedParameter);
-    }
-    
-    private static Object getTransformedObject(Iterable<Object> sourceObjects, Class<?> targetType, Properties transformationProperties){
-        ObjectTransformationRoute route = TypeTransformerRegistry.transformObject(sourceObjects, targetType, transformationProperties);
-        if(route == null){
-            LOGGER.error("Did not find a transformation route from one of {} to {}. Please enhance the TypeTransformerRegistry with a corresponding TypeTranformer. The matcher is not called.", 
-                    classRepresentation(sourceObjects), targetType);
-            return null;
-        }
-        try {
-            return route.getTransformedObject();
-        } catch (Exception ex) {
-            LOGGER.error("During conversion of object {} to class {} an exception occured. The matcher is not called.", route.getInitialObject(), targetType, ex);
-            return null;
-        }
-    }
-    private static Object getTransformedObjectGivenOne(Object sourceObject, Class<?> targetType, Properties transformationProperties){
-        ObjectTransformationRoute route = TypeTransformerRegistry.transformObject(sourceObject, targetType, transformationProperties);
-        if(route == null){
-            LOGGER.error("Did not find a transformation route from one of {} to {}. Please enhance the TypeTransformerRegistry with a corresponding TypeTranformer. The matcher is not called.", 
-                    sourceObject.getClass(), targetType);
-            return null;
-        }
-        try {
-            return route.getTransformedObject();
-        } catch (Exception ex) {
-            LOGGER.error("During conversion of object {} to class {} an exception occured. The matcher is not called.", route.getInitialObject(), targetType, ex);
-            return null;
-        }
-    }
-    
-    private static Object makeInstance(Class<?> clazz){
-        try{
-            return clazz.newInstance();
-        }catch(IllegalAccessException | InstantiationException | ExceptionInInitializerError | SecurityException ex){
-            return null;
-        }
+        Object resultingAlignment = matcher.match(transformedSource, transformedTarget, transformedInputAlignment, transformedParameter);
+        return new AlignmentAndParameters(resultingAlignment, transformedParameter);        
     }
     
     /**
      * Search the method declared in the IMatcher interface.
-     * It strats from the given class and moves on to the superclasses.
+     * It starts from the given class and moves on to the superclasses.
      * @param clazz the given class to start searching
      * @return the method from the IMatcher or null if non is found
      */
-    private static Method getMatcherMethod(Class<?> clazz){
+    private static Method getIMatcherMethod(Class<?> clazz){
         //https://stackoverflow.com/questions/45729211/can-i-get-the-interface-that-a-method-is-implementing-via-java-reflection
         //TODO: maybe find the correct method which really implements the imterface and not only one method with the same name and parameter constellation
         Class<?> c = clazz;
         //search the method from the interface 
         while (c != null) {
+            List<Entry<Method, Integer>> possibleMethods = new ArrayList();
             for(Method method : c.getDeclaredMethods()){
-                //comprae name and parameter count
-                if(method.getName().equals("match") && method.getParameterCount() == 4){
+                //compare name 
+                if(method.getName().equals("match")){
                     Class<?>[] paramTypes = method.getParameterTypes();
-                    //at least one parameter has to be non Object - because the generic method is compiled into a method with only object params
-                    if(paramTypes[0] != Object.class || paramTypes[1] != Object.class || paramTypes[2] != Object.class|| paramTypes[3] != Object.class){
+                    //compare parameter count
+                    if(paramTypes.length == 4){
                         // compare parameter types
                         if(paramTypes[0] == paramTypes[1] && method.getReturnType() == paramTypes[2]){
-                            return method;
+                            int numberOfNonObjectParameters = 0;
+                            for(int i=0; i < 4; i++){
+                                if(paramTypes[i] != Object.class)
+                                    numberOfNonObjectParameters++;
+                            }
+                            possibleMethods.add(new SimpleEntry(method, numberOfNonObjectParameters));
                         }
                     }
                 }
             }
+            if(possibleMethods.isEmpty() == false){
+                //return the method which has the highest number of parameters which are NOT object.
+                //Because the generic method also creates a method with only object parameters.
+                //In case there is only a method which acceots Objects, then this is expected and this method should be chosen.
+                possibleMethods.sort((c1, c2) -> c2.getValue().compareTo(c1.getValue()));
+                return possibleMethods.get(0).getKey();
+            }
             c = c.getSuperclass();
         }
         return null;
-    }
-    
-    private static String classRepresentation(Iterable<Object> objects){
-        Set<Class<?>> classes = new HashSet();
-        for(Object o : objects){
-            classes.add(o.getClass());
-        }
-        return classes.toString();
     }
 }
