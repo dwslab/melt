@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetr
 import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.ObjectTransformationRoute;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers.URI2PropertiesTransformer;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -17,6 +18,8 @@ public class TestPropertiesLoader {
     
     @Test
     public void testPropertiesLoader() throws Exception{
+        // normally added automatically but in other tests we called TypeTransformerRegistry.clear()
+        TypeTransformerRegistry.addTransformer(new URI2PropertiesTransformer());         
         URI paramsURI = Paths.get("src", "test", "resources", "paramsyaml.txt").toUri();
         if(paramsURI == null)
             throw new Exception("test resource is missing");
