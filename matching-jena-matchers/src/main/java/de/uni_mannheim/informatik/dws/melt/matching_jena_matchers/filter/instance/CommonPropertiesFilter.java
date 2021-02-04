@@ -43,7 +43,7 @@ public class CommonPropertiesFilter extends BaseFilterWithSetComparison implemen
      * @param threshold The threshold which should be larger or equal to be a valid match.
      * @param setSimilarity The set similarity to choose when computing similarity value between the two distinct property sets.
      * @param excludeSameURIMapping If true, this excludes correspodences which maps to the same URI e.g. rdf:type = rdf:type
-     * @param minPropertyConfidence The minmum confidence for which a property mapping is counted.
+     * @param minPropertyConfidence The minimum confidence for which a property mapping is counted.
      */
     public CommonPropertiesFilter(double threshold, SetSimilarity setSimilarity, boolean excludeSameURIMapping, double minPropertyConfidence) {
         super(threshold, setSimilarity);

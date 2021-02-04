@@ -231,7 +231,7 @@
 
     <profiles>
 
-        <!-- Background Knowledge Test Case Execution -->
+        <!-- Default profile: Skip all BK test that require a local set-up of resources. -->
         <profile>
             <id>default</id>
             <activation>
@@ -256,7 +256,7 @@
             </build>
         </profile>
 
-        <!-- Background Knowledge Test Case Execution -->
+        <!-- Background Knowledge Test Case Execution (this requires that BK resources are set up correctly) -->
         <profile>
             <id>run-bk-tests</id>
             <build>

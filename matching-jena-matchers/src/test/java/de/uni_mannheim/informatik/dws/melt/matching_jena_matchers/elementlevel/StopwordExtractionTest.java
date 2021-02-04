@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.scale.ValueExtractorProperty;
+//import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.scale.ValueExtractorProperty;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Set;
