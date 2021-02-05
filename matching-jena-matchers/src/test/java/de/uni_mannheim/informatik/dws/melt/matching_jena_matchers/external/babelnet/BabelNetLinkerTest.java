@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.babelnet;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -10,7 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BabelNetLinkerTest {
 
 
-    private static BabelNetLinker linker = new BabelNetLinker(new BabelNetKnowledgeSource());
+    private static BabelNetLinker linker;
+
+    @BeforeAll
+    static void setUp(){
+        linker = new BabelNetLinker(new BabelNetKnowledgeSource());
+    }
 
     @Test
     void linkToSingleConcept() {

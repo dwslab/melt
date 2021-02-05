@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic.WebIsAlodClassicLinker;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -21,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * This test requires a working internet connection.
  */
 class WebIsAlodSPARQLserviceTest {
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebIsAlodSPARQLserviceTest.class);
 
@@ -201,5 +201,4 @@ class WebIsAlodSPARQLserviceTest {
         // service MUST be closed to allow for reinitialization with another endpoint
         service.close();
     }
-
 }
