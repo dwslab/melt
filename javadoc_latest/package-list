@@ -32,6 +32,7 @@ de.uni_mannheim.informatik.dws.melt.matching_jena
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.scale
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.babelnet
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.combined
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.dataStructures
