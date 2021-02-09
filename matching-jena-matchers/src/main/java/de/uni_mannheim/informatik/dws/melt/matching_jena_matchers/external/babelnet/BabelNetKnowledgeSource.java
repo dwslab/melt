@@ -14,6 +14,7 @@ import it.uniroma1.lcl.kb.Sense;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.BABELNET_HYPERNYMY_BUFFER;
@@ -91,7 +92,7 @@ public class BabelNetKnowledgeSource extends SemanticWordRelationDictionary {
      * @return Set with Synonyms.
      */
     @Override
-    public HashSet<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonyms(String linkedConcept) {
         String key = linkedConcept + "_EN";
         if(synonymBuffer.containsKey(key)){
             return synonymBuffer.get(key);

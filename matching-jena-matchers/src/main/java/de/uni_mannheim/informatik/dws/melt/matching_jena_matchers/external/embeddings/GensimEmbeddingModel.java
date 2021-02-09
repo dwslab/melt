@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -87,7 +86,7 @@ public class GensimEmbeddingModel implements ExternalResourceWithSynonymCapabili
     }
 
     @Override
-    public HashSet<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonyms(String linkedConcept) {
         // not to be implemented
         LOGGER.error("Not implemented.");
         return null;

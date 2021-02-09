@@ -6,7 +6,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Seman
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import org.apache.jena.atlas.lib.NotImplemented;
 
-import java.util.HashSet;
+import java.util.Set;
 
 public class WebIsAlodXLKnowledgeSource extends SemanticWordRelationDictionary {
 
@@ -26,7 +26,6 @@ public class WebIsAlodXLKnowledgeSource extends SemanticWordRelationDictionary {
      */
     public double minimumConfidence;
 
-
     public WebIsAlodXLKnowledgeSource(double minimumConfidence){
         sparqLservice = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_XL_NO_PROXY);
         linker = new WebIsAlodXLLinker();
@@ -41,7 +40,6 @@ public class WebIsAlodXLKnowledgeSource extends SemanticWordRelationDictionary {
         this(-1.0);
     }
 
-
     @Override
     public boolean isInDictionary(String word) {
         // NOTE: Compared to the other background sources, this dictionary uses the linker.
@@ -52,11 +50,9 @@ public class WebIsAlodXLKnowledgeSource extends SemanticWordRelationDictionary {
         } else return false;
     }
 
-
     public boolean isURIinDictionary(String uri){
         throw new NotImplemented();
     }
-
 
     @Override
     public boolean isSynonymous(String word1, String word2) {
@@ -79,7 +75,7 @@ public class WebIsAlodXLKnowledgeSource extends SemanticWordRelationDictionary {
     }
 
     @Override
-    public HashSet<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonyms(String linkedConcept) {
         throw new NotImplemented();
     }
 
@@ -89,8 +85,8 @@ public class WebIsAlodXLKnowledgeSource extends SemanticWordRelationDictionary {
     }
 
     @Override
-    public HashSet<String> getHypernyms(String linkedConcept) {
-        return null;
+    public Set<String> getHypernyms(String linkedConcept) {
+        return sparqLservice.getHypernyms(linkedConcept, minimumConfidence);
     }
 
     //----------------------------------------------------------------------------

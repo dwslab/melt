@@ -149,6 +149,19 @@ class WebIsAlodClassicKnowledgeSourceTest {
 
 
     @Test
+    void isHypernym(){
+        WebIsAlodClassicKnowledgeSource dictionary = new WebIsAlodClassicKnowledgeSource();
+        WebIsAlodClassicLinker linker = (WebIsAlodClassicLinker) dictionary.getLinker();
+        String watch = linker.linkToSingleConcept("watch");
+        String rolexWatch = linker.linkToSingleConcept("rolex watch");
+        assertTrue(dictionary.isHypernym(watch, rolexWatch));
+
+        // again just to test the buffer
+        assertTrue(dictionary.isHypernym(watch, rolexWatch));
+    }
+
+
+    @Test
     void isHypernymous(){
         //-------------------------------------------
         // Test 1: no boundary

@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * API for WordNet requests.
@@ -118,7 +119,7 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 	 * @param linkedConcept for which synonyms shall be retrieved.
 	 * @return Synonyms
 	 */
-	public HashSet<String> getSynonyms(String linkedConcept) {
+	public Set<String> getSynonyms(String linkedConcept) {
 		if(buffer.containsKey(linkedConcept)) {
 			return buffer.get(linkedConcept);
 		}

@@ -2,6 +2,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webI
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic.WebIsAlodClassicLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.xl.WebIsAlodXLKnowledgeSource;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.xl.WebIsAlodXLLinker;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -132,8 +135,21 @@ class WebIsAlodSPARQLserviceTest {
     }
 
     @Test
+    void getHypernyms(){
+        WebIsAlodSPARQLservice service = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_XL_ENDPOINT, false);
+        WebIsAlodXLLinker linker = new WebIsAlodXLLinker();
+        String optionContract = linker.linkToSingleConcept("option contract");
+        String contract = linker.linkToSingleConcept("contract");
+        Set<String> hypernyms = service.getHypernyms(optionContract, 0.0);
+        assertTrue(hypernyms.contains(contract));
+        service.close();
+    }
+
+    /**
+     * Unfortunately, the queries are to complex for the endpoint.
+     */
+    @Test
     @Disabled
-        // Unfortunately, the queries are to complex for the endpoint.
     void isSynonymousXL() {
         WebIsAlodSPARQLservice service = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_XL_NO_PROXY);
 

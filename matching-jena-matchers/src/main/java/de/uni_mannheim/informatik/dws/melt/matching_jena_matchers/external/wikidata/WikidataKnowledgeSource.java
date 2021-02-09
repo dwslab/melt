@@ -159,7 +159,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     }
 
     @Override
-    public HashSet<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonyms(String linkedConcept) {
         return getSynonyms(linkedConcept, Language.ENGLISH);
     }
 
@@ -499,6 +499,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
      * @param depth The desired depth (integer in the range [1, 2, 3]).
      * @return True if it is a hypernym, else false.
      */
+    @Override
     public boolean isHypernym(String superConcept, String subConcept, int depth) {
         if(superConcept == null ||subConcept == null){
             LOGGER.error("The concepts cannot be null - one of them is. Returning false.");

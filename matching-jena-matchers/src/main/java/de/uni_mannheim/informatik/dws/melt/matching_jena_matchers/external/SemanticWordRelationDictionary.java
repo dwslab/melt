@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external;
 
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Interface for dictionary access.
@@ -8,6 +9,7 @@ import java.util.HashSet;
  *
  */
 public abstract class SemanticWordRelationDictionary implements ExternalResourceWithSynonymCapability {
+
 
 	/**
 	 * Checks whether the given word is available in the dictionary.
@@ -23,7 +25,7 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 	 * @param linkedConcept The linked concept for which synonyms shall be retrieved.
 	 * @return A set of linked concepts.
 	 */
-	public abstract HashSet<String> getSynonyms(String linkedConcept);
+	public abstract Set<String> getSynonyms(String linkedConcept);
 
 	/**
 	 * Retrieves a set of hypernyms independently of the word sense.
@@ -31,7 +33,7 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 	 * @param linkedConcept The linked concept for which hypernyms shall be retrieved.
 	 * @return A set of linked concepts.
 	 */
-	public abstract HashSet<String> getHypernyms(String linkedConcept);
+	public abstract Set<String> getHypernyms(String linkedConcept);
 
 	/**
 	 * Closing open resources
@@ -53,8 +55,8 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 			return false;
 		}
 		
-		HashSet<String> synonyms1 = getSynonyms(word1);
-		HashSet<String> synonyms2 = getSynonyms(word2);
+		Set<String> synonyms1 = getSynonyms(word1);
+		Set<String> synonyms2 = getSynonyms(word2);
 
 		if(synonyms1 == null && synonyms2 == null){
 			// only if both are null b/c one concept might not have synonyms but still be a synonym of the other concept
@@ -99,8 +101,8 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
             return false;
         }
 
-        HashSet<String> hypernyms_1 = getHypernyms(linkedConcept_1);
-        HashSet<String> hypernyms_2 = getHypernyms(linkedConcept_2);
+        Set<String> hypernyms_1 = getHypernyms(linkedConcept_1);
+        Set<String> hypernyms_2 = getHypernyms(linkedConcept_2);
 
         for(String hypernym : hypernyms_1){
             if(linkedConcept_2.equals(hypernym)) return true;
@@ -121,7 +123,6 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 	    return isStrongFormSynonymous(linkedConcept_1, linkedConcept_2) || isHypernymous(linkedConcept_1, linkedConcept_2);
     }
 
-
 	/**
 	 * Checks for synonymy by determining whether word1 is contained in the set of synonymous words of word2 or
 	 * vice versa.
@@ -134,8 +135,8 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 			return false;
 		}
 
-		HashSet<String> synonyms1 = getSynonyms(word1);
-		HashSet<String> synonyms2 = getSynonyms(word2);
+		Set<String> synonyms1 = getSynonyms(word1);
+		Set<String> synonyms2 = getSynonyms(word2);
 
 		if(synonyms1 == null && synonyms2 == null){
 			// only if both are null b/c one concept might not have synonyms but still be a synonym of the other concept
@@ -159,6 +160,47 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 		if(synonyms1.contains(word2)) return true;
 		if(synonyms2.contains(word1)) return true;
 
+		return false;
+	}
+
+	/**
+	 * Checks for a one sided hypernymy relation (as opposed to {@link SemanticWordRelationDictionary#isHypernymous(String, String)}.
+	 * @param superConcept The linked super concept.
+	 * @param subConcept The linked sub concept.
+	 * @return True if superConcept is a hypernym of subConcept.
+	 */
+	public boolean isHypernym(String superConcept, String subConcept){
+		return isHypernym(superConcept, subConcept, 1);
+	}
+
+	/**
+	 * Checks for a one sided hypernymy relation (as opposed to {@link SemanticWordRelationDictionary#isHypernymous(String, String)}.
+	 * @param superConcept The linked super concept.
+	 * @param subConcept The linked sub concept.
+	 * @param depth The desired depth. Must be one or larger.
+	 * @return True if superConcept is a hypernym of subConcept.
+	 */
+	public boolean isHypernym(String superConcept, String subConcept, int depth) {
+		if(superConcept == null || subConcept == null) {
+			return false;
+		}
+		Set<String> nextIterationHypernyms = new HashSet<>();
+		nextIterationHypernyms.add(subConcept);
+		Set<String> hypernyms = new HashSet<>();
+		for (int i = 1; i <= depth; i++){
+				Set<String> newHypernyms = new HashSet<>();
+				for(String concept : nextIterationHypernyms){
+					Set<String> conceptHypernyms = getHypernyms(concept);
+					if(conceptHypernyms != null && conceptHypernyms.size() > 1) {
+						newHypernyms.addAll(conceptHypernyms);
+						hypernyms.addAll(conceptHypernyms);
+					}
+				}
+				nextIterationHypernyms = newHypernyms;
+				if(hypernyms.contains(superConcept)){
+					return true;
+				}
+		}
 		return false;
 	}
 
