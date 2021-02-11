@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webI
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.WebIsAlodSPARQLservice;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.xl.WebIsAlodXLKnowledgeSource;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -147,7 +148,6 @@ class WebIsAlodClassicKnowledgeSourceTest {
         dictionary.close();
     }
 
-
     @Test
     void isHypernym(){
         WebIsAlodClassicKnowledgeSource dictionary = new WebIsAlodClassicKnowledgeSource();
@@ -159,7 +159,6 @@ class WebIsAlodClassicKnowledgeSourceTest {
         // again just to test the buffer
         assertTrue(dictionary.isHypernym(watch, rolexWatch));
     }
-
 
     @Test
     void isHypernymous(){
@@ -228,6 +227,12 @@ class WebIsAlodClassicKnowledgeSourceTest {
 
         // for buffer
         assertFalse(dictionary.isSynonymousOrHypernymous(watch, rolexWatch));
+    }
+
+    @Test
+    void getLinker(){
+        WebIsAlodClassicKnowledgeSource classic = new WebIsAlodClassicKnowledgeSource();
+        assertNotNull(classic.getLinker());
     }
 
 }

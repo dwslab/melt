@@ -7,6 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WebIsAlodXLKnowledgeSourceTest {
 
+    @Test
+    void getLinker(){
+        WebIsAlodXLKnowledgeSource xl = new WebIsAlodXLKnowledgeSource();
+        assertNotNull(xl.getLinker());
+    }
 
     @Test
     void isHypernym(){

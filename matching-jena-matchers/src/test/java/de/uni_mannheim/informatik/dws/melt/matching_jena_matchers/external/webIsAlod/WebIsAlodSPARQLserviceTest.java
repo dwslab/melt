@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webI
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic.WebIsAlodClassicLinker;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.xl.WebIsAlodXLKnowledgeSource;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.xl.WebIsAlodXLLinker;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -135,13 +134,62 @@ class WebIsAlodSPARQLserviceTest {
     }
 
     @Test
-    void getHypernyms(){
+    void getHypernymsXL(){
         WebIsAlodSPARQLservice service = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_XL_ENDPOINT, false);
         WebIsAlodXLLinker linker = new WebIsAlodXLLinker();
         String optionContract = linker.linkToSingleConcept("option contract");
         String contract = linker.linkToSingleConcept("contract");
         Set<String> hypernyms = service.getHypernyms(optionContract, 0.0);
         assertTrue(hypernyms.contains(contract));
+        hypernyms = service.getHypernyms(optionContract, 0.01);
+        assertTrue(hypernyms.contains(contract));
+
+        // error case
+        String notExisting = "XZY_DOES_NOT_EXIST_123";
+        assertEquals(0,service.getHypernyms(notExisting, 0.0).size());
+        service.close();
+    }
+
+    /**
+     * Test that links of classic and XL are different and that the services can be active at the same time.
+     */
+    @Test
+    void parallelUsageOfClassicAndXL(){
+        WebIsAlodSPARQLservice serviceClassic = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT, false);
+        WebIsAlodSPARQLservice serviceXL = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_XL_NO_PROXY, false);
+        WebIsAlodXLLinker linkerXL = new WebIsAlodXLLinker();
+        WebIsAlodClassicLinker linkerClassic = new WebIsAlodClassicLinker();
+        String optionContractClassic = linkerClassic.linkToSingleConcept("option contract");
+        String optionContractXL = linkerXL.linkToSingleConcept("option contract");
+
+        Set<String> classicResultCorrectLink = serviceClassic.getHypernyms(optionContractClassic, -1);
+        assertTrue(classicResultCorrectLink.size() > 0);
+        Set<String> classicResultWrongLink = serviceClassic.getHypernyms(optionContractXL, -1);
+        assertEquals(0, classicResultWrongLink.size());
+
+        Set<String> xlResultCorrectLink = serviceXL.getHypernyms(optionContractXL, -1);
+        assertTrue(xlResultCorrectLink.size() > 0);
+        Set<String> xlResultWrongLink = serviceXL.getHypernyms(optionContractClassic, -1);
+        assertEquals(0, xlResultWrongLink.size());
+
+        serviceClassic.getHypernyms(optionContractXL, -1);
+        assertNotEquals(optionContractClassic, optionContractXL);
+    }
+
+    @Test
+    void getHypernymsClassic(){
+        WebIsAlodSPARQLservice service = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT, false);
+        WebIsAlodClassicLinker linker = new WebIsAlodClassicLinker();
+        String optionContract = linker.linkToSingleConcept("option contract");
+        String contract = linker.linkToSingleConcept("contract");
+        Set<String> hypernyms = service.getHypernyms(optionContract, 0.0);
+        assertTrue(hypernyms.contains(contract));
+        hypernyms = service.getHypernyms(optionContract, 0.01);
+        assertTrue(hypernyms.contains(contract));
+
+        // error case
+        String notExisting = "XZY_DOES_NOT_EXIST_123";
+        assertEquals(0,service.getHypernyms(notExisting, 0.0).size());
         service.close();
     }
 

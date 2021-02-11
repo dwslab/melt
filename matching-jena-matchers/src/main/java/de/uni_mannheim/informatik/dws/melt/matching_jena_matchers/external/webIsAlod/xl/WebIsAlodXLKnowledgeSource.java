@@ -26,9 +26,13 @@ public class WebIsAlodXLKnowledgeSource extends SemanticWordRelationDictionary {
      */
     public double minimumConfidence;
 
+    /**
+     * Constructor
+     * @param minimumConfidence Minimum confidence.
+     */
     public WebIsAlodXLKnowledgeSource(double minimumConfidence){
         sparqLservice = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_XL_NO_PROXY);
-        linker = new WebIsAlodXLLinker();
+        this.linker = new WebIsAlodXLLinker();
         this.minimumConfidence = minimumConfidence;
     }
 
@@ -95,7 +99,7 @@ public class WebIsAlodXLKnowledgeSource extends SemanticWordRelationDictionary {
 
     @Override
     public LabelToConceptLinker getLinker() {
-        return null;
+        return this.linker;
     }
 
     @Override
