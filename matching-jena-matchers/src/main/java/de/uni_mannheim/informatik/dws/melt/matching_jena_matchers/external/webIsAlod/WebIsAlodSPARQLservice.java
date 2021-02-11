@@ -309,6 +309,7 @@ public class WebIsAlodSPARQLservice {
             QuerySolution solution = queryResult.next();
             result.add(solution.get("?hypernym").toString());
         }
+        qe.close();
         hypernymBuffer.put(key, result);
         if (this.webIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT)) {
             commit(ALDO_CLASSIC_HYPERNYM_BUFFER);
@@ -513,12 +514,12 @@ public class WebIsAlodSPARQLservice {
         if (!results.hasNext()) {
             // Query was not successful.
             labelUriBuffer.put(key, "null");
-            qe.close();
             if (isClassic) {
                 commit(ALOD_CLASSIC_LABEL_URI_BUFFER);
             } else {
                 commit(ALOD_XL_LABEL_URI_BUFFER);
             }
+            qe.close();
             return null;
         }
 

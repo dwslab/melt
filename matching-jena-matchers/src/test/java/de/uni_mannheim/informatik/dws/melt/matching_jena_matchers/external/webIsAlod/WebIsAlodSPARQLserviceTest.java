@@ -136,6 +136,7 @@ class WebIsAlodSPARQLserviceTest {
     @Test
     void getHypernymsXL(){
         WebIsAlodSPARQLservice service = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_XL_ENDPOINT, false);
+        assertFalse(service.isDiskBufferEnabled());
         WebIsAlodXLLinker linker = new WebIsAlodXLLinker();
         String optionContract = linker.linkToSingleConcept("option contract");
         String contract = linker.linkToSingleConcept("contract");
@@ -150,13 +151,26 @@ class WebIsAlodSPARQLserviceTest {
         service.close();
     }
 
+    @Test
+    void getXLhypernymsTest(){
+        String term = "Promissory Note";
+        WebIsAlodSPARQLservice serviceXL = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_XL_NO_PROXY, false);
+        assertFalse(serviceXL.isDiskBufferEnabled());
+        WebIsAlodXLLinker linkerXL = new WebIsAlodXLLinker();
+        String link = linkerXL.linkToSingleConcept(term);
+        serviceXL.getHypernyms(link, 0.0);
+        System.out.println("DONE");
+    }
+
     /**
      * Test that links of classic and XL are different and that the services can be active at the same time.
      */
     @Test
     void parallelUsageOfClassicAndXL(){
         WebIsAlodSPARQLservice serviceClassic = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT, false);
+        assertFalse(serviceClassic.isDiskBufferEnabled());
         WebIsAlodSPARQLservice serviceXL = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_XL_NO_PROXY, false);
+        assertFalse(serviceXL.isDiskBufferEnabled());
         WebIsAlodXLLinker linkerXL = new WebIsAlodXLLinker();
         WebIsAlodClassicLinker linkerClassic = new WebIsAlodClassicLinker();
         String optionContractClassic = linkerClassic.linkToSingleConcept("option contract");

@@ -28,7 +28,10 @@ public class SparqlServices {
         } catch (Exception e) {
             // most likely a http exception
             e.printStackTrace();
-            LOGGER.error("An exception occurred while querying. Waiting for 15 seconds...");
+            LOGGER.error("An exception occurred while querying.");
+            LOGGER.error("Problematic Query:\n" + queryExecutionInstance.getQuery() + "\n");
+            LOGGER.error("Query with Endpoint: " + queryExecutionInstance);
+            LOGGER.error("Waiting for 15 seconds...");
             try {
                 TimeUnit.SECONDS.sleep(15);
             } catch (InterruptedException ie) {
