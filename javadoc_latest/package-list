@@ -28,6 +28,7 @@ de.uni_mannheim.informatik.dws.melt.matching_eval.resultswriter.mappingdesc
 de.uni_mannheim.informatik.dws.melt.matching_eval.tracks
 de.uni_mannheim.informatik.dws.melt.matching_eval.util
 de.uni_mannheim.informatik.dws.melt.matching_eval.visualization
+de.uni_mannheim.informatik.dws.melt.matching_external
 de.uni_mannheim.informatik.dws.melt.matching_jena
 de.uni_mannheim.informatik.dws.melt.matching_jena.multisource
 de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation
