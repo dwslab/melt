@@ -6,6 +6,7 @@ de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process
 de.uni_mannheim.informatik.dws.melt.matching_base.external.http
 de.uni_mannheim.informatik.dws.melt.matching_base.external.seals
 de.uni_mannheim.informatik.dws.melt.matching_base.hobbit_maven_plugin
+de.uni_mannheim.informatik.dws.melt.matching_base.multisource
 de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer
 de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers
 de.uni_mannheim.informatik.dws.melt.matching_eval
@@ -27,8 +28,9 @@ de.uni_mannheim.informatik.dws.melt.matching_eval.resultswriter.mappingdesc
 de.uni_mannheim.informatik.dws.melt.matching_eval.tracks
 de.uni_mannheim.informatik.dws.melt.matching_eval.util
 de.uni_mannheim.informatik.dws.melt.matching_eval.visualization
-de.uni_mannheim.informatik.dws.melt.matching_external
 de.uni_mannheim.informatik.dws.melt.matching_jena
+de.uni_mannheim.informatik.dws.melt.matching_jena.multisource
+de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.scale
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external
@@ -70,6 +72,6 @@ de.uni_mannheim.informatik.dws.melt.matching_ml.python.openea
 de.uni_mannheim.informatik.dws.melt.matching_ml.util
 de.uni_mannheim.informatik.dws.melt.matching_owlapi
 de.uni_mannheim.informatik.dws.melt.matching_validation
-de.uni_mannheim.informatik.dws.melt.matching_yaaa
 de.uni_mannheim.informatik.dws.melt.seals_assembly
 de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api
+de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.typetransformation
