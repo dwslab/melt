@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
  * <i>Hierarchies in directed networks by Nikolaj Tatti</i><br>
  * Code is available at <a href="https://users.ics.aalto.fi/ntatti/software.shtml">https://users.ics.aalto.fi/ntatti/software.shtml</a>.
  * This implementation has a similar runtime performance than the C++ code and is one to one translated.
+ * An evaluation can be found at <a href="https://github.com/zhenv5/breaking_cycles_in_noisy_hierarchies">https://github.com/zhenv5/breaking_cycles_in_noisy_hierarchies</a>.
  */
 public class Agony<E> {
     private static final Logger LOGGER = LoggerFactory.getLogger(Agony.class);

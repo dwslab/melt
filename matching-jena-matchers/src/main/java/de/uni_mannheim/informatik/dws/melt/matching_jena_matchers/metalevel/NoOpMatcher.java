@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel;
 
-import de.uni_mannheim.informatik.dws.melt.matching_yaaa.MatcherYAAA;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAA;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.net.URL;
 import java.util.Properties;

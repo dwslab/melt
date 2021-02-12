@@ -25,7 +25,6 @@
         <module>matching-ml</module>
         <module>matching-owlapi</module>
         <module>matching-validation</module>
-        <module>matching-yaaa</module>
         <module>yet-another-alignment-api</module>
     </modules>
 

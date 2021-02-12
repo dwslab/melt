@@ -28,6 +28,11 @@
             <artifactId>cqengine</artifactId>
             <version>3.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>matching-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

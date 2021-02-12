@@ -4,6 +4,8 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -71,6 +73,16 @@ public class Counter<T> {
     }
     
     /**
+     * Add a collection of elements to the counter.
+     * @param iterator the iterator to be added.
+     */
+    public void addAll(Iterator<T> iterator) {
+        while(iterator.hasNext()){
+            this.add(iterator.next());
+        }
+    }
+    
+    /**
      * Add one element to the counter
      * @param t the element to add
      */
@@ -103,6 +115,7 @@ public class Counter<T> {
 
     /**
      * Get the count for a specific element.
+     * If the element does not appear in this counter, 0 is returned.
      * @param t the element for which the count should be returned
      * @return how often this element occured.
      */
@@ -305,6 +318,22 @@ public class Counter<T> {
         return list.stream()
             .sorted(this.mapComparator)
             .collect(Collectors.toList());
+    }
+    
+    public Set<T> betweenFrequencyReturningElements(double min, double max) {
+        if (min < 0.0 || min > 1.0)
+            throw new IllegalArgumentException("min argument not between zero and one: " + min);
+        if (max < 0.0 || max > 1.0)
+            throw new IllegalArgumentException("max argument not between zero and one: " + min);
+                
+        Set<T> set = new HashSet<>();
+        for(Entry<T, MutableInt> count : this.counts.entrySet()){
+            double frequency = (double)count.getValue().get() / (double) this.overallCount;
+            if(min <= frequency && frequency <= max){
+                set.add(count.getKey());
+            }
+        }
+        return set;
     }
 
     @Override
