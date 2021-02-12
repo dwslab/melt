@@ -17,8 +17,8 @@ public class GenericMatcherCallerTest {
     @Test
     public void testGenericMatcherCaller() throws MalformedURLException, Exception{
         TypeTransformerRegistry.clear();
-        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(URL.class, MyModel.class));
-        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(URL.class, MyAlignment.class));
+        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest<>(URL.class, MyModel.class));
+        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest<>(URL.class, MyAlignment.class));
         
         List<Object> possibleMatchers = Arrays.asList(
                 new myTestMatcher(), 
@@ -27,8 +27,8 @@ public class GenericMatcherCallerTest {
         
         for(Object matcher : possibleMatchers){
             AlignmentAndParameters o = GenericMatcherCaller.runMatcherMultipleRepresentations(matcher, 
-                new HashSet(Arrays.asList(URI.create("http://source.com").toURL())), 
-                new HashSet(Arrays.asList(URI.create("http://target.com").toURL())),
+                new HashSet<>(Arrays.asList(URI.create("http://source.com").toURL())), 
+                new HashSet<>(Arrays.asList(URI.create("http://target.com").toURL())),
                 URI.create("http://myAlignment.com").toURL(), 
                 new Properties());
             assertNotNull(o.getAlignment());

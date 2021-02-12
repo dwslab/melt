@@ -71,7 +71,7 @@ public class GenericMatcherCaller {
      * @throws Exception in case something goes wrong
      */
     public static AlignmentAndParameters runMatcher(Object matcher, Object sourceOntology, Object targetOntology, Object inputAlignment, Object parameters) throws Exception{
-        return runMatcherMultipleRepresentations(matcher, new HashSet(Arrays.asList(sourceOntology)), new HashSet(Arrays.asList(targetOntology)), inputAlignment, parameters);
+        return runMatcherMultipleRepresentations(matcher, new HashSet<>(Arrays.asList(sourceOntology)), new HashSet<>(Arrays.asList(targetOntology)), inputAlignment, parameters);
     }
     
     /**
@@ -138,33 +138,50 @@ public class GenericMatcherCaller {
                 return null;
             }
         }
-        
-        if(matcherInstance instanceof IMatcher){
-            return runIMatcher((IMatcher)matcherInstance, sourceOntology, targetOntology, inputAlignment, parameters);
-        }else if(matcherInstance instanceof IMatcherCaller){
+        if(matcherInstance instanceof IMatcherCaller){
             return runIMatcherCaller((IMatcherCaller)matcherInstance, sourceOntology, targetOntology, inputAlignment, parameters);
-        }else if(matcherInstance instanceof IOntologyMatchingToolBridge){
+        } else if(matcherInstance instanceof IMatcher){
+            return runIMatcher((IMatcher)matcherInstance, sourceOntology, targetOntology, inputAlignment, parameters);
+        } else if(matcherInstance instanceof IOntologyMatchingToolBridge){
             return runIOntologyMatchingToolBridge((IOntologyMatchingToolBridge)matcherInstance, sourceOntology, targetOntology, inputAlignment, parameters);
-        }else{
+        }//else if(matcherInstance instanceof IMatcherMultiSource){
+         //   return GenericMatcherMultiSourceCaller.runMatcherMultiSourceMultipleRepresentations(matcherInstance, oneToOneInputToMultiSource(sourceOntology, targetOntology), inputAlignment, parameters);
+        //}
+        else{
             LOGGER.error("The given matcher instance does not implement IMatcher nor IOntologyMatchingToolBridge. The given class is {}. The matcher will not be called.", matcherInstance.getClass());
             return null;
         }
     }
     
-    private static AlignmentAndParameters runIMatcherCaller(IMatcherCaller matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment, Object parameters) throws Exception{
-        if(sourceOntology == null || sourceOntology.isEmpty() || targetOntology == null || targetOntology.isEmpty()){
-            LOGGER.warn("source or target representatives are null or empty. Matcher {} is not called.", matcher.getClass());
-            return null;
-        }
-        if(inputAlignment == null)
-            inputAlignment = new Object();
-        if(parameters == null)
-            parameters = new Object();
-        return matcher.match(sourceOntology, targetOntology, inputAlignment, parameters);
-    }
+    // in case we want to call multi source even if we have only two ontologies
+    //private static Set<List<Object>> oneToOneInputToMultiSource(Set<Object> sourceOntology, Set<Object> targetOntology){
+    //    Map<Class<?>, List<Object>> map = new HashMap();
+    //    for(Object s : sourceOntology){
+    //        map.computeIfAbsent(s.getClass(), __-> new ArrayList()).add(s);
+    //    }
+    //    for(Object s : targetOntology){
+    //        map.computeIfAbsent(s.getClass(), __-> new ArrayList()).add(s);
+    //    }
+    //    return new HashSet(map.values());
+    //}
     
+    
+    /************************************
+     * IOntologyMatchingToolBridge section
+     ************************************/
+    
+    /**
+     * Runs a matcher which implements the {@link IOntologyMatchingToolBridge} interface.
+     * @param matcher the matcher object
+     * @param sourceOntology the source ontology / knowledge graph
+     * @param targetOntology the taregt ontology / knowledge graph
+     * @param inputAlignment the input alignment
+     * @param parameters the parameters
+     * @return alignment and parameters
+     * @throws Exception in case somethign goes wrong
+     */
     private static AlignmentAndParameters runIOntologyMatchingToolBridge(IOntologyMatchingToolBridge matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment, Object parameters) throws Exception{
-        Properties p = TypeTransformerRegistry.transformParametersObjectToProperties(parameters);
+        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
         
         Object transformedSource = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(sourceOntology, URL.class, p);
         if(transformedSource == null)
@@ -173,7 +190,7 @@ public class GenericMatcherCaller {
         if(transformedTarget == null)
             return null;
         
-        URL result = null;
+        URL result;
         if(inputAlignment == null || inputAlignment.getClass() == Object.class){
             result = matcher.align((URL)transformedSource, (URL)transformedTarget);
         }else{
@@ -186,7 +203,24 @@ public class GenericMatcherCaller {
         
         return new AlignmentAndParameters(result, parameters); // just return the same input parameters
     }
-        
+    
+    
+    /*****************************************
+     * IMatcher and IMatcherCaller section
+     *****************************************/
+    
+    
+    /**
+     * Runs a matcher which implements the {@link IMatcher} interface.
+     * @param matcher the matcher object
+     * @param sourceOntology the source ontology / knowledge graph
+     * @param targetOntology the taregt ontology / knowledge graph
+     * @param inputAlignment the input alignment
+     * @param parameters the parameters
+     * @return alignment and parameters
+     * @throws Exception in case somethign goes wrong
+     */
+    @SuppressWarnings("unchecked")
     private static AlignmentAndParameters runIMatcher(IMatcher matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment, Object parameters) throws Exception{
         Method matchMethod = getIMatcherMethod(matcher.getClass());
         if(matchMethod == null){
@@ -196,7 +230,7 @@ public class GenericMatcherCaller {
         LOGGER.debug("Choosing the following method to extract the parameter types: {}", matchMethod);
         Class<?>[] paramTypes = matchMethod.getParameterTypes();
         
-        Properties p = TypeTransformerRegistry.transformParametersObjectToProperties(parameters);
+        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
         
         Object transformedSource = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(sourceOntology, paramTypes[0], p);
         if(transformedSource == null)
@@ -206,7 +240,7 @@ public class GenericMatcherCaller {
             return null;
         
         //optional params
-        Object transformedInputAlignment = null;
+        Object transformedInputAlignment;
         if(inputAlignment == null || inputAlignment.getClass() == Object.class){
             //try to create an instance
             try{
@@ -221,7 +255,7 @@ public class GenericMatcherCaller {
                 return null;
         }
         
-        Object transformedParameter = null;
+        Object transformedParameter;
         //if the parameters object equals the object class, then it cannot contain any valuable information and we can try to create a new instance of the specified type.
         if(parameters == null || parameters.getClass() == Object.class){
             //try to create an instance
@@ -236,7 +270,6 @@ public class GenericMatcherCaller {
             if(transformedParameter == null)
                 return null;
         }
-        
         Object resultingAlignment = matcher.match(transformedSource, transformedTarget, transformedInputAlignment, transformedParameter);
         return new AlignmentAndParameters(resultingAlignment, transformedParameter);        
     }
@@ -253,7 +286,7 @@ public class GenericMatcherCaller {
         Class<?> c = clazz;
         //search the method from the interface 
         while (c != null) {
-            List<Entry<Method, Integer>> possibleMethods = new ArrayList();
+            List<Entry<Method, Integer>> possibleMethods = new ArrayList<>();
             for(Method method : c.getDeclaredMethods()){
                 //compare name 
                 if(method.getName().equals("match")){
@@ -267,7 +300,7 @@ public class GenericMatcherCaller {
                                 if(paramTypes[i] != Object.class)
                                     numberOfNonObjectParameters++;
                             }
-                            possibleMethods.add(new SimpleEntry(method, numberOfNonObjectParameters));
+                            possibleMethods.add(new SimpleEntry<>(method, numberOfNonObjectParameters));
                         }
                     }
                 }
@@ -282,5 +315,28 @@ public class GenericMatcherCaller {
             c = c.getSuperclass();
         }
         return null;
+    }
+    
+    
+    /**
+     * Runs a matcher which implements the {@link IMatcherCaller} interface.
+     * @param matcher the matcher object
+     * @param sourceOntology the set of different representations of source ontology / knowledge graph
+     * @param targetOntology the set of different representations of taregt ontology / knowledge graph
+     * @param inputAlignment the input alignment
+     * @param parameters the parameters
+     * @return alignment and parameters
+     * @throws Exception in case somethign goes wrong
+     */
+    private static AlignmentAndParameters runIMatcherCaller(IMatcherCaller matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment, Object parameters) throws Exception{
+        if(sourceOntology == null || sourceOntology.isEmpty() || targetOntology == null || targetOntology.isEmpty()){
+            LOGGER.warn("source or target representatives are null or empty. Matcher {} is not called.", matcher.getClass());
+            return null;
+        }
+        if(inputAlignment == null)
+            inputAlignment = new Object();
+        if(parameters == null)
+            parameters = new Object();
+        return matcher.match(sourceOntology, targetOntology, inputAlignment, parameters);
     }
 }

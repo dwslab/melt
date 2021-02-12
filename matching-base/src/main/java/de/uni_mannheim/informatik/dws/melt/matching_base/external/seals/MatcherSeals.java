@@ -137,7 +137,7 @@ public class MatcherSeals extends MatcherFile{
      * @param sealsClientJar the seals client jar
      */
     public MatcherSeals(File matcherFileOrFolder, File sealsClientJar) {
-        this(matcherFileOrFolder, sealsClientJar, 12, TimeUnit.HOURS, new ArrayList(), false, "java");
+        this(matcherFileOrFolder, sealsClientJar, 12, TimeUnit.HOURS, new ArrayList<>(), false, "java");
     }
     
     /**
@@ -224,7 +224,7 @@ public class MatcherSeals extends MatcherFile{
         if(this.matcherFolder == null){
             throw new Exception("Matcher folder is null. See error messages above.");
         }
-        File currentInstance = null;
+        File currentInstance;
         if(this.freshMatcherInstance){
             //copy folder to tmp directory
             currentInstance = createFolderWithRandomNumberInDirectory(this.tmpFolder, "meltFreshInstance");

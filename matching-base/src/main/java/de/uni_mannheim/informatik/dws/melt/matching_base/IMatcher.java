@@ -20,7 +20,7 @@ public interface IMatcher <ModelClass, AlignmentClass, ParameterClass>{
      * @param parameters object representing additional parameters.
      *      Only add to this object and do not create a new Object like <code>parameters= new ...()</code> 
      *      because otherwise the parameters are lost (<a href="https://stackoverflow.com/questions/40480/is-java-pass-by-reference-or-pass-by-value">java ist call by value</a>).
-     *      Sensible classes are {@link java.util.Properties}, {@link java.util.Map Map&lt;String, Object&gt;} or any similar data structure.
+     *      Sensible classes are {@link java.util.Properties} (preferred), {@link java.util.Map Map&lt;String, Object&gt;} or any similar data structure.
      *      Some already specified keys (strings) can be found at {@link ParameterConfigKeys}.
      * @return the resulting alignment of the matching process.
      * @throws Exception any exception which occurs during matching

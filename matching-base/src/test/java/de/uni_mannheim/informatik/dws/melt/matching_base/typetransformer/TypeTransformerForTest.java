@@ -4,21 +4,23 @@ import java.util.Properties;
 
 /**
  * Simple type transformer for the tests.
+ * @param <S> source type
+ * @param <T> target type
  */
-public class TypeTransformerForTest extends AbstractTypeTransformer{
-    private int weight;
-    public TypeTransformerForTest(Class sourceClass, Class targetClass) {
+public class TypeTransformerForTest <S,T> extends AbstractTypeTransformer<S,T>{
+    private final int weight;
+    public TypeTransformerForTest(Class<S> sourceClass, Class<T> targetClass) {
         super(sourceClass, targetClass);
         this.weight = 30;
     }
     
-    public TypeTransformerForTest(Class sourceClass, Class targetClass, int weight) {
+    public TypeTransformerForTest(Class<S> sourceClass, Class<T> targetClass, int weight) {
         super(sourceClass, targetClass);
         this.weight = weight;
     }
 
     @Override
-    public Object transform(Object value, Properties parameters) throws Exception {
+    public T transform(S value, Properties parameters) throws Exception {
         if(this.sourceClass.isInstance(value)){
             return targetClass.newInstance();
         }

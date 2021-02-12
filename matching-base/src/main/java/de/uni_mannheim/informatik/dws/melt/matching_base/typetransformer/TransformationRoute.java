@@ -6,10 +6,10 @@ import java.util.Properties;
 public class TransformationRoute {
     protected Class<?> source;
     protected Class<?> target;    
-    protected List<TypeTransformer> transformations;
+    protected List<TypeTransformer<?,?>> transformations;
     protected int cost;
 
-    public TransformationRoute(Class<?> source, Class<?> target, List<TypeTransformer> transformations, int cost) {
+    public TransformationRoute(Class<?> source, Class<?> target, List<TypeTransformer<?,?>> transformations, int cost) {
         this.source = source;
         this.target = target;
         this.transformations = transformations;
@@ -30,7 +30,9 @@ public class TransformationRoute {
     public Object getTransformedObject(Object object) throws Exception{
         return getTransformedObject(object, new Properties());
     }
-
+    
+    
+    @SuppressWarnings("unchecked")
     public Object getTransformedObject(Object object, Properties params) throws Exception{
         Object tmp = object;
         for(TypeTransformer transformer : transformations){
@@ -39,7 +41,7 @@ public class TransformationRoute {
         return tmp;
     }
 
-    public List<TypeTransformer> getTransformations() {
+    public List<TypeTransformer<?,?>> getTransformations() {
         return transformations;
     }
 

@@ -50,6 +50,15 @@ public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatc
         }
     }
 
+    
+    /**
+     * Match two ontologies / knowledge graphs together and returns an alignment.
+     * @param source the source ontology / knowledge graph
+     * @param target the target ontology / knowledge graph
+     * @param inputAlignment the input alignment as URL (<a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">alignment API format</a>)
+     * @return an alignment as URL (most often as file URL) the format is again the <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">alignment API format</a>.
+     * @throws Exception in case something went wrong
+     */
     public abstract URL match(URL source, URL target, URL inputAlignment) throws Exception;
 
     /**

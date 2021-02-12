@@ -80,7 +80,7 @@ public class ExternalProcessTest {
         p.addArgumentLine("-v $[ -i  ${input}]");
         assertEquals(Arrays.asList("-v"), p.getArguments());
         
-        Map<String, Object> one = new HashMap();
+        Map<String, Object> one = new HashMap<>();
         one.put("input", "x");
         p.addSubstitutionMap(one);
         
@@ -104,9 +104,9 @@ public class ExternalProcessTest {
     @Test
     void testSubstitutionMap() {
         ExternalProcess p = new ExternalProcess();
-        Map<String, Object> one = new HashMap();
+        Map<String, Object> one = new HashMap<>();
         one.put("one", "x");
-        Map<String, Object> two = new HashMap();
+        Map<String, Object> two = new HashMap<>();
         two.put("two", "y");
         p.addSubstitutionMap(one);
         p.addSubstitutionMap(two);
@@ -116,7 +116,7 @@ public class ExternalProcessTest {
 }
 
 class ArgumentCollector implements ProcessOutputConsumer{
-    private List<String> output = new ArrayList(); 
+    private final List<String> output = new ArrayList<>(); 
     
     @Override
     public void processOutput(String line) {

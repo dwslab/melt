@@ -41,10 +41,48 @@ public class TypeTransformerRegistry {
     /**
      * The map which contains all transformers.
      */
-    private static final Map<Class<?>, Map<Class<?>,Set<TypeTransformer>>> TRANFORMERS = new HashMap<>();
+    private static final Map<Class<?>, Map<Class<?>,Set<TypeTransformer<?,?>>>> TRANFORMERS = new HashMap<>();
     static{
         //initialize TRANFORMERS
-        
+        addAllTransformersViaServiceRegistry();
+    }
+    
+    /**
+     * The additional tranformation cost (determined by the environment variable MELT_TRANSFORMATION_HIERARCHY_COST )to add
+     * if hierarchy is allowed e.g. when we have a {@link TypeTransformer} between
+     * A (source) and B(target) and we allow hierarchy then it is also possible to transform between any subclass of A and any superclass of B.
+     * The HIERARCHY_TRANSFORMATION_COST is added to the initial transformaion cost with each layer in the class hierarchy.
+     * If the number is smaller than zero (e.g. -1), then the hierarchy is disabled. Default: hierarchy enabled with 30 as cost.
+     */
+    private static final int HIERARCHY_TRANSFORMATION_COST = getHierarchyTransformationCost();
+    private static int getHierarchyTransformationCost(){
+        String cost = System.getProperty("MELT_TRANSFORMATION_HIERARCHY_COST", "30");
+        try{
+            return Integer.parseInt(cost);
+        }catch(NumberFormatException ex){
+            LOGGER.error("Could not parse the number given by MELT_TRANSFORMATION_HIERARCHY_COST which is {}. Use default which is 30.",
+                    cost, ex);
+            return 30;
+        }
+    }
+
+    /**
+     * If true, then the tranformation can be performed with multiple steps ({@link TypeTransformer}).
+     * If false, only one {@link TypeTransformer} is allowed to be used for a transformation.
+     * It is set through the environment variable MELT_TRANSFORMATION_ALLOW_MULTI_STEP .
+     * The default is true.
+     * If too many transformers are used, then settings this property to false might help.
+     */
+    private static final boolean ALLOW_MULTI_STEP = Boolean.parseBoolean(System.getProperty("MELT_TRANSFORMATION_ALLOW_MULTI_STEP", "true"));
+
+    public static void addTransformer(TypeTransformer<?,?> transformer){
+        TRANFORMERS.computeIfAbsent(transformer.getSourceType(), __-> new HashMap<>())
+                .computeIfAbsent(transformer.getTargetType(), __-> new HashSet<>())
+                .add(transformer);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static void addAllTransformersViaServiceRegistry(){
         ServiceLoader<TypeTransformerLoader> loaders = ServiceLoader.load(TypeTransformerLoader.class);
         for(TypeTransformerLoader l : loaders){
             l.registerTypeTransformers();
@@ -56,68 +94,10 @@ public class TypeTransformerRegistry {
         }
     }
     
-    /**
-     * Get all registered tranformers. For debugging purposes.
-     * @return all registered transformers.
-     */
-    public static Set<TypeTransformer> getAllRegisteredTypeTransformers(){
-        Set<TypeTransformer> transformers = new HashSet();
-        for(Map<Class<?>,Set<TypeTransformer>> entry : TRANFORMERS.values()){
-            for(Set<TypeTransformer> typetransformers : entry.values()){
-                transformers.addAll(typetransformers);
-            }
-        }
-        return transformers;
-    }
-    
-    public static String getAllRegisteredTypeTransformersAsString(){
-        Set<String> classes = new HashSet();
-        for(TypeTransformer o : getAllRegisteredTypeTransformers()){
-            classes.add(o.getClass().getName());
-        }
-        return classes.toString();
-    }
-    
-    /**
-     * The additional tranformation cost (determined by the environment variable MELT_TRANSFORMATION_HIERARCHY_COST )to add
-     * if hierarchy is allowed e.g. when we have a {@link TypeTransformer} between
-     * A (source) and B(target) and we allow hierarchy then it is also possible to transform between any subclass of A and any superclass of B.
-     * The HIERARCHY_TRANSFORMATION_COST is added to the initial transformaion cost with each layer in the class hierarchy.
-     * If the number is smaller than zero (e.g. -1), then the hierarchy is disabled (which is the default).
-     */
-    private static final int HIERARCHY_TRANSFORMATION_COST = getHierarchyTransformationCost();
-    private static int getHierarchyTransformationCost(){
-        String cost = System.getProperty("MELT_TRANSFORMATION_HIERARCHY_COST", "-1");
-        try{
-            return Integer.parseInt(cost);
-        }catch(NumberFormatException ex){
-            LOGGER.error("Could not parse the number given by MELT_TRANSFORMATION_HIERARCHY_COST which is {}. Use default which is -1",
-                    cost, ex);
-            return -1;
-        }
-    }
-    
-    /**
-     * If true, then the tranformation can be performed with multiple steps ({@link TypeTransformer}).
-     * If false, only one {@link TypeTransformer} is allowed to be used for a transformation.
-     * It is set through the environment variable MELT_TRANSFORMATION_ALLOW_MULTI_STEP .
-     * The default is true.
-     * If too many transformers are used, then settings this property to false might help.
-     */
-    private static final boolean ALLOW_MULTI_STEP = Boolean.parseBoolean(System.getProperty("MELT_TRANSFORMATION_ALLOW_MULTI_STEP", "true"));
-
-    
-    
-    public static void addTransformer(TypeTransformer transformer){
-        TRANFORMERS.computeIfAbsent(transformer.getSourceType(), __-> new HashMap<>())
-                .computeIfAbsent(transformer.getTargetType(), __-> new HashSet<>())
-                .add(transformer);
-    }
-    
-    public static void removeTransformer(TypeTransformer transformer){
-        Map<Class<?>,Set<TypeTransformer>> map = TRANFORMERS.get(transformer.getSourceType());
+    public static void removeTransformer(TypeTransformer<?,?> transformer){
+        Map<Class<?>,Set<TypeTransformer<?,?>>> map = TRANFORMERS.get(transformer.getSourceType());
         if(map != null){
-            Set<TypeTransformer> set = map.get(transformer.getTargetType());
+            Set<TypeTransformer<?,?>> set = map.get(transformer.getTargetType());
             if(set != null){
                 set.remove(transformer);
             }
@@ -131,28 +111,52 @@ public class TypeTransformerRegistry {
         TRANFORMERS.clear();
     }
     
-    public static ObjectTransformationRoute transformObject(Object source, Class<?> target){
-        return transformObject(source, target, new Properties());
+    /**
+     * Get all registered tranformers. For debugging purposes.
+     * @return all registered transformers.
+     */
+    public static Set<TypeTransformer<?,?>> getAllRegisteredTypeTransformers(){
+        Set<TypeTransformer<?,?>> transformers = new HashSet<>();
+        for(Map<Class<?>,Set<TypeTransformer<?,?>>> entry : TRANFORMERS.values()){
+            for(Set<TypeTransformer<?,?>> typetransformers : entry.values()){
+                transformers.addAll(typetransformers);
+            }
+        }
+        return transformers;
     }
-    public static ObjectTransformationRoute transformObject(Object source, Class<?> target, Properties parameters){
-        return transformObject(source, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
+    
+    public static String getAllRegisteredTypeTransformersAsString(){
+        Set<String> classes = new HashSet<>();
+        for(TypeTransformer<?,?> o : getAllRegisteredTypeTransformers()){
+            classes.add(o.getClass().getName());
+        }
+        return classes.toString();
     }
-    public static ObjectTransformationRoute transformObject(Object source, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+    
+    
+    
+    public static ObjectTransformationRoute getObjectTransformationRoute(Object source, Class<?> target){
+        return TypeTransformerRegistry.getObjectTransformationRoute(source, target, new Properties());
+    }
+    public static ObjectTransformationRoute getObjectTransformationRoute(Object source, Class<?> target, Properties parameters){
+        return TypeTransformerRegistry.getObjectTransformationRoute(source, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
+    }
+    public static ObjectTransformationRoute getObjectTransformationRoute(Object source, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
         if(source == null)
             return null;
-        TransformationRoute route = transformClass(source.getClass(), target, parameters, hierarchyTransformationCost, allowMultiStep);
+        TransformationRoute route = TypeTransformerRegistry.getClassTransformationRoute(source.getClass(), target, parameters, hierarchyTransformationCost, allowMultiStep);
         if(route == null)
             return null;
         return new ObjectTransformationRoute(route, source);
     }
     
     
-    public static ObjectTransformationRoute transformObjectMultipleRepresentations(Iterable<Object> sources, Class<?> target){
-        return transformObjectMultipleRepresentations(sources, target, new Properties());
+    public static ObjectTransformationRoute getObjectTransformationRouteMultipleRepresentations(Iterable<Object> sources, Class<?> target){
+        return TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(sources, target, new Properties());
     }
     
-    public static ObjectTransformationRoute transformObjectMultipleRepresentations(Iterable<Object> sources, Class<?> target, Properties parameters){
-        return transformObjectMultipleRepresentations(sources, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
+    public static ObjectTransformationRoute getObjectTransformationRouteMultipleRepresentations(Iterable<Object> sources, Class<?> target, Properties parameters){
+        return TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(sources, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
     }
     
     /**
@@ -165,7 +169,7 @@ public class TypeTransformerRegistry {
      * @param allowMultiStep allow multi step: see {@link TypeTransformerRegistry#ALLOW_MULTI_STEP}
      * @return ObjectTransformationRoute which contains the transformers as well as the source object. The actual transformation is not yet executed.
      */
-    public static ObjectTransformationRoute transformObjectMultipleRepresentations(Iterable<Object> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+    public static ObjectTransformationRoute getObjectTransformationRouteMultipleRepresentations(Iterable<Object> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
         if(sources == null)
             return null;
         Map<Class<?>, Object> mapping = new HashMap<>();
@@ -174,14 +178,14 @@ public class TypeTransformerRegistry {
                 continue;
             mapping.put(o.getClass(), o); // override if multiple object of the same class appears
         }
-        TransformationRoute route = transformClassMultipleRepresentations(mapping.keySet(), target, parameters, hierarchyTransformationCost, allowMultiStep);
+        TransformationRoute route = TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(mapping.keySet(), target, parameters, hierarchyTransformationCost, allowMultiStep);
         if(route == null)
             return null;
         return new ObjectTransformationRoute(route, mapping.get(route.getSource()));
     }
     
     /*************************
-     * Tranform class section
+     * getClassTransformationRoute section
      *************************/
     
     
@@ -191,25 +195,25 @@ public class TypeTransformerRegistry {
      * @param target the target class
      * @return the transformation route
      */
-    public static TransformationRoute transformClass(Class<?> source, Class<?> target){
-        return transformClass(source, target, new Properties());
+    public static TransformationRoute getClassTransformationRoute(Class<?> source, Class<?> target){
+        return getClassTransformationRoute(source, target, new Properties());
     }
     
-    public static TransformationRoute transformClass(Class<?> source, Class<?> target, Properties parameters){
-        return transformClass(source, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
+    public static TransformationRoute getClassTransformationRoute(Class<?> source, Class<?> target, Properties parameters){
+        return getClassTransformationRoute(source, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
     }
     
-    public static TransformationRoute transformClass(Class<?> source, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
-        return transformClassMultipleRepresentations(Arrays.asList(source), target, parameters, hierarchyTransformationCost, allowMultiStep);
+    public static TransformationRoute getClassTransformationRoute(Class<?> source, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+        return getClassTransformationRouteMultipleRepresentations(Arrays.asList(source), target, parameters, hierarchyTransformationCost, allowMultiStep);
     }
     
     
-    public static TransformationRoute transformClassMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target){
-        return transformClassMultipleRepresentations(sources, target, new Properties());
+    public static TransformationRoute getClassTransformationRouteMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target){
+        return getClassTransformationRouteMultipleRepresentations(sources, target, new Properties());
     }
     
-    public static TransformationRoute transformClassMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target, Properties parameters){
-        return transformClassMultipleRepresentations(sources, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
+    public static TransformationRoute getClassTransformationRouteMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target, Properties parameters){
+        return getClassTransformationRouteMultipleRepresentations(sources, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
     }
     
     /**
@@ -221,14 +225,14 @@ public class TypeTransformerRegistry {
      * @param allowMultiStep allow multiple type transformers - see also {@link TypeTransformerRegistry#ALLOW_MULTI_STEP}
      * @return null if there is no path, otherwise instance of TransformationRoute (which can contain no transformers, when the source is a subclass of target class)
      */
-    public static TransformationRoute transformClassMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+    public static TransformationRoute getClassTransformationRouteMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
         if(sources == null || target == null)
             return null;
         //transformation to object class always work
         if(target == Object.class){
             for(Class<?> sourceClass : sources){
                 if(sourceClass != null)
-                    return new TransformationRoute(sourceClass, target, new ArrayList(), 0);
+                    return new TransformationRoute(sourceClass, target, new ArrayList<>(), 0);
             }
             return null;
         }
@@ -257,7 +261,7 @@ public class TypeTransformerRegistry {
             Class<?> node = getMinimum(distances, unSettledNodes);
             if(node.equals(target)){                
                 //search path back starting from target
-                List<TypeTransformer> transformers = new ArrayList();
+                List<TypeTransformer<?,?>> transformers = new ArrayList<>();
                 TransformationEdge previousEdge;
                 Class<?> tmpNode = node;
                 while((previousEdge = predecessors.get(tmpNode)) != null){
@@ -275,12 +279,12 @@ public class TypeTransformerRegistry {
             //findMinimalDistances
             int distanceNode = distances.getOrDefault(node, Integer.MAX_VALUE);
             
-            for(Entry<Class<?>, Set<TypeTransformer>> targetClassToTransformers : TRANFORMERS.getOrDefault(node, new HashMap<>()).entrySet()){
+            for(Entry<Class<?>, Set<TypeTransformer<?,?>>> targetClassToTransformers : TRANFORMERS.getOrDefault(node, new HashMap<>()).entrySet()){
                 for(Entry<Class<?>, Integer> targetClassToHierarchyCost : getAllSuperClassesAndIterfacesWithCost(targetClassToTransformers.getKey(), hierarchyTransformationCost).entrySet()){
                     Class<?> targetClazz = targetClassToHierarchyCost.getKey();
                     if(settledNodes.contains(targetClazz))
                         continue;
-                    for(TypeTransformer transformer : targetClassToTransformers.getValue()){
+                    for(TypeTransformer<?,?> transformer : targetClassToTransformers.getValue()){
                         int edgeCost = transformer.getTransformationCost(parameters) + targetClassToHierarchyCost.getValue();
                         int newCost = distanceNode + edgeCost;
                         if(distances.getOrDefault(targetClazz, Integer.MAX_VALUE) > newCost){
@@ -311,18 +315,18 @@ public class TypeTransformerRegistry {
     
     private static TransformationRoute transformInOneStep(Iterable<Class<?>> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost){
         //target is not null because this method is called from transformClassMultipleRepresentations
-        List<TransformationRoute> transformationRoutes = new ArrayList();
+        List<TransformationRoute> transformationRoutes = new ArrayList<>();
         for(Class<?> src : sources){
             if(src == null)
                 continue;
             for(Entry<Class<?>, Integer> sourceHierarchy : getAllSuperClassesAndIterfacesWithCost(src, hierarchyTransformationCost).entrySet()){
                 if(sourceHierarchy.getKey() == target){
-                    transformationRoutes.add(new TransformationRoute(src, target, new ArrayList(), sourceHierarchy.getValue()));
+                    transformationRoutes.add(new TransformationRoute(src, target, new ArrayList<>(), sourceHierarchy.getValue()));
                 }
-                for(Entry<Class<?>, Set<TypeTransformer>> targetToTransformers : TRANFORMERS.getOrDefault(sourceHierarchy.getKey(), new HashMap<>()).entrySet()){
+                for(Entry<Class<?>, Set<TypeTransformer<?,?>>> targetToTransformers : TRANFORMERS.getOrDefault(sourceHierarchy.getKey(), new HashMap<>()).entrySet()){
                     Integer targetHierarchyCost = getAllSuperClassesAndIterfacesWithCost(targetToTransformers.getKey(), hierarchyTransformationCost).get(target);
                     if(targetHierarchyCost != null){
-                        for(TypeTransformer transformer : targetToTransformers.getValue()){
+                        for(TypeTransformer<?,?> transformer : targetToTransformers.getValue()){
                             transformationRoutes.add(new TransformationRoute(
                                     src, 
                                     target, 
@@ -339,6 +343,88 @@ public class TypeTransformerRegistry {
         return transformationRoutes.get(0);
     }
     
+    /****************************************************
+     * Section getTransformedListOfObjectsMultipleRepresentations
+     ****************************************************/
+    
+    /**
+     * Directly get the transformed list of objects or null if something went wrong.
+     * @param sourceObjects the objects which all represent the same information. To this set, the transformed list of objects will be added.
+     * @param targetType the tyoe of class to transform each object in the list to 
+     * @param transformationProperties additional properties.
+     * @return the transformed list of objects or null
+     */
+    public static List<Object> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<?> targetType, Properties transformationProperties){
+        List<Object> transformedObjects = new ArrayList<>(sourceObjects.size());
+        for(Set<Object> representations : sourceObjects){
+            Object transformed = getTransformedObjectMultipleRepresentations(representations, targetType, transformationProperties);
+            if(transformed == null)
+                return null;
+            transformedObjects.add(transformed);
+        }
+        return transformedObjects;
+        
+        /*
+        //this was for set<list<object>> as first parameter
+        int maxNumberOfElements = -1;
+        for(List<Object> list : sourceObjects){
+            if(maxNumberOfElements < 0){
+                maxNumberOfElements = list.size();
+            }else if(list.size() != maxNumberOfElements){
+                LOGGER.warn("The size of the list of different oobject representations are not the same. This is likely an error but we just try to convert the maximum.");
+                if(list.size() > maxNumberOfElements){
+                    maxNumberOfElements = list.size();
+                }
+            }
+        }
+        
+        List<Object> transformedObjects = new ArrayList(maxNumberOfElements);
+        int numberOfRepresentations = sourceObjects.size();
+        for(int i=0; i < maxNumberOfElements; i++){
+            Set<Object> possibleRepresentationsForIthElement = new HashSet(numberOfRepresentations);
+            for(List<Object> list : sourceObjects){
+                try{
+                    possibleRepresentationsForIthElement.add(list.get(i));
+                }catch(IndexOutOfBoundsException ex){ 
+                    // if one lists is shorter, we just use the remaining representations and one list has to have this number of elements
+                }
+            }
+            Object transformed = getTransformedObjectMultipleRepresentations(possibleRepresentationsForIthElement, targetType, transformationProperties);
+            if(transformed == null)
+                return null;
+            transformedObjects.add(transformed);
+        }
+        return transformedObjects;
+        */
+    }
+    
+    /**
+     * Directly get the transformed object or null if something went wrong.
+     * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
+     * @param targetType the tyoe of class to trasnform to 
+     * @param transformationProperties additional properties.
+     * @return the transformed object or null
+     */
+    public static List<Object> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<?> targetType, Object transformationProperties){
+        return getTransformedListOfObjectsMultipleRepresentations(sourceObjects, targetType, getTransformedProperties(transformationProperties));
+    }
+    
+    /**
+     * Directly get the transformed object or null if something went wrong. No transformation properties are provided.
+     * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
+     * @param targetType the tyoe of class to trasnform to 
+     * @return the transformed object or null
+     */
+    public static List<Object> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<?> targetType){
+        return getTransformedListOfObjectsMultipleRepresentations(sourceObjects, targetType, new Properties());
+    }
+    
+    
+    /****************************************************
+     * Section getTransformedObjectMultipleRepresentations
+     ****************************************************/
+    
+    
     /**
      * Directly get the transformed object or null if something went wrong.
      * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
@@ -347,7 +433,7 @@ public class TypeTransformerRegistry {
      * @return the transformed object or null
      */
     public static Object getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<?> targetType, Properties transformationProperties){
-        ObjectTransformationRoute route = TypeTransformerRegistry.transformObjectMultipleRepresentations(sourceObjects, targetType, transformationProperties);
+        ObjectTransformationRoute route = TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(sourceObjects, targetType, transformationProperties);
         if(route == null){
             LOGGER.error("Did not find a transformation route from one of {} to {}. Please enhance the TypeTransformerRegistry with a corresponding TypeTranformer.", 
                     classRepresentation(sourceObjects), targetType);
@@ -371,25 +457,42 @@ public class TypeTransformerRegistry {
      * @return the transformed object or null
      */
     public static Object getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<?> targetType, Object transformationProperties){
-        return getTransformedObjectMultipleRepresentations(sourceObjects, targetType, transformParametersObjectToProperties(transformationProperties));
+        return getTransformedObjectMultipleRepresentations(sourceObjects, targetType, getTransformedProperties(transformationProperties));
     }
     
     /**
-     * Directly get the transformed object or null if something went wrong.
-     * @param sourceObject the source object
+     * Directly get the transformed object or null if something went wrong. No transformation parameters are provided.
+     * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
      * @param targetType the tyoe of class to trasnform to 
-     * @param transformationProperties additional properties.
      * @return the transformed object or null
      */
-    public static Object getTransformedObject(Object sourceObject, Class<?> targetType, Properties transformationProperties){
-        ObjectTransformationRoute route = TypeTransformerRegistry.transformObject(sourceObject, targetType, transformationProperties);
+    public static Object getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<?> targetType){
+        return getTransformedObjectMultipleRepresentations(sourceObjects, targetType, new Properties());
+    }
+    
+    
+    /****************************************************
+     * Section getTransformedObject
+     ****************************************************/
+    
+    
+    /**
+     * Directly get the transformed object or null if something went wrong.
+     * @param <T> the type of the return value
+     * @param sourceObject the source object
+     * @param targetType the tyoe of class to trasnform to 
+     * @param transformationProperties additional properties which can be used during transformation.
+     * @return the transformed object or null
+     */
+    public static <T> T getTransformedObject(Object sourceObject, Class<? extends T> targetType, Properties transformationProperties){
+        ObjectTransformationRoute route = TypeTransformerRegistry.getObjectTransformationRoute(sourceObject, targetType, transformationProperties);
         if(route == null){
             LOGGER.error("Did not find a transformation route from one of {} to {}. Please enhance the TypeTransformerRegistry with a corresponding TypeTranformer. The matcher is not called.", 
                     sourceObject.getClass(), targetType);
             return null;
         }
         try {
-            return route.getTransformedObject();
+            return targetType.cast(route.getTransformedObject());
         } catch (Exception ex) {
             LOGGER.error("During conversion of object {} to class {} an exception occured. The matcher is not called.", route.getInitialObject(), targetType, ex);
             return null;
@@ -398,24 +501,37 @@ public class TypeTransformerRegistry {
     
     /**
      * Directly get the transformed object or null if something went wrong.
+     * @param <T> the type of the return value
      * @param sourceObject the source object
      * @param targetType the tyoe of class to trasnform to 
-     * @param transformationProperties additional properties.
+     * @param transformationProperties additional properties which can be used during transformation.
      * @return the transformed object or null
      */
-    public static Object getTransformedObject(Object sourceObject, Class<?> targetType, Object transformationProperties){
-        return getTransformedObject(sourceObject, targetType, transformParametersObjectToProperties(transformationProperties));
+    public static <T> T getTransformedObject(Object sourceObject, Class<? extends T> targetType, Object transformationProperties){
+        return getTransformedObject(sourceObject, targetType, getTransformedProperties(transformationProperties));
     }
+    
+    /**
+     * Directly get the transformed object or null if something went wrong. No tranformation parameters are provided.
+     * @param <T> the type of the return value
+     * @param sourceObject the source object
+     * @param targetType the tyoe of class to trasnform to 
+     * @return the transformed object or null
+     */
+    public static <T> T getTransformedObject(Object sourceObject, Class<? extends T> targetType){
+        return getTransformedObject(sourceObject, targetType, new Properties());
+    }
+    
     
     /**
      * Transforms a given object to java.lang:Properties or return new Properties() if something went wrong.
      * @param parameters the object which represents parameters.
      * @return java.lang:Properties or new Properties() if something went wrong
      */
-    public static Properties transformParametersObjectToProperties(Object parameters){
+    public static Properties getTransformedProperties(Object parameters){
         if(parameters == null)
             return new Properties();
-        ObjectTransformationRoute route = TypeTransformerRegistry.transformObject(parameters, Properties.class);
+        ObjectTransformationRoute route = TypeTransformerRegistry.getObjectTransformationRoute(parameters, Properties.class);
         if(route == null){
             LOGGER.debug("No conversion route from {} to java.util.Properties are found. Thus empty parameters during type transformation are used.", parameters.getClass());
             return new Properties();
@@ -429,7 +545,7 @@ public class TypeTransformerRegistry {
     }
     
     private static String classRepresentation(Set<Object> objects){
-        Set<Class<?>> classes = new HashSet();
+        Set<Class<?>> classes = new HashSet<>();
         for(Object o : objects){
             classes.add(o.getClass());
         }
@@ -443,14 +559,14 @@ public class TypeTransformerRegistry {
      * @param hierarchyCost the hierarchy cost which is multiplied with every level
      * @return a map which contains all superclasses and interfaces with corresponding depth
      */
-    public static Map<Class<?>, Integer> getAllSuperClassesAndIterfacesWithCost(Class<?> clazz, int hierarchyCost){
+    static Map<Class<?>, Integer> getAllSuperClassesAndIterfacesWithCost(Class<?> clazz, int hierarchyCost){
         if(hierarchyCost < 0){
-            Map<Class<?>, Integer> newMap = new HashMap(1);
+            Map<Class<?>, Integer> newMap = new HashMap<>(1);
             newMap.put(clazz, 0);
             return newMap;
         }
         Map<Class<?>, Integer> map = getAllSuperClassesAndIterfaces(clazz);
-        Map<Class<?>, Integer> newMap = new HashMap(map.size());
+        Map<Class<?>, Integer> newMap = new HashMap<>(map.size());
         for(Entry<Class<?>, Integer> e : map.entrySet()){
             newMap.put(e.getKey(), e.getValue() * hierarchyCost);
         }
@@ -461,14 +577,14 @@ public class TypeTransformerRegistry {
      * Cache for Superclasses and interfaces for a given class.
      * Since there are ussually not so many classes, this information can directly be cache without much memory consumption.
      */
-    private static Map<Class<?>, Map<Class<?>, Integer>> SUPER_CLASSES_CACHE = new HashMap();
+    private static final Map<Class<?>, Map<Class<?>, Integer>> SUPER_CLASSES_CACHE = new HashMap<>();
 
     /**
      * Given a class return all superclasses and interfaces except the Object class (which woul be too generic).
      * @param clazz the class to start searching
      * @return a map which contains all superclasses and interfaces with corresponding depth
      */
-    public static Map<Class<?>, Integer> getAllSuperClassesAndIterfaces(Class<?> clazz){
+    static Map<Class<?>, Integer> getAllSuperClassesAndIterfaces(Class<?> clazz){
         Map<Class<?>, Integer> depths = SUPER_CLASSES_CACHE.get(clazz);
         if(depths != null)
             return depths; //use cache
@@ -497,14 +613,15 @@ public class TypeTransformerRegistry {
     }
     
 }
+//can be extended by searching not only shortest path but k-shortest path (if an error occurs at shortest path) : https://en.wikipedia.org/wiki/Yen%27s_algorithm
 
 class TransformationEdge{
-    private Class<?> source;
-    private Class<?> target;
-    private TypeTransformer transformer;
-    private int cost;
+    private final Class<?> source;
+    private final Class<?> target;
+    private final TypeTransformer<?,?> transformer;
+    private final int cost;
 
-    public TransformationEdge(Class<?> source, Class<?> target, TypeTransformer transformer, int cost) {
+    public TransformationEdge(Class<?> source, Class<?> target, TypeTransformer<?,?> transformer, int cost) {
         this.source = source;
         this.target = target;
         this.transformer = transformer;
@@ -519,7 +636,7 @@ class TransformationEdge{
         return target;
     }
 
-    public TypeTransformer getTransformer() {
+    public TypeTransformer<?,?> getTransformer() {
         return transformer;
     }
 

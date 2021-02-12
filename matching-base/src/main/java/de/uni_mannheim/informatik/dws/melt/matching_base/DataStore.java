@@ -63,7 +63,7 @@ public class DataStore {
      * @param clazz The class.
      * @return Value stored for key.
      */
-    public Object get(String key, Class clazz){
+    public Object get(String key, Class<?> clazz){
         return clazz.cast(centralStore.get(key));
     }
     
@@ -75,6 +75,7 @@ public class DataStore {
      * @param key  Key used to retrieve value.
      * @return Value stored for key.
      */
+    @SuppressWarnings("unchecked")
     public <T> T get(String key){
         return (T) centralStore.get(key);
     }

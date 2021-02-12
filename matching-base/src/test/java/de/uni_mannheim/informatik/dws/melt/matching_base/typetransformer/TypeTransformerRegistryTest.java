@@ -48,10 +48,10 @@ public class TypeTransformerRegistryTest {
     @Test
     public void transformClassTest() throws Exception, Exception, Exception{
         TypeTransformerRegistry.clear();
-        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(SourceSuperClass.class, TargetSubClass.class, 20));
+        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest<>(SourceSuperClass.class, TargetSubClass.class, 20));
 
         for(Boolean b : Arrays.asList(true, false)){
-            TransformationRoute r = TypeTransformerRegistry.transformClassMultipleRepresentations(
+            TransformationRoute r = TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(
                 Arrays.asList(SourceSubClass.class), 
                 TargetSubClass.class, 
                 new Properties(), 
@@ -63,7 +63,7 @@ public class TypeTransformerRegistryTest {
             assertEquals(1, r.getTransformations().size());
             
             //no hierarchy allowed
-            r = TypeTransformerRegistry.transformClassMultipleRepresentations(
+            r = TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(
                 Arrays.asList(SourceSubClass.class), 
                 TargetSubClass.class, 
                 new Properties(), 
@@ -76,15 +76,15 @@ public class TypeTransformerRegistryTest {
     @Test
     public void threeHopsTest() throws Exception{
         TypeTransformerRegistry.clear();
-        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(SourceSuperClass.class, MiddleClass.class));        
-        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(MiddleClass.class, TargetSubClass.class));
+        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest<>(SourceSuperClass.class, MiddleClass.class));        
+        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest<>(MiddleClass.class, TargetSubClass.class));
         
         SourceSubClass s = new SourceSubClass();
-        ObjectTransformationRoute route = TypeTransformerRegistry.transformObjectMultipleRepresentations(
+        ObjectTransformationRoute route = TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(
                 Arrays.asList(s), TargetSubClass.class, new Properties(),-1, true);
         assertNull(route);
         
-        route = TypeTransformerRegistry.transformObjectMultipleRepresentations(
+        route = TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(
                 Arrays.asList(s, new Object()), TargetSubClass.class, new Properties(),5, true);
         assertEquals(s, route.getInitialObject());
         assertNotNull(route.getTransformedObject());
@@ -95,11 +95,11 @@ public class TypeTransformerRegistryTest {
     @Test
     public void testHierarchy() throws Exception{
         SourceSubClass c = new SourceSubClass();
-        assertNull(TypeTransformerRegistry.transformObjectMultipleRepresentations(Arrays.asList(c), SourceSuperClass.class, new Properties(), -1, true));
-        assertNull(TypeTransformerRegistry.transformObjectMultipleRepresentations(Arrays.asList(c), SourceSuperClass.class, new Properties(), -1, false));
+        assertNull(TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(Arrays.asList(c), SourceSuperClass.class, new Properties(), -1, true));
+        assertNull(TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(Arrays.asList(c), SourceSuperClass.class, new Properties(), -1, false));
         
         for(Boolean b : Arrays.asList(true, false)){
-            ObjectTransformationRoute r = TypeTransformerRegistry.transformObjectMultipleRepresentations(Arrays.asList(c), SourceSuperClass.class, new Properties(), 10, true);
+            ObjectTransformationRoute r = TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(Arrays.asList(c), SourceSuperClass.class, new Properties(), 10, true);
 
             assertNotNull(r);
             assertEquals(SourceSubClass.class, r.getSource());
@@ -117,11 +117,11 @@ public class TypeTransformerRegistryTest {
     @Test
     public void testProperties(){
         TypeTransformerRegistry.clear();        
-        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(SourceSubClass.class, MiddleClass.class, 10));        
-        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(MiddleClass.class, TargetSubClass.class, 10));
-        TypeTransformerRegistry.addTransformer(new AbstractTypeTransformer(SourceSubClass.class, TargetSubClass.class) {
+        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest<>(SourceSubClass.class, MiddleClass.class, 10));        
+        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest<>(MiddleClass.class, TargetSubClass.class, 10));
+        TypeTransformerRegistry.addTransformer(new AbstractTypeTransformer<SourceSubClass, TargetSubClass>(SourceSubClass.class, TargetSubClass.class) {
             @Override
-            public Object transform(Object value, Properties parameters) throws Exception {
+            public TargetSubClass transform(SourceSubClass value, Properties parameters) throws Exception {
                 if(SourceSubClass.class.isInstance(value)){
                     return new TargetSubClass();
                 }
@@ -138,7 +138,7 @@ public class TypeTransformerRegistryTest {
             }
         });
         
-        TransformationRoute r = TypeTransformerRegistry.transformClassMultipleRepresentations(
+        TransformationRoute r = TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(
                 Arrays.asList(SourceSubClass.class), 
                 TargetSubClass.class, 
                 new Properties(), 
@@ -152,7 +152,7 @@ public class TypeTransformerRegistryTest {
         Properties params = new Properties();
         params.put("test", "test");
         
-        r = TypeTransformerRegistry.transformClassMultipleRepresentations(
+        r = TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(
                 Arrays.asList(SourceSubClass.class), 
                 TargetSubClass.class, 
                 params, 
@@ -166,24 +166,24 @@ public class TypeTransformerRegistryTest {
     
     @Test
     public void testNullValues(){
-        assertEquals(null, TypeTransformerRegistry.transformObject(null, null));
-        assertEquals(null, TypeTransformerRegistry.transformObject(null, List.class));
-        assertEquals(null, TypeTransformerRegistry.transformObject(new Object(), null));
+        assertEquals(null, TypeTransformerRegistry.getObjectTransformationRoute(null, null));
+        assertEquals(null, TypeTransformerRegistry.getObjectTransformationRoute(null, List.class));
+        assertEquals(null, TypeTransformerRegistry.getObjectTransformationRoute(new Object(), null));
         
-        assertEquals(null, TypeTransformerRegistry.transformObjectMultipleRepresentations(null, null));
-        assertEquals(null, TypeTransformerRegistry.transformObjectMultipleRepresentations(null, List.class));
-        assertEquals(null, TypeTransformerRegistry.transformObjectMultipleRepresentations(Arrays.asList(), null));
-        assertEquals(null, TypeTransformerRegistry.transformObjectMultipleRepresentations(Arrays.asList(), List.class));
+        assertEquals(null, TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(null, null));
+        assertEquals(null, TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(null, List.class));
+        assertEquals(null, TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(Arrays.asList(), null));
+        assertEquals(null, TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(Arrays.asList(), List.class));
         
         
-        assertEquals(null, TypeTransformerRegistry.transformClass(null, null));
-        assertEquals(null, TypeTransformerRegistry.transformClass(null, List.class));
-        assertEquals(null, TypeTransformerRegistry.transformClass(List.class, null));
+        assertEquals(null, TypeTransformerRegistry.getClassTransformationRoute(null, null));
+        assertEquals(null, TypeTransformerRegistry.getClassTransformationRoute(null, List.class));
+        assertEquals(null, TypeTransformerRegistry.getClassTransformationRoute(List.class, null));
         
-        assertEquals(null, TypeTransformerRegistry.transformClassMultipleRepresentations(null, null));
-        assertEquals(null, TypeTransformerRegistry.transformClassMultipleRepresentations(null, List.class));
-        assertEquals(null, TypeTransformerRegistry.transformClassMultipleRepresentations(Arrays.asList(), null));
-        assertEquals(null, TypeTransformerRegistry.transformClassMultipleRepresentations(Arrays.asList(), List.class));
+        assertEquals(null, TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(null, null));
+        assertEquals(null, TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(null, List.class));
+        assertEquals(null, TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(Arrays.asList(), null));
+        assertEquals(null, TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(Arrays.asList(), List.class));
     }
     
     
@@ -210,7 +210,7 @@ public class TypeTransformerRegistryTest {
     //Helper methods
     
     private void compareImplementationsRandomSourceTarget(DirectedWeightedMultigraph<Class<?>, DefaultWeightedEdge> graph){
-        List<Class<?>> vertices = new ArrayList(graph.vertexSet());
+        List<Class<?>> vertices = new ArrayList<>(graph.vertexSet());
         Collections.shuffle(vertices);
         compareImplementations(graph, vertices.get(0), vertices.get(1));
     }
@@ -221,7 +221,7 @@ public class TypeTransformerRegistryTest {
         
         TypeTransformerRegistry.clear();
         updateTypeTranformerRegistryWithGraph(graph);        
-        TransformationRoute route = TypeTransformerRegistry.transformClass(source, target);
+        TransformationRoute route = TypeTransformerRegistry.getClassTransformationRoute(source, target);
         
         if(path == null){
             assertNull(route);
@@ -250,7 +250,7 @@ public class TypeTransformerRegistryTest {
             new DirectedWeightedMultigraph<>(new ClassSupplier(), SupplierUtil.createDefaultWeightedEdgeSupplier());
         
         Random rnd = new Random();
-        GnmRandomGraphGenerator generator = new GnmRandomGraphGenerator(vertexCount, edgeCount, 1324, false, true);
+        GnmRandomGraphGenerator<Class<?>, DefaultWeightedEdge> generator = new GnmRandomGraphGenerator<>(vertexCount, edgeCount, 1324, false, true);
         generator.generateGraph(graph);
         
         for(DefaultWeightedEdge e : graph.edgeSet()){
@@ -264,7 +264,7 @@ public class TypeTransformerRegistryTest {
             Class<?> source = graph.getEdgeSource(edge);
             Class<?> target = graph.getEdgeTarget(edge);
             double weight = graph.getEdgeWeight(edge);            
-            TypeTransformerRegistry.addTransformer(new TypeTransformerForTest(source, target, (int)weight));
+            TypeTransformerRegistry.addTransformer(new TypeTransformerForTest<>(source, target, (int)weight));
         }
     }
 }

@@ -85,13 +85,13 @@ public class ExternalProcess {
 
     public ExternalProcess(){
         this.workingDirectory = null;
-        this.environment = new HashMap();        
+        this.environment = new HashMap<>();        
         this.arguments = new ArrayList<>();
         this.substitutionLookups = new ArrayList<>();
         this.timeout = 0;
         this.timeoutTimeUnit = TimeUnit.SECONDS;
-        this.outConsumer = new ArrayList();
-        this.errConsumer = new ArrayList();
+        this.outConsumer = new ArrayList<>();
+        this.errConsumer = new ArrayList<>();
         this.milliSecondsBetweenSigtermAndSigkill = 3000;
         this.timeoutForReadingThreadJoin = 0;
     }
@@ -467,7 +467,7 @@ public class ExternalProcess {
         if(prefix == null)
             return;
         
-        List<String> env = new ArrayList();
+        List<String> env = new ArrayList<>();
         //make same environment variables like activate:
         //https://github.com/conda/conda/blob/7cb5f66dd46727ce8f16b969e084555e6221cfc5/conda/activate.py#L396
         if(IS_WINDOWS){
@@ -730,7 +730,7 @@ public class ExternalProcess {
      * @return the command line arguments
     */
     public List<String> getArguments(){
-        List<String> substitutedArguments = new ArrayList();
+        List<String> substitutedArguments = new ArrayList<>();
         for(ArgumentScope scope : this.arguments){
             substitutedArguments.addAll(scope.getSubsitutedArguments(this.substitutionLookups));
         }
@@ -755,7 +755,7 @@ public class ExternalProcess {
         // parse with a FST (finite state machine)
         QuoteState state = QuoteState.NORMAL;
         StringTokenizer tok = new StringTokenizer(commandLine, "\"\' ", true);
-        ArrayList<String> list = new ArrayList();
+        ArrayList<String> list = new ArrayList<>();
         StringBuilder current = new StringBuilder();
         boolean lastTokenHasBeenQuoted = false;
 
@@ -844,8 +844,8 @@ class OutputDiscardThread extends Thread {
 class OutputCollectorThread extends Thread {
     private static final Logger LOGGER = LoggerFactory.getLogger(OutputCollectorThread.class);
     
-    private InputStream streamToCollect;
-    private List<ProcessOutputConsumer> consumers;
+    private final InputStream streamToCollect;
+    private final List<ProcessOutputConsumer> consumers;
     
     public OutputCollectorThread(InputStream streamToCollect, List<ProcessOutputConsumer> consumers){
         this.streamToCollect = streamToCollect;
@@ -882,11 +882,11 @@ class OutputCollectorThread extends Thread {
 class ArgumentScope {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArgumentScope.class);
 
-    private List<String> arguments;
-    private boolean inScope;
+    private final List<String> arguments;
+    private final boolean inScope;
 
     public ArgumentScope(Iterable<String> arguments, boolean inScope){            
-        this.arguments = new ArrayList();
+        this.arguments = new ArrayList<>();
         for(String arg : arguments){
             arg = arg.trim();
             if(!arg.isEmpty())
@@ -896,7 +896,7 @@ class ArgumentScope {
     }
 
     public List<String> getSubsitutedArguments(List<Function<String, String>> substitutionLookups){
-        List<String> subsitutedArguments = new ArrayList(this.arguments.size());
+        List<String> subsitutedArguments = new ArrayList<>(this.arguments.size());
         for(String argument : this.arguments){                        
             StringBuilder subsitutedArgument = new StringBuilder();
             int startScope = 0;
@@ -916,7 +916,7 @@ class ArgumentScope {
                 if(result == null){
                     if(inScope){
                         // we are in a scope and cannot replace a variable, so the whole scope is removed
-                        return new ArrayList(); 
+                        return new ArrayList<>(); 
                     }else{
                         if(argumentName.startsWith("!")){
                             //TODO: maybe change to a non runtime exception

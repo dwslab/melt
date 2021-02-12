@@ -3,7 +3,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_base.external.cli;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherURL;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process.ExternalProcess;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process.ProcessOutputAlignmentCollector;
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +71,7 @@ public abstract class MatcherCLI extends MatcherURL {
     protected abstract String getCommand() throws Exception;
     
     private Map<String,Object> getSubsitiutionMap(URL source, URL target, URL inputAlignment){
-        Map<String,Object> map = new HashMap();
+        Map<String,Object> map = new HashMap<>();
         map.put("source", source);
         map.put("target", target);
         map.put("inputAlignment", inputAlignment);

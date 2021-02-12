@@ -90,7 +90,7 @@ public class ProcessOutputAlignmentCollector implements ProcessOutputConsumer {
             return null;
         }
         Matcher matcher = URL_PATTERN.matcher(text);
-        List<String> urlMatches = new ArrayList();
+        List<String> urlMatches = new ArrayList<>();
         while (matcher.find()) {
             urlMatches.add(matcher.group());
         }

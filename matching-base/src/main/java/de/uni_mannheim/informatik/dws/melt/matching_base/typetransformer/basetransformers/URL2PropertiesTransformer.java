@@ -1,7 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers;
 
-import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformer;
-import java.net.URI;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AbstractTypeTransformer;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
 import java.util.Scanner;
 import org.json.JSONException;
@@ -14,21 +15,28 @@ import org.yaml.snakeyaml.Yaml;
  * Transforms a URI to java.uril.Properties.
  * Currently supported formats: YAML, JSON.
  */
-public class URI2PropertiesTransformer implements TypeTransformer<URI, Properties>  {
-    private static final Logger LOGGER = LoggerFactory.getLogger(URI2PropertiesTransformer.class);
+public class URL2PropertiesTransformer extends AbstractTypeTransformer<URL, Properties>  {
+    private static final Logger LOGGER = LoggerFactory.getLogger(URL2PropertiesTransformer.class);
+
+    public URL2PropertiesTransformer() {
+        super(URL.class, Properties.class);
+    }
     
     @Override
-    public Properties transform(URI value, Properties parameters) throws Exception {
-        
+    public Properties transform(URL value, Properties parameters) throws Exception {
+        return parse(value);
+    }
+    
+    public static Properties parse(URL value) throws IOException{
         String content = null;
-        try (Scanner scanner = new Scanner(value.toURL().openStream(), "UTF-8")) {
+        try (Scanner scanner = new Scanner(value.openStream(), "UTF-8")) {
             content = scanner.useDelimiter("\\A").next();
         }
         
         if(content == null || content.trim().isEmpty()){
             LOGGER.warn("The content of the URI for the parameters is empty. Returning empty set of parameters.");
             return new Properties();
-        } 
+        }
         
         try{
             Properties p = new Properties();
@@ -47,17 +55,6 @@ public class URI2PropertiesTransformer implements TypeTransformer<URI, Propertie
         }
         
         LOGGER.warn("Could not parse the parameter file. Returning empty set of parameters.");
-        return new Properties();        
+        return new Properties();
     }
-
-    @Override
-    public Class<URI> getSourceType() { return URI.class; }
-
-    @Override
-    public Class<Properties> getTargetType() { return Properties.class; }
-
-
-    @Override
-    public int getTransformationCost(Properties parameters) { return 30; }
-    
 }
