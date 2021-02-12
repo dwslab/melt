@@ -19,7 +19,6 @@
         <module>matching-assembly</module>
         <module>matching-base</module>
         <module>matching-eval</module>
-        <module>matching-external</module>
         <module>matching-jena</module>
         <module>matching-jena-matchers</module>
         <module>matching-ml</module>
