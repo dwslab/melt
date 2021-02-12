@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class utilizing DBnary.
@@ -119,7 +120,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
 
 
     @Override
-    public HashSet<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonyms(String linkedConcept) {
         if (linkedConcept != null) {
             HashSet<String> result = getSynonyms(linkedConcept, Language.ENGLISH);
             if (result.size() == 0) {

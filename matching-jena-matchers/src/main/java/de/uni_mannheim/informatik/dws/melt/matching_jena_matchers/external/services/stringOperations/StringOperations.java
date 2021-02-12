@@ -19,6 +19,7 @@ import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.externa
  */
 public class StringOperations {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(StringOperations.class);
 
     // signal words that separate entities
@@ -101,9 +102,7 @@ public class StringOperations {
      * @return The tokens of the phrase.
      */
     static public String[] tokenizeCamelCase(String phrase, AbbreviationHandler handler) {
-
         try {
-
             ArrayList<String> list = new ArrayList<String>();
             char[] phraseAsCharacterArray = phrase.toCharArray();
 
@@ -406,7 +405,6 @@ public class StringOperations {
         return outputString;
     }
 
-
     /**
      * Cleans a string from anything that is not a letter.
      *
@@ -621,7 +619,6 @@ public class StringOperations {
         return isSameArrayContent(sArray1, sArray2);
     }
 
-
     public static boolean isSameStringIgnoringStopwordsAndNumbersWithSpellingCorrection(String s1, String s2, float maxAllowedEditDistance) {
         if (s1 == null || s2 == null) {
             return false;
@@ -652,7 +649,6 @@ public class StringOperations {
             return true;
         } else return hasSimilarTokenWriting(sArray1, sArray2, maxAllowedEditDistance);
     }
-
 
     /**
      * Checks whether two arrays have a similar writing. Every token is matched to its most similar token.
@@ -699,7 +695,6 @@ public class StringOperations {
         return totalDistance;
     }
 
-
     /**
      * This method checks whether two Strings are very similar by performing simple
      * string operations. Stopwords are removed.
@@ -735,7 +730,6 @@ public class StringOperations {
         sArray2 = clearArrayFromStopwords(sArray2);
         return isSameArrayContent(sArray1, sArray2);
     }
-
 
     /**
      * This method checks whether two Strings are very similar by performing simple
@@ -793,7 +787,6 @@ public class StringOperations {
         return result;
     }
 
-
     /**
      * Removes the stopwords from the given HashSet.
      *
@@ -804,7 +797,6 @@ public class StringOperations {
         lazyInitStopwords();
         return hashSetWithStopwords.stream().filter(term -> !stopwords.contains(term.toLowerCase())).collect(Collectors.toCollection(HashSet::new));
     }
-
 
     /**
      * Removes free floating "s", "S", and cuts "'s".
@@ -846,7 +838,6 @@ public class StringOperations {
         set.remove("S");
         return set;
     }
-
 
     /**
      * Wrapping of Porter's Stemming Code.
@@ -916,7 +907,6 @@ public class StringOperations {
         return set;
     }
 
-
     /**
      * Remove numbers from a set of strings.
      *
@@ -946,7 +936,6 @@ public class StringOperations {
         return result;
     }
 
-
     /**
      * Given a String array, numeric tokens will be removed.
      *
@@ -964,7 +953,6 @@ public class StringOperations {
         }
         return resultList.toArray(new String[0]);
     }
-
 
     /**
      * Returns whether the stringToBeChecked is a number e.g. '123' or 'XI'.
@@ -997,7 +985,6 @@ public class StringOperations {
         return false;
     }
 
-
     /**
      * A set containing nominal and cardinal numbers from 1 to 1ß
      */
@@ -1020,7 +1007,6 @@ public class StringOperations {
         return ENGLISH_NUMBER_WORDS_SET.contains(stringToBeChecked);
     }
 
-
     /**
      * Removes everything that is not a digit, character, space, or underscore. Note: In English, this may lead to a concatenations
      * of the genitive s together with the latter word e.g. that's → thats. It might make sense to remove those first.
@@ -1032,7 +1018,6 @@ public class StringOperations {
         return stringWithPunctuation.replaceAll("[^a-zA-Z\\d\\s:_]", ""); // regex: [^a-zA-Z\d\s:]
     }
 
-
     /**
      * Removes the English genitive s.
      *
@@ -1042,7 +1027,6 @@ public class StringOperations {
     public static String removeEnglishGenitiveS(String string) {
         return string.replace("'s", "");
     }
-
 
     /**
      * Get a comma separated list of the given {@code HashSet<String>}.

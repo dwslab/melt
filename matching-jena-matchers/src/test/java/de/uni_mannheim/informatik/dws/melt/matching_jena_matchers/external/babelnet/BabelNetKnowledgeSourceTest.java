@@ -2,7 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.babe
 
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +20,7 @@ class BabelNetKnowledgeSourceTest {
 
     @Test
     void getSynonyms() {
-        HashSet<String> result = dictionary.getSynonyms("macron");
+        Set<String> result = dictionary.getSynonyms("macron");
         assertTrue(result.contains("emmanuel_macron"));
     }
 

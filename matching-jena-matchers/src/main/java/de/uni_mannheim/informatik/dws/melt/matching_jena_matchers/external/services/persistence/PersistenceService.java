@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
@@ -19,6 +18,7 @@ import java.util.concurrent.ConcurrentMap;
  * A simple persistence service offering stripped-down database operations to other applications.
  */
 public class PersistenceService {
+
 
     /**
      * Directory where all persistence database files will be saved.
@@ -142,11 +142,13 @@ public class PersistenceService {
 
         ALOD_CLASSIC_SYONYMY_BUFFER,
         ALOD_CLASSIC_LABEL_URI_BUFFER,
-        ALOD_CLASSIC_HYPERNYMY_BUFFER,
+        ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER,
+        ALDO_CLASSIC_HYPERNYM_BUFFER,
 
         ALOD_XL_SYONYMY_BUFFER,
         ALOD_XL_LABEL_URI_BUFFER,
-        ALOD_XL_HYPERNYMY_BUFFER,
+        ALOD_XL_HYPERNYMY_ASK_BUFFER,
+        ALDO_XL_HYPERNYM_BUFFER,
 
         /**
          * Stores existing and non-existing concepts.
@@ -176,11 +178,13 @@ public class PersistenceService {
             switch (this) {
                 case ALOD_CLASSIC_SYONYMY_BUFFER:
                 case ALOD_XL_SYONYMY_BUFFER:
-                case ALOD_CLASSIC_HYPERNYMY_BUFFER:
-                case ALOD_XL_HYPERNYMY_BUFFER:
+                case ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER:
+                case ALOD_XL_HYPERNYMY_ASK_BUFFER:
                     return StringString.class;
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
                 case ALOD_XL_LABEL_URI_BUFFER:
+                case ALDO_CLASSIC_HYPERNYM_BUFFER:
+                case ALDO_XL_HYPERNYM_BUFFER:
                 case BABELNET_SYNONYM_BUFFER:
                 case BABELNET_HYPERNYMY_BUFFER:
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
@@ -198,8 +202,8 @@ public class PersistenceService {
             switch (this) {
                 case ALOD_CLASSIC_SYONYMY_BUFFER:
                 case ALOD_XL_SYONYMY_BUFFER:
-                case ALOD_CLASSIC_HYPERNYMY_BUFFER:
-                case ALOD_XL_HYPERNYMY_BUFFER:
+                case ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER:
+                case ALOD_XL_HYPERNYMY_ASK_BUFFER:
                     return Serializer.JAVA;
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
                 case WIKIDATA_HYPERNYMY_BUFFER:
@@ -211,6 +215,8 @@ public class PersistenceService {
                 case BABELNET_MULTI_CONCEPT_BUFFER:
                 case WIKIDATA_LABEL_LINK_BUFFER:
                 case WIKIDATA_ASK_BUFFER:
+                case ALDO_CLASSIC_HYPERNYM_BUFFER:
+                case ALDO_XL_HYPERNYM_BUFFER:
                     return Serializer.STRING;
             }
             return null;
@@ -220,8 +226,8 @@ public class PersistenceService {
             switch (this) {
                 case ALOD_CLASSIC_SYONYMY_BUFFER:
                 case ALOD_XL_SYONYMY_BUFFER:
-                case ALOD_CLASSIC_HYPERNYMY_BUFFER:
-                case ALOD_XL_HYPERNYMY_BUFFER:
+                case ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER:
+                case ALOD_XL_HYPERNYMY_ASK_BUFFER:
                 case WIKIDATA_ASK_BUFFER:
                     return Serializer.BOOLEAN;
                 case BABELNET_SYNONYM_BUFFER:
@@ -230,6 +236,8 @@ public class PersistenceService {
                 case WIKIDATA_HYPERNYMY_BUFFER:
                 case WIKIDATA_SYNONYMY_BUFFER:
                 case WIKIDATA_LABEL_LINK_BUFFER:
+                case ALDO_CLASSIC_HYPERNYM_BUFFER:
+                case ALDO_XL_HYPERNYM_BUFFER:
                     return Serializer.JAVA;
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
@@ -254,9 +262,9 @@ public class PersistenceService {
                     return PERSISTENCE_DIRECTORY + "/webisalod_classic_label_uri_buffer.mapdb";
                 case ALOD_XL_LABEL_URI_BUFFER:
                     return PERSISTENCE_DIRECTORY + "/webisalod_xl_label_uri_buffer.mapdb";
-                case ALOD_CLASSIC_HYPERNYMY_BUFFER:
+                case ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER:
                     return PERSISTENCE_DIRECTORY + "/webisalod_classic_hypernymy_buffer.mapdb";
-                case ALOD_XL_HYPERNYMY_BUFFER:
+                case ALOD_XL_HYPERNYMY_ASK_BUFFER:
                     return PERSISTENCE_DIRECTORY + "/webisalod_xl_hypernymy_buffer.mapdb";
                 case BABELNET_SYNONYM_BUFFER:
                     return PERSISTENCE_DIRECTORY + "/babelnet_synonym_buffer.mapdb";
@@ -274,6 +282,10 @@ public class PersistenceService {
                     return PERSISTENCE_DIRECTORY + "/wikidata_label_link_buffer.mapdb";
                 case WIKIDATA_ASK_BUFFER:
                     return PERSISTENCE_DIRECTORY + "/wikidata_ask_buffer.mapdb";
+                case ALDO_CLASSIC_HYPERNYM_BUFFER:
+                    return PERSISTENCE_DIRECTORY + "/webisalod_classic_hypernym_buffer.mapdb";
+                case ALDO_XL_HYPERNYM_BUFFER:
+                    return PERSISTENCE_DIRECTORY + "/webisalod_xl_hypernym_buffer.mapdb";
             }
             return null;
         }

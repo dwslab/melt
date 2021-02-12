@@ -7,6 +7,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Label
 import org.apache.jena.atlas.lib.NotImplemented;
 
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * WebIsAlod Knowledge source. All requests are made through the {@link WebIsAlodSPARQLservice}.
@@ -63,7 +64,7 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
      * @return A set of synonyms.
      */
     @Override
-    public HashSet<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonyms(String linkedConcept) {
         throw new NotImplemented();
     }
 
@@ -88,8 +89,8 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
     }
 
     @Override
-    public HashSet<String> getHypernyms(String linkedConcept) {
-        return null;
+    public Set<String> getHypernyms(String linkedConcept) {
+        return sparqlService.getHypernyms(linkedConcept, minimumConfidence);
     }
 
     @Override

@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -31,12 +33,17 @@ public class WebIsAlodSPARQLservice {
     /**
      * Synonymy Buffer
      */
-    private ConcurrentMap<StringString, Boolean> synonymyBuffer;
+    private ConcurrentMap<StringString, Boolean> synonymyAskBuffer;
 
     /**
-     * Hypernymy Buffer
+     * Hypernymy Buffer (for ask queries)
      */
-    private ConcurrentMap<StringString, Boolean> hypernymyBuffer;
+    private ConcurrentMap<StringString, Boolean> hypernymyAskBuffer;
+
+    /**
+     * Hypernym Buffer (for isa queries)
+     */
+    private ConcurrentMap<String, Set<String>> hypernymBuffer;
 
     /**
      * Label2URI buffer (linking buffer)
@@ -95,6 +102,7 @@ public class WebIsAlodSPARQLservice {
         } else {
             webIsAlodSPARQLservice = instances.get(sparqlWebIsAlodEndpoint);
             if (webIsAlodSPARQLservice != null) {
+                webIsAlodSPARQLservice.setDiskBufferEnabled(isDiskBufferEnabled);
                 return webIsAlodSPARQLservice;
             } else {
                 webIsAlodSPARQLservice = new WebIsAlodSPARQLservice(sparqlWebIsAlodEndpoint, isDiskBufferEnabled);
@@ -124,17 +132,21 @@ public class WebIsAlodSPARQLservice {
         if (isDiskBufferEnabled) {
             if (this.webIsAlodEndpoint.isClassic()) {
                 this.labelUriBuffer = persistenceService.getMapDatabase(ALOD_CLASSIC_LABEL_URI_BUFFER);
-                this.synonymyBuffer = persistenceService.getMapDatabase(ALOD_CLASSIC_SYONYMY_BUFFER);
-                this.hypernymyBuffer = persistenceService.getMapDatabase(ALOD_CLASSIC_HYPERNYMY_BUFFER);
+                this.synonymyAskBuffer = persistenceService.getMapDatabase(ALOD_CLASSIC_SYONYMY_BUFFER);
+                this.hypernymyAskBuffer = persistenceService.getMapDatabase(ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER);
+                this.hypernymBuffer = persistenceService.getMapDatabase(ALDO_CLASSIC_HYPERNYM_BUFFER);
             } else {
                 this.labelUriBuffer = persistenceService.getMapDatabase(ALOD_XL_LABEL_URI_BUFFER);
-                this.synonymyBuffer = persistenceService.getMapDatabase(ALOD_XL_SYONYMY_BUFFER);
-                this.hypernymyBuffer = persistenceService.getMapDatabase(ALOD_XL_HYPERNYMY_BUFFER);
+                this.synonymyAskBuffer = persistenceService.getMapDatabase(ALOD_XL_SYONYMY_BUFFER);
+                this.hypernymyAskBuffer = persistenceService.getMapDatabase(ALOD_XL_HYPERNYMY_ASK_BUFFER);
+                this.hypernymBuffer = persistenceService.getMapDatabase(ALDO_XL_HYPERNYM_BUFFER);
+
             }
         } else {
             this.labelUriBuffer = new ConcurrentHashMap<>();
-            this.synonymyBuffer = new ConcurrentHashMap<>();
-            this.hypernymyBuffer = new ConcurrentHashMapUnsafe<>();
+            this.synonymyAskBuffer = new ConcurrentHashMap<>();
+            this.hypernymBuffer = new ConcurrentHashMap<>();
+            this.hypernymyAskBuffer = new ConcurrentHashMapUnsafe<>();
         }
     }
 
@@ -232,12 +244,12 @@ public class WebIsAlodSPARQLservice {
     private boolean isSynonymous(WebIsAlodEndpoint sparqlWebIsAlodEndpoint, String uri1, String uri2, double minimumConfidence) {
         // buffer lookup
         StringString uriTuple = new StringString(uri1 + minimumConfidence, uri2 + minimumConfidence);
-        if (synonymyBuffer.get(uriTuple) != null) {
-            return synonymyBuffer.get(uriTuple);
+        if (synonymyAskBuffer.get(uriTuple) != null) {
+            return synonymyAskBuffer.get(uriTuple);
         }
         QueryExecution qe = QueryExecutionFactory.sparqlService(sparqlWebIsAlodEndpoint.toString(), getIsSynonymousAskQueryClassic(uri1, uri2, minimumConfidence, this.webIsAlodEndpoint.isClassic()));
         boolean result = safeAsk(qe);
-        synonymyBuffer.put(uriTuple, result);
+        synonymyAskBuffer.put(uriTuple, result);
         qe.close();
         if (sparqlWebIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT)) {
             commit(ALOD_CLASSIC_SYONYMY_BUFFER);
@@ -247,6 +259,65 @@ public class WebIsAlodSPARQLservice {
         return result;
     }
 
+    /**
+     * Obtain isa concepts for the given uri.
+     *
+     * @param uri        The URI for which hypernyms shall be found.
+     * @param confidence Minimum confidence.
+     * @return A set of hypernyms.
+     */
+    public Set<String> getHypernyms(String uri, double confidence) {
+        if (uri == null || uri.equals("")) {
+            return null;
+        }
+        if (confidence < 0) {
+            confidence = 0.0;
+        }
+        uri = StringOperations.removeTag(uri);
+        String key = uri + "_" + confidence;
+        if (hypernymBuffer.get(key) != null) {
+            return hypernymBuffer.get(key);
+        }
+        boolean isClassic = this.webIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT);
+
+        String queryString;
+        if (confidence != 0.0) {
+            String confidencePrefix = "";
+            if (isClassic) confidencePrefix = CLASSIC_CONFIDENCE;
+            else confidencePrefix = XL_CONFIDENCE;
+            queryString =
+                    "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" +
+                            "PREFIX isaont: " + confidencePrefix + "\n" +
+                            //"select distinct ?hypernym ?minConfidence where\n" + // dropped b/c we do not need minConfidence here
+                            "select distinct ?hypernym where\n" +
+                            "{\n" +
+                            "GRAPH ?g {\n" +
+                            "<" + uri + ">  skos:broader ?hypernym .\n" +
+                            "}\n" +
+                            "?g isaont:hasConfidence ?minConfidence .\n" +
+                            "FILTER(?minConfidence > " + confidence + ")\n" +
+                            "}";
+        } else {
+            queryString = "SELECT DISTINCT ?hypernym WHERE\n" +
+                    "{ <" + uri + "> <http://www.w3.org/2004/02/skos/core#broader> ?hypernym .}";
+
+        }
+        QueryExecution qe = QueryExecutionFactory.sparqlService(this.webIsAlodEndpoint.toString(), queryString);
+        Set<String> result = new HashSet<>();
+        ResultSet queryResult = safeExecution(qe);
+        while (queryResult.hasNext()) {
+            QuerySolution solution = queryResult.next();
+            result.add(solution.get("?hypernym").toString());
+        }
+        qe.close();
+        hypernymBuffer.put(key, result);
+        if (this.webIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT)) {
+            commit(ALDO_CLASSIC_HYPERNYM_BUFFER);
+        } else {
+            commit(ALDO_XL_HYPERNYM_BUFFER);
+        }
+        return result;
+    }
 
     /**
      * Internal method that can execute a synonymy ask query without minimum confidence threshold.
@@ -258,12 +329,12 @@ public class WebIsAlodSPARQLservice {
      */
     private boolean isSynonymous(WebIsAlodEndpoint sparqlWebIsAlodEndpoint, String uri1, String uri2) {
         StringString uriTuple = new StringString(uri1, uri2);
-        if (synonymyBuffer.get(uriTuple) != null) {
-            return synonymyBuffer.get(uriTuple);
+        if (synonymyAskBuffer.get(uriTuple) != null) {
+            return synonymyAskBuffer.get(uriTuple);
         }
         QueryExecution qe = QueryExecutionFactory.sparqlService(sparqlWebIsAlodEndpoint.toString(), getIsSynonymousAskQueryClassic(uri1, uri2));
         boolean result = safeAsk(qe);
-        synonymyBuffer.put(uriTuple, result);
+        synonymyAskBuffer.put(uriTuple, result);
         qe.close();
         if (sparqlWebIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT)) {
             commit(ALOD_CLASSIC_SYONYMY_BUFFER);
@@ -303,16 +374,16 @@ public class WebIsAlodSPARQLservice {
     private boolean isHypernymous(WebIsAlodEndpoint sparqlWebIsAlodEndpoint, String uri1, String uri2, double minimumConfidence) {
         // buffer lookup
         StringString uriTuple = new StringString(uri1 + minimumConfidence, uri2 + minimumConfidence);
-        if (hypernymyBuffer.get(uriTuple) != null) {
-            return hypernymyBuffer.get(uriTuple);
+        if (hypernymyAskBuffer.get(uriTuple) != null) {
+            return hypernymyAskBuffer.get(uriTuple);
         }
         QueryExecution qe = QueryExecutionFactory.sparqlService(sparqlWebIsAlodEndpoint.toString(), getIsHypernymousAskQueryClassic(uri1, uri2, minimumConfidence, this.webIsAlodEndpoint.isClassic()));
         boolean result = safeAsk(qe);
-        hypernymyBuffer.put(uriTuple, result);
-        if(sparqlWebIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT)){
-            commit(ALOD_CLASSIC_HYPERNYMY_BUFFER);
+        hypernymyAskBuffer.put(uriTuple, result);
+        if (sparqlWebIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT)) {
+            commit(ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER);
         } else {
-            commit(ALOD_XL_HYPERNYMY_BUFFER);
+            commit(ALOD_XL_HYPERNYMY_ASK_BUFFER);
         }
         qe.close();
         return result;
@@ -369,7 +440,6 @@ public class WebIsAlodSPARQLservice {
         if (isClassic) confidencePrefix = CLASSIC_CONFIDENCE;
         else confidencePrefix = XL_CONFIDENCE;
         return "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" +
-                "PREFIX isa: <http://webisa.webdatacommons.org/concept/>\n" +
                 "PREFIX isaont: " + confidencePrefix + "\n" +
                 "ASK\n" +
                 "{\n" +
@@ -428,7 +498,7 @@ public class WebIsAlodSPARQLservice {
         if (labelUriBuffer.containsKey(key)) {
             String retrieved = labelUriBuffer.get(key);
             if (retrieved.equals("null")) {
-                //return null;
+                return null;
             } else return retrieved;
         }
 
@@ -444,9 +514,12 @@ public class WebIsAlodSPARQLservice {
         if (!results.hasNext()) {
             // Query was not successful.
             labelUriBuffer.put(key, "null");
+            if (isClassic) {
+                commit(ALOD_CLASSIC_LABEL_URI_BUFFER);
+            } else {
+                commit(ALOD_XL_LABEL_URI_BUFFER);
+            }
             qe.close();
-            if(isClassic){commit(ALOD_CLASSIC_LABEL_URI_BUFFER);}
-            else {commit(ALOD_XL_LABEL_URI_BUFFER);}
             return null;
         }
 
@@ -457,15 +530,21 @@ public class WebIsAlodSPARQLservice {
                 resource = solution.getResource("c").toString();
                 labelUriBuffer.put(key, resource);
                 qe.close();
-                if(isClassic){commit(ALOD_CLASSIC_LABEL_URI_BUFFER);}
-                else {commit(ALOD_XL_LABEL_URI_BUFFER);}
+                if (isClassic) {
+                    commit(ALOD_CLASSIC_LABEL_URI_BUFFER);
+                } else {
+                    commit(ALOD_XL_LABEL_URI_BUFFER);
+                }
                 return resource;
             }
         }
         // Nothing could be found.
         labelUriBuffer.put(key, "null");
-        if(isClassic){commit(ALOD_CLASSIC_LABEL_URI_BUFFER);}
-        else {commit(ALOD_XL_LABEL_URI_BUFFER);}
+        if (isClassic) {
+            commit(ALOD_CLASSIC_LABEL_URI_BUFFER);
+        } else {
+            commit(ALOD_XL_LABEL_URI_BUFFER);
+        }
         qe.close();
         return null;
     }
@@ -483,11 +562,13 @@ public class WebIsAlodSPARQLservice {
     public void commit(PersistenceService.PreconfiguredPersistences persistences) {
         if (!isDiskBufferEnabled) return;
         switch (persistences) {
-            case ALOD_XL_HYPERNYMY_BUFFER:
+            case ALOD_XL_HYPERNYMY_ASK_BUFFER:
             case ALOD_XL_SYONYMY_BUFFER:
             case ALOD_XL_LABEL_URI_BUFFER:
+            case ALDO_XL_HYPERNYM_BUFFER:
             case ALOD_CLASSIC_SYONYMY_BUFFER:
-            case ALOD_CLASSIC_HYPERNYMY_BUFFER:
+            case ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER:
+            case ALDO_CLASSIC_HYPERNYM_BUFFER:
             case ALOD_CLASSIC_LABEL_URI_BUFFER:
                 persistenceService.commit(persistences);
         }
@@ -499,22 +580,26 @@ public class WebIsAlodSPARQLservice {
     public void close() {
         boolean isClassic = this.webIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT);
         if (persistenceService != null) {
-            if(isClassic){
+            if (isClassic) {
                 persistenceService.closeDatabase(ALOD_CLASSIC_SYONYMY_BUFFER);
-                persistenceService.closeDatabase(ALOD_CLASSIC_HYPERNYMY_BUFFER);
+                persistenceService.closeDatabase(ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER);
+                persistenceService.closeDatabase(ALDO_CLASSIC_HYPERNYM_BUFFER);
                 persistenceService.closeDatabase(ALOD_CLASSIC_LABEL_URI_BUFFER);
-            } else {
+            } else if(! (instances.containsKey(WebIsAlodEndpoint.ALOD_XL_NO_PROXY) && instances.containsKey(WebIsAlodEndpoint.ALOD_XL_ENDPOINT)) ) {
+                // only close XL if there are no remaining XL endpoints (multiple exist so we cannot close the XL buffer if there is another open XL SPARQL service)
                 persistenceService.closeDatabase(ALOD_XL_SYONYMY_BUFFER);
-                persistenceService.closeDatabase(ALOD_XL_HYPERNYMY_BUFFER);
+                persistenceService.closeDatabase(ALOD_XL_HYPERNYMY_ASK_BUFFER);
+                persistenceService.closeDatabase(ALDO_XL_HYPERNYM_BUFFER);
                 persistenceService.closeDatabase(ALOD_XL_LABEL_URI_BUFFER);
             }
         }
         instances.remove(this.webIsAlodEndpoint);
     }
 
-    public static void closeAllServices(){
-        if(instances == null) return;
-        for(WebIsAlodSPARQLservice service : instances.values()){
+    public static void closeAllServices() {
+        if (instances == null) return;
+        HashSet<WebIsAlodSPARQLservice> mySet = new HashSet<>(instances.values());
+        for (WebIsAlodSPARQLservice service : mySet) {
             service.close();
         }
     }

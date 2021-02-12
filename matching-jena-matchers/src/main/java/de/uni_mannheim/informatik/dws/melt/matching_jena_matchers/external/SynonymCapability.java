@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external;
 
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Interface for external resources that are capable to determine whether two
@@ -13,7 +13,7 @@ public interface SynonymCapability {
      * @param linkedConcept Linked concept.
      * @return A set of synonyms. // TODO: be more specific links or words
      */
-    HashSet<String> getSynonyms(String linkedConcept);
+    Set<String> getSynonyms(String linkedConcept);
 
     /**
      * Given two links, determine whether those are synonymous.
