@@ -1,8 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.OntoInfo;
-import de.uni_mannheim.informatik.dws.melt.matching_yaaa.MatcherYAAA;
 
 import java.net.URL;
 import java.util.Properties;
@@ -13,7 +13,7 @@ import org.apache.jena.ontology.OntModelSpec;
 /**
  * A matcher template for matchers that are based on Apache Jena.
  */
-public abstract class MatcherYAAAJena extends MatcherYAAA {
+public abstract class MatcherYAAAJena extends MatcherYAAA implements IMatcher<OntModel, Alignment, Properties>{
     
     protected OntModelSpec getModelSpec(){
         return OntologyCacheJena.DEFAULT_JENA_ONT_MODEL_SPEC;
@@ -56,6 +56,7 @@ public abstract class MatcherYAAAJena extends MatcherYAAA {
      * @return The resulting mapping of the matching process.
      * @throws Exception any exception which occurs during matching
      */
+    @Override
     public abstract Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception ;
 
 }

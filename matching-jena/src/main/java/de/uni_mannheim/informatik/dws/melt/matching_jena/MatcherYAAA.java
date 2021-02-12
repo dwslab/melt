@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_yaaa;
+package de.uni_mannheim.informatik.dws.melt.matching_jena;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherFile;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -30,7 +30,7 @@ public abstract class MatcherYAAA extends MatcherFile{
         AlignmentSerializer.serialize(m, alignmentFile);
     }
 
-     /**
+    /**
      * Aligns two ontologies specified via URL, with an input alignment
      * as Alignment object, and returns the mapping of the resulting alignment.
      *

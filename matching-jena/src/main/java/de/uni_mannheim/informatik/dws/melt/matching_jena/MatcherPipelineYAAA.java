@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_yaaa;
+package de.uni_mannheim.informatik.dws.melt.matching_jena;
 
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 
