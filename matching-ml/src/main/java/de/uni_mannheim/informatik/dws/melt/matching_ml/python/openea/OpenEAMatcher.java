@@ -199,7 +199,7 @@ public class OpenEAMatcher extends MatcherYAAAJena{
 
         writeCorrespondences(trainCorrespondences, new File(alignmentFolder, "train_links"));
         writeCorrespondences(valCorrespondences, new File(alignmentFolder, "valid_links"));
-        writeCorrespondences(new ArrayList(), new File(alignmentFolder, "test_links")); //file test_links has to exist
+        writeCorrespondences(new ArrayList<>(), new File(alignmentFolder, "test_links")); //file test_links has to exist
         
         //https://stackoverflow.com/questions/13483430/how-to-make-rounded-percentages-add-up-to-100
         //java rounding split percentage

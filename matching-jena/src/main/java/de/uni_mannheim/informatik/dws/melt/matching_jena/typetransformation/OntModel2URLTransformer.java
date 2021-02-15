@@ -28,7 +28,7 @@ public class OntModel2URLTransformer extends AbstractTypeTransformer<OntModel, U
     @Override
     public URL transform(OntModel value, Properties parameters) throws Exception {
         
-        Lang lang = RDFLanguages.nameToLang(parameters.getProperty(ParameterConfigKeys.DEFAULT_ONTOLOGY_SERIALIZATION_FORMAT));
+        Lang lang = RDFLanguages.nameToLang(parameters.getProperty(ParameterConfigKeys.DEFAULT_ONTOLOGY_SERIALIZATION_FORMAT, "RDF/XML"));
         if(lang == null){
             LOGGER.warn("The DEFAULT_ONTOLOGY_SERIALIZATION_FORMAT could not be converted to a jena lang. Defaulting to RDF/XML.");
             lang = Lang.RDFXML;

@@ -79,7 +79,7 @@ public class ConfidenceFinder{
     public static double getBestConfidenceForFmeasure(ExecutionResult executionResult){
         ConfusionMatrix m = new ConfusionMatrixMetric().compute(executionResult);
 
-        List<Double> systemConfidences = new ArrayList(getOccurringConfidences(executionResult.getSystemAlignment(), 2));
+        List<Double> systemConfidences = new ArrayList<>(getOccurringConfidences(executionResult.getSystemAlignment(), 2));
         Collections.sort(systemConfidences);
         double bestConf = 1.0d;
         double bestValue = 0.0d;
@@ -103,7 +103,7 @@ public class ConfidenceFinder{
     public static ExecutionResultSet getConfidenceResultSet(ExecutionResult executionResult){
         ExecutionResultSet s = new ExecutionResultSet();
         s.add(executionResult);
-        List<Double> systemConfidences = new ArrayList(getOccurringConfidences(executionResult.getSystemAlignment(), 2));
+        List<Double> systemConfidences = new ArrayList<>(getOccurringConfidences(executionResult.getSystemAlignment(), 2));
         Collections.sort(systemConfidences);
         for(Double conf : systemConfidences){
             s.get(executionResult, new ConfidenceRefiner(conf));

@@ -121,17 +121,17 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filt
      */
     public static Alignment trainAndApplyMLModel(Alignment trainAlignment, Alignment predictAlignment, List<String> confidenceNames, int crossValidationNumber, int numberOfParallelJobs){
         if(confidenceNames == null || confidenceNames.isEmpty())
-            confidenceNames = new ArrayList(trainAlignment.getDistinctCorrespondenceConfidenceKeys());
+            confidenceNames = new ArrayList<>(trainAlignment.getDistinctCorrespondenceConfidenceKeys());
         if(confidenceNames.isEmpty()){
             LOGGER.warn("No attributes available for learning. Return unfiltered alignment.");
             return predictAlignment;
         }
         try{
             File trainingFile = File.createTempFile("trainingsFile", ".csv");
-            writeDataset(new ArrayList(trainAlignment), trainingFile, true, confidenceNames);
+            writeDataset(new ArrayList<>(trainAlignment), trainingFile, true, confidenceNames);
 
             File testFile = File.createTempFile("testFile", ".csv");
-            List<Correspondence> testAlignment = new ArrayList(predictAlignment); // make order explicit
+            List<Correspondence> testAlignment = new ArrayList<>(predictAlignment); // make order explicit
             writeDataset(testAlignment, testFile, false, confidenceNames);
 
             List<Integer> predictions = PythonServer.getInstance().learnAndApplyMLModel(trainingFile, testFile, crossValidationNumber, numberOfParallelJobs);
@@ -158,14 +158,14 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filt
      */
     public static List<String> trainAndStoreMLModel(Alignment alignment, File modelFile, List<String> confidenceNames, int crossValidationNumber, int numberOfParallelJobs){
         if(confidenceNames == null || confidenceNames.isEmpty())
-            confidenceNames = new ArrayList(alignment.getDistinctCorrespondenceConfidenceKeys());
+            confidenceNames = new ArrayList<>(alignment.getDistinctCorrespondenceConfidenceKeys());
         if(confidenceNames.isEmpty()){
             LOGGER.error("No attributes available for learning. Did not create any model file.");
             return confidenceNames;
         }        
         try{
             File trainingFile = File.createTempFile("trainingsFile", ".csv");
-            writeDataset(new ArrayList(alignment), trainingFile, true, confidenceNames);
+            writeDataset(new ArrayList<>(alignment), trainingFile, true, confidenceNames);
             PythonServer.getInstance().trainAndStoreMLModel(trainingFile, modelFile, crossValidationNumber, numberOfParallelJobs);
             trainingFile.delete();
         } catch (Exception ex) {
@@ -192,7 +192,7 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filt
         }
         try{
             File predictFile = new File("testFile.csv");
-            List<Correspondence> predictAlignmentOrdered = new ArrayList(predictAlignment); // make order explicit
+            List<Correspondence> predictAlignmentOrdered = new ArrayList<>(predictAlignment); // make order explicit
             writeDataset(predictAlignmentOrdered, predictFile, false, confidenceNames);
 
             List<Integer> predictions = PythonServer.getInstance().applyStoredMLModel(modelFile, predictFile);
@@ -242,7 +242,7 @@ public class MachineLearningScikitFilter extends MatcherYAAAJena implements Filt
             int positive = 0;
             int negative = 0;
             for(Correspondence c : alignment){
-                List<Object> record = new ArrayList(confidenceNames.size());
+                List<Object> record = new ArrayList<>(confidenceNames.size());
                 for(String confidenceName : confidenceNames){
                     record.add(c.getAdditionalConfidenceOrDefault(confidenceName, 0.0));                    
                 }

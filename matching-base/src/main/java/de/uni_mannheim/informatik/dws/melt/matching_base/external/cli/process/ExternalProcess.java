@@ -932,8 +932,9 @@ class ArgumentScope {
                 startScope = endScope + 1;
             }
             subsitutedArgument.append(argument.substring(startScope, argument.length()));
-            
-            subsitutedArguments.add(subsitutedArgument.toString());
+            String subsitutedArgumentString = subsitutedArgument.toString().trim();
+            if(subsitutedArgumentString.isEmpty() == false)
+                subsitutedArguments.add(subsitutedArgumentString);
         }
         return subsitutedArguments;
     }

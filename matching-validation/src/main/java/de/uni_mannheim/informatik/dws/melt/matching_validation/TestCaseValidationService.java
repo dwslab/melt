@@ -31,12 +31,12 @@ public class TestCaseValidationService {
     /**
      * Test case on which the analysis was performed on.
      */
-    private TestCase testCase;
+    private final TestCase testCase;
     
     /**
      * Semantic web library to use like Jena or Owl API
      */
-    private SemanticWebLibrary semanticWebLibrary;
+    private final SemanticWebLibrary semanticWebLibrary;
 
     //-------------------------------------------------------------------------
     // Hard Validation Fields
@@ -120,9 +120,9 @@ public class TestCaseValidationService {
     HashSet<String> targetClassesNotMapped = new HashSet<>();
 
 
-    OntologyValidationService sourceOntologyValidationService;
+    OntologyValidationService<?> sourceOntologyValidationService;
 
-    OntologyValidationService targetOntologyValidationService;
+    OntologyValidationService<?> targetOntologyValidationService;
 
     /**
      * Indicates whether all source classes appear in the mapping.
@@ -384,11 +384,11 @@ public class TestCaseValidationService {
         return targetDatatypePropertiesNotMapped;
     }
 
-    public OntologyValidationService getSourceOntologyValidationService() {
+    public OntologyValidationService<?> getSourceOntologyValidationService() {
         return sourceOntologyValidationService;
     }
 
-    public OntologyValidationService getTargetOntologyValidationService() {
+    public OntologyValidationService<?> getTargetOntologyValidationService() {
         return targetOntologyValidationService;
     }
     

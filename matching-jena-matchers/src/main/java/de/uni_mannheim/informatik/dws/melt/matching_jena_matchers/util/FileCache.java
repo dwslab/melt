@@ -2,19 +2,17 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * File cache which can be used to store a java object in a file and load it from that file if the program runs a second time.
+ * @param <T> the type of object to store.
  */
 public class FileCache <T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileCache.class);
@@ -34,6 +32,7 @@ public class FileCache <T> {
         load();
     }
     
+    @SuppressWarnings("unchecked")
     protected void load(){
         if(this.file.exists()){
             LOGGER.info("Load from cache file");

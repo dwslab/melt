@@ -549,7 +549,7 @@ public class Executor {
      * @param matcherClass the matcher class whose name shall be retrieved.
      * @return The name as String.
      */
-    public static String getMatcherName(Class matcherClass) {
+    public static String getMatcherName(Class<?> matcherClass) {
         //https://stackoverflow.com/questions/22866925/detect-if-object-has-overriden-tostring
         try {
             if (matcherClass.getMethod("toString").getDeclaringClass() != Object.class) {

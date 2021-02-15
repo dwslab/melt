@@ -258,7 +258,7 @@ public class GridSearch {
      * @param paramTypes The parameter type of the constructor in the correct order.
      * @return Edited {@code GridSearch} instance.
      */
-    public GridSearch addStaticConstructorParameter(List<Object> paramValues, List<Class> paramTypes){
+    public GridSearch addStaticConstructorParameter(List<Object> paramValues, List<Class<?>> paramTypes){
         if(paramTypes.size() != paramValues.size()){
             throw new IllegalArgumentException("The size of paramTypes and paramValues is not equal.");
         }
@@ -403,7 +403,7 @@ public class GridSearch {
     }
     
     private IOntologyMatchingToolBridge getInstantiatedMatcher(List<Object> paramValue) throws ReflectiveOperationException {        
-        List<Object> constructorValues = new ArrayList();
+        List<Object> constructorValues = new ArrayList<>();
         List<Class<?>> constructorTypes = new ArrayList<>();
         for(int i=0; i < this.paramName.size(); i++){
             if(isConstructorParameter(this.paramName.get(i))){
@@ -417,7 +417,7 @@ public class GridSearch {
         if(constructorValues.isEmpty()){
             matcherInstance = this.matcher.newInstance();
         } else {
-            Constructor constructor = this.matcher.getConstructor(constructorTypes.toArray(new Class<?>[constructorTypes.size()]));
+            Constructor<?> constructor = this.matcher.getConstructor(constructorTypes.toArray(new Class<?>[constructorTypes.size()]));
             if(constructor == null)
                 throw new NoSuchMethodException("Constructor with param types" + constructorTypes.toString() + " not found.");
             matcherInstance = (IOntologyMatchingToolBridge)constructor.newInstance(constructorValues.toArray(new Object[constructorValues.size()]));

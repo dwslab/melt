@@ -16,7 +16,7 @@ public class AlignmentSortTest {
         List<Correspondence> correspondences = a.getConfidenceOrderedMapping();
         System.out.println((System.nanoTime() - startTime)/1000000f);
         
-        List<Correspondence> sorted = new ArrayList(correspondences);
+        List<Correspondence> sorted = new ArrayList<>(correspondences);
         sorted.sort(new CorrespondenceConfidenceComparator());
         assertTrue(sorted.equals(correspondences), "Method getConfidenceOrderedMapping in Alignment returns a unsorted list.");
     }

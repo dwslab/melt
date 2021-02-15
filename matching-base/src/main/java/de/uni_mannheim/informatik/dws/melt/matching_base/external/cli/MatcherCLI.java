@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.external.cli;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherURL;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process.ExternalProcess;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process.ProcessOutputAlignmentCollector;
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Matcher for running external matchers (require the subclass to create a command to execute).
  */
-public abstract class MatcherCLI extends MatcherURL {
+public abstract class MatcherCLI extends MatcherURL implements IMatcher<URL, URL, URL> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherCLI.class);
     
     /**
@@ -27,23 +28,7 @@ public abstract class MatcherCLI extends MatcherURL {
 
     @Override
     public URL match(URL source, URL target, URL inputAlignment) throws Exception {
-        ExternalProcess p = new ExternalProcess();
-        p.addArgumentLine(getCommand());
-        p.addSubstitutionMap(getSubsitiutionMap(source, target, inputAlignment));
-        p.addSubstitutionDefaultLookups();
-        ProcessOutputAlignmentCollector alignmentCollector = new ProcessOutputAlignmentCollector();
-        p.addStdErrConsumer(l -> LOGGER.info("External (ERR): {}",l));
-        p.addStdOutConsumer(l -> LOGGER.info("External (OUT): {}",l));
-        if(isUsingStdOut()){
-            p.addStdOutConsumer(alignmentCollector);
-        }else{
-            p.addStdErrConsumer(alignmentCollector);
-        }
-        p.run();
-        URL detectedURL = alignmentCollector.getURL(); 
-        if(detectedURL == null)
-            return inputAlignment;
-        return detectedURL;
+        return match(source, target, inputAlignment, null);
     }
     
      /**
@@ -54,6 +39,7 @@ public abstract class MatcherCLI extends MatcherURL {
      * <li>${source} with source URI</li>
      * <li>${target} with target URI</li>
      * <li>${inputAlignment} with inputAlignment URI</li>
+     * <li>${parameters} with parameters URI</li>
      * <li>system properties like ${line.separator} or ${file.separator} ${java.io.tmpdir}</li>
      * <li>environment variables like ${PATH}</li>
      * <li>JVM arguments like ${Xmx} which is replaced by e.g. -Xmx10G</li>
@@ -70,11 +56,35 @@ public abstract class MatcherCLI extends MatcherURL {
      */
     protected abstract String getCommand() throws Exception;
     
-    private Map<String,Object> getSubsitiutionMap(URL source, URL target, URL inputAlignment){
+    private Map<String,Object> getSubsitiutionMap(URL source, URL target, URL inputAlignment, URL parameters){
         Map<String,Object> map = new HashMap<>();
         map.put("source", source);
         map.put("target", target);
         map.put("inputAlignment", inputAlignment);
+        map.put("parameters", parameters);
         return map;
+    }
+
+    @Override
+    public URL match(URL source, URL target, URL inputAlignment, URL parameters) throws Exception {
+        ExternalProcess p = new ExternalProcess();
+        p.addArgumentLine(getCommand());
+        p.addSubstitutionMap(getSubsitiutionMap(source, target, inputAlignment, parameters));
+        p.addSubstitutionDefaultLookups();
+        ProcessOutputAlignmentCollector alignmentCollector = new ProcessOutputAlignmentCollector();
+        p.addStdErrConsumer(l -> LOGGER.info("External (ERR): {}",l));
+        p.addStdOutConsumer(l -> LOGGER.info("External (OUT): {}",l));
+        if(isUsingStdOut()){
+            p.addStdOutConsumer(alignmentCollector);
+        }else{
+            p.addStdErrConsumer(alignmentCollector);
+        }
+        p.run();
+        URL detectedURL = alignmentCollector.getURL(); 
+        if(detectedURL == null){
+            LOGGER.warn("Did not find an URL in the output of the external process. Return input alignment");
+            return inputAlignment;
+        }
+        return detectedURL;
     }
 }

@@ -144,6 +144,7 @@ public class TestCase {
      * @param <T> Type of the ontology class e.g. OntModel
      * @return Source ontology in the specified format.
      */
+    @SuppressWarnings("unchecked")
     public <T> T getSourceOntology(Class<T> clazz){
         if(clazz == OntModel.class){
             // return ontology model using default specification and cache
@@ -163,6 +164,7 @@ public class TestCase {
      * @param <T> Type of the ontology class e.g. OntModel
      * @return Target ontology in the specified format.
      */
+    @SuppressWarnings("unchecked")
     public <T> T getTargetOntology(Class<T> clazz){
         if(clazz == OntModel.class){
             // return ontology model using default specification and cache

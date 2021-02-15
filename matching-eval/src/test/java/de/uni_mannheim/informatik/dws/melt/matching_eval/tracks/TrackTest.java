@@ -14,7 +14,7 @@ class TrackTest {
     public void testDistinctTracks(){
         List<URL> distinctOntologies = TrackRepository.Conference.V1.getDistinctOntologies();
         
-        Set<String> testcaseNames = new HashSet();
+        Set<String> testcaseNames = new HashSet<>();
         for(URL url : distinctOntologies){
             testcaseNames.add(getName(url));
         }

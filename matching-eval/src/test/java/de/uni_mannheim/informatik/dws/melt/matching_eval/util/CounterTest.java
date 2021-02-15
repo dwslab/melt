@@ -10,7 +10,8 @@ public class CounterTest {
 
     @Test
     void testCounter(){        
-        Counter c = new Counter();
+        @SuppressWarnings("deprecation")
+        Counter<String> c = new Counter<>();
         c.add(Arrays.asList("one", "one", "two", "two", "two", "three"));
         List<Entry<String, Integer>> mostCommon = c.mostCommon();
         assertEquals(3, mostCommon.get(0).getValue());

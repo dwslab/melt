@@ -47,6 +47,8 @@ public class ProcessOutputAlignmentCollector implements ProcessOutputConsumer {
                 } catch (IOException ex) {
                     LOGGER.error("Cannot write to tmp file for alignment", ex);
                 }
+            }else{
+                this.lastLine = line;
             }
         } else {
             if(writer != null){
@@ -80,6 +82,7 @@ public class ProcessOutputAlignmentCollector implements ProcessOutputConsumer {
             try {
                 return new URL(this.lastLine);
             } catch (MalformedURLException ex) {
+                LOGGER.info("The last line of the outout is not a URL - try to find a URL within the last line. Last line was: {}", this.lastLine);
                 return findLastURL(this.lastLine);
             }
         }
@@ -96,10 +99,14 @@ public class ProcessOutputAlignmentCollector implements ProcessOutputConsumer {
         }
         ListIterator<String> iterator = urlMatches.listIterator(urlMatches.size());
         while (iterator.hasPrevious()) {
+            String foundURL = iterator.previous();
             try {
-                return new URL(iterator.previous());
-            } catch (MalformedURLException ex) {}
+                return new URL(foundURL);
+            } catch (MalformedURLException ex) {
+                LOGGER.info("Found url text can not be transformed to URL. FoundURL: {}", foundURL);
+            }
         }
+        LOGGER.warn("No text found which can be transformed to URL. Returning null.");
         return null;
     }
 }

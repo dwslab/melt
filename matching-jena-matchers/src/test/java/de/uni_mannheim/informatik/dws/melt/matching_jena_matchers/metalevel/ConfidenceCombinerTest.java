@@ -27,7 +27,7 @@ public class ConfidenceCombinerTest {
         Alignment alignment = new Alignment(Arrays.asList(a, b));
         
         //use only the first two confidences
-        ConfidenceCombiner combiner = new ConfidenceCombiner(new HashSet(Arrays.asList("conf1", "conf2")));
+        ConfidenceCombiner combiner = new ConfidenceCombiner(new HashSet<>(Arrays.asList("conf1", "conf2")));
         Alignment combinedAlignment = combiner.combine(alignment);
         assertEquals(0.75, combinedAlignment.getCorrespondence("a", "a'", CorrespondenceRelation.EQUIVALENCE).getConfidence());
         assertEquals(0.3, combinedAlignment.getCorrespondence("b", "b'", CorrespondenceRelation.EQUIVALENCE).getConfidence());
@@ -53,7 +53,7 @@ public class ConfidenceCombinerTest {
         Correspondence b = new Correspondence("b", "b'", 0.8);
         
         Alignment alignment = new Alignment(Arrays.asList(a, b));
-        ConfidenceCombiner combiner = new ConfidenceCombiner(new HashSet(Arrays.asList("conf1", "conf2")));
+        ConfidenceCombiner combiner = new ConfidenceCombiner(new HashSet<>(Arrays.asList("conf1", "conf2")));
         Alignment combinedAlignment = combiner.combine(alignment);
         assertEquals(0.9, combinedAlignment.getCorrespondence("a", "a'", CorrespondenceRelation.EQUIVALENCE).getConfidence());
         assertEquals(0.8, combinedAlignment.getCorrespondence("b", "b'", CorrespondenceRelation.EQUIVALENCE).getConfidence());

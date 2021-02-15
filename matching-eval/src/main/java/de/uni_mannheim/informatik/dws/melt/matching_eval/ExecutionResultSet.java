@@ -31,11 +31,12 @@ import java.util.List;
  */
 public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionResult> implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionResultSet.class);
+    private static final long serialVersionUID = 1L;
     
-    private HashIndex matcherIndex;
-    private HashIndex testCaseIndex;
-    private HashIndex trackIndex;
-    private HashIndex refinementSetIndex;
+    private HashIndex<String, ExecutionResult> matcherIndex;
+    private HashIndex<TestCase, ExecutionResult> testCaseIndex;
+    private HashIndex<Track, ExecutionResult> trackIndex;
+    private HashIndex<Set<Refiner>, ExecutionResult> refinementSetIndex;
 
     /**
      * Constructor

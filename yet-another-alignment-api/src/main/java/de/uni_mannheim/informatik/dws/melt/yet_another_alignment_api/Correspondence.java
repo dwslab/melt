@@ -200,6 +200,7 @@ public class Correspondence {
      * @param <T> Extension value type.
      * @return The value of the extension as String, null if there is no value.
      */
+    @SuppressWarnings("unchecked")
     public <T> T getExtensionValueCasted(String extensionUri){
         if(extensions == null) return null;
         return (T) extensions.get(extensionUri);
@@ -222,7 +223,7 @@ public class Correspondence {
      * @param matcherClass the class of the matcher
      * @param confidence the additional confidence
      */
-    public void addAdditionalConfidence(Class matcherClass, double confidence) {
+    public void addAdditionalConfidence(Class<?> matcherClass, double confidence) {
         addAdditionalConfidence(matcherClass.getSimpleName(), confidence);
     }
     
@@ -261,7 +262,7 @@ public class Correspondence {
      * @param matcherClass the class of the matcher
      * @param confidence the additional confidence
      */
-    public void addAdditionalConfidenceIfHigher(Class matcherClass, double confidence) {
+    public void addAdditionalConfidenceIfHigher(Class<?> matcherClass, double confidence) {
         addAdditionalConfidenceIfHigher(matcherClass.getSimpleName(), confidence);
     }
     
@@ -270,7 +271,7 @@ public class Correspondence {
      * @param matcherClass Class of the matcher.
      * @return The confidence if found.
      */
-    public Double getAdditionalConfidence(Class matcherClass) { 
+    public Double getAdditionalConfidence(Class<?> matcherClass) { 
         return getAdditionalConfidence(matcherClass.getSimpleName());
     }
     
@@ -328,7 +329,7 @@ public class Correspondence {
      * @param matcherClass the class of the matcher
      * @param explanation the explanation for a correspondence
      */
-    public void addAdditionalExplanation(Class matcherClass, String explanation) {
+    public void addAdditionalExplanation(Class<?> matcherClass, String explanation) {
         addAdditionalExplanation(matcherClass.getSimpleName(), explanation);
     }
     
@@ -341,7 +342,7 @@ public class Correspondence {
         addExtensionValue(getAdditionalExplanationURL(key), explanation);
     }
     
-    public String getAdditionalExplanation(Class matcherClass) { 
+    public String getAdditionalExplanation(Class<?> matcherClass) { 
         return getAdditionalExplanation(matcherClass.getSimpleName());
     }
     

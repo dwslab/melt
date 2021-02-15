@@ -24,7 +24,7 @@ public class AgonyTest {
     @Test
     void testWikiVote() {
         Map<String, Integer> wikivoteResult = readResult(getResourceFile("Wiki-Vote_result.txt"));
-        Map<String, Integer> wikiVoteAgony = new Agony(Agony.readEdges(getResourceFile("Wiki-Vote.txt"))).computeAgony();
+        Map<String, Integer> wikiVoteAgony = new Agony<>(Agony.readEdges(getResourceFile("Wiki-Vote.txt"))).computeAgony();
         assertEquals(wikivoteResult, wikiVoteAgony);
     }
     

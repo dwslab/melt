@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml.python.openea;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
@@ -10,12 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +36,7 @@ public class OpenEAConfiguration {
     private Map<String, Object> arguments;
 
     public OpenEAConfiguration() {
-        this.arguments = new HashMap();
+        this.arguments = new HashMap<>();
     }
     
     /**

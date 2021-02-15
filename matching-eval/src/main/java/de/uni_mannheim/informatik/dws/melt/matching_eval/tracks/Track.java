@@ -180,7 +180,7 @@ public abstract class Track {
      */
     public List<TestCase> getTestCases(List<String> testCaseNames){
         Map<String, TestCase> map = getMapNameToTestCase();        
-        List<TestCase> tcs = new ArrayList(testCaseNames.size());
+        List<TestCase> tcs = new ArrayList<>(testCaseNames.size());
         for(String testCaseName : testCaseNames){
             TestCase tc = map.get(testCaseName);
             if(tc == null){
@@ -193,7 +193,7 @@ public abstract class Track {
     }
     
     private Map<String, TestCase> getMapNameToTestCase(){
-        Map<String, TestCase> map = new HashMap();
+        Map<String, TestCase> map = new HashMap<>();
         for(TestCase testCase : getTestCases()){
             map.put(testCase.getName(), testCase);
         }
@@ -255,8 +255,8 @@ public abstract class Track {
      * @return list of URLs which points to the ontologies.
      */
     public List<URL> getDistinctOntologies(){
-        List<URL> distinctOntologies = new ArrayList();
-        Set<String> alreadySeen = new HashSet();
+        List<URL> distinctOntologies = new ArrayList<>();
+        Set<String> alreadySeen = new HashSet<>();
         for(TestCase testCase : getTestCases()){
             String[] sourceTargetNames = testCase.getName().split("-");
             if(sourceTargetNames.length != 2){

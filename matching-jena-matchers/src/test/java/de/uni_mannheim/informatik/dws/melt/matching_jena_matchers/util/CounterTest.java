@@ -13,7 +13,7 @@ public class CounterTest {
 
     @Test
     void testCounter(){        
-        Counter<String> c = new Counter();
+        Counter<String> c = new Counter<>();
         c.addAll(Arrays.asList("one", "one", "two", "two", "two", "three"));
         List<Entry<String, Integer>> mostCommon = c.mostCommon();
         assertEquals(3, mostCommon.get(0).getValue());
@@ -21,8 +21,8 @@ public class CounterTest {
         
         assertEquals("two", c.mostCommonElement());
         assertEquals(Arrays.asList("two"), c.mostCommonElements(1));
-        assertEquals(Arrays.asList(new SimpleEntry("two", 0.5)), c.mostCommonByPercentage(0.5));
-        assertEquals(Arrays.asList(new SimpleEntry("two", 0.5), new SimpleEntry("one", (double)2/6)), c.mostCommonByPercentage(0.3));
+        assertEquals(Arrays.asList(new SimpleEntry<>("two", 0.5)), c.mostCommonByPercentage(0.5));
+        assertEquals(Arrays.asList(new SimpleEntry<>("two", 0.5), new SimpleEntry<>("one", (double)2/6)), c.mostCommonByPercentage(0.3));
         
         assertEquals(Arrays.asList("two"), c.mostCommonElementsByPercentage(0.5));
         assertEquals(Arrays.asList("two", "one"), c.mostCommonElementsByPercentage(0.3));
@@ -46,7 +46,7 @@ public class CounterTest {
     void testSecondComparator(){     
         //sorty by size ascending
         Comparator<String> comp = (c1, c2) -> Integer.compare(c1.length(), c2.length());
-        Counter<String> c = new Counter(comp);
+        Counter<String> c = new Counter<>(comp);
         c.addAll(Arrays.asList("aaaaaa", "aaaaaa", "bbbbbbb", "bbbbbbb", "c", "c", "dd", "dd"));
         
         List<String> expected = Arrays.asList("c", "dd", "aaaaaa", "bbbbbbb");
@@ -56,7 +56,7 @@ public class CounterTest {
         //-----
         //sorty by size descending
         comp = (c1, c2) -> Integer.compare(c2.length(), c1.length());
-        c = new Counter(comp);
+        c = new Counter<>(comp);
         c.addAll(Arrays.asList("aaaaaa", "aaaaaa", "bbbbbbb", "bbbbbbb", "c", "c", "dd", "dd"));
         
         expected = Arrays.asList("bbbbbbb", "aaaaaa", "dd", "c");
@@ -67,7 +67,7 @@ public class CounterTest {
         //sort by characters
         
         comp = (c1, c2) -> c1.compareTo(c2);
-        c = new Counter(comp);
+        c = new Counter<>(comp);
         c.addAll(Arrays.asList("aaaaaa", "aaaaaa", "bbbbbbb", "bbbbbbb", "c", "c", "dd", "dd"));
         
         expected = Arrays.asList("aaaaaa", "bbbbbbb", "c", "dd");
@@ -80,7 +80,7 @@ public class CounterTest {
     
     @Test
     void testEmptyCounter(){
-        Counter c = new Counter();
+        Counter<String> c = new Counter<>();
         assertNull(c.mostCommonElement());
         assertEquals(Arrays.asList(), c.mostCommon());
         assertEquals(Arrays.asList(), c.mostCommon(10));
@@ -90,7 +90,7 @@ public class CounterTest {
     
     @Test
     void testZeroN(){
-        Counter<String> c = new Counter();
+        Counter<String> c = new Counter<>();
         c.addAll(Arrays.asList("one", "one", "two", "two", "two", "three"));
         
         assertEquals(3,c.mostCommonElementsByPercentage(0.0).size());
@@ -101,7 +101,7 @@ public class CounterTest {
     
     @Test
     void testExceptions(){
-        Counter<String> c = new Counter();
+        Counter<String> c = new Counter<>();
         c.addAll(Arrays.asList("one", "one", "two", "two", "two", "three"));
         
         Assertions.assertThrows(IllegalArgumentException.class, () -> {

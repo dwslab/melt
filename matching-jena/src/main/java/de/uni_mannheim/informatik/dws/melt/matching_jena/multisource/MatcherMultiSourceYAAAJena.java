@@ -23,7 +23,7 @@ public abstract class MatcherMultiSourceYAAAJena extends MatcherMultiSourceURL i
         //use hard coded transformers and not the generic variant:        
         Properties p = URL2PropertiesTransformer.parse(parameters);
         
-        List<OntModel> ontModels = new ArrayList(graphs.size());
+        List<OntModel> ontModels = new ArrayList<>(graphs.size());
         for(URL url : graphs){
             ontModels.add(readOntology(url, getModelSpec()));
             //can also use transformer: 

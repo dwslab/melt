@@ -138,6 +138,11 @@ public class GenericMatcherCaller {
                 return null;
             }
         }
+        //if the matcher is also loading its own transformers, then call this first (maybe used in SEALS).
+        if(matcherInstance instanceof TypeTransformerLoader){
+            ((TypeTransformerLoader)matcherInstance).registerTypeTransformers();
+        }
+        
         if(matcherInstance instanceof IMatcherCaller){
             return runIMatcherCaller((IMatcherCaller)matcherInstance, sourceOntology, targetOntology, inputAlignment, parameters);
         } else if(matcherInstance instanceof IMatcher){

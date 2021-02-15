@@ -97,7 +97,7 @@ public class ExecutionResult {
      * @param matcher Matcher that was used for the testCase.
      */
     public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, IOntologyMatchingToolBridge matcher) {
-        this(testCase, matcherName, originalSystemAlignment, runtime, null, testCase.getParsedReferenceAlignment(), matcher, new HashSet());
+        this(testCase, matcherName, originalSystemAlignment, runtime, null, testCase.getParsedReferenceAlignment(), matcher, new HashSet<>());
     }
 
     
@@ -122,7 +122,7 @@ public class ExecutionResult {
      * @return New Refinement Set.
      */
     private static Set<Refiner> addRefinementToNewSet(Set<Refiner> initialRefinement, Refiner newRefinement){
-        Set<Refiner> s = new HashSet(initialRefinement);
+        Set<Refiner> s = new HashSet<>(initialRefinement);
         if(newRefinement != null)
             s.add(newRefinement);
         return s;

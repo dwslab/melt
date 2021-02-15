@@ -33,7 +33,7 @@ public class HobbitWrapper extends AbstractSystemAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(HobbitWrapper.class);
 
     private ExecutorService executor;
-    private Map<String, FileReceiverCallableState> receivers = Collections.synchronizedMap(new HashMap<String, FileReceiverCallableState>());
+    private final Map<String, FileReceiverCallableState> receivers = Collections.synchronizedMap(new HashMap<>());
 
     @Override
     public void init() throws Exception {
@@ -66,6 +66,7 @@ public class HobbitWrapper extends AbstractSystemAdapter {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void receiveGeneratedTask(String taskId, byte[] data) {
         LOGGER.info("Starting receiveGeneratedTask");
         ByteBuffer taskBuffer = ByteBuffer.wrap(data);
@@ -89,7 +90,7 @@ public class HobbitWrapper extends AbstractSystemAdapter {
         String queueName = RabbitMQUtils.readString(taskBuffer);
         
         // Allowed instance types (i.e., class URIs)
-        Set<String> allowedInstanceTypes = new HashSet();
+        Set<String> allowedInstanceTypes = new HashSet<>();
         if (isMatchingInstancesRequired) {
             while (taskBuffer.hasRemaining()) {
                 allowedInstanceTypes.add(RabbitMQUtils.readString(taskBuffer));
@@ -168,7 +169,7 @@ public class HobbitWrapper extends AbstractSystemAdapter {
         
         IOntologyMatchingToolBridge bridge;
         try {
-            Class clazz = Class.forName(implementingClass);
+            Class<?> clazz = Class.forName(implementingClass);
             bridge = (IOntologyMatchingToolBridge) clazz.newInstance();
         } catch (ClassNotFoundException ex) { 
             LOGGER.error("Could not find class " + implementingClass, ex);

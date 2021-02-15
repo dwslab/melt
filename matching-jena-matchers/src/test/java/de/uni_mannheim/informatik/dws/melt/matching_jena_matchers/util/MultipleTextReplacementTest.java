@@ -14,7 +14,7 @@ public class MultipleTextReplacementTest {
     
     @Test
     void testReplacement() {
-        Map<String, String> replacement = new HashMap();
+        Map<String, String> replacement = new HashMap<>();
         replacement.put("one", "1");
         replacement.put("two", "2");        
         MultipleTextReplacement replacer = new MultipleTextReplacement(replacement);
@@ -23,7 +23,7 @@ public class MultipleTextReplacementTest {
     
     @Test
     void testReplacementSpecialCharactersAsInput() {
-        Map<String, String> replacement = new HashMap();
+        Map<String, String> replacement = new HashMap<>();
         replacement.put("\\s", "x");
         replacement.put(".", "dot");
         replacement.put("(test)", "brackets");
@@ -33,7 +33,7 @@ public class MultipleTextReplacementTest {
     
     @Test
     void testReplacementSpecialCharactersToReplace() {
-        Map<String, String> replacement = new HashMap();
+        Map<String, String> replacement = new HashMap<>();
         replacement.put("x", "foo$20bar");
         replacement.put("y", "\\s");
         MultipleTextReplacement replacer = new MultipleTextReplacement(replacement);
@@ -42,19 +42,19 @@ public class MultipleTextReplacementTest {
     
     @Test
     void testReplacementSamePrefix() {
-        List<Entry<String, String>> replacements = new ArrayList();
-        replacements.add(new SimpleEntry("hi", "hello"));
-        replacements.add(new SimpleEntry("hii", "hellooo"));        
+        List<Entry<String, String>> replacements = new ArrayList<>();
+        replacements.add(new SimpleEntry<>("hi", "hello"));
+        replacements.add(new SimpleEntry<>("hii", "hellooo"));        
         MultipleTextReplacement replacer = new MultipleTextReplacement(replacements);
         assertEquals("helloi", replacer.replace("hii"));
         
-        replacements = new ArrayList();
-        replacements.add(new SimpleEntry("hii", "hellooo"));
-        replacements.add(new SimpleEntry("hi", "hello"));        
+        replacements = new ArrayList<>();
+        replacements.add(new SimpleEntry<>("hii", "hellooo"));
+        replacements.add(new SimpleEntry<>("hi", "hello"));        
         replacer = new MultipleTextReplacement(replacements);
         assertEquals("hellooo", replacer.replace("hii"));
         
-        Map<String, String> replacement = new HashMap();
+        Map<String, String> replacement = new HashMap<>();
         replacement.put("hi", "hello");
         replacement.put("hii", "hellooo");
         replacer = new MultipleTextReplacement(replacement);
@@ -63,7 +63,7 @@ public class MultipleTextReplacementTest {
     
     @Test
     void testReplacementLargeReplacement() {
-        Map<String, String> replacement = new HashMap();
+        Map<String, String> replacement = new HashMap<>();
         for(int i=0; i < 30000; i++){
             replacement.put(Integer.toString(i), "(" + i + ")");
         }

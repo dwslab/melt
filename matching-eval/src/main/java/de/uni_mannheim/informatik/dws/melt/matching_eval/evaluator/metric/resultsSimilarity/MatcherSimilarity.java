@@ -169,7 +169,7 @@ public class MatcherSimilarity {
         double[] xValues = shift(coordinates[0]); //shift if values are below zero
         double[] yValues = shift(coordinates[1]);
         
-        Map<ExecutionResult, Point2D.Double> coordinateMap = new HashMap();
+        Map<ExecutionResult, Point2D.Double> coordinateMap = new HashMap<>();
         for(int i = 0; i < results.size(); i++){
             coordinateMap.put(results.get(i), new Point2D.Double(xValues[i], yValues[i]));
         }

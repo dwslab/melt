@@ -17,8 +17,8 @@ public class MultipleTextReplacementMultipleReturnTest {
     
     @Test
     void testReplacement() {
-        Map<String, Set<String>> replacement = new HashMap();
-        replacement.put("band", new HashSet(Arrays.asList("band", "music group", "ring")));
+        Map<String, Set<String>> replacement = new HashMap<>();
+        replacement.put("band", new HashSet<>(Arrays.asList("band", "music group", "ring")));
         
         MultipleTextReplacementMultiReturn replacer = new MultipleTextReplacementMultiReturn(replacement);
         
@@ -32,9 +32,9 @@ public class MultipleTextReplacementMultipleReturnTest {
     
     @Test
     void testMultiReplacement() {
-        Map<String, Set<String>> replacement = new HashMap();
-        replacement.put("help", new HashSet(Arrays.asList("help", "assist")));
-        replacement.put("quiet", new HashSet(Arrays.asList("quiet", "silent")));
+        Map<String, Set<String>> replacement = new HashMap<>();
+        replacement.put("help", new HashSet<>(Arrays.asList("help", "assist")));
+        replacement.put("quiet", new HashSet<>(Arrays.asList("quiet", "silent")));
         
         MultipleTextReplacementMultiReturn replacer = new MultipleTextReplacementMultiReturn(replacement);
         
@@ -50,9 +50,9 @@ public class MultipleTextReplacementMultipleReturnTest {
     
     @Test
     void testMultiReplacementWholeWord() {
-        Map<String, Set<String>> replacement = new HashMap();
-        replacement.put("help", new HashSet(Arrays.asList("xxx", "yyy")));
-        replacement.put("quiet", new HashSet(Arrays.asList("111", "222")));
+        Map<String, Set<String>> replacement = new HashMap<>();
+        replacement.put("help", new HashSet<>(Arrays.asList("xxx", "yyy")));
+        replacement.put("quiet", new HashSet<>(Arrays.asList("111", "222")));
         
         MultipleTextReplacementMultiReturn replacer = new MultipleTextReplacementMultiReturn(replacement, false);
         Set<String> replacements = replacer.replace("helper quietly");

@@ -35,8 +35,8 @@ public class MachineLearningScikitFilterTest {
         }
         //should learn that positive is exactly when feature_a > 1
         
-        List<Correspondence> positive = new ArrayList();
-        List<Correspondence> negative = new ArrayList();
+        List<Correspondence> positive = new ArrayList<>();
+        List<Correspondence> negative = new ArrayList<>();
         Alignment test = new Alignment();
         for(int i=0;i<10;i++){
             Correspondence c = new Correspondence("http://testLeft/" +  Integer.toString(i),

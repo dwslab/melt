@@ -51,14 +51,14 @@ public class ResultsPageUtil {
     }
     
     private List<String> getOrderedMatchers(){
-        List<String> list = new ArrayList();
+        List<String> list = new ArrayList<>();
         this.results.getDistinctMatchers().forEach(list::add);
         list.sort(Comparator.comparing(x->x.toLowerCase()));
         return list;
     }
     
     private List<TestCase> getOrderedTestCases(){
-        List list = new ArrayList();
+        List<TestCase> list = new ArrayList<>();
         this.results.getDistinctTestCases().forEach(list::add);
         list.sort(Comparator.comparing(TestCase::getName));
         return list;

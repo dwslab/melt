@@ -38,19 +38,32 @@
             <artifactId>commons-csv</artifactId>
             <version>1.8</version>
         </dependency>
-
+        
+        <!--for multisource dispatcher incremental merge by cluster (because of the clustering algorithmns)-->
         <dependency>
+            <groupId>com.github.haifengl</groupId>
+            <artifactId>smile-core</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <!--for multisource dispatcher incremental merge by cluster text (because of tokenizer etc)-->
+        <dependency>
+            <groupId>com.github.haifengl</groupId>
+            <artifactId>smile-nlp</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
+        <!--dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
             <version>8.4.1</version>
-        </dependency>
+        </dependency-->
 
         <!-- only for testing - can be removed -->
-        <dependency>
+        <!--dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-queryparser</artifactId>
             <version>8.4.1</version>
-        </dependency>
+        </dependency-->
 
         <dependency>
             <groupId>com.github.universal-automata</groupId>

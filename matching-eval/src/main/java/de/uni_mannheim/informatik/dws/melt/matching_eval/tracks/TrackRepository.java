@@ -570,10 +570,11 @@ public class TrackRepository{
      * @param initialClasses the initial class to search defined tracks in it.
      * @return a set of tracks which are defined in 
      */
+    @SuppressWarnings("unchecked")
     public static Set<Track> retrieveDefinedTracks(Class<?>... initialClasses){
         Set<Track> tracks = new HashSet<>();
         
-        Queue<Class<?>> classesToInspect = new LinkedList();
+        Queue<Class<?>> classesToInspect = new LinkedList<>();
         Collections.addAll(classesToInspect, initialClasses);
         while(!classesToInspect.isEmpty()){
             Class<?> clazz = classesToInspect.poll();

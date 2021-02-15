@@ -135,11 +135,11 @@ public class ScalableStringProcessingMatcherTest {
         ScalableStringProcessingMatcher matcher = new ScalableStringProcessingMatcher(Arrays.asList(
                 new PropertySpecificStringProcessingMultipleReturn(text -> {
                     if(text.equals("a")){
-                        return new HashSet(Arrays.asList("a", "x"));
+                        return new HashSet<>(Arrays.asList("a", "x"));
                     }else if(text.equals("b")){
-                        return new HashSet(Arrays.asList("b", "x"));
+                        return new HashSet<>(Arrays.asList("b", "x"));
                     }
-                    return new HashSet(Arrays.asList(text));
+                    return new HashSet<>(Arrays.asList(text));
                 }, 1.0, RDFS.label)
         ));
         Alignment a = matcher.match(source, target, new Alignment(), new Properties());

@@ -73,7 +73,7 @@ public class MatcherSimilarityLatexPlotWriter {
         writer.println("    ]");
         writer.println("\\addplot[color=black, only marks, mark=*,text mark as node=true,point meta=explicit symbolic,nodes near coords, nodes near coords style={font=\\tiny}, mark options={scale=0.8}] coordinates { ");
         for(ExecutionResult outer : executionResults){
-            List<Double> similarities = new ArrayList();
+            List<Double> similarities = new ArrayList<>();
             for(ExecutionResult inner : executionResults){
                 if(inner != outer){
                     similarities.add(similarityResultInstance.getMatcherSimilarity(outer, inner));

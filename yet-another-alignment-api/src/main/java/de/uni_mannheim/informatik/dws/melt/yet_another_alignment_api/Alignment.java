@@ -243,7 +243,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param confidence The additional confidence.
      * @return the updated correspondence
      */
-    public Correspondence addAdditionalConfidence(String entityOne, String entityTwo, Class matcherClass, double confidence) {
+    public Correspondence addAdditionalConfidence(String entityOne, String entityTwo, Class<?> matcherClass, double confidence) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
         c.addAdditionalConfidence(matcherClass, confidence);
         return addOrModify(c);
@@ -257,7 +257,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param explanation the explanation for a correspondence
      * @return the updated correspondence
      */
-    public Correspondence addAdditionalExplanation(String entityOne, String entityTwo, Class matcherClass, String explanation) {
+    public Correspondence addAdditionalExplanation(String entityOne, String entityTwo, Class<?> matcherClass, String explanation) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
         c.addAdditionalExplanation(matcherClass, explanation);
         return addOrModify(c);
@@ -272,7 +272,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param explanation the explanation for a correspondence
      * @return the updated correspondence
      */
-    public Correspondence addAdditionalConfidenceAndExplanation(String entityOne, String entityTwo, Class matcherClass, double confidence, String explanation) {
+    public Correspondence addAdditionalConfidenceAndExplanation(String entityOne, String entityTwo, Class<?> matcherClass, double confidence, String explanation) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
         c.addAdditionalConfidence(matcherClass, confidence);
         c.addAdditionalExplanation(matcherClass, explanation);
@@ -635,7 +635,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @return a set of all correspondence extension keys.
      */
     public Set<String> getDistinctCorrespondenceExtensionKeys(){
-        Set<String> keys = new HashSet();
+        Set<String> keys = new HashSet<>();
         for(Correspondence c : this){
             keys.addAll(c.getExtensions().keySet());
         }
@@ -647,7 +647,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @return a set of all correspondence (sub-) extension keys.
      */
     public Set<String> getDistinctCorrespondenceConfidenceKeys(){
-        Set<String> keys = new HashSet();
+        Set<String> keys = new HashSet<>();
         for(Correspondence c : this){
             keys.addAll(c.getAdditionalConfidences().keySet());
         }
@@ -963,7 +963,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         this.extensions = extensions;
     }
     
-    private static final String newline = System.getProperty("line.separator");
+    private static final String NEWLINE = System.getProperty("line.separator");
             
     /**
      * ToString method which returns the alignment in multiple lines (each correspondence in one line) to have a better overview.
@@ -971,9 +971,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      */
     public String toStringMultiline(){
         StringBuilder sb = new StringBuilder();
-        sb.append("[").append(newline);
+        sb.append("[").append(NEWLINE);
         for(Correspondence c : this){
-            sb.append("    ").append(c.toString()).append(",").append(newline);
+            sb.append("    ").append(c.toString()).append(",").append(NEWLINE);
         }
         sb.append("]");
         return sb.toString();
@@ -986,34 +986,34 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      */
     public String toStringMultilineInfo(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Alignment{").append(newline);
+        sb.append("Alignment{").append(NEWLINE);
         sb.append("  indexSource=").append(indexSource!=null)
                 .append(", indexTarget=").append(indexTarget!=null)
                 .append(", indexRelation=").append(indexRelation!=null)
                 .append(", indexConfidence=").append(indexConfidence!=null)
-                .append(",").append(newline);
+                .append(",").append(NEWLINE);
         
         if(this.onto1 != null)
-            sb.append("  source=").append(this.onto1.toString()).append(",").append(newline);
+            sb.append("  source=").append(this.onto1.toString()).append(",").append(NEWLINE);
         if(this.onto2 != null)
-            sb.append("  target=").append(this.onto2.toString()).append(",").append(newline);
+            sb.append("  target=").append(this.onto2.toString()).append(",").append(NEWLINE);
         if(this.method != null && !this.method.isEmpty())
-            sb.append("  method=").append(this.method).append(",").append(newline);
+            sb.append("  method=").append(this.method).append(",").append(NEWLINE);
         if(this.type != null && !this.type.isEmpty())
-            sb.append("  type=").append(this.type).append(",").append(newline);
+            sb.append("  type=").append(this.type).append(",").append(NEWLINE);
         if(this.level != null && !this.level.isEmpty())
-            sb.append("  level=").append(this.level).append(",").append(newline);
+            sb.append("  level=").append(this.level).append(",").append(NEWLINE);
         if(this.extensions != null){
             for(Entry<String, String> e : this.extensions.entrySet()){
-                sb.append("  ").append(e.getKey()).append("=").append(e.getValue()).append(",").append(newline);
+                sb.append("  ").append(e.getKey()).append("=").append(e.getValue()).append(",").append(NEWLINE);
             }
         }
         
-        sb.append("  [").append(newline);
+        sb.append("  [").append(NEWLINE);
         for(Correspondence c : this){
-            sb.append("    ").append(c.toStringWithExtensions()).append(",").append(newline);
+            sb.append("    ").append(c.toStringWithExtensions()).append(",").append(NEWLINE);
         }
-        sb.append("  ]").append(newline);
+        sb.append("  ]").append(NEWLINE);
         sb.append("}");
         return sb.toString();
     }

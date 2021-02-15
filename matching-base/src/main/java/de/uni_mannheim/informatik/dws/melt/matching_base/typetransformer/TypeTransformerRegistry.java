@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.Queue;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,17 +82,55 @@ public class TypeTransformerRegistry {
                 .add(transformer);
     }
     
-    @SuppressWarnings("unchecked")
     public static void addAllTransformersViaServiceRegistry(){
-        ServiceLoader<TypeTransformerLoader> loaders = ServiceLoader.load(TypeTransformerLoader.class);
+        addAllTransformersViaServiceRegistry(Thread.currentThread().getContextClassLoader());
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static void addAllTransformersViaServiceRegistry(ClassLoader classloader){
+        ServiceLoader<TypeTransformerLoader> loaders = ServiceLoader.load(TypeTransformerLoader.class, classloader);
         for(TypeTransformerLoader l : loaders){
             l.registerTypeTransformers();
         }
         
-        ServiceLoader<TypeTransformer> typeTransformers = ServiceLoader.load(TypeTransformer.class);
+        ServiceLoader<TypeTransformer> typeTransformers = ServiceLoader.load(TypeTransformer.class, classloader);
         for(TypeTransformer t : typeTransformers){
             addTransformer(t);
         }
+    }
+    
+    private static final List<String> MELT_DEFAULT_TRANSFORMERS = Arrays.asList(
+        //alignment
+        "de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.typetransformation.Alignment2URLTransformer",
+        "de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.typetransformation.URL2AlignmentTransformer",
+        
+        //properties
+        "de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers.URL2PropertiesTransformer",
+        "de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers.Properties2URLTransformer",
+        
+        //jena related
+        "de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.OntModel2URLTransformer",
+        "de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.URL2OntModelTransformer",
+        "de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.Model2OntModelTransformer"
+    );
+    
+    /**
+     * This can be called in case the service registry does not work (in case of SEALS - due to the classloader).
+     * It will add a static set of default transformers available in melt if the corresponding class is available in the classpath.
+     */
+    @SuppressWarnings("unchecked")
+    public static void addMeltDefaultTransformers(){
+        for(String className : MELT_DEFAULT_TRANSFORMERS){
+            try {
+                TypeTransformer<?,?> transformer = (TypeTransformer)Class.forName(className).newInstance();
+                addTransformer(transformer);
+            } catch (ClassNotFoundException ex) {
+                LOGGER.info("Class {} is not added to the typetransformer because it is not available in the classpath. Nothing to worry about as long as the transformer is not needed.", className);
+            }catch(InstantiationException | IllegalAccessException ex){
+                LOGGER.info("Class {} can not be instantiated. Check that there is an empty constructor.", className);
+            }
+        }
+        
     }
     
     public static void removeTransformer(TypeTransformer<?,?> transformer){
@@ -427,12 +466,13 @@ public class TypeTransformerRegistry {
     
     /**
      * Directly get the transformed object or null if something went wrong.
+     * @param <T> the type of the return value
      * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
      * @param targetType the tyoe of class to trasnform to 
      * @param transformationProperties additional properties.
      * @return the transformed object or null
      */
-    public static Object getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<?> targetType, Properties transformationProperties){
+    public static <T> T getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<? extends T> targetType, Properties transformationProperties){
         ObjectTransformationRoute route = TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(sourceObjects, targetType, transformationProperties);
         if(route == null){
             LOGGER.error("Did not find a transformation route from one of {} to {}. Please enhance the TypeTransformerRegistry with a corresponding TypeTranformer.", 
@@ -442,7 +482,7 @@ public class TypeTransformerRegistry {
         try {
             Object transformedObject = route.getTransformedObject();
             sourceObjects.add(transformedObject);
-            return transformedObject;
+            return targetType.cast(transformedObject);
         } catch (Exception ex) {
             LOGGER.error("During conversion of object {} to class {} an exception occured.", route.getInitialObject(), targetType, ex);
             return null;
@@ -451,22 +491,24 @@ public class TypeTransformerRegistry {
     
     /**
      * Directly get the transformed object or null if something went wrong.
+     * @param <T> the type of the return value
      * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
      * @param targetType the tyoe of class to trasnform to 
      * @param transformationProperties additional properties.
      * @return the transformed object or null
      */
-    public static Object getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<?> targetType, Object transformationProperties){
+    public static <T> T getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<? extends T> targetType, Object transformationProperties){
         return getTransformedObjectMultipleRepresentations(sourceObjects, targetType, getTransformedProperties(transformationProperties));
     }
     
     /**
      * Directly get the transformed object or null if something went wrong. No transformation parameters are provided.
+     * @param <T> the type of the return value
      * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
      * @param targetType the tyoe of class to trasnform to 
      * @return the transformed object or null
      */
-    public static Object getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<?> targetType){
+    public static <T> T getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<? extends T> targetType){
         return getTransformedObjectMultipleRepresentations(sourceObjects, targetType, new Properties());
     }
     

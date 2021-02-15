@@ -653,7 +653,7 @@ public class DashboardBuilder extends Evaluator {
     }
     
     private List<String> getAllDimensionDefinitions(){
-        Set<String> definitions = new HashSet();
+        Set<String> definitions = new HashSet<>();
         for(List<DcjsElement> list : this.rows){
             for(DcjsElement e : list){
                 String def = e.getDimensionDefinition();
@@ -662,13 +662,13 @@ public class DashboardBuilder extends Evaluator {
                 }
             }
         }
-        List<String> l = new ArrayList(definitions);
+        List<String> l = new ArrayList<>(definitions);
         Collections.sort(l);
         return l;
     }
     
     private List<String> getAllGroupDefinitions(){
-        Set<String> definitions = new HashSet();
+        Set<String> definitions = new HashSet<>();
         for(List<DcjsElement> list : this.rows){
             for(DcjsElement e : list){
                 for(String def : e.getGroupDefinitions()){
@@ -678,13 +678,13 @@ public class DashboardBuilder extends Evaluator {
                 }
             }
         }
-        List<String> l = new ArrayList(definitions);
+        List<String> l = new ArrayList<>(definitions);
         Collections.sort(l);
         return l;
     }
     
     private List<String> getAllJsHelperFileNames(){
-        Set<String> helperFilesNames = new HashSet();
+        Set<String> helperFilesNames = new HashSet<>();
         for(List<DcjsElement> list : this.rows){
             for(DcjsElement e : list){
                 for(String fileName : e.getJsHelperFileNames()){
@@ -694,7 +694,7 @@ public class DashboardBuilder extends Evaluator {
                 }
             }
         }
-        List<String> l = new ArrayList(helperFilesNames);
+        List<String> l = new ArrayList<>(helperFilesNames);
         Collections.sort(l);
         return l;
     }

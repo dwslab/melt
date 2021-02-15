@@ -138,6 +138,11 @@ public class GenericMatcherMultiSourceCaller {
             }
         }
         
+        //if the matcher is also loading its own transformers, then call this first (maybe used in SEALS).
+        if(matcherInstance instanceof TypeTransformerLoader){
+            ((TypeTransformerLoader)matcherInstance).registerTypeTransformers();
+        }
+        
         if(matcherInstance instanceof IMatcherMultiSourceCaller){
             return runIMatcherMultiSourceCaller((IMatcherMultiSourceCaller)matcherInstance, ontologies, inputAlignment, parameters);
         } else if(matcherInstance instanceof IMatcherMultiSource){

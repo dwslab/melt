@@ -88,6 +88,19 @@ public class ExternalProcessTest {
     }
     
     @Test
+    void testMissingSubsitution() {
+        ExternalProcess p = new ExternalProcess();
+        p.addArgumentLine("${one} ${two} ${input} ${params}");
+        Map<String, Object> sub = new HashMap<>();
+        sub.put("one", "o");
+        sub.put("two", "t");
+        sub.put("params", "p");
+        p.addSubstitutionMap(sub);
+        List<String> arguments = p.getArguments();
+        assertEquals(Arrays.asList("o", "t", "p"), arguments);
+    }
+    
+    @Test
     void testArgumentScopeNotClosed() {
         ExternalProcess p = new ExternalProcess();
         assertThrows(IllegalArgumentException.class, ()-> p.addArgumentLine("-v $[ -i  ${input}"));

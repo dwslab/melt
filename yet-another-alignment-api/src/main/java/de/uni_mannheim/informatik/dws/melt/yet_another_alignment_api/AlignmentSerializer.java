@@ -230,7 +230,7 @@ public class AlignmentSerializer {
      */
     public static void serializeToCSVWithExtensions(Alignment alignment, File file) throws IOException {
         checkFile(file);
-        List<String> extensionKeys = new ArrayList(alignment.getDistinctCorrespondenceExtensionKeys());
+        List<String> extensionKeys = new ArrayList<>(alignment.getDistinctCorrespondenceExtensionKeys());
         List<String> header = new ArrayList<>();
         header.add("source");
         header.add("target");

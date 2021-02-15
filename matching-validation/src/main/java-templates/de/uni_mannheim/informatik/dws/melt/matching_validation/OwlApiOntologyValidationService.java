@@ -61,6 +61,7 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
     protected OWLOntology parseOntology(URI ontUri) throws Exception {
         // Required to avoid errors on older OWL API releases with tracks that reuse one ontology in multiple test
         // cases.
+        @SuppressWarnings("deprecation")
         ArrayList<OWLOntology> ontologiesToBeDeleted = new ArrayList<>(man.getOntologies());
         for(OWLOntology ontology : ontologiesToBeDeleted){
             man.removeOntology(ontology);
@@ -72,6 +73,7 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
     protected OWLOntology parseOntology(String fileContent) throws Exception {
         // Required to avoid errors on older OWL API releases with tracks that reuse one ontology in multiple test
         // cases.
+        @SuppressWarnings("deprecation")
         ArrayList<OWLOntology> ontologiesToBeDeleted = new ArrayList<>(man.getOntologies());
         for(OWLOntology ontology : ontologiesToBeDeleted){
             man.removeOntology(ontology);
@@ -81,21 +83,25 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
     
 
     @Override
+    @SuppressWarnings("deprecation")
     protected Set<String> retrieveClasses(OWLOntology ontology) {
         return getURIs(ontology.getClassesInSignature());
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected Set<String> retrieveDatatypeProperties(OWLOntology ontology) {
         return getURIs(ontology.getDataPropertiesInSignature());
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected Set<String> retrieveObjectProperties(OWLOntology ontology) {
         return getURIs(ontology.getObjectPropertiesInSignature());
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected Set<String> retrieveProperties(OWLOntology ontology) {
         return getURIs(ontology.getAnnotationPropertiesInSignature());
         //Set<String> union = retrieveDatatypeProperties(ontology);
@@ -104,11 +110,13 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected Set<String> retrieveInstances(OWLOntology ontology) {
         return getURIs(ontology.getIndividualsInSignature());
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected int computeNumberOfRestrictions(OWLOntology ontology) {
         int restrictions = 0;
         for(OWLAxiom a : ontology.getAxioms()){
@@ -139,7 +147,7 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
     }
 
     @Override
-    protected Class getClassForVersionSpecification() {
+    protected Class<?> getClassForVersionSpecification() {
         return OWLOntology.class;
     }
 
