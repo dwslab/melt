@@ -1,5 +1,4 @@
 de.uni_mannheim.informatik.dws.melt.hobbit_wrapper
-de.uni_mannheim.informatik.dws.melt.hobbit_wrapper.spimbench
 de.uni_mannheim.informatik.dws.melt.matching_base
 de.uni_mannheim.informatik.dws.melt.matching_base.external.cli
 de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process
@@ -21,6 +20,7 @@ de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.dashboard
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.resultspage
 de.uni_mannheim.informatik.dws.melt.matching_eval.hobbit
+de.uni_mannheim.informatik.dws.melt.matching_eval.multisource
 de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning
 de.uni_mannheim.informatik.dws.melt.matching_eval.profiling
 de.uni_mannheim.informatik.dws.melt.matching_eval.refinement
@@ -28,7 +28,6 @@ de.uni_mannheim.informatik.dws.melt.matching_eval.resultswriter.mappingdesc
 de.uni_mannheim.informatik.dws.melt.matching_eval.tracks
 de.uni_mannheim.informatik.dws.melt.matching_eval.util
 de.uni_mannheim.informatik.dws.melt.matching_eval.visualization
-de.uni_mannheim.informatik.dws.melt.matching_external
 de.uni_mannheim.informatik.dws.melt.matching_jena
 de.uni_mannheim.informatik.dws.melt.matching_jena.multisource
 de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation
@@ -63,6 +62,7 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.instancelevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util
