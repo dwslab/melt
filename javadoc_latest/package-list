@@ -62,6 +62,7 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.instancelevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.clustering
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony
