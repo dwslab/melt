@@ -51,6 +51,43 @@
             <artifactId>smile-nlp</artifactId>
             <version>2.6.0</version>
         </dependency>
+        
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>yet-another-alignment-api</artifactId>
+            <version>2.7-SNAPSHOT</version>
+            <!--
+            use exclusions as a last resort - why do we do it here?
+            The main problem is that there are two versions of kryo in the classpath.
+            One comes from cqengine which is used by yet-another-alignment-api and
+            the other comes from famer-clustering via flink-core.
+            Why does maven not detect it and use only one version?
+            Because kryo changed their group id from com.esotericsoftware.kryo to com.esotericsoftware 
+            (both artifactId are the same - kryo).
+            Since we currently do not rely on cqengines kryo (for index persistence),
+            but we need it for flink/famer to work, we exclude the dependency here. 
+            
+            For ANTLR we were not sure if the different runtime makes a huge difference but again
+            we do not need in cqengine (which parses an SQL query which we do not do) but maybe need it for flink - who knows?
+            -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.esotericsoftware</groupId>
+                    <artifactId>kryo</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.antlr</groupId>
+                    <artifactId>antlr4-runtime</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <!--for multisource clustering (detect which links are correct) -->
+        <dependency>
+            <groupId>org.gradoop.famer</groupId>
+            <artifactId>famer-clustering</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
 
         <!--dependency>
             <groupId>org.apache.lucene</groupId>
@@ -275,10 +312,16 @@
             <id>central</id>
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
+        <!-- for babelnet dependencies -->
         <repository>
             <id>thirdparty</id>
             <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/thirdparty/</url>
         </repository>
+        <!-- for famer-clustering dependency -->
+        <repository>
+            <id>gitlab-f</id>
+            <url>https://git.informatik.uni-leipzig.de/api/v4/projects/933/packages/maven</url>
+        </repository>        
     </repositories>
 
 </project>
