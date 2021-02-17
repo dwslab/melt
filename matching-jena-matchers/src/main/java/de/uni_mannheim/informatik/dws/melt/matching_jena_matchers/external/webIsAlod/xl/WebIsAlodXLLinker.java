@@ -136,7 +136,7 @@ public class WebIsAlodXLLinker implements LabelToConceptLinker {
     /**
      * This method will strip the URL part from the URI.
      * @param uri URI that shall be stripped.
-     * @return unstripped URI
+     * @return Unstripped URI
      */
     public static String unstripUriXl(String uri){
         uri = uri.replaceAll("%20", " ");

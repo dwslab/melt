@@ -38,6 +38,7 @@ import org.apache.http.entity.StringEntity;
  */
 public class PythonServer {
 
+
     /**
      * Default logger
      */
@@ -53,7 +54,6 @@ public class PythonServer {
      * ObjectMapper from jackson to generate JSON.
      */
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
-    
 
     /**
      * Constructor
