@@ -40,7 +40,7 @@ public class TdbUtil {
     /**
      * Checks if there is at least one file in the directory denoted by this url which ends with .dat or .idn.
      * This indicates that there is a TDB dataset.
-     * There is also the function {@link TDBFactory#inUseLocation()} but it also returns true if the directory contains
+     * There is also the function TDBFactory#inUseLocation() but it also returns true if the directory contains
      * one rdf file and is definitely not a TDB dataset.
      * The definition when a directory is a TDB directory might change in the future.
      * @param directory the directory as a File
