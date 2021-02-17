@@ -13,14 +13,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * API for WordNet requests.
- * @author D060249
- *
  */
 public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
+
 
 	private IDictionary dict;
 
@@ -32,28 +32,8 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 	/**
 	 * Buffer for synonyms
 	 */
-	private HashMap<String, HashSet<String>> buffer;
+	private Map<String, HashSet<String>> buffer;
 
-	/**
-	 * Just for testing.
-	 * @param args args
-	 */
-	public static void main(String[] args) {
-		WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource("/Users/janportisch/Documents/Data/Wordnet/dict");
-
-		System.out.println("Synonyms");
-		for (String s : wordnet.getSynonyms(wordnet.getLinker().linkToSingleConcept("human"))){
-			System.out.println(s);
-		}
-
-		System.out.println("\n\nHypernyms");
-		for (String s : wordnet.getHypernyms(wordnet.getLinker().linkToSingleConcept("human"))){
-			System.out.println(s);
-		}
-		//System.out.println(wordnet.isInDictionary(""));
-		//System.out.println("\n\n" + wordnet.isSynonymous("domestic Dog", "hound"));
-	}
-	
 	/**
 	 * the linker that is used to link words to wordnet concepts
 	 */
@@ -79,7 +59,6 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 			e.printStackTrace();
 		}
 	}
-
 	
 	/**
 	 * Checks whether the given word can be found in the dictionary, regardless of POS.
@@ -113,7 +92,6 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 		return false;
 	}
 
-
 	/**
 	 * Retrieve Synonyms for the given word.
 	 * @param linkedConcept for which synonyms shall be retrieved.
@@ -131,8 +109,7 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 		buffer.put(linkedConcept, result);
 		return result;
 	}
-	
-	
+
 	/**
 	 * Get synonyms for a particular part of speech.
 	 * @param word The word for which the synonyms shall be retrieved.
@@ -190,7 +167,6 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 			//}
 		}
 		return result;
-
 	}
 
 	@Override
@@ -207,5 +183,4 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 	public String getName(){
 		return "WordNet";
 	}
-
 }

@@ -208,7 +208,7 @@ class WikidataKnowledgeSourceTest {
         closestConcepts = wikidata.getClosestCommonHypernym(links, limitOfHops);
 
         assertTrue(closestConcepts.getValue0().contains("http://www.wikidata.org/entity/Q729"));
-        assertEquals(2, closestConcepts.getValue1());
+        assertEquals(3, closestConcepts.getValue1());
 
         // Unit test 3
         // -----------
