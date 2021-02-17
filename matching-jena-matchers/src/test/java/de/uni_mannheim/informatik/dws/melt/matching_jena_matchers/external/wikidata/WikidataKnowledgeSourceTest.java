@@ -32,6 +32,16 @@ class WikidataKnowledgeSourceTest {
     }
 
     @Test
+    void isStrongFormSynonymous(){
+        WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+        wikidata.setDiskBufferEnabled(false);
+        WikidataLinker linker = new WikidataLinker();
+        String link1 = linker.linkToSingleConcept("Jan Portisch");
+        String link2 = linker.linkToSingleConcept("Jan Philipp Portisch");
+        assertTrue(wikidata.isStrongFormSynonymous(link1, link2));
+    }
+
+    @Test
     void getSynonyms() {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
         wikidata.setDiskBufferEnabled(false);

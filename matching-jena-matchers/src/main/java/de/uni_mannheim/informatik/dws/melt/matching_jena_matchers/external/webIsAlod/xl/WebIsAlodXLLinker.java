@@ -11,10 +11,11 @@ import java.util.HashSet;
 
 public class WebIsAlodXLLinker implements LabelToConceptLinker {
 
+
     /**
      * Identifying label of this linker.
      */
-    private String nameOfLinker = "ALOD Classic Linker";
+    private String nameOfLinker = "ALOD XL Linker";
 
     /**
      * SPARQL Service instance for (buffered) queries.
@@ -107,7 +108,7 @@ public class WebIsAlodXLLinker implements LabelToConceptLinker {
     }
 
     /**
-     * Normalize for BabelNet lookup, i.e., lowercasing and camel-case resolution.
+     * Normalize for BabelNet lookup, i.e., lower casing and camel-case resolution.
      * Dev-Remark: The BabelNet library utilizes space-separation.
      * @param lookupString The string that shall be normalized for lookup.
      * @return Space-separated lookup word.

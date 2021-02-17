@@ -127,6 +127,39 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     }
 
     /**
+     * Checks for synonymy by determining whether link1 is contained in the set of synonymous words of link2 or
+     * vice versa.
+     * @param link1 Word 1
+     * @param link2 Word 2
+     * @return True if the given words are synonymous, else false.
+     */
+    @Override
+    public boolean isStrongFormSynonymous(String link1, String link2){
+        if(link1 == null || link2 == null) {
+            return false;
+        }
+
+        Set<String> synonyms1 = new HashSet<>();
+        Set<String> synonyms2 = new HashSet<>();
+
+        synonyms1.addAll(linker.getUris(link1));
+        synonyms2.addAll(linker.getUris(link2));
+
+        // remove empty strings to avoid false positives
+        synonyms1.remove("");
+        synonyms2.remove("");
+
+        for(String s : linker.getUris(link2)){
+            if(synonyms1.contains(s)) return true;
+        }
+        for(String s : linker.getUris(link1)){
+            if(synonyms2.contains(s)) return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Ask query with label.
      *
      * @param word     The concept label that shall be looked up.
