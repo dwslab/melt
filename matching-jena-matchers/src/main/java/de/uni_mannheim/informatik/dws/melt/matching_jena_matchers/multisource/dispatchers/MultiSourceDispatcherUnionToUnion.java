@@ -6,6 +6,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MultiSource
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.JenaHelper;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class MultiSourceDispatcherUnionToUnion extends MatcherMultiSourceURL imp
         
         LOGGER.info("Building union of all graphs");
         Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
-        Model union = OntologyCacheJena.createNewModel(p);
+        Model union = JenaHelper.createNewModel(p);
         for(Set<Object> m : models){
             Model transformedModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(m, Model.class, p);
             if(transformedModel == null){

@@ -17,14 +17,14 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MatcherMultiSourceDispatcherJenaAllPairs extends MatcherMultiSourceURL implements MultiSourceDispatcher, IMatcherMultiSourceCaller{
+public class MultiSourceDispatcherAllPairs extends MatcherMultiSourceURL implements MultiSourceDispatcher, IMatcherMultiSourceCaller{
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(MatcherMultiSourceDispatcherJenaAllPairs.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherAllPairs.class);
     
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private final Object oneToOneMatcher;
 
-    public MatcherMultiSourceDispatcherJenaAllPairs(Object oneToOneMatcher) {
+    public MultiSourceDispatcherAllPairs(Object oneToOneMatcher) {
         this.oneToOneMatcher = oneToOneMatcher;
     }
     

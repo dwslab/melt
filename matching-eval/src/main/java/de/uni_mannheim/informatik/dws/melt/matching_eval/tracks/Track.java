@@ -255,9 +255,13 @@ public abstract class Track {
      * @return list of URLs which points to the ontologies.
      */
     public List<URL> getDistinctOntologies(){
+        return getDistinctOntologies(getTestCases());
+    }
+    
+    public static List<URL> getDistinctOntologies(List<TestCase> testCases){
         List<URL> distinctOntologies = new ArrayList<>();
         Set<String> alreadySeen = new HashSet<>();
-        for(TestCase testCase : getTestCases()){
+        for(TestCase testCase : testCases){
             String[] sourceTargetNames = testCase.getName().split("-");
             if(sourceTargetNames.length != 2){
                 LOGGER.warn("Test case name contains none or more than one '-' character which is not possible when requesting distinct ontologies."
@@ -275,7 +279,6 @@ public abstract class Track {
                 }
             } catch (MalformedURLException ex) {
                 LOGGER.warn("Cannot convert URI to URL at test case {}. Just skipping.", testCase.getName());
-                continue;
             }
         }
         return distinctOntologies;

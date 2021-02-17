@@ -51,7 +51,7 @@
         <!-- copy all dependencies (excluding the ones from seals) to bin/lib folder -->
         <dependencySet>
             <outputDirectory>bin/lib</outputDirectory>
-            <useProjectArtifact>false</useProjectArtifact>
+            <useProjectArtifact>true</useProjectArtifact>
             <scope>runtime</scope>
             <excludes>
                 <exclude>alignment-api:align</exclude><!--4.1-->
@@ -129,16 +129,6 @@
                 <exclude>xml-apis:xml-apis</exclude><!--1.4.01-->
                 <exclude>xml-resolver:xml-resolver</exclude><!--1.2-->
             </excludes>
-        </dependencySet>
-        
-        <!--copy project artifact to bin -->
-        <dependencySet>
-            <outputDirectory>bin</outputDirectory>
-            <useProjectArtifact>true</useProjectArtifact>
-            <includes>
-                <include>${project.groupId}:${project.artifactId}</include>
-            </includes>
-            <outputFileNameMapping>${project.build.finalName}.${project.packaging}</outputFileNameMapping>
         </dependencySet>
     </dependencySets>
 </assembly>

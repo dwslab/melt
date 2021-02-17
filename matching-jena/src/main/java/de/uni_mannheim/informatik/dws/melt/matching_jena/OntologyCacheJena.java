@@ -80,9 +80,14 @@ public class OntologyCacheJena {
      * @return OntModel instance that was read.
      */
     private static OntModel readOntModel(String uri, OntModelSpec spec){
-        OntModel model = ModelFactory.createOntologyModel(spec);
-        model.read(uri);
-        return model;
+        File f = TdbUtil.getFileFromURL(uri);
+        if(TdbUtil.isTDB1Dataset(f)){
+            return TdbUtil.getOntModelFromTDB(f.getAbsolutePath(), spec);
+        }else{
+            OntModel model = ModelFactory.createOntologyModel(spec);
+            model.read(uri);
+            return model;
+        }
     }
 
     /**
@@ -197,6 +202,13 @@ public class OntologyCacheJena {
     
     /*
     //methods for createing and loading TDB Model
+    //https://jena.apache.org/documentation/tdb/commands.html
+    //the tdbloader script can be found here:
+    //https://github.com/apache/jena/tree/main/apache-jena/bat
+    //https://github.com/apache/jena/tree/main/apache-jena/bin
+    //which just calls java class here:
+    //https://github.com/apache/jena/blob/main/jena-cmds/src/main/java/tdb/tdbloader.java
+    
     private static void createTDBcache(String url, String tdblocation){
         Dataset d = TDBFactory.createDataset(tdblocation);
         GraphTDB graphTDB = (GraphTDB)d.asDatasetGraph().getDefaultGraph();
@@ -207,21 +219,4 @@ public class OntologyCacheJena {
         return ModelFactory.createOntologyModel(spec, d.getDefaultModel());
     }
     */
-    
-    public static OntModel createNewOntModel(){
-        return createNewOntModel(new Properties());
-    }
-    
-    public static OntModel createNewOntModel(Properties parameters){
-        return ModelFactory.createOntologyModel(JenaTransformerHelper.getSpec(parameters));
-    }
-    
-    public static Model createNewModel(){
-        return createNewModel(new Properties());
-    }
-    
-    public static Model createNewModel(Properties parameters){
-        //TODO: make TDB if parameters says so
-         return ModelFactory.createDefaultModel();
-    }
 }

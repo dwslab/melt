@@ -2,12 +2,18 @@ package de.uni_mannheim.informatik.dws.melt.seals_assembly;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringJoiner;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.maven.plugins.assembly.filter.ContainerDescriptorHandler;
 import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.ArchiverException;
@@ -33,39 +39,43 @@ public class SealsDescriptorHandler implements ContainerDescriptorHandler {
     public void finalizeArchiveCreation(Archiver archiver) throws ArchiverException {
         archiver.getResources().forEachRemaining(a -> {}); // necessary to prompt the isSelected() call
 
-        String libEntries = getLibEntries(archiver);        
         try {
             archiver.addFile(createStartStopFile("Start"), "bin/start.bat");
             archiver.addFile(createStartStopFile("Stop"), "bin/stop.bat");
             archiver.addFile(createStartStopFile("Deploy"), "bin/deploy.bat");
             archiver.addFile(createStartStopFile("Undeploy"), "bin/undeploy.bat");            
-            archiver.addFile(createDescriptor(libEntries, mainclass, projectjar), "descriptor.xml");
+            archiver.addFile(createDescriptor(getLibEntries(archiver), "de.uni_mannheim.informatik.dws.melt.matching_base.GenericMatcherCallerFromFile", "matching-base.jar"), "descriptor.xml");
+            archiver.addFile(getFileFromResource("matching-base.jar"), "bin/matching-base.jar");
+            archiver.addFile(getFileFromText(this.mainclass), "conf/external/main_class.txt");
         } catch (IOException ex) {
             System.out.println("Couldn't create start stop scripts or descriptor for seals packaging");
         }
     }
     
     @Override
-    public List getVirtualFiles() {
+    public List<String> getVirtualFiles() {
         return Arrays.asList(
                 "bin/start.bat", 
                 "bin/stop.bat", 
                 "bin/deploy.bat", 
                 "bin/undeploy.bat",
-                "descriptor.xml");
+                "descriptor.xml",
+                "bin/matching-base.jar",
+                "conf/external/main_class.txt"
+        );
     }
     
-    protected String getLibEntries(Archiver archiver){
+    protected List<String> getLibEntries(Archiver archiver){
         List<String> libList = new ArrayList<>();
         ResourceIterator ri = archiver.getResources();
         while (ri.hasNext()) {
             String normalisedName = normalise(ri.next().getName());
             if(normalisedName.startsWith("bin/lib/")){                
-                libList.add("				<ns:lib>" + normalisedName.substring(4) + "</ns:lib>");
+                libList.add(normalisedName.substring(4));
             }
         }
         Collections.sort(libList);
-        return String.join(newline, libList);
+        return libList;
     }
     
     protected String normalise(String path){
@@ -94,9 +104,19 @@ public class SealsDescriptorHandler implements ContainerDescriptorHandler {
         return f;
     }
     
-    protected File createDescriptor(String libs, String descriptorMainclass, String descriptorProjectjar) throws IOException {
+    protected File createDescriptor(List<String> libs, String descriptorMainclass, String descriptorProjectjar) throws IOException {
         File f = File.createTempFile("descriptor.xml", ".tmp");
         f.deleteOnExit();
+        
+        StringBuilder libsXml= new StringBuilder();
+        if(libs.isEmpty() == false){
+            libsXml.append("			<ns:dependencies>").append(newline);
+            for(String lib : libs){
+                libsXml.append("				<ns:lib>").append(lib).append("</ns:lib>").append(newline);
+            }
+            libsXml.append("			</ns:dependencies>").append(newline);
+        }
+        
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
             writer.write(String.join(newline, Arrays.asList(
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
@@ -126,9 +146,7 @@ getDescPart("undeploy"),
 "			<!-- references relative to bin folder -->",
 "			<ns:class>" + descriptorMainclass + "</ns:class>",
 "			<ns:jar>" + descriptorProjectjar + "</ns:jar>",
-"			<ns:dependencies>",
-libs,
-"			</ns:dependencies>",
+libsXml.toString(),
 "		</ns:bridge>",
 "	</ns:wrapper>",
 "</ns:package>",
@@ -148,7 +166,7 @@ libs,
 "			</ns:"+ type + ">"));
     }
     
-
+    
     public void setId(String id) { this.id = id; }
     public void setVersion(String version) { this.version = version; }
     public void setDescription(String description) { this.description = description; }
@@ -156,5 +174,27 @@ libs,
     public void setLicense(String license) { this.license = license; }
     public void setMainclass(String mainclass) { this.mainclass = mainclass; }
     public void setProjectjar(String projectjar) { this.projectjar = projectjar; }
-
+    
+    
+    
+    protected File getFileFromText(String content) throws IOException{
+        File f = File.createTempFile("matching_file", ".txt");
+        f.deleteOnExit();
+        try (PrintWriter out = new PrintWriter(f)) {
+            out.print(content);
+        }
+        return f;
+    }
+    
+    
+    protected File getFileFromResource(String path) throws IOException{
+        File f = File.createTempFile("matching_file", ".jar");
+        f.deleteOnExit();
+        try (InputStream s = getClass().getClassLoader().getResourceAsStream(path)){
+            try (OutputStream outStream = new FileOutputStream(f)) {
+                IOUtils.copy(s, outStream);
+            }
+            return f;
+        }
+    }
 }

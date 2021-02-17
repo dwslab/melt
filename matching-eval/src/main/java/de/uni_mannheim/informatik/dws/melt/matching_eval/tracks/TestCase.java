@@ -55,6 +55,11 @@ public class TestCase {
     private URI inputAlignment;
     
     /**
+     * The parsed input alignment which is initialized lazily.
+     */
+    private Alignment parsedInputAlignment;
+    
+    /**
      * How complete is the gold standard for this test case.
      */
     private GoldStandardCompleteness goldStandardCompleteness;
@@ -190,6 +195,22 @@ public class TestCase {
             }
         }
         return parsedReference;
+    }
+    
+    /**
+     * This method parses the input alignment and returns it.
+     * If called again, a cached parsed instance will be returned.
+     * @return Parsed input {@link Alignment}.
+     */
+    public Alignment getParsedInputAlignment() {
+        if(parsedInputAlignment == null){
+            try {
+                parsedInputAlignment = new Alignment(getInputAlignment().toURL());
+            } catch (SAXException | IOException ex) {
+                LOGGER.error("Could not parse reference alignment file. Return null.", ex);
+            }
+        }
+        return parsedInputAlignment;
     }
 
 

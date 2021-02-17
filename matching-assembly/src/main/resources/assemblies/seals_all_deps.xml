@@ -51,7 +51,7 @@
         <!-- copy all dependencies to bin/lib folder -->
         <dependencySet>
             <outputDirectory>bin/lib</outputDirectory>
-            <useProjectArtifact>false</useProjectArtifact>
+            <useProjectArtifact>true</useProjectArtifact>
             <scope>runtime</scope>
             <excludes>
                 <exclude>eu.sealsproject.domain.omt.metadata:omt-metadata</exclude><!--2.0-->
@@ -71,16 +71,6 @@
                 <exclude>de.uni-mannheim.informatik.dws.melt:res-domain-api</exclude><!--1.1.1-->
                 <exclude>de.uni-mannheim.informatik.dws.melt:res-tool-impl</exclude><!--1.1.1-->
             </excludes>
-        </dependencySet>
-        
-        <!--copy project artifact to bin -->
-        <dependencySet>
-            <outputDirectory>bin</outputDirectory>
-            <useProjectArtifact>true</useProjectArtifact>
-            <includes>
-                <include>${project.groupId}:${project.artifactId}</include>
-            </includes>
-            <outputFileNameMapping>${project.build.finalName}.${project.packaging}</outputFileNameMapping>
         </dependencySet>
     </dependencySets>
 </assembly>
