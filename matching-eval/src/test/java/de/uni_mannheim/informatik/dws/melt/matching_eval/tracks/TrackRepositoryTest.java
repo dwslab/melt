@@ -112,7 +112,7 @@ class TrackRepositoryTest {
     public void generateTestCaseWithSampledReferenceAlignmentEvaluateOnlyRemainingTest() throws MalformedURLException, SAXException, IOException{
         TestCase tc = TrackRepository.Anatomy.Default.getFirstTestCase();
         
-        TestCase thirty = TrackRepository.generateTestCaseWithSampledReferenceAlignmentEvaluateOnlyRemaining(tc, 0.3, 1234);
+        TestCase thirty = TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, 0.3, 1234);
         Alignment reference = thirty.getParsedReferenceAlignment();
         Alignment inputAlignment = new Alignment(thirty.getInputAlignment().toURL());
         
@@ -124,14 +124,14 @@ class TrackRepositoryTest {
     public void generateTestCaseWithSampledReferenceAlignmentTest() throws MalformedURLException, SAXException, IOException{
         TestCase tc = TrackRepository.Anatomy.Default.getFirstTestCase();
         
-        TestCase thirty = TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, 0.3, 1234);
+        TestCase thirty = TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, 0.3, 1234, false);
         Alignment reference = thirty.getParsedReferenceAlignment();
         Alignment inputAlignment = new Alignment(thirty.getInputAlignment().toURL());
         
         Alignment intersection = Alignment.intersection(inputAlignment, reference);
         assertEquals(inputAlignment.size(), intersection.size());
                 
-        TestCase fifty = TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, 0.5, 1234);
+        TestCase fifty = TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, 0.5, 1234, false);
         Alignment inputAlignmentFifty = new Alignment(fifty.getInputAlignment().toURL());
         assertTrue(inputAlignmentFifty.containsAll(inputAlignment));
     }

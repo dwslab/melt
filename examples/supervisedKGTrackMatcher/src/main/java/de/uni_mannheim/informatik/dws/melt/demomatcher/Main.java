@@ -68,7 +68,7 @@ public class Main {
     private static void analyzeSupervisedLearningMatcher(double fraction){
         List<TestCase> testCases = new ArrayList();
         for(TestCase tc : TrackRepository.Knowledgegraph.V3.getTestCases()){
-            testCases.add(TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, fraction, 1324567));
+            testCases.add(TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, fraction, 1324567, false));
         }
         ExecutionResultSet results = Executor.run(testCases, new SupervisedMatcher());
         results.addAll(Executor.run(testCases, new BaseMatcher()));

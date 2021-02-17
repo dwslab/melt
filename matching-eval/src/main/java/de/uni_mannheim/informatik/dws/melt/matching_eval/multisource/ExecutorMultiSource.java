@@ -1,7 +1,6 @@
 
 package de.uni_mannheim.informatik.dws.melt.matching_eval.multisource;
 
-import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractorUrlPattern;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MatcherMultiSourceURL;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
@@ -19,9 +18,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -35,39 +35,55 @@ import org.xml.sax.SAXException;
 public class ExecutorMultiSource {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorMultiSource.class);
-    
+  
     
     public static ExecutionResultSet execute(Track track, Map<String, MatcherMultiSourceURL> matchers){
-        ExecutionResultSet resultSet = new ExecutionResultSet();        
-        for(Entry<String, MatcherMultiSourceURL> matcher : matchers.entrySet()){
-            resultSet.addAll(execute(track, matcher.getValue(), matcher.getKey(), track.getDistinctOntologies(), getMostSpecificPartitioner(track)));
-        }        
-        return resultSet;
+        return execute(track.getTestCases(), matchers);
     }
     
-    public static ExecutionResultSet execute(Track track, Collection<MatcherMultiSourceURL> matchers){
+    public static ExecutionResultSet execute(List<TestCase> testCases, Map<String, MatcherMultiSourceURL> matchers){
         ExecutionResultSet resultSet = new ExecutionResultSet();        
-        for(MatcherMultiSourceURL matcher : matchers){
-            resultSet.addAll(execute(track, matcher, Executor.getMatcherName(matcher), track.getDistinctOntologies(), getMostSpecificPartitioner(track)));
-        }        
+        for(Entry<Track, List<TestCase>> trackToTestcases : groupTestCasesByTrack(testCases).entrySet()){
+            Track track = trackToTestcases.getKey();
+            List<TestCase> trackTestCases = trackToTestcases.getValue();
+            List<URL> distinctOntologies = Track.getDistinctOntologies(trackTestCases);
+            for(Entry<String, MatcherMultiSourceURL> matcher : matchers.entrySet()){
+                resultSet.addAll(execute(trackTestCases, matcher.getValue(), matcher.getKey(), distinctOntologies, getMostSpecificPartitioner(track)));
+            }
+        }
         return resultSet;
     }
-    
     
     public static ExecutionResultSet execute(Track track, MatcherMultiSourceURL matcher){
-        return execute(track, matcher, Executor.getMatcherName(matcher), track.getDistinctOntologies(), getMostSpecificPartitioner(track));
+        return execute(track.getTestCases(), matcher,Executor.getMatcherName(matcher));
     }
+    
+    public static ExecutionResultSet execute(List<TestCase> testCases, MatcherMultiSourceURL matcher){
+        return execute(testCases, matcher,Executor.getMatcherName(matcher));
+    }
+    
+    public static ExecutionResultSet execute(List<TestCase> testCases, MatcherMultiSourceURL matcher, String matcherName){
+        ExecutionResultSet resultSet = new ExecutionResultSet();        
+        for(Entry<Track, List<TestCase>> trackToTestcases : groupTestCasesByTrack(testCases).entrySet()){
+            Track track = trackToTestcases.getKey();
+            List<TestCase> trackTestCases = trackToTestcases.getValue();
+            List<URL> distinctOntologies = Track.getDistinctOntologies(trackTestCases);
+            resultSet.addAll(execute(trackTestCases, matcher, matcherName, distinctOntologies, getMostSpecificPartitioner(track)));
+        }
+        return resultSet;
+    }
+    
     
     public static ExecutionResultSet executeWithAdditionalGraphs(Track track, MatcherMultiSourceURL matcher, String matcherName, List<URL> additionalGraphs, Partitioner partitioner){
         List<URL> allGraphs = track.getDistinctOntologies();
         allGraphs.addAll(additionalGraphs);
-        return execute(track, matcher, matcherName, allGraphs, partitioner);
+        return execute(track.getTestCases(), matcher, matcherName, allGraphs, partitioner);
     }
     
-    public static ExecutionResultSet execute(Track track, MatcherMultiSourceURL matcher, String matcherName, 
+    public static ExecutionResultSet execute(List<TestCase> testCases, MatcherMultiSourceURL matcher, String matcherName, 
             List<URL> allGraphs, Partitioner partitioner){
-        
-        LOGGER.info("Running multi source matcher {} on track {}.", matcherName, track.getName());
+        Set<String> trackNames = getTrackNames(testCases);
+        LOGGER.info("Running multi source matcher {} on track(s) {}.", matcherName, trackNames);
 
         long runTime;
         URL resultingAlignment = null;
@@ -75,17 +91,17 @@ public class ExecutorMultiSource {
         try {
             resultingAlignment = matcher.match(allGraphs, null, null);
         } catch (Exception ex) {
-            LOGGER.error("Exception during matching (matcher " + matcherName + " on track " +  track.getName() + ").", ex);
+            LOGGER.error("Exception during matching (matcher " + matcherName + " on track(s) " +  trackNames + ").", ex);
             return new ExecutionResultSet();
         }
         finally
         {
             runTime = System.nanoTime() - startTime;  
-            LOGGER.info("Running matcher {} on track {} completed in {}.", matcherName, track.getName(), DurationFormatUtils.formatDurationWords((long)(runTime/1_000_000), true, true));
+            LOGGER.info("Running matcher {} on track(s) {} completed in {}.", matcherName, trackNames, DurationFormatUtils.formatDurationWords((runTime/1_000_000), true, true));
         }
         
         if(resultingAlignment == null) {
-            LOGGER.error("Matching task unsuccessful: output alignment equals null. (matcher: {} track: {})", matcherName, track.getName());
+            LOGGER.error("Matching task unsuccessful: output alignment equals null. (matcher: {} track(s): {})", matcherName, trackNames);
             return new ExecutionResultSet();
         }
         
@@ -98,11 +114,11 @@ public class ExecutorMultiSource {
             return new ExecutionResultSet();
         }
         
-        return fromAlignmentFile(alignmentFile, track, matcherName, runTime, matcher.needsTransitiveClosureForEvaluation(), partitioner);
+        return fromAlignmentFile(alignmentFile, testCases, matcherName, runTime, matcher.needsTransitiveClosureForEvaluation(), partitioner);
     }
     
     
-    public static ExecutionResultSet fromAlignmentFile(File fullAlignmentFile, Track track, String matcherName, long runTime, boolean computeTransitiveClosure, Partitioner partitioner){
+    public static ExecutionResultSet fromAlignmentFile(File fullAlignmentFile, List<TestCase> testCases, String matcherName, long runTime, boolean computeTransitiveClosure, Partitioner partitioner){
         Alignment fullAlignment = null;
         try {
             fullAlignment = AlignmentParser.parse(fullAlignmentFile);
@@ -156,7 +172,7 @@ public class ExecutorMultiSource {
         }
         
         ExecutionResultSet resultSet = new ExecutionResultSet();
-        for(TestCase testCase : track.getTestCases()){
+        for(TestCase testCase : testCases){
             resultSet.add(new ExecutionResult(
                     testCase, 
                     matcherName, 
@@ -170,7 +186,6 @@ public class ExecutorMultiSource {
         }
         return resultSet;
     }
-    
     
     private static final Set<Track> KG_TRACKS = TrackRepository.retrieveDefinedTracks(TrackRepository.Knowledgegraph.class);
     private static final Set<Track> CONFERENCE_TRACKS = TrackRepository.retrieveDefinedTracks(TrackRepository.Conference.class);
@@ -189,4 +204,21 @@ public class ExecutorMultiSource {
             return new PartitionerDefault(track);
         }
     }
+    
+    private static Map<Track, List<TestCase>> groupTestCasesByTrack(List<TestCase> testCases){
+        Map<Track, List<TestCase>> map = new HashMap<>();
+        for(TestCase testCase : testCases){
+            map.computeIfAbsent(testCase.getTrack(), __-> new ArrayList<>()).add(testCase);
+        }
+        return map;
+    }
+    
+    private static Set<String> getTrackNames(List<TestCase> testCases){
+        Set<String> trackNames = new HashSet<>();
+        for(TestCase testCase : testCases){
+            trackNames.add(testCase.getTrack().getName());
+        }
+        return trackNames;
+    }
+    
 }

@@ -7,6 +7,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MultiSource
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.JenaHelper;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.multisource.IndexBasedJenaMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.JenaTransformerHelper;
@@ -222,7 +223,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         if(model == null){
             throw new IllegalArgumentException("Could not transform model during copying.");
         }
-        OntModel copiedModel = OntologyCacheJena.createNewOntModel(parameters);
+        OntModel copiedModel = JenaHelper.createNewOntModel(parameters);
         copiedModel.add(model);
         return new HashSet<>(Arrays.asList(copiedModel));
     }
