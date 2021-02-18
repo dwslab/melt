@@ -51,6 +51,7 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.spa
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringEquality
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.statistics
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.xl
@@ -67,6 +68,7 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatche
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalextractors
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.wrapper
 de.uni_mannheim.informatik.dws.melt.matching_ml.kgvec2go
 de.uni_mannheim.informatik.dws.melt.matching_ml.python
