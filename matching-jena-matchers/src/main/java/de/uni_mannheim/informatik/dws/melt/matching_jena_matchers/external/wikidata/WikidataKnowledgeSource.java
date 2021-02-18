@@ -225,6 +225,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                 QuerySolution solution = resultSet.next();
                 result.add(solution.getLiteral("?l").getLexicalForm());
             }
+            queryExecution.close();
         }
         synonymyBuffer.put(key, result);
         return result;

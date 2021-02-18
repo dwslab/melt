@@ -56,12 +56,21 @@ public class WiktionaryKnowledgeSourceTest {
     }
 
     @Test
+    void encodeWord(){
+        // we need this space encoding to ensure that it works on DBnary:
+        assertEquals("European_Union", WiktionaryKnowledgeSource.encodeWord("European Union"));
+    }
+
+    @Test
     public void testIsInDictionaryString() {
         // true positive check
         assertTrue(wiktionary.isInDictionary("dog"));
 
         // true positive check; check for correct encoding of spaces
         assertTrue(wiktionary.isInDictionary("seminal fluid"));
+
+        // true positive check; check for correct encoding of %
+        assertTrue(wiktionary.isInDictionary("%"));
 
         // false positive check
         assertFalse(wiktionary.isInDictionary("asdfasdfasdf"));

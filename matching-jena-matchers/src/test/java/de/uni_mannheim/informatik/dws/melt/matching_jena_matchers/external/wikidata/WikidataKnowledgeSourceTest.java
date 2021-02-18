@@ -16,6 +16,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class WikidataKnowledgeSourceTest {
 
 
+    /**
+     * Not an actual test but can be used for quick experiments.
+     */
+    @Test
+    void synonymyPlayground(){
+        String term = "option";
+        System.out.println("Synonyms for '" + term + "'");
+        WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+        for(String s: wikidata.getSynonyms(wikidata.getLinker().linkToSingleConcept(term))){
+            System.out.println(s);
+        }
+    }
+
     @Test
     void isInDictionary() {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
