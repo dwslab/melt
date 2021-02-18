@@ -22,17 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class WebIsAlodClassicKnowledgeSourceTest {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(WebIsAlodClassicKnowledgeSourceTest.class);
 
     @BeforeAll
-    static void setup() {
-        WebIsAlodSPARQLservice.closeAllServices();
-        PersistenceService.getService().closePersistenceService();
-        deletePersistenceDirectory();
-    }
-
     @AfterAll
-    static void tearDown() {
+    static void setupAndTearDown() {
         WebIsAlodSPARQLservice.closeAllServices();
         PersistenceService.getService().closePersistenceService();
         deletePersistenceDirectory();

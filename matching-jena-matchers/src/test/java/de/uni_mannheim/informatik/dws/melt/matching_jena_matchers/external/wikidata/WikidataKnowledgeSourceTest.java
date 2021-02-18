@@ -1,11 +1,16 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wikidata;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
+import it.uniroma1.lcl.jlt.util.Files;
 import org.javatuples.Pair;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +31,16 @@ class WikidataKnowledgeSourceTest {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
         for(String s: wikidata.getSynonyms(wikidata.getLinker().linkToSingleConcept(term))){
             System.out.println(s);
+        }
+    }
+
+    @AfterAll
+    @BeforeAll
+    static void deleteBuffers(){
+        PersistenceService.getService().closePersistenceService();
+        File buffer = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        if(buffer.exists() && buffer.isDirectory()) {
+            Files.deleteDirectory(buffer);
         }
     }
 

@@ -143,12 +143,12 @@ public class PersistenceService {
         ALOD_CLASSIC_SYONYMY_BUFFER,
         ALOD_CLASSIC_LABEL_URI_BUFFER,
         ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER,
-        ALDO_CLASSIC_HYPERNYM_BUFFER,
+        ALOD_CLASSIC_HYPERNYM_BUFFER,
 
         ALOD_XL_SYONYMY_BUFFER,
         ALOD_XL_LABEL_URI_BUFFER,
         ALOD_XL_HYPERNYMY_ASK_BUFFER,
-        ALDO_XL_HYPERNYM_BUFFER,
+        ALOD_XL_HYPERNYM_BUFFER,
 
         /**
          * Stores existing and non-existing concepts.
@@ -183,8 +183,8 @@ public class PersistenceService {
                     return StringString.class;
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
                 case ALOD_XL_LABEL_URI_BUFFER:
-                case ALDO_CLASSIC_HYPERNYM_BUFFER:
-                case ALDO_XL_HYPERNYM_BUFFER:
+                case ALOD_CLASSIC_HYPERNYM_BUFFER:
+                case ALOD_XL_HYPERNYM_BUFFER:
                 case BABELNET_SYNONYM_BUFFER:
                 case BABELNET_HYPERNYMY_BUFFER:
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
@@ -215,8 +215,8 @@ public class PersistenceService {
                 case BABELNET_MULTI_CONCEPT_BUFFER:
                 case WIKIDATA_LABEL_LINK_BUFFER:
                 case WIKIDATA_ASK_BUFFER:
-                case ALDO_CLASSIC_HYPERNYM_BUFFER:
-                case ALDO_XL_HYPERNYM_BUFFER:
+                case ALOD_CLASSIC_HYPERNYM_BUFFER:
+                case ALOD_XL_HYPERNYM_BUFFER:
                     return Serializer.STRING;
             }
             return null;
@@ -236,8 +236,8 @@ public class PersistenceService {
                 case WIKIDATA_HYPERNYMY_BUFFER:
                 case WIKIDATA_SYNONYMY_BUFFER:
                 case WIKIDATA_LABEL_LINK_BUFFER:
-                case ALDO_CLASSIC_HYPERNYM_BUFFER:
-                case ALDO_XL_HYPERNYM_BUFFER:
+                case ALOD_CLASSIC_HYPERNYM_BUFFER:
+                case ALOD_XL_HYPERNYM_BUFFER:
                     return Serializer.JAVA;
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
@@ -282,9 +282,9 @@ public class PersistenceService {
                     return PERSISTENCE_DIRECTORY + "/wikidata_label_link_buffer.mapdb";
                 case WIKIDATA_ASK_BUFFER:
                     return PERSISTENCE_DIRECTORY + "/wikidata_ask_buffer.mapdb";
-                case ALDO_CLASSIC_HYPERNYM_BUFFER:
+                case ALOD_CLASSIC_HYPERNYM_BUFFER:
                     return PERSISTENCE_DIRECTORY + "/webisalod_classic_hypernym_buffer.mapdb";
-                case ALDO_XL_HYPERNYM_BUFFER:
+                case ALOD_XL_HYPERNYM_BUFFER:
                     return PERSISTENCE_DIRECTORY + "/webisalod_xl_hypernym_buffer.mapdb";
             }
             return null;

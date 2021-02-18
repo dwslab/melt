@@ -1,10 +1,15 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations;
+import it.uniroma1.lcl.jlt.util.Files;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,6 +33,16 @@ public class WordNetKnowledgeSourceTest {
             fail("Cannot find config.properties or local_config.properties with key " + key);
         }
         wordnet = new WordNetKnowledgeSource(wordNetPath);
+    }
+
+    @AfterAll
+    @BeforeAll
+    static void deleteBuffers(){
+        PersistenceService.getService().closePersistenceService();
+        File buffer = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        if(buffer.exists() && buffer.isDirectory()) {
+            Files.deleteDirectory(buffer);
+        }
     }
 
     @Test

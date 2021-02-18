@@ -134,12 +134,12 @@ public class WebIsAlodSPARQLservice {
                 this.labelUriBuffer = persistenceService.getMapDatabase(ALOD_CLASSIC_LABEL_URI_BUFFER);
                 this.synonymyAskBuffer = persistenceService.getMapDatabase(ALOD_CLASSIC_SYONYMY_BUFFER);
                 this.hypernymyAskBuffer = persistenceService.getMapDatabase(ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER);
-                this.hypernymBuffer = persistenceService.getMapDatabase(ALDO_CLASSIC_HYPERNYM_BUFFER);
+                this.hypernymBuffer = persistenceService.getMapDatabase(ALOD_CLASSIC_HYPERNYM_BUFFER);
             } else {
                 this.labelUriBuffer = persistenceService.getMapDatabase(ALOD_XL_LABEL_URI_BUFFER);
                 this.synonymyAskBuffer = persistenceService.getMapDatabase(ALOD_XL_SYONYMY_BUFFER);
                 this.hypernymyAskBuffer = persistenceService.getMapDatabase(ALOD_XL_HYPERNYMY_ASK_BUFFER);
-                this.hypernymBuffer = persistenceService.getMapDatabase(ALDO_XL_HYPERNYM_BUFFER);
+                this.hypernymBuffer = persistenceService.getMapDatabase(ALOD_XL_HYPERNYM_BUFFER);
 
             }
         } else {
@@ -312,9 +312,9 @@ public class WebIsAlodSPARQLservice {
         qe.close();
         hypernymBuffer.put(key, result);
         if (this.webIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT)) {
-            commit(ALDO_CLASSIC_HYPERNYM_BUFFER);
+            commit(ALOD_CLASSIC_HYPERNYM_BUFFER);
         } else {
-            commit(ALDO_XL_HYPERNYM_BUFFER);
+            commit(ALOD_XL_HYPERNYM_BUFFER);
         }
         return result;
     }
@@ -565,10 +565,10 @@ public class WebIsAlodSPARQLservice {
             case ALOD_XL_HYPERNYMY_ASK_BUFFER:
             case ALOD_XL_SYONYMY_BUFFER:
             case ALOD_XL_LABEL_URI_BUFFER:
-            case ALDO_XL_HYPERNYM_BUFFER:
+            case ALOD_XL_HYPERNYM_BUFFER:
             case ALOD_CLASSIC_SYONYMY_BUFFER:
             case ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER:
-            case ALDO_CLASSIC_HYPERNYM_BUFFER:
+            case ALOD_CLASSIC_HYPERNYM_BUFFER:
             case ALOD_CLASSIC_LABEL_URI_BUFFER:
                 persistenceService.commit(persistences);
         }
@@ -583,13 +583,13 @@ public class WebIsAlodSPARQLservice {
             if (isClassic) {
                 persistenceService.closeDatabase(ALOD_CLASSIC_SYONYMY_BUFFER);
                 persistenceService.closeDatabase(ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER);
-                persistenceService.closeDatabase(ALDO_CLASSIC_HYPERNYM_BUFFER);
+                persistenceService.closeDatabase(ALOD_CLASSIC_HYPERNYM_BUFFER);
                 persistenceService.closeDatabase(ALOD_CLASSIC_LABEL_URI_BUFFER);
             } else if(! (instances.containsKey(WebIsAlodEndpoint.ALOD_XL_NO_PROXY) && instances.containsKey(WebIsAlodEndpoint.ALOD_XL_ENDPOINT)) ) {
                 // only close XL if there are no remaining XL endpoints (multiple exist so we cannot close the XL buffer if there is another open XL SPARQL service)
                 persistenceService.closeDatabase(ALOD_XL_SYONYMY_BUFFER);
                 persistenceService.closeDatabase(ALOD_XL_HYPERNYMY_ASK_BUFFER);
-                persistenceService.closeDatabase(ALDO_XL_HYPERNYM_BUFFER);
+                persistenceService.closeDatabase(ALOD_XL_HYPERNYM_BUFFER);
                 persistenceService.closeDatabase(ALOD_XL_LABEL_URI_BUFFER);
             }
         }
