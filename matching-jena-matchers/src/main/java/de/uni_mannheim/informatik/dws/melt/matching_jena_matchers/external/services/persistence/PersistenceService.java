@@ -117,6 +117,7 @@ public class PersistenceService {
 
     /**
      * Close all opened databases and shut down service.
+     * Make sure that dependent services are also closed.
      */
     public void closePersistenceService() {
         // close all databases

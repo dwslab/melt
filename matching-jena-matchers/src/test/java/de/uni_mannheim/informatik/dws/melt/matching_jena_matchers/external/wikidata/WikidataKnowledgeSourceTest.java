@@ -190,7 +190,7 @@ class WikidataKnowledgeSourceTest {
     }
 
     @Test
-    void getlabelsForLink() {
+    void getLabelsForLink() {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
         wikidata.setDiskBufferEnabled(false);
         assertFalse(wikidata.isDiskBufferEnabled());
