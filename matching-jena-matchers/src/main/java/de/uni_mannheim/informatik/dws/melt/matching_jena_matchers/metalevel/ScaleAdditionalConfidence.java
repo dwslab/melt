@@ -14,22 +14,46 @@ import org.apache.jena.ontology.OntModel;
 
 /**
  * Scales the additional correspondence confidence values (that were produced by other filters/matchers) linearly to a
- * given interval (by default [0,1]).
+ * given interval (by default [0,1]). Each additional confidence is scaled separately and only the specified
+ * additional confidences are scaled. If all of them should be scaled, then leave the set of keys empty.
  */
 public class ScaleAdditionalConfidence extends MatcherYAAAJena implements Filter {
 
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        return scale(inputAlignment, new HashSet());
+        return scale(inputAlignment);
     }
     
+    /**
+     * Scales all additional confidence values (separately) between zero and one.
+     * @param alignment the alignment to scale.
+     * @return the scaled alignment.
+     */
+    public static Alignment scale(Alignment alignment){
+        return scale(alignment, 0.0, 1.0, new HashSet<>());
+    }
+    
+    /**
+     * Scales the additional confidence values (separately) of the provides keys between zero and one.
+     * @param alignment the alignment to scale.
+     * @param keys the set of keys for the additional confidences to scale. Leave empty for all additional confidences.
+     * @return the scaled alignment.
+     */
     public static Alignment scale(Alignment alignment, Set<String> keys){
         return scale(alignment, 0.0, 1.0, keys);
     }
     
+    /**
+     * Scales the additional confidence values of the provides keys (separately) between newMin and newMax. 
+     * @param alignment the alignment to scale.
+     * @param newMin the new minimum value (inclusive)
+     * @param newMax the new maximum value (inclusive)
+     * @param keys the set of keys for the additional confidences to scale. Leave empty for all additional confidences.
+     * @return the scaled alignment.
+     */
     public static Alignment scale(Alignment alignment, double newMin, double newMax, Set<String> keys){
         //find min and max:
-        Map<String, MinMax> keyToMinMax = new HashMap();
+        Map<String, MinMax> keyToMinMax = new HashMap<>();
         if(keys.isEmpty()){
             for(Correspondence c : alignment){
                 for(Entry<String, Double> entry : c.getAdditionalConfidences().entrySet()){

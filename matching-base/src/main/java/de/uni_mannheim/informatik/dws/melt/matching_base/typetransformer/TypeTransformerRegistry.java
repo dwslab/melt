@@ -393,10 +393,10 @@ public class TypeTransformerRegistry {
      * @param transformationProperties additional properties.
      * @return the transformed list of objects or null
      */
-    public static List<Object> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<?> targetType, Properties transformationProperties){
-        List<Object> transformedObjects = new ArrayList<>(sourceObjects.size());
+    public static <T> List<T> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<T> targetType, Properties transformationProperties){
+        List<T> transformedObjects = new ArrayList<>(sourceObjects.size());
         for(Set<Object> representations : sourceObjects){
-            Object transformed = getTransformedObjectMultipleRepresentations(representations, targetType, transformationProperties);
+            T transformed = getTransformedObjectMultipleRepresentations(representations, targetType, transformationProperties);
             if(transformed == null)
                 return null;
             transformedObjects.add(transformed);
@@ -444,7 +444,7 @@ public class TypeTransformerRegistry {
      * @param transformationProperties additional properties.
      * @return the transformed object or null
      */
-    public static List<Object> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<?> targetType, Object transformationProperties){
+    public static <T> List<T> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<T> targetType, Object transformationProperties){
         return getTransformedListOfObjectsMultipleRepresentations(sourceObjects, targetType, getTransformedProperties(transformationProperties));
     }
     
@@ -454,7 +454,7 @@ public class TypeTransformerRegistry {
      * @param targetType the tyoe of class to trasnform to 
      * @return the transformed object or null
      */
-    public static List<Object> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<?> targetType){
+    public static <T> List<T> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<T> targetType){
         return getTransformedListOfObjectsMultipleRepresentations(sourceObjects, targetType, new Properties());
     }
     

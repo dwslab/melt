@@ -2,7 +2,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.multisource;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractorUrlPattern;
-import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MatcherMultiSourceURL;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherMultiSourceCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
@@ -25,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.slf4j.Logger;
@@ -37,32 +39,32 @@ public class ExecutorMultiSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorMultiSource.class);
   
     
-    public static ExecutionResultSet execute(Track track, Map<String, MatcherMultiSourceURL> matchers){
+    public static ExecutionResultSet execute(Track track, Map<String, Object> matchers){
         return execute(track.getTestCases(), matchers);
     }
     
-    public static ExecutionResultSet execute(List<TestCase> testCases, Map<String, MatcherMultiSourceURL> matchers){
+    public static ExecutionResultSet execute(List<TestCase> testCases, Map<String, Object> matchers){
         ExecutionResultSet resultSet = new ExecutionResultSet();        
         for(Entry<Track, List<TestCase>> trackToTestcases : groupTestCasesByTrack(testCases).entrySet()){
             Track track = trackToTestcases.getKey();
             List<TestCase> trackTestCases = trackToTestcases.getValue();
             List<URL> distinctOntologies = Track.getDistinctOntologies(trackTestCases);
-            for(Entry<String, MatcherMultiSourceURL> matcher : matchers.entrySet()){
+            for(Entry<String, Object> matcher : matchers.entrySet()){
                 resultSet.addAll(execute(trackTestCases, matcher.getValue(), matcher.getKey(), distinctOntologies, getMostSpecificPartitioner(track)));
             }
         }
         return resultSet;
     }
     
-    public static ExecutionResultSet execute(Track track, MatcherMultiSourceURL matcher){
+    public static ExecutionResultSet execute(Track track, Object matcher){
         return execute(track.getTestCases(), matcher,Executor.getMatcherName(matcher));
     }
     
-    public static ExecutionResultSet execute(List<TestCase> testCases, MatcherMultiSourceURL matcher){
+    public static ExecutionResultSet execute(List<TestCase> testCases, Object matcher){
         return execute(testCases, matcher,Executor.getMatcherName(matcher));
     }
     
-    public static ExecutionResultSet execute(List<TestCase> testCases, MatcherMultiSourceURL matcher, String matcherName){
+    public static ExecutionResultSet execute(List<TestCase> testCases, Object matcher, String matcherName){
         ExecutionResultSet resultSet = new ExecutionResultSet();        
         for(Entry<Track, List<TestCase>> trackToTestcases : groupTestCasesByTrack(testCases).entrySet()){
             Track track = trackToTestcases.getKey();
@@ -74,22 +76,26 @@ public class ExecutorMultiSource {
     }
     
     
-    public static ExecutionResultSet executeWithAdditionalGraphs(Track track, MatcherMultiSourceURL matcher, String matcherName, List<URL> additionalGraphs, Partitioner partitioner){
+    public static ExecutionResultSet executeWithAdditionalGraphs(Track track, Object matcher, String matcherName, List<URL> additionalGraphs, Partitioner partitioner){
         List<URL> allGraphs = track.getDistinctOntologies();
         allGraphs.addAll(additionalGraphs);
         return execute(track.getTestCases(), matcher, matcherName, allGraphs, partitioner);
     }
     
-    public static ExecutionResultSet execute(List<TestCase> testCases, MatcherMultiSourceURL matcher, String matcherName, 
+    public static ExecutionResultSet execute(List<TestCase> testCases, Object matcher, String matcherName, 
             List<URL> allGraphs, Partitioner partitioner){
         Set<String> trackNames = getTrackNames(testCases);
+        Alignment inputAlignment = getInputAlignment(testCases);
+        Properties parameters = getParameters(testCases);
         LOGGER.info("Running multi source matcher {} on track(s) {}.", matcherName, trackNames);
-
+        
         long runTime;
         URL resultingAlignment = null;
         long startTime = System.nanoTime();
         try {
-            resultingAlignment = matcher.match(allGraphs, null, null);
+            AlignmentAndParameters result = GenericMatcherMultiSourceCaller.runMatcherMultiSourceSpecificType(matcher, allGraphs, inputAlignment, parameters);
+            resultingAlignment = result.getAlignment(URL.class);
+            //resultingAlignment = matcher.match(allGraphs, null, null);
         } catch (Exception ex) {
             LOGGER.error("Exception during matching (matcher " + matcherName + " on track(s) " +  trackNames + ").", ex);
             return new ExecutionResultSet();
@@ -114,7 +120,8 @@ public class ExecutorMultiSource {
             return new ExecutionResultSet();
         }
         
-        return fromAlignmentFile(alignmentFile, testCases, matcherName, runTime, matcher.needsTransitiveClosureForEvaluation(), partitioner);
+        boolean needsTransitiveClosure = GenericMatcherMultiSourceCaller.needsTransitiveClosureForEvaluation(matcher);
+        return fromAlignmentFile(alignmentFile, testCases, matcherName, runTime, needsTransitiveClosure, partitioner);
     }
     
     
@@ -221,4 +228,20 @@ public class ExecutorMultiSource {
         return trackNames;
     }
     
+    private static Alignment getInputAlignment(List<TestCase> testCases){
+        Alignment inputAlignment = new Alignment();
+        for(TestCase testCase : testCases){
+            inputAlignment.addAll(testCase.getParsedInputAlignment());
+        }
+        return inputAlignment;
+    }
+    
+    private static Properties getParameters(List<TestCase> testCases){
+        Properties parameters = new Properties();
+        for(TestCase testCase : testCases){
+            // will override already existent parameters
+            parameters.putAll(testCase.getParsedParameters(Properties.class)); 
+        }
+        return parameters;
+    }
 }

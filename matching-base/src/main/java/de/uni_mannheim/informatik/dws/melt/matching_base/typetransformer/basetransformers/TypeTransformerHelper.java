@@ -28,7 +28,7 @@ public class TypeTransformerHelper {
     }
     
     private static final SecureRandom random = new SecureRandom();
-    private static File createFileWithRandomNumber(File folder, String prefix, String suffix){
+    public static File createFileWithRandomNumber(File folder, String prefix, String suffix){
         long n = random.nextLong();
         n = (n == Long.MIN_VALUE) ? 0 : Math.abs(n);
         return new File(folder, prefix + Long.toString(n) + suffix);

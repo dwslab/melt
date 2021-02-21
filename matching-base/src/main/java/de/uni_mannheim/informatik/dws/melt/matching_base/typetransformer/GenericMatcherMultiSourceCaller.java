@@ -2,9 +2,11 @@ package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.IMatcherMultiSource;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.IMatcherMultiSourceCaller;
+import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MatcherMultiSourceURL;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +25,54 @@ import org.slf4j.LoggerFactory;
 public class GenericMatcherMultiSourceCaller {
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericMatcherMultiSourceCaller.class);
     
+    
+    /**
+     * Calls a multi source matcher object with the provided arguments. The type of ontologies must be same same for all ontologies e.g. all URLs.
+     * @param matcher the matcher can be: <ul>
+     *  <li>an object / instance which implements/extends {@link IMatcherMultiSource}, or {@link IMatcherMultiSourceCaller}</li>
+     *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
+     *  <li>a string: the fully qualified name of a class which implements one of the above interfaces/classes like de.uni_mannheim.informatik.dws.melt.matching_base.MyMatcher - a new instance of this class will be created.</li>
+     * </ul>
+     * @param ontologies a list of objects which represents the different ontologies/ knowledge graphs to be aligned.
+     * @return the object which is returned by the matcher. This can be any arbitrary object, but you can call the TypeTransformerRegistry to get the representation you want.
+     * @throws Exception in case something goes wrong
+     */
+    public static <T> AlignmentAndParameters runMatcherMultiSourceSpecificType(Object matcher, List<T> ontologies) throws Exception{
+        return runMatcherMultiSource(matcher, new ArrayList<>(ontologies), null, null);
+    }
+    
+    /**
+     * Calls a multi source matcher object with the provided arguments. The type of ontologies must be same same for all ontologies e.g. all URLs.
+     * @param matcher the matcher can be: <ul>
+     *  <li>an object / instance which implements/extends {@link IMatcherMultiSource}, or {@link IMatcherMultiSourceCaller}</li>
+     *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
+     *  <li>a string: the fully qualified name of a class which implements one of the above interfaces/classes like de.uni_mannheim.informatik.dws.melt.matching_base.MyMatcher - a new instance of this class will be created.</li>
+     * </ul>
+     * @param ontologies a list of objects which represents the different ontologies/ knowledge graphs to be aligned.
+     * @param inputAlignment the object which represents an input alignment. Can be null.
+     * @return the object which is returned by the matcher. This can be any arbitrary object, but you can call the TypeTransformerRegistry to get the representation you want.
+     * @throws Exception in case something goes wrong
+     */
+    public static <T> AlignmentAndParameters runMatcherMultiSourceSpecificType(Object matcher, List<T> ontologies, Object inputAlignment) throws Exception{
+        return runMatcherMultiSource(matcher, new ArrayList<>(ontologies), inputAlignment, null);
+    }
+    
+    /**
+     * Calls a multi source matcher object with the provided arguments. The type of ontologies must be same same for all ontologies e.g. all URLs.
+     * @param matcher the matcher can be: <ul>
+     *  <li>an object / instance which implements/extends {@link IMatcherMultiSource}, or {@link IMatcherMultiSourceCaller}</li>
+     *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
+     *  <li>a string: the fully qualified name of a class which implements one of the above interfaces/classes like de.uni_mannheim.informatik.dws.melt.matching_base.MyMatcher - a new instance of this class will be created.</li>
+     * </ul>
+     * @param ontologies a list of objects which represents the different ontologies/ knowledge graphs to be aligned.
+     * @param inputAlignment the object which represents an input alignment. Can be null.
+     * @param parameters an objetc which represents parameters. Can be null.
+     * @return the object which is returned by the matcher. This can be any arbitrary object, but you can call the TypeTransformerRegistry to get the representation you want.
+     * @throws Exception in case something goes wrong
+     */
+    public static <T> AlignmentAndParameters runMatcherMultiSourceSpecificType(Object matcher, List<T> ontologies, Object inputAlignment, Object parameters) throws Exception{
+        return runMatcherMultiSource(matcher, new ArrayList<>(ontologies), inputAlignment, parameters);
+    }
     
     /**
      * Calls a multi source matcher object with the provided arguments.
@@ -147,7 +197,9 @@ public class GenericMatcherMultiSourceCaller {
             return runIMatcherMultiSourceCaller((IMatcherMultiSourceCaller)matcherInstance, ontologies, inputAlignment, parameters);
         } else if(matcherInstance instanceof IMatcherMultiSource){
             return runIMatcherMultiSource((IMatcherMultiSource)matcherInstance, ontologies, inputAlignment, parameters);
-        } else{
+        } else if(matcherInstance instanceof MatcherMultiSourceURL){
+            return runMatcherMultiSourceURL((MatcherMultiSourceURL)matcherInstance, ontologies, inputAlignment, parameters);
+        }else{
             LOGGER.error("The given matcher instance does not implement IMatcherMultiSource nor IMatcherMultiSourceCaller. The given class is {}. The matcher will not be called.", matcherInstance.getClass());
             return null;
         }
@@ -183,7 +235,7 @@ public class GenericMatcherMultiSourceCaller {
         
         Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
         
-        List<Object> transformedModels = TypeTransformerRegistry.getTransformedListOfObjectsMultipleRepresentations(ontologies, modelType, p);
+        List<?> transformedModels = TypeTransformerRegistry.getTransformedListOfObjectsMultipleRepresentations(ontologies, modelType, p);
         if(transformedModels == null)
             return null;
         
@@ -278,6 +330,63 @@ public class GenericMatcherMultiSourceCaller {
         if(parameters == null)
             parameters = new Object();
         return matcher.match(ontologies, inputAlignment, parameters);
+    }
+    
+    /**
+     * Runs a matcher which implements the {@link IMatcherMultiSourceCaller} interface.
+     * @param matcher the matcher object
+     * @param ontologies  this is a list of sets of objects where each sets contains different representations of the dame ontologies/ knowledge graph.
+     * @param inputAlignment the input alignment
+     * @param parameters the parameters
+     * @return alignment and parameters
+     * @throws Exception in case somethign goes wrong
+     */
+    private static AlignmentAndParameters runMatcherMultiSourceURL(MatcherMultiSourceURL matcher, List<Set<Object>> ontologies, Object inputAlignment, Object parameters) throws Exception{
+        if(ontologies == null || ontologies.isEmpty()){
+            LOGGER.warn("ontology representatives are null or empty. Matcher {} is not called.", matcher.getClass());
+            return null;
+        }
+        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
+        
+        List<URL> transformedModels = TypeTransformerRegistry.getTransformedListOfObjectsMultipleRepresentations(ontologies, URL.class, p);
+        if(transformedModels == null)
+            return null;
+        URL transformedInputAlignment = TypeTransformerRegistry.getTransformedObject(inputAlignment, URL.class, p);
+        URL transformedParameters = TypeTransformerRegistry.getTransformedObject(parameters, URL.class, p);  
+        
+        URL result = matcher.match(transformedModels, transformedInputAlignment, transformedParameters);
+        return new AlignmentAndParameters(result, transformedParameters);
+    }
+    
+    
+    public static boolean needsTransitiveClosureForEvaluation(Object matcher){
+        Object matcherInstance = matcher;
+        if(matcher instanceof String){
+            try {
+                matcherInstance = Class.forName((String)matcher).newInstance();
+            } catch (InstantiationException|IllegalAccessException|ClassNotFoundException ex) {
+                LOGGER.error("Could not instantiate the class given by the fully qualified name {}. Return false for transive closure in evaluation.", matcher, ex);
+                return false;
+            }
+        }else if(matcher instanceof Class){
+            try {
+                matcherInstance = ((Class)matcher).newInstance();
+            } catch (InstantiationException | IllegalAccessException ex) {
+                LOGGER.error("Could not instantiate the class. Return false for transive closure in evaluation.", ex);
+                return false;
+            }
+        }
+        
+        if(matcherInstance instanceof IMatcherMultiSourceCaller){
+            return ((IMatcherMultiSourceCaller)matcherInstance).needsTransitiveClosureForEvaluation();
+        } else if(matcherInstance instanceof IMatcherMultiSource){
+            return ((IMatcherMultiSource)matcherInstance).needsTransitiveClosureForEvaluation();
+        }else if(matcherInstance instanceof MatcherMultiSourceURL){
+            return ((MatcherMultiSourceURL)matcherInstance).needsTransitiveClosureForEvaluation();
+        }else{
+            LOGGER.error("The given matcher instance does not implement IMatcherMultiSource, IMatcherMultiSourceCaller, or MatcherMultiSourceURL. The given class is {}. Return false for transive closure in evaluation.", matcherInstance.getClass());
+            return false;
+        }
     }
     
 }
