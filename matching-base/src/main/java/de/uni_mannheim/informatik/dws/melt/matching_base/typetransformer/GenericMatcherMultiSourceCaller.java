@@ -27,7 +27,8 @@ public class GenericMatcherMultiSourceCaller {
     
     
     /**
-     * Calls a multi source matcher object with the provided arguments. The type of ontologies must be same same for all ontologies e.g. all URLs.
+     * Calls a multi source matcher object with the provided arguments.The type of ontologies must be same same for all ontologies e.g. all URLs.
+     * @param <T> the type of the ontologies ( have to be the same for all ontologies)
      * @param matcher the matcher can be: <ul>
      *  <li>an object / instance which implements/extends {@link IMatcherMultiSource}, or {@link IMatcherMultiSourceCaller}</li>
      *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
@@ -43,6 +44,7 @@ public class GenericMatcherMultiSourceCaller {
     
     /**
      * Calls a multi source matcher object with the provided arguments. The type of ontologies must be same same for all ontologies e.g. all URLs.
+     * @param <T> the type of the ontologies ( have to be the same for all ontologies)
      * @param matcher the matcher can be: <ul>
      *  <li>an object / instance which implements/extends {@link IMatcherMultiSource}, or {@link IMatcherMultiSourceCaller}</li>
      *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
@@ -59,6 +61,7 @@ public class GenericMatcherMultiSourceCaller {
     
     /**
      * Calls a multi source matcher object with the provided arguments. The type of ontologies must be same same for all ontologies e.g. all URLs.
+     * @param <T> the type of the ontologies ( have to be the same for all ontologies)
      * @param matcher the matcher can be: <ul>
      *  <li>an object / instance which implements/extends {@link IMatcherMultiSource}, or {@link IMatcherMultiSourceCaller}</li>
      *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>

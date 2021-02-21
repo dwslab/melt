@@ -388,6 +388,7 @@ public class TypeTransformerRegistry {
     
     /**
      * Directly get the transformed list of objects or null if something went wrong.
+     * @param <T> the type
      * @param sourceObjects the objects which all represent the same information. To this set, the transformed list of objects will be added.
      * @param targetType the tyoe of class to transform each object in the list to 
      * @param transformationProperties additional properties.
@@ -439,6 +440,7 @@ public class TypeTransformerRegistry {
     
     /**
      * Directly get the transformed object or null if something went wrong.
+     * @param <T> the type
      * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
      * @param targetType the tyoe of class to trasnform to 
      * @param transformationProperties additional properties.
@@ -449,7 +451,8 @@ public class TypeTransformerRegistry {
     }
     
     /**
-     * Directly get the transformed object or null if something went wrong. No transformation properties are provided.
+     * Directly get the transformed object or null if something went wrong.No transformation properties are provided.
+     * @param <T> the type
      * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
      * @param targetType the tyoe of class to trasnform to 
      * @return the transformed object or null
