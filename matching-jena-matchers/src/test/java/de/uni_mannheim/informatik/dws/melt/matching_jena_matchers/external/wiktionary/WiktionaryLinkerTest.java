@@ -46,6 +46,7 @@ class WiktionaryLinkerTest {
      * Delete the persistence directory.
      */
     private static void deletePersistenceDirectory() {
+        PersistenceService.getService().closePersistenceService();
         File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
         if (result != null && result.exists() && result.isDirectory()) {
             try {

@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.BABELNET_HYPERNYMY_BUFFER;
-import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.BABELNET_SYNONYM_BUFFER;
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.*;
 
 /**
  * A dictionary that will use BabelNet offline indices.
@@ -53,7 +52,6 @@ public class BabelNetKnowledgeSource extends SemanticWordRelationDictionary {
      * Make sure that the indices are available offline and that the project is configured correctly.
      */
     public BabelNetKnowledgeSource() {
-
         babelNet = BabelNet.getInstance();
         initializeBuffers();
         this.linker = new BabelNetLinker(this);
@@ -108,6 +106,7 @@ public class BabelNetKnowledgeSource extends SemanticWordRelationDictionary {
             }
         }
         synonymBuffer.put(key, result);
+        commit(BABELNET_SYNONYM_BUFFER);
         return result;
     }
 
@@ -130,6 +129,7 @@ public class BabelNetKnowledgeSource extends SemanticWordRelationDictionary {
             }
         }
         hypernymyBuffer.put(key, result);
+        commit(BABELNET_HYPERNYMY_BUFFER);
         return result;
     }
 
@@ -137,6 +137,17 @@ public class BabelNetKnowledgeSource extends SemanticWordRelationDictionary {
     public void close() {
         persistenceService.closeDatabase(BABELNET_SYNONYM_BUFFER);
         persistenceService.closeDatabase(BABELNET_HYPERNYMY_BUFFER);
+    }
+
+    private void commit(PersistenceService.PreconfiguredPersistences persistence){
+        switch (persistence){
+            case BABELNET_SYNONYM_BUFFER:
+                persistenceService.commit(BABELNET_SYNONYM_BUFFER);
+                return;
+            case BABELNET_HYPERNYMY_BUFFER:
+                persistenceService.commit(BABELNET_HYPERNYMY_BUFFER);
+                return;
+        }
     }
 
     /**

@@ -1,7 +1,13 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.WebIsAlodSPARQLservice;
+import it.uniroma1.lcl.jlt.util.Files;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,6 +17,18 @@ import static org.junit.jupiter.api.Assertions.*;
  * Requires a working internet connection.
  */
 class WebIsAlodClassicLinkerTest {
+
+
+    @AfterAll
+    @BeforeAll
+    static void deleteBuffers(){
+        WebIsAlodSPARQLservice.closeAllServices();
+        PersistenceService.getService().closePersistenceService();
+        File buffer = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        if(buffer.exists() && buffer.isDirectory()) {
+            Files.deleteDirectory(buffer);
+        }
+    }
 
     @Test
     void linkToSingleConcept() {

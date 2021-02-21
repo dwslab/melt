@@ -22,17 +22,9 @@ import org.slf4j.LoggerFactory;
  * Creates a track in folder test so that it can be used for the SEALS/MELT Track Repository.
  */
 public class SaveAsSealsRepo {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SaveAsSealsRepo.class);
 
-    public static void main(String[] args) throws IOException{
-        //save(TrackRepository.Largebio.V2016.FMA_NCI_SMALL, "./z_fma_nci_small/");
-        //save(TrackRepository.Largebio.V2016.FMA_NCI_WHOLE, "./z_fma_nci_whole/");
-        //save(TrackRepository.Largebio.V2016.FMA_SNOMED_SMALL, "./z_fma_snomed_small/");
-        //save(TrackRepository.Largebio.V2016.FMA_SNOMED_WHOLE, "./z_fma_snomed_whole/");
-        //save(TrackRepository.Largebio.V2016.SNOMED_NCI_SMALL, "./z_snomed_nci_small/");
-        //save(TrackRepository.Largebio.V2016.SNOMED_NCI_WHOLE, "./z_snomed_nci_whole/");
-        //save(TrackRepository.Complex.Popenslaved, "./Popenslaved_upload/");
-    }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SaveAsSealsRepo.class);
 
     /**
      * Simple utility function to save a track as SEALS repository track.
@@ -80,5 +72,4 @@ public class SaveAsSealsRepo {
             LOGGER.error("Could not write to file.", ex);
         }
     }
-   
 }

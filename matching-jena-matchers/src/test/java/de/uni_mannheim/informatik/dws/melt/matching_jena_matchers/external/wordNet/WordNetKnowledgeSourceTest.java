@@ -1,9 +1,15 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations;
+import it.uniroma1.lcl.jlt.util.Files;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,21 +35,40 @@ public class WordNetKnowledgeSourceTest {
         wordnet = new WordNetKnowledgeSource(wordNetPath);
     }
 
+    @AfterAll
+    @BeforeAll
+    static void deleteBuffers(){
+        PersistenceService.getService().closePersistenceService();
+        File buffer = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        if(buffer.exists() && buffer.isDirectory()) {
+            Files.deleteDirectory(buffer);
+        }
+    }
+
     @Test
-    public void testIsInDictionary() {
+    void synonymyPlayground(){
+        String word = "equity";
+        System.out.println("Synonyms for '" + word + "'");
+        for (String synonym : wordnet.getSynonyms(wordnet.getLinker().linkToSingleConcept(word))){
+            System.out.println(synonym);
+        }
+    }
+
+    @Test
+    void testIsInDictionary() {
         assertTrue(wordnet.isInDictionary("car"));
         assertTrue(wordnet.isInDictionary("monkey"));
         assertTrue(wordnet.isInDictionary("milk"));
     }
 
     @Test
-    public void testIsSynonymous() {
+    void testIsSynonymous() {
         assertTrue(wordnet.isSynonymous("dog", "hound"));
         assertFalse(wordnet.isSynonymous("dog", "car"));
     }
 
     @Test
-    public void testIsStrongFormSynonymous() {
+    void testIsStrongFormSynonymous() {
         assertTrue(wordnet.isStrongFormSynonymous("dog", "hound"));
         assertTrue(wordnet.isStrongFormSynonymous("dog", "dog"));
         assertTrue(wordnet.isStrongFormSynonymous("medulla", "bulb"));
@@ -60,18 +85,18 @@ public class WordNetKnowledgeSourceTest {
 
 
     @Test
-    public void getSynonyms() {
+    void getSynonyms() {
         assertNotEquals(wordnet.getSynonyms("dog").size(), wordnet.getSynonyms("hound").size());
     }
 
     @Test
-    public void isInDictionary() {
+    void isInDictionary() {
         assertTrue(wordnet.isInDictionary("dog"));
         assertFalse(wordnet.isInDictionary("asdfasdfasdf"));
     }
 
     @Test
-    public void isHypernymous(){
+    void isHypernymous(){
         assertTrue(wordnet.isHypernymous("human", "hominid"));
         assertFalse(wordnet.isHypernymous("human", "animal"));
 
@@ -82,7 +107,7 @@ public class WordNetKnowledgeSourceTest {
     }
 
     @Test
-    public void isHypernymousOrSynonymous(){
+    void isHypernymousOrSynonymous(){
         assertTrue(wordnet.isSynonymousOrHypernymous("human", "hominid"));
         assertTrue(wordnet.isSynonymousOrHypernymous("human", "homo"));
         assertFalse(wordnet.isSynonymousOrHypernymous("human", "dog"));

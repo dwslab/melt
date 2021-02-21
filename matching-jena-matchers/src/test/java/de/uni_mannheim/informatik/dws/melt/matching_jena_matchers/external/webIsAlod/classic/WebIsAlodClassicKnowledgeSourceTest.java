@@ -22,19 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class WebIsAlodClassicKnowledgeSourceTest {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(WebIsAlodClassicKnowledgeSourceTest.class);
 
     @BeforeAll
-    static void setup() {
-        WebIsAlodSPARQLservice.closeAllServices();
-        PersistenceService.getService().closePersistenceService();
-        deletePersistenceDirectory();
-    }
-
     @AfterAll
-    static void tearDown() {
-        WebIsAlodSPARQLservice.closeAllServices();
-        PersistenceService.getService().closePersistenceService();
+    static void setupAndTearDown() {
         deletePersistenceDirectory();
     }
 
@@ -42,6 +35,8 @@ class WebIsAlodClassicKnowledgeSourceTest {
      * Delete the persistence directory.
      */
     private static void deletePersistenceDirectory() {
+        WebIsAlodSPARQLservice.closeAllServices();
+        PersistenceService.getService().closePersistenceService();
         File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
         if (result != null && result.exists() && result.isDirectory()) {
             try {

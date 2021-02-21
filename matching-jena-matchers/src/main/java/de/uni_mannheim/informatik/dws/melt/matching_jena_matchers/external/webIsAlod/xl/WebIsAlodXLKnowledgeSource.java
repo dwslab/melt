@@ -68,13 +68,13 @@ public class WebIsAlodXLKnowledgeSource extends SemanticWordRelationDictionary {
     }
 
     @Override
-    public boolean isStrongFormSynonymous(String word1, String word2) {
+    public boolean isStrongFormSynonymous(String link1, String link2) {
         if(this.minimumConfidence <= 0) {
             // no distinction here
-            return sparqLservice.isSynonymous(word1, word2);
+            return sparqLservice.isSynonymous(link1, link2);
         } else {
             // no distinction here
-            return sparqLservice.isSynonymous(word1, word2, minimumConfidence);
+            return sparqLservice.isSynonymous(link1, link2, minimumConfidence);
         }
     }
 

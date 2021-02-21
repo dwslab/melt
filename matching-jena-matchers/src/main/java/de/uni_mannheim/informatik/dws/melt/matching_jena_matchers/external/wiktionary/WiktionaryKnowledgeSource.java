@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -54,32 +56,33 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
 
     /**
      * Constructor
+     *
      * @param tdbDirectoryPath Path to the Wiktionary <a href="https://jena.apache.org/documentation/tdb/index.html">TDB</a>
      *                         directory.
      */
-    public WiktionaryKnowledgeSource(String tdbDirectoryPath){
+    public WiktionaryKnowledgeSource(String tdbDirectoryPath) {
         this.tdbDirectoryPath = tdbDirectoryPath;
 
-            // convenience checks for stable code
-            File tdbDirectoryFile = new File(tdbDirectoryPath);
-            if (!tdbDirectoryFile.exists()) {
-                LOGGER.error("tdbDirectoryPath does not exist. - ABORTING PROGRAM");
-                return;
-            }
-            if (!tdbDirectoryFile.isDirectory()) {
-                LOGGER.error("tdbDirectoryPath is not a directory. - ABORTING PROGRAM");
-                return;
-            }
+        // convenience checks for stable code
+        File tdbDirectoryFile = new File(tdbDirectoryPath);
+        if (!tdbDirectoryFile.exists()) {
+            LOGGER.error("tdbDirectoryPath does not exist. - ABORTING PROGRAM");
+            return;
+        }
+        if (!tdbDirectoryFile.isDirectory()) {
+            LOGGER.error("tdbDirectoryPath is not a directory. - ABORTING PROGRAM");
+            return;
+        }
 
-            synonymyBuffer = new HashMap<>();
-            hypernymyBuffer = new HashMap<>();
+        synonymyBuffer = new HashMap<>();
+        hypernymyBuffer = new HashMap<>();
 
-            // dataset and model creation
-            //tdbDataset = TDB2Factory.connectDataset(tdbDirectoryPath);
-            tdbDataset = TDBFactory.createDataset(tdbDirectoryPath);
-            tdbDataset.begin(ReadWrite.READ);
+        // dataset and model creation
+        //tdbDataset = TDB2Factory.connectDataset(tdbDirectoryPath);
+        tdbDataset = TDBFactory.createDataset(tdbDirectoryPath);
+        tdbDataset.begin(ReadWrite.READ);
 
-            linker = new WiktionaryLinker(this);
+        linker = new WiktionaryLinker(this);
     }
 
 
@@ -194,9 +197,12 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      * @param word Word to be encoded.
      * @return encoded word
      */
-    private static String encodeWord(String word) {
+    static String encodeWord(String word) {
+        // we cannot use the Java default encoder due to some ideosyncratic encodings
+        word = word.replace("%", "%25");
         word = word.replace(" ", "_");
         word = word.replace(".", "%2E");
+        word = word.replace("^", "%5E");
         return word;
     }
 
@@ -215,11 +221,11 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      * Obtain hypernyms for the given concept.
      *
      * @param linkedConcept The linked concept for which hypernyms shall be retrieved.
-     * @param language The desired language of the hypernyms.
+     * @param language      The desired language of the hypernyms.
      * @return A set of hypernyms.
      */
     public HashSet<String> getHypernyms(String linkedConcept, Language language) {
-        if(linkedConcept == null) return null;
+        if (linkedConcept == null) return null;
         linkedConcept = encodeWord(linkedConcept);
         if (hypernymyBuffer.containsKey(linkedConcept + "_" + linkedConcept)) {
             return hypernymyBuffer.get(linkedConcept + "_" + linkedConcept);
@@ -234,12 +240,12 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                 "?hypernym rdf:type dbnary:Page .}}\n" +
                 "UNION\n" +
                 "{select ?hypernym where {\n" +
-                "?hs dbnary:hyponym dbnarylan:" + linkedConcept +" .\n" +
+                "?hs dbnary:hyponym dbnarylan:" + linkedConcept + " .\n" +
                 "?hypernym dbnary:describes ?hs .\n" +
                 "?hypernym rdf:type dbnary:Page .}}\n" +
                 "UNION\n" +
                 "{select ?hypernym where {\n" +
-                "dbnarylan:" + linkedConcept +" dbnary:describes ?dc .\n" +
+                "dbnarylan:" + linkedConcept + " dbnary:describes ?dc .\n" +
                 "?dc dbnary:hypernym ?hypernym.\n" +
                 "?hypernym rdf:type dbnary:Page .\n" +
                 "}}}";
@@ -252,12 +258,11 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             }
             hypernymyBuffer.put(linkedConcept + "_" + language.toWiktionaryChar3(), result);
             return result;
-        } catch (QueryParseException qpe){
+        } catch (QueryParseException qpe) {
             LOGGER.info("Faild to build query for concept '" + linkedConcept + "'", qpe);
             return null;
         }
     }
-
 
 
     @Override

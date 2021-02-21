@@ -1,11 +1,16 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wikidata;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
+import it.uniroma1.lcl.jlt.util.Files;
 import org.javatuples.Pair;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +20,29 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WikidataKnowledgeSourceTest {
 
+
+    /**
+     * Not an actual test but can be used for quick experiments.
+     */
+    @Test
+    void synonymyPlayground(){
+        String term = "option";
+        System.out.println("Synonyms for '" + term + "'");
+        WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+        for(String s: wikidata.getSynonyms(wikidata.getLinker().linkToSingleConcept(term))){
+            System.out.println(s);
+        }
+    }
+
+    @AfterAll
+    @BeforeAll
+    static void deleteBuffers(){
+        PersistenceService.getService().closePersistenceService();
+        File buffer = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        if(buffer.exists() && buffer.isDirectory()) {
+            Files.deleteDirectory(buffer);
+        }
+    }
 
     @Test
     void isInDictionary() {
@@ -29,6 +57,16 @@ class WikidataKnowledgeSourceTest {
         assertFalse(wikidata.isInDictionary("Privates Gymnasium Sank Paulusheim", Language.ENGLISH));
         assertTrue(wikidata.isInDictionary("St. Paulusheim", Language.GERMAN));
         assertTrue(wikidata.isInDictionary("Privatgymnasium Sankt Paulusheim", Language.GERMAN));
+    }
+
+    @Test
+    void isStrongFormSynonymous(){
+        WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
+        wikidata.setDiskBufferEnabled(false);
+        WikidataLinker linker = new WikidataLinker();
+        String link1 = linker.linkToSingleConcept("Jan Portisch");
+        String link2 = linker.linkToSingleConcept("Jan Philipp Portisch");
+        assertTrue(wikidata.isStrongFormSynonymous(link1, link2));
     }
 
     @Test
@@ -152,7 +190,7 @@ class WikidataKnowledgeSourceTest {
     }
 
     @Test
-    void getlabelsForLink() {
+    void getLabelsForLink() {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
         wikidata.setDiskBufferEnabled(false);
         assertFalse(wikidata.isDiskBufferEnabled());
@@ -208,7 +246,7 @@ class WikidataKnowledgeSourceTest {
         closestConcepts = wikidata.getClosestCommonHypernym(links, limitOfHops);
 
         assertTrue(closestConcepts.getValue0().contains("http://www.wikidata.org/entity/Q729"));
-        assertEquals(2, closestConcepts.getValue1());
+        assertEquals(3, closestConcepts.getValue1());
 
         // Unit test 3
         // -----------

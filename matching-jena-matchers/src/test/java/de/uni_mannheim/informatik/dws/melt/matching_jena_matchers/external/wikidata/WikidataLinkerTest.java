@@ -22,14 +22,8 @@ class WikidataLinkerTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(WikidataLinkerTest.class);
 
     @BeforeAll
-    static void setup() {
-        PersistenceService.getService().closePersistenceService();
-        deletePersistenceDirectory();
-    }
-
     @AfterAll
-    static void tearDown() {
-        PersistenceService.getService().closePersistenceService();
+    static void setupAndTearDown() {
         deletePersistenceDirectory();
     }
 
@@ -37,6 +31,7 @@ class WikidataLinkerTest {
      * Delete the persistence directory.
      */
     private static void deletePersistenceDirectory() {
+        PersistenceService.getService().closePersistenceService();
         File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
         if (result.exists() && result.isDirectory()) {
             try {
