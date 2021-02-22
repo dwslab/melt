@@ -91,24 +91,24 @@ public class WiktionaryKnowledgeSourceTest {
     @Test
     public void testGetSynonymsString() {
         // just checking that there are synonyms
-        assertTrue(wiktionary.getSynonyms("cat").size() > 0);
+        assertTrue(wiktionary.getSynonymsLexical("cat").size() > 0);
 
         // second test for buffer
-        assertTrue(wiktionary.getSynonyms("cat").size() > 0);
+        assertTrue(wiktionary.getSynonymsLexical("cat").size() > 0);
 
         // checking for one specific synonym
-        assertTrue(wiktionary.getSynonyms("temporal muscle").contains("temporalis"));
+        assertTrue(wiktionary.getSynonymsLexical("temporal muscle").contains("temporalis"));
 
         // checking for non-existing synonym
-        assertNull(wiktionary.getSynonyms("asdfasdfasdf"));
+        assertNull(wiktionary.getSynonymsLexical("asdfasdfasdf"));
 
     }
 
     @Test
     public void testGetSynonymsStringDBNaryLanguage() {
         // buffer check
-        int numberOfSynonyms1 = wiktionary.getSynonyms("cat").size();
-        int numberOfSynonyms2 = wiktionary.getSynonyms("cat").size();
+        int numberOfSynonyms1 = wiktionary.getSynonymsLexical("cat").size();
+        int numberOfSynonyms2 = wiktionary.getSynonymsLexical("cat").size();
         assertTrue(numberOfSynonyms1 == numberOfSynonyms2);
     }
 

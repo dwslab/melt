@@ -79,7 +79,7 @@ public class WebIsAlodXLKnowledgeSource extends SemanticWordRelationDictionary {
     }
 
     @Override
-    public Set<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonymsLexical(String linkedConcept) {
         throw new NotImplemented();
     }
 

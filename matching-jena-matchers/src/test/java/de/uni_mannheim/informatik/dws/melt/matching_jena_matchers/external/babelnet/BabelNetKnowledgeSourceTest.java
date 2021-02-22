@@ -20,7 +20,7 @@ class BabelNetKnowledgeSourceTest {
 
     @Test
     void getSynonyms() {
-        Set<String> result = dictionary.getSynonyms("macron");
+        Set<String> result = dictionary.getSynonymsLexical("macron");
         assertTrue(result.contains("emmanuel_macron"));
     }
 

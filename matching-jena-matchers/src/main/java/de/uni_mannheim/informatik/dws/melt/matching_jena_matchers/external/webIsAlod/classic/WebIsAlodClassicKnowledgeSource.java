@@ -64,7 +64,7 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
      * @return A set of synonyms.
      */
     @Override
-    public Set<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonymsLexical(String linkedConcept) {
         throw new NotImplemented();
     }
 

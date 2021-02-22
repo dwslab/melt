@@ -23,9 +23,9 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 	 * Retrieves a list of synonyms independently of the word sense.
 	 * The assumed language is English.
 	 * @param linkedConcept The linked concept for which synonyms shall be retrieved.
-	 * @return A set of linked concepts.
+	 * @return A set of synonyms in word form (not links).
 	 */
-	public abstract Set<String> getSynonyms(String linkedConcept);
+	public abstract Set<String> getSynonymsLexical(String linkedConcept);
 
 	/**
 	 * Retrieves a set of hypernyms independently of the word sense.
@@ -55,8 +55,8 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 			return false;
 		}
 		
-		Set<String> synonyms1 = getSynonyms(word1);
-		Set<String> synonyms2 = getSynonyms(word2);
+		Set<String> synonyms1 = getSynonymsLexical(word1);
+		Set<String> synonyms2 = getSynonymsLexical(word2);
 
 		if(synonyms1 == null && synonyms2 == null){
 			// only if both are null b/c one concept might not have synonyms but still be a synonym of the other concept
@@ -135,8 +135,8 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 			return false;
 		}
 
-		Set<String> synonyms1 = getSynonyms(link1);
-		Set<String> synonyms2 = getSynonyms(link2);
+		Set<String> synonyms1 = getSynonymsLexical(link1);
+		Set<String> synonyms2 = getSynonymsLexical(link2);
 
 		if(synonyms1 == null && synonyms2 == null){
 			// only if both are null b/c one concept might not have synonyms but still be a synonym of the other concept

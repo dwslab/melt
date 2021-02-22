@@ -142,6 +142,8 @@ public class PersistenceService {
         WIKIDATA_ASK_BUFFER,
 
         DBPEDIA_LABEL_LINK_BUFFER,
+        DBPEDIA_SYNONYMY_BUFFER,
+        DBPEDIA_HYPERNYMY_BUFFER,
 
         ALOD_CLASSIC_SYONYMY_BUFFER,
         ALOD_CLASSIC_LABEL_URI_BUFFER,
@@ -197,6 +199,8 @@ public class PersistenceService {
                 case WIKIDATA_LABEL_LINK_BUFFER:
                 case WIKIDATA_ASK_BUFFER:
                 case DBPEDIA_LABEL_LINK_BUFFER:
+                case DBPEDIA_HYPERNYMY_BUFFER:
+                case DBPEDIA_SYNONYMY_BUFFER:
                     return String.class;
             }
             return null;
@@ -222,6 +226,8 @@ public class PersistenceService {
                 case ALOD_CLASSIC_HYPERNYM_BUFFER:
                 case ALOD_XL_HYPERNYM_BUFFER:
                 case DBPEDIA_LABEL_LINK_BUFFER:
+                case DBPEDIA_SYNONYMY_BUFFER:
+                case DBPEDIA_HYPERNYMY_BUFFER:
                     return Serializer.STRING;
             }
             return null;
@@ -244,6 +250,8 @@ public class PersistenceService {
                 case ALOD_CLASSIC_HYPERNYM_BUFFER:
                 case ALOD_XL_HYPERNYM_BUFFER:
                 case DBPEDIA_LABEL_LINK_BUFFER:
+                case DBPEDIA_SYNONYMY_BUFFER:
+                case DBPEDIA_HYPERNYMY_BUFFER:
                     return Serializer.JAVA;
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
@@ -294,6 +302,10 @@ public class PersistenceService {
                     return PERSISTENCE_DIRECTORY + File.separator + "webisalod_xl_hypernym_buffer.mapdb";
                 case DBPEDIA_LABEL_LINK_BUFFER:
                     return PERSISTENCE_DIRECTORY + File.separator + "dbpedia_label_link_buffer.mapdb";
+                case DBPEDIA_SYNONYMY_BUFFER:
+                    return PERSISTENCE_DIRECTORY + File.separator + "dbpedia_synonymy_buffer.mapdb";
+                case DBPEDIA_HYPERNYMY_BUFFER:
+                    return PERSISTENCE_DIRECTORY + File.separator + "dbpedia_hypernymy_buffer.mapdb";
             }
             return null;
         }

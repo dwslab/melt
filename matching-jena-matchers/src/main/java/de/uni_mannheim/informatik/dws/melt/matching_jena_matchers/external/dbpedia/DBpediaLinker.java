@@ -22,7 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.DBPEDIA_LABEL_LINK_BUFFER;
-import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.WIKIDATA_LABEL_LINK_BUFFER;
 
 public class DBpediaLinker implements LabelToConceptLinker {
 
@@ -68,6 +67,10 @@ public class DBpediaLinker implements LabelToConceptLinker {
      */
     Set<StringModifier> stringModificationSet = new HashSet<>();
 
+    public DBpediaLinker(){
+        this(true);
+    }
+
     /**
      * Constructor
      *
@@ -91,10 +94,15 @@ public class DBpediaLinker implements LabelToConceptLinker {
      * @param multiConceptLink The lookup link.
      * @return Individual links, empty set if there are none.
      */
+    @NotNull
     public Set<String> getUris(String multiConceptLink) {
         Set<String> result = new HashSet<>();
+        if(multiConceptLink == null){
+            return result;
+        }
         if (!multiConceptLink.startsWith(MULTI_CONCEPT_PREFIX)) {
-            LOGGER.warn("The given link does not start with a prefix. Return null.");
+            LOGGER.warn("The given link does not start with a prefix. Returning the link");
+            result.add(multiConceptLink);
             return result;
         }
         if (multiLinkStore.containsKey(multiConceptLink)) {
@@ -222,9 +230,9 @@ public class DBpediaLinker implements LabelToConceptLinker {
             String disambiguatedUri = solution.getResource("c").getURI();
             result.add(disambiguatedUri);
         }
+        queryExecution.close();
         return result;
     }
-
 
     /**
      * SPARQL query to find links using a label and a language.
@@ -341,5 +349,14 @@ public class DBpediaLinker implements LabelToConceptLinker {
 
     public boolean isDiskBufferEnabled() {
         return isDiskBufferEnabled;
+    }
+
+    public void setDiskBufferEnabled(boolean diskBufferEnabled) {
+        if(diskBufferEnabled && this.isDiskBufferEnabled) return;
+        if(!diskBufferEnabled && !this.isDiskBufferEnabled) return;
+
+        // re-initialize buffers
+        this.isDiskBufferEnabled = diskBufferEnabled;
+        initializeBuffers();
     }
 }

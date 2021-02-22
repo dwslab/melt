@@ -29,7 +29,7 @@ class WikidataKnowledgeSourceTest {
         String term = "option";
         System.out.println("Synonyms for '" + term + "'");
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
-        for(String s: wikidata.getSynonyms(wikidata.getLinker().linkToSingleConcept(term))){
+        for(String s: wikidata.getSynonymsLexical(wikidata.getLinker().linkToSingleConcept(term))){
             System.out.println(s);
         }
     }
@@ -115,6 +115,11 @@ class WikidataKnowledgeSourceTest {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
         wikidata.setDiskBufferEnabled(false);
         HashSet<String> result1 = wikidata.getHypernyms(wikidata.getLinker().linkToSingleConcept("financial services"));
+        assertTrue(result1.size() > 0);
+        assertTrue(result1.contains("http://www.wikidata.org/entity/Q268592"));
+
+        // repeat to use buffer
+        result1 = wikidata.getHypernyms(wikidata.getLinker().linkToSingleConcept("financial services"));
         assertTrue(result1.size() > 0);
         assertTrue(result1.contains("http://www.wikidata.org/entity/Q268592"));
     }

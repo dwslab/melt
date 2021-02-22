@@ -123,7 +123,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
 
 
     @Override
-    public Set<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonymsLexical(String linkedConcept) {
         if (linkedConcept != null) {
             HashSet<String> result = getSynonyms(linkedConcept, Language.ENGLISH);
             if (result.size() == 0) {

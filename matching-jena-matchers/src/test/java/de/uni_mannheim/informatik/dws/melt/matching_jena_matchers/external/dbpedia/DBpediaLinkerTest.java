@@ -87,6 +87,14 @@ class DBpediaLinkerTest {
     }
 
     @Test
+    void getUris(){
+        DBpediaLinker linker = new DBpediaLinker(false);
+        Set<String> result = linker.getUris("http://dbpedia.org/resource/Mount_everest");
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
     void getDisambiguationUris(){
         DBpediaLinker linker = new DBpediaLinker(false);
         Set<String> uris = linker.getDisambiguationUris("http://dbpedia.org/resource/Swap");

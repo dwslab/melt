@@ -13,7 +13,7 @@ public interface SynonymCapability {
      * @param linkedConcept Linked concept.
      * @return A set of synonyms. // TODO: be more specific links or words
      */
-    Set<String> getSynonyms(String linkedConcept);
+    Set<String> getSynonymsLexical(String linkedConcept);
 
     /**
      * Given two links, determine whether those are synonymous.

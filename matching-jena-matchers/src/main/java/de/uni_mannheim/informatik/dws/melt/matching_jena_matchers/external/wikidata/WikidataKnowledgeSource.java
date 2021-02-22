@@ -192,7 +192,7 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     }
 
     @Override
-    public Set<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonymsLexical(String linkedConcept) {
         return getSynonyms(linkedConcept, Language.ENGLISH);
     }
 
@@ -640,7 +640,8 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     /**
      * This will return the direct hypernyms as String.
      *
-     * @param linkedConcept The linked concept for which hypernyms shall be retrieved. The linked concept is a URI.
+     * @param linkedConcept The linked concept for which hypernyms shall be retrieved. The linked concept is a URI or
+     *                      a multilink.
      * @return The found hypernyms as links (URIs). If it is planned to immediately use the lexical representation
      * use {@link WikidataKnowledgeSource#getHypernymsLexical(String, Language)}. In case nothing was found,
      * an empty set will be returned.
@@ -648,6 +649,12 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
     @Override
     public HashSet<String> getHypernyms(String linkedConcept) {
         HashSet<String> result = new HashSet<>();
+        String key = linkedConcept + "_hypernym_uris";
+
+        if(hypernymyBuffer.containsKey(key)){
+            return hypernymyBuffer.get(key);
+        }
+
         if (linkedConcept.startsWith(WikidataLinker.MULTI_CONCEPT_PREFIX)) {
             Set<String> individualLinks = this.linker.getUris(linkedConcept);
             if (individualLinks == null) {
@@ -657,16 +664,18 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
                 result.addAll(getHypernyms(individualLink));
             }
         } else {
-            String queryString = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" +
-                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                    "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n" +
-                    "SELECT DISTINCT ?c WHERE { \n" +
-                    "  { <" + linkedConcept + "> wdt:P31 ?c . }\n" +
-                    "  UNION\n" +
-                    "  { <" + linkedConcept + "> wdt:P279 ?c . }\n" +
-                    "}";
+            StringBuilder queryString = new StringBuilder();
+            queryString
+                    .append("PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n")
+                    .append("PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n")
+                    .append("PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n")
+                    .append("SELECT DISTINCT ?c WHERE { \n")
+                    .append("  { <" + linkedConcept + "> wdt:P31 ?c . }\n")
+                    .append("  UNION\n")
+                    .append("  { <" + linkedConcept + "> wdt:P279 ?c . }\n")
+                    .append("}");
             //System.out.println(queryString);
-            Query query = QueryFactory.create(queryString);
+            Query query = QueryFactory.create(queryString.toString());
             QueryExecution queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
             ResultSet resultSet = queryExecution.execSelect();
             while (resultSet.hasNext()) {
@@ -676,6 +685,8 @@ public class WikidataKnowledgeSource extends SemanticWordRelationDictionary {
             }
             queryExecution.close();
         }
+        hypernymyBuffer.put(key, result);
+        commit();
         return result;
     }
 
