@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -211,6 +212,17 @@ public class TestCase {
             }
         }
         return parsedInputAlignment;
+    }
+    
+    
+    /**
+     * This method parses the parameters and returns it in the given class type.
+     * @param <T> the type of parameter class
+     * @param type the requested type
+     * @return Parsed parameters.
+     */
+    public <T> T getParsedParameters(Class<T> type) {
+        return TypeTransformerRegistry.getTransformedObject(this.parameters, type);
     }
 
 
