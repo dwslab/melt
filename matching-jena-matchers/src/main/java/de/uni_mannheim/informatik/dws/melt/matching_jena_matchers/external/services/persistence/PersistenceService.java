@@ -23,7 +23,7 @@ public class PersistenceService {
     /**
      * Directory where all persistence database files will be saved.
      */
-    public final static String PERSISTENCE_DIRECTORY = "./persistences";
+    public final static String PERSISTENCE_DIRECTORY = "." + File.separator + "persistences";
 
     /**
      * Logger.
@@ -141,6 +141,8 @@ public class PersistenceService {
         WIKIDATA_LABEL_LINK_BUFFER,
         WIKIDATA_ASK_BUFFER,
 
+        DBPEDIA_LABEL_LINK_BUFFER,
+
         ALOD_CLASSIC_SYONYMY_BUFFER,
         ALOD_CLASSIC_LABEL_URI_BUFFER,
         ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER,
@@ -194,6 +196,7 @@ public class PersistenceService {
                 case WIKIDATA_SYNONYMY_BUFFER:
                 case WIKIDATA_LABEL_LINK_BUFFER:
                 case WIKIDATA_ASK_BUFFER:
+                case DBPEDIA_LABEL_LINK_BUFFER:
                     return String.class;
             }
             return null;
@@ -218,6 +221,7 @@ public class PersistenceService {
                 case WIKIDATA_ASK_BUFFER:
                 case ALOD_CLASSIC_HYPERNYM_BUFFER:
                 case ALOD_XL_HYPERNYM_BUFFER:
+                case DBPEDIA_LABEL_LINK_BUFFER:
                     return Serializer.STRING;
             }
             return null;
@@ -239,6 +243,7 @@ public class PersistenceService {
                 case WIKIDATA_LABEL_LINK_BUFFER:
                 case ALOD_CLASSIC_HYPERNYM_BUFFER:
                 case ALOD_XL_HYPERNYM_BUFFER:
+                case DBPEDIA_LABEL_LINK_BUFFER:
                     return Serializer.JAVA;
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
@@ -256,37 +261,39 @@ public class PersistenceService {
         public String getFilePath() {
             switch (this) {
                 case ALOD_CLASSIC_SYONYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/webisalod_classic_synonymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_classic_synonymy_buffer.mapdb";
                 case ALOD_XL_SYONYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/webisalod_xl_synonymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_xl_synonymy_buffer.mapdb";
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/webisalod_classic_label_uri_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_classic_label_uri_buffer.mapdb";
                 case ALOD_XL_LABEL_URI_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/webisalod_xl_label_uri_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_xl_label_uri_buffer.mapdb";
                 case ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/webisalod_classic_hypernymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_classic_hypernymy_buffer.mapdb";
                 case ALOD_XL_HYPERNYMY_ASK_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/webisalod_xl_hypernymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_xl_hypernymy_buffer.mapdb";
                 case BABELNET_SYNONYM_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/babelnet_synonym_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "babelnet_synonym_buffer.mapdb";
                 case BABELNET_HYPERNYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/babelnet_hypernymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "babelnet_hypernymy_buffer.mapdb";
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/babelnet_single_concept_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "babelnet_single_concept_buffer.mapdb";
                 case BABELNET_MULTI_CONCEPT_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/babelnet_multi_concept_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "babelnet_multi_concept_buffer.mapdb";
                 case WIKIDATA_SYNONYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/wikidata_synonymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "wikidata_synonymy_buffer.mapdb";
                 case WIKIDATA_HYPERNYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/wikidata_hypernymy_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "wikidata_hypernymy_buffer.mapdb";
                 case WIKIDATA_LABEL_LINK_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/wikidata_label_link_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "wikidata_label_link_buffer.mapdb";
                 case WIKIDATA_ASK_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/wikidata_ask_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "wikidata_ask_buffer.mapdb";
                 case ALOD_CLASSIC_HYPERNYM_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/webisalod_classic_hypernym_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_classic_hypernym_buffer.mapdb";
                 case ALOD_XL_HYPERNYM_BUFFER:
-                    return PERSISTENCE_DIRECTORY + "/webisalod_xl_hypernym_buffer.mapdb";
+                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_xl_hypernym_buffer.mapdb";
+                case DBPEDIA_LABEL_LINK_BUFFER:
+                    return PERSISTENCE_DIRECTORY + File.separator + "dbpedia_label_link_buffer.mapdb";
             }
             return null;
         }

@@ -15,6 +15,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class WebIsAlodXLLinkerTest {
 
 
+    /**
+     * For exploratory testing.
+     */
+    @Test
+    void linkToPotentiallyMultipleConceptsPlayground(){
+        String concept = "CDX Emerging Markets";
+        System.out.println("Linked Concepts:");
+        WebIsAlodXLLinker linker = new WebIsAlodXLLinker();
+        HashSet<String> result = linker.linkToPotentiallyMultipleConcepts(concept);
+        if(result != null && result.size() > 0) {
+            for (String s : result) {
+                System.out.println("\t" + s);
+            }
+        } else {
+            System.out.println("No concept found.");
+        }
+    }
+
     @AfterAll
     @BeforeAll
     static void deleteBuffers(){

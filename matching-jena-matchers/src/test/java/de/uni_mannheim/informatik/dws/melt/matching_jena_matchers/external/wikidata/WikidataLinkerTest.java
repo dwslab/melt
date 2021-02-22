@@ -4,6 +4,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
@@ -15,31 +16,16 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations.deletePersistenceDirectory;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WikidataLinkerTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WikidataLinkerTest.class);
 
     @BeforeAll
     @AfterAll
     static void setupAndTearDown() {
         deletePersistenceDirectory();
-    }
-
-    /**
-     * Delete the persistence directory.
-     */
-    private static void deletePersistenceDirectory() {
-        PersistenceService.getService().closePersistenceService();
-        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
-        if (result.exists() && result.isDirectory()) {
-            try {
-                FileUtils.deleteDirectory(result);
-            } catch (IOException e) {
-                LOGGER.error("Failed to remove persistence directory.", e);
-            }
-        }
     }
 
     @ParameterizedTest
@@ -136,6 +122,12 @@ class WikidataLinkerTest {
         assertTrue(individualLinks3.contains("http://www.wikidata.org/entity/Q207326"));
 
         PersistenceService.getService().closePersistenceService();
+    }
+
+    @Test
+    void getNameOfLinker(){
+        WikidataLinker linker = new WikidataLinker(false);
+        assertNotNull(linker.getNameOfLinker());
     }
 
 }

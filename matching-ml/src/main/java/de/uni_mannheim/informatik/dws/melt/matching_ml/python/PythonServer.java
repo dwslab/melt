@@ -802,7 +802,6 @@ public class PythonServer {
      */
     private static Process serverProcess;
 
-
     /**
      * Export a resource embedded into a Jar file to the local file path.
      *
@@ -810,6 +809,7 @@ public class PythonServer {
      * @param resourceName ie.: "/SmartLibrary.dll"
      */
     private void exportResource(File baseDirectory, String resourceName) {
+        // there must not be an OS-specific separator - a forward slash is strictly required here (getResourceAsStream)!
         try (InputStream stream = this.getClass().getResourceAsStream("/" + resourceName)){
             if(stream == null) {
                 throw new Exception("Cannot get resource \"" + resourceName + "\" from Jar file.");
@@ -826,7 +826,6 @@ public class PythonServer {
                     + baseDirectory.getAbsolutePath() + ")", ex);
         }
     }
-
 
     /**
      * Initializes the server.
@@ -945,8 +944,8 @@ public class PythonServer {
     protected void updateEnvironmentPath(Map<String,String> environment, String pythonCommand){
         String path = environment.getOrDefault("PATH", "");
         String additionalPaths = getPythonAdditionalPath(pythonCommand);
-        if(additionalPaths.isEmpty() == false){
-            if(path.endsWith(File.pathSeparator) == false)
+        if(!additionalPaths.isEmpty()){
+            if(!path.endsWith(File.pathSeparator))
                 path += File.pathSeparator;
             path += additionalPaths;
         }
@@ -965,10 +964,9 @@ public class PythonServer {
             return "";
         }
         try {
-            String s = Files.find(f.toPath(), 6, (path, attributes) -> attributes.isDirectory() && path.getFileName().toString().equals("bin"))
+            return Files.find(f.toPath(), 6, (path, attributes) -> attributes.isDirectory() && path.getFileName().toString().equals("bin"))
                     .map(path->path.toAbsolutePath().toString())
                     .collect(Collectors.joining(File.pathSeparator));
-            return s;
         } catch (IOException ex) {
             LOGGER.info("Could not add more directories in path", ex);
             return "";
