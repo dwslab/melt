@@ -64,6 +64,28 @@ class DBpediaLinkerTest {
         assertTrue(swapUris.contains("http://dbpedia.org/resource/Swap_(finance)"));
     }
 
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void linkToPotentiallyMultipleConcepts(boolean isDiskBufferEnabled) {
+        DBpediaLinker linker = new DBpediaLinker(isDiskBufferEnabled);
+        assertEquals(isDiskBufferEnabled, linker.isDiskBufferEnabled());
+
+        // this is a full label match (https://dbpedia.org/page/Cocktail_party)
+        Set<String> links1 = linker.linkToPotentiallyMultipleConcepts("cocktail party");
+        assertTrue(links1.size() > 0);
+
+        // multi match (cocktail party and car)
+        Set<String> links2 = linker.linkToPotentiallyMultipleConcepts("cocktail party car");
+        assertTrue(links2.size() > 1);
+
+        // case 3: multi link test with stopwords
+        Set<String> links3 = linker.linkToPotentiallyMultipleConcepts("peak of the Mount Everest");
+        assertNotNull(links3);
+        assertTrue(links3.size() > 1);
+        Set<String> individualLinks3 = linker.getUris(links3);
+        assertTrue(individualLinks3.contains("http://dbpedia.org/resource/Mount_everest"));
+    }
+
     @Test
     void getDisambiguationUris(){
         DBpediaLinker linker = new DBpediaLinker(false);

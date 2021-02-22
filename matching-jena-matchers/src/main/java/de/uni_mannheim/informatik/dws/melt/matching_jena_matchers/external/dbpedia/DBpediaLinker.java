@@ -2,9 +2,12 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpe
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.LeftToRightTokenizer;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.MaxGramLeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.*;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
@@ -96,6 +99,24 @@ public class DBpediaLinker implements LabelToConceptLinker {
         }
         if (multiLinkStore.containsKey(multiConceptLink)) {
             return multiLinkStore.get(multiConceptLink);
+        }
+        return result;
+    }
+
+    /**
+     * Given a set of links where the links can be multi concept links or direct links, a set of only direct links
+     * is returned.
+     * @param multipleLinks Set with multiple links. Multi concept links can be mixed with direct links.
+     * @return A set with only direct links.
+     */
+    public Set<String> getUris(Set<String> multipleLinks){
+        Set<String> result = new HashSet<>();
+        for(String link : multipleLinks){
+            if(link.startsWith(MULTI_CONCEPT_PREFIX)){
+                result.addAll(getUris(link));
+            } else {
+                result.add(link);
+            }
         }
         return result;
     }
@@ -259,7 +280,53 @@ public class DBpediaLinker implements LabelToConceptLinker {
 
     @Override
     public Set<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
+        return linkToPotentiallyMultipleConcepts(labelToBeLinked, Language.ENGLISH);
+    }
+
+    public HashSet<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked, Language language) {
+        HashSet<String> result = linkLabelToTokensLeftToRight(labelToBeLinked, language);
+        int possibleConceptParts = StringOperations.clearArrayFromStopwords(StringOperations.tokenizeBestGuess(labelToBeLinked)).length;
+
+        int actualConceptParts = 0;
+        for(String s : result) {
+            actualConceptParts = actualConceptParts + StringOperations.clearArrayFromStopwords(StringOperations.tokenizeBestGuess(s)).length;
+        }
+
+        // TODO: for now: only 100% results
+        if(possibleConceptParts <= actualConceptParts) {
+            return result;
+        }
         return null;
+    }
+
+    /**
+     * Splits the labelToBeLinked in ngrams up to infinite size and tries to link components.
+     * This corresponds to a MAXGRAM_LEFT_TO_RIGHT_TOKENIZER or NGRAM_LEFT_TO_RIGHT_TOKENIZER OneToManyLinkingStrategy.
+     *
+     * @param labelToBeLinked The label that shall be linked.
+     * @param language The language of the label.
+     * @return A set of concept URIs that were found.
+     */
+    private HashSet<String> linkLabelToTokensLeftToRight(String labelToBeLinked, Language language){
+        //StringOperations.removeNonAlphanumericCharacters(StringOperations.removeEnglishGenitiveS(labelToBeLinked));
+        LeftToRightTokenizer tokenizer;
+        String[] tokens = StringOperations.tokenizeBestGuess(labelToBeLinked);
+
+        //tokenizer = new NgramLeftToRightTokenizer(tokens, "_", 10);
+        tokenizer = new MaxGramLeftToRightTokenizer(tokens, " ");
+
+        HashSet<String> result = new HashSet<>();
+        String token = tokenizer.getInitialToken();
+        while(token != null){
+            String resultingConcept = linkToSingleConcept(token, language);
+            if(resultingConcept == null || resultingConcept.length() == 0){
+                token = tokenizer.getNextTokenNotSuccessful();
+            } else {
+                result.add(resultingConcept);
+                token = tokenizer.getNextTokenSuccessful();
+            }
+        }
+        return result;
     }
 
     @Override

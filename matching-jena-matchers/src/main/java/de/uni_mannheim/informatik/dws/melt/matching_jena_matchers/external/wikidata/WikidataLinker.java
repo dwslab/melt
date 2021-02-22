@@ -154,8 +154,8 @@ public class WikidataLinker implements LabelToConceptLinker {
      * @param multipleLinks Set with multiple links. Multi concept links can be mixed with direct links.
      * @return A set with only direct links.
      */
-    public HashSet<String> getUris(HashSet<String> multipleLinks){
-        HashSet<String> result = new HashSet<>();
+    public Set<String> getUris(Set<String> multipleLinks){
+        Set<String> result = new HashSet<>();
         for(String link : multipleLinks){
             if(link.startsWith(MULTI_CONCEPT_PREFIX)){
                 result.addAll(getUris(link));
@@ -282,7 +282,7 @@ public class WikidataLinker implements LabelToConceptLinker {
     }
 
     @Override
-    public HashSet<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
+    public Set<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
         return linkToPotentiallyMultipleConcepts(labelToBeLinked, Language.ENGLISH);
     }
 
