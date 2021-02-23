@@ -19,7 +19,7 @@ is also shown in the following figure.
 
 The program will use the default `python` command of your system path.
 Note that Python 3 is required together with the dependencies listed 
-in [/matching-ml/melt-resources/requirements.txt](/matching-ml/src/main/resources/requirements.txt).
+in [/matching-ml/melt-resources/requirements.txt](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/resources/requirements.txt).
 
 If you want to use a special python environment, you can create a file named `python_command.txt`
 in your `melt-resources` directory (create if not existing) containing the path to your python executable. You can, for example,
