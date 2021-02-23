@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Complete List of Matchers
-parent: Matcher Evaluation
+parent: Available Matchers
 nav_order: 1
 permalink: /matcher-components/full-matcher-list
 ---
