@@ -5,7 +5,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Langu
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wikidata.WikidataLinker;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
