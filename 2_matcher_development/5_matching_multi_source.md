@@ -1,9 +1,9 @@
 ---
 layout: default
-title: Matching with ML
+title: Multi-Source Matching
 parent: Matcher Development
 nav_order: 5
 ---
 
-# Matching with Machine Learning
+# Matching with Multiple Sources
 Some content here.
