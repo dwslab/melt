@@ -15,7 +15,7 @@ It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaign
 Found a bug? Don't hesitate to <a href="https://github.com/dwslab/melt/issues">open an issue</a>.
 
 ## User Guide
-All functionaly is documented in our <a href="https://dwslab.github.io/melt/">User Guide</a>. 
+All functionality is documented in our <a href="https://dwslab.github.io/melt/">User Guide</a>. 
 
 ## JavaDoc
 - [Latest Commit / Developer Version](https://dwslab.github.io/melt/javadoc_latest/index.html)
@@ -47,7 +47,7 @@ you can use [jitpack.io](https://jitpack.io/#dwslab/melt/) :
 ```
 for the version, you can use any [release tag](https://github.com/dwslab/melt/releases), [short commit hash](https://github.com/dwslab/melt/commits/master) or `master-SNAPSHOT` to get the current development version.
 They are also listed directly at [jitpack.io/#dwslab/melt/](https://jitpack.io/#dwslab/melt/).
-Furthermore you need to add the jitpack repository in your pom file:
+Furthermore, you need to add the jitpack repository in your pom file:
 ```xml
 <repositories>
     <repository>

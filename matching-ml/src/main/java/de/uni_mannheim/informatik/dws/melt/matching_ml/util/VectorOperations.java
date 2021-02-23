@@ -17,6 +17,7 @@ import java.util.Set;
  */
 public class VectorOperations {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(VectorOperations.class);
 
     /**
@@ -32,24 +33,86 @@ public class VectorOperations {
 
     /**
      * Read the provided text file.
+     * @param textModelFilePath Path to the text file. Each line represents a concept vector. All elements are space-separated.
+     *                          The first element is the concept string. Afterwards, the vector elements are named. The file
+     *                          must be UTF-8 encoded.
+     * @return Parsed text model. Null in the case of an error.
+     */
+    public static Map<String, Float[]> readVectorFileAsFloat(String textModelFilePath){
+        return readVectorFileAsFloat(new File(textModelFilePath));
+    }
+
+    /**
+     * Read the provided text file.
+     * @param textModelFile The text file. Each line represents a concept vector. All elements are space-separated.
+     *                      The first element is the concept string. Afterwards, the vector elements are named. The file
+     *                      must be UTF-8 encoded.
+     * @return Parsed text model. Null in the case of an error.
+     */
+    public static Map<String, Float[]> readVectorFileAsFloat(File textModelFile){
+        if(!isFileOk(textModelFile)) return null;
+        Map<String, Float[]> result = new HashMap<>();
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(textModelFile), StandardCharsets.UTF_8));
+            String line;
+            while((line = reader.readLine()) != null) {
+                String[] tokens = line.split(" ");
+                String key = tokens[0];
+                if (result.containsKey(key)) {
+                    LOGGER.warn("WARNING: The specified file (" + textModelFile + ") contains a duplicate key: " + key);
+                    continue;
+                }
+                Float[] vector = new Float[tokens.length - 1];
+                try {
+                    for (int i = 1; i <= vector.length; i++) {
+                        vector[i - 1] = Float.parseFloat(tokens[i]);
+                    }
+                } catch (NumberFormatException nfe){
+                    LOGGER.warn("WARNING: There was a number format exception. Will not add vector for key " + key);
+                    LOGGER.warn("The problem occurred while reading the following line: " + line);
+                    continue;
+                }
+                result.put(key, vector);
+            }
+        } catch (FileNotFoundException e) {
+            LOGGER.error("Error while trying to read text model file: FileNotFoundException", e);
+        } catch (IOException e) {
+            LOGGER.error("Error while trying to read text model file.", e);
+        }
+        return result;
+    }
+
+    /**
+     * Checks the provided file.
+     * @param textModelFile File to be checked.
+     * @return True if ok, else false.
+     */
+    private static boolean isFileOk(File textModelFile){
+        if(textModelFile == null) {
+            LOGGER.error("The specified file is null. Cannot read the vector file.");
+            return false;
+        }
+        if(textModelFile.isDirectory()){
+            LOGGER.error("The specified file is actually a directory. Cannot read the vector file.");
+            return false;
+        }
+        if(!textModelFile.exists()){
+            LOGGER.error("The specified file does not exist. Cannot read the vector file.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Read the provided text file.
      * @param textModelFile The text file. Each line represents a concept vector. All elements are space-separated.
      *                      The first element is the concept string. Afterwards, the vector elements are named. The file
      *                      must be UTF-8 encoded.
      * @return Parsed text model. Null in the case of an error.
      */
     public static Map<String, Double[]> readVectorFile(File textModelFile){
-        if(textModelFile == null) {
-            LOGGER.error("The specified file is null. Cannot read the vector file.");
-            return null;
-        }
-        if(textModelFile.isDirectory()){
-            LOGGER.error("The specified file is actually a directory. Cannot read the vector file.");
-            return null;
-        }
-        if(!textModelFile.exists()){
-            LOGGER.error("The specified file does not exist. Cannot read the vector file.");
-            return null;
-        }
+        if(!isFileOk(textModelFile)) return null;
+
 
         Map<String, Double[]> result = new HashMap<>();
         try {
@@ -92,7 +155,6 @@ public class VectorOperations {
      *              [2] True if dimension is consistent, else false.<br>
      */
     static Triplet<Set<String>, Integer, Boolean> analyzeVectorTextFile(File textModelFile){
-        Triplet<Set<String>, Integer, Boolean> result;
         int dimension = -1;
         boolean isDimensionConsistent = true;
         HashSet<String> concepts = new HashSet<>();
@@ -119,8 +181,7 @@ public class VectorOperations {
         } catch (IOException e) {
             LOGGER.error("Error while trying to read text model file.", e);
         } finally {
-            result = new Triplet<>(concepts, dimension, isDimensionConsistent);
-            return result;
+            return new Triplet<>(concepts, dimension, isDimensionConsistent);
         }
     }
 
