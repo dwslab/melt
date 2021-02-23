@@ -3,6 +3,7 @@ layout: default
 title: Available Matchers
 has_children: true
 nav_order: 3
+permalink: /matcher-components
 ---
 
 # Available Matchers and Filters

@@ -3,6 +3,8 @@ layout: default
 title: Matching with ML
 parent: Matcher Development
 nav_order: 6
+permalink: /matcher-development/with-ml
+
 ---
 
 # Matching with Machine Learning

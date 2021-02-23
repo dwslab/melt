@@ -2,6 +2,7 @@
 layout: default
 title: Cite MELT
 nav_order: 7
+permalink: /cite-melt
 ---
 
 # How to Cite?

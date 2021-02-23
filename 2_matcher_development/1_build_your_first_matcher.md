@@ -3,6 +3,7 @@ layout: default
 title: Build Your First Matcher
 parent: Matcher Development
 nav_order: 1
+permalink: /matcher-development/build-your-first-matcher
 ---
 
 # Build Your First Java Matcher with MELT

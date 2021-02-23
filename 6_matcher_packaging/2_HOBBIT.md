@@ -3,6 +3,7 @@ layout: default
 title: HOBBIT
 parent: Matcher Packaging
 nav_order: 2
+permalink: /matcher-packaging/hobbit
 ---
 
 # Packaging Matchers for SEALS and HOBBIT

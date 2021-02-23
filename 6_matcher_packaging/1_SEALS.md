@@ -3,9 +3,10 @@ layout: default
 title: SEALS
 parent: Matcher Packaging
 nav_order: 1
+permalink: /matcher-packaging/seals
 ---
 
-# Packaging matchers for SEALS
+# Packaging Matchers for SEALS
 
 ## Steps
 1. Have a look at [examples/simpleJavaMatcher](/examples/simpleJavaMatcher)

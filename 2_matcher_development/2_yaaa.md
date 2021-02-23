@@ -3,6 +3,7 @@ layout: default
 title: YAAA
 parent: Matcher Development
 nav_order: 2
+permalink: /matcher-development/yaaa
 ---
 
 # Yet Another Alignment API (YAAA)

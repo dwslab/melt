@@ -3,6 +3,7 @@ layout: default
 title: Non-Java Matchers
 parent: Matcher Development
 nav_order: 3
+permalink: /matcher-development/non-java-matchers
 ---
 
 # Non-Java Matchers / External Matcher Development

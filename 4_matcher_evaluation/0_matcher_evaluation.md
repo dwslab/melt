@@ -3,6 +3,7 @@ layout: default
 title: Matcher Evaluation
 has_children: true
 nav_order: 4
+permalink: /matcher-evaluation
 ---
 
 
@@ -40,21 +41,9 @@ of evaluators and metrics.
 After the `Executor` ran, an `ExecutionResult` can be refined by a `Refiner`. A refiner takes an individual `ExecutionResult` and makes it smaller. An example is the `TypeRefiner` which creates additional execution results depending on the type of 
 the alignment (classes, properties, datatype properties, object properties, instances). Another example for an implemented 
 refiner is the `ResidualRefiner` which only keeps non-trivial correspondences. Refiners can be combined. This means that 
-MELT can calculate very specific evaluation statistics such as the residual precision of datatype property correspondences.
+MELT can calculate very specific evaluation statistics such as the residual precision of datatype property correspondences. 
 
-#### Available Evaluators
-- `EvaluatorCSV`: Default evaluator for an in-depth analysis of alignments. Multiple CSV files are generated that can be 
-analyzed using a spreadsheet program such as <a href="https://www.libreoffice.org/download/download/">LibreOffice Calc</a>.
-- `EvaluatorBasic`: A basic evaluator that is easy on memory. Use this evaluator when you run into
-memory issues with `EvaluatorCSV` on very large evaluation problems. Note that this evaluator offers less
-functionality than the default evaluator.
-- `EvaluatorMcNemarSignificance`: An evaluator for statistical significance tests.
- This evaluator allows checking whether multiple alignments are significantly different.
-- `DashboardBuilder`: This evaluator generates an interactive Web UI (*MELT Dashboard*) to analyze alignments
-in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2019
-<a href="http://oaei.ontologymatching.org/2019/anatomy/index.html">Anatomy</a> and <a href="http://oaei.ontologymatching.org/2019/conference/index.html">Conference</a> track <a href="https://dwslab.github.io/melt/anatomy_conference_dashboard.html">here</a>.
-
-*Note that it is possible to build your own evaluator and call functions from the existing evaluators.*
+The default evaluator is `EvaluatorCSV`.
 
 #### Minimal Evaluation Example
 The following code example will execute the `SimpleStringMatcher` on the `Anatomy` track
