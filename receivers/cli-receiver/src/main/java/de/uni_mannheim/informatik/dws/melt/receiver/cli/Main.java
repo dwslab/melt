@@ -1,59 +1,93 @@
 package de.uni_mannheim.informatik.dws.melt.receiver.cli;
 
-import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
-import eu.sealsproject.platform.res.tool.api.ToolBridgeException;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 
 /**
  * This class is used as wrapper for the SEALS external matcher build process.
  * It follows the MELT ExternalMatcher communication protocol.
  */
 public class Main {
-
-    public static void main(String[] args) {
-        if(args.length != 3 || args.length == 4){
-            System.err.println("Did not get an implementing class and 2 or 3 input URLs.");
-            return;
-        }
-        System.err.println("The following parameters have been received: " + String.join(" | ", args));
-        IOntologyMatchingToolBridge matcher = getBridge(args[0]);
-        if (matcher == null) {
-            return;
-        }
+    
+    public static void main(String[] args) throws Exception {
+        Options options = new Options();
+        
+        options.addOption(Option.builder("m")
+                .longOpt("matcher")
+                .hasArg()
+                .argName("fullName")
+                .required()
+                .desc("The full name of the matcher like de.uni_mannheim.informatik.dws.melt.MyMatcher")
+                .build());
+        
+        options.addOption(Option.builder("s")
+                .longOpt("source")
+                .hasArg()
+                .argName("URL")
+                .required()
+                .desc("The source ontology URI (usually a file uri pointing to a file containing an ontology).")
+                .build());
+        
+        options.addOption(Option.builder("t")
+                .longOpt("target")
+                .hasArg()
+                .argName("URL")
+                .required()
+                .desc("The taregt ontology URI (usually a file uri pointing to a file containing an ontology).")
+                .build());
+        
+        options.addOption(Option.builder("i")
+                .longOpt("inputAlignment")
+                .hasArg()
+                .argName("URL")
+                .desc("The input alignment URI (usually a file uri pointing to a file containing the alignment in the alignment api format).")
+                .build());
+        
+        options.addOption(Option.builder("p")
+                .longOpt("parameters")
+                .hasArg()
+                .argName("URL")
+                .desc("The parameters URI (usually a file uri pointing to a file containing parameters formatted usually as json or YAML).")
+                .build());
+        
+        options.addOption("help", "print this message");
+                
+        CommandLine cmd = null;
         try {
-            if (args.length == 3) {
-                System.out.println(matcher.align(new URL(args[1]), new URL(args[2])));
-            } else if (args.length == 4) {
-                System.out.println(matcher.align(new URL(args[1]), new URL(args[2]), new URL(args[3])));
-            }
-        } catch (MalformedURLException ex) {
-            System.err.println("Could not create URL. " + ex.getMessage());
-        } catch (ToolBridgeException ex) {
-            System.err.println("ToolBridgeException: " + ex.getMessage());
+            cmd = new DefaultParser().parse(options, args);
+        } catch (ParseException e) {
+            System.err.println(e.getMessage());
+            new HelpFormatter().printHelp("java -jar cli-receiver.jar", options);
+            System.exit(1);
         }
+        
+        if(cmd.hasOption("help")){
+            new HelpFormatter().printHelp("java -jar cli-receiver.jar", options);
+            System.exit(1);
+        }
+        
+        AlignmentAndParameters result = GenericMatcherCaller.runMatcher(cmd.getOptionValue("m"), getURL(cmd, "s"), getURL(cmd, "t"), getURL(cmd, "i"), getURL(cmd, "p"));
+        System.out.println(TypeTransformerRegistry.getTransformedObject(result.getAlignment(), URL.class));
     }
-
-    private static IOntologyMatchingToolBridge getBridge(String implementingClass) {
-        implementingClass = implementingClass.replace("\r", "").replace("\n", "").trim();
-        if(implementingClass.length() == 0){
-             System.err.println("The name of the implementing class is empty");
-             return null;
+    
+    private static URL getURL(CommandLine cmd, String parameter){
+        if(cmd.hasOption(parameter)){
+            try {
+                return new URL(cmd.getOptionValue(parameter));
+            } catch (MalformedURLException ex) {
+                System.err.println("argument " + parameter + " is not a valid url. The argument will not be used.");
+            }
         }
-        IOntologyMatchingToolBridge bridge;
-        try {
-            Class clazz = Class.forName(implementingClass);
-            bridge = (IOntologyMatchingToolBridge) clazz.newInstance();
-        } catch (ClassNotFoundException ex) {
-            System.err.println("Could not find class " + implementingClass);
-            return null;
-        } catch (InstantiationException ex) {
-            System.err.println("Could not instantiate class " + implementingClass);
-            return null;
-        } catch (IllegalAccessException ex) {
-            System.err.println("Could not access class " + implementingClass);
-            return null;
-        }
-        return bridge;
+        return null;
     }
 }
