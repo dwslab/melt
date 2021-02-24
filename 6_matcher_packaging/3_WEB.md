@@ -12,8 +12,8 @@ This can be in a docker or any other server.
 
 
 ## Swagger documentation of the Web API
+melt/matcher-packaging/
+[Full screen documentation in a new tab](/melt/6_matcher_packaging/swagger_ui_melt.html){:target="_blank"}
 
-[Full screen documentation in a new tab](/6_matcher_packaging/swagger_ui_melt.html){:target="_blank"}
-
-<iframe src="/6_matcher_packaging/swagger_ui_melt.html" scrolling="no"
+<iframe src="/melt/6_matcher_packaging/swagger_ui_melt.html" scrolling="no"
     style="border:0; width:100%; height:3000px; overflow:hidden;">
