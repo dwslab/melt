@@ -99,6 +99,49 @@ public class PythonServer {
     
     
     /************************************
+     * Transformer section
+     ***********************************/
+    
+    /**
+     * Run huggingface transformers library.
+     * @param modelName the name of the pretrained model which
+     *   is downloaded or a path to a directory containing model weights
+     *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
+     *   see first parameter pretrained_model_name_or_path of the from_pretrained
+     *   function in huggingface library</a>).
+     * @param predictionFilePath path to csv file with two columns (text left and text right).
+     * @param usingTF if true, using tensorflow, if false use pytorch
+     * @param cudaVisibleDevices the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.
+     * @param transformersCache the directory where thre transformetrs library stores the models.
+     * @throws Exception in case something goes wrong.
+     * @return a list of confidences
+     */
+    public List<Double> transformersPrediction(String modelName, File predictionFilePath, boolean usingTF, String cudaVisibleDevices, File transformersCache) throws Exception{
+        HttpGet request = new HttpGet(serverUrl + "/transformers-prediction");
+        request.addHeader("modelName", modelName);
+        request.addHeader("predictionFilePath", getCanonicalPath(predictionFilePath));
+        request.addHeader("usingTF", Boolean.toString(usingTF));
+        
+        if(cudaVisibleDevices != null && cudaVisibleDevices.isEmpty() == false)
+            request.addHeader("cudaVisibleDevices", cudaVisibleDevices);
+        
+        if(transformersCache != null)
+            request.addHeader("transformersCache", getCanonicalPath(transformersCache));
+
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                } else return JSON_MAPPER.readValue(resultString, JSON_MAPPER.getTypeFactory().constructCollectionType(List.class, Double.class));
+            }
+        }
+    }
+    
+    /************************************
      * OpenEA section
      ***********************************/
     
