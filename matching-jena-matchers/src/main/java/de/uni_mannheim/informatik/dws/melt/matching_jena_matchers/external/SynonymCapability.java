@@ -8,12 +8,13 @@ import java.util.Set;
  */
 public interface SynonymCapability {
 
+
     /**
      * Get the synonyms.
      * @param linkedConcept Linked concept.
-     * @return A set of synonyms. // TODO: be more specific links or words
+     * @return A set of synonym words/labels (not links or URIs!).
      */
-    Set<String> getSynonyms(String linkedConcept);
+    Set<String> getSynonymsLexical(String linkedConcept);
 
     /**
      * Given two links, determine whether those are synonymous.

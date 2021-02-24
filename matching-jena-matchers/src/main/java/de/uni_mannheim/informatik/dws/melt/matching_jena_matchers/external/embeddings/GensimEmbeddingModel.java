@@ -86,7 +86,7 @@ public class GensimEmbeddingModel implements ExternalResourceWithSynonymCapabili
     }
 
     @Override
-    public Set<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonymsLexical(String linkedConcept) {
         // not to be implemented
         LOGGER.error("Not implemented.");
         return null;

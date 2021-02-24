@@ -97,7 +97,7 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 	 * @param linkedConcept for which synonyms shall be retrieved.
 	 * @return Synonyms
 	 */
-	public Set<String> getSynonyms(String linkedConcept) {
+	public Set<String> getSynonymsLexical(String linkedConcept) {
 		if(buffer.containsKey(linkedConcept)) {
 			return buffer.get(linkedConcept);
 		}

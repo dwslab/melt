@@ -115,7 +115,6 @@ public class WikidataLinker implements LabelToConceptLinker {
         stringModificationSet.add(new TokenizeConcatSpaceLowercaseModifier());
         stringModificationSet.add(new TokenizeConcatSpaceModifierDropPlural());
         stringModificationSet.add(new TokenizeConcatSpaceLowercaseModifierDropPlural());
-        // additions:
         stringModificationSet.add(new TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifier());
         stringModificationSet.add(new TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifierDropPlural());
     }
@@ -155,8 +154,8 @@ public class WikidataLinker implements LabelToConceptLinker {
      * @param multipleLinks Set with multiple links. Multi concept links can be mixed with direct links.
      * @return A set with only direct links.
      */
-    public HashSet<String> getUris(HashSet<String> multipleLinks){
-        HashSet<String> result = new HashSet<>();
+    public Set<String> getUris(Set<String> multipleLinks){
+        Set<String> result = new HashSet<>();
         for(String link : multipleLinks){
             if(link.startsWith(MULTI_CONCEPT_PREFIX)){
                 result.addAll(getUris(link));
@@ -283,7 +282,7 @@ public class WikidataLinker implements LabelToConceptLinker {
     }
 
     @Override
-    public HashSet<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
+    public Set<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
         return linkToPotentiallyMultipleConcepts(labelToBeLinked, Language.ENGLISH);
     }
 
@@ -343,8 +342,7 @@ public class WikidataLinker implements LabelToConceptLinker {
         List<String> result = new ArrayList<>();
         String queryString = "SELECT ?c WHERE { ?c <http://www.w3.org/2000/01/rdf-schema#label> \"" + label + "\"@" + language.toSparqlChar2() + " . }";
         //System.out.println(queryString);
-        Query query = QueryFactory.create(queryString);
-        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
+        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, queryString);
         ResultSet resultSet = queryExecution.execSelect();
         while (resultSet.hasNext()) {
             QuerySolution solution = resultSet.next();

@@ -90,7 +90,7 @@ public class BabelNetKnowledgeSource extends SemanticWordRelationDictionary {
      * @return Set with Synonyms.
      */
     @Override
-    public Set<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonymsLexical(String linkedConcept) {
         String key = linkedConcept + "_EN";
         if(synonymBuffer.containsKey(key)){
             return synonymBuffer.get(key);

@@ -1,9 +1,13 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -13,6 +17,7 @@ import java.util.Set;
  * A class which provides supporting functionalities mainly for writing unit tests.
  */
 public class TestOperations {
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestOperations.class);
 
@@ -44,7 +49,6 @@ public class TestOperations {
         return true;
     }
 
-
     /**
      * Checks whether two string arrays contain the same contents.
      * @param array_1 Array 1.
@@ -67,7 +71,6 @@ public class TestOperations {
             return true;
         }
     }
-
 
     /**
      * Checks whether two double arrays contain the same contents.
@@ -149,6 +152,21 @@ public class TestOperations {
         } catch (MissingResourceException mre){
             LOGGER.error("Cannot find resource file: " + resourceBundle + ".properties or key '" + key + "'");
             return null;
+        }
+    }
+
+    /**
+     * Delete the persistence directory.
+     */
+    public static void deletePersistenceDirectory() {
+        PersistenceService.getService().closePersistenceService();
+        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        if (result.exists() && result.isDirectory()) {
+            try {
+                FileUtils.deleteDirectory(result);
+            } catch (IOException e) {
+                LOGGER.error("Failed to remove persistence directory.", e);
+            }
         }
     }
 }

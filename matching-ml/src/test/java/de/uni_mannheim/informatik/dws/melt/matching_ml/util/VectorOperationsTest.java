@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class VectorOperationsTest {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(VectorOperationsTest.class);
 
     @Test
@@ -46,6 +47,41 @@ class VectorOperationsTest {
         assertEquals(-0.0020970153, deinVector[0]);
         assertEquals(-0.0008417874, deinVector[1]);
         assertEquals(-0.000101082886, deinVector[2]);
+
+        // make sure invalid concept is not there:
+        assertFalse(result.containsKey("Gott"));
+
+        // error behavior
+        assertNull(VectorOperations.readVectorFile("XZY"));
+    }
+
+    @Test
+    void readVectorFileAsFloat() {
+        Map<String, Float[]> result = VectorOperations.readVectorFileAsFloat(getPathOfResource("freude_vectors.txt"));
+        assertEquals(12, result.size());
+
+        // check concrete concept
+        Float[] deinVector = result.get("dein");
+        assertEquals(deinVector.length, 3);
+        assertEquals(-0.0020970153f, deinVector[0]);
+        assertEquals(-0.0008417874f, deinVector[1]);
+        assertEquals(-0.000101082886f, deinVector[2]);
+
+        // error behavior
+        assertNull(VectorOperations.readVectorFile("XZY"));
+    }
+
+    @Test
+    void readVectorFileAsFloatWithErrors() {
+        Map<String, Float[]> result = VectorOperations.readVectorFileAsFloat(getPathOfResource("freude_vectors_with_errors.txt"));
+        assertEquals(12, result.size());
+
+        // make sure the valid ones are still there:
+        Float[] deinVector = result.get("dein");
+        assertEquals(deinVector.length, 3);
+        assertEquals(-0.0020970153f, deinVector[0]);
+        assertEquals(-0.0008417874f, deinVector[1]);
+        assertEquals(-0.000101082886f, deinVector[2]);
 
         // make sure invalid concept is not there:
         assertFalse(result.containsKey("Gott"));

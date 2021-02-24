@@ -4,6 +4,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
@@ -15,31 +16,16 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations.deletePersistenceDirectory;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WikidataLinkerTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WikidataLinkerTest.class);
 
     @BeforeAll
     @AfterAll
     static void setupAndTearDown() {
         deletePersistenceDirectory();
-    }
-
-    /**
-     * Delete the persistence directory.
-     */
-    private static void deletePersistenceDirectory() {
-        PersistenceService.getService().closePersistenceService();
-        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
-        if (result.exists() && result.isDirectory()) {
-            try {
-                FileUtils.deleteDirectory(result);
-            } catch (IOException e) {
-                LOGGER.error("Failed to remove persistence directory.", e);
-            }
-        }
     }
 
     @ParameterizedTest
@@ -110,32 +96,38 @@ class WikidataLinkerTest {
         assertEquals(isDiskBufferEnabled, linker.isDiskBufferEnabled());
 
         // case 1: direct link test
-        HashSet<String> links1 = linker.linkToPotentiallyMultipleConcepts("cocktail party");
+        Set<String> links1 = linker.linkToPotentiallyMultipleConcepts("cocktail party");
         assertNotNull(links1);
         assertTrue(links1.size() > 0);
 
         // checking for concrete instances
-        HashSet<String> individualLinks1 = linker.getUris(links1);
+        Set<String> individualLinks1 = linker.getUris(links1);
         assertTrue(individualLinks1.contains("http://www.wikidata.org/entity/Q1105365"));
         assertFalse(individualLinks1.contains("http://www.wikidata.org/entity/Q837171"));
 
         // case 2: multi link test with stopwords
-        HashSet<String> links2 = linker.linkToPotentiallyMultipleConcepts("peak of the Mount Everest");
+        Set<String> links2 = linker.linkToPotentiallyMultipleConcepts("peak of the Mount Everest");
         assertNotNull(links2);
         assertTrue(links2.size() > 0);
-        HashSet<String> individualLinks2 = linker.getUris(links2);
+        Set<String> individualLinks2 = linker.getUris(links2);
         assertTrue(individualLinks2.contains("http://www.wikidata.org/entity/Q513"));
         assertTrue(individualLinks2.contains("http://www.wikidata.org/entity/Q207326"));
 
         // case 3: multi link test with other Writing
-        HashSet<String> links3 = linker.linkToPotentiallyMultipleConcepts("peakOfTheMountEverest");
+        Set<String> links3 = linker.linkToPotentiallyMultipleConcepts("peakOfTheMountEverest");
         assertNotNull(links3);
         assertTrue(links3.size() > 0);
-        HashSet<String> individualLinks3 = linker.getUris(links2);
+        Set<String> individualLinks3 = linker.getUris(links2);
         assertTrue(individualLinks3.contains("http://www.wikidata.org/entity/Q513"));
         assertTrue(individualLinks3.contains("http://www.wikidata.org/entity/Q207326"));
 
         PersistenceService.getService().closePersistenceService();
+    }
+
+    @Test
+    void getNameOfLinker(){
+        WikidataLinker linker = new WikidataLinker(false);
+        assertNotNull(linker.getNameOfLinker());
     }
 
 }

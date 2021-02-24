@@ -6,7 +6,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Seman
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import org.apache.jena.atlas.lib.NotImplemented;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -64,16 +63,16 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
      * @return A set of synonyms.
      */
     @Override
-    public Set<String> getSynonyms(String linkedConcept) {
+    public Set<String> getSynonymsLexical(String linkedConcept) {
         throw new NotImplemented();
     }
 
     @Override
-    public boolean isSynonymous(String word1, String word2) {
+    public boolean isSynonymous(String link1, String link2) {
         if(this.minimumConfidence <= 0) {
-            return sparqlService.isSynonymous(word1, word2);
+            return sparqlService.isSynonymous(link1, link2);
         } else {
-            return sparqlService.isSynonymous(word1, word2, minimumConfidence);
+            return sparqlService.isSynonymous(link1, link2, minimumConfidence);
         }
     }
 

@@ -6,7 +6,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import it.uniroma1.lcl.jlt.util.Files;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -49,7 +48,7 @@ public class WordNetKnowledgeSourceTest {
     void synonymyPlayground(){
         String word = "equity";
         System.out.println("Synonyms for '" + word + "'");
-        for (String synonym : wordnet.getSynonyms(wordnet.getLinker().linkToSingleConcept(word))){
+        for (String synonym : wordnet.getSynonymsLexical(wordnet.getLinker().linkToSingleConcept(word))){
             System.out.println(synonym);
         }
     }
@@ -86,7 +85,7 @@ public class WordNetKnowledgeSourceTest {
 
     @Test
     void getSynonyms() {
-        assertNotEquals(wordnet.getSynonyms("dog").size(), wordnet.getSynonyms("hound").size());
+        assertNotEquals(wordnet.getSynonymsLexical("dog").size(), wordnet.getSynonymsLexical("hound").size());
     }
 
     @Test

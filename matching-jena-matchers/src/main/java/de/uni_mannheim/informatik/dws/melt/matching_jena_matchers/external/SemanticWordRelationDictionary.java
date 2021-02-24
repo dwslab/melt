@@ -1,5 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,22 +12,15 @@ import java.util.Set;
  */
 public abstract class SemanticWordRelationDictionary implements ExternalResourceWithSynonymCapability {
 
-
-	/**
-	 * Checks whether the given word is available in the dictionary.
-	 * The assumed language is English.
-	 * @param word The word to be looked for.
-	 * @return Returns true if the word is in the dictionary, else false.
-	 */
-	public abstract boolean isInDictionary(String word);
 	
 	/**
 	 * Retrieves a list of synonyms independently of the word sense.
 	 * The assumed language is English.
 	 * @param linkedConcept The linked concept for which synonyms shall be retrieved.
-	 * @return A set of linked concepts.
+	 * @return A set of synonyms in word form (not links).
 	 */
-	public abstract Set<String> getSynonyms(String linkedConcept);
+	@NotNull
+	public abstract Set<String> getSynonymsLexical(String linkedConcept);
 
 	/**
 	 * Retrieves a set of hypernyms independently of the word sense.
@@ -45,18 +40,18 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 	 * or word_1 and word_2.
 	 * The assumed language is English.
 	 *
-	 * @param word1 linked word 1
-	 * @param word2 linked word 2
+	 * @param link1 linked word 1
+	 * @param link2 linked word 2
 	 * @return True if the given words are synonymous, else false.
 	 */
 	@Deprecated
-	public boolean isSynonymous(String word1, String word2) {
-		if(word1 == null || word2 == null) {
+	public boolean isSynonymous(String link1, String link2) {
+		if(link1 == null || link2 == null) {
 			return false;
 		}
 		
-		Set<String> synonyms1 = getSynonyms(word1);
-		Set<String> synonyms2 = getSynonyms(word2);
+		Set<String> synonyms1 = getSynonymsLexical(link1);
+		Set<String> synonyms2 = getSynonymsLexical(link2);
 
 		if(synonyms1 == null && synonyms2 == null){
 			// only if both are null b/c one concept might not have synonyms but still be a synonym of the other concept
@@ -70,8 +65,8 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 		}
 		
 		// add the words themselves
-		synonyms1.add(word1);
-		synonyms2.add(word2);
+		synonyms1.add(link1);
+		synonyms2.add(link2);
 
 		// remove empty strings to avoid false positives
 		synonyms1.remove("");
@@ -135,8 +130,8 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 			return false;
 		}
 
-		Set<String> synonyms1 = getSynonyms(link1);
-		Set<String> synonyms2 = getSynonyms(link2);
+		Set<String> synonyms1 = getSynonymsLexical(link1);
+		Set<String> synonyms2 = getSynonymsLexical(link2);
 
 		if(synonyms1 == null && synonyms2 == null){
 			// only if both are null b/c one concept might not have synonyms but still be a synonym of the other concept
