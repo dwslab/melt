@@ -157,8 +157,13 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
             }
             
             //run matcher
-            Object copiedInputAlignment = objectMapper.readValue(objectMapper.writeValueAsString(inputAlignment), inputAlignment.getClass());
-            Object copiedParameters = objectMapper.readValue(objectMapper.writeValueAsString(parameters), parameters.getClass());
+            Object copiedInputAlignment = null;
+            if(inputAlignment != null)
+                copiedInputAlignment = objectMapper.readValue(objectMapper.writeValueAsString(inputAlignment), inputAlignment.getClass());
+            
+            Object copiedParameters = null;
+            if(parameters != null)
+                copiedParameters = objectMapper.readValue(objectMapper.writeValueAsString(parameters), parameters.getClass());
             
             LOGGER.info("Run one to one match");
             AlignmentAndParameters alignmentAndPrameters = GenericMatcherCaller.runMatcherMultipleRepresentations(

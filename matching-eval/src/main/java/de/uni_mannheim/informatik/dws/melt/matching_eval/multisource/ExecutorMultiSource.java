@@ -1,6 +1,7 @@
 
 package de.uni_mannheim.informatik.dws.melt.matching_eval.multisource;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractorUrlPattern;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherMultiSourceCaller;
@@ -34,50 +35,50 @@ public class ExecutorMultiSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorMultiSource.class);
   
     
-    public static ExecutionResultSet executeMultipleMatchers(Track track, Map<String, Object> matchers){
-        return executeMultipleMatchers(track.getTestCases(), matchers);
+    public static ExecutionResultSet runMultipleMatchers(Track track, Map<String, Object> matchers){
+        return ExecutorMultiSource.runMultipleMatchers(track.getTestCases(), matchers);
     }
     
-    public static ExecutionResultSet executeMultipleMatchers(List<TestCase> testCases, Map<String, Object> matchers){
+    public static ExecutionResultSet runMultipleMatchers(List<TestCase> testCases, Map<String, Object> matchers){
         ExecutionResultSet resultSet = new ExecutionResultSet();        
         for(Entry<Track, List<TestCase>> trackToTestcases : groupTestCasesByTrack(testCases).entrySet()){
             Track track = trackToTestcases.getKey();
             List<TestCase> trackTestCases = trackToTestcases.getValue();
             List<URL> distinctOntologies = Track.getDistinctOntologies(trackTestCases);
             for(Entry<String, Object> matcher : matchers.entrySet()){
-                resultSet.addAll(execute(trackTestCases, matcher.getValue(), matcher.getKey(), distinctOntologies, getMostSpecificPartitioner(track)));
+                resultSet.addAll(ExecutorMultiSource.run(trackTestCases, matcher.getValue(), matcher.getKey(), distinctOntologies, getMostSpecificPartitioner(track)));
             }
         }
         return resultSet;
     }
     
-    public static ExecutionResultSet execute(Track track, Object matcher){
-        return execute(track.getTestCases(), matcher,Executor.getMatcherName(matcher));
+    public static ExecutionResultSet run(Track track, Object matcher){
+        return ExecutorMultiSource.run(track.getTestCases(), matcher,Executor.getMatcherName(matcher));
     }
     
-    public static ExecutionResultSet execute(List<TestCase> testCases, Object matcher){
-        return execute(testCases, matcher,Executor.getMatcherName(matcher));
+    public static ExecutionResultSet run(List<TestCase> testCases, Object matcher){
+        return ExecutorMultiSource.run(testCases, matcher,Executor.getMatcherName(matcher));
     }
     
-    public static ExecutionResultSet execute(List<TestCase> testCases, Object matcher, String matcherName){
+    public static ExecutionResultSet run(List<TestCase> testCases, Object matcher, String matcherName){
         ExecutionResultSet resultSet = new ExecutionResultSet();        
         for(Entry<Track, List<TestCase>> trackToTestcases : groupTestCasesByTrack(testCases).entrySet()){
             Track track = trackToTestcases.getKey();
             List<TestCase> trackTestCases = trackToTestcases.getValue(); // in case not all testcases of a track are included.
             List<URL> distinctOntologies = Track.getDistinctOntologies(trackTestCases);
-            resultSet.addAll(execute(trackTestCases, matcher, matcherName, distinctOntologies, getMostSpecificPartitioner(track)));
+            resultSet.addAll(ExecutorMultiSource.run(trackTestCases, matcher, matcherName, distinctOntologies, getMostSpecificPartitioner(track)));
         }
         return resultSet;
     }
     
     
-    public static ExecutionResultSet executeWithAdditionalGraphs(Track track, Object matcher, String matcherName, List<URL> additionalGraphs, Partitioner partitioner){
+    public static ExecutionResultSet runWithAdditionalGraphs(Track track, Object matcher, String matcherName, List<URL> additionalGraphs, Partitioner partitioner){
         List<URL> allGraphs = track.getDistinctOntologies();
         allGraphs.addAll(additionalGraphs);
-        return execute(track.getTestCases(), matcher, matcherName, allGraphs, partitioner);
+        return ExecutorMultiSource.run(track.getTestCases(), matcher, matcherName, allGraphs, partitioner);
     }
     
-    public static ExecutionResultSet execute(List<TestCase> testCases, Object matcher, String matcherName, 
+    public static ExecutionResultSet run(List<TestCase> testCases, Object matcher, String matcherName, 
             List<URL> allGraphs, Partitioner partitioner){
         Set<String> trackNames = getTrackNames(testCases);
         Alignment inputAlignment = getInputAlignment(testCases);
@@ -196,6 +197,22 @@ public class ExecutorMultiSource {
             return new PartitionerFromDatasetIdExtractor(track, DatasetIDExtractorUrlPattern.CONFERENCE_TRACK_EXTRACTOR);
         } else{
             return new PartitionerDefault(track);
+        }
+    }
+    
+    
+    /**
+     * Returns the most specific partitioner for a given track
+     * @param track the track
+     * @return the most specific partitioner
+     */
+    public static DatasetIDExtractor getMostSpecificDatasetIdExtractor(Track track){
+        if(KG_TRACKS.contains(track)){
+            return DatasetIDExtractorUrlPattern.KG_TRACK_EXTRACTOR;
+        }else if(CONFERENCE_TRACKS.contains(track)){
+            return DatasetIDExtractorUrlPattern.CONFERENCE_TRACK_EXTRACTOR;
+        } else{
+            throw new UnsupportedOperationException("DatasetIdExtractor for track " + track.getName() + "is not available");
         }
     }
     
