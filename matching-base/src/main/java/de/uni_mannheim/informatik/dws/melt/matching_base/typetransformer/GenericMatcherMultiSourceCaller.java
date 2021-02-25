@@ -236,7 +236,7 @@ public class GenericMatcherMultiSourceCaller {
         ParameterizedType pType = (ParameterizedType) genericParamTypes[0];
         Class<?> modelType = (Class<?>) pType.getActualTypeArguments()[0];
         
-        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
+        Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
         List<?> transformedModels = TypeTransformerRegistry.getTransformedListOfObjectsMultipleRepresentations(ontologies, modelType, p);
         if(transformedModels == null)
@@ -349,7 +349,7 @@ public class GenericMatcherMultiSourceCaller {
             LOGGER.warn("ontology representatives are null or empty. Matcher {} is not called.", matcher.getClass());
             return null;
         }
-        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
+        Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
         List<URL> transformedModels = TypeTransformerRegistry.getTransformedListOfObjectsMultipleRepresentations(ontologies, URL.class, p);
         if(transformedModels == null)

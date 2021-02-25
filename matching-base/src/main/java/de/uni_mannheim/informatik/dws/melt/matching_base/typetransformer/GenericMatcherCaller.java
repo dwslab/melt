@@ -186,7 +186,7 @@ public class GenericMatcherCaller {
      * @throws Exception in case somethign goes wrong
      */
     private static AlignmentAndParameters runIOntologyMatchingToolBridge(IOntologyMatchingToolBridge matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment, Object parameters) throws Exception{
-        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
+        Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
         Object transformedSource = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(sourceOntology, URL.class, p);
         if(transformedSource == null)
@@ -235,7 +235,7 @@ public class GenericMatcherCaller {
         LOGGER.debug("Choosing the following method to extract the parameter types: {}", matchMethod);
         Class<?>[] paramTypes = matchMethod.getParameterTypes();
         
-        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
+        Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
         Object transformedSource = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(sourceOntology, paramTypes[0], p);
         if(transformedSource == null)

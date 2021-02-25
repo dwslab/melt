@@ -186,7 +186,7 @@ public class TrackRepository{
      */
     public static class Complex {
         /** This dataset is based on the OntoFarm dataset [1] used in the Conference track of the OAEI campaigns. */
-        public static Track Conference  = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1");
+        //public static Track Conference  = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1"); // same dataset as Conference
         
         /**The hydrography dataset is composed of four source ontologies (Hydro3, HydrOntology_native, HydrOntology_translated, and Cree) that each should be aligned to a single target Surface Water Ontology (SWO).**/
         public static Track Hydrography  = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "hydrography", "hydrography-v1");
@@ -571,9 +571,13 @@ public class TrackRepository{
      * @param initialClasses the initial class to search defined tracks in it.
      * @return a set of tracks which are defined in 
      */
-    @SuppressWarnings("unchecked")
     public static Set<Track> retrieveDefinedTracks(Class<?>... initialClasses){
-        Set<Track> tracks = new HashSet<>();
+        return new HashSet<>(retrieveDefinedTrackList(initialClasses));
+    }
+    
+    @SuppressWarnings("unchecked")
+    static List<Track> retrieveDefinedTrackList(Class<?>... initialClasses){
+        List<Track> tracks = new ArrayList<>();
         
         Queue<Class<?>> classesToInspect = new LinkedList<>();
         Collections.addAll(classesToInspect, initialClasses);

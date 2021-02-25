@@ -20,27 +20,27 @@ public class AlignmentAndParameters {
         return alignment;
     }
     
-    public <T> T getAlignment(Class<? extends T> type) {
-        return TypeTransformerRegistry.getTransformedObject(alignment, type);
+    public <T> T getAlignment(Class<T> type) {
+        return TypeTransformerRegistry.getTransformedObjectOrNewInstance(alignment, type);
     }
     
-    public <T> T getAlignment(Class<? extends T> type, Properties p) {
-        return TypeTransformerRegistry.getTransformedObject(alignment, type, p);
+    public <T> T getAlignment(Class<T> type, Properties p) {
+        return TypeTransformerRegistry.getTransformedObjectOrNewInstance(alignment, type, p);
     }
 
     public Object getParameters() {
         return parameters;
     }
     
-    public <T> T getParameters(Class<? extends T> type) {
-        return TypeTransformerRegistry.getTransformedObject(parameters, type);
+    public <T> T getParameters(Class<T> type) {
+        return TypeTransformerRegistry.getTransformedObjectOrNewInstance(parameters, type);
     }
     
-    public <T> T getParameters(Class<? extends T> type, Properties p) {
-        return TypeTransformerRegistry.getTransformedObject(parameters, type, p);
+    public <T> T getParameters(Class<T> type, Properties p) {
+        return TypeTransformerRegistry.getTransformedObjectOrNewInstance(parameters, type, p);
     }
     
     public Properties getParametersAsProperties() {
-        return TypeTransformerRegistry.getTransformedObject(parameters, Properties.class);
+        return TypeTransformerRegistry.getTransformedObjectOrNewInstance(parameters, Properties.class);
     }
 }

@@ -20,9 +20,13 @@ public class TypeTransformerForTest <S,T> extends AbstractTypeTransformer<S,T>{
     }
 
     @Override
-    public T transform(S value, Properties parameters) throws Exception {
+    public T transform(S value, Properties parameters) throws TypeTransformationException {
         if(this.sourceClass.isInstance(value)){
-            return targetClass.newInstance();
+            try {
+                return targetClass.newInstance();
+            } catch (InstantiationException | IllegalAccessException ex) {
+                throw new TypeTransformationException("Could not transform", ex);
+            }
         }
         return null; //OR throw new exception
     }

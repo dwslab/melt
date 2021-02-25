@@ -174,41 +174,42 @@ public class TypeTransformerRegistry {
     
     
     
-    public static ObjectTransformationRoute getObjectTransformationRoute(Object source, Class<?> target){
+    public static <T> ObjectTransformationRoute<T> getObjectTransformationRoute(Object source, Class<T> target) throws TypeTransformationException{
         return TypeTransformerRegistry.getObjectTransformationRoute(source, target, new Properties());
     }
-    public static ObjectTransformationRoute getObjectTransformationRoute(Object source, Class<?> target, Properties parameters){
+    public static <T> ObjectTransformationRoute<T> getObjectTransformationRoute(Object source, Class<T> target, Properties parameters) throws TypeTransformationException{
         return TypeTransformerRegistry.getObjectTransformationRoute(source, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
     }
-    public static ObjectTransformationRoute getObjectTransformationRoute(Object source, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+    public static <T> ObjectTransformationRoute<T> getObjectTransformationRoute(Object source, Class<T> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep) throws TypeTransformationException{
         if(source == null)
             return null;
-        TransformationRoute route = TypeTransformerRegistry.getClassTransformationRoute(source.getClass(), target, parameters, hierarchyTransformationCost, allowMultiStep);
+        TransformationRoute<T> route = TypeTransformerRegistry.getClassTransformationRoute(source.getClass(), target, parameters, hierarchyTransformationCost, allowMultiStep);
         if(route == null)
             return null;
-        return new ObjectTransformationRoute(route, source);
+        return new ObjectTransformationRoute<>(route, source);
     }
     
     
-    public static ObjectTransformationRoute getObjectTransformationRouteMultipleRepresentations(Iterable<Object> sources, Class<?> target){
+    public static <T> ObjectTransformationRoute<T> getObjectTransformationRouteMultipleRepresentations(Iterable<Object> sources, Class<T> target) throws TypeTransformationException{
         return TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(sources, target, new Properties());
     }
     
-    public static ObjectTransformationRoute getObjectTransformationRouteMultipleRepresentations(Iterable<Object> sources, Class<?> target, Properties parameters){
+    public static <T> ObjectTransformationRoute<T> getObjectTransformationRouteMultipleRepresentations(Iterable<Object> sources, Class<T> target, Properties parameters) throws TypeTransformationException{
         return TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(sources, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
     }
     
     /**
-     * Transforms an object with multiple representations to one class.
-     * This means, you have multiple objects representing the same information and want to choose the right one with the lowest transformation cost.
+     * Transforms an object with multiple representations to one class.This means, you have multiple objects representing the same information and want to choose the right one with the lowest transformation cost.
+     * @param <T> the target type
      * @param sources the possible objects which all contains the same information (but in different classes).
      * @param target the target class in which the object should be converted.
      * @param parameters optional parameters for the conversion.
      * @param hierarchyTransformationCost hierarchy transformation cost: see {@link TypeTransformerRegistry#HIERARCHY_TRANSFORMATION_COST}
      * @param allowMultiStep allow multi step: see {@link TypeTransformerRegistry#ALLOW_MULTI_STEP}
      * @return ObjectTransformationRoute which contains the transformers as well as the source object. The actual transformation is not yet executed.
+     * @throws TypeTransformationException in case no transformation route is found
      */
-    public static ObjectTransformationRoute getObjectTransformationRouteMultipleRepresentations(Iterable<Object> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+    public static <T> ObjectTransformationRoute<T> getObjectTransformationRouteMultipleRepresentations(Iterable<Object> sources, Class<T> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep) throws TypeTransformationException{
         if(sources == null)
             return null;
         Map<Class<?>, Object> mapping = new HashMap<>();
@@ -217,10 +218,10 @@ public class TypeTransformerRegistry {
                 continue;
             mapping.put(o.getClass(), o); // override if multiple object of the same class appears
         }
-        TransformationRoute route = TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(mapping.keySet(), target, parameters, hierarchyTransformationCost, allowMultiStep);
+        TransformationRoute<T> route = TypeTransformerRegistry.getClassTransformationRouteMultipleRepresentations(mapping.keySet(), target, parameters, hierarchyTransformationCost, allowMultiStep);
         if(route == null)
             return null;
-        return new ObjectTransformationRoute(route, mapping.get(route.getSource()));
+        return new ObjectTransformationRoute<>(route, mapping.get(route.getSource()));
     }
     
     /*************************
@@ -230,48 +231,53 @@ public class TypeTransformerRegistry {
     
     /**
      * Return the transformation from a given class to a target class.
+     * @param <T> the target type
      * @param source the source class
      * @param target the target class
      * @return the transformation route
+     * @throws TypeTransformationException if no route is found
      */
-    public static TransformationRoute getClassTransformationRoute(Class<?> source, Class<?> target){
+    public static <T> TransformationRoute<T> getClassTransformationRoute(Class<?> source, Class<T> target) throws TypeTransformationException{
         return getClassTransformationRoute(source, target, new Properties());
     }
     
-    public static TransformationRoute getClassTransformationRoute(Class<?> source, Class<?> target, Properties parameters){
+    public static <T> TransformationRoute<T> getClassTransformationRoute(Class<?> source, Class<T> target, Properties parameters) throws TypeTransformationException{
         return getClassTransformationRoute(source, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
     }
     
-    public static TransformationRoute getClassTransformationRoute(Class<?> source, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+    public static <T> TransformationRoute<T> getClassTransformationRoute(Class<?> source, Class<T> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep) throws TypeTransformationException{
         return getClassTransformationRouteMultipleRepresentations(Arrays.asList(source), target, parameters, hierarchyTransformationCost, allowMultiStep);
     }
     
     
-    public static TransformationRoute getClassTransformationRouteMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target){
+    public static <T> TransformationRoute<T> getClassTransformationRouteMultipleRepresentations(Iterable<Class<?>> sources, Class<T> target) throws TypeTransformationException{
         return getClassTransformationRouteMultipleRepresentations(sources, target, new Properties());
     }
     
-    public static TransformationRoute getClassTransformationRouteMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target, Properties parameters){
+    public static <T> TransformationRoute<T> getClassTransformationRouteMultipleRepresentations(Iterable<Class<?>> sources, Class<T> target, Properties parameters) throws TypeTransformationException{
         return getClassTransformationRouteMultipleRepresentations(sources, target, parameters, HIERARCHY_TRANSFORMATION_COST, ALLOW_MULTI_STEP);
     }
     
     /**
-     * Returns type transformers for one of the source classes to the target class. 
+     * Returns type transformation route for one of the source classes to the target class.If no transformation is available, then a TypeTransformationException is thrown.
+     * If no classes are gioven, then null is returned.
+     * @param <T> the target type
      * @param sources the iterable of source classes
      * @param target the target class
      * @param parameters the parameters which are forwarded to each type transformer
      * @param hierarchyTransformationCost negative value (below zero) if the hierarchy is not allowed, otherwise the cost for each subclass to superclass relation - see also {@link TypeTransformerRegistry#HIERARCHY_TRANSFORMATION_COST}
      * @param allowMultiStep allow multiple type transformers - see also {@link TypeTransformerRegistry#ALLOW_MULTI_STEP}
      * @return null if there is no path, otherwise instance of TransformationRoute (which can contain no transformers, when the source is a subclass of target class)
+     * @throws TypeTransformationException if no route is found
      */
-    public static TransformationRoute getClassTransformationRouteMultipleRepresentations(Iterable<Class<?>> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep){
+    public static <T> TransformationRoute<T> getClassTransformationRouteMultipleRepresentations(Iterable<Class<?>> sources, Class<T> target, Properties parameters, int hierarchyTransformationCost, boolean allowMultiStep) throws TypeTransformationException{
         if(sources == null || target == null)
             return null;
-        //transformation to object class always work
+        //transformation to object class always work - quick path
         if(target == Object.class){
             for(Class<?> sourceClass : sources){
                 if(sourceClass != null)
-                    return new TransformationRoute(sourceClass, target, new ArrayList<>(), 0);
+                    return new TransformationRoute<>(sourceClass, target, new ArrayList<>(), 0);
             }
             return null;
         }
@@ -296,6 +302,9 @@ public class TypeTransformerRegistry {
             }
         }
         
+        if(unSettledNodes.isEmpty())
+            return null;
+        
         while (unSettledNodes.size() > 0) {
             Class<?> node = getMinimum(distances, unSettledNodes);
             if(node.equals(target)){                
@@ -309,7 +318,7 @@ public class TypeTransformerRegistry {
                     tmpNode = previousEdge.getSource();
                 }
                 Collections.reverse(transformers);
-                return new TransformationRoute(tmpNode, target, transformers, distances.get(node));
+                return new TransformationRoute<>(tmpNode, target, transformers, distances.get(node));
             }
             
             settledNodes.add(node);
@@ -335,7 +344,7 @@ public class TypeTransformerRegistry {
                 }
             }
         }
-        return null;
+        throw new TypeTransformationException("No transformation route is found between " + sources + " to " + target);
     }
     
     private static Class<?> getMinimum(Map<Class<?>, Integer> distances, Set<Class<?>> vertexes) {
@@ -352,21 +361,21 @@ public class TypeTransformerRegistry {
     }
     
     
-    private static TransformationRoute transformInOneStep(Iterable<Class<?>> sources, Class<?> target, Properties parameters, int hierarchyTransformationCost){
+    private static <T> TransformationRoute<T> transformInOneStep(Iterable<Class<?>> sources, Class<T> target, Properties parameters, int hierarchyTransformationCost) throws TypeTransformationException{
         //target is not null because this method is called from transformClassMultipleRepresentations
-        List<TransformationRoute> transformationRoutes = new ArrayList<>();
+        List<TransformationRoute<T>> transformationRoutes = new ArrayList<>();
         for(Class<?> src : sources){
             if(src == null)
                 continue;
             for(Entry<Class<?>, Integer> sourceHierarchy : getAllSuperClassesAndIterfacesWithCost(src, hierarchyTransformationCost).entrySet()){
                 if(sourceHierarchy.getKey() == target){
-                    transformationRoutes.add(new TransformationRoute(src, target, new ArrayList<>(), sourceHierarchy.getValue()));
+                    transformationRoutes.add(new TransformationRoute<>(src, target, new ArrayList<>(), sourceHierarchy.getValue()));
                 }
                 for(Entry<Class<?>, Set<TypeTransformer<?,?>>> targetToTransformers : TRANFORMERS.getOrDefault(sourceHierarchy.getKey(), new HashMap<>()).entrySet()){
                     Integer targetHierarchyCost = getAllSuperClassesAndIterfacesWithCost(targetToTransformers.getKey(), hierarchyTransformationCost).get(target);
                     if(targetHierarchyCost != null){
                         for(TypeTransformer<?,?> transformer : targetToTransformers.getValue()){
-                            transformationRoutes.add(new TransformationRoute(
+                            transformationRoutes.add(new TransformationRoute<>(
                                     src, 
                                     target, 
                                     Arrays.asList(transformer), 
@@ -377,7 +386,7 @@ public class TypeTransformerRegistry {
             }
         }
         if(transformationRoutes.isEmpty())
-            return null;
+            throw new TypeTransformationException("No transformation route is found between " + sources + " to " + target);
         transformationRoutes.sort(Comparator.comparing(TransformationRoute::getCost));
         return transformationRoutes.get(0);
     }
@@ -393,8 +402,9 @@ public class TypeTransformerRegistry {
      * @param targetType the tyoe of class to transform each object in the list to 
      * @param transformationProperties additional properties.
      * @return the transformed list of objects or null
+     * @throws TypeTransformationException in case no transformation route is found
      */
-    public static <T> List<T> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<T> targetType, Properties transformationProperties){
+    public static <T> List<T> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<T> targetType, Properties transformationProperties) throws TypeTransformationException{
         List<T> transformedObjects = new ArrayList<>(sourceObjects.size());
         for(Set<Object> representations : sourceObjects){
             T transformed = getTransformedObjectMultipleRepresentations(representations, targetType, transformationProperties);
@@ -445,9 +455,10 @@ public class TypeTransformerRegistry {
      * @param targetType the tyoe of class to trasnform to 
      * @param transformationProperties additional properties.
      * @return the transformed object or null
+     * @throws TypeTransformationException in case no transformation route is found
      */
-    public static <T> List<T> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<T> targetType, Object transformationProperties){
-        return getTransformedListOfObjectsMultipleRepresentations(sourceObjects, targetType, getTransformedProperties(transformationProperties));
+    public static <T> List<T> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<T> targetType, Object transformationProperties) throws TypeTransformationException{
+        return getTransformedListOfObjectsMultipleRepresentations(sourceObjects, targetType, getTransformedPropertiesOrNewInstance(transformationProperties));
     }
     
     /**
@@ -456,8 +467,9 @@ public class TypeTransformerRegistry {
      * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
      * @param targetType the tyoe of class to trasnform to 
      * @return the transformed object or null
+     * @throws TypeTransformationException in case no transformation route is found
      */
-    public static <T> List<T> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<T> targetType){
+    public static <T> List<T> getTransformedListOfObjectsMultipleRepresentations(List<Set<Object>> sourceObjects, Class<T> targetType) throws TypeTransformationException{
         return getTransformedListOfObjectsMultipleRepresentations(sourceObjects, targetType, new Properties());
     }
     
@@ -474,22 +486,16 @@ public class TypeTransformerRegistry {
      * @param targetType the tyoe of class to trasnform to 
      * @param transformationProperties additional properties.
      * @return the transformed object or null
+     * @throws TypeTransformationException in case no transformation route is found
      */
-    public static <T> T getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<? extends T> targetType, Properties transformationProperties){
-        ObjectTransformationRoute route = TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(sourceObjects, targetType, transformationProperties);
+    public static <T> T getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<T> targetType, Properties transformationProperties) throws TypeTransformationException{
+        ObjectTransformationRoute<T> route = TypeTransformerRegistry.getObjectTransformationRouteMultipleRepresentations(sourceObjects, targetType, transformationProperties);
         if(route == null){
-            LOGGER.error("Did not find a transformation route from one of {} to {}. Please enhance the TypeTransformerRegistry with a corresponding TypeTranformer.", 
-                    classRepresentation(sourceObjects), targetType);
             return null;
         }
-        try {
-            Object transformedObject = route.getTransformedObject();
-            sourceObjects.add(transformedObject);
-            return targetType.cast(transformedObject);
-        } catch (Exception ex) {
-            LOGGER.error("During conversion of object {} to class {} an exception occured.", route.getInitialObject(), targetType, ex);
-            return null;
-        }
+        T transformedObject = route.getTransformedObject();
+        sourceObjects.add(transformedObject);
+        return transformedObject;
     }
     
     /**
@@ -499,19 +505,21 @@ public class TypeTransformerRegistry {
      * @param targetType the tyoe of class to trasnform to 
      * @param transformationProperties additional properties.
      * @return the transformed object or null
+     * @throws TypeTransformationException in case no transformation route is found
      */
-    public static <T> T getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<? extends T> targetType, Object transformationProperties){
-        return getTransformedObjectMultipleRepresentations(sourceObjects, targetType, getTransformedProperties(transformationProperties));
+    public static <T> T getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<T> targetType, Object transformationProperties) throws TypeTransformationException{
+        return getTransformedObjectMultipleRepresentations(sourceObjects, targetType, getTransformedPropertiesOrNewInstance(transformationProperties));
     }
     
     /**
-     * Directly get the transformed object or null if something went wrong. No transformation parameters are provided.
+     * Directly get the transformed object or null if something went wrong.No transformation parameters are provided.
      * @param <T> the type of the return value
      * @param sourceObjects the objects which all represent the same information. To this set, the transformed object will be added.
      * @param targetType the tyoe of class to trasnform to 
      * @return the transformed object or null
+     * @throws TypeTransformationException in case no transformation route is found
      */
-    public static <T> T getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<? extends T> targetType){
+    public static <T> T getTransformedObjectMultipleRepresentations(Set<Object> sourceObjects, Class<T> targetType) throws TypeTransformationException{
         return getTransformedObjectMultipleRepresentations(sourceObjects, targetType, new Properties());
     }
     
@@ -527,21 +535,15 @@ public class TypeTransformerRegistry {
      * @param sourceObject the source object
      * @param targetType the tyoe of class to trasnform to 
      * @param transformationProperties additional properties which can be used during transformation.
-     * @return the transformed object or null
+     * @return the transformed object or null if source is null
+     * @throws TypeTransformationException in case no route is found
      */
-    public static <T> T getTransformedObject(Object sourceObject, Class<? extends T> targetType, Properties transformationProperties){
-        ObjectTransformationRoute route = TypeTransformerRegistry.getObjectTransformationRoute(sourceObject, targetType, transformationProperties);
+    public static <T> T getTransformedObject(Object sourceObject, Class<T> targetType, Properties transformationProperties) throws TypeTransformationException{
+        ObjectTransformationRoute<T> route = TypeTransformerRegistry.getObjectTransformationRoute(sourceObject, targetType, transformationProperties);
         if(route == null){
-            LOGGER.error("Did not find a transformation route from one of {} to {}. Please enhance the TypeTransformerRegistry with a corresponding TypeTranformer. The matcher is not called.", 
-                    sourceObject.getClass(), targetType);
             return null;
         }
-        try {
-            return targetType.cast(route.getTransformedObject());
-        } catch (Exception ex) {
-            LOGGER.error("During conversion of object {} to class {} an exception occured. The matcher is not called.", route.getInitialObject(), targetType, ex);
-            return null;
-        }
+        return route.getTransformedObject();
     }
     
     /**
@@ -550,9 +552,10 @@ public class TypeTransformerRegistry {
      * @param sourceObject the source object
      * @param targetType the tyoe of class to trasnform to 
      * @param transformationProperties additional properties which can be used during transformation.
-     * @return the transformed object or null
+     * @return the transformed object or null if source is null
+     * @throws TypeTransformationException in case no route is found
      */
-    public static <T> T getTransformedObject(Object sourceObject, Class<? extends T> targetType, Object transformationProperties){
+    public static <T> T getTransformedObject(Object sourceObject, Class<? extends T> targetType, Object transformationProperties) throws TypeTransformationException{
         return getTransformedObject(sourceObject, targetType, getTransformedProperties(transformationProperties));
     }
     
@@ -561,31 +564,87 @@ public class TypeTransformerRegistry {
      * @param <T> the type of the return value
      * @param sourceObject the source object
      * @param targetType the tyoe of class to trasnform to 
-     * @return the transformed object or null
+     * @return the transformed object or null if source is null
+     * @throws TypeTransformationException in case no route is found
      */
-    public static <T> T getTransformedObject(Object sourceObject, Class<? extends T> targetType){
+    public static <T> T getTransformedObject(Object sourceObject, Class<? extends T> targetType) throws TypeTransformationException{
         return getTransformedObject(sourceObject, targetType, new Properties());
+    }
+    
+    /**
+     * Directly get the transformed object or new instance if something went wrong.
+     * If a new instance could not be generated, null is returned.
+     * @param <T> the type of the return value
+     * @param sourceObject the source object
+     * @param targetType the type of class to trasnform to 
+     * @param transformationProperties additional properties which can be used during transformation.
+     * @return the transformed object
+     */
+    public static <T> T getTransformedObjectOrNewInstance(Object sourceObject, Class<T> targetType, Properties transformationProperties){
+        try {
+            ObjectTransformationRoute<T> route = TypeTransformerRegistry.getObjectTransformationRoute(sourceObject, targetType, transformationProperties);
+            if(route == null){
+                //sourceObject was null
+                return getNewInstance(targetType);
+            }
+            return route.getTransformedObject(transformationProperties);
+        } catch (TypeTransformationException ex) {
+            return getNewInstance(targetType);
+        }
+    }
+    
+    /**
+     * Directly get the transformed object or a new instance something went wrong.
+     * If a new instance could not be generated, null is returned.
+     * @param <T> the type of the return value
+     * @param sourceObject the source object
+     * @param targetType the tyoe of class to trasnform to 
+     * @param transformationProperties additional properties which can be used during transformation.
+     * @return the transformed object or new instance
+     */
+    public static <T> T getTransformedObjectOrNewInstance(Object sourceObject, Class<? extends T> targetType, Object transformationProperties){
+        return getTransformedObjectOrNewInstance(sourceObject, targetType, getTransformedPropertiesOrNewInstance(transformationProperties));
+    }
+    
+    /**
+     * Directly get the transformed object or a new instance something went wrong. No tranformation parameters are provided.
+     * If a new instance could not be generated, null is returned.
+     * @param <T> the type of the return value
+     * @param sourceObject the source object
+     * @param targetType the tyoe of class to trasnform to 
+     * @return the transformed object or new instance
+     */
+    public static <T> T getTransformedObjectOrNewInstance(Object sourceObject, Class<? extends T> targetType){
+        return getTransformedObjectOrNewInstance(sourceObject, targetType, new Properties());
     }
     
     
     /**
-     * Transforms a given object to java.lang:Properties or return new Properties() if something went wrong.
+     * Transforms a given object to java.lang:Properties or throws an exception if something went wrong.If parameter is null, then null is returned.
+     * @param parameters the object which represents parameters.
+     * @return java.lang:Properties or new Properties() if something went wrong
+     * @throws TypeTransformationException in case transformation route is not found.
+     */
+    public static Properties getTransformedProperties(Object parameters) throws TypeTransformationException{
+        return getTransformedObject(parameters, Properties.class, new Properties());
+    }
+    
+    /**
+     * Transforms a given object to java.lang:Properties or throws an exception if something went wrong.
+     * If parameter is null, then null is returned.
      * @param parameters the object which represents parameters.
      * @return java.lang:Properties or new Properties() if something went wrong
      */
-    public static Properties getTransformedProperties(Object parameters){
-        if(parameters == null)
-            return new Properties();
-        ObjectTransformationRoute route = TypeTransformerRegistry.getObjectTransformationRoute(parameters, Properties.class);
-        if(route == null){
-            LOGGER.debug("No conversion route from {} to java.util.Properties are found. Thus empty parameters during type transformation are used.", parameters.getClass());
-            return new Properties();
-        }
-        try {
-            return (Properties)route.getTransformedObject();
-        } catch (Exception ex) {
-            LOGGER.error("During conversion of parameters object {} to java.util.Properties an exception occured. Thus empty parameters will be used for type transformation.", route.getInitialObject(), ex);
-            return new Properties();
+    public static Properties getTransformedPropertiesOrNewInstance(Object parameters){
+        return getTransformedObjectOrNewInstance(parameters, Properties.class, new Properties());
+    }
+    
+    public static <T> T getNewInstance(Class<T> clazz){
+        try{
+            return clazz.newInstance();
+        }catch(InstantiationException | IllegalAccessException ex){
+            LOGGER.warn("Could not create a new instance of {} as a default value. Check if there is an empty constructor. Return null for now.");
+            return null;
         }
     }
     

@@ -2,19 +2,19 @@ package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer;
 
 import java.util.Properties;
 
-public class ObjectTransformationRoute extends TransformationRoute {
+public class ObjectTransformationRoute <T> extends TransformationRoute<T> {
     private final Object initialObject;
     
-    public ObjectTransformationRoute(TransformationRoute route, Object object) {
+    public ObjectTransformationRoute(TransformationRoute<T> route, Object object) {
         super(route);
         this.initialObject = object;
     }
         
-    public Object getTransformedObject() throws Exception{
+    public T getTransformedObject() throws TypeTransformationException{
         return super.getTransformedObject(this.initialObject);
     }
 
-    public Object getTransformedObject(Properties params) throws Exception{
+    public T getTransformedObject(Properties params) throws TypeTransformationException{
         return super.getTransformedObject(this.initialObject, params);
     }
 

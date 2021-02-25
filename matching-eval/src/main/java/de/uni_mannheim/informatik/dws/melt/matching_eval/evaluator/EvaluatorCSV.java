@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 /**
  * This evaluator is capable of persisting the results of the matching process in a CSV file (which can be consumed
@@ -295,8 +296,11 @@ public class EvaluatorCSV extends Evaluator {
      */
     private void writeAggregatedFileMatcherTrack(Track track, String matcher, File baseDirectory) {
 
+        //Results
+        Set<ExecutionResult> all = this.results.getGroup(track, matcher);
+        
         // micro averages
-        ConfusionMatrix microAllCm = confusionMatrixMetric.getMicroAveragesForResults(this.results.getGroup(track, matcher));
+        ConfusionMatrix microAllCm = confusionMatrixMetric.getMicroAveragesForResults(all);
         ConfusionMatrix microClassesCm = confusionMatrixMetric.getMicroAveragesForResults(this.results.getGroup(track, matcher, classRefiner));
         ConfusionMatrix microPropertiesCm = confusionMatrixMetric.getMicroAveragesForResults(this.results.getGroup(track, matcher, propertyRefiner));
         ConfusionMatrix microInstancesCm = confusionMatrixMetric.getMicroAveragesForResults(this.results.getGroup(track, matcher, instanceRefiner));
@@ -306,7 +310,7 @@ public class EvaluatorCSV extends Evaluator {
         ConfusionMatrix microInstancesResidualCm = confusionMatrixMetric.getMicroAveragesForResults(this.results.getGroup(track, matcher, instanceRefiner, residualRefiner));
 
         // macro averages
-        ConfusionMatrix macroAllCm = confusionMatrixMetric.getMacroAveragesForResults(this.results.getGroup(track, matcher));
+        ConfusionMatrix macroAllCm = confusionMatrixMetric.getMacroAveragesForResults(all);
         ConfusionMatrix macroClassesCm = confusionMatrixMetric.getMacroAveragesForResults(this.results.getGroup(track, matcher, classRefiner));
         ConfusionMatrix macroPropertiesCm = confusionMatrixMetric.getMacroAveragesForResults(this.results.getGroup(track, matcher, propertyRefiner));
         ConfusionMatrix macroInstancesCm = confusionMatrixMetric.getMacroAveragesForResults(this.results.getGroup(track, matcher, instanceRefiner));
@@ -319,6 +323,8 @@ public class EvaluatorCSV extends Evaluator {
         fileToBeWritten.getParentFile().mkdirs();
         //    LOGGER.info("Results directory created because it did not exist.");
 
+        long summedRuntime = getSummedRuntimeOfResults(all);
+        String formattedRuntime = getFormattedRuntime(summedRuntime);
         try {
             // alignment extension handling
             String[] extensionValues;
@@ -332,20 +338,32 @@ public class EvaluatorCSV extends Evaluator {
 
             CSVPrinter printer = CSVFormat.DEFAULT.print(fileToBeWritten, StandardCharsets.UTF_8);
             printer.printRecord(getHeaderAggregated());
-            printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "ALL", macroAllCm.getPrecision(), macroAllCm.getRecall(), macroAllResidualCm.getRecall(), macroAllCm.getF1measure(), microAllCm.getPrecision(), microAllCm.getRecall(), microAllResidualCm.getRecall(), microAllCm.getF1measure(), macroAllCm.getTruePositiveSize(), macroAllResidualCm.getTruePositiveSize(), macroAllCm.getFalsePositiveSize(), macroAllCm.getFalseNegativeSize(), macroAllCm.getNumberOfCorrespondences(), "-"));
-            trackPerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, track.getName(), matcher, "ALL", macroAllCm.getPrecision(), macroAllCm.getRecall(), macroAllResidualCm.getRecall(), macroAllCm.getF1measure(), microAllCm.getPrecision(), microAllCm.getRecall(), microAllResidualCm.getRecall(), microAllCm.getF1measure(), macroAllCm.getTruePositiveSize(), macroAllResidualCm.getTruePositiveSize(), macroAllCm.getFalsePositiveSize(), macroAllCm.getFalseNegativeSize(), macroAllCm.getNumberOfCorrespondences(), "-"));
-            printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "CLASSES", macroClassesCm.getPrecision(), macroClassesCm.getRecall(), macroClassesResidualCm.getRecall(), macroClassesCm.getF1measure(), microClassesCm.getPrecision(), microClassesCm.getRecall(), microClassesResidualCm.getRecall(), microClassesCm.getF1measure(), macroClassesCm.getTruePositiveSize(), macroClassesResidualCm.getTruePositiveSize(), macroClassesCm.getFalsePositiveSize(), macroClassesCm.getFalseNegativeSize(), macroClassesCm.getNumberOfCorrespondences(), "-"));
-            trackPerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, track.getName(), matcher, "CLASSES", macroClassesCm.getPrecision(), macroClassesCm.getRecall(), macroClassesResidualCm.getRecall(), macroClassesCm.getF1measure(), microClassesCm.getPrecision(), microClassesCm.getRecall(), microClassesResidualCm.getRecall(), microClassesCm.getF1measure(), macroClassesCm.getTruePositiveSize(), macroClassesResidualCm.getTruePositiveSize(), macroClassesCm.getFalsePositiveSize(), macroClassesCm.getFalseNegativeSize(), macroClassesCm.getNumberOfCorrespondences(), "-"));
-            printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "PROPERTIES", macroPropertiesCm.getPrecision(), macroPropertiesCm.getRecall(), macroPropertiesResidualCm.getRecall(), macroPropertiesCm.getF1measure(), microPropertiesCm.getPrecision(), microPropertiesCm.getRecall(), microPropertiesResidualCm.getRecall(), microPropertiesCm.getF1measure(), macroPropertiesCm.getTruePositiveSize(), macroPropertiesResidualCm.getTruePositiveSize(), macroPropertiesCm.getFalsePositiveSize(), macroPropertiesCm.getFalseNegativeSize(), macroPropertiesCm.getNumberOfCorrespondences(), "-"));
-            trackPerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, track.getName(), matcher, "PROPERTIES", macroPropertiesCm.getPrecision(), macroPropertiesCm.getRecall(), macroPropertiesResidualCm.getRecall(), macroPropertiesCm.getF1measure(), microPropertiesCm.getPrecision(), microPropertiesCm.getRecall(), microPropertiesResidualCm.getRecall(), microPropertiesCm.getF1measure(), macroPropertiesCm.getTruePositiveSize(), macroPropertiesResidualCm.getTruePositiveSize(), macroPropertiesCm.getFalsePositiveSize(), macroPropertiesCm.getFalseNegativeSize(), macroPropertiesCm.getNumberOfCorrespondences(), "-"));
-            printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "INSTANCES", macroInstancesCm.getPrecision(), macroInstancesCm.getRecall(), macroInstancesResidualCm.getRecall(), macroInstancesCm.getF1measure(), microInstancesCm.getPrecision(), microInstancesCm.getRecall(), microInstancesResidualCm.getRecall(), microInstancesCm.getF1measure(), macroInstancesCm.getTruePositiveSize(), macroInstancesResidualCm.getTruePositiveSize(), macroInstancesCm.getFalsePositiveSize(), macroInstancesCm.getFalseNegativeSize(), macroInstancesCm.getNumberOfCorrespondences(), "-"));
-            trackPerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, track.getName(), matcher, "INSTANCES", macroInstancesCm.getPrecision(), macroInstancesCm.getRecall(), macroInstancesResidualCm.getRecall(), macroInstancesCm.getF1measure(), microInstancesCm.getPrecision(), microInstancesCm.getRecall(), microInstancesResidualCm.getRecall(), microInstancesCm.getF1measure(), macroInstancesCm.getTruePositiveSize(), macroInstancesResidualCm.getTruePositiveSize(), macroInstancesCm.getFalsePositiveSize(), macroInstancesCm.getFalseNegativeSize(), macroInstancesCm.getNumberOfCorrespondences(), "-"));
+            printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "ALL", macroAllCm.getPrecision(), macroAllCm.getRecall(), macroAllResidualCm.getRecall(), macroAllCm.getF1measure(), microAllCm.getPrecision(), microAllCm.getRecall(), microAllResidualCm.getRecall(), microAllCm.getF1measure(), macroAllCm.getTruePositiveSize(), macroAllResidualCm.getTruePositiveSize(), macroAllCm.getFalsePositiveSize(), macroAllCm.getFalseNegativeSize(), macroAllCm.getNumberOfCorrespondences(), summedRuntime, formattedRuntime));
+            trackPerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, track.getName(), matcher, "ALL", macroAllCm.getPrecision(), macroAllCm.getRecall(), macroAllResidualCm.getRecall(), macroAllCm.getF1measure(), microAllCm.getPrecision(), microAllCm.getRecall(), microAllResidualCm.getRecall(), microAllCm.getF1measure(), macroAllCm.getTruePositiveSize(), macroAllResidualCm.getTruePositiveSize(), macroAllCm.getFalsePositiveSize(), macroAllCm.getFalseNegativeSize(), macroAllCm.getNumberOfCorrespondences(), summedRuntime, formattedRuntime));
+            printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "CLASSES", macroClassesCm.getPrecision(), macroClassesCm.getRecall(), macroClassesResidualCm.getRecall(), macroClassesCm.getF1measure(), microClassesCm.getPrecision(), microClassesCm.getRecall(), microClassesResidualCm.getRecall(), microClassesCm.getF1measure(), macroClassesCm.getTruePositiveSize(), macroClassesResidualCm.getTruePositiveSize(), macroClassesCm.getFalsePositiveSize(), macroClassesCm.getFalseNegativeSize(), macroClassesCm.getNumberOfCorrespondences(), "-", "-"));
+            trackPerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, track.getName(), matcher, "CLASSES", macroClassesCm.getPrecision(), macroClassesCm.getRecall(), macroClassesResidualCm.getRecall(), macroClassesCm.getF1measure(), microClassesCm.getPrecision(), microClassesCm.getRecall(), microClassesResidualCm.getRecall(), microClassesCm.getF1measure(), macroClassesCm.getTruePositiveSize(), macroClassesResidualCm.getTruePositiveSize(), macroClassesCm.getFalsePositiveSize(), macroClassesCm.getFalseNegativeSize(), macroClassesCm.getNumberOfCorrespondences(), "-", "-"));
+            printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "PROPERTIES", macroPropertiesCm.getPrecision(), macroPropertiesCm.getRecall(), macroPropertiesResidualCm.getRecall(), macroPropertiesCm.getF1measure(), microPropertiesCm.getPrecision(), microPropertiesCm.getRecall(), microPropertiesResidualCm.getRecall(), microPropertiesCm.getF1measure(), macroPropertiesCm.getTruePositiveSize(), macroPropertiesResidualCm.getTruePositiveSize(), macroPropertiesCm.getFalsePositiveSize(), macroPropertiesCm.getFalseNegativeSize(), macroPropertiesCm.getNumberOfCorrespondences(), "-", "-"));
+            trackPerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, track.getName(), matcher, "PROPERTIES", macroPropertiesCm.getPrecision(), macroPropertiesCm.getRecall(), macroPropertiesResidualCm.getRecall(), macroPropertiesCm.getF1measure(), microPropertiesCm.getPrecision(), microPropertiesCm.getRecall(), microPropertiesResidualCm.getRecall(), microPropertiesCm.getF1measure(), macroPropertiesCm.getTruePositiveSize(), macroPropertiesResidualCm.getTruePositiveSize(), macroPropertiesCm.getFalsePositiveSize(), macroPropertiesCm.getFalseNegativeSize(), macroPropertiesCm.getNumberOfCorrespondences(), "-", "-"));
+            printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "INSTANCES", macroInstancesCm.getPrecision(), macroInstancesCm.getRecall(), macroInstancesResidualCm.getRecall(), macroInstancesCm.getF1measure(), microInstancesCm.getPrecision(), microInstancesCm.getRecall(), microInstancesResidualCm.getRecall(), microInstancesCm.getF1measure(), macroInstancesCm.getTruePositiveSize(), macroInstancesResidualCm.getTruePositiveSize(), macroInstancesCm.getFalsePositiveSize(), macroInstancesCm.getFalseNegativeSize(), macroInstancesCm.getNumberOfCorrespondences(), "-", "-"));
+            trackPerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, track.getName(), matcher, "INSTANCES", macroInstancesCm.getPrecision(), macroInstancesCm.getRecall(), macroInstancesResidualCm.getRecall(), macroInstancesCm.getF1measure(), microInstancesCm.getPrecision(), microInstancesCm.getRecall(), microInstancesResidualCm.getRecall(), microInstancesCm.getF1measure(), macroInstancesCm.getTruePositiveSize(), macroInstancesResidualCm.getTruePositiveSize(), macroInstancesCm.getFalsePositiveSize(), macroInstancesCm.getFalseNegativeSize(), macroInstancesCm.getNumberOfCorrespondences(), "-", "-"));
             printer.flush();
             printer.close();
         } catch (IOException ex) {
             LOGGER.error("Could not write detailed evaluation file.", ex);
             ex.printStackTrace();
         }
+    }
+    
+    private String getFormattedRuntime(long nanoSeconds){
+        return DurationFormatUtils.formatDuration(nanoSeconds/1000000, "HH:mm:ss");
+    }
+    
+    private long getSummedRuntimeOfResults(Set<ExecutionResult> results){
+        long summedRuntime = 0;
+        for(ExecutionResult result : results){
+            summedRuntime += result.getRuntime();
+        }
+        return summedRuntime;
     }
 
 
@@ -439,14 +457,14 @@ public class EvaluatorCSV extends Evaluator {
                 fileToBeWritten.getParentFile().mkdirs();
                 CSVPrinter printer =  CSVFormat.DEFAULT.print(fileToBeWritten, StandardCharsets.UTF_8);
                 printer.printRecord(getHeaderIndividual());
-                printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "ALL", allCm.getPrecision(), allCm.getRecall(), allResidualCm.getRecall(), allCm.getF1measure(), allCm.getTruePositiveSize(), allCm.getFalsePositiveSize(), allCm.getFalseNegativeSize(), allCm.getNumberOfCorrespondences(), allExecutionResult.getRuntime()));
-                testCasePerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, testCase.getTrack().getName(), testCase.getName(), matcher, "ALL", allCm.getPrecision(), allCm.getRecall(), allResidualCm.getRecall(), allCm.getF1measure(), allCm.getTruePositiveSize(), allCm.getFalsePositiveSize(), allCm.getFalseNegativeSize(), allCm.getNumberOfCorrespondences(), allExecutionResult.getRuntime()));
-                printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "CLASSES", classCm.getPrecision(), classCm.getRecall(), classResidualCm.getRecall(), classCm.getF1measure(), classCm.getTruePositiveSize(), classCm.getFalsePositiveSize(), classCm.getFalseNegativeSize(), classCm.getNumberOfCorrespondences(), "-"));
-                testCasePerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, testCase.getTrack().getName(), testCase.getName(), matcher, "CLASSES", classCm.getPrecision(), classCm.getRecall(), classResidualCm.getRecall(), classCm.getF1measure(), classCm.getTruePositiveSize(), classCm.getFalsePositiveSize(), classCm.getFalseNegativeSize(), classCm.getNumberOfCorrespondences(), "-"));
-                printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "PROPERTIES", propertiesCm.getPrecision(), propertiesCm.getRecall(), propertiesResidualCm.getRecall(), propertiesCm.getF1measure(), propertiesCm.getTruePositiveSize(), propertiesCm.getFalsePositiveSize(), propertiesCm.getFalseNegativeSize(), propertiesCm.getNumberOfCorrespondences(), "-"));
-                testCasePerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, testCase.getTrack().getName(), testCase.getName(), matcher, "PROPERTIES", propertiesCm.getPrecision(), propertiesCm.getRecall(), propertiesResidualCm.getRecall(), propertiesCm.getF1measure(), propertiesCm.getTruePositiveSize(), propertiesCm.getFalsePositiveSize(), propertiesCm.getFalseNegativeSize(), propertiesCm.getNumberOfCorrespondences(), "-"));
-                printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "INSTANCES", instanceCm.getPrecision(), instanceCm.getRecall(), instanceResidualCm.getRecall(), instanceCm.getF1measure(), instanceCm.getTruePositiveSize(), instanceCm.getFalsePositiveSize(), instanceCm.getFalseNegativeSize(), instanceCm.getNumberOfCorrespondences(), "-"));
-                testCasePerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, testCase.getTrack().getName(), testCase.getName(), matcher, "INSTANCES", instanceCm.getPrecision(), instanceCm.getRecall(), instanceResidualCm.getRecall(), instanceCm.getF1measure(), instanceCm.getTruePositiveSize(), instanceCm.getFalsePositiveSize(), instanceCm.getFalseNegativeSize(), instanceCm.getNumberOfCorrespondences(), "-"));
+                printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "ALL", allCm.getPrecision(), allCm.getRecall(), allResidualCm.getRecall(), allCm.getF1measure(), allCm.getTruePositiveSize(), allCm.getFalsePositiveSize(), allCm.getFalseNegativeSize(), allCm.getNumberOfCorrespondences(), allExecutionResult.getRuntime(), getFormattedRuntime(allExecutionResult.getRuntime())));
+                testCasePerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, testCase.getTrack().getName(), testCase.getName(), matcher, "ALL", allCm.getPrecision(), allCm.getRecall(), allResidualCm.getRecall(), allCm.getF1measure(), allCm.getTruePositiveSize(), allCm.getFalsePositiveSize(), allCm.getFalseNegativeSize(), allCm.getNumberOfCorrespondences(), allExecutionResult.getRuntime(), getFormattedRuntime(allExecutionResult.getRuntime())));
+                printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "CLASSES", classCm.getPrecision(), classCm.getRecall(), classResidualCm.getRecall(), classCm.getF1measure(), classCm.getTruePositiveSize(), classCm.getFalsePositiveSize(), classCm.getFalseNegativeSize(), classCm.getNumberOfCorrespondences(), "-", "-"));
+                testCasePerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, testCase.getTrack().getName(), testCase.getName(), matcher, "CLASSES", classCm.getPrecision(), classCm.getRecall(), classResidualCm.getRecall(), classCm.getF1measure(), classCm.getTruePositiveSize(), classCm.getFalsePositiveSize(), classCm.getFalseNegativeSize(), classCm.getNumberOfCorrespondences(), "-", "-"));
+                printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "PROPERTIES", propertiesCm.getPrecision(), propertiesCm.getRecall(), propertiesResidualCm.getRecall(), propertiesCm.getF1measure(), propertiesCm.getTruePositiveSize(), propertiesCm.getFalsePositiveSize(), propertiesCm.getFalseNegativeSize(), propertiesCm.getNumberOfCorrespondences(), "-", "-"));
+                testCasePerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, testCase.getTrack().getName(), testCase.getName(), matcher, "PROPERTIES", propertiesCm.getPrecision(), propertiesCm.getRecall(), propertiesResidualCm.getRecall(), propertiesCm.getF1measure(), propertiesCm.getTruePositiveSize(), propertiesCm.getFalsePositiveSize(), propertiesCm.getFalseNegativeSize(), propertiesCm.getNumberOfCorrespondences(), "-", "-"));
+                printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "INSTANCES", instanceCm.getPrecision(), instanceCm.getRecall(), instanceResidualCm.getRecall(), instanceCm.getF1measure(), instanceCm.getTruePositiveSize(), instanceCm.getFalsePositiveSize(), instanceCm.getFalseNegativeSize(), instanceCm.getNumberOfCorrespondences(), "-", "-"));
+                testCasePerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, testCase.getTrack().getName(), testCase.getName(), matcher, "INSTANCES", instanceCm.getPrecision(), instanceCm.getRecall(), instanceResidualCm.getRecall(), instanceCm.getF1measure(), instanceCm.getTruePositiveSize(), instanceCm.getFalsePositiveSize(), instanceCm.getFalseNegativeSize(), instanceCm.getNumberOfCorrespondences(), "-", "-"));
                 printer.flush();
                 printer.close();
             } catch (IOException ioe) {
@@ -496,6 +514,7 @@ public class EvaluatorCSV extends Evaluator {
         result.add("# of FN");
         result.add("# of Correspondences");
         result.add("Time");
+        result.add("Time (HH:MM:SS)");
         return result;
     }
 
@@ -536,6 +555,7 @@ public class EvaluatorCSV extends Evaluator {
         result.add("# of FN");
         result.add("# of Correspondences");
         result.add("Total Runtime");
+        result.add("Total Runtime(HH:MM:SS)");
         if(isPrintAlignmentExtensions) {
             for (String extensionUri : this.alignmentExtensions) {
                 result.add(extensionUri);

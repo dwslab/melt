@@ -6,6 +6,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MatcherMult
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MultiSourceDispatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.JenaHelper;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
@@ -28,7 +29,6 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +68,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                 
         List<Set<Object>> mergedOntologies = new ArrayList<>();
         
-        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
+        Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
         int n = models.size();
         if(mergingTree.length != n-1){
@@ -157,8 +157,8 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
             }
             
             //run matcher
-            Object copiedInputAlignment = objectMapper.readValue(objectMapper.writeValueAsString(inputAlignment), Object.class);
-            Object copiedParameters = objectMapper.readValue(objectMapper.writeValueAsString(parameters), Object.class);
+            Object copiedInputAlignment = objectMapper.readValue(objectMapper.writeValueAsString(inputAlignment), inputAlignment.getClass());
+            Object copiedParameters = objectMapper.readValue(objectMapper.writeValueAsString(parameters), parameters.getClass());
             
             LOGGER.info("Run one to one match");
             AlignmentAndParameters alignmentAndPrameters = GenericMatcherCaller.runMatcherMultipleRepresentations(
@@ -201,7 +201,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     
     
     
-    private boolean isLeftModelGreater(Set<Object> leftOntology, Set<Object> rightOntology, Properties p){
+    private boolean isLeftModelGreater(Set<Object> leftOntology, Set<Object> rightOntology, Properties p) throws TypeTransformationException{
         Model leftModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(leftOntology, Model.class, p);
         Model rightModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(rightOntology, Model.class, p);
         if(leftModel == null || rightModel == null){
@@ -218,7 +218,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         }
     }
     
-    private Set<Object> getCopiedModel(Set<Object> modelRepresentations, Properties parameters){
+    private Set<Object> getCopiedModel(Set<Object> modelRepresentations, Properties parameters) throws TypeTransformationException{
         Model model = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, Model.class, parameters);
         if(model == null){
             throw new IllegalArgumentException("Could not transform model during copying.");

@@ -19,9 +19,9 @@ public interface TypeTransformer <S,T>{
      * @param value the given value to convert
      * @param parameters the parameters can contain any further hints for the transformation e.g. create OntModel with or without reasoning / in memory or in file etc. 
      * @return the transformed value
-     * @throws Exception in case the transformation 
+     * @throws TypeTransformationException in case the transformation did not work
      */
-    T transform(S value, Properties parameters) throws Exception;
+    T transform(S value, Properties parameters) throws TypeTransformationException;
     
     /**
      * Returns the source type as a class value.

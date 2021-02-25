@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -19,6 +20,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
 
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -517,8 +520,9 @@ public class Executor {
                             LOGGER.error("alignment file (systemAlignment.rdf) is missing in folder {}", matcherFolder.getAbsolutePath());
                             continue;
                         }
+                        File perfomanceFile = new File(matcherFolder, "performance.csv");
                         try {
-                            results.add(new ExecutionResult(testcase, matcherFolder.getName(), alignmentFile.toURI().toURL(), 0, null));
+                            results.add(new ExecutionResult(testcase, matcherFolder.getName(), alignmentFile.toURI().toURL(), getTimeFromPerformanceCSV(perfomanceFile), null));
                         } catch (MalformedURLException ex) {
                             LOGGER.error("Could not build URL for file " + alignmentFile.getName());
                         }
@@ -527,6 +531,24 @@ public class Executor {
             }
         }
         return results;
+    }
+    
+    private static long getTimeFromPerformanceCSV(File performanceCSV){
+        if(performanceCSV.exists() == false){
+            LOGGER.warn("Could not extract runtime from performance.csv because it is not existent: ", performanceCSV.getPath());
+            return 0;
+        }
+        try(Reader in = new InputStreamReader(new FileInputStream(performanceCSV), "UTF-8")){
+            for (CSVRecord row : CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in)) {
+                try{
+                    return Long.parseLong(row.get("Time"));
+                }
+                catch(NumberFormatException ex){} // do nothing -> continue
+            }
+        } catch (IOException ex) {
+            LOGGER.warn("Could not extract runtime from file {}", performanceCSV.getPath(), ex);
+        }
+        return 0;
     }
     
     /**

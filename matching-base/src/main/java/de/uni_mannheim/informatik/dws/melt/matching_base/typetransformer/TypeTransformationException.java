@@ -5,6 +5,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer;
  */
 public class TypeTransformationException extends Exception {
 
+    private static final long serialVersionUID = 1L;
+
     public TypeTransformationException() {
     }
 
