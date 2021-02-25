@@ -97,7 +97,7 @@ public class TestFamerClustering {
     }
     
     private DatasetIDExtractor getTestExtractor(){
-        return new DatasetIDExtractorUrlPattern("http://", ".com");
+        return new DatasetIDExtractorUrlPattern("http://", ".com", s->s);
     }
     
     private LogicalGraph getTestLogicalGraph(){
