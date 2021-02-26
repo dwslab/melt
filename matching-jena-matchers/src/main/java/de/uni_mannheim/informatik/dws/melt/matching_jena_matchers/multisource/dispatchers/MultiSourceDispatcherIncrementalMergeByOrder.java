@@ -129,6 +129,28 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
      */
     public static final Comparator<ModelAndIndex> AMOUNT_OF_CLASSES_DECENDING = AMOUNT_OF_CLASSES_ASCENDING.reversed();
     
+    /**
+     * Sorted by the number of unique subjects (of a triple /statement) in a model. Smaller gets merged first.
+     */
+    public static final Comparator<ModelAndIndex> UNIQUE_SUBJECTS_ASCENDING = new Comparator<ModelAndIndex>() {
+        @Override
+        public int compare(ModelAndIndex left, ModelAndIndex right) {
+            OntModel leftModel = left.getModel(OntModel.class);
+            OntModel rightModel = right.getModel(OntModel.class);
+            if(leftModel == null || rightModel == null){
+                LOGGER.warn("Could not compare models because transformation does not work");
+                return 0;
+            }
+            
+            return Long.compare(iteratorSize(leftModel.listSubjects()), iteratorSize(rightModel.listSubjects()));
+        }
+    };
+    
+    /**
+     * Sorted by the number of unique subjects (of a triple /statement) in a model. Larger gets merged first.
+     */
+    public static final Comparator<ModelAndIndex> UNIQUE_SUBJECTS_DECENDING = UNIQUE_SUBJECTS_ASCENDING.reversed();
+    
     private static long iteratorSize(Iterator<?> i){
         long count = 0;
         while(i.hasNext()){
