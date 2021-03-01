@@ -275,6 +275,20 @@ public class TrackRepository{
              * Together 189,188 classes.
              */
             public static Track SNOMED_NCI_WHOLE = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "largebio", "largebio-snomed_nci_whole_2016");
+            
+            
+            /**
+             * Non official: Covers all SMALL test cases.
+             * This should not be used for multi source matchign because the source and target are subsets and the ontologies are not the same.
+             * This includes FMA_NCI, FMA_SNOMED, and SNOMED_NCI
+             */
+            public static Track ONLY_SMALL = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "largebio", "largebio-small_tasks_2016");
+            
+            /**
+             * Non official: Covers all WHOLE test cases.
+             * This includes FMA_NCI, FMA_SNOMED, and SNOMED_NCI
+             */
+            public static Track ONLY_WHOLE = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "largebio", "largebio-whole_tasks_2016");
         }
         
         /** 2015 version of Large Biomedical Ontologies. */
