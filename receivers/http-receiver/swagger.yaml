@@ -1,0 +1,168 @@
+openapi: 3.0.1
+info:
+  title: "Ontology / Knowledge Graph Matcher"
+  description: "This interface represents an Ontology / KnowledgeGraph Matcher. It is also in use by the [Ontology Alignment Evaluation Initiative (OAEI)](http://oaei.ontologymatching.org))."
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+externalDocs:
+  description: "See the MELT repository"
+  url: https://github.com/dwslab/melt
+paths:
+  /match:
+    post:
+      summary: Computes the alignment between the given ontologies/knowledge graphs as URLs
+      requestBody:
+        required: true
+        content:
+            application/x-www-form-urlencoded:
+              schema:
+                required:
+                  - source
+                  - target
+                type: object
+                properties:
+                  source:
+                    type: string
+                    description: The URI of the source ontology/knowledge graph. The format of the file depends on the matcher. Possible formats rdf/xml, turtle, n3. The URI can be a file URI pointing to a local file or an external URI.
+                  target:
+                    type: string
+                    description: The URI of the target ontology/knowledge graph. The format of the file depends on the matcher. Possible formats rdf/xml, turtle, n3. The URI can be a file URI pointing to a local file or an external URI.
+                  inputAlignment:
+                    type: string
+                    description: The URI of the input alignment which is optional. The format needs to be the [alignment format](https://moex.gitlabpages.inria.fr/alignapi/format.html). The URI can be a file URI pointing to a local file or an external URI.
+                  parameters:
+                    type: string
+                    description: The URI of the parameters which is optional. Currently supported formats are JSON and YAML. The parameters are usually only key value pairs. Some keys are already defined in [MELT](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/ParameterConfigKeys.java). The URI can be a file URI pointing to a local file or an external URI.
+            multipart/form-data:
+              schema:
+                required:
+                  - source
+                  - target
+                type: object
+                properties:
+                  source:
+                    type: string
+                    format: binary
+                    description: The source ontology/knowledge graph as a file (upload). The format of the file depends on the matcher. Possible formats rdf/xml, turtle, n3
+                  target:
+                    type: string
+                    format: binary
+                    description: The target ontology/knowledge graph as a file (upload). The format of the file depends on the matcher. Possible formats rdf/xml, turtle, n3
+                  inputAlignment:
+                    type: string
+                    format: binary
+                    description: The input alignment as a file(upload) which is optional. The format needs to be the [alignment format](https://moex.gitlabpages.inria.fr/alignapi/format.html)
+                  parameters:
+                    type: string
+                    format: binary
+                    description: The parameters as a file(upload) which is optional. Currently supported formats are JSON and YAML. The parameters are usually only key value pairs. Some keys are already defined in [MELT](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/ParameterConfigKeys.java).
+      responses:
+        '200':
+          description: The alignment in the [alignment format](https://moex.gitlabpages.inria.fr/alignapi/format.html) either as file (application/xml in case of multipart request) or as file URL (represented as a string in case of form-urlencoded request)
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/RDF'
+              examples:
+                xml:
+                  summary: Two correspondences
+                  value: |
+                    <?xml version="1.0" encoding="utf-8"?>
+                    <rdf:RDF xmlns="http://knowledgeweb.semanticweb.org/heterogeneity/alignment"
+                      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                      xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+                    <Alignment>
+                      <xml>yes</xml>
+                      <level>0</level>
+                      <type>??</type>
+                      <map>
+                        <Cell>
+                          <entity1 rdf:resource="http://mouse.owl#MA_0002018"/>
+                          <entity2 rdf:resource="http://human.owl#NCI_C33314"/>
+                          <relation>=</relation>
+                          <measure rdf:datatype="xsd:float">1.0</measure>
+                        </Cell>
+                      </map>
+                      <map>
+                        <Cell>
+                          <entity1 rdf:resource="http://mouse.owl#MA_0001626"/>
+                          <entity2 rdf:resource="http://human.owl#NCI_C32662"/>
+                          <relation>=</relation>
+                          <measure rdf:datatype="xsd:float">1.0</measure>
+                        </Cell>
+                      </map>
+                    </Alignment>
+                    </rdf:RDF>
+            text/plain:
+              schema:
+                type: string
+                description: The URL which points to the alignment file.
+                example: 'file:///home/oaei/myalignment.rdf'
+        '400':
+          description: Some errors on the client side(like not providing a source or target OR formatted in the wrong way).
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Any text which describes the error
+                example: 'No source is provided'
+              
+        '500':
+          description: Any server errors.
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Any text which describes the error
+                example: 'Could not read file'
+
+components:
+  schemas:
+    RDF:
+      type: object
+      properties:
+        Alignment:
+          type: object
+          properties:
+            xml:
+              type: string
+            level:
+              type: string
+            type:
+              type: string
+            map:
+              type: array
+              items:
+                type: object
+                xml:
+                  name: map
+                properties:
+                  Cell:
+                    type: object
+                    properties:
+                      entity1:
+                        type: object
+                        properties:
+                          rdf:resource:
+                            type: string
+                            xml:
+                              attribute: true
+                      entity2:
+                        type: object
+                        properties:
+                          rdf:resource:
+                            type: string
+                            xml:
+                              attribute: true
+                      relation:
+                        type: string
+                        enum: ['=','>', '<', '~>', '%', '?']
+                      measure:
+                        type: number
+                        format: float
+      xml:
+        prefix: 'rdf'
+        namespace: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+  

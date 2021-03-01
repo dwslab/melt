@@ -50,8 +50,8 @@ public class MultiSourceDispatcherAllPairs extends MatcherMultiSourceURL impleme
                 Set<Object> right = models.get(j);
                 LOGGER.info("Match combination {} out of {}", counter++, combinations);
                 //to make sure that all matchers gets the same input alignment and proeprties we make a deep copy of them.
-                Object copiedInputAlignment = objectMapper.readValue(objectMapper.writeValueAsString(inputAlignment), Object.class);
-                Object copiedParameters = objectMapper.readValue(objectMapper.writeValueAsString(parameters), Object.class);
+                Object copiedInputAlignment = objectMapper.readValue(objectMapper.writeValueAsString(inputAlignment), inputAlignment.getClass());
+                Object copiedParameters = objectMapper.readValue(objectMapper.writeValueAsString(parameters), parameters.getClass());
                 AlignmentAndParameters alignmentAndPrameters = GenericMatcherCaller.runMatcherMultipleRepresentations(this.oneToOneMatcher, left, right, copiedInputAlignment, copiedParameters);
                 Alignment a = TypeTransformerRegistry.getTransformedObject(alignmentAndPrameters.getAlignment(), Alignment.class);
                 if(a == null){

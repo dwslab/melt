@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntResource;
 import org.apache.jena.rdf.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +33,14 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
         this.comparator = comparator;
     }
     
+    /**
+     * Constructor which requires an one to one matcher. The merging order id the identity; meaning that the exact same order a given in the list.
+     * @param oneToOneMatcher the one to one matcher.
+     */
+    public MultiSourceDispatcherIncrementalMergeByOrder(Object oneToOneMatcher) {
+        this(oneToOneMatcher, IDENTITY);
+    }
+    
     @Override
     public int[][] getMergeTree(List<Set<Object>> models, Object inputAlignment, Object parameters){
         int numberOfModels = models.size();
@@ -42,7 +49,7 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
             return new int[0][0];
         }
         
-        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
+        Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         List<ModelAndIndex> inducedOrder = new ArrayList<>(numberOfModels);
         for(int i = 0; i < numberOfModels; i++){
             inducedOrder.add(new ModelAndIndex(models.get(i), i, p));
@@ -50,9 +57,9 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
         
         inducedOrder.sort(this.comparator);
         
-        for(ModelAndIndex i : inducedOrder){
-            System.out.println(i.getModel(OntModel.class).size());
-        }
+        //for(ModelAndIndex i : inducedOrder){
+        //    System.out.println(i.getModel(OntModel.class).size());
+        //}
         
         int[][] mergeTree = new int[numberOfModels - 1][2];
         
@@ -121,6 +128,28 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
      * Sorted by the number of classes in a model. This means models/ontologies/knowledge graphs with large number of classes will be merged first.
      */
     public static final Comparator<ModelAndIndex> AMOUNT_OF_CLASSES_DECENDING = AMOUNT_OF_CLASSES_ASCENDING.reversed();
+    
+    /**
+     * Sorted by the number of unique subjects (of a triple /statement) in a model. Smaller gets merged first.
+     */
+    public static final Comparator<ModelAndIndex> UNIQUE_SUBJECTS_ASCENDING = new Comparator<ModelAndIndex>() {
+        @Override
+        public int compare(ModelAndIndex left, ModelAndIndex right) {
+            OntModel leftModel = left.getModel(OntModel.class);
+            OntModel rightModel = right.getModel(OntModel.class);
+            if(leftModel == null || rightModel == null){
+                LOGGER.warn("Could not compare models because transformation does not work");
+                return 0;
+            }
+            
+            return Long.compare(iteratorSize(leftModel.listSubjects()), iteratorSize(rightModel.listSubjects()));
+        }
+    };
+    
+    /**
+     * Sorted by the number of unique subjects (of a triple /statement) in a model. Larger gets merged first.
+     */
+    public static final Comparator<ModelAndIndex> UNIQUE_SUBJECTS_DECENDING = UNIQUE_SUBJECTS_ASCENDING.reversed();
     
     private static long iteratorSize(Iterator<?> i){
         long count = 0;

@@ -35,6 +35,9 @@ public class ExecutionResult {
     private TestCase testCase;
     private String matcherName;    
     private URL originalSystemAlignment;
+    /**
+     * The runtime in nanoseconds
+     */
     private long runtime;
     private Alignment systemAlignment;
     private Alignment referenceAlignment;
@@ -155,6 +158,10 @@ public class ExecutionResult {
         return matcherName;
     }
 
+    /**
+     * Returns the runtime in nanoseconds
+     * @return the runtime in nanoseconds
+     */
     public long getRuntime() {
         return runtime;
     }

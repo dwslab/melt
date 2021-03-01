@@ -1,10 +1,8 @@
-Wrapping for matchers
+Receivers for matchers
 ==========
 
-The HTTP interface is defined by swagger here:
-
-
-To try out your matching tool you could run:
-```
-curl -F 'source=@cmt.rdf' -F 'target=@conference.rdf' http://127.0.0.1:5465/match
-```
+This folder contains main entry points for receivers.
+This means a main method which expects the arguments(source, target URI) in some way.
+Currently supported are:
+- CLI
+- HTTP (Server)

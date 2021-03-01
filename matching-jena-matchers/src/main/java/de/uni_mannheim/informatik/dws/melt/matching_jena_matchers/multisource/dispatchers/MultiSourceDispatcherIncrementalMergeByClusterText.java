@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.Counter;
 import java.io.BufferedWriter;
@@ -57,19 +58,25 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
     
     @Override
     public double[][] getClusterFeatures(List<Set<Object>> models, Object inputAlignment, Object parameters){
-        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
+        Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
         Counter<String> documentFrequency = new Counter<>();
         List<Counter<String>> documents = new ArrayList<>(models.size());
         for(int i=0; i < models.size(); i++){
+            try{
             Model m = (Model)TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(models.get(i), OntModel.class, p);
             if(m == null){
-                LOGGER.warn("Conversion to OntModel/Model did not work. Can compute the similarities between the ontologies/knowledge graphs.");
+                LOGGER.warn("Initial model is null. Can't compute the similarities between the ontologies/knowledge graphs.");
                 return new double[0][0];
             }
             Counter<String> bow = getBagOfWords(m);
+            
             documents.add(bow);
             documentFrequency.addAll(bow.getDistinctElements());
+            }catch(TypeTransformationException ex){
+                LOGGER.warn("Conversion to OntModel/Model did not work. Can't compute the similarities between the ontologies/knowledge graphs.", ex);
+                return new double[0][0];
+            }
         }
         //create features
         

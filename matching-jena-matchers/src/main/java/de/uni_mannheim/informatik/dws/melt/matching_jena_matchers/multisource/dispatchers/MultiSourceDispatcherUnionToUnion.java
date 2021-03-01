@@ -7,7 +7,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.Alignme
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.JenaHelper;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,10 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/**
- * This 
- * @author shertlin
- */
 public class MultiSourceDispatcherUnionToUnion extends MatcherMultiSourceURL implements MultiSourceDispatcher, IMatcherMultiSourceCaller{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherUnionToUnion.class);
@@ -48,7 +43,7 @@ public class MultiSourceDispatcherUnionToUnion extends MatcherMultiSourceURL imp
     public AlignmentAndParameters match(List<Set<Object>> models, Object inputAlignment, Object parameters) throws Exception {
         
         LOGGER.info("Building union of all graphs");
-        Properties p = TypeTransformerRegistry.getTransformedProperties(parameters);
+        Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         Model union = JenaHelper.createNewModel(p);
         for(Set<Object> m : models){
             Model transformedModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(m, Model.class, p);

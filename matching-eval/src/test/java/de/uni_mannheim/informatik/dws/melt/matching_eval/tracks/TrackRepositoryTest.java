@@ -3,6 +3,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.tracks;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.xml.sax.SAXException;
@@ -17,6 +19,17 @@ import org.xml.sax.SAXException;
  */
 class TrackRepositoryTest {
 
+    
+    @Test
+    public void testAllDifferentIdAndVersion(){
+        Set<String> alreadySeen = new HashSet<>();
+        for(Track t : TrackRepository.retrieveDefinedTrackList(TrackRepository.class.getDeclaredClasses())){
+            assertFalse(alreadySeen.contains(t.getNameAndVersionString()), 
+                    "A track name and version appear multiple times in TrackRepository: " + t.getNameAndVersionString());
+            alreadySeen.add(t.getNameAndVersionString());
+        }
+    }
+    
     @Test
     //@EnabledOnOs({ MAC })
     public void testTracks(){

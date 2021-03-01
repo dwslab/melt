@@ -2,9 +2,11 @@ package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetr
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AbstractTypeTransformer;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 import org.json.JSONObject;
@@ -22,19 +24,23 @@ public class Properties2URLTransformer extends AbstractTypeTransformer<Propertie
     }
     
     @Override
-    public URL transform(Properties value, Properties parameters) throws Exception {
+    public URL transform(Properties value, Properties parameters) throws TypeTransformationException {
         File f;
-        if(parameters.getOrDefault(ParameterConfigKeys.DEFAULT_PARAMETERS_SERIALIZATION_FORMAT, "json").toString().toLowerCase().equals("json")){
-            f = TypeTransformerHelper.getRandomSerializationFile(parameters, FILE_PREFIX, ".json");
-            try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))){
-                bw.write(new JSONObject(value).toString());
+        try{
+            if(parameters.getOrDefault(ParameterConfigKeys.DEFAULT_PARAMETERS_SERIALIZATION_FORMAT, "json").toString().toLowerCase().equals("json")){
+                f = TypeTransformerHelper.getRandomSerializationFile(parameters, FILE_PREFIX, ".json");
+                try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))){
+                    bw.write(new JSONObject(value).toString());
+                }
+            }else{
+                f = TypeTransformerHelper.getRandomSerializationFile(parameters, FILE_PREFIX, ".yaml");
+                try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))){
+                    bw.write(new Yaml().dump(value));
+                }
             }
-        }else{
-            f = TypeTransformerHelper.getRandomSerializationFile(parameters, FILE_PREFIX, ".yaml");
-            try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))){
-                bw.write(new Yaml().dump(value));
-            }
+            return f.toURI().toURL();
+        }catch(IOException e){
+            throw new TypeTransformationException("Could not transform Properties to URL", e);
         }
-        return f.toURI().toURL();
     }
 }

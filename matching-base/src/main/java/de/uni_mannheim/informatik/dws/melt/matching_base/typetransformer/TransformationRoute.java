@@ -3,13 +3,13 @@ package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer;
 import java.util.List;
 import java.util.Properties;
 
-public class TransformationRoute {
+public class TransformationRoute<T> {
     protected Class<?> source;
-    protected Class<?> target;    
+    protected Class<T> target;    
     protected List<TypeTransformer<?,?>> transformations;
     protected int cost;
 
-    public TransformationRoute(Class<?> source, Class<?> target, List<TypeTransformer<?,?>> transformations, int cost) {
+    public TransformationRoute(Class<?> source, Class<T> target, List<TypeTransformer<?,?>> transformations, int cost) {
         this.source = source;
         this.target = target;
         this.transformations = transformations;
@@ -20,25 +20,25 @@ public class TransformationRoute {
      * Copy constructor used in ObjectTransformationRoute 
      * @param route the old route
      */
-    public TransformationRoute(TransformationRoute route) {
+    public TransformationRoute(TransformationRoute<T> route) {
         this.source = route.source;
         this.target = route.target;
         this.transformations = route.transformations;
         this.cost = route.cost;
     }
     
-    public Object getTransformedObject(Object object) throws Exception{
+    public T getTransformedObject(Object object) throws TypeTransformationException{
         return getTransformedObject(object, new Properties());
     }
     
     
     @SuppressWarnings("unchecked")
-    public Object getTransformedObject(Object object, Properties params) throws Exception{
+    public T getTransformedObject(Object object, Properties params) throws TypeTransformationException{
         Object tmp = object;
         for(TypeTransformer transformer : transformations){
             tmp = transformer.transform(tmp, params);
         }
-        return tmp;
+        return target.cast(tmp);
     }
 
     public List<TypeTransformer<?,?>> getTransformations() {

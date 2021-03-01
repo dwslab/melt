@@ -1243,6 +1243,54 @@ def run_openea():
         return "ERROR " + traceback.format_exc()
 
 
+@app.route("/transformers-prediction", methods=["GET"])
+def transformers_prediction():
+    try:
+        import os
+
+        if "cudaVisibleDevices" in request.headers:
+            os.environ['CUDA_VISIBLE_DEVICES'] = request.headers.get("cudaVisibleDevices")
+        
+        if "transformersCache" in request.headers:
+            os.environ['TRANSFORMERS_CACHE'] = request.headers.get("transformersCache")
+
+        using_tensorflow = request.headers.get("usingTF").lower() == 'true'
+        model_name = request.headers.get("modelName")
+        prediction_file_path = request.headers.get("predictionFilePath")
+
+        import csv
+        data_left = []
+        data_right = []
+        with open(prediction_file_path, encoding="utf-8") as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=",")
+            for row in readCSV:
+                data_left.append(row[0])
+                data_right.append(row[1])
+
+        from transformers import AutoTokenizer
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        
+        if using_tensorflow:
+            import tensorflow as tf
+            from transformers import TFAutoModelForSequenceClassification
+            tokens = tokenizer(data_left, data_right, return_tensors="tf", padding=True, truncation='longest_first')
+            model = TFAutoModelForSequenceClassification.from_pretrained(model_name) 
+            classification = model(tokens)[0]
+            scores = tf.nn.softmax(classification, axis=1).numpy()[:,1]
+        else:
+            import torch
+            from transformers import AutoModelForSequenceClassification
+            tokens = tokenizer(data_left, data_right, return_tensors="pt", padding=True, truncation='longest_first')
+            model = AutoModelForSequenceClassification.from_pretrained(model_name) 
+            classification = model(**tokens).logits
+            scores = [e[1] for e in torch.softmax(classification, dim=1).tolist()] 
+        
+        return jsonify(scores)
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
+
+
 @app.route("/hello", methods=["GET"])
 def hello_demo() -> str:
     """A demo program that will return Hello <name> when called.

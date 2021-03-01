@@ -1,10 +1,12 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AbstractTypeTransformer;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Level;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -23,8 +25,12 @@ public class URL2PropertiesTransformer extends AbstractTypeTransformer<URL, Prop
     }
     
     @Override
-    public Properties transform(URL value, Properties parameters) throws Exception {
-        return parse(value);
+    public Properties transform(URL value, Properties parameters) throws TypeTransformationException {
+        try {
+            return parse(value);
+        }catch(IOException e){
+            throw new TypeTransformationException("Could not transform URL to Properties", e);
+        }
     }
     
     public static Properties parse(URL value) throws IOException{

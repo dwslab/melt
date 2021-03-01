@@ -27,16 +27,14 @@ import org.slf4j.LoggerFactory;
  * Matcher which uses different String Matching approaches (stored in PropertySpecificStringProcessing) with a specific confidence.
  * Multiple normalization are possible as shown below.
  * The highest confidence is taken at the end.
- * <pre>{@code 
- * Function<String, Object> equality = (text) -> text;
+ * <pre>{@code Function<String, Object> equality = (text) -> text;
  * Function<String, Object> lowercase = (text) -> text.toLowerCase();
  * ScalableStringProcessingMatcher matcherOne = new ScalableStringProcessingMatcher(Arrays.asList(
  *              new PropertySpecificStringProcessing(equality, 1.0, RDFS.label),
  *              new PropertySpecificStringProcessing(lowercase, 0.9, RDFS.label)
  *              new PropertySpecificStringProcessing(equality, 0.7, SKOS.altLabel),
  *              new PropertySpecificStringProcessing(lowercase, 0.6, SKOS.altLabel)
- * ));
- * }</pre>
+ * ));}</pre>
  */
 public class ScalableStringProcessingMatcher extends MatcherYAAAJena {
 

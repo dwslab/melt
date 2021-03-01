@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.typetransformation;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AbstractTypeTransformer;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers.TypeTransformerHelper;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentSerializer;
@@ -24,10 +25,14 @@ public class Alignment2URLTransformer extends AbstractTypeTransformer<Alignment,
     }
     
     @Override
-    public URL transform(Alignment value, Properties parameters) throws Exception {
-        File serializationFile = TypeTransformerHelper.getRandomSerializationFile(parameters, FILE_PREFIX, FILE_SUFFIX);
-        AlignmentSerializer.serialize(value, serializationFile);
-        return serializationFile.toURI().toURL();
+    public URL transform(Alignment value, Properties parameters) throws TypeTransformationException {
+        try{
+            File serializationFile = TypeTransformerHelper.getRandomSerializationFile(parameters, FILE_PREFIX, FILE_SUFFIX);
+            AlignmentSerializer.serialize(value, serializationFile);
+            return serializationFile.toURI().toURL();
+        }catch(IOException e){
+            throw new TypeTransformationException("Could not transform Alignment to URL", e);
+        }
     }
     
     

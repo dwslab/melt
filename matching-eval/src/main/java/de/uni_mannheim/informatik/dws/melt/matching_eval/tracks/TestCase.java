@@ -205,10 +205,14 @@ public class TestCase {
      */
     public Alignment getParsedInputAlignment() {
         if(parsedInputAlignment == null){
-            try {
-                parsedInputAlignment = new Alignment(getInputAlignment().toURL());
-            } catch (SAXException | IOException ex) {
-                LOGGER.error("Could not parse reference alignment file. Return null.", ex);
+            if(getInputAlignment() == null){
+                parsedInputAlignment =  new Alignment();
+            }else{
+                try {
+                    parsedInputAlignment = new Alignment(getInputAlignment().toURL());
+                } catch (SAXException | IOException ex) {
+                    LOGGER.error("Could not parse reference alignment file. Return null.", ex);
+                }
             }
         }
         return parsedInputAlignment;
@@ -217,14 +221,14 @@ public class TestCase {
     
     /**
      * This method parses the parameters and returns it in the given class type.
+     * If no parameters are given, then a new instance of the required class is returned (if possible).
      * @param <T> the type of parameter class
      * @param type the requested type
      * @return Parsed parameters.
      */
     public <T> T getParsedParameters(Class<T> type) {
-        return TypeTransformerRegistry.getTransformedObject(this.parameters, type);
+        return TypeTransformerRegistry.getTransformedObjectOrNewInstance(this.parameters, type);
     }
-
 
     @Override
     public int hashCode() {

@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AbstractTypeTransformer;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
 import java.net.URL;
 import java.util.Properties;
@@ -17,7 +18,7 @@ public class URL2OntModelTransformer extends AbstractTypeTransformer<URL, OntMod
     }
     
     @Override
-    public OntModel transform(URL value, Properties parameters) throws Exception {
+    public OntModel transform(URL value, Properties parameters) throws TypeTransformationException {
         return OntologyCacheJena.get(value.toString(), JenaTransformerHelper.getSpec(parameters), JenaTransformerHelper.shouldUseCache(parameters));
     }
 }

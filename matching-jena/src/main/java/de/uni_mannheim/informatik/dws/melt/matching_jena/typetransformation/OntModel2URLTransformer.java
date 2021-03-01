@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AbstractTypeTransformer;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers.TypeTransformerHelper;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,7 +27,7 @@ public class OntModel2URLTransformer extends AbstractTypeTransformer<OntModel, U
     }
     
     @Override
-    public URL transform(OntModel value, Properties parameters) throws Exception {
+    public URL transform(OntModel value, Properties parameters) throws TypeTransformationException {
         
         Lang lang = RDFLanguages.nameToLang(parameters.getProperty(ParameterConfigKeys.DEFAULT_ONTOLOGY_SERIALIZATION_FORMAT, "RDF/XML"));
         if(lang == null){
@@ -38,15 +39,15 @@ public class OntModel2URLTransformer extends AbstractTypeTransformer<OntModel, U
         List<String> fileExtensions = lang.getFileExtensions();
         if(fileExtensions.size() > 0)
             fileExtension = "." + fileExtensions.get(0);
-        
-        File f = TypeTransformerHelper.getRandomSerializationFile(parameters, "model", fileExtension);
-        try(OutputStream out = new FileOutputStream(f)){
-            RDFDataMgr.write(out, value, lang);     
-            //value.write(out, parameters.getProperty(ParameterConfigKeys.DEFAULT_ONTOLOGY_SERIALIZATION_FORMAT));
-        } catch (IOException ex) {
-            LOGGER.warn("Could not write the ontModel to File.");
-            return null;
+        try{
+            File f = TypeTransformerHelper.getRandomSerializationFile(parameters, "model", fileExtension);
+            try(OutputStream out = new FileOutputStream(f)){
+                RDFDataMgr.write(out, value, lang);     
+                //value.write(out, parameters.getProperty(ParameterConfigKeys.DEFAULT_ONTOLOGY_SERIALIZATION_FORMAT));
+            }
+            return f.toURI().toURL();
+        }catch(IOException e){
+            throw new TypeTransformationException("Could not transform OntModel to URL", e);
         }
-        return f.toURI().toURL();
     }
 }
