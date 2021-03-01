@@ -102,24 +102,20 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         return getGroup(basisResults, refinements);
     }
 
-    
     public Set<ExecutionResult> getGroup(String matcher, Refiner... refinements){
         ResultSet<ExecutionResult> basisResults = this.retrieve(query(matcher, EMPTY_REFINEMENT));
         return getGroup(basisResults, refinements);
     }
-
 
     public Set<ExecutionResult> getGroup(Track track, Refiner... refinements){
         ResultSet<ExecutionResult> basisResults = this.retrieve(query(track, EMPTY_REFINEMENT));
         return getGroup(basisResults, refinements);
     }
 
-
     public Set<ExecutionResult> getGroup(Track track, String matcher, Refiner... refinements){
         ResultSet<ExecutionResult> basisResults = this.retrieve(query(track, matcher, EMPTY_REFINEMENT));
         return getGroup(basisResults, refinements);
     }
-
 
     public Set<ExecutionResult> getGroup(ResultSet<ExecutionResult> basisResults, Refiner... refinements){
         if(refinements.length == 0){
@@ -160,7 +156,6 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         return getSortedList(getDistinctMatchers(), Comparator.comparing(x->x.toLowerCase()));
     }
 
-
     /**
      * Obtain the distinct matcher names in this execution result set that were ran on the specified track.
      * @param track The track on which the matcher ran.
@@ -193,7 +188,6 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
     public List<String> getDistinctMatchersSorted(TestCase testCase){
         return getSortedList(getDistinctMatchers(testCase), Comparator.comparing(x->x.toLowerCase()));
     }
-
 
     /**
      * Get the distinct test cases that used in this ExecutionResultSet.

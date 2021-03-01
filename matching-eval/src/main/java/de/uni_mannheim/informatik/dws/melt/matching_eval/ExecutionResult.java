@@ -28,7 +28,8 @@ import org.xml.sax.SAXException;
  * @author Jan Portisch
  */
 public class ExecutionResult {
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionResult.class);
     
     private TestCase testCase;
@@ -39,7 +40,6 @@ public class ExecutionResult {
     private Alignment referenceAlignment;
     private IOntologyMatchingToolBridge matcher;
     private Set<Refiner> refinements;
-
 
     /**
      * Reference to the log message file of the matcher.
