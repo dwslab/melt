@@ -93,7 +93,7 @@ public class MarkdownDoclet extends Standard {
         writer.write(sb.toString());
         writer.newLine();
         writer.newLine(); // get a newline in markdown
-        writer.write("Keywords: " + splitCamelCase(clazz.simpleTypeName()));
+        writer.write("*Keywords: " + splitCamelCase(clazz.simpleTypeName()) + "*");
         writer.newLine();
         //writer.write(clazz.commentText());writer.newLine();
         writer.newLine();

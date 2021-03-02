@@ -274,7 +274,7 @@
                         <version>3.0.0-M4</version>
                         <configuration>
                             <excludes>WiktionaryLinkerTest.java</excludes>
-                            <excludes>WiktionaryKnowledgeSourceTest.java</excludes>
+                            <excludes>WiktionaryKnowledgeSourceTdbTest.java</excludes>
                             <excludes>WordNetLinkerTest.java</excludes>
                             <excludes>WordNetKnowledgeSourceTest.java</excludes>
                             <excludes>BabelNetLinkerTest.java</excludes>

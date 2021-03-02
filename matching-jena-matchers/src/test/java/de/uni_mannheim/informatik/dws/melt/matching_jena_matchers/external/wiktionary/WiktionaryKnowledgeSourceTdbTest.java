@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wikt
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,20 +15,31 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * This tets requires a working internet connection.
- */
-public class WiktionaryKnowledgeSourceTest {
+public class WiktionaryKnowledgeSourceTdbTest {
 
 
-    private static WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+    private static WiktionaryKnowledgeSource wiktionary;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WiktionaryKnowledgeSourceTdbTest.class);
 
     @BeforeAll
-    @AfterAll
-    public static void prepareAndTearDown() {
+    public static void prepare() {
         deletePersistenceDirectory();
+        String key = "wiktionaryTdbDirectory";
+        String tdbpath = TestOperations.getStringKeyFromResourceBundle("config", key);
+        if(tdbpath == null){
+            tdbpath = TestOperations.getStringKeyFromResourceBundle("local_config", key);
+        }
+        if(tdbpath == null){
+            fail("Cannot find config.properties or local_config.properties with key " + key);
+        }
+        wiktionary = new WiktionaryKnowledgeSource(tdbpath);
+    }
+
+    @AfterAll
+    public static void shutDown() {
+        deletePersistenceDirectory();
+        wiktionary.close();
     }
 
     /**
@@ -45,6 +57,12 @@ public class WiktionaryKnowledgeSourceTest {
     }
 
     @Test
+    void encodeWord(){
+        // we need this space encoding to ensure that it works on DBnary:
+        assertEquals("European_Union", WiktionaryKnowledgeSource.encodeWord("European Union"));
+    }
+
+    @Test
     public void testIsInDictionaryString() {
         // true positive check
         assertTrue(wiktionary.isInDictionary("dog"));
@@ -57,12 +75,6 @@ public class WiktionaryKnowledgeSourceTest {
 
         // false positive check
         assertFalse(wiktionary.isInDictionary("asdfasdfasdf"));
-    }
-
-    @Test
-    void encodeWord(){
-        // we need this space encoding to ensure that it works on DBnary:
-        assertEquals("European_Union", WiktionaryKnowledgeSource.encodeWord("European Union"));
     }
 
     @Test
@@ -135,4 +147,5 @@ public class WiktionaryKnowledgeSourceTest {
         assertTrue(wiktionary.isSynonymousOrHypernymous(wiktionary.getLinker().linkToSingleConcept("dog"), wiktionary.getLinker().linkToSingleConcept("hound")));
         assertFalse(wiktionary.isSynonymousOrHypernymous(wiktionary.getLinker().linkToSingleConcept("dog"), wiktionary.getLinker().linkToSingleConcept("cat")));
     }
+
 }

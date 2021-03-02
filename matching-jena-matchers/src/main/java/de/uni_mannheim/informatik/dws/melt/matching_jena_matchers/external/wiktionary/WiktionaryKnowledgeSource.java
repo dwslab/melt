@@ -5,14 +5,11 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Langu
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import org.apache.jena.query.*;
-//import org.apache.jena.tdb.TDB2Factory;
 import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -50,9 +47,24 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
     private Dataset tdbDataset;
 
     /**
+     * Endpoint URL
+     */
+    private static final String ENDPOINT_URL = "http://kaiko.getalp.org/sparql";
+
+    /**
+     * True if a tdb source shall be used rather than an on-line SPARQL endpoint.
+     */
+    private boolean isUseTdb = false;
+
+    /**
      * The linker that links input strings to terms.
      */
     private WiktionaryLinker linker;
+
+    public WiktionaryKnowledgeSource(){
+        isUseTdb = false;
+        initialize();
+    }
 
     /**
      * Constructor
@@ -73,34 +85,37 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             LOGGER.error("tdbDirectoryPath is not a directory. - ABORTING PROGRAM");
             return;
         }
-
-        synonymyBuffer = new HashMap<>();
-        hypernymyBuffer = new HashMap<>();
+        this.isUseTdb = true;
 
         // dataset and model creation
         //tdbDataset = TDB2Factory.connectDataset(tdbDirectoryPath);
         tdbDataset = TDBFactory.createDataset(tdbDirectoryPath);
         tdbDataset.begin(ReadWrite.READ);
 
-        linker = new WiktionaryLinker(this);
+        initialize();
     }
 
+    private void initialize(){
+        synonymyBuffer = new HashMap<>();
+        hypernymyBuffer = new HashMap<>();
+        linker = new WiktionaryLinker(this);
+    }
 
     /**
      * De-constructor; call before ending the program.
      */
     public void close() {
-        tdbDataset.end();
-        tdbDataset.close();
+        if(tdbDataset != null) {
+            tdbDataset.end();
+            tdbDataset.close();
+        }
         LOGGER.info("Dataset closed.");
     }
-
 
     @Override
     public boolean isInDictionary(String word) {
         return this.isInDictionary(word, Language.ENGLISH);
     }
-
 
     /**
      * Language dependent query for existence in the dbnary dictionary.
@@ -117,10 +132,16 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                         "PREFIX dbnary: <http://kaiko.getalp.org/dbnary#>\r\n" +
                         "ASK {  <http://kaiko.getalp.org/dbnary/" + language.toWiktionaryChar3() + "/" + word + "> ?p ?o . }";
         Query query = QueryFactory.create(queryString);
-        QueryExecution queryExecution = QueryExecutionFactory.create(query, tdbDataset);
-        return queryExecution.execAsk();
+        QueryExecution queryExecution;
+        if(isUseTdb) {
+            queryExecution = QueryExecutionFactory.create(query, tdbDataset);
+        } else {
+            queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
+        }
+        boolean result = queryExecution.execAsk();
+        queryExecution.close();
+        return result;
     }
-
 
     @Override
     public Set<String> getSynonymsLexical(String linkedConcept) {
@@ -171,11 +192,17 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                         "}";
         //System.out.println(queryString);
         Query query = QueryFactory.create(queryString);
-        QueryExecution queryExecution = QueryExecutionFactory.create(query, tdbDataset);
+        QueryExecution queryExecution;
+        if(isUseTdb) {
+            queryExecution = QueryExecutionFactory.create(query, tdbDataset);
+        } else {
+            queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
+        }
         ResultSet queryResult = queryExecution.execSelect();
         while (queryResult.hasNext()) {
             result.add(getLemmaFromURI(queryResult.next().getResource("synonym").toString()));
         }
+        queryExecution.close();
         synonymyBuffer.put(word + "_" + language.toWiktionaryChar3(), result);
         return result;
     }
@@ -251,11 +278,18 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                 "}}}";
         try {
             Query query = QueryFactory.create(queryString);
-            QueryExecution queryExecution = QueryExecutionFactory.create(query, tdbDataset);
+
+            QueryExecution queryExecution;
+            if(isUseTdb) {
+                queryExecution = QueryExecutionFactory.create(query, tdbDataset);
+            } else {
+                queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
+            }
             ResultSet queryResult = queryExecution.execSelect();
             while (queryResult.hasNext()) {
                 result.add(getLemmaFromURI(queryResult.next().getResource("hypernym").toString()));
             }
+            queryExecution.close();
             hypernymyBuffer.put(linkedConcept + "_" + language.toWiktionaryChar3(), result);
             return result;
         } catch (QueryParseException qpe) {
@@ -263,7 +297,6 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             return null;
         }
     }
-
 
     @Override
     public LabelToConceptLinker getLinker() {
