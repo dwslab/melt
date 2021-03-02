@@ -45,12 +45,12 @@ jobs:
     - name: Generate JavaDoc Documentation 📚
       run: mvn clean javadoc:aggregate
     - name: Deploy JavaDoc 🚀
-      uses: JamesIves/github-pages-deploy-action@releases/v3
+      uses: JamesIves/github-pages-deploy-action@4.0.0
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages # The branch the action should deploy to.
-        FOLDER: target/site/apidocs
-        TARGET_FOLDER: javadoc_latest
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: gh-pages # The branch the action should deploy to.
+        folder: target/site/apidocs
+        target-folder: javadoc_latest
     - name: Install the MarkDown DocLet 🔌
       run: |
         cd ./documentation/melt_doclet
