@@ -5,7 +5,6 @@ on: [push]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v2
       with:
@@ -65,6 +64,7 @@ jobs:
         folder: target/site/apidocs/generated_markdown
         target-folder: 3_available_matcher_components/generated_markdown
   check-documentation-links:
+    needs: build-and-deploy
     runs-on: ubuntu-latest
     steps:
     - name: Set up JDK 13
