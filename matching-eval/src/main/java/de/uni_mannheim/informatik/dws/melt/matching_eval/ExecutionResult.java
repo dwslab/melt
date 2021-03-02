@@ -35,6 +35,7 @@ public class ExecutionResult {
     private TestCase testCase;
     private String matcherName;    
     private URL originalSystemAlignment;
+
     /**
      * The runtime in nanoseconds
      */
@@ -53,7 +54,6 @@ public class ExecutionResult {
      * File reference to the error log of the matcher.
      */
     File matcherErrorLog;
-
 
     /**
      * Base constructor which needs all parameters
@@ -77,7 +77,6 @@ public class ExecutionResult {
         if(refinements != null) this.refinements = refinements;
         else this.refinements = new HashSet<>();
     }
-
     
     /**
      * Constructor used by tests to check if metrics compute correctly.
@@ -89,7 +88,6 @@ public class ExecutionResult {
     public ExecutionResult(TestCase testCase, String matcherName, Alignment systemAlignment, Alignment referenceAlignment) {
         this(testCase, matcherName, null, 0, systemAlignment, referenceAlignment, null, new HashSet<>());
     }
-
 
     /**
      * Constructor used by ExecutionRunner for initializing a execution result from a matcher run
@@ -103,7 +101,6 @@ public class ExecutionResult {
         this(testCase, matcherName, originalSystemAlignment, runtime, null, testCase.getParsedReferenceAlignment(), matcher, new HashSet<>());
     }
 
-    
     /**
      * Copies all members except the mappings from the given execution result (like a copy constructor).
      * It should be used by all refinement operations to create a new executionResult with modified system and referenceAlignments.
@@ -284,17 +281,13 @@ public class ExecutionResult {
         if (!Objects.equals(this.testCase, other.testCase)) {
             return false;
         }
-        if (!Objects.equals(this.refinements, other.refinements)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.refinements, other.refinements);
     }
 
     @Override
     public String toString() {
         return "ExecutionResult{testCase=" + testCase.getName() + ", matcherName=" + matcherName + ", refinements=" + refinements + '}';
     }
-
 
     /**
      * Returns a comparator that can be used to sort multiple ExecutionResults by matcher name.
@@ -309,7 +302,6 @@ public class ExecutionResult {
         };
     }
 
-    
     /**
      * This method allows the MATCHER to be an index within a collection.
      */
@@ -341,5 +333,4 @@ public class ExecutionResult {
        @Override
         public Set<Refiner> getValue(ExecutionResult c, QueryOptions queryOptions) { return c.refinements; }        
     };
-    
 }
