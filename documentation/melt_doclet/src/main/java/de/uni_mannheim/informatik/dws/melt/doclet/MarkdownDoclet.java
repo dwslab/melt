@@ -15,9 +15,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 
-public class MarkdownDoclet extends Standard{
-    
-    
+public class MarkdownDoclet extends Standard {
+
     
     public static boolean start(RootDoc root) {
         //Standard.start(root); // make normal javadoc

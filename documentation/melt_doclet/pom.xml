@@ -9,6 +9,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <!-- tools.jar file path for special cases -->
+        <toolsjar.path>/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/lib/tools.jar</toolsjar.path>
     </properties>
 
     <dependencies>
@@ -30,6 +33,7 @@
                     <exists>${java.home}/../lib/tools.jar</exists>
                 </file>
             </activation>
+
             <properties>
                 <toolsjar>${java.home}/../lib/tools.jar</toolsjar>
             </properties>
@@ -44,6 +48,18 @@
             </activation>
             <properties>
                 <toolsjar>${java.home}/../Classes/classes.jar</toolsjar>
+            </properties>
+        </profile>
+        <profile>
+            <id>custom</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <file>
+                    <exists>${toolsjar.path}</exists>
+                </file>
+            </activation>
+            <properties>
+                <toolsjar>${toolsjar.path}</toolsjar>
             </properties>
         </profile>
     </profiles>

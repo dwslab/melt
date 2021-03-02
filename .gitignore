@@ -7,6 +7,9 @@ target/
 *.ipr
 .idea/
 
+# vscode
+.vscode/
+
 # eclipse project file
 .settings/
 .classpath

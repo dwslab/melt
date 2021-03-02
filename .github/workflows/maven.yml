@@ -37,20 +37,26 @@ jobs:
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
     - name: Install python dependencies
       run: pip install -r ./matching-ml/src/main/resources/requirements.txt
-    - name: Build with Maven
+    - name: Build with Maven 📦
       #run: mvn -B package --file pom.xml
       run: mvn clean install
     - name: Coveralls
       run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS }}
-    - name: Generate Documentation 📚
+    - name: Generate JavaDoc Documentation 📚
       run: mvn clean javadoc:aggregate
-    - name: Deploy 🚀
+    - name: Deploy JavaDoc 🚀
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BRANCH: gh-pages # The branch the action should deploy to.
         FOLDER: target/site/apidocs
         TARGET_FOLDER: javadoc_latest
+    - name: Install the MarkDown DocLet 🔌
+      run: |
+        cd ./documentation/melt_doclet
+        mvn clean install
+    - name: Generate MarkDown Documentation 📚
+      run: mvn site -P ci-run
   build-multi-platform:
     runs-on: ${{ matrix.os }}
     strategy:
