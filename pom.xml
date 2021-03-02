@@ -327,7 +327,8 @@
                 </plugins>
             </build>
         </profile>
-        
+
+        <!-- This will only work in Java 8 -->
         <profile>
             <id>ci-run</id>
             <reporting>

@@ -57,6 +57,13 @@ jobs:
         mvn clean install
     - name: Generate MarkDown Documentation 📚
       run: mvn site -P ci-run
+    - name: Deploy MarkDown 🚀
+      uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: target/site/apidocs/generated_markdown
+          TARGET_FOLDER: 3_available_matcher_components/generated_markdown
   build-multi-platform:
     runs-on: ${{ matrix.os }}
     strategy:

@@ -9,10 +9,38 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        
-        <!-- tools.jar file path for special cases -->
-        <toolsjar.path>/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/lib/tools.jar</toolsjar.path>
     </properties>
+
+    <build>
+        <finalName>my-project-name</finalName>
+        <plugins>
+    
+            <!-- other Maven plugins ... -->
+    
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
+    
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+    
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+    
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
@@ -38,6 +66,7 @@
                 <toolsjar>${java.home}/../lib/tools.jar</toolsjar>
             </properties>
         </profile>
+
         <profile>
             <id>mac-profile</id>
             <activation>
@@ -50,16 +79,17 @@
                 <toolsjar>${java.home}/../Classes/classes.jar</toolsjar>
             </properties>
         </profile>
+
         <profile>
-            <id>custom</id>
+            <id>mac-profile-2</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
                 <file>
-                    <exists>${toolsjar.path}</exists>
+                    <exists>${java.home}/lib/tools.jar</exists>
                 </file>
             </activation>
             <properties>
-                <toolsjar>${toolsjar.path}</toolsjar>
+                <toolsjar>${java.home}/lib/tools.jar</toolsjar>
             </properties>
         </profile>
     </profiles>

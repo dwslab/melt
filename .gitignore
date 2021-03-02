@@ -70,6 +70,9 @@ Spielewiese.java
 Playground.java
 Playground[0-9].java
 
+# gradle
+.gradle/
+
 # mac specific
 .DS_Store
 
