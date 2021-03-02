@@ -1,0 +1,14 @@
+# IDEs
+.DS_Store
+.idea
+*.iml
+
+# Ruby / Jekyll
+*.gem
+.bundle
+.ruby-version
+.jekyll-cache
+.sass-cache
+_site
+Gemfile.lock
+node_modules
