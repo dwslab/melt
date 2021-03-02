@@ -29,17 +29,6 @@ public class DatasetIDExtractorUrlPattern implements DatasetIDExtractor {
                 return postProcessing.apply(uri.substring(this.prefixLength, infixIndex));
             }
         }
-        return "default";
+        return postProcessing.apply(DatasetIDHelper.getHost(uri)); // "default" - better get host of uri which often represents the dataset
     }
-    
-    /**
-     * Extractor for the Conference track available at OAEI.
-     */
-    public static final DatasetIDExtractorUrlPattern CONFERENCE_TRACK_EXTRACTOR = new DatasetIDExtractorUrlPattern("http://", "#", s->s.toLowerCase());
-    
-    /**
-     * Extractor for the Knowledge graph track available at OAEI.
-     */
-    public static final DatasetIDExtractorUrlPattern KG_TRACK_EXTRACTOR = new DatasetIDExtractorUrlPattern("http://dbkwik.webdatacommons.org/", ".", s->s.replace("-", ""));
-    
 }

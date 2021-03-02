@@ -241,6 +241,23 @@
         </plugins>
     </build>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.1</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>checkstyle</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
     <profiles>
 
         <!-- Default profile: Skip all BK test that require a local set-up of resources. -->
@@ -310,23 +327,27 @@
                 </plugins>
             </build>
         </profile>
+        
+        <profile>
+            <id>ci-run</id>
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <configuration>
+                            <doclet>de.uni_mannheim.informatik.dws.melt.doclet.MarkdownDoclet</doclet>
+                            <!-- can be found at /documentation/melt_doclet - not installed by default -->
+                            <docletArtifact> 
+                                <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+                                <artifactId>doclet</artifactId>
+                                <version>1.0</version>
+                            </docletArtifact>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
     </profiles>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>checkstyle</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
-
 </project>

@@ -12,13 +12,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PartitionerTest {
     
     @Test
-    void testConferencePartitioner() {
+    void testConferenceTrackPartitioner() {
         testPartitioner(TrackRepository.Conference.V1);
     }
     
     //@Test // not to download KG track every time in CI
     void testKGTrackPartitioner() {
         testPartitioner(TrackRepository.Knowledgegraph.V3);
+    }
+    
+    //@Test // not to download large bio track every time in CI
+    void testLargeBioTrackPartitioner() {
+        testPartitioner(TrackRepository.Largebio.V2016.ONLY_WHOLE);
     }
     
     private void testPartitioner(Track track){

@@ -60,4 +60,15 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+    <!-- enable resource filtering for MeltUtil to have the build properties available.
+    further predefined properties: https://github.com/cko/predefined_maven_properties/blob/master/README.md -->
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources-filtered</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
 </project>

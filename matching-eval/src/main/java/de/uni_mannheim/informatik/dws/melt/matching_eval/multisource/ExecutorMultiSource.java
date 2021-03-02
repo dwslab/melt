@@ -172,7 +172,7 @@ public class ExecutorMultiSource {
     
     private static final Set<Track> KG_TRACKS = TrackRepository.retrieveDefinedTracks(TrackRepository.Knowledgegraph.class);
     private static final Set<Track> CONFERENCE_TRACKS = TrackRepository.retrieveDefinedTracks(TrackRepository.Conference.class);
-    
+    private static final Set<Track> LARGE_BIO_TRACKS = TrackRepository.retrieveDefinedTracks(TrackRepository.Largebio.V2016.class);
     
     private static boolean allTestCasesFromSameTrack(List<TestCase> testCases){
         if(testCases.isEmpty())
@@ -191,28 +191,30 @@ public class ExecutorMultiSource {
      * @return the most specific partitioner
      */
     public static Partitioner getMostSpecificPartitioner(Track track){
-        if(KG_TRACKS.contains(track)){
-            return new PartitionerFromDatasetIdExtractor(track, DatasetIDExtractorUrlPattern.KG_TRACK_EXTRACTOR);
-        }else if(CONFERENCE_TRACKS.contains(track)){
-            return new PartitionerFromDatasetIdExtractor(track, DatasetIDExtractorUrlPattern.CONFERENCE_TRACK_EXTRACTOR);
-        } else{
+        DatasetIDExtractor idExtractor = getMostSpecificDatasetIdExtractor(track);
+        if(idExtractor == null)
             return new PartitionerDefault(track);
-        }
+        return new PartitionerFromDatasetIdExtractor(track, idExtractor);
     }
     
     
     /**
      * Returns the most specific partitioner for a given track
      * @param track the track
-     * @return the most specific partitioner
+     * @return the most specific partitioner or null if none is available
      */
     public static DatasetIDExtractor getMostSpecificDatasetIdExtractor(Track track){
         if(KG_TRACKS.contains(track)){
-            return DatasetIDExtractorUrlPattern.KG_TRACK_EXTRACTOR;
+            return DatasetIDExtractor.KG_TRACK_EXTRACTOR;
         }else if(CONFERENCE_TRACKS.contains(track)){
-            return DatasetIDExtractorUrlPattern.CONFERENCE_TRACK_EXTRACTOR;
-        } else{
-            throw new UnsupportedOperationException("DatasetIdExtractor for track " + track.getName() + "is not available");
+            return DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR;
+        }else if(LARGE_BIO_TRACKS.contains(track)){
+            if(track.equals(TrackRepository.Largebio.V2016.ONLY_WHOLE) == false)
+                LOGGER.warn("Makeing a multisource experiment with Large Bio is only possible with TrackRepository.Largebio.V2016.ONLY_WHOLE because"
+                        + "other tracks contains multiple different ontologies (subsets which are not equal).");
+            return DatasetIDExtractor.LARGE_BIO_TRACK_EXTRACTOR;
+        }else{
+            return null;
         }
     }
     
