@@ -86,7 +86,7 @@ jobs:
         cd ./invalid-url-check
         mvn clean install
         cd ./target
-        java -jar invalid-url-check-1.0-SNAPSHOT.jar ../melt
+        java -jar invalid-url-check-1.0-SNAPSHOT.jar ../../melt
   build-multi-platform:
     runs-on: ${{ matrix.os }}
     strategy:
