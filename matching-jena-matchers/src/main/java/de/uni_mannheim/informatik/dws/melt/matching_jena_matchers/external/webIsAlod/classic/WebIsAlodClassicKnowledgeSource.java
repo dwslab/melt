@@ -47,7 +47,6 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
         linker = new WebIsAlodClassicLinker();
     }
 
-    @Override
     public boolean isInDictionary(String word) {
         // NOTE: Compared to the other background sources, this dictionary uses the linker.
         // However, as the linker does not use the isInDictionary() method, this has no effect and is rather

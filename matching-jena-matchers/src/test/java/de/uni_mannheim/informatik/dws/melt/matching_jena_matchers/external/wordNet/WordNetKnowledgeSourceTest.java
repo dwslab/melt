@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class WordNetKnowledgeSourceTest {
 
+
     private static WordNetKnowledgeSource wordnet;
 
     @BeforeAll

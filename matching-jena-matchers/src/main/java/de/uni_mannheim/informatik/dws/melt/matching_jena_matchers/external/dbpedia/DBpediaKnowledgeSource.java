@@ -99,7 +99,6 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
         }
     }
 
-    @Override
     public boolean isInDictionary(String word) {
         return linker.linkToSingleConcept(word, Language.ENGLISH) != null;
     }

@@ -38,8 +38,8 @@ public class WiktionaryKnowledgeSourceTdbTest {
 
     @AfterAll
     public static void shutDown() {
-        deletePersistenceDirectory();
         wiktionary.close();
+        deletePersistenceDirectory();
     }
 
     /**

@@ -80,7 +80,6 @@ public class GensimEmbeddingModel implements ExternalResourceWithSynonymCapabili
         this.gensim = PythonServer.getInstance();
     }
 
-    @Override
     public boolean isInDictionary(String word) {
         return linker.linkToSingleConcept(word) != null;
     }

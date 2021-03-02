@@ -15,12 +15,10 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * This tets requires a working internet connection.
+ * This test requires a working internet connection.
  */
 public class WiktionaryKnowledgeSourceTest {
 
-
-    private static WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WiktionaryKnowledgeSourceTdbTest.class);
 
@@ -34,18 +32,20 @@ public class WiktionaryKnowledgeSourceTest {
      * Delete the persistence directory.
      */
     private static void deletePersistenceDirectory() {
+        PersistenceService.getService().closePersistenceService();
         File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
-        if (result != null && result.exists() && result.isDirectory()) {
-            try {
-                FileUtils.deleteDirectory(result);
-            } catch (IOException e) {
-                LOGGER.error("Failed to remove persistence directory.");
-            }
+        try {
+            FileUtils.deleteDirectory(result);
+        } catch (IOException e) {
+            LOGGER.error("Failed to remove persistence directory.");
         }
+
     }
 
     @Test
     public void testIsInDictionaryString() {
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+
         // true positive check
         assertTrue(wiktionary.isInDictionary("dog"));
 
@@ -60,13 +60,15 @@ public class WiktionaryKnowledgeSourceTest {
     }
 
     @Test
-    void encodeWord(){
+    void encodeWord() {
         // we need this space encoding to ensure that it works on DBnary:
         assertEquals("European_Union", WiktionaryKnowledgeSource.encodeWord("European Union"));
     }
 
     @Test
     public void testIsInDictionaryStringDBNaryLanguage() {
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+
         // true positive check
         assertTrue(wiktionary.isInDictionary("cat", Language.ENGLISH));
 
@@ -79,6 +81,8 @@ public class WiktionaryKnowledgeSourceTest {
 
     @Test
     public void testGetSynonymsString() {
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+
         // just checking that there are synonyms
         assertTrue(wiktionary.getSynonymsLexical("cat").size() > 0);
 
@@ -94,6 +98,8 @@ public class WiktionaryKnowledgeSourceTest {
 
     @Test
     public void testGetSynonymsStringDBNaryLanguage() {
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+
         // buffer check
         int numberOfSynonyms1 = wiktionary.getSynonymsLexical("cat").size();
         int numberOfSynonyms2 = wiktionary.getSynonymsLexical("cat").size();
@@ -102,20 +108,23 @@ public class WiktionaryKnowledgeSourceTest {
 
     @Test
     public void testIsSynonymous() {
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
         assertTrue(wiktionary.isSynonymous("dog", "hound"));
         assertTrue(wiktionary.isSynonymous("dog", "dog"));
         assertFalse(wiktionary.isSynonymous("dog", "cat"));
     }
 
     @Test
-    public void testIsStrongFromSynonymous(){
+    public void testIsStrongFromSynonymous() {
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
         assertTrue(wiktionary.isStrongFormSynonymous("dog", "hound"));
         assertTrue(wiktionary.isStrongFormSynonymous("dog", "dog"));
         assertFalse(wiktionary.isStrongFormSynonymous("dog", "cat"));
     }
 
     @Test
-    public void testHypernymy(){
+    public void testHypernymy() {
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
         assertTrue(wiktionary.getHypernyms("cat").contains("feline"));
         assertFalse(wiktionary.getHypernyms("cat").contains("dog"));
 
@@ -125,7 +134,8 @@ public class WiktionaryKnowledgeSourceTest {
     }
 
     @Test
-    void isSynonymousOrHypernymyous(){
+    void isSynonymousOrHypernymyous() {
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
         assertTrue(wiktionary.isSynonymousOrHypernymous("cat", "feline"));
         assertTrue(wiktionary.isSynonymousOrHypernymous("dog", "hound"));
         assertFalse(wiktionary.isSynonymousOrHypernymous("dog", "cat"));

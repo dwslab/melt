@@ -155,6 +155,10 @@ public class PersistenceService {
         ALOD_XL_HYPERNYMY_ASK_BUFFER,
         ALOD_XL_HYPERNYM_BUFFER,
 
+        WIKTIONARY_SYNONYMY_BUFFER,
+        WIKTIONARY_HYPERNYMY_BUFFER,
+        WIKTIONARY_ASK_BUFFER,
+
         /**
          * Stores existing and non-existing concepts.
          * Data Structure: String -&gt; String
@@ -201,6 +205,9 @@ public class PersistenceService {
                 case DBPEDIA_LABEL_LINK_BUFFER:
                 case DBPEDIA_HYPERNYMY_BUFFER:
                 case DBPEDIA_SYNONYMY_BUFFER:
+                case WIKTIONARY_HYPERNYMY_BUFFER:
+                case WIKTIONARY_SYNONYMY_BUFFER:
+                case WIKTIONARY_ASK_BUFFER:
                     return String.class;
             }
             return null;
@@ -228,6 +235,9 @@ public class PersistenceService {
                 case DBPEDIA_LABEL_LINK_BUFFER:
                 case DBPEDIA_SYNONYMY_BUFFER:
                 case DBPEDIA_HYPERNYMY_BUFFER:
+                case WIKTIONARY_HYPERNYMY_BUFFER:
+                case WIKTIONARY_SYNONYMY_BUFFER:
+                case WIKTIONARY_ASK_BUFFER:
                     return Serializer.STRING;
             }
             return null;
@@ -240,6 +250,7 @@ public class PersistenceService {
                 case ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER:
                 case ALOD_XL_HYPERNYMY_ASK_BUFFER:
                 case WIKIDATA_ASK_BUFFER:
+                case WIKTIONARY_ASK_BUFFER:
                     return Serializer.BOOLEAN;
                 case BABELNET_SYNONYM_BUFFER:
                 case BABELNET_HYPERNYMY_BUFFER:
@@ -252,6 +263,8 @@ public class PersistenceService {
                 case DBPEDIA_LABEL_LINK_BUFFER:
                 case DBPEDIA_SYNONYMY_BUFFER:
                 case DBPEDIA_HYPERNYMY_BUFFER:
+                case WIKTIONARY_HYPERNYMY_BUFFER:
+                case WIKTIONARY_SYNONYMY_BUFFER:
                     return Serializer.JAVA;
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
@@ -306,6 +319,12 @@ public class PersistenceService {
                     return PERSISTENCE_DIRECTORY + File.separator + "dbpedia_synonymy_buffer.mapdb";
                 case DBPEDIA_HYPERNYMY_BUFFER:
                     return PERSISTENCE_DIRECTORY + File.separator + "dbpedia_hypernymy_buffer.mapdb";
+                case WIKTIONARY_HYPERNYMY_BUFFER:
+                    return PERSISTENCE_DIRECTORY + File.separator + "wiktionary_hypernymy_buffer.mapdb";
+                case WIKTIONARY_SYNONYMY_BUFFER:
+                    return PERSISTENCE_DIRECTORY + File.separator + "wiktionary_synonymy_buffer.mapdb";
+                case WIKTIONARY_ASK_BUFFER:
+                    return PERSISTENCE_DIRECTORY + File.separator + "wiktionary_ask_buffer.mapdb";
             }
             return null;
         }

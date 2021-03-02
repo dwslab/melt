@@ -72,7 +72,6 @@ public class BabelNetKnowledgeSource extends SemanticWordRelationDictionary {
      * @param word The word to be looked for.
      * @return true if word found, else false.
      */
-    @Override
     public boolean isInDictionary(String word) {
         BabelNetQuery query = new BabelNetQuery.Builder(word)
                 .from(Language.EN)

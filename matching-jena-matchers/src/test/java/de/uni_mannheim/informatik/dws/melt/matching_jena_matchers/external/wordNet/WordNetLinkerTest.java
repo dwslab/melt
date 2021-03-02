@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class WordNetLinkerTest {
 
+
     private static String wordNetPath;
 
     @BeforeAll
@@ -61,7 +62,6 @@ class WordNetLinkerTest {
         assertNull(linker.linkToSingleConcept(""));
         assertNull(linker.linkToSingleConcept(null));
     }
-
 
     @Test
     void normalizeForWordnetLookup(){

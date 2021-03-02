@@ -4,6 +4,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wikt
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import org.apache.jena.query.*;
 import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
@@ -13,10 +14,13 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.*;
 
 /**
- * Class utilizing DBnary.
- * DBnary endpoint for tests:
+ * Class utilizing DBnary, a SPARQL endpoint for Wiktionary.
  */
 public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
 
@@ -32,14 +36,24 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
     public String tdbDirectoryPath;
 
     /**
+     * Service responsible for disk buffers.
+     */
+    private PersistenceService persistenceService;
+
+    /**
      * Buffer for synonyms.
      */
-    private HashMap<String, HashSet<String>> synonymyBuffer;
+    private ConcurrentMap<String, HashSet<String>> synonymyBuffer;
 
     /**
      * Buffer for hypernymy.
      */
-    private HashMap<String, HashSet<String>> hypernymyBuffer;
+    private ConcurrentMap<String, HashSet<String>> hypernymyBuffer;
+
+    /**
+     * Buffer for ask queries.
+     */
+    private ConcurrentMap<String, Boolean> askBuffer;
 
     /**
      * The TDB dataset into which the dbnary data set was loaded.
@@ -47,7 +61,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
     private Dataset tdbDataset;
 
     /**
-     * Endpoint URL
+     * The public SPARQL endpoint.
      */
     private static final String ENDPOINT_URL = "http://kaiko.getalp.org/sparql";
 
@@ -56,18 +70,33 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      */
     private boolean isUseTdb = false;
 
+    private boolean isDiskBufferEnabled;
+
     /**
      * The linker that links input strings to terms.
      */
     private WiktionaryLinker linker;
 
+    /**
+     * Constructor for Wiktionary online (SPARQL endpoint) access.
+     * By default, a disk-buffer is enabled.
+     */
     public WiktionaryKnowledgeSource(){
-        isUseTdb = false;
-        initialize();
+        this(true);
     }
 
     /**
      * Constructor
+     * @param isDiskBufferEnabled True if buffers shall be written to disk.
+     */
+    public WiktionaryKnowledgeSource(boolean isDiskBufferEnabled){
+        isUseTdb = false;
+        this.isDiskBufferEnabled = isDiskBufferEnabled;
+        initialize();
+    }
+
+    /**
+     * Constructor for DBnary TDB access.
      *
      * @param tdbDirectoryPath Path to the Wiktionary <a href="https://jena.apache.org/documentation/tdb/index.html">TDB</a>
      *                         directory.
@@ -91,13 +120,24 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
         //tdbDataset = TDB2Factory.connectDataset(tdbDirectoryPath);
         tdbDataset = TDBFactory.createDataset(tdbDirectoryPath);
         tdbDataset.begin(ReadWrite.READ);
-
+        this.isDiskBufferEnabled = false;
         initialize();
     }
 
+    /**
+     * Helper functions for constructor-independent actions.
+     */
     private void initialize(){
-        synonymyBuffer = new HashMap<>();
-        hypernymyBuffer = new HashMap<>();
+        if(isDiskBufferEnabled){
+            this.persistenceService = PersistenceService.getService();
+            this.synonymyBuffer = persistenceService.getMapDatabase(WIKTIONARY_SYNONYMY_BUFFER);
+            this.hypernymyBuffer = persistenceService.getMapDatabase(WIKTIONARY_HYPERNYMY_BUFFER);
+            this.askBuffer = persistenceService.getMapDatabase(WIKTIONARY_ASK_BUFFER);
+        } else {
+            this.synonymyBuffer = new ConcurrentHashMap<>();
+            this.hypernymyBuffer = new ConcurrentHashMap<>();
+            this.askBuffer = new ConcurrentHashMap<>();
+        }
         linker = new WiktionaryLinker(this);
     }
 
@@ -105,6 +145,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      * De-constructor; call before ending the program.
      */
     public void close() {
+        commitAll();
         if(tdbDataset != null) {
             tdbDataset.end();
             tdbDataset.close();
@@ -112,7 +153,6 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
         LOGGER.info("Dataset closed.");
     }
 
-    @Override
     public boolean isInDictionary(String word) {
         return this.isInDictionary(word, Language.ENGLISH);
     }
@@ -127,6 +167,11 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      */
     public boolean isInDictionary(String word, Language language) {
         word = encodeWord(word);
+        String key = "in_dict_" + word + "_" + language.toSparqlChar2();
+        if(askBuffer.containsKey(key)){
+            return askBuffer.get(key);
+        }
+
         String queryString =
                 "PREFIX lexvo: <http://lexvo.org/id/iso639-3/>\r\n" +
                         "PREFIX dbnary: <http://kaiko.getalp.org/dbnary#>\r\n" +
@@ -140,6 +185,8 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
         }
         boolean result = queryExecution.execAsk();
         queryExecution.close();
+        askBuffer.put(key, result);
+        commit(WIKTIONARY_ASK_BUFFER);
         return result;
     }
 
@@ -204,9 +251,9 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
         }
         queryExecution.close();
         synonymyBuffer.put(word + "_" + language.toWiktionaryChar3(), result);
+        commit(WIKTIONARY_SYNONYMY_BUFFER);
         return result;
     }
-
 
     /**
      * Given a resource URI, this method will transform it to a lemma.
@@ -291,10 +338,42 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             }
             queryExecution.close();
             hypernymyBuffer.put(linkedConcept + "_" + language.toWiktionaryChar3(), result);
+            commit(WIKTIONARY_HYPERNYMY_BUFFER);
             return result;
         } catch (QueryParseException qpe) {
             LOGGER.info("Faild to build query for concept '" + linkedConcept + "'", qpe);
             return null;
+        }
+    }
+
+    /**
+     * Commit persistence.
+     * @param persistence The persistence that is to be commited.
+     */
+    private void commit(PersistenceService.PreconfiguredPersistences persistence){
+        if(persistence == null || persistenceService == null){
+            return;
+        }
+        switch (persistence){
+            case WIKTIONARY_SYNONYMY_BUFFER:
+                persistenceService.commit(WIKTIONARY_SYNONYMY_BUFFER);
+                return;
+            case WIKTIONARY_HYPERNYMY_BUFFER:
+                persistenceService.commit(WIKTIONARY_HYPERNYMY_BUFFER);
+                return;
+            case WIKTIONARY_ASK_BUFFER:
+                persistenceService.commit(WIKTIONARY_ASK_BUFFER);
+        }
+    }
+
+    /**
+     * Commit data changes if active.
+     */
+    private void commitAll(){
+        if(isDiskBufferEnabled && persistenceService != null){
+            persistenceService.commit(WIKTIONARY_SYNONYMY_BUFFER);
+            persistenceService.commit(WIKTIONARY_HYPERNYMY_BUFFER);
+            persistenceService.commit(WIKTIONARY_ASK_BUFFER);
         }
     }
 
@@ -307,5 +386,4 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
     public String getName() {
         return "Wiktionary";
     }
-
 }
