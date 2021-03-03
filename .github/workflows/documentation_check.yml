@@ -6,7 +6,6 @@ on:
 
 jobs:
   check-documentation-links:
-    needs: build-and-deploy
     runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 13
