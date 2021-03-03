@@ -5,19 +5,19 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WordNetKnowledgeSourceExtJWNLTest {
+class WordNetKnowledgeSourceTest {
 
 
     @Test
     void testIsSynonymous() {
-        WordNetKnowledgeSourceExtJWNL wordnet = new WordNetKnowledgeSourceExtJWNL();
+        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         assertTrue(wordnet.isSynonymous("dog", "hound"));
         assertFalse(wordnet.isSynonymous("dog", "car"));
     }
 
     @Test
     void synonymyPlayground(){
-        WordNetKnowledgeSourceExtJWNL wordnet = new WordNetKnowledgeSourceExtJWNL();
+        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         String word = "equity";
         System.out.println("Synonyms for '" + word + "'");
         for (String synonym : wordnet.getSynonymsLexical(wordnet.getLinker().linkToSingleConcept(word))){
@@ -27,7 +27,7 @@ class WordNetKnowledgeSourceExtJWNLTest {
 
     @Test
     void testIsStrongFormSynonymous() {
-        WordNetKnowledgeSourceExtJWNL wordnet = new WordNetKnowledgeSourceExtJWNL();
+        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         assertTrue(wordnet.isStrongFormSynonymous("dog", "hound"));
         assertTrue(wordnet.isStrongFormSynonymous("dog", "dog"));
         assertTrue(wordnet.isStrongFormSynonymous("medulla", "bulb"));
@@ -44,7 +44,7 @@ class WordNetKnowledgeSourceExtJWNLTest {
 
     @Test
     void testIsInDictionary() {
-        WordNetKnowledgeSourceExtJWNL wordnet = new WordNetKnowledgeSourceExtJWNL();
+        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         assertTrue(wordnet.isInDictionary("car"));
         assertTrue(wordnet.isInDictionary("monkey"));
         assertTrue(wordnet.isInDictionary("milk"));
@@ -52,20 +52,20 @@ class WordNetKnowledgeSourceExtJWNLTest {
 
     @Test
     void getSynonyms() {
-        WordNetKnowledgeSourceExtJWNL wordnet = new WordNetKnowledgeSourceExtJWNL();
+        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         assertNotEquals(wordnet.getSynonymsLexical("dog").size(), wordnet.getSynonymsLexical("hound").size());
     }
 
     @Test
     void isInDictionary() {
-        WordNetKnowledgeSourceExtJWNL wordnet = new WordNetKnowledgeSourceExtJWNL();
+        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         assertTrue(wordnet.isInDictionary("dog"));
         assertFalse(wordnet.isInDictionary("asdfasdfasdf"));
     }
 
     @Test
     void isHypernymous(){
-        WordNetKnowledgeSourceExtJWNL wordnet = new WordNetKnowledgeSourceExtJWNL();
+        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
 
         assertTrue(wordnet.isHypernymous("human", "hominid"));
         assertFalse(wordnet.isHypernymous("human", "animal"));
@@ -78,7 +78,7 @@ class WordNetKnowledgeSourceExtJWNLTest {
 
     @Test
     void isHypernymousOrSynonymous(){
-        WordNetKnowledgeSourceExtJWNL wordnet = new WordNetKnowledgeSourceExtJWNL();
+        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
 
         assertTrue(wordnet.isSynonymousOrHypernymous("human", "hominid"));
         assertTrue(wordnet.isSynonymousOrHypernymous("human", "homo"));

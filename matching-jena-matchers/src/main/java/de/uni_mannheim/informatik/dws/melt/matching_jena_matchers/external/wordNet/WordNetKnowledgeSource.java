@@ -25,10 +25,10 @@ import java.util.Set;
 /**
  * API for WordNet requests.
  */
-public class WordNetKnowledgeSourceExtJWNL extends SemanticWordRelationDictionary {
+public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 
 
-	private static Logger LOGGER = LoggerFactory.getLogger(WordNetKnowledgeSourceExtJWNL.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(WordNetKnowledgeSource.class);
 
 	private Dictionary dictionary;
 
@@ -40,16 +40,16 @@ public class WordNetKnowledgeSourceExtJWNL extends SemanticWordRelationDictionar
 	/**
 	 * the linker that is used to link words to wordnet concepts
 	 */
-	WordNetLinkerExtJWNL linker;
+	WordNetLinker linker;
 
 	/**
 	 * Constructor
 	 */
-	public WordNetKnowledgeSourceExtJWNL(){
+	public WordNetKnowledgeSource(){
 		try {
 			this.dictionary = Dictionary.getDefaultResourceInstance();
 			buffer = new HashMap<>();
-			linker = new WordNetLinkerExtJWNL(this);
+			linker = new WordNetLinker(this);
 		} catch (JWNLException e) {
 			e.printStackTrace();
 		}

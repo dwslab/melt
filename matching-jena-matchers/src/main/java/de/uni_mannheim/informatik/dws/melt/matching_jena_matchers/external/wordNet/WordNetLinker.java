@@ -15,15 +15,15 @@ import java.util.HashSet;
  *
  * @author D060249
  */
-public class WordNetLinkerExtJWNL implements LabelToConceptLinker {
+public class WordNetLinker implements LabelToConceptLinker {
 
 
-	private static Logger LOGGER = LoggerFactory.getLogger(WordNetLinkerExtJWNL.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(WordNetLinker.class);
 
     /**
      * The WordNet dictionary instance that is to be used.
      */
-    private WordNetKnowledgeSourceExtJWNL dictionary;
+    private WordNetKnowledgeSource dictionary;
 
     private String nameOfLinker = "WordNet Linker";
 
@@ -32,7 +32,7 @@ public class WordNetLinkerExtJWNL implements LabelToConceptLinker {
      */
     private HashMap<String, String> singleConceptBuffer;
 
-    public WordNetLinkerExtJWNL(WordNetKnowledgeSourceExtJWNL dictionary) {
+    public WordNetLinker(WordNetKnowledgeSource dictionary) {
         this.dictionary = dictionary;
         singleConceptBuffer = new HashMap<>();
     }

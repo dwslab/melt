@@ -6,11 +6,11 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WordNetLinkerExtJWNLTest {
+class WordNetLinkerTest {
 
     @Test
     void linkToSingleConcept() {
-        WordNetLinkerExtJWNL linker = new WordNetLinkerExtJWNL(new WordNetKnowledgeSourceExtJWNL());
+        WordNetLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
         assertEquals("parietal cortex", linker.linkToSingleConcept("parietal cortex"));
         assertEquals("parietal cortex", linker.linkToSingleConcept("parietal_cortex"));
         assertEquals("parietal cortex", linker.linkToSingleConcept("parietal_Cortex"));
@@ -47,7 +47,7 @@ class WordNetLinkerExtJWNLTest {
 
     @Test
     void normalizeForWordnetLookup(){
-        WordNetLinkerExtJWNL linker = new WordNetLinkerExtJWNL(new WordNetKnowledgeSourceExtJWNL());
+        WordNetLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
         assertEquals("parietal cortex", linker.normalizeForWordnetLookupWithTokenization("parietal cortex"));
         assertEquals("parietal cortex", linker.normalizeForWordnetLookupWithTokenization("parietal_cortex"));
         assertEquals("parietal cortex", linker.normalizeForWordnetLookupWithTokenization("parietal_Cortex"));
@@ -56,7 +56,7 @@ class WordNetLinkerExtJWNLTest {
 
     @Test
     void linkToPotentiallyMultipleConcepts(){
-        WordNetLinkerExtJWNL linker = new WordNetLinkerExtJWNL(new WordNetKnowledgeSourceExtJWNL());
+        WordNetLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
         HashSet<String> result1 = linker.linkToPotentiallyMultipleConcepts("hair medulla");
         assertTrue(result1.size() == 2);
         assertTrue(result1.contains("hair"));
