@@ -10,7 +10,7 @@ import java.util.Set;
  * @author Jan Portisch
  *
  */
-public abstract class SemanticWordRelationDictionary implements ExternalResourceWithSynonymCapability {
+public abstract class SemanticWordRelationDictionary implements ExternalResourceWithSynonymCapability, ExternalResourceWithHypernymCapability {
 
 	
 	/**
