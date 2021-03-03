@@ -1,36 +1,16 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * As of WordNet 3.1
- */
-class WordNetLinkerTest {
-
-
-    private static String wordNetPath;
-
-    @BeforeAll
-    static void setup(){
-        String key = "wordnetPath";
-        wordNetPath = TestOperations.getStringKeyFromResourceBundle("local_config", key);
-        if(wordNetPath == null){
-            wordNetPath = TestOperations.getStringKeyFromResourceBundle("config", key);
-        }
-        if(wordNetPath == null){
-            fail("Cannot find config.properties or local_config.properties with key " + key);
-        }
-    }
+class WordNetLinkerExtJWNLTest {
 
     @Test
     void linkToSingleConcept() {
-        WordNetLinker linker = new WordNetLinker(new WordNetKnowledgeSource(wordNetPath));
+        WordNetLinkerExtJWNL linker = new WordNetLinkerExtJWNL(new WordNetKnowledgeSourceExtJWNL());
         assertEquals("parietal cortex", linker.linkToSingleConcept("parietal cortex"));
         assertEquals("parietal cortex", linker.linkToSingleConcept("parietal_cortex"));
         assertEquals("parietal cortex", linker.linkToSingleConcept("parietal_Cortex"));
@@ -39,6 +19,8 @@ class WordNetLinkerTest {
         assertEquals("parietal cortex", linker.linkToSingleConcept("ParietalCortex"));
         assertEquals("european union", linker.linkToSingleConcept("EuropeanUnion"));
         assertEquals("european union", linker.linkToSingleConcept("EuroPEan UNION"));
+        assertEquals("dog", linker.linkToSingleConcept("dog"));
+        assertEquals("hound", linker.linkToSingleConcept("hound"));
         assertEquals("hiv", linker.linkToSingleConcept("hiv"));
         assertEquals("hiv", linker.linkToSingleConcept("HIV"));
         assertNull(linker.linkToSingleConcept("hair_bulb"));
@@ -65,7 +47,7 @@ class WordNetLinkerTest {
 
     @Test
     void normalizeForWordnetLookup(){
-        WordNetLinker linker = new WordNetLinker(new WordNetKnowledgeSource(wordNetPath));
+        WordNetLinkerExtJWNL linker = new WordNetLinkerExtJWNL(new WordNetKnowledgeSourceExtJWNL());
         assertEquals("parietal cortex", linker.normalizeForWordnetLookupWithTokenization("parietal cortex"));
         assertEquals("parietal cortex", linker.normalizeForWordnetLookupWithTokenization("parietal_cortex"));
         assertEquals("parietal cortex", linker.normalizeForWordnetLookupWithTokenization("parietal_Cortex"));
@@ -74,7 +56,7 @@ class WordNetLinkerTest {
 
     @Test
     void linkToPotentiallyMultipleConcepts(){
-        WordNetLinker linker = new WordNetLinker(new WordNetKnowledgeSource(wordNetPath));
+        WordNetLinkerExtJWNL linker = new WordNetLinkerExtJWNL(new WordNetKnowledgeSourceExtJWNL());
         HashSet<String> result1 = linker.linkToPotentiallyMultipleConcepts("hair medulla");
         assertTrue(result1.size() == 2);
         assertTrue(result1.contains("hair"));
@@ -100,4 +82,5 @@ class WordNetLinkerTest {
         assertNull(linker.linkToPotentiallyMultipleConcepts(null));
         assertNull(linker.linkToPotentiallyMultipleConcepts(""));
     }
+
 }

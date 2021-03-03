@@ -154,12 +154,6 @@
         </dependency>
 
         <dependency>
-            <groupId>edu.mit</groupId>
-            <artifactId>jwi</artifactId>
-            <version>2.2.3</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.javatuples</groupId>
             <artifactId>javatuples</artifactId>
             <version>1.2</version>
@@ -303,6 +297,20 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>20.1.0</version>
+        </dependency>
+
+        <!-- main library dependency -->
+        <dependency>
+            <groupId>net.sf.extjwnl</groupId>
+            <artifactId>extjwnl</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+
+        <!-- Princeton WordNet 3.1 data dependency -->
+        <dependency>
+            <groupId>net.sf.extjwnl</groupId>
+            <artifactId>extjwnl-data-wn31</artifactId>
+            <version>1.2</version>
         </dependency>
 
     </dependencies>

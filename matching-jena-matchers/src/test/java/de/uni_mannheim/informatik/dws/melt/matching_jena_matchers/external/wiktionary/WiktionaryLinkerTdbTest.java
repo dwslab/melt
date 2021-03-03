@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiktionary;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,17 +15,25 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WiktionaryLinkerTest {
+class WiktionaryLinkerTdbTest {
 
-    
+
     private static WiktionaryLinker linker;
     private static WiktionaryKnowledgeSource wiktionary;
-    private static final Logger LOGGER = LoggerFactory.getLogger(WiktionaryLinkerTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WiktionaryLinkerTdbTest.class);
 
     @BeforeAll
     public static void prepare() {
         deletePersistenceDirectory();
-        wiktionary = new WiktionaryKnowledgeSource();
+        String key = "wiktionaryTdbDirectory";
+        String tdbpath = TestOperations.getStringKeyFromResourceBundle("local_config", key);
+        if(tdbpath == null){
+            tdbpath = TestOperations.getStringKeyFromResourceBundle("config", key);
+        }
+        if(tdbpath == null){
+            fail("Cannot find config.properties or local_config.properties with key " + key);
+        }
+        wiktionary = new WiktionaryKnowledgeSource(tdbpath);
         linker = new WiktionaryLinker(wiktionary);
     }
 

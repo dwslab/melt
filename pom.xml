@@ -273,10 +273,8 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>3.0.0-M4</version>
                         <configuration>
-                            <excludes>WiktionaryLinkerTest.java</excludes>
+                            <excludes>WiktionaryLinkerTdbTest.java</excludes>
                             <excludes>WiktionaryKnowledgeSourceTdbTest.java</excludes>
-                            <excludes>WordNetLinkerTest.java</excludes>
-                            <excludes>WordNetKnowledgeSourceTest.java</excludes>
                             <excludes>BabelNetLinkerTest.java</excludes>
                             <excludes>BabelNetKnowledgeSourceTest.java</excludes>
                         </configuration>

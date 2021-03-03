@@ -7,7 +7,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -16,15 +15,15 @@ import java.util.HashSet;
  *
  * @author D060249
  */
-public class WordNetLinker implements LabelToConceptLinker {
+public class WordNetLinkerExtJWNL implements LabelToConceptLinker {
 
 
-	private static Logger LOGGER = LoggerFactory.getLogger(WordNetLinker.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(WordNetLinkerExtJWNL.class);
 
     /**
      * The WordNet dictionary instance that is to be used.
      */
-    private WordNetKnowledgeSource dictionary;
+    private WordNetKnowledgeSourceExtJWNL dictionary;
 
     private String nameOfLinker = "WordNet Linker";
 
@@ -33,7 +32,7 @@ public class WordNetLinker implements LabelToConceptLinker {
      */
     private HashMap<String, String> singleConceptBuffer;
 
-    public WordNetLinker(WordNetKnowledgeSource dictionary) {
+    public WordNetLinkerExtJWNL(WordNetKnowledgeSourceExtJWNL dictionary) {
         this.dictionary = dictionary;
         singleConceptBuffer = new HashMap<>();
     }
