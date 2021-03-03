@@ -15,7 +15,11 @@ It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaign
 Found a bug? Don't hesitate to <a href="https://github.com/dwslab/melt/issues">open an issue</a>.
 
 ## User Guide
-All functionality is documented in our <a href="https://dwslab.github.io/melt/">User Guide</a>. 
+All functionality is documented in our <a href="https://dwslab.github.io/melt/">User Guide</a>.<br/>
+Note, that you can also easily search the entire user guide:
+<a href="https://dwslab.github.io/melt/">
+![image](https://raw.githubusercontent.com/dwslab/melt/gh-pages/media/search_screenshot.png)
+</a>
 
 ## JavaDoc
 - [Latest Commit / Developer Version](https://dwslab.github.io/melt/javadoc_latest/index.html)
