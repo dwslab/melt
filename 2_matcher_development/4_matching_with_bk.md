@@ -25,3 +25,7 @@ There are currently two relevant capabilities (interfaces): [`SynonymCapability`
 
 ## Matching with Wiktionary
 [Wiktionary](https://www.wiktionary.org/) is a collaboratively built dictionary. As there is no official API for this dataset, the [DBnary](http://kaiko.getalp.org/about-dbnary/) graph is used.
+
+The core class is [`WiktionaryKnowledgeSource`](). If a TDB path is passed to the constuctor, TDB is used, else a SPARQL connection to the endpoint is established.
+
+This link is intentionally broken: [Broken Link](https://github.com/dwslab/melt/tree/master/matching-eval/does_not_exist.java)
