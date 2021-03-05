@@ -33,7 +33,7 @@ The MELT code is extensively documented using JavaDoc which is also published on
 ## About this User Guide
 This guide is written for newcomers and practitioners in the matching domain. You can read this guide like a book chapter by chapter using the navigation pane on the left or by jumping directly to the section of your interest.
 
-Note, that you can also easily search the entire user guide: 
+Note that you can also easily search the entire user guide: 
 
 ![image](/media/search_screenshot.png)
 
@@ -71,6 +71,6 @@ Contains a wrapper for HOBBIT platform (implements the interface used in HOBBIT 
 Maven Plugin for creating a container for the [HOBBIT platform](https://project-hobbit.eu/outcomes/hobbit-platform/).
 
 ### receivers
-TODO Sven
+Contains utilities to wrap a matcher to a specific interface such as HTTP, SEALS, HOBBIT etc.
 
 
