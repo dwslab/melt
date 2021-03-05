@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet;
 
-
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
 import net.sf.extjwnl.JWNLException;
@@ -15,8 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -30,6 +27,9 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(WordNetKnowledgeSource.class);
 
+	/**
+	 * WordNet dictionary instance.
+	 */
 	private Dictionary dictionary;
 
 	/**
@@ -161,7 +161,11 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 
 	@Override
 	public void close() {
-		// no resources to close here
+		try {
+			dictionary.close();
+		} catch (JWNLException e) {
+			LOGGER.error("An error occurred while trying to close the dictionary.");
+		}
 	}
 	
 	@Override

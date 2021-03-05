@@ -30,11 +30,6 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
     private static final Logger LOGGER = LoggerFactory.getLogger(WiktionaryKnowledgeSource.class);
 
     /**
-     * directory where the TDB database with the wiktionary files lies
-     */
-    public String tdbDirectoryPath;
-
-    /**
      * Service responsible for disk buffers.
      */
     private PersistenceService persistenceService;
@@ -69,6 +64,9 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      */
     private boolean isUseTdb = false;
 
+    /**
+     * True if buffers shall be written to disk.
+     */
     private boolean isDiskBufferEnabled;
 
     /**
@@ -101,8 +99,6 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      *                         directory.
      */
     public WiktionaryKnowledgeSource(String tdbDirectoryPath) {
-        this.tdbDirectoryPath = tdbDirectoryPath;
-
         // convenience checks for stable code
         File tdbDirectoryFile = new File(tdbDirectoryPath);
         if (!tdbDirectoryFile.exists()) {
@@ -149,7 +145,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             tdbDataset.end();
             tdbDataset.close();
         }
-        LOGGER.info("Dataset closed.");
+        LOGGER.info("DBnary TDB dataset closed.");
     }
 
     public boolean isInDictionary(String word) {

@@ -25,7 +25,7 @@ public class WiktionaryLinker implements LabelToConceptLinker {
 	/**
 	 * Default name of the linker.
 	 */
-	private String nameOfLinker = "DbnaryLinker";
+	private String nameOfLinker = "Wiktionary Linker";
 
 	private MaxGramLeftToRightTokenizer maxGramTokenizer = new MaxGramLeftToRightTokenizer(null, " ");
 

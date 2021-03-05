@@ -8,9 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WordNetLinkerTest {
 
+
     @Test
     void linkToSingleConcept() {
-        WordNetLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
+        WordNetKnowledgeSource wks = new WordNetKnowledgeSource();
+        WordNetLinker linker = new WordNetLinker(wks);
         assertEquals("parietal cortex", linker.linkToSingleConcept("parietal cortex"));
         assertEquals("parietal cortex", linker.linkToSingleConcept("parietal_cortex"));
         assertEquals("parietal cortex", linker.linkToSingleConcept("parietal_Cortex"));
@@ -43,20 +45,25 @@ class WordNetLinkerTest {
         // null test
         assertNull(linker.linkToSingleConcept(""));
         assertNull(linker.linkToSingleConcept(null));
+
+        wks.close();
     }
 
     @Test
     void normalizeForWordnetLookup(){
-        WordNetLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
+        WordNetKnowledgeSource wks = new WordNetKnowledgeSource();
+        WordNetLinker linker = new WordNetLinker(wks);
         assertEquals("parietal cortex", linker.normalizeForWordnetLookupWithTokenization("parietal cortex"));
         assertEquals("parietal cortex", linker.normalizeForWordnetLookupWithTokenization("parietal_cortex"));
         assertEquals("parietal cortex", linker.normalizeForWordnetLookupWithTokenization("parietal_Cortex"));
         assertEquals("parietal cortex", linker.normalizeForWordnetLookupWithTokenization("parietalCortex"));
+        wks.close();
     }
 
     @Test
     void linkToPotentiallyMultipleConcepts(){
-        WordNetLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
+        WordNetKnowledgeSource wks = new WordNetKnowledgeSource();
+        WordNetLinker linker = new WordNetLinker(wks);
         HashSet<String> result1 = linker.linkToPotentiallyMultipleConcepts("hair medulla");
         assertTrue(result1.size() == 2);
         assertTrue(result1.contains("hair"));
@@ -81,6 +88,8 @@ class WordNetLinkerTest {
         assertNull(linker.linkToPotentiallyMultipleConcepts("Hair_Bulb_ACDFDSDF"));
         assertNull(linker.linkToPotentiallyMultipleConcepts(null));
         assertNull(linker.linkToPotentiallyMultipleConcepts(""));
+
+        wks.close();
     }
 
 }

@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: "Ontology / Knowledge Graph Matcher"
-  description: "This interface represents an Ontology / KnowledgeGraph Matcher. It is also in use by the [Ontology Alignment Evaluation Initiative (OAEI)](http://oaei.ontologymatching.org))."
+  description: "This interface represents an Ontology / KnowledgeGraph Matcher. It is also in use by the [Ontology Alignment Evaluation Initiative (OAEI)](http://oaei.ontologymatching.org)."
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT

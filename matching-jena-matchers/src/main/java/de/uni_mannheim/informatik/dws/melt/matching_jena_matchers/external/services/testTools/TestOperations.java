@@ -156,6 +156,24 @@ public class TestOperations {
     }
 
     /**
+     * Retrieves a string value from "local_config.properties" and if the key is not found there from
+     * "config.properties".
+     * @param key The key to be used.
+     * @return String value if value found in one of the two properties files, else null.
+     */
+    public static String getKeyFromConfigFiles(String key){
+        String tdbpath = TestOperations.getStringKeyFromResourceBundle("local_config", key);
+        if(tdbpath == null){
+            tdbpath = TestOperations.getStringKeyFromResourceBundle("config", key);
+        }
+        if(tdbpath == null){
+            LOGGER.error("Cannot find config.properties or local_config.properties with key " + key);
+            return null;
+        }
+        return tdbpath;
+    }
+
+    /**
      * Delete the persistence directory.
      */
     public static void deletePersistenceDirectory() {

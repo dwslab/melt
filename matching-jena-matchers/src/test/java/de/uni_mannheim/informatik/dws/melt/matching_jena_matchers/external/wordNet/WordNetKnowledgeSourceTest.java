@@ -13,6 +13,7 @@ class WordNetKnowledgeSourceTest {
         WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         assertTrue(wordnet.isSynonymous("dog", "hound"));
         assertFalse(wordnet.isSynonymous("dog", "car"));
+        wordnet.close();
     }
 
     @Test
@@ -23,6 +24,7 @@ class WordNetKnowledgeSourceTest {
         for (String synonym : wordnet.getSynonymsLexical(wordnet.getLinker().linkToSingleConcept(word))){
             System.out.println(synonym);
         }
+        wordnet.close();
     }
 
     @Test
@@ -40,6 +42,7 @@ class WordNetKnowledgeSourceTest {
         assertTrue(wordnet.isStrongFormSynonymous(linker.linkToSingleConcept("human"), linker.linkToSingleConcept("human_being")));
         assertTrue(wordnet.isStrongFormSynonymous(linker.linkToSingleConcept("human"), linker.linkToSingleConcept("human being")));
         assertFalse(wordnet.isStrongFormSynonymous(linker.linkToSingleConcept("dog"), linker.linkToSingleConcept("car")));
+        wordnet.close();
     }
 
     @Test
@@ -48,12 +51,14 @@ class WordNetKnowledgeSourceTest {
         assertTrue(wordnet.isInDictionary("car"));
         assertTrue(wordnet.isInDictionary("monkey"));
         assertTrue(wordnet.isInDictionary("milk"));
+        wordnet.close();
     }
 
     @Test
     void getSynonyms() {
         WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         assertNotEquals(wordnet.getSynonymsLexical("dog").size(), wordnet.getSynonymsLexical("hound").size());
+        wordnet.close();
     }
 
     @Test
@@ -61,6 +66,7 @@ class WordNetKnowledgeSourceTest {
         WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         assertTrue(wordnet.isInDictionary("dog"));
         assertFalse(wordnet.isInDictionary("asdfasdfasdf"));
+        wordnet.close();
     }
 
     @Test
@@ -74,6 +80,7 @@ class WordNetKnowledgeSourceTest {
         LabelToConceptLinker linker = wordnet.getLinker();
         assertTrue(wordnet.isHypernymous(linker.linkToSingleConcept("human"), linker.linkToSingleConcept("hominid")));
         assertFalse(wordnet.isHypernymous(linker.linkToSingleConcept("human"), linker.linkToSingleConcept("animal")));
+        wordnet.close();
     }
 
     @Test
@@ -90,6 +97,6 @@ class WordNetKnowledgeSourceTest {
         assertTrue(wordnet.isSynonymousOrHypernymous(linker.linkToSingleConcept("human"),  linker.linkToSingleConcept("homo")));
         assertFalse(wordnet.isSynonymousOrHypernymous(linker.linkToSingleConcept("human"), linker.linkToSingleConcept("dog")));
 
+        wordnet.close();
     }
-
 }

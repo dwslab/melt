@@ -277,6 +277,7 @@
                             <excludes>WiktionaryKnowledgeSourceTdbTest.java</excludes>
                             <excludes>BabelNetLinkerTest.java</excludes>
                             <excludes>BabelNetKnowledgeSourceTest.java</excludes>
+                            <excludes>DBpediaKnowledgeSourceTdbTest.java</excludes>
                         </configuration>
                     </plugin>
                 </plugins>

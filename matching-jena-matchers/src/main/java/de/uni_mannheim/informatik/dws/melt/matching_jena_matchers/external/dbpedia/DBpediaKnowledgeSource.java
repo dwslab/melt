@@ -5,12 +5,13 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Langu
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
+import org.apache.jena.tdb.TDBFactory;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +21,11 @@ import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.externa
 
 public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
 
+
+    /**
+     * Logger for this class.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DBpediaKnowledgeSource.class);
 
     /**
      * The public SPARQL endpoint.
@@ -57,12 +63,22 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
      */
     private boolean isDiskBufferEnabled = true;
 
+    /**
+     * True if a tdb source shall be used rather than an on-line SPARQL endpoint.
+     */
+    private boolean isUseTdb = false;
+
     public static String getEndpointUrl() {
         return ENDPOINT_URL;
     }
 
     /**
-     * Default constructor.
+     * The TDB dataset into which the DBpedia data set was loaded.
+     */
+    private Dataset tdbDataset;
+
+    /**
+     * Default constructor. SPARQL endpoint will be queried.
      * Disk buffer is enabled by default.
      */
     public DBpediaKnowledgeSource(){
@@ -70,27 +86,75 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
     }
 
     /**
-     *
-     * @param isDiskBufferEnabled True if a disk buffer shall be enabled by default
+     * Constructor for SPARQL access.
+     * @param isDiskBufferEnabled True if a disk buffer shall be enabled by default.
      */
     public DBpediaKnowledgeSource(boolean isDiskBufferEnabled){
         this.isDiskBufferEnabled = isDiskBufferEnabled;
-        initializeBuffers();
+        initializeMembers();
+    }
 
-        if(this.linker == null){
-            this.linker = new DBpediaLinker(isDiskBufferEnabled);
+    /**
+     * Constructor for DBpedia TDB access.
+     * @param tdbDirectoryPath The path to the TDB directory.
+     */
+    public DBpediaKnowledgeSource(String tdbDirectoryPath){
+        this(tdbDirectoryPath, true);
+    }
+
+    /**
+     * Constructor for DBpedia TDB access.
+     * @param tdbDirectoryPath The path to the TDB directory.
+     * @param isDiskBufferEnabled True if the disk buffer shall be enabled.
+     */
+    public DBpediaKnowledgeSource(String tdbDirectoryPath, boolean isDiskBufferEnabled){
+        // convenience checks for stable code
+        File tdbDirectoryFile = new File(tdbDirectoryPath);
+        if (!tdbDirectoryFile.exists()) {
+            LOGGER.error("tdbDirectoryPath does not exist. - ABORTING PROGRAM");
+            return;
         }
+        if (!tdbDirectoryFile.isDirectory()) {
+            LOGGER.error("tdbDirectoryPath is not a directory. - ABORTING PROGRAM");
+            return;
+        }
+        this.isUseTdb = true;
+        tdbDataset = TDBFactory.createDataset(tdbDirectoryPath);
+        tdbDataset.begin(ReadWrite.READ);
 
+        this.isDiskBufferEnabled = isDiskBufferEnabled;
+        initializeMembers();
+    }
+
+    /**
+     * Initializations that have to be performed.
+     */
+    private void initializeMembers(){
+        initializeBuffers();
+        initializeLinker();
+        initializeHypernymExclusion();
+    }
+
+    private void initializeHypernymExclusion(){
         // hypernym exclusion default set
         excludedHypernyms.add("http://www.w3.org/2002/07/owl#Thing");
+    }
+
+    /**
+     * Helper method to initialize the linker.
+     */
+    private void initializeLinker(){
+        if(this.linker == null){
+            this.linker = new DBpediaLinker(this);
+        }
     }
 
     /**
      * Initialize buffers (either on-disk or memory).
      */
     private void initializeBuffers(){
-        persistenceService = PersistenceService.getService();
         if(isDiskBufferEnabled){
+            persistenceService = PersistenceService.getService();
             this.synonymyBuffer = persistenceService.getMapDatabase(DBPEDIA_SYNONYMY_BUFFER);
             this.hypernymyBuffer = persistenceService.getMapDatabase(DBPEDIA_HYPERNYMY_BUFFER);
         } else {
@@ -115,7 +179,12 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
             return synonymyBuffer.get(key);
         }
         String queryString = getSynonymsLexicalQuery(linkedConcept);
-        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(getEndpointUrl(), queryString);
+        QueryExecution queryExecution;
+        if(isUseTdb){
+            queryExecution = QueryExecutionFactory.create(queryString, tdbDataset);
+        } else {
+            queryExecution = QueryExecutionFactory.sparqlService(getEndpointUrl(), queryString);
+        }
         ResultSet resultSet = SparqlServices.safeExecution(queryExecution);
         while(resultSet.hasNext()){
             QuerySolution solution = resultSet.next();
@@ -125,7 +194,7 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
         queryExecution.close();
         result.remove("");
         synonymyBuffer.put(key, result);
-        commit();
+        commitAll();
         return result;
     }
 
@@ -192,7 +261,14 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
             return result;
         }
         String queryString = getHypernymsQuery(linkedConcept);
-        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(getEndpointUrl(), queryString);
+        QueryExecution queryExecution;
+
+        if(isUseTdb){
+            queryExecution = QueryExecutionFactory.create(queryString, tdbDataset);
+        } else {
+            queryExecution = QueryExecutionFactory.sparqlService(getEndpointUrl(), queryString);
+        }
+
         ResultSet queryResult = SparqlServices.safeExecution(queryExecution);
         while(queryResult.hasNext()){
             QuerySolution solution = queryResult.next();
@@ -203,7 +279,7 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
 
         // we add to the buffer before excluding hypernyms
         hypernymyBuffer.put(key, result);
-        commit();
+        commitAll();
 
         result.removeAll(getExcludedHypernyms());
         return result;
@@ -253,8 +329,8 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
     /**
      * Commit data changes if active.
      */
-    private void commit(){
-        if(isDiskBufferEnabled){
+    private void commitAll(){
+        if(isDiskBufferEnabled && this.persistenceService != null) {
             persistenceService.commit(DBPEDIA_SYNONYMY_BUFFER);
             persistenceService.commit(DBPEDIA_HYPERNYMY_BUFFER);
         }
@@ -262,12 +338,25 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
 
     @Override
     public void close() {
-        // nothing to close
+        commitAll();
+        if(tdbDataset != null) {
+            tdbDataset.end();
+            tdbDataset.close();
+        }
+        LOGGER.info("DBpedia TDB dataset closed.");
     }
 
     @Override
     public LabelToConceptLinker getLinker() {
         return this.linker;
+    }
+
+    public boolean isUseTdb() {
+        return isUseTdb;
+    }
+
+    public Dataset getTdbDataset() {
+        return tdbDataset;
     }
 
     @Override
@@ -277,6 +366,10 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
 
     public Set<String> getExcludedHypernyms() {
         return excludedHypernyms;
+    }
+
+    public boolean isDiskBufferEnabled() {
+        return isDiskBufferEnabled;
     }
 
     public void setExcludedHypernyms(Set<String> excludedHypernyms) {

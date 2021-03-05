@@ -8,10 +8,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,17 +64,23 @@ public class DBpediaLinker implements LabelToConceptLinker {
      */
     Set<StringModifier> stringModificationSet = new HashSet<>();
 
-    public DBpediaLinker(){
-        this(true);
-    }
+    /**
+     * True if a TDB source shall be used rather than an on-line SPARQL endpoint.
+     */
+    private boolean isUseTdb = false;
+
+    /**
+     * The TDB dataset into which the DBpedia data set was loaded.
+     */
+    private Dataset tdbDataset;
 
     /**
      * Constructor
      *
-     * @param isUseDiskBuffer True if disk buffer shall be used.
+     * @param dBpediaKnowledgeSource DBpedia knowledge source (configuration of the knowledge source will will be used).
      */
-    public DBpediaLinker(boolean isUseDiskBuffer) {
-        this.isDiskBufferEnabled = isUseDiskBuffer;
+    public DBpediaLinker(DBpediaKnowledgeSource dBpediaKnowledgeSource) {
+        this.isDiskBufferEnabled = dBpediaKnowledgeSource.isDiskBufferEnabled();
         initializeBuffers();
         stringModificationSet.add(new TokenizeConcatSpaceModifier());
         stringModificationSet.add(new TokenizeConcatSpaceCapitalizeModifier());
@@ -86,6 +89,10 @@ public class DBpediaLinker implements LabelToConceptLinker {
         stringModificationSet.add(new TokenizeConcatSpaceLowercaseModifierDropPlural());
         stringModificationSet.add(new TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifier());
         stringModificationSet.add(new TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifierDropPlural());
+        this.isUseTdb = dBpediaKnowledgeSource.isUseTdb();
+        if(this.isUseTdb){
+            this.tdbDataset = dBpediaKnowledgeSource.getTdbDataset();
+        }
     }
 
     /**
@@ -97,7 +104,7 @@ public class DBpediaLinker implements LabelToConceptLinker {
     @NotNull
     public Set<String> getUris(String multiConceptLink) {
         Set<String> result = new HashSet<>();
-        if(multiConceptLink == null){
+        if (multiConceptLink == null) {
             return result;
         }
         if (!multiConceptLink.startsWith(MULTI_CONCEPT_PREFIX)) {
@@ -114,13 +121,14 @@ public class DBpediaLinker implements LabelToConceptLinker {
     /**
      * Given a set of links where the links can be multi concept links or direct links, a set of only direct links
      * is returned.
+     *
      * @param multipleLinks Set with multiple links. Multi concept links can be mixed with direct links.
      * @return A set with only direct links.
      */
-    public Set<String> getUris(Set<String> multipleLinks){
+    public Set<String> getUris(Set<String> multipleLinks) {
         Set<String> result = new HashSet<>();
-        for(String link : multipleLinks){
-            if(link.startsWith(MULTI_CONCEPT_PREFIX)){
+        for (String link : multipleLinks) {
+            if (link.startsWith(MULTI_CONCEPT_PREFIX)) {
                 result.addAll(getUris(link));
             } else {
                 result.add(link);
@@ -177,9 +185,13 @@ public class DBpediaLinker implements LabelToConceptLinker {
 
         // try lookup
         String queryString = this.getLinkerQueryString(allModifications, language);
-        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, queryString);
-        SparqlServices.safeExecution(queryExecution);
-        ResultSet resultSet = queryExecution.execSelect();
+        QueryExecution queryExecution;
+        if(this.isUseTdb){
+            queryExecution = QueryExecutionFactory.create(queryString, tdbDataset);
+        } else {
+            queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, queryString);
+        }
+        ResultSet resultSet = SparqlServices.safeExecution(queryExecution);
         Set<String> uris = new HashSet<>();
         while (resultSet.hasNext()) {
             QuerySolution solution = resultSet.next();
@@ -190,14 +202,14 @@ public class DBpediaLinker implements LabelToConceptLinker {
 
         // now we need to check disambiguations
         Set<String> disambiguations = new HashSet<>();
-        for(String uri : uris){
+        for (String uri : uris) {
             disambiguations.addAll(getDisambiguationUris(uri));
         }
         uris.addAll(disambiguations);
 
         multiLinkStore.put(key, uris);
         commit();
-        if(uris.size() > 0){
+        if (uris.size() > 0) {
             return key;
         } else return null;
     }
@@ -205,27 +217,33 @@ public class DBpediaLinker implements LabelToConceptLinker {
     /**
      * Commit data changes if active.
      */
-    private void commit(){
-        if(isDiskBufferEnabled){
+    private void commit() {
+        if (isDiskBufferEnabled) {
             persistenceService.commit(DBPEDIA_LABEL_LINK_BUFFER);
         }
     }
 
     /**
-     *
      * @param uri The URI for which a disambiguation shall be obtained.
      * @return A set of URIs. The set may be empty.
      */
     @NotNull
-    public Set<String> getDisambiguationUris(String uri){
+    public Set<String> getDisambiguationUris(String uri) {
         Set<String> result = new HashSet<>();
-        if(uri == null || uri.equals("")){
+        if (uri == null || uri.equals("")) {
             return result;
         }
         String disambiguationQuery = "SELECT DISTINCT ?c WHERE {<" + uri + "> <http://dbpedia.org/ontology/wikiPageDisambiguates> ?c}";
-        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(getEndpointUrl(), disambiguationQuery);
+        QueryExecution queryExecution;
+
+        if(this.isUseTdb){
+            queryExecution = QueryExecutionFactory.create(disambiguationQuery, tdbDataset);
+        } else {
+            queryExecution = QueryExecutionFactory.sparqlService(getEndpointUrl(), disambiguationQuery);
+        }
+
         ResultSet queryResult = SparqlServices.safeExecution(queryExecution);
-        while(queryResult.hasNext()){
+        while (queryResult.hasNext()) {
             QuerySolution solution = queryResult.next();
             String disambiguatedUri = solution.getResource("c").getURI();
             result.add(disambiguatedUri);
@@ -268,9 +286,10 @@ public class DBpediaLinker implements LabelToConceptLinker {
 
     /**
      * Helper method to build a query.
+     *
      * @param predicate The predicate.
-     * @param concept The concept String representation.
-     * @param language The language.
+     * @param concept   The concept String representation.
+     * @param language  The language.
      * @return A string builder.
      */
     static StringBuilder getPredicateQueryLine(String predicate, String concept, Language language) {
@@ -296,12 +315,12 @@ public class DBpediaLinker implements LabelToConceptLinker {
         int possibleConceptParts = StringOperations.clearArrayFromStopwords(StringOperations.tokenizeBestGuess(labelToBeLinked)).length;
 
         int actualConceptParts = 0;
-        for(String s : result) {
+        for (String s : result) {
             actualConceptParts = actualConceptParts + StringOperations.clearArrayFromStopwords(StringOperations.tokenizeBestGuess(s)).length;
         }
 
         // TODO: for now: only 100% results
-        if(possibleConceptParts <= actualConceptParts) {
+        if (possibleConceptParts <= actualConceptParts) {
             return result;
         }
         return null;
@@ -312,10 +331,10 @@ public class DBpediaLinker implements LabelToConceptLinker {
      * This corresponds to a MAXGRAM_LEFT_TO_RIGHT_TOKENIZER or NGRAM_LEFT_TO_RIGHT_TOKENIZER OneToManyLinkingStrategy.
      *
      * @param labelToBeLinked The label that shall be linked.
-     * @param language The language of the label.
+     * @param language        The language of the label.
      * @return A set of concept URIs that were found.
      */
-    private HashSet<String> linkLabelToTokensLeftToRight(String labelToBeLinked, Language language){
+    private HashSet<String> linkLabelToTokensLeftToRight(String labelToBeLinked, Language language) {
         //StringOperations.removeNonAlphanumericCharacters(StringOperations.removeEnglishGenitiveS(labelToBeLinked));
         LeftToRightTokenizer tokenizer;
         String[] tokens = StringOperations.tokenizeBestGuess(labelToBeLinked);
@@ -325,9 +344,9 @@ public class DBpediaLinker implements LabelToConceptLinker {
 
         HashSet<String> result = new HashSet<>();
         String token = tokenizer.getInitialToken();
-        while(token != null){
+        while (token != null) {
             String resultingConcept = linkToSingleConcept(token, language);
-            if(resultingConcept == null || resultingConcept.length() == 0){
+            if (resultingConcept == null || resultingConcept.length() == 0) {
                 token = tokenizer.getNextTokenNotSuccessful();
             } else {
                 result.add(resultingConcept);
@@ -352,8 +371,8 @@ public class DBpediaLinker implements LabelToConceptLinker {
     }
 
     public void setDiskBufferEnabled(boolean diskBufferEnabled) {
-        if(diskBufferEnabled && this.isDiskBufferEnabled) return;
-        if(!diskBufferEnabled && !this.isDiskBufferEnabled) return;
+        if (diskBufferEnabled && this.isDiskBufferEnabled) return;
+        if (!diskBufferEnabled && !this.isDiskBufferEnabled) return;
 
         // re-initialize buffers
         this.isDiskBufferEnabled = diskBufferEnabled;

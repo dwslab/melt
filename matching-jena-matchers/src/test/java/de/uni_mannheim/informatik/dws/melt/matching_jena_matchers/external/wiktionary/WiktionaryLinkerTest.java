@@ -14,6 +14,9 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This test uses the SPARQL endpoint of DBnary and requires a working internet connection.
+ */
 class WiktionaryLinkerTest {
 
     
@@ -69,10 +72,8 @@ class WiktionaryLinkerTest {
         assertNull(linker.linkToSingleConcept(""));
     }
 
-
     @Test
     void testLinkToPotentiallyMultipleConcepts() {
-
         // example 1: underscores
         HashSet<String> result1 = linker.linkToPotentiallyMultipleConcepts("House_of_Lords_dog");
         assertEquals(2, result1.size());

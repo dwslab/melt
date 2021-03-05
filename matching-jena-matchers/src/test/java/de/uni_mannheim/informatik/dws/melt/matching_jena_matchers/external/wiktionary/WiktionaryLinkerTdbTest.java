@@ -1,18 +1,15 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiktionary;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations.deletePersistenceDirectory;
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations.getKeyFromConfigFiles;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WiktionaryLinkerTdbTest {
@@ -20,18 +17,14 @@ class WiktionaryLinkerTdbTest {
 
     private static WiktionaryLinker linker;
     private static WiktionaryKnowledgeSource wiktionary;
-    private static final Logger LOGGER = LoggerFactory.getLogger(WiktionaryLinkerTdbTest.class);
+    //private static final Logger LOGGER = LoggerFactory.getLogger(WiktionaryLinkerTdbTest.class);
 
     @BeforeAll
     public static void prepare() {
         deletePersistenceDirectory();
-        String key = "wiktionaryTdbDirectory";
-        String tdbpath = TestOperations.getStringKeyFromResourceBundle("local_config", key);
+        String tdbpath = getKeyFromConfigFiles("wiktionaryTdbDirectory");
         if(tdbpath == null){
-            tdbpath = TestOperations.getStringKeyFromResourceBundle("config", key);
-        }
-        if(tdbpath == null){
-            fail("Cannot find config.properties or local_config.properties with key " + key);
+            fail("wiktionaryTdbDirectory not found in local_config.properties file.");
         }
         wiktionary = new WiktionaryKnowledgeSource(tdbpath);
         linker = new WiktionaryLinker(wiktionary);
@@ -41,21 +34,6 @@ class WiktionaryLinkerTdbTest {
     public static void destruct() {
         wiktionary.close();
         deletePersistenceDirectory();
-    }
-
-    /**
-     * Delete the persistence directory.
-     */
-    private static void deletePersistenceDirectory() {
-        PersistenceService.getService().closePersistenceService();
-        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
-        if (result != null && result.exists() && result.isDirectory()) {
-            try {
-                FileUtils.deleteDirectory(result);
-            } catch (IOException e) {
-                LOGGER.error("Failed to remove persistence directory.");
-            }
-        }
     }
 
     @Test

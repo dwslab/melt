@@ -12,8 +12,6 @@ import java.util.HashSet;
 
 /**
  * This class is capable of linking words to concepts in WordNet.
- *
- * @author D060249
  */
 public class WordNetLinker implements LabelToConceptLinker {
 

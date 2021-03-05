@@ -14,6 +14,9 @@ import java.util.Set;
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations.deletePersistenceDirectory;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This test uses the SPARQL endpoint and requires a working internet connection.
+ */
 class DBpediaLinkerTest {
 
 
@@ -32,7 +35,8 @@ class DBpediaLinkerTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void linkToSingleConcept(boolean isDiskBufferEnabled) {
-        DBpediaLinker linker = new DBpediaLinker(isDiskBufferEnabled);
+        DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(isDiskBufferEnabled);
+        DBpediaLinker linker = new DBpediaLinker(dks);
         assertEquals(isDiskBufferEnabled, linker.isDiskBufferEnabled());
 
         // default test
@@ -62,12 +66,15 @@ class DBpediaLinkerTest {
         assertNotNull(swapLink);
         Set<String> swapUris = linker.getUris(swapLink);
         assertTrue(swapUris.contains("http://dbpedia.org/resource/Swap_(finance)"));
+
+        dks.close();
     }
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void linkToPotentiallyMultipleConcepts(boolean isDiskBufferEnabled) {
-        DBpediaLinker linker = new DBpediaLinker(isDiskBufferEnabled);
+        DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(isDiskBufferEnabled);
+        DBpediaLinker linker = new DBpediaLinker(dks);
         assertEquals(isDiskBufferEnabled, linker.isDiskBufferEnabled());
 
         // this is a full label match (https://dbpedia.org/page/Cocktail_party)
@@ -84,29 +91,37 @@ class DBpediaLinkerTest {
         assertTrue(links3.size() > 1);
         Set<String> individualLinks3 = linker.getUris(links3);
         assertTrue(individualLinks3.contains("http://dbpedia.org/resource/Mount_everest"));
+
+        dks.close();
     }
 
     @Test
     void getUris(){
-        DBpediaLinker linker = new DBpediaLinker(false);
+        DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(false);
+        DBpediaLinker linker = new DBpediaLinker(dks);
         Set<String> result = linker.getUris("http://dbpedia.org/resource/Mount_everest");
         assertNotNull(result);
         assertEquals(1, result.size());
+        dks.close();
     }
 
     @Test
     void getDisambiguationUris(){
-        DBpediaLinker linker = new DBpediaLinker(false);
+        DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(false);
+        DBpediaLinker linker = new DBpediaLinker(dks);
         Set<String> uris = linker.getDisambiguationUris("http://dbpedia.org/resource/Swap");
         assertNotNull(uris);
         assertTrue(uris.contains("http://dbpedia.org/resource/Swap_(finance)"));
         assertNotNull(linker.getDisambiguationUris(null));
+        dks.close();
     }
 
     @Test
     void getNameOfLinker(){
-        DBpediaLinker linker = new DBpediaLinker(false);
+        DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(false);
+        DBpediaLinker linker = new DBpediaLinker(dks);
         assertNotNull(linker.getNameOfLinker());
+        dks.close();
     }
 
     @Test

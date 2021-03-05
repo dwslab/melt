@@ -8,6 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestOperationsTest {
 
+
+    @Test
+    void getKeyFromConfigFiles(){
+        String result = TestOperations.getKeyFromConfigFiles("testKey");
+        assertEquals("myTest", result);
+    }
+
     @Test
     void setContainsSameContent(){
         HashSet<String> s1 = new HashSet<>();
