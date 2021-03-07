@@ -39,10 +39,17 @@ The core class is [`WiktionaryKnowledgeSource`](https://github.com/dwslab/melt/b
 - Initialize `WiktionaryKnowledgeSource` with the path to your tdb directory (in this case `<...>/wiktionary_tdb`)
 
 ## Matching with DBpedia
-TODO
+The knowledge source can be used to obtain synonyms (`SynonymCapability`) and hypernyms (`HypernymCapability`). The core class is [`DBpediaKnowledgeSourceTest`](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/dbpedia/DBpediaKnowledgeSource.java). If a TDB path is passed to the constuctor, TDB is used, else a SPARQL connection to the endpoint is established.
 
 ### Use DBpedia with TDB
-TODO
+Create a TDB dataset (see instructions above) which is comprised of at least the following files:
+- [`disambiguations_lang=en.ttl`](https://downloads.dbpedia.org/repo/dbpedia/generic/disambiguations/2020.12.01/disambiguations_lang=en.ttl.bz2)
+- [`labels_lang=en.ttl`](https://downloads.dbpedia.org/repo/dbpedia/generic/labels/2020.12.01/labels_lang=en.ttl.bz2
+)
+- [`instance-types_lang=en_specific.ttl`](https://downloads.dbpedia.org/repo/dbpedia/mappings/instance-types/2020.12.01/instance-types_lang=en_specific.ttl.bz2)
+- [`mappingbased-literals_lang=en.ttl`](https://downloads.dbpedia.org/repo/dbpedia/mappings/mappingbased-literals/2020.12.01/mappingbased-literals_lang=en.ttl.bz2)
+
+A full overview of DBpedia download links can be found on the [databus Web page](https://databus.dbpedia.org/dbpedia/collections/latest-core). 
 
 ## Matching with Wikidata
 [Wikidata](https://www.wikidata.org/) is a publicly built knowledge graph. The knowledge source can be used to obtain synonyms (`SynonymCapability`) and hypernyms (`HypernymCapability`). The core class is [`WikidataKnowledgeSource`](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/wikidata/WikidataKnowledgeSource.java).
