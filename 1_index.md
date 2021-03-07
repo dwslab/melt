@@ -37,6 +37,11 @@ Note, that you can also easily search the entire user guide:
 
 ![image](/media/search_screenshot.png)
 
+## Code search
+<form>
+<input type="search" class="form-control" id="searchText" placeholder="Search">
+<button type="submit" name="button" class="btn" onclick="window.open('https://github.com/search?q=' + encodeURIComponent(document.getElementById('searchText').value) + '+repo%3Adwslab%2Fmelt&type=Code','_blank');">Search with Github</button>
+</form>
 
 ## Modules Overview
 MELT is grouped into multiple maven modules which are described below.
