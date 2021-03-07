@@ -392,6 +392,21 @@ public class TrackRepository{
              */
             public static Track SNOMED_NCI_WHOLE_FLAGGED = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "largebio", "largebio-snomed_nci_whole_flagged_2015");
         }
+        
+        /**
+         * Sets the system property of jdk.xml.entityExpansionLimit to zero because large bio needs it for parsing at least in jena.
+         * Call this function before parsing large bio ontologies and especially when getting the error:
+         * <code>
+         * JAXP00010001: The parser has encountered more than "64000" entity expansions in this document; this is the limit imposed by the JDK.
+         * </code>
+         * or
+         * <code>
+         * JAXP00010001: Der Parser hat mehr als 64000 Entityerweiterungen in diesem Dokument gefunden. Dies ist der von JDK vorgeschriebene Grenzwert.
+         * </code>
+         */
+        public static void unlimitEntityExpansion(){
+            System.getProperties().put("jdk.xml.entityExpansionLimit", "0");
+        }
     }
     
     /**

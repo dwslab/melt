@@ -120,4 +120,57 @@ public class CounterTest {
             c.mostCommonElementsByPercentageOrTopN(-0.2, -3);
         });
     }
+    
+    @Test
+    void testAddAllCounter(){
+        Counter<String> one = new Counter<>();
+        one.add("hello");
+        one.add("good", 2);
+        
+        assertEquals(3, one.getCount());
+        
+        Counter<String> two = new Counter<>();
+        two.add("good", 4);
+        assertEquals(4, two.getCount());
+        two.addAll(one);
+        
+        assertEquals(3, one.getCount());
+        assertEquals(7, two.getCount());
+        
+        assertEquals(6, two.getCount("good"));
+        assertEquals(1, two.getCount("hello"));
+    }
+    
+    @Test
+    void testEqualityOfCounters(){
+        Counter<String> one = new Counter<>();
+        Counter<String> two = new Counter<>();
+        
+        one.add("hello", 10);
+        one.add("foo", 20);
+        
+        two.add("hello", 10);
+        two.add("foo", 20);
+        
+        assertEquals(one, two);
+        
+        one.add("day");
+        two.add("hello");
+        assertNotEquals(one, two);
+        
+        two.add("day");
+        one.add("hello");
+        assertEquals(one, two);
+        
+        
+        one = new Counter<>(Comparator.comparingInt(s->s.length()));
+        two = new Counter<>();
+        
+        one.add("hello", 10);
+        one.add("foo", 20);
+        
+        two.add("hello", 10);
+        two.add("foo", 20);
+        assertNotEquals(one, two); // because of different comparator
+    }
 }

@@ -184,6 +184,7 @@ public class MatcherSeals extends MatcherFile{
                 //make folder for unzipDirectory
                 File unzipFolder = createFolderWithRandomNumberInDirectory(tmpDirectory, "meltUnzip");
                 unzipFolder.deleteOnExit();
+                LOGGER.info("Unzip seals matcher {} now.", matcherFileOrFolder.getName());
                 unzipToDirectory(unzipFolder, matcherFileOrFolder, true);
                 matcherFolderTmp = unzipFolder;
             }else{
@@ -228,6 +229,7 @@ public class MatcherSeals extends MatcherFile{
         if(this.freshMatcherInstance){
             //copy folder to tmp directory
             currentInstance = createFolderWithRandomNumberInDirectory(this.tmpFolder, "meltFreshInstance");
+            LOGGER.info("Copy matcher {} to new directory because a fresh instance for each new matching task is requested.", this.matcherFolder.getName());
             copyDirectory(currentInstance, this.matcherFolder);
         }else{
             currentInstance = this.matcherFolder;

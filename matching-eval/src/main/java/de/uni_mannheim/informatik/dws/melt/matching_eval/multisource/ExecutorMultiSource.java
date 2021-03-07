@@ -33,7 +33,14 @@ import org.slf4j.LoggerFactory;
 public class ExecutorMultiSource {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorMultiSource.class);
-  
+      
+    public static ExecutionResultSet runMultipleMatchersMultipleTracks(List<Track> tracks, Map<String, Object> matchers){
+        ExecutionResultSet results = new ExecutionResultSet();
+        for(Track track : tracks){
+            results.addAll(ExecutorMultiSource.runMultipleMatchers(track.getTestCases(), matchers));
+        }
+        return results;
+    }
     
     public static ExecutionResultSet runMultipleMatchers(Track track, Map<String, Object> matchers){
         return ExecutorMultiSource.runMultipleMatchers(track.getTestCases(), matchers);
@@ -217,6 +224,15 @@ public class ExecutorMultiSource {
             return null;
         }
     }
+    
+    public static long getSummedRuntimeOfAllUnrefinedResults(ExecutionResultSet results){
+        long summedRuntime = 0;
+        for(ExecutionResult r : results.getUnrefinedResults()){
+            summedRuntime += r.getRuntime();
+        }
+        return summedRuntime;
+    }
+    
     
     private static Map<Track, List<TestCase>> groupTestCasesByTrack(List<TestCase> testCases){
         Map<Track, List<TestCase>> map = new HashMap<>();

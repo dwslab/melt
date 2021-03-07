@@ -9,18 +9,18 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.Generic
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.JenaHelper;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.multisource.IndexBasedJenaMatcher;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.JenaTransformerHelper;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.jena.graph.Graph;
@@ -40,12 +40,25 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMultiSourceURL implements MultiSourceDispatcher, IMatcherMultiSourceCaller{
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherIncrementalMerge.class);
-    
     private static final ObjectMapper objectMapper = new ObjectMapper();    
-    private final Object oneToOneMatcher;
+    
+    private final Object oneToOneMatcher;    
+    private final boolean useCacheForMergeTree;
+    private final Map<List<Set<Object>>, int[][]> mergeTreeCache;
+    
+    private List<Alignment> intermediateAlignments;
 
-    public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher) {
+    /**
+     * Constructor which expects the actual one to one matcher and a boolean if the cache should be used.
+     * If true, then check that the subclasses do not change a parameter (make them final) which would change the result of getMergeTree.
+     * @param oneToOneMatcher ont to one matcher
+     * @param useCacheForMergeTree true if cache is enabled.
+     */
+    public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher, boolean useCacheForMergeTree) {
         this.oneToOneMatcher = oneToOneMatcher;
+        this.useCacheForMergeTree = useCacheForMergeTree;
+        this.mergeTreeCache = new HashMap<>();
+        this.intermediateAlignments = new ArrayList<>();
     }
     
     @Override
@@ -63,9 +76,30 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     
     @Override
     public AlignmentAndParameters match(List<Set<Object>> models, Object inputAlignment, Object parameters) throws Exception {
+        int[][] mergingTree;
+        if(useCacheForMergeTree){
+            mergingTree = mergeTreeCache.get(models);
+            if(mergingTree == null){
+                LOGGER.debug("Compute mergeTree");
+                mergingTree = getMergeTree(models, parameters);
+                if(mergingTree == null){
+                    LOGGER.warn("Merging tree is null. Please check subclasses, expecially what they return at method getMergeTree. Returning input alignment.");
+                    return new AlignmentAndParameters(inputAlignment, parameters);
+                }else{
+                    LOGGER.debug("Put mergeTree into cache.");
+                    mergeTreeCache.put(models, mergingTree);
+                }
+            }else{
+                LOGGER.debug("Use cached mergedTree.");
+            }
+        }else{
+            mergingTree = getMergeTree(models, parameters);
+            if(mergingTree == null){
+                LOGGER.warn("Merging tree is null. Please check subclasses, expecially what they return at method getMergeTree. Returning input alignment.");
+                return new AlignmentAndParameters(inputAlignment, parameters);
+            }
+        }
         
-        int[][] mergingTree = getMergeTree(models, inputAlignment, parameters);
-                
         List<Set<Object>> mergedOntologies = new ArrayList<>();
         
         Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
@@ -174,6 +208,8 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                 return new AlignmentAndParameters(inputAlignment, parameters);
             }
             finalAlignment.addAll(alignment);
+            if(this.intermediateAlignments != null)
+                this.intermediateAlignments.add(alignment);
             
             LOGGER.info("Merge source ontology with alignment into target ontology.");
             //need to transform the model in something known like jena model.
@@ -191,18 +227,31 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         return new AlignmentAndParameters(finalAlignment, parameters);
     }
     
+    public void clearAndStartSavingIntermediateAlignments(){
+        this.intermediateAlignments = new ArrayList<>();
+    }
+
+    /**
+     * Returns the intermediate alignments. This only works if clearAndStartSavingIntermediateAlignments is called before the match method.
+     * @return a list of intermediate alignments or null if clearAndStartSavingIntermediateAlignments is not called.
+     */
+    public List<Alignment> getIntermediateAlignments() {
+        return intermediateAlignments;
+    }
+    
+    
+    
     
     /**
      * Returns the merging tree (which ontologies are merged in which order).
      * Have a look at the return description to see the merging tree format.
      * @param models the models
-     * @param inputAlignment this object represents the input alignment.
      * @param parameters object representing additional parameters.
      * @return mergingTree for n models, this is a n-1 by 2 matrix where row i describes the merging of clusters at step i of the clustering. 
      *      If an element j in the row is less than n, then observation j was merged at this stage. 
      *      If j &ge; n then the merge was with the cluster formed at the (earlier) stage j-n of the algorithm.
      */
-    public abstract int[][] getMergeTree(List<Set<Object>> models, Object inputAlignment, Object parameters);
+    public abstract int[][] getMergeTree(List<Set<Object>> models, Object parameters);
     
     
     
@@ -232,6 +281,8 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         copiedModel.add(model);
         return new HashSet<>(Arrays.asList(copiedModel));
     }
+    
+    
         
     /**
      * Merges all triples from the source model into the target model.
