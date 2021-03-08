@@ -35,25 +35,33 @@ public class ExecutorMultiSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorMultiSource.class);
       
     public static ExecutionResultSet runMultipleMatchersMultipleTracks(List<Track> tracks, Map<String, Object> matchers){
+        return runMultipleMatchersMultipleTracks(tracks, matchers, null);
+    }
+    
+    public static ExecutionResultSet runMultipleMatchersMultipleTracks(List<Track> tracks, Map<String, Object> matchers, Properties additionalParameters){
         ExecutionResultSet results = new ExecutionResultSet();
         for(Track track : tracks){
-            results.addAll(ExecutorMultiSource.runMultipleMatchers(track.getTestCases(), matchers));
+            results.addAll(runMultipleMatchers(track.getTestCases(), matchers, additionalParameters));
         }
         return results;
     }
     
     public static ExecutionResultSet runMultipleMatchers(Track track, Map<String, Object> matchers){
-        return ExecutorMultiSource.runMultipleMatchers(track.getTestCases(), matchers);
+        return runMultipleMatchers(track.getTestCases(), matchers);
     }
     
     public static ExecutionResultSet runMultipleMatchers(List<TestCase> testCases, Map<String, Object> matchers){
+        return runMultipleMatchers(testCases, matchers, null);
+    }
+    
+    public static ExecutionResultSet runMultipleMatchers(List<TestCase> testCases, Map<String, Object> matchers, Properties additionalParameters){
         ExecutionResultSet resultSet = new ExecutionResultSet();        
         for(Entry<Track, List<TestCase>> trackToTestcases : groupTestCasesByTrack(testCases).entrySet()){
             Track track = trackToTestcases.getKey();
             List<TestCase> trackTestCases = trackToTestcases.getValue();
             List<URL> distinctOntologies = Track.getDistinctOntologies(trackTestCases);
             for(Entry<String, Object> matcher : matchers.entrySet()){
-                resultSet.addAll(ExecutorMultiSource.run(trackTestCases, matcher.getValue(), matcher.getKey(), distinctOntologies, getMostSpecificPartitioner(track)));
+                resultSet.addAll(run(trackTestCases, matcher.getValue(), matcher.getKey(), distinctOntologies, getMostSpecificPartitioner(track), additionalParameters));
             }
         }
         return resultSet;
@@ -73,7 +81,7 @@ public class ExecutorMultiSource {
             Track track = trackToTestcases.getKey();
             List<TestCase> trackTestCases = trackToTestcases.getValue(); // in case not all testcases of a track are included.
             List<URL> distinctOntologies = Track.getDistinctOntologies(trackTestCases);
-            resultSet.addAll(ExecutorMultiSource.run(trackTestCases, matcher, matcherName, distinctOntologies, getMostSpecificPartitioner(track)));
+            resultSet.addAll(ExecutorMultiSource.run(trackTestCases, matcher, matcherName, distinctOntologies, getMostSpecificPartitioner(track), null));
         }
         return resultSet;
     }
@@ -82,14 +90,17 @@ public class ExecutorMultiSource {
     public static ExecutionResultSet runWithAdditionalGraphs(Track track, Object matcher, String matcherName, List<URL> additionalGraphs, Partitioner partitioner){
         List<URL> allGraphs = track.getDistinctOntologies();
         allGraphs.addAll(additionalGraphs);
-        return ExecutorMultiSource.run(track.getTestCases(), matcher, matcherName, allGraphs, partitioner);
+        return ExecutorMultiSource.run(track.getTestCases(), matcher, matcherName, allGraphs, partitioner, null);
     }
     
+    
     public static ExecutionResultSet run(List<TestCase> testCases, Object matcher, String matcherName, 
-            List<URL> allGraphs, Partitioner partitioner){
+            List<URL> allGraphs, Partitioner partitioner, Properties additionalParameters){
         Set<String> trackNames = getTrackNames(testCases);
         Alignment inputAlignment = getInputAlignment(testCases);
         Properties parameters = getParameters(testCases);
+        if(additionalParameters != null)
+            parameters.putAll(additionalParameters);
         LOGGER.info("Running multi source matcher {} on track(s) {}.", matcherName, trackNames);
         
         long runTime;

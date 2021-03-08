@@ -32,21 +32,10 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
      * Some comparators are already defined as public static attributes in this class.
      * @param oneToOneMatcher the one to one matcher.
      * @param comparator the comparator to make the merging order of the models explicit. Some comparators are already defined as public static attributes in this class.
-     * @param useCacheForMergeTree true if the merge cache should be used.
-     */
-    public MultiSourceDispatcherIncrementalMergeByOrder(Object oneToOneMatcher, Comparator<? super ModelAndIndex> comparator, boolean useCacheForMergeTree) {
-        super(oneToOneMatcher, useCacheForMergeTree);
-        this.comparator = comparator;
-    }
-    
-    /**
-     * Constructor which requires the one to one matcher as well as the comparator which define es merging order.
-     * Some comparators are already defined as public static attributes in this class.
-     * @param oneToOneMatcher the one to one matcher.
-     * @param comparator the comparator to make the merging order of the models explicit. Some comparators are already defined as public static attributes in this class.
      */
     public MultiSourceDispatcherIncrementalMergeByOrder(Object oneToOneMatcher, Comparator<? super ModelAndIndex> comparator) {
-        this(oneToOneMatcher, comparator, true);
+        super(oneToOneMatcher);
+        this.comparator = comparator;
     }
     
     /**

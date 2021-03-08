@@ -28,15 +28,10 @@ public abstract class MultiSourceDispatcherIncrementalMergeByCluster extends Mul
      */
     private final ClusterLinkage linkage;
     
-    public MultiSourceDispatcherIncrementalMergeByCluster(Object oneToOneMatcher, ClusterLinkage linkage, boolean useCacheForMergeTree) {
-        super(oneToOneMatcher, useCacheForMergeTree);
-        this.linkage = linkage;
-    }
-    
     public MultiSourceDispatcherIncrementalMergeByCluster(Object oneToOneMatcher, ClusterLinkage linkage) {
-        this(oneToOneMatcher, linkage, true);
-    }
-        
+        super(oneToOneMatcher);
+        this.linkage = linkage;
+    }        
     
     @Override
     public int[][] getMergeTree(List<Set<Object>> models, Object parameters){

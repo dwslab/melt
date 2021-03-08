@@ -42,14 +42,10 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
     private double mindf;
     private double maxdf;
     
-    public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher, ClusterLinkage linkage, double mindf, double maxdf, boolean useCacheForMergeTree) {
-        super(oneToOneMatcher, linkage, useCacheForMergeTree);
+    public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher, ClusterLinkage linkage, double mindf, double maxdf) {
+        super(oneToOneMatcher, linkage);
         this.mindf = mindf;
         this.maxdf = maxdf;
-    }
-    
-    public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher, ClusterLinkage linkage, double mindf, double maxdf) {
-        this(oneToOneMatcher, linkage, mindf, maxdf, true);
     }
     
     public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher, ClusterLinkage linkage) {

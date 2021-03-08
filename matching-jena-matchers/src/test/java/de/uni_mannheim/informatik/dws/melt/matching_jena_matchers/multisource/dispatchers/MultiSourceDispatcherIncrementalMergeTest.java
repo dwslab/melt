@@ -139,7 +139,7 @@ public class MultiSourceDispatcherIncrementalMergeTest {
 class matcherTest extends MultiSourceDispatcherIncrementalMerge{
 
     public matcherTest() {
-        super(new NoOp(), true);
+        super(new NoOp());
     }
 
     @Override

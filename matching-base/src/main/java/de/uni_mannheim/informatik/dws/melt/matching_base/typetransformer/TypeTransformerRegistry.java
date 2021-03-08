@@ -493,7 +493,7 @@ public class TypeTransformerRegistry {
         if(route == null){
             return null;
         }
-        T transformedObject = route.getTransformedObject();
+        T transformedObject = route.getTransformedObject(transformationProperties);
         sourceObjects.add(transformedObject);
         return transformedObject;
     }
@@ -543,7 +543,7 @@ public class TypeTransformerRegistry {
         if(route == null){
             return null;
         }
-        return route.getTransformedObject();
+        return route.getTransformedObject(transformationProperties);
     }
     
     /**

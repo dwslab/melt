@@ -42,23 +42,29 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherIncrementalMerge.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();    
     
-    private final Object oneToOneMatcher;    
-    private final boolean useCacheForMergeTree;
+    private final Object oneToOneMatcher;
     private final Map<List<Set<Object>>, int[][]> mergeTreeCache;
     
+    private boolean useCacheForMergeTree;
+    private boolean addInformationToUnion;    
     private List<Alignment> intermediateAlignments;
 
     /**
      * Constructor which expects the actual one to one matcher and a boolean if the cache should be used.
      * If true, then check that the subclasses do not change a parameter (make them final) which would change the result of getMergeTree.
      * @param oneToOneMatcher ont to one matcher
-     * @param useCacheForMergeTree true if cache is enabled.
+     * @param addInformationToUnion if true all information from matched entities are in the union.
      */
-    public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher, boolean useCacheForMergeTree) {
+    public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher, boolean addInformationToUnion) {
         this.oneToOneMatcher = oneToOneMatcher;
-        this.useCacheForMergeTree = useCacheForMergeTree;
+        this.useCacheForMergeTree = true;// default is to cache merge tree
         this.mergeTreeCache = new HashMap<>();
-        this.intermediateAlignments = new ArrayList<>();
+        this.addInformationToUnion = addInformationToUnion;
+        this.intermediateAlignments = null; // default is not to save intermediate alignments
+    }
+    
+    public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher) {
+        this(oneToOneMatcher, true);
     }
     
     @Override
@@ -219,7 +225,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                 LOGGER.error("Could not transform source or target to Model");
                 return new AlignmentAndParameters(inputAlignment, parameters);
             }
-            mergeSourceIntoTarget(sourceModel, targetModel, alignment, true);
+            mergeSourceIntoTarget(sourceModel, targetModel, alignment, addInformationToUnion);
             
             mergedOntologies.add(new HashSet<>(Arrays.asList(targetModel))); 
         }
@@ -240,8 +246,16 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     }
     
     
+    public void setUseCacheForMergeTree(boolean useCache){
+        this.useCacheForMergeTree = useCache;
+    }
+    
+    public void setAddInformationToUnion(boolean addInformationToUnion){
+        this.addInformationToUnion = addInformationToUnion;
+    }
     
     
+             
     /**
      * Returns the merging tree (which ontologies are merged in which order).
      * Have a look at the return description to see the merging tree format.
