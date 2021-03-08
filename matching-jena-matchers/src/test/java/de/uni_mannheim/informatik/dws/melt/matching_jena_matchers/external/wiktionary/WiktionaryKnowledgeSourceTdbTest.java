@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations.getKeyFromConfigFiles;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WiktionaryKnowledgeSourceTdbTest {
@@ -26,10 +27,7 @@ public class WiktionaryKnowledgeSourceTdbTest {
     public static void prepare() {
         deletePersistenceDirectory();
         String key = "wiktionaryTdbDirectory";
-        String tdbpath = TestOperations.getStringKeyFromResourceBundle("config", key);
-        if(tdbpath == null){
-            tdbpath = TestOperations.getStringKeyFromResourceBundle("local_config", key);
-        }
+        String tdbpath = getKeyFromConfigFiles("wiktionaryTdbDirectory");
         if(tdbpath == null){
             fail("Cannot find config.properties or local_config.properties with key " + key);
         }

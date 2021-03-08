@@ -159,6 +159,14 @@
             <version>1.2</version>
         </dependency>
 
+        <!-- BabelNet dependency -->
+        <dependency>
+            <groupId>edu.mit</groupId>
+            <artifactId>jwi</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+
+
         <!-- BabelNet dependency, hosted at the University of Mannheim -->
         <dependency>
             <groupId>it.uniroma1.lcl</groupId>

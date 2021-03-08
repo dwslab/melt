@@ -342,8 +342,8 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
         if(tdbDataset != null) {
             tdbDataset.end();
             tdbDataset.close();
+            LOGGER.info("DBpedia TDB dataset closed.");
         }
-        LOGGER.info("DBpedia TDB dataset closed.");
     }
 
     @Override

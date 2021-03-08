@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,31 +11,37 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations.deletePersistenceDirectory;
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations.getKeyFromConfigFiles;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * This test uses the SPARQL endpoint and requires a working internet connection.
- */
-class DBpediaLinkerTest {
+public class DBpediaLinkerTdbTest {
 
+
+    private static DBpediaKnowledgeSource dbpedia;
+    private static DBpediaLinker linker;
+    private static String tdbpath;
 
     @BeforeAll
-    @AfterAll
-    static void setupAndTearDown() {
+    public static void prepare() {
         deletePersistenceDirectory();
+        tdbpath = getKeyFromConfigFiles("dbpediaTdbDirectory");
+        if(tdbpath == null){
+            fail("wiktionaryTdbDirectory not found in local_config.properties file.");
+        }
+        dbpedia = new DBpediaKnowledgeSource(tdbpath);
+        linker = new DBpediaLinker(dbpedia);
     }
 
-    @Test
-    void checkEndpointIsLive(){
-        String sparqlQueryString = "ASK {?a ?b ?c}";
-        assertTrue(SparqlServices.safeAsk(sparqlQueryString, DBpediaLinker.getEndpointUrl()));
+    @AfterAll
+    public static void destruct() {
+        dbpedia.close();
+        deletePersistenceDirectory();
     }
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void linkToSingleConcept(boolean isDiskBufferEnabled) {
-        DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(isDiskBufferEnabled);
-        DBpediaLinker linker = new DBpediaLinker(dks);
+        linker.setDiskBufferEnabled(isDiskBufferEnabled);
         assertEquals(isDiskBufferEnabled, linker.isDiskBufferEnabled());
 
         // default test
@@ -66,15 +71,12 @@ class DBpediaLinkerTest {
         assertNotNull(swapLink);
         Set<String> swapUris = linker.getUris(swapLink);
         assertTrue(swapUris.contains("http://dbpedia.org/resource/Swap_(finance)"));
-
-        dks.close();
     }
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void linkToPotentiallyMultipleConcepts(boolean isDiskBufferEnabled) {
-        DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(isDiskBufferEnabled);
-        DBpediaLinker linker = new DBpediaLinker(dks);
+        linker.setDiskBufferEnabled(isDiskBufferEnabled);
         assertEquals(isDiskBufferEnabled, linker.isDiskBufferEnabled());
 
         // this is a full label match (https://dbpedia.org/page/Cocktail_party)
@@ -91,37 +93,26 @@ class DBpediaLinkerTest {
         assertTrue(links3.size() > 1);
         Set<String> individualLinks3 = linker.getUris(links3);
         assertTrue(individualLinks3.contains("http://dbpedia.org/resource/Mount_everest"));
-
-        dks.close();
     }
 
     @Test
     void getUris(){
-        DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(false);
-        DBpediaLinker linker = new DBpediaLinker(dks);
         Set<String> result = linker.getUris("http://dbpedia.org/resource/Mount_everest");
         assertNotNull(result);
         assertEquals(1, result.size());
-        dks.close();
     }
 
     @Test
     void getDisambiguationUris(){
-        DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(false);
-        DBpediaLinker linker = new DBpediaLinker(dks);
         Set<String> uris = linker.getDisambiguationUris("http://dbpedia.org/resource/Swap");
         assertNotNull(uris);
         assertTrue(uris.contains("http://dbpedia.org/resource/Swap_(finance)"));
         assertNotNull(linker.getDisambiguationUris(null));
-        dks.close();
     }
 
     @Test
     void getNameOfLinker(){
-        DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(false);
-        DBpediaLinker linker = new DBpediaLinker(dks);
         assertNotNull(linker.getNameOfLinker());
-        dks.close();
     }
 
     @Test
@@ -140,10 +131,5 @@ class DBpediaLinkerTest {
         assertTrue(result.contains("SAP"));
         assertTrue(result.contains("BASF"));
         //System.out.println(result);
-    }
-
-    @Test
-    void getEndpointUrl() {
-        assertNotNull(DBpediaLinker.getEndpointUrl());
     }
 }
