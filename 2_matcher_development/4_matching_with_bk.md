@@ -44,8 +44,7 @@ The knowledge source can be used to obtain synonyms (`SynonymCapability`) and hy
 ### Use DBpedia with TDB
 Create a TDB dataset (see instructions above) which is comprised of at least the following files:
 - [`disambiguations_lang=en.ttl`](https://downloads.dbpedia.org/repo/dbpedia/generic/disambiguations/2020.12.01/disambiguations_lang=en.ttl.bz2)
-- [`labels_lang=en.ttl`](https://downloads.dbpedia.org/repo/dbpedia/generic/labels/2020.12.01/labels_lang=en.ttl.bz2
-)
+- [`labels_lang=en.ttl`](https://downloads.dbpedia.org/repo/dbpedia/generic/labels/2020.12.01/labels_lang=en.ttl.bz2)
 - [`instance-types_lang=en_specific.ttl`](https://downloads.dbpedia.org/repo/dbpedia/mappings/instance-types/2020.12.01/instance-types_lang=en_specific.ttl.bz2)
 - [`mappingbased-literals_lang=en.ttl`](https://downloads.dbpedia.org/repo/dbpedia/mappings/mappingbased-literals/2020.12.01/mappingbased-literals_lang=en.ttl.bz2)
 
