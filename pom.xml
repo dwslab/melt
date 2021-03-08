@@ -11,6 +11,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <junit.version>5.6.2</junit.version>
         <slf4j.version>1.7.30</slf4j.version>
+        <surefire.version>3.0.0-M5</surefire.version>
     </properties>
 
     <modules>
@@ -271,14 +272,16 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>3.0.0-M5</version>
+                        <version>${surefire.version}</version>
                         <configuration>
-                            <excludes>**/WiktionaryLinkerTdbTest.java</excludes>
-                            <excludes>**/WiktionaryKnowledgeSourceTdbTest.java</excludes>
-                            <excludes>**/BabelNetLinkerTest.java</excludes>
-                            <excludes>**/BabelNetKnowledgeSourceTest.java</excludes>
-                            <excludes>**/DBpediaKnowledgeSourceTdbTest.java</excludes>
-                            <excludes>**/DBpediaLinkerTdbTest.java</excludes>
+                            <excludes>
+                                <exclude>**/WiktionaryLinkerTdbTest.java</exclude>
+                                <exclude>**/WiktionaryKnowledgeSourceTdbTest.java</exclude>
+                                <exclude>**/BabelNetLinkerTest.java</exclude>
+                                <exclude>**/BabelNetKnowledgeSourceTest.java</exclude>
+                                <exclude>**/DBpediaKnowledgeSourceTdbTest.java</exclude>
+                                <exclude>**/DBpediaLinkerTdbTest.java</exclude>
+                            </excludes>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -288,12 +291,15 @@
         <!-- Background Knowledge Test Case Execution (this requires that BK resources are set up correctly) -->
         <profile>
             <id>run-bk-tests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>3.0.0-M4</version>
+                        <version>${surefire.version}</version>
                     </plugin>
                 </plugins>
             </build>
@@ -340,7 +346,7 @@
                         <configuration>
                             <doclet>de.uni_mannheim.informatik.dws.melt.doclet.MarkdownDoclet</doclet>
                             <!-- can be found at /documentation/melt_doclet - not installed by default -->
-                            <docletArtifact> 
+                            <docletArtifact>
                                 <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
                                 <artifactId>doclet</artifactId>
                                 <version>1.0</version>
