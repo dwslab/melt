@@ -42,10 +42,14 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
     private double mindf;
     private double maxdf;
     
-    public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher, ClusterLinkage linkage, double mindf, double maxdf) {
-        super(oneToOneMatcher, linkage);
+    public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher, ClusterLinkage linkage, double mindf, double maxdf, boolean useCacheForMergeTree) {
+        super(oneToOneMatcher, linkage, useCacheForMergeTree);
         this.mindf = mindf;
         this.maxdf = maxdf;
+    }
+    
+    public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher, ClusterLinkage linkage, double mindf, double maxdf) {
+        this(oneToOneMatcher, linkage, mindf, maxdf, true);
     }
     
     public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher, ClusterLinkage linkage) {
@@ -57,7 +61,7 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
     }
     
     @Override
-    public double[][] getClusterFeatures(List<Set<Object>> models, Object inputAlignment, Object parameters){
+    public double[][] getClusterFeatures(List<Set<Object>> models, Object parameters){
         Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
         Counter<String> documentFrequency = new Counter<>();

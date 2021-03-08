@@ -9,17 +9,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * A Counter is for counting arbitrary objects.
  * The number per object is integer, thus the maximum frequency of an entity should not be higher than 2,147,483,647.
+ * @param <T> the datatype of the objects to count.
  */
 public class Counter<T> {
-    protected Map<T, MutableInt> counts;
-    protected long overallCount;
-    protected Comparator<Entry<T, ? extends Comparable>> mapComparator;
+    private Map<T, MutableInt> counts;
+    private long overallCount;
+    private Comparator<Entry<T, ? extends Comparable>> mapComparator;
 
     /**
      * Create a new counter object with a default initial capacity. 
@@ -79,6 +81,17 @@ public class Counter<T> {
     public void addAll(Iterator<T> iterator) {
         while(iterator.hasNext()){
             this.add(iterator.next());
+        }
+    }
+    
+    /**
+     * Adds another counter to this counter.
+     * Only this counter is modified.
+     * @param counter the other counter to add to this object. 
+     */
+    public void addAll(Counter<T> counter) {
+        for(Entry<T, MutableInt> c : counter.counts.entrySet()){
+            this.add(c.getKey(), c.getValue().value);
         }
     }
     
@@ -184,7 +197,7 @@ public class Counter<T> {
      * @return list of elements with their counts
      */
     public List<Entry<T, Integer>> mostCommonWithHighestCount() {
-        List<Entry<T, Integer>> mostCommon = new ArrayList();
+        List<Entry<T, Integer>> mostCommon = new ArrayList<>();
         int highestCount = -1;
         for(Entry<T, Integer> entry : mostCommon()){
             if(highestCount < 0){
@@ -209,11 +222,11 @@ public class Counter<T> {
         if (percentage < 0.0 || percentage > 1.0)
             throw new IllegalArgumentException("Percentage: " + percentage);
         
-        List<Entry<T, Double>> list = new ArrayList();
+        List<Entry<T, Double>> list = new ArrayList<>();
         for(Entry<T, MutableInt> count : this.counts.entrySet()){
             double frequency = (double)count.getValue().get() / (double) this.overallCount;
             if(frequency >= percentage){
-                list.add(new SimpleEntry(count.getKey(), frequency));
+                list.add(new SimpleEntry<>(count.getKey(), frequency));
             }
         }
         return list.stream()
@@ -308,11 +321,11 @@ public class Counter<T> {
         if (max < 0.0 || max > 1.0)
             throw new IllegalArgumentException("max argument not between zero and one: " + min);
                 
-        List<Entry<T, Double>> list = new ArrayList();
+        List<Entry<T, Double>> list = new ArrayList<>();
         for(Entry<T, MutableInt> count : this.counts.entrySet()){
             double frequency = (double)count.getValue().get() / (double) this.overallCount;
             if(min <= frequency && frequency <= max){
-                list.add(new SimpleEntry(count.getKey(), frequency));
+                list.add(new SimpleEntry<>(count.getKey(), frequency));
             }
         }
         return list.stream()
@@ -356,6 +369,39 @@ public class Counter<T> {
         sb.append("]");
         return sb.toString();
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.counts);
+        hash = 53 * hash + (int) (this.overallCount ^ (this.overallCount >>> 32));
+        hash = 53 * hash + Objects.hashCode(this.mapComparator);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Counter<?> other = (Counter<?>) obj;
+        if (this.overallCount != other.overallCount) {
+            return false;
+        }
+        if (!Objects.equals(this.counts, other.counts)) {
+            return false;
+        }
+        if (!Objects.equals(this.mapComparator, other.mapComparator)) {
+            return false;
+        }
+        return true;
+    }
     
     class MutableInt implements Comparable<MutableInt>{
         private int value;
@@ -375,6 +421,31 @@ public class Counter<T> {
         @Override
         public String toString() {
             return Integer.toString(value);
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 59 * hash + this.value;
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final MutableInt other = (MutableInt) obj;
+            if (this.value != other.value) {
+                return false;
+            }
+            return true;
         }
     }
 }

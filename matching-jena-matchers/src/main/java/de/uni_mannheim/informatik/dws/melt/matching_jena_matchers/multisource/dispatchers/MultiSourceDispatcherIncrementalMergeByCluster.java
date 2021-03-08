@@ -22,19 +22,27 @@ import smile.clustering.linkage.WardLinkage;
 public abstract class MultiSourceDispatcherIncrementalMergeByCluster extends MultiSourceDispatcherIncrementalMerge{
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherIncrementalMergeByCluster.class);
     
-    private ClusterLinkage linkage;
+    /**
+     * the linkage method.
+     * final becuase it should not change to be able to use the cache.
+     */
+    private final ClusterLinkage linkage;
+    
+    public MultiSourceDispatcherIncrementalMergeByCluster(Object oneToOneMatcher, ClusterLinkage linkage, boolean useCacheForMergeTree) {
+        super(oneToOneMatcher, useCacheForMergeTree);
+        this.linkage = linkage;
+    }
     
     public MultiSourceDispatcherIncrementalMergeByCluster(Object oneToOneMatcher, ClusterLinkage linkage) {
-        super(oneToOneMatcher);
-        this.linkage = linkage;
+        this(oneToOneMatcher, linkage, true);
     }
         
     
     @Override
-    public int[][] getMergeTree(List<Set<Object>> models, Object inputAlignment, Object parameters){
+    public int[][] getMergeTree(List<Set<Object>> models, Object parameters){
         //CSVFormat format = CSVFormat.DEFAULT.withDelimiter('\t').withIgnoreSurroundingSpaces(true);
         //double[][] data = Read.csv("", format).toArray(false, CategoricalEncoder.ONE_HOT);        
-        double[][] data = getClusterFeatures(models, inputAlignment, parameters);
+        double[][] data = getClusterFeatures(models, parameters);
         
         HierarchicalClustering clusters = HierarchicalClustering.fit(getLinkage(data));
         int[][] tree = clusters.getTree();
@@ -49,7 +57,7 @@ public abstract class MultiSourceDispatcherIncrementalMergeByCluster extends Mul
         return tree;
     }
     
-    public abstract double[][] getClusterFeatures(List<Set<Object>> models, Object inputAlignment, Object parameters);
+    public abstract double[][] getClusterFeatures(List<Set<Object>> models, Object parameters);
     
     private Linkage getLinkage(double[][] data){
         switch(this.linkage){

@@ -20,7 +20,24 @@ import org.slf4j.LoggerFactory;
 public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDispatcherIncrementalMerge{
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherIncrementalMergeByOrder.class);
     
-    private Comparator<? super ModelAndIndex> comparator;
+    /**
+     * the comparator which compares the models and bring them into an order.
+     * This order is used dureing merging.
+     * It is final because it should not change when using the cache of the superclass.
+     */
+    private final Comparator<? super ModelAndIndex> comparator;
+    
+    /**
+     * Constructor which requires the one to one matcher as well as the comparator which define es merging order.
+     * Some comparators are already defined as public static attributes in this class.
+     * @param oneToOneMatcher the one to one matcher.
+     * @param comparator the comparator to make the merging order of the models explicit. Some comparators are already defined as public static attributes in this class.
+     * @param useCacheForMergeTree true if the merge cache should be used.
+     */
+    public MultiSourceDispatcherIncrementalMergeByOrder(Object oneToOneMatcher, Comparator<? super ModelAndIndex> comparator, boolean useCacheForMergeTree) {
+        super(oneToOneMatcher, useCacheForMergeTree);
+        this.comparator = comparator;
+    }
     
     /**
      * Constructor which requires the one to one matcher as well as the comparator which define es merging order.
@@ -29,8 +46,7 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
      * @param comparator the comparator to make the merging order of the models explicit. Some comparators are already defined as public static attributes in this class.
      */
     public MultiSourceDispatcherIncrementalMergeByOrder(Object oneToOneMatcher, Comparator<? super ModelAndIndex> comparator) {
-        super(oneToOneMatcher);
-        this.comparator = comparator;
+        this(oneToOneMatcher, comparator, true);
     }
     
     /**
@@ -42,7 +58,7 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
     }
     
     @Override
-    public int[][] getMergeTree(List<Set<Object>> models, Object inputAlignment, Object parameters){
+    public int[][] getMergeTree(List<Set<Object>> models, Object parameters){
         int numberOfModels = models.size();
         if(numberOfModels < 2){
             LOGGER.warn("Nothing to merge because number of model is less than two.");
@@ -55,7 +71,9 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
             inducedOrder.add(new ModelAndIndex(models.get(i), i, p));
         }
         
-        inducedOrder.sort(this.comparator);
+        if(this.comparator != IDENTITY){
+            inducedOrder.sort(this.comparator);
+        }
         
         //for(ModelAndIndex i : inducedOrder){
         //    System.out.println(i.getModel(OntModel.class).size());
@@ -67,9 +85,9 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
         mergeTree[0][0] = inducedOrder.get(0).getIndex();
         mergeTree[0][1] = inducedOrder.get(1).getIndex();
         for(int i = 2; i < models.size(); i++){
-            //merge the next in the list with the merge models before
-            mergeTree[i - 1][0] = numberOfModels + (i - 2); // the merged model befoe
-            mergeTree[i - 1][1] = i;
+            //merge the next in the list with the merged model before
+            mergeTree[i - 1][0] = numberOfModels + (i - 2); // the merged model before
+            mergeTree[i - 1][1] = inducedOrder.get(i).getIndex();
         }
         
         //JFrame f = new JFrame();
