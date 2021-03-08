@@ -116,12 +116,12 @@ class WikidataKnowledgeSourceTest {
         wikidata.setDiskBufferEnabled(false);
         HashSet<String> result1 = wikidata.getHypernyms(wikidata.getLinker().linkToSingleConcept("financial services"));
         assertTrue(result1.size() > 0);
-        assertTrue(result1.contains("http://www.wikidata.org/entity/Q268592"));
+        assertTrue(result1.contains("http://www.wikidata.org/entity/Q25351891"));
 
         // repeat to use buffer
         result1 = wikidata.getHypernyms(wikidata.getLinker().linkToSingleConcept("financial services"));
         assertTrue(result1.size() > 0);
-        assertTrue(result1.contains("http://www.wikidata.org/entity/Q268592"));
+        assertTrue(result1.contains("http://www.wikidata.org/entity/Q25351891"));
     }
 
     @Test
