@@ -2,7 +2,7 @@
 layout: default
 title: Matching with Background Knowledge
 parent: Matcher Development
-nav_order: 4
+nav_order: 5
 permalink: /matcher-development/with-background-knowledge
 ---
 

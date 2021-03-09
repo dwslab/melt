@@ -2,7 +2,7 @@
 layout: default
 title: Multi-Source Matching
 parent: Matcher Development
-nav_order: 5
+nav_order: 6
 permalink: /matcher-development/with-multiple-sources
 
 ---

@@ -38,9 +38,10 @@ Note that you can also easily search the entire user guide:
 ![image](/media/search_screenshot.png)
 
 ## Code search
+You can use the search below to search the complete code base of MELT.
 <form>
 <input type="search" class="form-control" id="searchText" placeholder="Search">
-<button type="submit" name="button" class="btn" onclick="window.open('https://github.com/search?q=' + encodeURIComponent(document.getElementById('searchText').value) + '+repo%3Adwslab%2Fmelt&type=Code','_blank');">Search with Github</button>
+<button type="submit" name="button" class="btn btn-primary" onclick="window.open('https://github.com/search?q=' + encodeURIComponent(document.getElementById('searchText').value) + '+repo%3Adwslab%2Fmelt&type=Code','_blank');">Search with Github</button>
 </form>
 
 ## Modules Overview
@@ -48,6 +49,9 @@ MELT is grouped into multiple maven modules which are described below.
 
 ### matching-base
 Contains the basic interfaces to implement a matcher e.g. MatcherURL.
+
+### matching-data
+Contains the MELT track repository implementation and data structures such as `Track`, or `TestCase`.
 
 ### matching-eval
 Contains various tools to evaluate the performance of matchers and to analyze their result.
