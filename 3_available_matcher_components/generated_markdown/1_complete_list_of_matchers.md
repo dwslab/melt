@@ -100,7 +100,8 @@ A matcher template for matchers that are based on Apache Jena.
 
 ## MatcherPipelineYAAAJenaConstructor [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherPipelineYAAAJenaConstructor.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherPipelineYAAAJenaConstructor.java)
 
-Better use MatcherYAAAPipeline because it can combine matchers which use different APIS like Jena and OWLAPI etc
+Better use MatcherPipelineYAAA because it can combine matchers which use different APIS like Jena and
+ OWLAPI etc.
 
 *Keywords: Matcher PipelineYAAA Jena Constructor*
 
@@ -127,6 +128,24 @@ A matcher which matches classes based on already instance matches.
 Matches properties based on same subject and object and the distribution.
 
 *Keywords: Match Prop Based On Instances*
+
+## SimpleStringMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/SimpleStringMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/SimpleStringMatcher.java)
+
+
+
+*Keywords: Simple String Matcher*
+
+## BackgroundMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.java)
+
+Template matcher where the background knowledge and the exploitation strategy (represented as ImplementedStrategies) can be plugged-in.
+
+ Focus of this Matcher: Reproducibility of Results (at the cost of runtime-performance).
+ High runtime performance (as far as possible).
+ <p>
+ This matcher relies on a similarity metric that is implemented within the background source and used in
+ BackgroundMatcher#compare(String, String).
+
+*Keywords: Background Matcher*
 
 ## StopwordExtraction [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/StopwordExtraction.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/StopwordExtraction.java)
 
