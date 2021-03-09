@@ -71,7 +71,7 @@ class BackgroundMatcherTest {
 
     @Test
     void isTokenSynonymous(){
-        BackgroundMatcher matcher = new BackgroundMatcher(new WordNetKnowledgeSource(), ImplementedStrategies.SYNONYMY, 0.0);
+        BackgroundMatcher matcher = new BackgroundMatcher(new WordNetKnowledgeSource(), ImplementedBackgroundMatchingStrategies.SYNONYMY, 0.0);
 
         // list 1
         List<Set<String>> list1 = new LinkedList<>();
@@ -162,8 +162,8 @@ class BackgroundMatcherTest {
 
     @Test
     void strategyTest(){
-        BackgroundMatcher matcher = new BackgroundMatcher(new WordNetKnowledgeSource(), ImplementedStrategies.SYNONYMY, 0.0);
-        matcher.setStrategy(ImplementedStrategies.SYNONYMY);
+        BackgroundMatcher matcher = new BackgroundMatcher(new WordNetKnowledgeSource(), ImplementedBackgroundMatchingStrategies.SYNONYMY, 0.0);
+        matcher.setStrategy(ImplementedBackgroundMatchingStrategies.SYNONYMY);
         assertEquals("SYNONYMY", matcher.getStrategy().toString());
     }
 

@@ -32,7 +32,7 @@ import org.xml.sax.SAXException;
  * An alignment is also known as "mapping" or "mappings".
  * Each {@link Correspondence} is uniquely identified by entityOne, entityTwo and relation.
  * This means, if you add a Correspondence which already exists, it will not be modified.
- * To modify an already existent correspondence you can use addOrModify.
+ * To modify an already existing correspondence you can use {@link Alignment#addOrModify(Correspondence)}.
  *
  * @author Sven Hertling
  * @author Jan Portisch
@@ -151,7 +151,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param confidence The confidence of the mapping.
      * @param relation The relation that holds between the two entities.
-     * @param extensions extenions
+     * @param extensions Extensions.
      */
     public void add(String entityOne, String entityTwo, double confidence, CorrespondenceRelation relation, Map<String,Object> extensions) {
         add(new Correspondence(entityOne, entityTwo, confidence, relation, extensions));
@@ -196,7 +196,6 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     public void add(String entityOne, String entityTwo) {
         add(new Correspondence(entityOne, entityTwo));
     }
-    
 
     /**
      * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
@@ -226,9 +225,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
      * @param entityOne URI of the entity from the source ontology as String.
      * @param entityTwo URI of the entity from the target ontology as String.
-     * @param extensionKey The key of the extension
-     * @param extensionValue The value of the extension
-     * @return the updated correspondence
+     * @param extensionKey The key of the extension.
+     * @param extensionValue The value of the extension.
+     * @return The updated correspondence.
      */
     public Correspondence addOrModify(String entityOne, String entityTwo, String extensionKey, Object extensionValue) {
         Correspondence c = new Correspondence(entityOne, entityTwo);
@@ -237,7 +236,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
-     * Adds the correspondence if not existent or adds the extensions values and updates confidence value.
+     * Adds the correspondence if not existing or adds the extensions values and updates confidence value.
      * @param entityOne URI of the entity from the source ontology as String.
      * @param entityTwo URI of the entity from the target ontology as String.
      * @param matcherClass The class of the matcher.
@@ -307,7 +306,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     
     
     /**
-     * Adds the correspondence if not existant.
+     * Adds the correspondence if not existing.
      * In case it already exists, adds the extensions values and updates confidence value(but only if it increases the confidence value).
      * @param c Correspondence to be added
      * @return the updated Correspondence
@@ -458,8 +457,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      public boolean isTargetRelationContained(String target, CorrespondenceRelation relation) {
         return getCorrespondencesTargetRelation(target, relation).iterator().hasNext();
     }
-     
-     
+
     /**
      * Obtain an iterator for all correspondences where the given relation are involved.
      * @param relation The relation that shall hold between the specified target and an arbitrary source.

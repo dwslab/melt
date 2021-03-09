@@ -3,7 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matc
 /**
  * Strategies that are supported by {@link BackgroundMatcher}.
  */
-public enum ImplementedStrategies {
+public enum ImplementedBackgroundMatchingStrategies {
 
 
     /**

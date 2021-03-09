@@ -22,11 +22,11 @@ import java.util.*;
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.BackgroundMatcherTools.getURIlabelMap;
 
 /**
- * Template matcher where the background knowledge and the exploitation strategy (represented as {@link ImplementedStrategies}) can be plugged-in.
+ * Template matcher where the background knowledge and the exploitation strategy (represented as {@link ImplementedBackgroundMatchingStrategies}) can be plugged-in.
  * This matcher can be used as matching component. It is sensible to use a simple string matcher before running this
  * matcher to increase the performance by filtering out simple matches. If you want a pre-packaged stand-alone
  * background-based matching system, you can try out {@link BackgroundMatcherStandAlone}.
- * <p>
+ * <br/>
  * This matcher relies on a similarity metric that is implemented within the background source and used in
  * {@link BackgroundMatcher#compare(String, String)}.
  */
@@ -62,7 +62,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     /**
      * Matching strategy.
      */
-    private ImplementedStrategies strategy;
+    private ImplementedBackgroundMatchingStrategies strategy;
 
     /**
      * The minimal confidence threshold that is required for a match.
@@ -92,7 +92,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @param strategy                The knowledgeSource strategy that shall be applied.
      * @param threshold               The minimal required threshold that is required for a match.
      */
-    public BackgroundMatcher(SemanticWordRelationDictionary knowledgeSourceToBeUsed, ImplementedStrategies strategy, double threshold) {
+    public BackgroundMatcher(SemanticWordRelationDictionary knowledgeSourceToBeUsed, ImplementedBackgroundMatchingStrategies strategy, double threshold) {
         this.knowledgeSource = knowledgeSourceToBeUsed;
         this.linker = this.knowledgeSource.getLinker();
         this.strategy = strategy;
@@ -107,7 +107,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @param knowledgeSourceToBeUsed The knowledge source that is to be used.
      */
     public BackgroundMatcher(SemanticWordRelationDictionary knowledgeSourceToBeUsed) {
-        this(knowledgeSourceToBeUsed, ImplementedStrategies.SYNONYMY, 0.0);
+        this(knowledgeSourceToBeUsed, ImplementedBackgroundMatchingStrategies.SYNONYMY, 0.0);
     }
 
     /**
@@ -117,7 +117,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @param knowledgeSourceToBeUsed The knowledge source that is to be used.
      * @param strategy                The strategy that shall be applied.
      */
-    public BackgroundMatcher(SemanticWordRelationDictionary knowledgeSourceToBeUsed, ImplementedStrategies strategy) {
+    public BackgroundMatcher(SemanticWordRelationDictionary knowledgeSourceToBeUsed, ImplementedBackgroundMatchingStrategies strategy) {
         this(knowledgeSourceToBeUsed, strategy, 0.0);
     }
 
@@ -657,11 +657,11 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     // Getters and Setters
     //--------------------------------------------------------------------------------------------
 
-    public ImplementedStrategies getStrategy() {
+    public ImplementedBackgroundMatchingStrategies getStrategy() {
         return strategy;
     }
 
-    public void setStrategy(ImplementedStrategies strategy) {
+    public void setStrategy(ImplementedBackgroundMatchingStrategies strategy) {
         this.strategy = strategy;
     }
 
