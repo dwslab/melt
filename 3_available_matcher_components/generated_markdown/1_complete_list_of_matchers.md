@@ -143,13 +143,12 @@ Matcher which applies String matching and matches then with the provided backgro
 
 ## BackgroundMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.java)
 
-Template matcher where the background knowledge and the exploitation strategy (represented as ImplementedStrategies) can be plugged-in.
+Template matcher where the background knowledge and the exploitation strategy (represented as ImplementedBackgroundMatchingStrategies) can be plugged-in.
  This matcher can be used as matching component. It is sensible to use a simple string matcher before running this
  matcher to increase the performance by filtering out simple matches. If you want a pre-packaged stand-alone
  background-based matching system, you can try out BackgroundMatcherStandAlone.
- <p>
- This matcher relies on a similarity metric that is implemented within the background source and used in
- BackgroundMatcher#compare(String, String).
+ <p>This matcher relies on a similarity metric that is implemented within the background source and used in
+ BackgroundMatcher#compare(String, String).</p>
 
 *Keywords: Background Matcher*
 
