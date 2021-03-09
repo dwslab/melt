@@ -26,9 +26,8 @@ import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.externa
  * This matcher can be used as matching component. It is sensible to use a simple string matcher before running this
  * matcher to increase the performance by filtering out simple matches. If you want a pre-packaged stand-alone
  * background-based matching system, you can try out {@link BackgroundMatcherStandAlone}.
- * <br/>
- * This matcher relies on a similarity metric that is implemented within the background source and used in
- * {@link BackgroundMatcher#compare(String, String)}.
+ * <p>This matcher relies on a similarity metric that is implemented within the background source and used in
+ * {@link BackgroundMatcher#compare(String, String)}.</p>
  */
 public class BackgroundMatcher extends MatcherYAAAJena {
 
