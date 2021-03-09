@@ -1,12 +1,14 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResourceWithSynonymCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.GensimEmbeddingModel;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.io.IOoperations;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorAllAnnotationProperties;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
 import org.apache.jena.ontology.OntModel;
@@ -17,11 +19,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.BackgroundMatcherTools.getURIlabelMap;
+
 /**
  * Template matcher where the background knowledge and the exploitation strategy (represented as {@link ImplementedStrategies}) can be plugged-in.
- *
- * Focus of this Matcher: Reproducibility of Results (at the cost of runtime-performance).
- * High runtime performance (as far as possible).
+ * It is sensible to use a simple string matcher before running this matcher to increase the performance by filtering
+ * out simple matches.
  * <p>
  * This matcher relies on a similarity metric that is implemented within the background source and used in
  * {@link BackgroundMatcher#compare(String, String)}.
@@ -37,13 +40,13 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     /**
      * Alignment
      */
-    private Alignment mapping = new Alignment();
+    private Alignment alignment = new Alignment();
 
     /**
      * Ontologies
      */
-    OntModel ontology1;
-    OntModel ontology2;
+    private OntModel ontology1;
+    private OntModel ontology2;
 
     /**
      * the knowledgeSource to be used
@@ -77,14 +80,9 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     private boolean isVerboseLoggingOutput = true;
 
     /**
-     * maps from URI -&gt; set&lt;label&gt;
+     * The value extractor used to obtain labels for resources.
      */
-    private HashMap<String, Set<String>> uri2labelMap_1;
-
-    /**
-     * maps from URI -&gt; set&lt;label&gt;
-     */
-    private HashMap<String, Set<String>> uri2labelMap_2;
+    private ValueExtractor valueExtractor;
 
     /**
      * Main Constructor
@@ -98,6 +96,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         this.linker = this.knowledgeSource.getLinker();
         this.strategy = strategy;
         this.threshold = threshold;
+        this.valueExtractor = new ValueExtractorAllAnnotationProperties();
     }
 
     /**
@@ -115,7 +114,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * Threshold: 0.0 is assumed.
      *
      * @param knowledgeSourceToBeUsed The knowledge source that is to be used.
-     * @param strategy The strategy that shall be applied.
+     * @param strategy                The strategy that shall be applied.
      */
     public BackgroundMatcher(SemanticWordRelationDictionary knowledgeSourceToBeUsed, ImplementedStrategies strategy) {
         this(knowledgeSourceToBeUsed, strategy, 0.0);
@@ -126,28 +125,35 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         LOGGER.info("Running BackgroundMatcher with the following configuration:\n" + getConfigurationListing());
         ontology1 = sourceOntology;
         ontology2 = targetOntology;
+        if(m != null) {
+            this.alignment = m;
+        } else {
+            this.alignment = new Alignment();
+        }
+
         match(ontology1.listClasses(), ontology2.listClasses());
         match(ontology1.listDatatypeProperties(), ontology2.listDatatypeProperties());
         match(ontology1.listObjectProperties(), ontology2.listObjectProperties());
         match(ontology1.listDatatypeProperties(), ontology2.listDatatypeProperties());
         LOGGER.info("Mapping Completed");
-        return this.mapping;
+        return this.alignment;
     }
 
     /**
      * Adds extension values.
      */
     private void addAlignmentExtensions() {
-        this.mapping.addExtensionValue("http://a.com/matcherThreshold", "" + threshold);
-        this.mapping.addExtensionValue("http://a.com/matcherStrategy", this.strategy.toString());
+        this.alignment.addExtensionValue("http://a.com/matcherThreshold", "" + threshold);
+        this.alignment.addExtensionValue("http://a.com/matcherStrategy", this.strategy.toString());
         if (this.knowledgeSource instanceof GensimEmbeddingModel) {
-            this.mapping.addExtensionValue("http://a.com/strategyThreshold", "" + ((GensimEmbeddingModel) this.knowledgeSource).getThreshold());
+            this.alignment.addExtensionValue("http://a.com/strategyThreshold", "" + ((GensimEmbeddingModel) this.knowledgeSource).getThreshold());
         }
-        this.mapping.addExtensionValue("http://a.com/backgroundDataset", this.knowledgeSource.getName());
+        this.alignment.addExtensionValue("http://a.com/backgroundDataset", this.knowledgeSource.getName());
     }
 
     /**
      * Get configuration of matcher as string output.
+     *
      * @return The configuration as string.
      */
     private String getConfigurationListing() {
@@ -155,7 +161,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
                 "- matcherStrategy: " + this.strategy.toString() + "\n" +
                 "- backgroundDataset: " + this.knowledgeSource.getName() + "\n";
         if (this.knowledgeSource instanceof GensimEmbeddingModel) {
-            result += "- strategyThreshold: " + ((GensimEmbeddingModel) this.knowledgeSource).getThreshold() +"\n";
+            result += "- strategyThreshold: " + ((GensimEmbeddingModel) this.knowledgeSource).getThreshold() + "\n";
         }
         return result;
     }
@@ -176,28 +182,24 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         }
 
         // step 0: get all the label data for the two Resource Iterators
-        //uri2labelMap_1 = getURIlabelMap(sourceOntologyIterator_1, ontology1);
-        //uri2labelMap_2 = getURIlabelMap(targetOntologyIterator_2, ontology2);
+        Map<String, Set<String>> uri2labelMap_1 = getURIlabelMap(sourceOntologyIterator_1, valueExtractor);
+        Map<String, Set<String>> uri2labelMap_2 = getURIlabelMap(targetOntologyIterator_2, valueExtractor);
 
+        LOGGER.info("Beginning full string synonymy matching.");
+        performFullStringSynonymyMatching(uri2labelMap_1, uri2labelMap_2);
+        LOGGER.info("Full string synonymy matching performed.");
 
+        // step 3: (more complex approach) look up long sub-parts in the label
+        // issues: what to do with partial mappings, performance...
+        LOGGER.info("Beginning longest string synonymy matching.");
+        performLongestStringSynonymyMatching(uri2labelMap_1, uri2labelMap_2);
+        LOGGER.info("Longest string synonymy matching performed.");
 
-            LOGGER.info("Beginning full string synonymy matching.");
-            performFullStringSynonymyMatching(uri2labelMap_1, uri2labelMap_2);
-            LOGGER.info("Full string synonymy matching performed.");
-
-            // step 3: (more complex approach) look up long sub-parts in the label
-            // issues: what to do with partial mappings, performance...
-            LOGGER.info("Beginning longest string synonymy matching.");
-            performLongestStringSynonymyMatching(uri2labelMap_1, uri2labelMap_2);
-            LOGGER.info("Longest string synonymy matching performed.");
-
-            // step 4:
-            LOGGER.info("Beginning token based synonymy matching.");
-            performTokenBasedSynonymyMatching(uri2labelMap_1, uri2labelMap_2);
-            LOGGER.info("Token based synonymy matching performed.");
-
+        // step 4:
+        LOGGER.info("Beginning token based synonymy matching.");
+        performTokenBasedSynonymyMatching(uri2labelMap_1, uri2labelMap_2);
+        LOGGER.info("Token based synonymy matching performed.");
     }
-
 
     /**
      * Filter out token synonymy utilizing a synonymy strategy.
@@ -206,12 +208,11 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @param uri2labelMap_1 URI2labels map of the source ontology.
      * @param uri2labelMap_2 URI2labels map of the target ontology.
      */
-    private void performFullStringSynonymyMatching(HashMap<String, Set<String>> uri2labelMap_1,
-                                                   HashMap<String, Set<String>> uri2labelMap_2) {
-
+    private void performFullStringSynonymyMatching(Map<String, Set<String>> uri2labelMap_1,
+                                                   Map<String, Set<String>> uri2labelMap_2) {
         LOGGER.info("BuildingMap:  Uri -> Link");
-        HashMap<String, Set<String>> uris2linksSource_1 = convertToUriLinkMap(uri2labelMap_1, true);
-        HashMap<String, Set<String>> uris2linksTarget_2 = convertToUriLinkMap(uri2labelMap_2, false);
+        Map<String, Set<String>> uris2linksSource_1 = convertToUriLinkMap(uri2labelMap_1, true);
+        Map<String, Set<String>> uris2linksTarget_2 = convertToUriLinkMap(uri2labelMap_2, false);
         LOGGER.info("BuildingMap finished: Uri -> Link Map");
 
         for (Map.Entry<String, Set<String>> uri2linksSource_1 : uris2linksSource_1.entrySet()) {
@@ -219,7 +220,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
                 if (fullMatchUsingDictionaryWithLinks(uri2linksSource_1.getValue(), uri2linksTarget_2.getValue())) {
                     HashMap<String, Object> extensions = new HashMap<>();
                     extensions.put("http://custom#addedInStep", "performFullStringSynonymyMatching()");
-                    mapping.add(uri2linksSource_1.getKey(), uri2linksTarget_2.getKey(), 1.0, CorrespondenceRelation.EQUIVALENCE, extensions);
+                    alignment.add(uri2linksSource_1.getKey(), uri2linksTarget_2.getKey(), 1.0, CorrespondenceRelation.EQUIVALENCE, extensions);
                     if (isVerboseLoggingOutput) {
                         LOGGER.info(uri2linksSource_1.getKey() + " " + uri2linksTarget_2.getKey() + " (full word synonymy match)");
                         LOGGER.info(uri2linksSource_1.getKey() + ": (" + IOoperations.convertSetToStringPipeSeparated(uri2labelMap_1.get(uri2linksSource_1.getKey())) + ")");
@@ -270,15 +271,15 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         Map<String, List<Set<String>>> uri2tokensMap_2 = convertToUriTokenMap(uri2labelMap_2, false);
         LOGGER.info("Conversion completed to URI -> Tokens map.");
 
-        for (HashMap.Entry<String, List<Set<String>>> uri2tokenlists_1 : uri2tokensMap_1.entrySet()) {
-            for (HashMap.Entry<String, List<Set<String>>> uri2tokenlists_2 : uri2tokensMap_2.entrySet()) {
-                if (isTokenSetSynonymous(uri2tokenlists_1.getValue(), uri2tokenlists_2.getValue())) {
-                    String uri1 = uri2tokenlists_1.getKey();
-                    String uri2 = uri2tokenlists_2.getKey();
+        for (HashMap.Entry<String, List<Set<String>>> uri2tokenLists_1 : uri2tokensMap_1.entrySet()) {
+            for (HashMap.Entry<String, List<Set<String>>> uri2tokenLists_2 : uri2tokensMap_2.entrySet()) {
+                if (isTokenSetSynonymous(uri2tokenLists_1.getValue(), uri2tokenLists_2.getValue())) {
+                    String uri1 = uri2tokenLists_1.getKey();
+                    String uri2 = uri2tokenLists_2.getKey();
 
                     HashMap<String, Object> extensions = new HashMap<>();
                     extensions.put("http://custom#addedInStep", "performTokenBasedSynonymyMatching()");
-                    mapping.add(uri1, uri2, 1.0, CorrespondenceRelation.EQUIVALENCE, extensions);
+                    alignment.add(uri1, uri2, 1.0, CorrespondenceRelation.EQUIVALENCE, extensions);
                     if (isVerboseLoggingOutput) {
                         LOGGER.info(uri1 + " " + uri2 + " (token based synonymy match)");
                         LOGGER.info(uri1 + ": (" + IOoperations.convertSetToStringPipeSeparated(uri2labelMap_1.get(uri1)) + ")");
@@ -297,7 +298,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @param tokenList2 List of words
      * @return true if synonymous, else false
      */
-    public boolean isTokenSetSynonymous(List<Set<String>> tokenList1, List<Set<String>> tokenList2) {
+    boolean isTokenSetSynonymous(List<Set<String>> tokenList1, List<Set<String>> tokenList2) {
         for (Set<String> set1 : tokenList1) {
             for (Set<String> set2 : tokenList2) {
                 if (isTokenSynonymous(set1, set2)) {
@@ -317,7 +318,6 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * this is tested both ways (set1 -&gt; set2 and set2 -&gt; set1).
      */
     public boolean isTokenSynonymous(Set<String> set1, Set<String> set2) {
-
         if (set1.size() != set2.size()) {
             return false;
         }
@@ -373,8 +373,8 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
                     HashMap<String, Object> extensions = new HashMap<>();
                     extensions.put("http://custom#addedInStep", "longsestStringMatch");
-                    mapping.add(uri2links_1.getKey(), uri2links_2.getKey(), 1.0, CorrespondenceRelation.EQUIVALENCE, extensions);
-                    if(isVerboseLoggingOutput) {
+                    alignment.add(uri2links_1.getKey(), uri2links_2.getKey(), 1.0, CorrespondenceRelation.EQUIVALENCE, extensions);
+                    if (isVerboseLoggingOutput) {
                         LOGGER.info(uri2links_1.getKey() + " " + uri2links_2.getKey() + " (longest string synonymy match)");
                         LOGGER.info(uri2links_1.getKey() + ": (" + IOoperations.convertSetToStringPipeSeparated(uri2labelMap_1.get(uri2links_1.getKey())) + ")");
                         LOGGER.info(uri2links_2.getKey() + ": (" + IOoperations.convertSetToStringPipeSeparated(uri2labelMap_2.get(uri2links_2.getKey())) + ")");
@@ -401,7 +401,6 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         }
         return false;
     }
-
 
     /**
      * All components of set_1 have to be synonymous to components in set_2.
@@ -448,7 +447,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * This method converts a URIs -&gt; labels HashMap to a URIs -&gt; {@code List<nlinks>}.
      * Mapped entries are ignored.
      *
-     * @param uris2labels URIs to labels map.
+     * @param uris2labels      URIs to labels map.
      * @param isSourceOntology True if the map refers to the source ontology.
      * @return Map {@code URI -> tokens}
      */
@@ -479,7 +478,6 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         return result;
     }
 
-
     /**
      * Check whether the specified word is synonymous to a word in the given set.
      *
@@ -497,14 +495,13 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         return false;
     }
 
-
     /**
      * This method transforms the uri2labels into a uri2links HashMap.
      * Thereby, the linking function is called only once.
      * Furthermore, concepts that cannot be linked are not included in the resulting HashMap.
      * Mapped entries are not linked.
      *
-     * @param uri2labels Input HashMap URI -&gt; labels
+     * @param uri2labels       Input HashMap URI -&gt; labels
      * @param isSourceOntology True if the map refers to the source ontology.
      * @return HashMap URI -&gt; links
      */
@@ -521,7 +518,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
                 }
             }
 
-            HashSet<String> links = new HashSet();
+            Set<String> links = new HashSet();
             for (String label : uri2label.getValue()) {
                 String linkedConcept = linker.linkToSingleConcept(label);
                 if (linkedConcept != null) {
@@ -536,12 +533,11 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         return result;
     }
 
-
     /**
      * This method converts a URIs -&gt; labels HashMap to a URIs -&gt; tokens HashMap.
      * Mapped entries are ignored.
      *
-     * @param uris2labels URIs to labels map.
+     * @param uris2labels      URIs to labels map.
      * @param isSourceOntology True if the map refers to the source ontology.
      * @return Map: {@code URI -> tokens}
      */
@@ -565,7 +561,6 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         } // end of for loop over whole map
         return result;
     }
-
 
     /**
      * Tokenizes a label and filters out stop words.
@@ -608,7 +603,6 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         return result;
     }
 
-
     /**
      * Checks whether there exists a mapping cell where the URI is used as source.
      *
@@ -616,7 +610,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @return True if at least one mapping cell exists, else false.
      */
     private boolean mappingExistsForSourceURI(String uri) {
-        return this.mapping.getCorrespondencesSource(uri).iterator().hasNext();
+        return this.alignment.getCorrespondencesSource(uri).iterator().hasNext();
     }
 
     /**
@@ -626,40 +620,8 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @return True if at least one mapping cell exists, else false.
      */
     private boolean mappingExistsForTargetURI(String uri) {
-        return this.mapping.getCorrespondencesTarget(uri).iterator().hasNext();
+        return this.alignment.getCorrespondencesTarget(uri).iterator().hasNext();
     }
-
-
-
-
-
-
-
-
-    /**
-     * Creates a map of the form {@code URI -> set<labels>}.
-     *
-     * @param iterator
-     * @return
-     */
-    /*
-    private HashMap<String, HashSet<String>> getFilteredURIlabelMap(ExtendedIterator<? extends OntResource> iterator,
-                                                                    OntModel ontModel) {
-        HashMap<String, HashSet<String>> result = new HashMap<>();
-        while (iterator.hasNext()) {
-            OntResource r1 = iterator.next();
-            HashSet<String> labels = getAnnotationProperties(r1, ontModel);
-            if (labels != null && labels.size() > 0) {
-                result.put(r1.getURI(), labels);
-            }
-        }
-        return result;
-    }
-    */
-
-
-
-
 
     /**
      * The compare method compares two concepts that are available in a background knowledge source.
@@ -681,8 +643,6 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         }
     }
 
-
-
     /**
      * Get the name of the matcher.
      *
@@ -691,7 +651,6 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     public String getMatcherName() {
         return this.strategy.toString() + "_" + this.knowledgeSource.getName() + "_" + this.threshold;
     }
-
 
     //--------------------------------------------------------------------------------------------
     // Getters and Setters

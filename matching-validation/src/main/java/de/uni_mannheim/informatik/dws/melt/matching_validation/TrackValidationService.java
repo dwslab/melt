@@ -11,11 +11,11 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
  */
 public class TrackValidationService {
 
+
     /**
      * The track under analysis.
      */
     private Track track;
-    
 
     /**
      * Constructor

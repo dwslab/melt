@@ -16,15 +16,22 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.BackgroundMatcherTools.getURIlabelMap;
 
+/**
+ * A relatively simple matcher that can be used before running {@link BackgroundMatcher} to filter out simple matches.
+ */
 public class SimpleStringMatcher extends MatcherYAAAJena {
 
 
     private static Logger LOGGER = LoggerFactory.getLogger(SimpleStringMatcher.class);
 
-    OntModel ontology1;
-    OntModel ontology2;
+    private OntModel ontology1;
+    private OntModel ontology2;
 
+    /**
+     * The value extractor used to obtain labels for resources.
+     */
     private ValueExtractor valueExtractor = new ValueExtractorAllAnnotationProperties();
 
     /**
@@ -39,7 +46,6 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
 
     @Override
     public Alignment match(OntModel sourceOntology, OntModel targetOntology, Alignment m, Properties p) throws Exception {
-        initializeMappingProcess();
         initializeMappingProcess();
         ontology1 = sourceOntology;
         ontology2 = targetOntology;
@@ -67,8 +73,7 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
     private boolean isVerboseLoggingOutput = true;
 
     /**
-     * This method will be called before every call of {@link BackgroundMatcher#match(OntModel, OntModel, Alignment, Properties)}.
-     * As match() might be called multiple times, data structures are re-initialized here if required.
+     * (Re-)initialize data structures.
      */
     private void initializeMappingProcess() {
         LOGGER.info("Initialize Mapping");
@@ -93,38 +98,14 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
         }
 
         // step 0: get all the label data for the two Resource Iterators
-        uri2labelMap_1 = getURIlabelMap(sourceOntologyIterator_1);
-        uri2labelMap_2 = getURIlabelMap(targetOntologyIterator_2);
+        uri2labelMap_1 = getURIlabelMap(sourceOntologyIterator_1, valueExtractor);
+        uri2labelMap_2 = getURIlabelMap(targetOntologyIterator_2, valueExtractor);
 
         // step 1: filter out simple string matches
         LOGGER.info("Beginning simple matching.");
         performSimpleMatching(uri2labelMap_1, uri2labelMap_2);
         LOGGER.info("Simple matching performed.");
     }
-
-    /**
-     * Creates a map of the form {@code URI -> set<labels>}.
-     *
-     * @param iterator Iterator for ont resources.
-     * @return URI label map
-     */
-    private Map<String, Set<String>> getURIlabelMap(ExtendedIterator<? extends OntResource> iterator) {
-        Map<String, Set<String>> result = new HashMap<>();
-        while (iterator.hasNext()) {
-            OntResource r1 = iterator.next();
-            Set<String> labels = valueExtractor.extract(r1);
-            if (labels != null && labels.size() > 0) {
-                result.put(r1.getURI(), labels);
-            }
-        }
-        return result;
-    }
-
-
-
-
-
-
 
     /**
      * Filter out simple string matches utilizing an index strategy.
@@ -134,10 +115,8 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
      */
     private void performSimpleMatching(Map<String, Set<String>> uri2labelMap_1,
                                        Map<String, Set<String>> uri2labelMap_2) {
-
         HashMap<BagOfWords, String> labelToURI_1 = convertToBOW2URI(uri2labelMap_1);
         HashMap<BagOfWords, String> labelToURI_2 = convertToBOW2URI(uri2labelMap_2);
-
         for (BagOfWords currentBOW : labelToURI_1.keySet()) {
             if (labelToURI_2.containsKey(currentBOW)) {
                 // a match has been found
@@ -183,7 +162,6 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
             clashedLabels.get(uri2).add(uri1);
         }
     }
-
 
     /**
      * If the applied comparison score cannot differentiate between multiple mapping options, add all.
@@ -248,7 +226,7 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
      * @param stringToBeNormalized The String that shall be normalized.
      * @return Bag of Words
      */
-    public static BagOfWords normalize(String stringToBeNormalized) {
+    static BagOfWords normalize(String stringToBeNormalized) {
         if (stringToBeNormalized == null) return null;
         if (stringToBeNormalized.length() > 3 && stringToBeNormalized.charAt(stringToBeNormalized.length() - 3) == '@') {
             stringToBeNormalized = stringToBeNormalized.substring(0, stringToBeNormalized.length() - 3);
