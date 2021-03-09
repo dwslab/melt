@@ -6,6 +6,8 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordN
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.jena.ontology.OntModel;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -31,6 +33,22 @@ class BackgroundMatcherTest {
         } catch (Exception e){
             fail(e);
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void setGetAllowForCumulativeMatches(boolean bool){
+        BackgroundMatcher matcher = new BackgroundMatcher(new WordNetKnowledgeSource());
+        matcher.setAllowForCumulativeMatches(bool);
+        assertEquals(bool, matcher.isAllowForCumulativeMatches());
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void setGetVerboseLogging(boolean bool){
+        BackgroundMatcher matcher = new BackgroundMatcher(new WordNetKnowledgeSource());
+        matcher.setVerboseLoggingOutput(bool);
+        assertEquals(bool, matcher.isVerboseLoggingOutput());
     }
 
     @Test

@@ -2,9 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matc
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherPipelineYAAAJenaConstructor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResourceWithSynonymCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.GensimEmbeddingModel;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.jena.ontology.OntModel;
 
@@ -27,6 +25,10 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
 
     private double threshold;
 
+    private SimpleStringMatcher simpleStringMatcher;
+
+    private BackgroundMatcher backgroundMatcher;
+
     /**
      * Constructor
      * @param backgroundKnowledgeSource The background knowledge source to be used.
@@ -40,8 +42,8 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
         this.backgroundKnowledgeSource = backgroundKnowledgeSource;
         this.strategy = strategy;
         this.threshold = threshold;
-        SimpleStringMatcher simpleStringMatcher = new SimpleStringMatcher();
-        BackgroundMatcher backgroundMatcher = new BackgroundMatcher(backgroundKnowledgeSource, strategy, threshold);
+        this.simpleStringMatcher = new SimpleStringMatcher();
+        this.backgroundMatcher = new BackgroundMatcher(backgroundKnowledgeSource, strategy, threshold);
         pipelineYAAAJena = new MatcherPipelineYAAAJenaConstructor(simpleStringMatcher, backgroundMatcher);
     }
 
@@ -61,5 +63,13 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
 
         alignment.addExtensionValue("http://a.com/backgroundDataset", this.backgroundKnowledgeSource.getName());
         return alignment;
+    }
+
+    /**
+     * Do not exclude String matches when matching in the second step with background knowledge.
+     * @param allowForCumulativeMatches True if multi-matches shall be allowed.
+     */
+    public void setAllowForCumulativeMatches(boolean allowForCumulativeMatches) {
+        this.backgroundMatcher.setAllowForCumulativeMatches(allowForCumulativeMatches);
     }
 }
