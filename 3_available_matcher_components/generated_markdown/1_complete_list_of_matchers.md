@@ -147,8 +147,9 @@ Template matcher where the background knowledge and the exploitation strategy (r
  This matcher can be used as matching component. It is sensible to use a simple string matcher before running this
  matcher to increase the performance by filtering out simple matches. If you want a pre-packaged stand-alone
  background-based matching system, you can try out BackgroundMatcherStandAlone.
- <p>This matcher relies on a similarity metric that is implemented within the background source and used in
- BackgroundMatcher#compare(String, String).</p>
+ <br>
+ This matcher relies on a similarity metric that is implemented within the background source and used in
+ BackgroundMatcher#compare(String, String).
 
 *Keywords: Background Matcher*
 
