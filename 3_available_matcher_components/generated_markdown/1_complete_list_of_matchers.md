@@ -131,16 +131,22 @@ Matches properties based on same subject and object and the distribution.
 
 ## SimpleStringMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/SimpleStringMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/SimpleStringMatcher.java)
 
-
+A relatively simple matcher that can be used before running BackgroundMatcher to filter out simple matches.
 
 *Keywords: Simple String Matcher*
+
+## BackgroundMatcherStandAlone [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcherStandAlone.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcherStandAlone.java)
+
+Matcher which applies String matching and matches then with the provided background knowledge source and strategy.
+
+*Keywords: Background Matcher Stand Alone*
 
 ## BackgroundMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.java)
 
 Template matcher where the background knowledge and the exploitation strategy (represented as ImplementedStrategies) can be plugged-in.
-
- Focus of this Matcher: Reproducibility of Results (at the cost of runtime-performance).
- High runtime performance (as far as possible).
+ This matcher can be used as matching component. It is sensible to use a simple string matcher before running this
+ matcher to increase the performance by filtering out simple matches. If you want a pre-packaged stand-alone
+ background-based matching system, you can try out BackgroundMatcherStandAlone.
  <p>
  This matcher relies on a similarity metric that is implemented within the background source and used in
  BackgroundMatcher#compare(String, String).
