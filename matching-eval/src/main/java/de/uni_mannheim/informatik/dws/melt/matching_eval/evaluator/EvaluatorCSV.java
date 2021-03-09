@@ -1,6 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.IExplainerResource;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ResourceType;
@@ -11,8 +13,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util.Analytic
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util.EvaluatorUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.ResidualRefiner;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.TypeRefiner;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BaselineStringMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;

@@ -3,9 +3,14 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+
+import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorProperty;
 import org.apache.jena.rdf.model.Property;
 
 public class PropertySpecificStringProcessingMultipleReturn {
+
+
     private List<ValueExtractor> valueExtractors;
     private Function<String, Iterable<Object>> processing;
     private double confidence;

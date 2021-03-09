@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.alignmentanalyzer;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ResourceType;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -7,7 +8,6 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Corresponde
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.Metric;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
 
 import java.io.BufferedWriter;
@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.apache.commons.text.StringEscapeUtils;
@@ -229,5 +228,4 @@ public class AlignmentAnalyzerMetric extends Metric<AlignmentAnalyzerResult> {
         }
         return count;
    }
-    
 }

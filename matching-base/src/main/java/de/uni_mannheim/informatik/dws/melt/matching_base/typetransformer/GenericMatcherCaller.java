@@ -117,7 +117,7 @@ public class GenericMatcherCaller {
      * @param sourceOntology this is an iterable of objects which all represents the same source ontology / knowledge graph
      * @param targetOntology this is an iterable of objects which all represents the same target ontology / knowledge graph
      * @param inputAlignment the object which represents an input alignment. Can be null.
-     * @param parameters an objetc which represents parameters. Can be null.
+     * @param parameters An object which represents parameters. Can be null.
      * @return the object which is returned by the matcher. This can be any arbitrary object, but you can call the TypeTransformerRegistry to get the representation you want.
      * @throws Exception in case something goes wrong
      */

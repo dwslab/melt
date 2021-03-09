@@ -9,9 +9,12 @@ import java.util.Properties;
 import org.apache.jena.ontology.OntModel;
 
 /**
- * Better use MatcherYAAAPipeline because it can combine matchers which use different APIS like Jena and OWLAPI etc
+ * Better use {@link MatcherPipelineYAAA} because it can combine matchers which use different APIS like Jena and
+ * OWLAPI etc.
  */
-public class MatcherPipelineYAAAJenaConstructor extends MatcherYAAAJena{
+public class MatcherPipelineYAAAJenaConstructor extends MatcherYAAAJena {
+
+
     protected List<MatcherYAAAJena> matchers;
     
     public MatcherPipelineYAAAJenaConstructor(List<MatcherYAAAJena> matchers){

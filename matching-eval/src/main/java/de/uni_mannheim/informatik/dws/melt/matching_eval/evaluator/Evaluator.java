@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 
@@ -8,7 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.file.Paths;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

@@ -1,11 +1,12 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;

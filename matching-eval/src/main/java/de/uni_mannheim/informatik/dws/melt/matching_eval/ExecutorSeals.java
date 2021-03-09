@@ -1,7 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.*;
@@ -34,7 +34,8 @@ import org.apache.commons.io.FileUtils;
  * @author Jan Portisch
  */
 public class ExecutorSeals {
-    
+
+
     private static final String OS_NAME = System.getProperty("os.name");
     private static final boolean isLinux = OS_NAME.startsWith("Linux") || OS_NAME.startsWith("LINUX");
 
@@ -253,7 +254,6 @@ public class ExecutorSeals {
         this.timeout = timeout;
         this.timeoutTimeUnit = timeoutTimeUnit;
     }
-
 
     /**
      * Evaluate matcher(s) using the local SEALS client.

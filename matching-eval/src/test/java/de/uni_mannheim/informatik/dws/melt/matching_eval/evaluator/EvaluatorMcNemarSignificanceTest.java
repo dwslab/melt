@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EvaluatorMcNemarSignificanceTest {
 
+
     @Test
     //@EnabledOnOs( { OS.MAC } )
     void calculateSignificance() {

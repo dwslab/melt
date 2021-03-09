@@ -1,8 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class RankingMetricTest {
-    
+
+
     @Test
     void testAlphabetically() throws Exception {
         Alignment system = new Alignment();

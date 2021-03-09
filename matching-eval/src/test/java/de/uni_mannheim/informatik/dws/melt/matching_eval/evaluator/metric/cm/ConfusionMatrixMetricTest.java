@@ -1,18 +1,16 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.condition.OS.MAC;
 
 /**
  * ConfusionMatrixMetric TestCase
@@ -22,9 +20,9 @@ import static org.junit.jupiter.api.condition.OS.MAC;
  */
 class ConfusionMatrixMetricTest {
 
+
     @Test
-    //@EnabledOnOs({ MAC })
-    void computeExample_1() throws Exception {
+    void computeExample_1() {
         ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
 
         Alignment referenceAlignment = new Alignment();
@@ -53,9 +51,7 @@ class ConfusionMatrixMetricTest {
         assertEquals(f1, confusionMatrix.getF1measure());
     }
 
-
     @Test
-    //@EnabledOnOs({ MAC })
     void computeExample_2() throws Exception {
         ConfusionMatrixMetric metric = new ConfusionMatrixMetric();
 
@@ -225,7 +221,6 @@ class ConfusionMatrixMetricTest {
      * and compares the MELT results with those given on the Web Page (http://oaei.ontologymatching.org/2018/results/anatomy/index.html).
      **/
     @Test
-    //@EnabledOnOs({ MAC })
     void realTest() {
         TestCase testCase = TrackRepository.Anatomy.Default.getTestCases().get(0);
         ExecutionResultSet resultSet = Executor.loadFromFolder("./src/test/resources/externalAlignmentForEvaluation", testCase);

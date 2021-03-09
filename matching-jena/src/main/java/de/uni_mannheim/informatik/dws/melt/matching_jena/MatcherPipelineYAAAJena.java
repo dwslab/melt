@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Better use MatcherYAAAPipeline because it can combine matchers which use different APIS like Jena and OWLAPI etc
  */
-public abstract class MatcherPipelineYAAAJena extends MatcherYAAAJena{
+public abstract class MatcherPipelineYAAAJena extends MatcherYAAAJena {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherPipelineYAAAJena.class);
     
     protected List<MatcherYAAAJena> matchers = initializeMatchers();

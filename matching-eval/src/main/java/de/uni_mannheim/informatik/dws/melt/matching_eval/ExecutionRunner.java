@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import eu.sealsproject.platform.res.tool.api.ToolBridgeException;
 import java.io.File;

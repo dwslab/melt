@@ -1,12 +1,13 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.Metric;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 
 
 public class RankingMetricGroup extends Metric<RankingResult> {
+
 
     /**
      * The strategy to resolve conflicts in case correspondences carry the same confidence.
@@ -69,5 +70,4 @@ public class RankingMetricGroup extends Metric<RankingResult> {
         overallResult.normalizeAllScores(numberOfDistinctSources);
         return overallResult;
     }
-
 }

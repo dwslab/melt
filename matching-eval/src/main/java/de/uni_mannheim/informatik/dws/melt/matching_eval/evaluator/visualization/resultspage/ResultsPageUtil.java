@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.resultspage;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ResourceType;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.TypeRefiner;
@@ -7,7 +8,6 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrix;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrixMetric;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 
 public class ResultsPageUtil {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ResultsPageUtil.class);
     
     private DecimalFormatSymbols decimalSymbols = new DecimalFormatSymbols(Locale.US);

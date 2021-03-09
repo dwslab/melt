@@ -1,13 +1,14 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RankingMetricGroupTest {
+
 
     private static Alignment system1 = createSystemAlignment1();
     private static Alignment createSystemAlignment1(){
@@ -43,5 +44,4 @@ class RankingMetricGroupTest {
         assertEquals((0.5), result.getReciprocalRank());
         assertEquals((0.5 + (0.5 + 2.0/3)*0.5) / 2, result.getAveragePrecision());
     }
-
 }

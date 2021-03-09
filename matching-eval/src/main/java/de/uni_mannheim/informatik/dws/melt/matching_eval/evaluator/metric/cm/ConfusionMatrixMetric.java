@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
@@ -19,7 +20,8 @@ import java.util.HashSet;
  * @author Sven Hertling, Jan Portisch
  */
 public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
-    
+
+
     /**
      * Default Logger
      */

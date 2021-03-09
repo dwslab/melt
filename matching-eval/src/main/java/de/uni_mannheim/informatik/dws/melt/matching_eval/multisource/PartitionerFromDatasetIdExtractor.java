@@ -2,19 +2,22 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.multisource;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
 public class PartitionerFromDatasetIdExtractor implements Partitioner{
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PartitionerFromDatasetIdExtractor.class);
 
     private Track track;
@@ -54,5 +57,4 @@ public class PartitionerFromDatasetIdExtractor implements Partitioner{
         }
         return testcaseMap;
     }
-    
 }

@@ -26,6 +26,7 @@
         <module>matching-owlapi</module>
         <module>matching-validation</module>
         <module>yet-another-alignment-api</module>
+        <module>matching-data</module>
     </modules>
 
     <name>MELT - Matching EvaLuation Toolkit</name>

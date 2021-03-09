@@ -1,7 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_validation;
 
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 
@@ -16,6 +16,7 @@ import java.util.Set;
  * @author Jan Portisch
  */
 public class TestCaseValidationService {
+
 
     /**
      * Constructor

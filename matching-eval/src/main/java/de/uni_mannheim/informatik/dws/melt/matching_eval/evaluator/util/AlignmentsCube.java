@@ -1,11 +1,11 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer.IExplainerResourceWithJenaOntology;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentSerializer;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.matching_base.IExplainerResource;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer.ExplainerResourceProperty;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.jena.ontology.OntModel;

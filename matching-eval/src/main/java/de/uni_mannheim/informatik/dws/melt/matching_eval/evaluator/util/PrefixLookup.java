@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -9,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
@@ -17,7 +18,8 @@ import org.apache.jena.rdf.model.Resource;
  * This class represents a lookup service for Semantic Web prefixes.
  */
 public class PrefixLookup {
-    
+
+
     /**
      * Default Prefix Lookup (independent of a particular ontology). 
      */

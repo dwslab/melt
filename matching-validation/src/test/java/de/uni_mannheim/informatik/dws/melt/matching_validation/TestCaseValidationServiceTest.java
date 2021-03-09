@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_validation;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * to be executed in maven and might fail when run within the IDE.
  */
 class TestCaseValidationServiceTest {
+
 
     void analzyePositiveCase(TestCaseValidationService result1) {
         assertTrue(result1.isSourceOntologyParseable());

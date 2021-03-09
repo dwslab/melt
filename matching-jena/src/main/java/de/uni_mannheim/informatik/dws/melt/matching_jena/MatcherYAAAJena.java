@@ -14,7 +14,8 @@ import org.apache.jena.ontology.OntModelSpec;
  * A matcher template for matchers that are based on Apache Jena.
  */
 public abstract class MatcherYAAAJena extends MatcherYAAA implements IMatcher<OntModel, Alignment, Properties>{
-    
+
+
     protected OntModelSpec getModelSpec(){
         return OntologyCacheJena.DEFAULT_JENA_ONT_MODEL_SPEC;
     }

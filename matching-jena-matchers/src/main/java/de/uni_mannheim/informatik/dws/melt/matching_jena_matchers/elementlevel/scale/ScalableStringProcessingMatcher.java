@@ -5,6 +5,7 @@ import com.github.liblevenshtein.transducer.ITransducer;
 import com.github.liblevenshtein.transducer.factory.TransducerBuilder;
 import de.uni_mannheim.informatik.dws.melt.matching_base.OaeiOptions;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * ));}</pre>
  */
 public class ScalableStringProcessingMatcher extends MatcherYAAAJena {
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScalableStringProcessingMatcher.class);
     

@@ -3,15 +3,15 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval;
 import com.googlecode.cqengine.attribute.Attribute;
 import com.googlecode.cqengine.attribute.SimpleAttribute;
 import com.googlecode.cqengine.query.option.QueryOptions;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.Refiner;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
+
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.HashSet;

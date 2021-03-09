@@ -8,6 +8,7 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
  * @author Sven Hertling, Jan Portisch
  */
 public class ConfusionMatrix {
+
     
     private Alignment truePositive;
     private Alignment falsePositive;
@@ -156,6 +157,4 @@ public class ConfusionMatrix {
                 ", REC=" + String.format("%.4f", recall) + 
                 ", F1=" + String.format("%.4f", getF1measure());
     }
-    
-    
 }

@@ -1,13 +1,15 @@
 
 package de.uni_mannheim.informatik.dws.melt.matching_eval.util;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.*;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Paths;
+
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import org.apache.commons.io.FileUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;

@@ -32,12 +32,13 @@ import org.xml.sax.SAXException;
  * An alignment is also known as "mapping" or "mappings".
  * Each {@link Correspondence} is uniquely identified by entityOne, entityTwo and relation.
  * This means, if you add a Correspondence which already exists, it will not be modified.
- * To modify an already existant correspondence you can use addOrModify.
+ * To modify an already existent correspondence you can use addOrModify.
  *
  * @author Sven Hertling
  * @author Jan Portisch
  */
 public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
+
 
     /**
      * Default logger.
@@ -931,7 +932,6 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         if(extensions == null) return null;
         return extensions.get(extensionUri);
     }
-
 
     /**
      * Set the value for an extension.

@@ -1,14 +1,13 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness;
+import de.uni_mannheim.informatik.dws.melt.matching_data.SealsTrack;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.SealsTrack;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BaselineStringMatcher;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.ExactStringMatcher;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -239,7 +238,6 @@ class EvaluatorCSVTest {
         }
     }
 
-
     /**
      * Helper method. Return the position in the array given a string.
      * @param title String to be looked for.
@@ -255,5 +253,4 @@ class EvaluatorCSVTest {
         }
         return -1;
     }
-
 }

@@ -1,8 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.Metric;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 
@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
  * A metric which computes multiple rank metrics such as the NDCG and average precision for an execution result.
  */
 public class RankingMetric extends Metric<RankingResult> {
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RankingMetric.class);
 

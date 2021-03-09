@@ -26,6 +26,13 @@
             <artifactId>matching-jena</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>matching-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-owlapi</artifactId>
@@ -50,6 +57,8 @@
             <artifactId>commons-compress</artifactId>
             <version>1.20</version>
         </dependency>
+
+
         
         <!-- for parsing the maven settings xml -->
         <dependency>

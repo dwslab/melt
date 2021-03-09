@@ -1,18 +1,17 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.condition.OS.MAC;
 
 class MatcherSimilarityMetricTest {
+
 
     @Test
     void computeSimilarityExecutionResult(){
@@ -30,7 +29,6 @@ class MatcherSimilarityMetricTest {
         assertEquals(1.0 / 3.0, MatcherSimilarityMetric.computeSimilarity(result_1, result_2));
     }
 
-
     @Test
     void computeSimilarityAlignment(){
         Alignment alignment_1 = new Alignment();
@@ -43,7 +41,6 @@ class MatcherSimilarityMetricTest {
 
         assertEquals(1.0 / 3.0, MatcherSimilarityMetric.computeSimilarity(alignment_1, alignment_2));
     }
-
 
     @Test
     //@EnabledOnOs({ MAC })
@@ -73,6 +70,4 @@ class MatcherSimilarityMetricTest {
         assertEquals(1.0 / 3.0, similarity_1.getMatcherSimilarity(result_1, result_2));
         assertEquals(1.0 / 3.0, similarity_1.getMatcherSimilarity(result_2, result_1));
     }
-
-
 }

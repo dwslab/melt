@@ -3,9 +3,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel;
 import de.uni_mannheim.informatik.dws.melt.matching_base.DataStore;
 import de.uni_mannheim.informatik.dws.melt.matching_base.OaeiOptions;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.scale.PropertySpecificStringProcessing;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.scale.ValueExtractor;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.scale.ValueExtractorProperty;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorProperty;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,14 +19,10 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
+
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntResource;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.StmtIterator;
-import org.apache.jena.vocabulary.RDFS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

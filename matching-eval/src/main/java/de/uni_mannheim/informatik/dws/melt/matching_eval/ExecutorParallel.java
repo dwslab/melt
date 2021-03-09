@@ -1,7 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +17,11 @@ import org.slf4j.LoggerFactory;
  * Executor to run matchers in parallel.
  */
 public class ExecutorParallel {
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorParallel.class);
     
     private int numberOfThreads;
-    
     
     public ExecutorParallel(){
         this.numberOfThreads = Runtime.getRuntime().availableProcessors();
@@ -30,8 +30,7 @@ public class ExecutorParallel {
     public ExecutorParallel(int numberOfThreads){
         this.numberOfThreads = numberOfThreads;
     }
-    
-    
+
     /**
      * Run the given matchers in parallel. Make sure the matcher can be run in parallel.
      * @param testCases the testcases on which the matcher should be run

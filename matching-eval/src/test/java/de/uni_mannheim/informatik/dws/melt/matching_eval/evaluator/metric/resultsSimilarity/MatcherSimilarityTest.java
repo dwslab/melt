@@ -1,19 +1,18 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
 
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.condition.OS.MAC;
 
 class MatcherSimilarityTest {
+
 
     @Test
     void median(){
@@ -28,7 +27,6 @@ class MatcherSimilarityTest {
         evenList_1.add(5.0);
         assertEquals(2.5, MatcherSimilarity.median(evenList_1));
     }
-
 
     @Test
     //@EnabledOnOs({ MAC })
@@ -62,7 +60,6 @@ class MatcherSimilarityTest {
         assertEquals(1.0/3.0, similarity_1.getMedianSimilariyWithoutSelfSimilarity());
     }
 
-
     @Test
     //@EnabledOnOs({ MAC })
     void getMedianSimilariyWithSelfSimilarity_1(){
@@ -95,7 +92,6 @@ class MatcherSimilarityTest {
         assertEquals(2.0 / 3.0, similarity_1.getMedianSimiarity());
     }
 
-
     @Test
     //@EnabledOnOs({ MAC })
     void getMedianSimilariyWithOutSelfSimilarity_2(){
@@ -121,5 +117,4 @@ class MatcherSimilarityTest {
 
         assertEquals(1.0 / 3.0, similarity_1.getMedianSimilariyWithoutSelfSimilarity());
     }
-
 }

@@ -55,20 +55,18 @@ public class IOoperations {
         });
     }
 
-
     /**
      * Returns the elements of a HashSet in one line without a line break.
      * @param set Set to be converted.
      * @return Result String.
      */
-    public static String convertHashSetToStringPipeSeparated(HashSet<String> set){
+    public static String convertSetToStringPipeSeparated(Set<String> set){
         String result = "";
         for(String s : set){
             result = result + s + " | ";
         }
         return result.substring(0, result.length() -3);
     }
-
 
     /**
      * Reads a tab separated file.

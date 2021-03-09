@@ -5,7 +5,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_base;
  * Matchers itself can also define keys (which are just strings).
  */
 public class ParameterConfigKeys {
-    
+
+
     /**
      * Boolean value (true/false) if matching classes is required (true) or not (false)
      */
@@ -42,7 +43,6 @@ public class ParameterConfigKeys {
      * not be matched (blocklist)
      */
     public static final String NON_MATCHING_INSTANCE_TYPES = "http://oaei.ontologymatching.org/nonMatchingInstanceTypes";
-
     
     /**
      * The main language of the source ontology / knowledge graph.
@@ -63,8 +63,7 @@ public class ParameterConfigKeys {
      * It is used when the parameters should be convert to e.g. a URL (by writing a file).
      */
     public static final String DEFAULT_PARAMETERS_SERIALIZATION_FORMAT = "http://oaei.ontologymatching.org/defaultParametersSerializationFormat";
-    
-    
+
     /**
      * The default serialization format for ontologies / knowledge graphs. The value is a string and can contain values <a href="https://jena.apache.org/documentation/io/rdf-output.html">used by jena</a> 
      * e.g. RDF/XML, Turtle, N-Triples, N3, N-Quads, CSV, TSV etc. Usually the method 
@@ -96,7 +95,4 @@ public class ParameterConfigKeys {
      * It is used in URL2OntModelTransformer (and thus as parameter in OntologyCacheJena).
      */
     public static final String JENA_ONTMODEL_SPEC = "http://oaei.ontologymatching.org/jenaOntModelSpec";
-    
-    
-    
 }

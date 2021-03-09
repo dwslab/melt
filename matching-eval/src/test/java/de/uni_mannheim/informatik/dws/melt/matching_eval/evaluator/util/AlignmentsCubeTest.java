@@ -1,6 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

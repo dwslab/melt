@@ -10,7 +10,8 @@ import java.util.Properties;
  * A matcher template for matchers that are based on YAAA.
  * @author Sven Hertling
  */
-public abstract class MatcherPipelineYAAA extends MatcherYAAA{
+public abstract class MatcherPipelineYAAA extends MatcherYAAA {
+
 
     protected List<MatcherYAAA> matchers = initializeMatchers();
     

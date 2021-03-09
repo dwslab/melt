@@ -1,11 +1,13 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.multisource;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 
 /**
  * POJO which represents a testcase and the information if an entity corresponds to source or target.
  */
 public class TestCasePart {
+
+
     private TestCase testcase;
     private boolean source;
 

@@ -1,16 +1,9 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.visualization;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrixMetric;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity.ExecutionResultTuple;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity.MatcherSimilarity;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity.MatcherSimilarityMetric;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
-
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 
@@ -20,6 +13,7 @@ import java.util.Map.Entry;
  * This writer can persist {@link MatcherSimilarity} objects in a LaTex graph from the perspective of one particular matcher.
  */
 public class MatcherSimilarityLatexBasePlotWriter {
+
 
     /**
      * Persists a matcher similarity instance as LaTex graph from the perspective of one particular matcher.

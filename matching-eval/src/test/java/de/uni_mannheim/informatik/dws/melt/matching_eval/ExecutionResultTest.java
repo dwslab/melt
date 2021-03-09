@@ -1,9 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval;
 
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -11,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.condition.OS.MAC;
 
 class ExecutionResultTest {
+
 
     @Test
     void getMatcherNameComparator() {

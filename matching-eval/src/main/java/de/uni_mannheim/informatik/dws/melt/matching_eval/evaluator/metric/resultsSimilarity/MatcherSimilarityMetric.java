@@ -1,11 +1,11 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.Refiner;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +17,11 @@ import org.slf4j.LoggerFactory;
  */
 public class MatcherSimilarityMetric {
 
+
     /**
      * Default Logger.
      */
     Logger LOGGER = LoggerFactory.getLogger(MatcherSimilarityMetric.class);
-
 
     /**
      * Obtain the matcher similarity for the given {@link ExecutionResultSet}.

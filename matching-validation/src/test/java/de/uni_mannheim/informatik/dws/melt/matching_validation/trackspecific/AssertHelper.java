@@ -1,9 +1,9 @@
 package de.uni_mannheim.informatik.dws.melt.matching_validation.trackspecific;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_validation.SemanticWebLibrary;
 import de.uni_mannheim.informatik.dws.melt.matching_validation.TestCaseValidationService;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
 
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;

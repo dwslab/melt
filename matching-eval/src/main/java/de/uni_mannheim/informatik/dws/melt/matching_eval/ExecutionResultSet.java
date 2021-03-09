@@ -6,9 +6,9 @@ import com.googlecode.cqengine.query.Query;
 import com.googlecode.cqengine.query.QueryFactory;
 import static com.googlecode.cqengine.query.QueryFactory.noQueryOptions;
 import com.googlecode.cqengine.resultset.ResultSet;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.Refiner;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
 
 import java.io.*;
 import java.util.Arrays;
@@ -30,6 +30,8 @@ import java.util.List;
  * @author Jan Portisch
  */
 public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionResult> implements Serializable {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionResultSet.class);
     private static final long serialVersionUID = 1L;
     
