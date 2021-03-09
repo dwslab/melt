@@ -8,6 +8,7 @@ de.uni_mannheim.informatik.dws.melt.matching_base.hobbit_maven_plugin
 de.uni_mannheim.informatik.dws.melt.matching_base.multisource
 de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer
 de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers
+de.uni_mannheim.informatik.dws.melt.matching_data
 de.uni_mannheim.informatik.dws.melt.matching_eval
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer
@@ -25,7 +26,6 @@ de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning
 de.uni_mannheim.informatik.dws.melt.matching_eval.profiling
 de.uni_mannheim.informatik.dws.melt.matching_eval.refinement
 de.uni_mannheim.informatik.dws.melt.matching_eval.resultswriter.mappingdesc
-de.uni_mannheim.informatik.dws.melt.matching_eval.tracks
 de.uni_mannheim.informatik.dws.melt.matching_eval.util
 de.uni_mannheim.informatik.dws.melt.matching_eval.visualization
 de.uni_mannheim.informatik.dws.melt.matching_jena
@@ -38,6 +38,7 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.babelnet
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.combined
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.dataStructures
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.io
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers
@@ -69,7 +70,8 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatche
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util
-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalextractors
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalExtractors
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.wrapper
 de.uni_mannheim.informatik.dws.melt.matching_ml.kgvec2go
 de.uni_mannheim.informatik.dws.melt.matching_ml.python
