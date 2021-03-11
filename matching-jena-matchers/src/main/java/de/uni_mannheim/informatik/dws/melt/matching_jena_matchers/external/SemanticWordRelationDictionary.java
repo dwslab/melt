@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Interface for dictionary access.
+ * Abstract class for dictionary access.
  * @author Jan Portisch
  *
  */
@@ -31,7 +31,7 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
 	public abstract Set<String> getHypernyms(String linkedConcept);
 
 	/**
-	 * Closing open resources
+	 * Closing open resources.
 	 */
 	public abstract void close();
 	

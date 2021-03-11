@@ -1,5 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,6 +15,9 @@ import java.util.Arrays;
  *
  */
 public class MaxGramLeftToRightTokenizer implements LeftToRightTokenizer, OneToManyLinkingStrategy {
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MaxGramLeftToRightTokenizer.class);
 
     private String[] arrayToLink;
     private int endIndexExclusive;
@@ -45,7 +51,6 @@ public class MaxGramLeftToRightTokenizer implements LeftToRightTokenizer, OneToM
         }
     }
 
-
     /**
      * Get a new token based on the information that the last string tested was not successful.
      * @return String representation for the next test.
@@ -71,7 +76,6 @@ public class MaxGramLeftToRightTokenizer implements LeftToRightTokenizer, OneToM
         }
     }
 
-
     /**
      * Get a new token based on the information that the last string tested was successful.
      * @return String representation for next trial.
@@ -92,7 +96,6 @@ public class MaxGramLeftToRightTokenizer implements LeftToRightTokenizer, OneToM
             terminated = true;
             return null;
         }
-
         startIndex = endIndexExclusive;
         endIndexExclusive = arrayToLink.length;
 
@@ -131,19 +134,19 @@ public class MaxGramLeftToRightTokenizer implements LeftToRightTokenizer, OneToM
             // removing last delimiter
             return result.substring(0, result.length() - delimiter.length());
         } catch (NullPointerException npe){
-            System.out.println("Result");
-            System.out.println(result);
-            System.out.println();
-            System.out.println("Delimiter");
-            System.out.println(delimiter);
-            System.out.println();
-            System.out.println("Array to convert:");
-            Arrays.stream(arrayToConvert).forEach(System.out::println);
+            StringBuilder builder = new StringBuilder();
+            builder.append("Result\n")
+                    .append(result)
+                    .append("\n")
+                    .append("Delimiter\n")
+                    .append(delimiter)
+                    .append("\n")
+                    .append("Array to convert:\n");
+            Arrays.stream(arrayToConvert).forEach(x -> builder.append(x));
+            LOGGER.error(builder.toString());
             return result.substring(0, result.length() - delimiter.length());
         }
     }
-
-
 
     //------------------------------
     // Only getters and setters

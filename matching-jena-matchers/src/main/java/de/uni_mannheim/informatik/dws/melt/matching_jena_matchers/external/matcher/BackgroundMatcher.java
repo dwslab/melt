@@ -86,6 +86,14 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     private ValueExtractor valueExtractor;
 
     /**
+     * If a concept cannot be linked as full string, the longest substrings are matched.
+     * This is expensive. If there are lengthy description texts etc., this should not be performed.
+     * This variable represents the number of tokens within a label up to which the multi-linking will be performed.
+     * The limit is inclusive, linking will not be performed if {@code |tokens in label| > multiConceptLinkerUpperLimit}
+     */
+    private int multiConceptLinkerUpperLimit = 7;
+
+    /**
      * Main Constructor
      *
      * @param knowledgeSourceToBeUsed Specify the knowledgeSource to be used.
@@ -166,7 +174,6 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         }
         return result;
     }
-
 
     /**
      * Given two iterators, match the resources covered by them.
@@ -467,9 +474,11 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
             List<Set<String>> list = new LinkedList<>();
             for (String label : uri2labels.getValue()) {
-                Set<String> linkedConcepts = linker.linkToPotentiallyMultipleConcepts(label);
-                if (linkedConcepts != null) {
-                    list.add(linkedConcepts);
+                if(StringOperations.tokenizeBestGuess(label).length > multiConceptLinkerUpperLimit) {
+                    Set<String> linkedConcepts = linker.linkToPotentiallyMultipleConcepts(label);
+                    if (linkedConcepts != null) {
+                        list.add(linkedConcepts);
+                    }
                 }
             }
             if (list.size() > 0) {
@@ -695,5 +704,13 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
     public void setVerboseLoggingOutput(boolean verboseLoggingOutput) {
         isVerboseLoggingOutput = verboseLoggingOutput;
+    }
+
+    public int getMultiConceptLinkerUpperLimit() {
+        return multiConceptLinkerUpperLimit;
+    }
+
+    public void setMultiConceptLinkerUpperLimit(int multiConceptLinkerUpperLimit) {
+        this.multiConceptLinkerUpperLimit = multiConceptLinkerUpperLimit;
     }
 }

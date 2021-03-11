@@ -14,8 +14,8 @@ import org.simmetrics.metrics.StringMetrics;
 
 class StringOperationsTest {
 
-    private static final double DELTA = 0.00001;
 
+    private static final double DELTA = 0.00001;
 
     @Test
     void testRemoveFreeFloatingS() {
@@ -31,7 +31,6 @@ class StringOperationsTest {
         assertTrue(result1set.contains("home-made"));
         assertTrue(result1set.contains("food"));
     }
-
 
     @Test
     void testAddAlternativeWritingsSimple() {
@@ -52,7 +51,6 @@ class StringOperationsTest {
         assertTrue(result2.contains("hind-brain"));
         assertTrue(result2.size() == 3);
     }
-
 
     @Test
     void splitUsingSplitWords() {
@@ -370,8 +368,6 @@ class StringOperationsTest {
         set1.add("car");
         set1.add("is");
         set1.add("vehicle");
-
         assertEquals("a, car, is, vehicle".length(), StringOperations.getCommaSeparatedString(set1).length());
     }
-
 }

@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class BabelNetLinker implements LabelToConceptLinker {
 
+
     private static Logger LOGGER = LoggerFactory.getLogger(BabelNetLinker.class);
 
     /**
