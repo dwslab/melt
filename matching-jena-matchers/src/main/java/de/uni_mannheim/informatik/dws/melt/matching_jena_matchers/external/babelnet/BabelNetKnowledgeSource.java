@@ -11,6 +11,8 @@ import it.uniroma1.lcl.babelnet.BabelSynsetRelation;
 import it.uniroma1.lcl.babelnet.data.BabelPointer;
 import it.uniroma1.lcl.jlt.util.Language;
 import it.uniroma1.lcl.kb.Sense;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +26,8 @@ import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.externa
  */
 public class BabelNetKnowledgeSource extends SemanticWordRelationDictionary {
 
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BabelNetKnowledgeSource.class);
 
     private static BabelNet babelNet;
 
@@ -52,7 +56,12 @@ public class BabelNetKnowledgeSource extends SemanticWordRelationDictionary {
      * Make sure that the indices are available offline and that the project is configured correctly.
      */
     public BabelNetKnowledgeSource() {
-        babelNet = BabelNet.getInstance();
+        try {
+            babelNet = BabelNet.getInstance();
+        } catch (NullPointerException npe){
+            LOGGER.error("Could not instantiate BabelNet instance. Did you copy the config directory into your " +
+                    "project? Do the BabelNet indices exist? Refer to the user guide in case of questions.", npe);
+        }
         initializeBuffers();
         this.linker = new BabelNetLinker(this);
     }

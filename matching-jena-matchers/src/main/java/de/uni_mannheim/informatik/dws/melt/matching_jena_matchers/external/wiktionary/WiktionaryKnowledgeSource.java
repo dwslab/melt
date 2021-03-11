@@ -100,6 +100,10 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      */
     public WiktionaryKnowledgeSource(String tdbDirectoryPath) {
         // convenience checks for stable code
+        if(tdbDirectoryPath == null){
+            LOGGER.error("The provided tdbDirectoryPath for Wiktionary is null. - ABORTING PROGRAM");
+            return;
+        }
         File tdbDirectoryFile = new File(tdbDirectoryPath);
         if (!tdbDirectoryFile.exists()) {
             LOGGER.error("tdbDirectoryPath does not exist. - ABORTING PROGRAM");

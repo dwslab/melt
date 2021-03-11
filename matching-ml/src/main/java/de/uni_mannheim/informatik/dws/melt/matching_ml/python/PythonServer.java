@@ -60,12 +60,13 @@ public class PythonServer {
      */
     private PythonServer() {
         // do nothing; do not start the server (yet)
+        serverUrl = "http://127.0.0.1:" + port;
     }
 
     /**
      * The URL that shall be used to perform the requests.
      */
-    private String serverUrl = "http://127.0.0.1:41193";
+    private static String serverUrl = "http://127.0.0.1:41193";
 
     /**
      * Indicator whether vectors shall be cached. This means that vectors are cached locally and similarities are
@@ -96,8 +97,15 @@ public class PythonServer {
      */
     private File resourcesDirectory = new File(DEFAULT_RESOURCES_DIRECTORY);
 
-    
-    
+    private static final int DEFAULT_PORT = 1808;
+
+    /**
+     * The port that shall be used.
+     */
+    private static int port = DEFAULT_PORT;
+
+
+
     /************************************
      * Transformer section
      ***********************************/
@@ -900,7 +908,8 @@ public class PythonServer {
             return false;
         }
         String pythonCommand = getPythonCommand();
-        List<String> command = Arrays.asList(pythonCommand, canonicalPath);
+        List<String> command = new ArrayList<>(Arrays.asList(pythonCommand, canonicalPath));
+        command.add("" + PythonServer.getPort());
         ProcessBuilder pb = new ProcessBuilder(command);
         pb.directory(new File(System.getProperty("user.dir")));
         updateEnvironmentPath(pb.environment(), pythonCommand);
@@ -1159,5 +1168,27 @@ public class PythonServer {
      */
     public void setVectorCaching(boolean vectorCaching) {
         isVectorCaching = vectorCaching;
+    }
+
+    public static int getPort() {
+        return port;
+    }
+
+    public static void setPort(int port) {
+        if (instance != null) {
+            LOGGER.error("Server is already running. The port cannot be changed.");
+            return;
+        }
+        if (port > 0) {
+            PythonServer.port = port;
+        } else {
+            LOGGER.error("You tried to set the port to a negative number. Using default: " + DEFAULT_PORT);
+            PythonServer.port = DEFAULT_PORT;
+        }
+        PythonServer.serverUrl = "http://127.0.0.1:" + port;
+    }
+
+    public static String getServerUrl() {
+        return serverUrl;
     }
 }

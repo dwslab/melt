@@ -5,6 +5,7 @@ import csv
 import numpy as np
 import logging
 import os
+import sys
 
 logging.basicConfig(
     handlers=[logging.FileHandler(__file__ + ".log", "a+", "utf-8")],
@@ -1208,38 +1209,86 @@ def run_openea():
         from openea.models.trans import TransD, TransE, TransH, TransR
         from openea.models.semantic import DistMult, HolE, SimplE, RotatE
         from openea.models.neural import ConvE, ProjE
-        from openea.approaches import AlignE, BootEA, JAPE, Attr2Vec, MTransE, IPTransE, GCN_Align, AttrE, IMUSE, SEA, MultiKE, RSN4EA, GMNN, KDCoE, RDGCN, BootEA_RotatE, BootEA_TransH, AliNet
+        from openea.approaches import (
+            AlignE,
+            BootEA,
+            JAPE,
+            Attr2Vec,
+            MTransE,
+            IPTransE,
+            GCN_Align,
+            AttrE,
+            IMUSE,
+            SEA,
+            MultiKE,
+            RSN4EA,
+            GMNN,
+            KDCoE,
+            RDGCN,
+            BootEA_RotatE,
+            BootEA_TransH,
+            AliNet,
+        )
         from openea.models.basic_model import BasicModel
-        
-        models = { 'TransD' : TransD, 'TransE' : TransE, 'TransH' : TransH, 'TransR' : TransR, # openea.models.trans
-                   'DistMult' : DistMult, 'HolE' : HolE, 'SimplE' : SimplE, 'RotatE' : RotatE, # openea.models.semantic
-                   'ConvE' : ConvE, 'ProjE' : ProjE, # openea.models.neural
-                   'AlignE' : AlignE, 'BootEA' : BootEA, 'JAPE' : JAPE, 'Attr2Vec' : Attr2Vec, # openea.approaches
-                   'MTransE' : MTransE, 'IPTransE' : IPTransE, 'GCN_Align' : GCN_Align, 'AttrE' : AttrE,
-                   'IMUSE' : IMUSE, 'SEA' : SEA, 'MultiKE' : MultiKE, 'RSN4EA' : RSN4EA,
-                   'GMNN' : GMNN, 'KDCoE' : KDCoE, 'RDGCN' : RDGCN, 'BootEA_RotatE' : BootEA_RotatE,
-                   'BootEA_TransH' : BootEA_TransH, 'AliNet' : AliNet,
-                   'BasicModel' : BasicModel } # openea.models.basic_model
+
+        models = {
+            "TransD": TransD,
+            "TransE": TransE,
+            "TransH": TransH,
+            "TransR": TransR,  # openea.models.trans
+            "DistMult": DistMult,
+            "HolE": HolE,
+            "SimplE": SimplE,
+            "RotatE": RotatE,  # openea.models.semantic
+            "ConvE": ConvE,
+            "ProjE": ProjE,  # openea.models.neural
+            "AlignE": AlignE,
+            "BootEA": BootEA,
+            "JAPE": JAPE,
+            "Attr2Vec": Attr2Vec,  # openea.approaches
+            "MTransE": MTransE,
+            "IPTransE": IPTransE,
+            "GCN_Align": GCN_Align,
+            "AttrE": AttrE,
+            "IMUSE": IMUSE,
+            "SEA": SEA,
+            "MultiKE": MultiKE,
+            "RSN4EA": RSN4EA,
+            "GMNN": GMNN,
+            "KDCoE": KDCoE,
+            "RDGCN": RDGCN,
+            "BootEA_RotatE": BootEA_RotatE,
+            "BootEA_TransH": BootEA_TransH,
+            "AliNet": AliNet,
+            "BasicModel": BasicModel,
+        }  # openea.models.basic_model
 
         args = load_args(request.headers.get("argumentFile"))
-        kgs = read_kgs_from_folder(args.training_data, args.dataset_division, args.alignment_module, args.ordered, remove_unlinked=False)
+        kgs = read_kgs_from_folder(
+            args.training_data,
+            args.dataset_division,
+            args.alignment_module,
+            args.ordered,
+            remove_unlinked=False,
+        )
         model = models[args.embedding_module]()
         model.set_args(args)
         model.set_kgs(kgs)
         model.init()
         model.run()
 
-        model.out_folder = args.output # do not use folder hierarchy with datetime
+        model.out_folder = args.output  # do not use folder hierarchy with datetime
         model.predict(
-            top_k=getattr(args, 'predict_top_k', None),
-            min_sim_value=getattr(args, 'predict_min_sim_value', None),
-            output_file_name='topk.tsv'
+            top_k=getattr(args, "predict_top_k", None),
+            min_sim_value=getattr(args, "predict_min_sim_value", None),
+            output_file_name="topk.tsv",
         )
-        #model.test()
+        # model.test()
         if "save" in request.headers:
             model.save()
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
 
 
@@ -1249,16 +1298,19 @@ def transformers_prediction():
         import os
 
         if "cudaVisibleDevices" in request.headers:
-            os.environ['CUDA_VISIBLE_DEVICES'] = request.headers.get("cudaVisibleDevices")
-        
-        if "transformersCache" in request.headers:
-            os.environ['TRANSFORMERS_CACHE'] = request.headers.get("transformersCache")
+            os.environ["CUDA_VISIBLE_DEVICES"] = request.headers.get(
+                "cudaVisibleDevices"
+            )
 
-        using_tensorflow = request.headers.get("usingTF").lower() == 'true'
+        if "transformersCache" in request.headers:
+            os.environ["TRANSFORMERS_CACHE"] = request.headers.get("transformersCache")
+
+        using_tensorflow = request.headers.get("usingTF").lower() == "true"
         model_name = request.headers.get("modelName")
         prediction_file_path = request.headers.get("predictionFilePath")
 
         import csv
+
         data_left = []
         data_right = []
         with open(prediction_file_path, encoding="utf-8") as csvfile:
@@ -1268,26 +1320,42 @@ def transformers_prediction():
                 data_right.append(row[1])
 
         from transformers import AutoTokenizer
+
         tokenizer = AutoTokenizer.from_pretrained(model_name)
-        
+
         if using_tensorflow:
             import tensorflow as tf
             from transformers import TFAutoModelForSequenceClassification
-            tokens = tokenizer(data_left, data_right, return_tensors="tf", padding=True, truncation='longest_first')
-            model = TFAutoModelForSequenceClassification.from_pretrained(model_name) 
+
+            tokens = tokenizer(
+                data_left,
+                data_right,
+                return_tensors="tf",
+                padding=True,
+                truncation="longest_first",
+            )
+            model = TFAutoModelForSequenceClassification.from_pretrained(model_name)
             classification = model(tokens)[0]
-            scores = tf.nn.softmax(classification, axis=1).numpy()[:,1]
+            scores = tf.nn.softmax(classification, axis=1).numpy()[:, 1]
         else:
             import torch
             from transformers import AutoModelForSequenceClassification
-            tokens = tokenizer(data_left, data_right, return_tensors="pt", padding=True, truncation='longest_first')
-            model = AutoModelForSequenceClassification.from_pretrained(model_name) 
+
+            tokens = tokenizer(
+                data_left,
+                data_right,
+                return_tensors="pt",
+                padding=True,
+                truncation="longest_first",
+            )
+            model = AutoModelForSequenceClassification.from_pretrained(model_name)
             classification = model(**tokens).logits
-            scores = [e[1] for e in torch.softmax(classification, dim=1).tolist()] 
-        
+            scores = [e[1] for e in torch.softmax(classification, dim=1).tolist()]
+
         return jsonify(scores)
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
 
 
@@ -1314,4 +1382,18 @@ def handle_exception(e):
 if __name__ == "__main__":
     # threaded=False because otherwise GridSearchCV do not run in parallel
     # see https://stackoverflow.com/questions/50665837/using-flask-with-joblib
-    app.run(debug=False, port=41193, threaded=False)
+    # determine the port
+    try:
+        if len(sys.argv) == 2:
+            logging.info("Received argument: " + sys.argv[1])
+            int_port = int(sys.argv[1])
+            if int_port > 0:
+                port = int_port
+        else:
+            port = 41193
+    except Exception as e:
+        logging.info("Exception occurred. Using default port: 41193")
+        port = 41193
+        logging.error(e)
+    logging.info(f"Starting server using port {port}")
+    app.run(debug=False, port=port, threaded=False)

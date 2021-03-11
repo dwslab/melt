@@ -15,11 +15,14 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 class PythonServerTest {
+
 
     private static PythonServer pythonServer;
 
@@ -73,7 +76,6 @@ class PythonServerTest {
         assertFalse(pythonServer.isInVocabulary("China", pathToVectorFile));
     }
 
-
     @Test
     /**
      * Default test with cache.
@@ -91,7 +93,6 @@ class PythonServerTest {
         assertTrue(similarity > 0);
     }
 
-
     @Test
     void getSimilarityNoCaching() {
         pythonServer.setVectorCaching(false);
@@ -105,7 +106,6 @@ class PythonServerTest {
         similarity = pythonServer.getSimilarity("Europe", "united", pathToVectorFile);
         assertTrue(similarity > 0);
     }
-
 
     @Test
     void testMultipleShutdownCallsAndRestarts() {
@@ -124,7 +124,6 @@ class PythonServerTest {
         similarity = pythonServer.getSimilarity("Europe", "united", pathToVectorFile);
         assertTrue(similarity > 0);
     }
-
 
     @Test
     /**
@@ -149,7 +148,6 @@ class PythonServerTest {
         assertEquals(100, europeVector.length);
     }
 
-
     @Test
     /**
      * Test without cache.
@@ -171,6 +169,47 @@ class PythonServerTest {
         String pathToModel = getPathOfResource("test_model");
         europeVector = pythonServer.getVector("Europe", pathToModel);
         assertEquals(100, europeVector.length);
+    }
+
+    /**
+     * Check whether vectors can be read using two different ports.
+     * Test without cache.
+     */
+    @ParameterizedTest
+    @ValueSource(ints = {1808, 1809})
+    void getVectorNoCachingDifferentPorts(int port) {
+        PythonServer.shutDown();
+        PythonServer.setPort(port);
+        assertEquals(port, PythonServer.getPort());
+        pythonServer = PythonServer.getInstance();
+        pythonServer.setVectorCaching(false);
+        // test case 1: vector file
+        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
+        Double[] europeVector = pythonServer.getVector("Europe", pathToVectorFile);
+        assertEquals(100, europeVector.length);
+
+        Double[] unitedVector = pythonServer.getVector("united", pathToVectorFile);
+
+        double similarityJava = (pythonServer.cosineSimilarity(europeVector, unitedVector));
+        double similarityPython = (pythonServer.getSimilarity("Europe", "united", pathToVectorFile));
+        assertEquals(similarityJava, similarityPython, 0.0001);
+
+        // test case 2: model file
+        String pathToModel = getPathOfResource("test_model");
+        europeVector = pythonServer.getVector("Europe", pathToModel);
+        assertEquals(100, europeVector.length);
+    }
+
+    @Test
+    void setGetPort(){
+        int testPort = 41194;
+        PythonServer.setPort(testPort);
+        assertFalse(PythonServer.getPort() == testPort);
+        PythonServer.shutDown();
+        PythonServer.setPort(testPort);
+        pythonServer = PythonServer.getInstance();
+        assertEquals(testPort, pythonServer.getPort());
+        assertTrue(PythonServer.getServerUrl().contains("41194"));
     }
 
     @Test
@@ -204,7 +243,6 @@ class PythonServerTest {
         vectorFile.delete();
     }
 
-
     @Test
     void trainWord2VecModelSG() {
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
@@ -235,7 +273,6 @@ class PythonServerTest {
         vectorFile.delete();
     }
 
-
     @Test
     void trainWord2VecModelWithWalkDirectory() {
         String testFilePath = getPathOfResource("walk_directory_test");
@@ -264,7 +301,6 @@ class PythonServerTest {
         vectorFile.delete();
     }
 
-
     @Test
     void trainWord2VecModelCBOW() {
         String testFilePath = getPathOfResource("testInputForWord2Vec.txt");
@@ -282,7 +318,6 @@ class PythonServerTest {
         modelFile.delete();
         vectorFile.delete();
     }
-
 
     @Test
     void externalResourcesDirectory(){
@@ -308,7 +343,6 @@ class PythonServerTest {
         }
     }
 
-
     @Test
     void getVocabularyTerms(){
         String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
@@ -317,7 +351,6 @@ class PythonServerTest {
         assertTrue(result.size() > 0);
         assertTrue(result.contains("Europe"));
     }
-
 
     /**
      * Helper method to obtain the canonical path of a (test) resource.
@@ -336,7 +369,6 @@ class PythonServerTest {
         }
     }
 
-
     /**
      * Helper method to obtain the number of read lines.
      * @param file File to be read.
@@ -351,9 +383,9 @@ class PythonServerTest {
             }
             br.close();
         } catch (FileNotFoundException fnfe){
-            fnfe.printStackTrace();
+            LOGGER.error("File not found " + file.getAbsolutePath(), fnfe);
         } catch (IOException ioe){
-            ioe.printStackTrace();
+            LOGGER.error("IOException while trying to get number of lines of file " + file.getAbsolutePath(), ioe);
         }
         return linesRead;
     }
