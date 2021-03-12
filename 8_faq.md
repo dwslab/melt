@@ -33,3 +33,79 @@ and place the python_command.txt` there.
 MELT is far more powerful than documented here. This `README` is intended to give an overview of the framework.
 For specific code snippets, have a look at the examples. Note that classes, interfaces, and methods are extensively 
 documented using [JavaDoc](/javadoc_latest/index.html).
+
+## Common Errors which might appear
+
+**Building a combined jar with jena dependencies**<br/>
+
+If you build a combined jar ("uber-jar" or "fat-jar", jar with dependencies) to try out your matchers especially with jena,
+then make sure you do not override the service initializers of jena.
+The Jena documentation has also a page about [building a combined jar with jena](https://jena.apache.org/documentation/notes/jena-repack.html).
+The error **can** look like this:
+```
+Caused by: java.lang.NullPointerException
+        at org.apache.jena.tdb.sys.EnvTDB.processGlobalSystemProperties(EnvTDB.java:33)
+        at org.apache.jena.tdb.TDB.init(TDB.java:254)
+        at org.apache.jena.tdb.sys.InitTDB.start(InitTDB.java:29)
+        at org.apache.jena.sys.JenaSystem.lambda$init$2(JenaSystem.java:117)
+        at java.util.ArrayList.forEach(Unknown Source)
+        at org.apache.jena.sys.JenaSystem.forEach(JenaSystem.java:192)
+        at org.apache.jena.sys.JenaSystem.forEach(JenaSystem.java:169)
+        at org.apache.jena.sys.JenaSystem.init(JenaSystem.java:115)
+        ...
+```
+In such a case use the [maven shade plugin](https://maven.apache.org/plugins/maven-shade-plugin/index.html) with a [ServicesResourceTransformer](https://maven.apache.org/plugins/maven-shade-plugin/examples/resource-transformers.html)
+to [build an exectuable jar](https://maven.apache.org/plugins/maven-shade-plugin/examples/executable-jar.html).
+.
+An example could look like the following
+```
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <configuration>
+                  <shadedArtifactAttached>true</shadedArtifactAttached>
+                  <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
+                  <transformers>
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                      <mainClass>{your_full_main_class_here}</mainClass>
+                    </transformer>
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                  </transformers>
+                </configuration>
+                <executions>
+                  <execution>
+                    <phase>package</phase>
+                    <goals>
+                      <goal>shade</goal>
+                    </goals>
+                  </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+```
+
+
+**Using largebio dataset without unlimiting entity expansion**<br/>
+
+If you encounter the following error:
+```
+JAXP00010001: The parser has encountered more than "64000" entity expansions in this document; this is the limit imposed by the JDK.
+```
+or 
+```
+JAXP00010001: Der Parser hat mehr als 64000 Entityerweiterungen in diesem Dokument gefunden. Dies ist der von JDK vorgeschriebene Grenzwert.
+```
+during parsing ontologies in large bio, then it is time to [set an additional java system property](https://community.appway.com/screen/kb/article/jdk-bug-xml-readers-share-the-same-entity-expansion-counter-1482810869950#).
+Set `jdk.xml.entityExpansionLimit` to `0`. This can be done at the command line:
+```
+-Djdk.xml.entityExpansionLimit=0
+```
+or by calling 
+```
+TrackRepository.Largebio.unlimitEntityExpansion();
+```
+which sets the property for the current JVM execution (but not for child processes.
