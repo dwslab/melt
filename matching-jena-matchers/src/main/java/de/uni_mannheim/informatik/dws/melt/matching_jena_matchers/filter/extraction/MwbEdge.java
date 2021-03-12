@@ -20,10 +20,13 @@ class MwbEdge{
      */
     private Correspondence correspondence;
     
-    public MwbEdge(MwbNode source, MwbNode target, Correspondence correspondence) {
+    private int weigth;
+    
+    public MwbEdge(MwbNode source, MwbNode target, Correspondence correspondence, int weight) {
         this.source = source;
         this.target = target;
         this.correspondence = correspondence;
+        this.weigth = weight;
     }
     
     public MwbNode getSource() {
@@ -34,8 +37,8 @@ class MwbEdge{
         return target;
     }
     
-    public double getWeight() {
-        return correspondence.getConfidence();
+    public int getWeight() {
+        return weigth;
     }
     
     public Correspondence getCorrespondence(){

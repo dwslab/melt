@@ -21,10 +21,13 @@ import org.slf4j.LoggerFactory;
  * Faster implementation than {@link HungarianExtractor} for generating a one-to-one alignment.
  * The implementation is based on http://www.mpi-inf.mpg.de/~mehlhorn/Optimization/bipartite_weighted.ps (page 13-19).
  * @see <a href="http://ceur-ws.org/Vol-551/om2009_Tpaper5.pdf">Paper: Efficient Selection of Mappings and Automatic Quality-driven Combination of Matching Methods</a>
+ * @see <a href="https://github.com/agreementmaker/agreementmaker/tree/master/projects/core/src/main/java/am/app/mappingEngine/oneToOneSelection">Implementation at Agreementmaker</a>
  */
 public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MaxWeightBipartiteExtractor.class);
+    
+    private final static int DEFAULT_MULTIPLIER = 10000;
     
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
@@ -32,10 +35,23 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
     }
     
     public static Alignment filter(Alignment inputAlignment){
-        return filter(inputAlignment, MwbInitHeuristic.NAIVE);
+        return filter(inputAlignment, MwbInitHeuristic.NAIVE, DEFAULT_MULTIPLIER);
     }
     
     public static Alignment filter(Alignment inputAlignment, MwbInitHeuristic heuristic){
+        return filter(inputAlignment, heuristic, DEFAULT_MULTIPLIER);
+    }
+    
+    /**
+     * Filters the alignment by computing a maximal one to one alignment. 
+     * Unfortunately we need to convert the double confidences to integers (double are multiplied by multiplier). Default is to use 4 digits after decimal. 
+     * For further reference see page 6 Arithmetic Demand at <a href="http://www.mpi-inf.mpg.de/~mehlhorn/Optimization/bipartite_weighted.ps">http://www.mpi-inf.mpg.de/~mehlhorn/Optimization/bipartite_weighted.ps</a>.
+     * @param inputAlignment the alignment to filter.
+     * @param heuristic the heuristic to use.
+     * @param multiplier the multiplier to use (how many digits of confidence are used.
+     * @return the filtered alignment.
+     */
+    public static Alignment filter(Alignment inputAlignment, MwbInitHeuristic heuristic, int multiplier){
         if(inputAlignment.isEmpty())
             return inputAlignment;
         
@@ -46,19 +62,19 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
             for(Correspondence c : inputAlignment.getCorrespondencesRelation(CorrespondenceRelation.EQUIVALENCE)){
                 MwbNode source = sourceNodeMapping.computeIfAbsent(c.getEntityTwo(), __ -> new MwbNode());
                 MwbNode target = targetNodeMapping.computeIfAbsent(c.getEntityOne(), __ -> new MwbNode());
-                source.addSuccesor(new MwbEdge(source, target, c)); //directed edge from source(A) to target(B)
+                source.addSuccesor(new MwbEdge(source, target, c, convertDoubleToInt(c.getConfidence(), multiplier))); //directed edge from source(A) to target(B)
             }
         } else {
             for(Correspondence c : inputAlignment.getCorrespondencesRelation(CorrespondenceRelation.EQUIVALENCE)){
                 MwbNode source = sourceNodeMapping.computeIfAbsent(c.getEntityOne(), __ -> new MwbNode());
                 MwbNode target = targetNodeMapping.computeIfAbsent(c.getEntityTwo(), __ -> new MwbNode());
-                source.addSuccesor(new MwbEdge(source, target, c)); //directed edge from source(A) to target(B)
+                source.addSuccesor(new MwbEdge(source, target, c, convertDoubleToInt(c.getConfidence(), multiplier))); //directed edge from source(A) to target(B)
             }
         }
 
         switch(heuristic){
             case NAIVE:
-                double maxConfidence = Collections.max(inputAlignment.getDistinctConfidencesAsSet());
+                int maxConfidence = convertDoubleToInt(Collections.max(inputAlignment.getDistinctConfidencesAsSet()), multiplier);
                 for(MwbNode a : sourceNodeMapping.values()){
                     a.setPotential(maxConfidence);
                 }
@@ -66,7 +82,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
             case SIMPLE:
                 for(MwbNode a : sourceNodeMapping.values()){
                     MwbEdge eMax = null;
-                    double cMax = 0.0;
+                    int cMax = 0;
                     for(MwbEdge e : a.getSuccessor()){
                         if(e.getWeight() > cMax){
                             eMax = e;
@@ -109,7 +125,15 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
         return result;
     }
     
-    
+    private static int convertDoubleToInt(double d, int multiplier){
+        double d2 = d * multiplier;
+        int i2 = (int)d2;
+        double residue = d2 - i2;
+        if(residue < 0.5){
+                return i2;
+        }
+        return i2+1;
+    }
     
     
     private static void augment(MwbNode a, PriorityQueue<MwbNode> PQ){
@@ -117,8 +141,8 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
         //initialization
         a.setDistance(0);
         MwbNode bestNodeInA = a;
-        double minA = a.getPotential();
-        double delta;
+        int minA = a.getPotential();
+        int delta;
         Stack<MwbNode> RA = new Stack<>();
         RA.push(a);
         Stack<MwbNode> RB = new Stack<>();
@@ -128,7 +152,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
         while(true){
             //select from PQ the node b with minimal distance db
             MwbNode b;
-            double db;
+            int db;
             if(PQ.isEmpty()){
                 b = null;
                 db = 0; //just any value
@@ -174,7 +198,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
         while(!RA.isEmpty()){
             MwbNode x = RA.pop();
             x.setPredecessor(null);
-            double potChange = delta - x.getDistance();
+            int potChange = delta - x.getDistance();
             if(potChange > 0)
                 x.setPotential(x.getPotential() - potChange);			
         }
@@ -182,7 +206,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
             MwbNode x = RB.pop();
             x.setPredecessor(null);
             PQ.remove(x);
-            double potChange = delta - x.getDistance();
+            int potChange = delta - x.getDistance();
             if(potChange > 0)
                 x.setPotential(x.getPotential() + potChange);
         }
@@ -199,7 +223,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
     private static void relaxAllEdges(MwbNode a1, Stack<MwbNode> RB, PriorityQueue<MwbNode> PQ){
         for(MwbEdge e : a1.getSuccessor()) {
             MwbNode b = e.getTarget();
-            double db = a1.getDistance() + (a1.getPotential() + b.getPotential() - e.getWeight());
+            int db = a1.getDistance() + (a1.getPotential() + b.getPotential() - e.getWeight());
             if(b.getPredecessor() == null){
                 b.setDistance(db);
                 b.setPredecessor(e);
