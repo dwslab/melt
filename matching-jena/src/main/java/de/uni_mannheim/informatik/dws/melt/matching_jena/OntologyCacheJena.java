@@ -50,7 +50,7 @@ public class OntologyCacheJena {
      * @param useCache Indicates whether the cache shall be used. If set to false, ontologies will not be held in memory but re-read every time time.
      * @return OntModel reference.
      */
-    public static OntModel get(String uri, OntModelSpec spec, boolean useCache) {
+    public static synchronized OntModel get(String uri, OntModelSpec spec, boolean useCache) {
         if (useCache) {
             String keyForCache = uri + "_" + spec.hashCode();
             OntModel model = ontologyCache.get(keyForCache);            
