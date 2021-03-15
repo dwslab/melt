@@ -426,7 +426,7 @@ public class StringOperations {
      * @param <T> Type of the Set.
      */
     public static <T> void writeSetToFile(File fileToWrite, Set<T> setToWrite) {
-        LOGGER.info("Start writing HashSet to File " + fileToWrite.getName());
+        LOGGER.info("Start writing Set to file '" + fileToWrite.getName() + "'");
         Iterator<T> iterator = setToWrite.iterator();
         try {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8));
@@ -446,6 +446,7 @@ public class StringOperations {
             } // end while
             writer.flush();
             writer.close();
+            LOGGER.info("Finished writing file '" + fileToWrite.getName() + "'");
         } catch (IOException e) {
             LOGGER.error("Could not write file.", e);
         }
@@ -483,7 +484,7 @@ public class StringOperations {
             LOGGER.error("File not found.", e);
             e.printStackTrace();
         } catch (IOException e) {
-            LOGGER.error("IOException occured.", e);
+            LOGGER.error("IOException occurred.", e);
             e.printStackTrace();
         }
         LOGGER.info("Entities read into cache.");
@@ -1080,5 +1081,4 @@ public class StringOperations {
         }
         return result.substring(0, result.length() - 2);
     }
-
 }

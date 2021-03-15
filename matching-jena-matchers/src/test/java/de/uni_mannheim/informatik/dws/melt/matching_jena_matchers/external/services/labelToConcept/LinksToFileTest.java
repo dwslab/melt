@@ -5,6 +5,8 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia.DBpediaKnowledgeSource;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia.DBpediaLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetKnowledgeSource;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorAllAnnotationProperties;
@@ -25,11 +27,14 @@ class LinksToFileTest {
 
     @AfterAll
     static void cleanUp(){
-        File fileToBeDeleted = new File("./trackLinks.txt");
-        if(fileToBeDeleted.exists()){
-            fileToBeDeleted.delete();
-        }
-        fileToBeDeleted = new File("./testCaseLinks.txt");
+        deleteFileIfExists("./trackLinks.txt");
+        deleteFileIfExists("./testCaseLinks.txt");
+        deleteFileIfExists("./testCaseLinksDBpedia.txt");
+        deleteFileIfExists("./tc_list_links.txt");
+    }
+
+    static void deleteFileIfExists(String filePath){
+        File fileToBeDeleted = new File(filePath);
         if(fileToBeDeleted.exists()){
             fileToBeDeleted.delete();
         }
@@ -96,13 +101,6 @@ class LinksToFileTest {
     }
 
     @Test
-    void typeAxiom(){
-        List<String> myList = new LinkedList<>();
-        myList.add("Hello");
-        assertEquals(String.class, myList.get(0).getClass());
-    }
-
-    @Test
     void writeLinksToFile() {
         try {
             File fileToBeWritten = new File("./trackLinks.txt");
@@ -154,6 +152,30 @@ class LinksToFileTest {
             String line;
             while ((line = reader.readLine()) != null) {
                 resultSet.add(line);
+            }
+            assertTrue(resultSet.size() > 10);
+        } catch (IOException ioe){
+            fail(ioe);
+        }
+    }
+
+    @Test
+    void testWriteLinksToFileMultiConceptLinker() {
+        File fileToBeWritten = new File("./testCaseLinksDBpedia.txt");
+        fileToBeWritten.deleteOnExit();
+        ValueExtractor extractor = new ValueExtractorAllAnnotationProperties();
+        LabelToConceptLinker linker = new DBpediaLinker(new DBpediaKnowledgeSource());
+        LinksToFile.writeLinksToFile(fileToBeWritten, TrackRepository.Conference.V1.getFirstTestCase(), extractor,
+                linker, 5);
+        assertTrue(fileToBeWritten.exists());
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileToBeWritten));
+            Set<String> resultSet = new HashSet<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                resultSet.add(line);
+                // make sure we do not get multi concept links
+                assertFalse(line.startsWith("#ML_"));
             }
             assertTrue(resultSet.size() > 10);
         } catch (IOException ioe){

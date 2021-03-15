@@ -5,7 +5,9 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.MultiConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorAllAnnotationProperties;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
 import org.apache.jena.util.iterator.ExtendedIterator;
@@ -25,7 +27,7 @@ import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.externa
  * Service class writing the links of a test case / track to a file.
  * (This can be helpful in some situations e.g. when pre-downloading certain external information or for
  * analyses.)
- * <p>
+ * <br>
  * If you are interest in linker coverage, use
  * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.statistics.Coverage}.
  */
@@ -33,6 +35,34 @@ public class LinksToFile {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LinksToFile.class);
+
+    /**
+     * Write all links of the tracks/testcases to one file (UTF-8 encoded).
+     *
+     * @param fileToWrite The file that shall be written.
+     * @param list        List of tracks or test cases (you cannot mix them).
+     * @param linker      The linker that shall be used.
+     * @param <T>         T must be {@link Track} or {@link TestCase} - otherwise this method will not work.
+     */
+    public static <T> void writeLinksToFile(@NotNull String fileToWrite,
+                                            @NotNull List<T> list,
+                                            @NotNull LabelToConceptLinker linker) {
+        writeLinksToFile(new File(fileToWrite), list, new ValueExtractorAllAnnotationProperties(), linker, 7);
+    }
+
+    /**
+     * Write all links of the tracks/testcases to one file (UTF-8 encoded).
+     *
+     * @param fileToWrite The file that shall be written.
+     * @param list        List of tracks or test cases (you cannot mix them).
+     * @param linker      The linker that shall be used.
+     * @param <T>         T must be {@link Track} or {@link TestCase} - otherwise this method will not work.
+     */
+    public static <T> void writeLinksToFile(@NotNull File fileToWrite,
+                                            @NotNull List<T> list,
+                                            @NotNull LabelToConceptLinker linker) {
+        writeLinksToFile(fileToWrite, list, new ValueExtractorAllAnnotationProperties(), linker, 7);
+    }
 
     /**
      * Write all links of the tracks/testcases to one file (UTF-8 encoded).
@@ -153,22 +183,23 @@ public class LinksToFile {
                 for (String label : labels) {
                     String link = linker.linkToSingleConcept(label);
                     if (link != null) {
-                        // full link could be found
-                        result.add(link);
+                        result.addAll(getUris(link, linker));
                     } else {
                         // go for partial links
                         String[] tokens = StringOperations.tokenizeBestGuess(label);
                         if (tokens.length < maxLabelTokenLength) {
                             Set<String> linkedConcepts = linker.linkToPotentiallyMultipleConcepts(label);
                             if (linkedConcepts != null) {
-                                result.addAll(linkedConcepts);
+                                for (String multiConceptSingleLink : linkedConcepts) {
+                                    result.addAll(getUris(multiConceptSingleLink, linker));
+                                }
                             }
 
                             // just to be sure: link all tokens
                             for (String token : tokens) {
                                 String tokenLink = linker.linkToSingleConcept(token);
                                 if (tokenLink != null) {
-                                    result.add(tokenLink);
+                                    result.addAll(getUris(tokenLink, linker));
                                 }
                             }
                         }
@@ -176,6 +207,16 @@ public class LinksToFile {
                 }
             }
         } // end of while loop
+        return result;
+    }
+
+    static @NotNull Set<String> getUris(String link, LabelToConceptLinker linker) {
+        Set<String> result = new HashSet<>();
+        if (linker instanceof MultiConceptLinker) {
+            result.addAll(((MultiConceptLinker) linker).getUris(link));
+        } else {
+            result.add(link);
+        }
         return result;
     }
 }

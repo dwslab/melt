@@ -87,7 +87,6 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
                 return lookupMap.get(modifiedConcept);
             }
         }
-
         return null;
     }
 
@@ -116,7 +115,6 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
         }
         return result;
     }
-
 
     @Override
     public Set<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
