@@ -2,10 +2,23 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extrac
 
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
@@ -109,7 +122,20 @@ public class TestExtractors {
     }
     
     @Test
-    void testRandomAlignment() throws SAXException, IOException{
+    void testSpecialAlignments() throws Exception {
+        //same checks as in hungarian
+        for(String alignmentPath : Arrays.asList("extractor_naive_error_simple_ok_alignment.rdf", "extractor_naive_ok_simple_error_alignment.rdf")){
+            Alignment alignment = new Alignment(TestExtractors.class.getClassLoader().getResourceAsStream(alignmentPath));
+            for(MwbInitHeuristic init : Arrays.asList(MwbInitHeuristic.NAIVE, MwbInitHeuristic.SIMPLE)){
+                Alignment mwbge = MaxWeightBipartiteExtractor.filter(new Alignment(alignment), init);
+                //just need to run though and do not hang in a while(true) loop
+            }
+        }
+    }
+    
+    
+    @Test
+    void testRandomSavedAlignment() throws SAXException, IOException{
         Alignment caseD = new Alignment(TestExtractors.class.getClassLoader().getResourceAsStream("randomAlignmentForTestingExtractors.xml"));
         Alignment hungarian = HungarianExtractor.filter(new Alignment(caseD));         
         for(MwbInitHeuristic init : Arrays.asList(MwbInitHeuristic.NAIVE, MwbInitHeuristic.SIMPLE)){
@@ -126,21 +152,43 @@ public class TestExtractors {
         for(MwbInitHeuristic init : Arrays.asList(MwbInitHeuristic.NAIVE, MwbInitHeuristic.SIMPLE)){
             Alignment mwbge = MaxWeightBipartiteExtractor.filter(new Alignment(caseE), init);
             assertEquals(hungarian, mwbge);
-        }        
-        
-        // following NOT suitable for general test, but good to see if it works...
-        /*
+        }
+    }
+    
+    
+    // following NOT suitable for general test, but good to see if it works...
+    //@Test
+    void testRandomAlignment() throws SAXException, IOException{
         for(int i=0; i<10; i++){
-            Alignment random = randomAlignment(500,500,1000);
+            LOGGER.info("generating random alignment. Run {}", i);
+            Alignment random = randomAlignment(250,250,1000);
+            LOGGER.info("running HungarianExtractor");
             Alignment hungarianRandom = HungarianExtractor.filter(new Alignment(random)); 
             for(MwbInitHeuristic init : Arrays.asList(MwbInitHeuristic.NAIVE, MwbInitHeuristic.SIMPLE)){
+                LOGGER.info("running MaxWeightBipartiteExtractor with {}", init);
                 Alignment mwbgeRandom = MaxWeightBipartiteExtractor.filter(new Alignment(random), init);
                 assertEquals(hungarianRandom, mwbgeRandom);
             }
         }
-        */
     }
     
+    // following NOT suitable for general test, but good to see if it works...
+    //@Test
+    void testMultiplier() throws SAXException, IOException{
+        for(int multiplier = 10; multiplier < 1000000; multiplier*=10){
+            for(int i=0; i<10; i++){
+                LOGGER.info("generating random alignment. Run {}", i);
+                Alignment random = randomAlignment(100,100,10000);
+                //LOGGER.info("running HungarianExtractor");
+                Alignment hungarianRandom = HungarianExtractor.filter(new Alignment(random)); 
+                for(MwbInitHeuristic init : Arrays.asList(MwbInitHeuristic.NAIVE, MwbInitHeuristic.SIMPLE)){
+                    //LOGGER.info("running MaxWeightBipartiteExtractor with {}", init);
+                    Alignment mwbgeRandom = MaxWeightBipartiteExtractor.filter(new Alignment(random), init, multiplier);
+                    LOGGER.info("multiplier: {} same: {}", multiplier, hungarianRandom.equals(mwbgeRandom));
+                }
+            }
+        }
+    }
     
     private static Alignment randomAlignment(int conceptsSource, int conceptsTargets, int correspondences){
         Random r = new Random();
@@ -192,4 +240,91 @@ public class TestExtractors {
 //                    + filteredHungarian.equals(filteredBipartiteSimple));
 //        }
 //    }
+    
+//    private static void alignmentToGephiCSV(Alignment alignment, File file){
+//        try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
+//            for(Correspondence cell : alignment){
+//                out.write(cell.getEntityOne().replace(";", "_") + ";" + cell.getEntityTwo().replace(";", "_"));
+//                out.newLine();
+//            }
+//        } catch (IOException ex) {}
+//    }
+//    
+//    private static void addMoreCorrespondencesUntilItFails(Alignment alignment, MwbInitHeuristic heuristic, boolean shuffle, File tmpFile) throws IOException{
+//        Alignment cumulated = new Alignment();
+//        List<Correspondence> l = new ArrayList<>(alignment);
+//        if(shuffle)
+//            Collections.shuffle(l);
+//        for(Correspondence c : l){
+//            cumulated.add(c);
+//            cumulated.serialize(tmpFile);
+//            LOGGER.info("Run with {}/{}", cumulated.size(), alignment.size());
+//            MaxWeightBipartiteExtractor.filter(cumulated, heuristic);
+//        }
+//    }
+//    
+//    private static void removeOnlyOneCorrespondenceAndCheck(Alignment alignment, MwbInitHeuristic heuristic, File tmpFile) throws IOException{
+//        for(Correspondence c : alignment){
+//            Alignment tmpAlignment = new Alignment(alignment);
+//            tmpAlignment.remove(c);
+//            tmpAlignment.serialize(tmpFile);
+//            LOGGER.info("Run with {}/{}", tmpAlignment.size(), alignment.size());
+//            MaxWeightBipartiteExtractor.filter(tmpAlignment, heuristic);
+//        }
+//    }
+//    
+//    private static void removeAsLongAsItFails(Alignment alignment, MwbInitHeuristic heuristic, File tmpFile) throws IOException{
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//        while(true){
+//            LOGGER.info("Run");
+//            ExtractorCallerAlignment x = new ExtractorCallerAlignment(alignment, heuristic);
+//            try {
+//                executor.submit(x).get(5, TimeUnit.SECONDS);
+//            } catch (ExecutionException | InterruptedException | TimeoutException ex) {
+//                LOGGER.info("Timeout");
+//                alignment = x.testAlignment;
+//                alignment.serialize(tmpFile);
+//            }
+//        }
+//    }
+//    
+//    
+//    public static void main(String[] args) throws IOException, SAXException {
+//        Alignment alignment = new Alignment(TestExtractors.class.getClassLoader().getResourceAsStream("extractor_naive_error_simple_ok_alignment.rdf"));
+//        //Alignment alignment = new Alignment(new File("blaaaaaaaaa.rdf"));
+//        
+//        //LOGGER.info("SIMPLE");
+//        //MaxWeightBipartiteExtractor.filter(alignment, MwbInitHeuristic.SIMPLE);
+//        LOGGER.info("NAIVE");
+//        MaxWeightBipartiteExtractor.filter(alignment, MwbInitHeuristic.NAIVE);
+//        LOGGER.info("Finish");
+//        
+//        
+//        //Alignment alignment = new Alignment(new File("bla.rdf"));
+//        //addMoreCorrespondencesUntilItFails(alignment, MwbInitHeuristic.NAIVE, false, new File("bla.rdf"));
+//        
+//        //alignmentToGephiCSV(alignment, new File("bla.csv"));
+//        
+//        //addMoreCorrespondencesUntilItFails(alignment, MwbInitHeuristic.NAIVE, false, new File("bla_2.rdf"));
+//        //removeOnlyOneCorrespondenceAndCheck(alignment, MwbInitHeuristic.SIMPLE, new File("extractor_naive_ok_simple_error_alignment_sample_next.rdf"));
+//    }
+    
 }
+
+//class ExtractorCallerAlignment implements Runnable{
+//    public Alignment testAlignment;
+//    private MwbInitHeuristic heuristic;
+//    
+//    public ExtractorCallerAlignment(Alignment a, MwbInitHeuristic heuristic){
+//        this.heuristic = heuristic;
+//        List<Correspondence> l = new ArrayList<>(a);
+//        Collections.shuffle(l);
+//        testAlignment = new Alignment(a);
+//        testAlignment.remove(l.get(0));
+//    }
+//
+//    @Override
+//    public void run() {
+//        MaxWeightBipartiteExtractor.filter(testAlignment, heuristic);
+//    }
+//}

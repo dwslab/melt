@@ -1,15 +1,14 @@
 package de.uni_mannheim.informatik.dws.melt.matching_data;
-import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
-import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
-import de.uni_mannheim.informatik.dws.melt.matching_owlapi.OntologyCacheOwlApi;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Objects;
-import org.apache.jena.ontology.OntModel;
-import org.semanticweb.owlapi.model.OWLOntology;
+import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -145,41 +144,56 @@ public class TestCase {
     //convenient methods for retrieving parsed ontologies
     
     /**
-     * Get the source ontology using a buffer and the default OntModelSpec.
+     * Get the source ontology.
      * @param clazz The result type that is expected.
      * @param <T> Type of the ontology class e.g. OntModel
      * @return Source ontology in the specified format.
      */
-    @SuppressWarnings("unchecked")
     public <T> T getSourceOntology(Class<T> clazz){
-        if(clazz == OntModel.class){
-            // return ontology model using default specification and cache
-            return (T) OntologyCacheJena.get(getSource().toString());
-        }else if(clazz == OWLOntology.class){
-            return (T) OntologyCacheOwlApi.get(getSource().toString());
-        } else {
-            LOGGER.error("Cannot get source ontology for the class type provided.");
+        return getSourceOntology(clazz, new Properties());
+    }
+    
+    /**
+     * Get the source ontology.
+     * @param clazz The result type that is expected.
+     * @param parameters parameters for the transformation of URL to corresponding model type.
+     * @param <T> Type of the ontology class e.g. OntModel
+     * @return Source ontology in the specified format.
+     */
+    public <T> T getSourceOntology(Class<T> clazz, Properties parameters){
+        try {
+            return TypeTransformerRegistry.getTransformedObject(getSource().toURL(), clazz, parameters);
+        } catch (MalformedURLException | TypeTransformationException ex) {
+            LOGGER.error("Could not return the parsed source ontology.", ex);
             return null;
         }
     }
-
+    
     /**
-     * Get the target ontology using a buffer and the default OntModelSpec.
+     * Get the target ontology.
      * @param clazz The result type that is expected.
      * @param <T> Type of the ontology class e.g. OntModel
      * @return Target ontology in the specified format.
      */
-    @SuppressWarnings("unchecked")
     public <T> T getTargetOntology(Class<T> clazz){
-        if(clazz == OntModel.class){
-            // return ontology model using default specification and cache
-            return (T) OntologyCacheJena.get(getTarget().toString());
-        } else {
-            LOGGER.error("Cannot get source ontology for the class type provided.");
+        return getTargetOntology(clazz, new Properties());
+    }
+    
+    /**
+     * Get the target ontology.
+     * @param clazz The result type that is expected.
+     * @param parameters parameters for the transformation of URL to corresponding model type.
+     * @param <T> Type of the ontology class e.g. OntModel
+     * @return Target ontology in the specified format.
+     */
+    public <T> T getTargetOntology(Class<T> clazz, Properties parameters){
+        try {
+            return TypeTransformerRegistry.getTransformedObject(getTarget().toURL(), clazz, parameters);
+        } catch (MalformedURLException | TypeTransformationException ex) {
+            LOGGER.error("Could not return the parsed source ontology.", ex);
             return null;
         }
     }
-
 
     /**
      * This method parses the reference alignment and returns it.

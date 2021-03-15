@@ -15,11 +15,11 @@ class MwbNode implements Comparable<MwbNode>{
     /**
      * The potenial as given in the algorithm.
      */
-    private double potential;
+    private int potential;
     /**
      * Shortest path property for distance.  
      */
-    private double distance;
+    private int distance;
     /**
      * Is the node already matched.
      */
@@ -32,8 +32,8 @@ class MwbNode implements Comparable<MwbNode>{
 
     public MwbNode() {
         this.successor = new HashSet<>();
-        this.potential = 0.0;
-        this.distance = 0.0;
+        this.potential = 0;
+        this.distance = 0;
         this.free = true;
         this.predecessor = null;
     }
@@ -46,19 +46,19 @@ class MwbNode implements Comparable<MwbNode>{
         this.successor.remove(e);
     }    
 
-    public double getPotential() {
+    public int getPotential() {
         return potential;
     }
 
-    public void setPotential(double potential) {
+    public void setPotential(int potential) {
         this.potential = potential;
     }
 
-    public double getDistance() {
+    public int getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(int distance) {
         this.distance = distance;
     }
     public boolean isFree() {
@@ -87,6 +87,6 @@ class MwbNode implements Comparable<MwbNode>{
 
     @Override
     public int compareTo(MwbNode o) {
-        return Double.compare(distance, o.distance);
+        return Integer.compare(distance, o.distance);
     }
 }
