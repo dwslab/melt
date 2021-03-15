@@ -8,7 +8,8 @@ import java.net.URL;
  * @author Sven Hertling
  */
 public abstract class MatcherFile extends MatcherURL {
-    
+
+
     protected static final String FILE_PREFIX = "alignment";
     protected static final String FILE_SUFFIX = ".rdf";
         

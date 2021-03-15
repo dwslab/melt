@@ -34,11 +34,11 @@ public class ExecutorParallel {
     /**
      * Run the given matchers in parallel. Make sure the matcher can be run in parallel.
      * @param testCases the testcases on which the matcher should be run
-     * @param matchers the matchers
+     * @param matchers The matchers in a map where the key represents the name of the matcher, and the value is the
+     *                 matcher instance.
      * @return ExecutionResultSet
      */
     public ExecutionResultSet run(List<TestCase> testCases, Map<String, IOntologyMatchingToolBridge> matchers) {
-
         ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
 
         List<Future<ExecutionResult>> futures = new ArrayList<>(testCases.size() * matchers.size());
@@ -71,7 +71,6 @@ public class ExecutorParallel {
         }
         return run(testCases, matchers);
     }
-    
 }
 //to run in parallel use ExecutorService 
 //https://stackoverflow.com/questions/21156599/javas-fork-join-vs-executorservice-when-to-use-which

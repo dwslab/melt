@@ -16,6 +16,7 @@ import eu.sealsproject.platform.res.tool.impl.AbstractPlugin;
  */
 public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatchingToolBridge {
 
+
     /**
      * Aligns two ontologies specified via their URL and returns the URL of the
      * resulting alignment, which should be stored locally.
@@ -26,8 +27,8 @@ public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatc
      * stored locally
      */
     @Override
-    public URL align(URL source, URL target) throws ToolBridgeException, ToolException {
-        return align(source, target, (URL) null);
+    public URL align(URL source, URL target) throws ToolBridgeException {
+        return align(source, target, null);
     }
 
     /**
@@ -42,7 +43,7 @@ public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatc
      * stored locally in the alignment format http://alignapi.gforge.inria.fr/format.html
      */
     @Override
-    public URL align(URL source, URL target, URL inputAlignment) throws ToolBridgeException, ToolException {
+    public URL align(URL source, URL target, URL inputAlignment) throws ToolBridgeException {
         try {
             return match(source, target, inputAlignment);
         } catch (Exception ex) {
@@ -50,14 +51,15 @@ public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatc
         }
     }
 
-    
     /**
      * Match two ontologies / knowledge graphs together and returns an alignment.
      * @param source the source ontology / knowledge graph
      * @param target the target ontology / knowledge graph
-     * @param inputAlignment the input alignment as URL (<a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">alignment API format</a>)
-     * @return an alignment as URL (most often as file URL) the format is again the <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">alignment API format</a>.
-     * @throws Exception in case something went wrong
+     * @param inputAlignment the input alignment as URL
+     *                       (<a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">alignment API format</a>)
+     * @return An alignment as URL (most often as file URL) the format is again the
+     * <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">alignment API format</a>.
+     * @throws Exception in case something went wrong.
      */
     public abstract URL match(URL source, URL target, URL inputAlignment) throws Exception;
 

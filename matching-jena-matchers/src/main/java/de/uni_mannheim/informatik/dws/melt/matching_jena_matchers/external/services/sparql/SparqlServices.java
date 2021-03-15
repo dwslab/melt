@@ -35,7 +35,7 @@ public class SparqlServices {
             try {
                 TimeUnit.SECONDS.sleep(15);
             } catch (InterruptedException ie) {
-                ie.printStackTrace();
+                LOGGER.error("Interrupted exception.", ie);
             }
             LOGGER.error("Retry");
             results = queryExecutionInstance.execSelect();
@@ -59,7 +59,7 @@ public class SparqlServices {
             try {
                 TimeUnit.SECONDS.sleep(15);
             } catch (InterruptedException ie) {
-                ie.printStackTrace();
+                LOGGER.error("Interrupted exception.", ie);
             }
             LOGGER.error("Retry.");
             result = queryExecutionInstance.execAsk();

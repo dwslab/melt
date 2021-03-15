@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -416,23 +417,22 @@ public class StringOperations {
     }
 
     /**
-     * This method writes the content of a {@code HashSet<String>} to a file.
+     * This method writes the content of a {@code Set<String>} to a file. The file will be UTF-8 encoded.
      *
      * @param fileToWrite    File which will be created and in which the data will
      *                       be written.
-     * @param hashSetToWrite HashSet whose content will be written into fileToWrite.
+     * @param setToWrite Set whose content will be written into fileToWrite.
+     * @param <T> Type of the Set.
      */
-    public static void writeHashSetToFile(File fileToWrite, HashSet<String> hashSetToWrite) {
-
-        System.out.println("Start writing HashSet to File " + fileToWrite.getName());
-        Iterator<String> iterator = hashSetToWrite.iterator();
+    public static <T>  void writeSetToFile(File fileToWrite, Set<T> setToWrite) {
+        LOGGER.info("Start writing HashSet to File " + fileToWrite.getName());
+        Iterator<T> iterator = setToWrite.iterator();
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileToWrite));
-            String line = "";
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8));
+            String line;
             boolean firstLine = true;
-
             while (iterator.hasNext()) {
-                line = iterator.next();
+                line = iterator.next().toString();
                 if (!(line.equals("") || line.equals("\n"))) { // do not write empty lines or just line breaks
                     if (firstLine) {
                         writer.write(line);
@@ -446,8 +446,7 @@ public class StringOperations {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
-            return;
+            LOGGER.error("Could not write file.", e);
         }
     }
 

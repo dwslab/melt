@@ -13,21 +13,21 @@ import java.util.Properties;
  * A matcher template for matchers that are based on the YAAA Framework.
  * @author Sven Hertling
  */
-public abstract class MatcherYAAA extends MatcherFile{
+public abstract class MatcherYAAA extends MatcherFile {
+
 
     @Override
     public void match(URL source, URL target, URL inputAlignment, File alignmentFile) throws Exception {
-
-        Alignment m = new Alignment();
+        Alignment alignment = new Alignment();
         
         if(inputAlignment != null){
-            m = AlignmentParser.parse(inputAlignment);
+            alignment = AlignmentParser.parse(inputAlignment);
         }
         Properties p = new Properties();
         
-        m = this.match(source, target, m, p);
+        alignment = this.match(source, target, alignment, p);
         
-        AlignmentSerializer.serialize(m, alignmentFile);
+        AlignmentSerializer.serialize(alignment, alignmentFile);
     }
 
     /**
@@ -45,5 +45,4 @@ public abstract class MatcherYAAA extends MatcherFile{
      * @throws Exception An exception that was risen while matching.
      */
     public abstract Alignment match(URL source, URL target, Alignment inputAlignment, Properties properties) throws Exception ;
-    
 }

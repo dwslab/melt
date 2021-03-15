@@ -143,7 +143,6 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         match(ontology1.listClasses(), ontology2.listClasses());
         match(ontology1.listDatatypeProperties(), ontology2.listDatatypeProperties());
         match(ontology1.listObjectProperties(), ontology2.listObjectProperties());
-        match(ontology1.listDatatypeProperties(), ontology2.listDatatypeProperties());
         LOGGER.info("Mapping Completed");
         return this.alignment;
     }
@@ -378,7 +377,6 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         for (HashMap.Entry<String, List<Set<String>>> uri2links_1 : uri2linksMap_1.entrySet()) {
             for (HashMap.Entry<String, List<Set<String>>> uri2links_2 : uri2linksMap_2.entrySet()) {
                 if (isLinkListSynonymous(uri2links_1.getValue(), uri2links_2.getValue())) {
-
                     HashMap<String, Object> extensions = new HashMap<>();
                     extensions.put("http://custom#addedInStep", "longsestStringMatch");
                     alignment.add(uri2links_1.getKey(), uri2links_2.getKey(), 1.0, CorrespondenceRelation.EQUIVALENCE, extensions);
@@ -474,7 +472,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
             List<Set<String>> list = new LinkedList<>();
             for (String label : uri2labels.getValue()) {
-                if(StringOperations.tokenizeBestGuess(label).length > multiConceptLinkerUpperLimit) {
+                if(StringOperations.tokenizeBestGuess(label).length < multiConceptLinkerUpperLimit) {
                     Set<String> linkedConcepts = linker.linkToPotentiallyMultipleConcepts(label);
                     if (linkedConcepts != null) {
                         list.add(linkedConcepts);

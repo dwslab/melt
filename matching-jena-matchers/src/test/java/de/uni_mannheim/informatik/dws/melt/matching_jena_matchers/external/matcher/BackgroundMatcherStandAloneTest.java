@@ -36,4 +36,18 @@ class BackgroundMatcherStandAloneTest {
             fail(e);
         }
     }
+
+    @Test
+    void getSetName(){
+        BackgroundMatcherStandAlone backgroundMatcher = new BackgroundMatcherStandAlone(new WordNetKnowledgeSource(),
+                ImplementedBackgroundMatchingStrategies.SYNONYMY, 0.0);
+
+        String matcherName1 = "My Super Matcher";
+        backgroundMatcher.setName(matcherName1);
+        assertEquals(matcherName1, backgroundMatcher.getName());
+
+        String matcherName2 = "My Super Matcher 2";
+        backgroundMatcher.setName(matcherName2);
+        assertEquals(matcherName2, backgroundMatcher.getName());
+    }
 }

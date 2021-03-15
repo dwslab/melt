@@ -50,14 +50,13 @@ public abstract class MatcherYAAAJena extends MatcherYAAA implements IMatcher<On
      * Note: This method might be called multiple times in a row when using the evaluation framework.
      * Make sure to return a mapping which is specific to the given inputs.
      *
-     * @param source this OntModel represents the source ontology
-     * @param target this OntModel represents the target ontology
-     * @param inputAlignment this mapping represents the input alignment
-     * @param properties additional properties
-     * @return The resulting mapping of the matching process.
-     * @throws Exception any exception which occurs during matching
+     * @param source This OntModel represents the source ontology.
+     * @param target This OntModel represents the target ontology.
+     * @param inputAlignment This mapping represents the input alignment.
+     * @param properties Additional properties.
+     * @return The resulting alignment of the matching process.
+     * @throws Exception Any exception which occurs during matching.
      */
     @Override
     public abstract Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception ;
-
 }
