@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.nlp.PorterStemmer;
+import org.jetbrains.annotations.NotNull;
 import org.simmetrics.metrics.Levenshtein;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -424,7 +425,7 @@ public class StringOperations {
      * @param setToWrite Set whose content will be written into fileToWrite.
      * @param <T> Type of the Set.
      */
-    public static <T>  void writeSetToFile(File fileToWrite, Set<T> setToWrite) {
+    public static <T> void writeSetToFile(File fileToWrite, Set<T> setToWrite) {
         LOGGER.info("Start writing HashSet to File " + fileToWrite.getName());
         Iterator<T> iterator = setToWrite.iterator();
         try {
@@ -448,6 +449,45 @@ public class StringOperations {
         } catch (IOException e) {
             LOGGER.error("Could not write file.", e);
         }
+    }
+
+    /**
+     * Reads a Set from the file as specified by the file path.
+     *
+     * @param filePath The path to the file that is to be read.
+     * @return The parsed file as HashSet.
+     */
+    public static @NotNull Set<String> readSetFromFile(String filePath) {
+        return readSetFromFile(new File(filePath));
+    }
+
+    /**
+     * Reads a Set from the file as specified by the file.
+     *
+     * @param file The file that is to be read.
+     * @return The parsed file as HashSet.
+     */
+    public static @NotNull Set<String> readSetFromFile(File file) {
+        Set<String> result = new HashSet<>();
+        if (!file.exists()) {
+            LOGGER.error("File does not exist.");
+            return result;
+        }
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.add(line);
+            }
+        } catch (FileNotFoundException e) {
+            LOGGER.error("File not found.", e);
+            e.printStackTrace();
+        } catch (IOException e) {
+            LOGGER.error("IOException occured.", e);
+            e.printStackTrace();
+        }
+        LOGGER.info("Entities read into cache.");
+        return result;
     }
 
     /**
