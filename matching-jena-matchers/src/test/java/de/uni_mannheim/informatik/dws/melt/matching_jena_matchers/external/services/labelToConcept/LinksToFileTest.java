@@ -43,7 +43,7 @@ class LinksToFileTest {
     @Test
     void writeLinksToFileListTestCase(){
         List<TestCase> myList = new LinkedList<>();
-        myList.add(TrackRepository.Conference.V1.getFirstTestCase());
+        myList.add(TrackRepository.Conference.V1.getTestCase("confof-iasted"));
         myList.add(TrackRepository.Anatomy.Default.getFirstTestCase());
         File fileToBeWritten = new File("./tc_list_links.txt");
         fileToBeWritten.deleteOnExit();
