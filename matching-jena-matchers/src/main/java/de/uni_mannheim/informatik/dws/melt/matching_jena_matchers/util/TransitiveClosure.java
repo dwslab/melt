@@ -99,4 +99,22 @@ public class TransitiveClosure <T> {
     public Collection<Set<T>> getClosure(){
         return this.idToClosure.values();
     }
+    
+    
+    public boolean belongToTheSameCluster(T... elements){
+        return belongToTheSameCluster(Arrays.asList(elements));
+    }
+    
+    public boolean belongToTheSameCluster(Iterable<T> elements){
+        Set<Integer> foundClosureIDs = new HashSet<>();        
+        for(T element : elements){
+            Integer closureID = this.objectToId.get(element);
+            if(closureID == null){
+                return false;
+            }else{
+                foundClosureIDs.add(closureID);
+            }
+        }            
+        return foundClosureIDs.size() <= 1;        
+    }
 }
