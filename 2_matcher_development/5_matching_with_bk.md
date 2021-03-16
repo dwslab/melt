@@ -13,6 +13,8 @@ MELT supports multiple external sources of background knowledge for matching:
 3. [Wikidata](#matching-with-wikidata)
 4. [DBpedia](#matching-with-dbpedia)
 5. [BabelNet](#matching-with-babelnet)
+6. [WebIsALOD](#matching-with-webisalod)
+
 
 ## Core Concepts
 The related classes/implementations can be found in [`de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external`](https://github.com/dwslab/melt/tree/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external).
@@ -53,4 +55,16 @@ Create a TDB dataset (see instructions above) which is comprised of at least the
 A full overview of DBpedia download links can be found on the [databus Web page](https://databus.dbpedia.org/dbpedia/collections/latest-core). 
 
 ## Matching with BabelNet
-[BabelNet](https://babelnet.org/) is a very large multilingual knowledge graph that combines multiple other sources such as Wikipedia, WordNet, and Wiktionary. Unlike the other sources of background knowledge, BabelNet cannot be easily mass-queried. Researchers can ask for the Lucene indices. Those are required to run the MELT BabelNet module.
+[BabelNet](https://babelnet.org/) is a very large multilingual knowledge graph that combines multiple other sources such as Wikipedia, WordNet, and Wiktionary. Unlike the other sources of background knowledge, BabelNet cannot be easily mass-queried. Researchers need to ask for the Lucene indices. Those are required to run the MELT BabelNet module. The core class is [`BabelNetKnowledgeSource`](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/babelnet/BabelNetKnowledgeSource.java).
+
+In order to use BabelNet, perform the following steps:
+1) Obtain the BabelNet indices (you can request them via the BabelNet Web site).
+2) Copy the [`config`](https://github.com/dwslab/melt/tree/master/matching-jena-matchers/config) folder to your project root.
+3) Set the `babelnet.dir` in the [`template_babelnet.var.properties`](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/config/template_babelnet.var.properties) file and rename it to `babelnet.var.properties`. The `babelnet.dir` property needs contain the directory where the BabelNet indices are stored.
+4) Download the [WordNet database files](https://wordnet.princeton.edu/download/current-version).
+5) Set the `jlt.wordnetVersion` and the `jlt.wordnetPrefix` in  [`template_jlt.var.properties`](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/config/template_jlt.var.properties). Rename the file to `jlt.var.properties`.
+
+If you build a JAR file, make sure that the config directory exists in the same directory in which the JAR is executed.
+
+## Matching with WebIsALOD
+[WebIsALOD](http://webisa.webdatacommons.org/) is a large RDF graph consisting of Web crawled hypernymy relations. The graph is available in two flavors: A filtered version containing less noise (referred to in the implementation as `WebIsAlod`**`Classic`**) and the full version containing a decent amount of noise (referred to in the implementation as `WebIsAlod`**`XL`**). The core classes are [`WebIsAlodClassicKnowledgeSource`](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/classic/WebIsAlodClassicKnowledgeSource.java) and [`WebIsAlodXLKnowledgeSource`](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/xl/WebIsAlodXLKnowledgeSource.java).
