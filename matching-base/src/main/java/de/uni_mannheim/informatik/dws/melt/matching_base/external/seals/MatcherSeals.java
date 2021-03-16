@@ -241,10 +241,13 @@ public class MatcherSeals extends MatcherFile{
             
             sealsProcess.addArgument(this.javaCommand);
             if (this.javaRuntimeParameters != null) sealsProcess.addArguments(this.javaRuntimeParameters);
-            sealsProcess.addArguments("-jar", this.sealsClientJar.getAbsolutePath(), currentInstance.getAbsolutePath(),
-                    "-o", source.toString(), target.toString());
-            if(inputAlignment != null)
-                sealsProcess.addArgument(inputAlignment.toString());
+            
+            sealsProcess.addArguments("-jar", this.sealsClientJar.getAbsolutePath(), currentInstance.getAbsolutePath());
+            if(inputAlignment == null){
+                sealsProcess.addArguments("-o", source.toString(), target.toString());
+            }else{
+                sealsProcess.addArguments("-oi", source.toString(), target.toString(), inputAlignment.toString());
+            }
             sealsProcess.addArguments("-f", alignmentResult.getAbsolutePath(), "-z");
             
             sealsProcess.setWorkingDirectory(this.sealsHome);
