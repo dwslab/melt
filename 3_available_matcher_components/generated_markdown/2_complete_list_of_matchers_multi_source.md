@@ -41,6 +41,27 @@ Matches multiple ontologies / knowledge graphs with an incremental merge approac
 
 *Keywords: Multi Source Dispatcher Incremental Merge By Cluster Text*
 
+## MultiSourceDispatcherSomePairsOrderBased [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherSomePairsOrderBased.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherSomePairsOrderBased.java)
+
+This dispatcher will match multiple ontologies by selecting a few pairs.
+ First the ontologies will be sorted by a given comparator.
+ As an example A, B, C, D.
+ Afterwards two possible matching strategies are possible:
+ <ul>
+ <li>firstVsRest (constructor parameter) is true: it will match (A,B) ; (A,C) ; (A,D)</li>
+ <li>firstVsRest (constructor parameter) is false: it will match (A,B) ; (B,C) ; (C,D)</li>
+ </ul>
+ Some comparators can be found at MultiSourceDispatcherIncrementalMergeByOrder as static attributes.
+
+*Keywords: Multi Source Dispatcher Some Pairs Order Based*
+
+## MultiSourceDispatcherSomePairsTextBased [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherSomePairsTextBased.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherSomePairsTextBased.java)
+
+This dispatcher will compare the texts in a model and match the ones which are textually the clostest such that a connection between all ontologies exists.
+ Therefore exactly (number of models)-1 matching operations and no merges are executed.
+
+*Keywords: Multi Source Dispatcher Some Pairs Text Based*
+
 ## MultiSourceDispatcherAllPairs [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherAllPairs.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherAllPairs.java)
 
 
