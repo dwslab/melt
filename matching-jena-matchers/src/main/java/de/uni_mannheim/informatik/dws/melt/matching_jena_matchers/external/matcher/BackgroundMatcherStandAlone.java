@@ -30,6 +30,11 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
     private BackgroundMatcher backgroundMatcher;
 
     /**
+     * The name of the matcher.
+     */
+    private String name;
+
+    /**
      * Constructor
      * @param backgroundKnowledgeSource The background knowledge source to be used.
      * @param strategy The strategy to be applied.
@@ -38,7 +43,6 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
     public BackgroundMatcherStandAlone(SemanticWordRelationDictionary backgroundKnowledgeSource,
                                        ImplementedBackgroundMatchingStrategies strategy,
                                        double threshold){
-
         this.backgroundKnowledgeSource = backgroundKnowledgeSource;
         this.strategy = strategy;
         this.threshold = threshold;
@@ -71,5 +75,13 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
      */
     public void setAllowForCumulativeMatches(boolean allowForCumulativeMatches) {
         this.backgroundMatcher.setAllowForCumulativeMatches(allowForCumulativeMatches);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -1,7 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiktionary;
 
-
-
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.LeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.MaxGramLeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.StringModifier;
@@ -16,7 +14,6 @@ import java.util.LinkedList;
 
 /**
  * This linker can link strings to dictionary entries. 
- * @author D060249
  *
  */
 public class WiktionaryLinker implements LabelToConceptLinker {

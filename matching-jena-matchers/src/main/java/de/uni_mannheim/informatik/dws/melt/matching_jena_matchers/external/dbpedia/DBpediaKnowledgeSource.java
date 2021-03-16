@@ -6,6 +6,8 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Seman
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices;
 import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.shared.Lock;
 import org.apache.jena.tdb.TDBFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -78,6 +80,11 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
     private Dataset tdbDataset;
 
     /**
+     * TDB modeltdbDataset.getDefaultModel()
+     */
+    private Model tdbModel;
+
+    /**
      * Default constructor. SPARQL endpoint will be queried.
      * Disk buffer is enabled by default.
      */
@@ -120,7 +127,8 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
         }
         this.isUseTdb = true;
         tdbDataset = TDBFactory.createDataset(tdbDirectoryPath);
-        tdbDataset.begin(ReadWrite.READ);
+        tdbModel = tdbDataset.getDefaultModel();
+        //tdbDataset.begin(ReadWrite.READ);
 
         this.isDiskBufferEnabled = isDiskBufferEnabled;
         initializeMembers();
@@ -181,7 +189,8 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
         String queryString = getSynonymsLexicalQuery(linkedConcept);
         QueryExecution queryExecution;
         if(isUseTdb){
-            queryExecution = QueryExecutionFactory.create(queryString, tdbDataset);
+            tdbModel.enterCriticalSection(Lock.READ);
+            queryExecution = QueryExecutionFactory.create(queryString, tdbModel);
         } else {
             queryExecution = QueryExecutionFactory.sparqlService(getEndpointUrl(), queryString);
         }
@@ -192,6 +201,9 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
             result.add(label);
         }
         queryExecution.close();
+        if(isUseTdb){
+            tdbModel.leaveCriticalSection();
+        }
         result.remove("");
         synonymyBuffer.put(key, result);
         commitAll();
@@ -264,7 +276,8 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
         QueryExecution queryExecution;
 
         if(isUseTdb){
-            queryExecution = QueryExecutionFactory.create(queryString, tdbDataset);
+            tdbModel.enterCriticalSection(Lock.READ);
+            queryExecution = QueryExecutionFactory.create(queryString, tdbModel);
         } else {
             queryExecution = QueryExecutionFactory.sparqlService(getEndpointUrl(), queryString);
         }
@@ -276,6 +289,9 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
             result.add(hypernym);
         }
         queryExecution.close();
+        if(isUseTdb){
+            tdbModel.leaveCriticalSection();
+        }
 
         // we add to the buffer before excluding hypernyms
         hypernymyBuffer.put(key, result);

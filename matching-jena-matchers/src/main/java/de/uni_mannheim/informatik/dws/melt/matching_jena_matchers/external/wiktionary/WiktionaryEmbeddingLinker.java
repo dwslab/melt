@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embed
 
 public class WiktionaryEmbeddingLinker extends LabelToConceptLinkerEmbeddings {
 
+
     private String nameOfLinker = "WiktionaryEmbeddingLinker";
 
     public WiktionaryEmbeddingLinker(String filePathToEntityFile) {

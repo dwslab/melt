@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiki
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.MultiConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.LeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.MaxGramLeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.*;
@@ -26,7 +27,7 @@ import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.externa
  * The {@link WikidataLinker#linkToSingleConcept(String)} method, for example, will return a multi label link.
  * In order to obtain the <em>actual</em> Wikidata URIs, use method {@link WikidataLinker#getUris(String)}.
  */
-public class WikidataLinker implements LabelToConceptLinker {
+public class WikidataLinker implements LabelToConceptLinker, MultiConceptLinker {
 
 
     /**
