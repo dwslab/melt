@@ -9,6 +9,12 @@ class WordNetKnowledgeSourceTest {
 
 
     @Test
+    void getIdGivenLink(){
+        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
+        wordnet.getIdGivenLink("dog");
+    }
+
+    @Test
     void testIsSynonymous() {
         WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         assertTrue(wordnet.isSynonymous("dog", "hound"));

@@ -148,6 +148,7 @@
                     <show>private</show>
                     <nohelp>true</nohelp>
                     <failOnWarnings>true</failOnWarnings>
+                    <notimestamp>true</notimestamp>
                 </configuration>
                 <executions>
                     <execution>

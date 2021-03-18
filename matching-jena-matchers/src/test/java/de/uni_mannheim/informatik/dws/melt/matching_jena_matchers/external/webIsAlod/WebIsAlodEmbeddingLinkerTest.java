@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WebIsAlodEmbeddingLinkerTest {
 
+
     @Test
     void linkToSingleConcept(){
         String pathToAlodEntityFile = loadFile("alod_entity_test_file.txt").getAbsolutePath();

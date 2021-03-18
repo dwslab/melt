@@ -10,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,15 +35,15 @@ class PythonServerTest {
 
     @AfterAll
     public static void tearDown(){
-        pythonServer.shutDown();
+        PythonServer.shutDown();
     }
 
-    private static Logger LOGGER = LoggerFactory.getLogger(PythonServerTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PythonServerTest.class);
 
-    @Test
     /**
      * Default test with cache.
      */
+    @Test
     void isInVocabulary() {
         pythonServer.setVectorCaching(true);
         // test case 1: model file
@@ -58,9 +60,14 @@ class PythonServerTest {
     }
 
     @Test
+    void checkRequirements(){
+        assertTrue(PythonServer.checkRequirements());
+    }
+
     /**
      * Default test without cache.
      */
+    @Test
     void isInVocabularyNoCaching() {
         pythonServer.setVectorCaching(false);
         // test case 1: model file
@@ -76,10 +83,11 @@ class PythonServerTest {
         assertFalse(pythonServer.isInVocabulary("China", pathToVectorFile));
     }
 
-    @Test
+
     /**
      * Default test with cache.
      */
+    @Test
     void getSimilarity() {
         pythonServer.setVectorCaching(true);
         // test case 1: model file
@@ -111,24 +119,24 @@ class PythonServerTest {
     void testMultipleShutdownCallsAndRestarts() {
         pythonServer.setVectorCaching(false);
         // test case 1: model file
-        pythonServer.shutDown();
+        PythonServer.shutDown();
         pythonServer = PythonServer.getInstance();
         String pathToModel = getPathOfResource("test_model");
         double similarity = pythonServer.getSimilarity("Europe", "united", pathToModel);
         assertTrue(similarity > 0);
 
         // test case 2: vector file
-        pythonServer.shutDown();
+        PythonServer.shutDown();
         pythonServer = PythonServer.getInstance();
         String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
         similarity = pythonServer.getSimilarity("Europe", "united", pathToVectorFile);
         assertTrue(similarity > 0);
     }
 
-    @Test
     /**
      * Default test with cache.
      */
+    @Test
     void getVector() {
         pythonServer.setVectorCaching(true);
         // test case 1: vector file
@@ -138,7 +146,7 @@ class PythonServerTest {
 
         Double[] unitedVector = pythonServer.getVector("united", pathToVectorFile);
 
-        double similarityJava = (pythonServer.cosineSimilarity(europeVector, unitedVector));
+        double similarityJava = (PythonServer.cosineSimilarity(europeVector, unitedVector));
         double similarityPyhton = (pythonServer.getSimilarity("Europe", "united", pathToVectorFile));
         assertEquals(similarityJava, similarityPyhton, 0.0001);
 
@@ -148,10 +156,10 @@ class PythonServerTest {
         assertEquals(100, europeVector.length);
     }
 
-    @Test
     /**
      * Test without cache.
      */
+    @Test
     void getVectorNoCaching() {
         pythonServer.setVectorCaching(false);
         // test case 1: vector file
@@ -161,7 +169,7 @@ class PythonServerTest {
 
         Double[] unitedVector = pythonServer.getVector("united", pathToVectorFile);
 
-        double similarityJava = (pythonServer.cosineSimilarity(europeVector, unitedVector));
+        double similarityJava = (PythonServer.cosineSimilarity(europeVector, unitedVector));
         double similarityPython = (pythonServer.getSimilarity("Europe", "united", pathToVectorFile));
         assertEquals(similarityJava, similarityPython, 0.0001);
 
@@ -190,7 +198,7 @@ class PythonServerTest {
 
         Double[] unitedVector = pythonServer.getVector("united", pathToVectorFile);
 
-        double similarityJava = (pythonServer.cosineSimilarity(europeVector, unitedVector));
+        double similarityJava = (PythonServer.cosineSimilarity(europeVector, unitedVector));
         double similarityPython = (pythonServer.getSimilarity("Europe", "united", pathToVectorFile));
         assertEquals(similarityJava, similarityPython, 0.0001);
 
@@ -204,11 +212,11 @@ class PythonServerTest {
     void setGetPort(){
         int testPort = 41194;
         PythonServer.setPort(testPort);
-        assertFalse(PythonServer.getPort() == testPort);
+        assertNotEquals(testPort, PythonServer.getPort());
         PythonServer.shutDown();
         PythonServer.setPort(testPort);
         pythonServer = PythonServer.getInstance();
-        assertEquals(testPort, pythonServer.getPort());
+        assertEquals(testPort, PythonServer.getPort());
         assertTrue(PythonServer.getServerUrl().contains("41194"));
     }
 
@@ -322,7 +330,7 @@ class PythonServerTest {
     @Test
     void externalResourcesDirectory(){
         // shut down
-        pythonServer.shutDown();
+        PythonServer.shutDown();
 
         // reinitialize
         File externalResourcesDirectory = new File("./ext/");
@@ -331,7 +339,7 @@ class PythonServerTest {
         assertTrue(serverFile.exists());
 
         // shut down again to keep using default resources directory
-        pythonServer.shutDown();
+        PythonServer.shutDown();
 
         // we need to restart for subsequent tests
         pythonServer = PythonServer.getInstance();
@@ -346,10 +354,29 @@ class PythonServerTest {
     @Test
     void getVocabularyTerms(){
         String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
-        HashSet<String> result = pythonServer.getVocabularyTerms(pathToVectorFile);
-
+        Set<String> result = pythonServer.getVocabularyTerms(pathToVectorFile);
         assertTrue(result.size() > 0);
         assertTrue(result.contains("Europe"));
+    }
+
+    @Test
+    void writeVocabularyToFile() {
+        File vocabFile = new File("./gensim_vocab.txt");
+        vocabFile.deleteOnExit();
+        pythonServer.writeVocabularyToFile(getPathOfResource("test_model_vectors.kv"), vocabFile);
+        assertTrue(vocabFile.exists());
+
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(vocabFile), StandardCharsets.UTF_8));
+            Set<String> vocabulary = new HashSet<>();
+            String line;
+            while((line = reader.readLine()) != null){
+                vocabulary.add(line);
+            }
+            assertTrue(vocabulary.contains("Europe"));
+        } catch (IOException  e) {
+            fail(e);
+        }
     }
 
     /**

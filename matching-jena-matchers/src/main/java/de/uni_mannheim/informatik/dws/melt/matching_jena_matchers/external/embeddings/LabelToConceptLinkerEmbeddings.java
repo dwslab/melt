@@ -8,6 +8,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.TokenizeConcatUnderscoreModifier;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.StringModifier;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,7 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
         if (entityFile.isDirectory() || !entityFile.exists()) {
             LOGGER.error("The given file is a directory or does not exist. The linker will not work.");
         }
-        lookupMap = readFileIntoHashMap(entityFile);
+        lookupMap = readFileIntoMap(entityFile);
         stringModificationSequence = new LinkedList<>();
         stringModificationSequence.add(new TokenizeConcatUnderscoreModifier());
         stringModificationSequence.add(new TokenizeConcatUnderscoreCapitalizeModifier());
@@ -136,9 +137,10 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
      * Read the HashSet of concepts/entities from file.
      *
      * @param file The file must be UTF-8 encoded.
-     * @return The contents of the file as HashSet.
+     * @return The contents of the file as Map.
      */
-    private Map<String, String> readFileIntoHashMap(File file) {
+    @NotNull
+    private Map<String, String> readFileIntoMap(File file) {
         HashMap<String, String> result = new HashMap<>();
         if (!file.exists()) {
             LOGGER.error("The specified file: " + file.getAbsolutePath() + " does not exist.");

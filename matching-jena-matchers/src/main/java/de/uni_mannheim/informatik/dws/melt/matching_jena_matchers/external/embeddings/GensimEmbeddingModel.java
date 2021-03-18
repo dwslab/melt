@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embe
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResourceWithSynonymCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ import java.util.Set;
  * This class represents a single gensim embedding model.
  * It allows for simplified usage in matching systems.
  */
-public class GensimEmbeddingModel implements ExternalResourceWithSynonymCapability {
+public class GensimEmbeddingModel extends SemanticWordRelationDictionary {
 
 
     /**
@@ -89,6 +90,18 @@ public class GensimEmbeddingModel implements ExternalResourceWithSynonymCapabili
         // not to be implemented
         LOGGER.error("Not implemented.");
         return null;
+    }
+
+    @Override
+    public Set<String> getHypernyms(String linkedConcept) {
+        // not to be implemented
+        LOGGER.error("Not implemented.");
+        return null;
+    }
+
+    @Override
+    public void close() {
+        // do nothing
     }
 
     @Override

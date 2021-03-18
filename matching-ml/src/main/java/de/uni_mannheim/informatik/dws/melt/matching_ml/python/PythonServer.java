@@ -683,7 +683,6 @@ public class PythonServer {
         }
     }
 
-
     /**
      * Returns the full vocabulary of the specified model as HashSet (e.g. for fast indexing).
      * Be aware that this operation can be very memory-consuming for very large models.
@@ -696,7 +695,7 @@ public class PythonServer {
      *      *                   order to be recognized as vector file.
      * @return Returns all vocabulary entries without vectors in a String HashSet.
      */
-    public HashSet<String> getVocabularyTerms(String modelOrVectorPath){
+    public Set<String> getVocabularyTerms(String modelOrVectorPath){
         HashSet<String> result = new HashSet<>();
         HttpGet request = new HttpGet(serverUrl + "/get-vocabulary-terms");
         addModelToRequest(request, modelOrVectorPath);
@@ -723,6 +722,60 @@ public class PythonServer {
         }
     }
 
+    /**
+     * Writes the vocabulary of the given gensim model to a text file (UTF-8 encoded).
+     * @param modelOrVectorPath The model of which the vocabulary shall be obtained.
+     * @param fileToWritePath The file path of the file that shall be written.
+     */
+    public void writeVocabularyToFile(String modelOrVectorPath, String fileToWritePath){
+        Set<String> vocab = getVocabularyTerms(modelOrVectorPath);
+        writeSetToFile(new File(fileToWritePath), vocab);
+    }
+
+    /**
+     * Writes the vocabulary of the given gensim model to a text file (UTF-8 encoded).
+     * @param modelOrVectorPath The model of which the vocabulary shall be obtained.
+     * @param fileToWrite The file that shall be written.
+     */
+    public void writeVocabularyToFile(String modelOrVectorPath, File fileToWrite){
+        Set<String> vocab = getVocabularyTerms(modelOrVectorPath);
+        writeSetToFile(fileToWrite, vocab);
+    }
+
+    /**
+     * This method writes the content of a {@code Set<String>} to a file. The file will be UTF-8 encoded.
+     *
+     * @param fileToWrite    File which will be created and in which the data will
+     *                       be written.
+     * @param setToWrite Set whose content will be written into fileToWrite.
+     * @param <T> Type of the Set.
+     */
+    private static <T> void writeSetToFile(File fileToWrite, Set<T> setToWrite) {
+        LOGGER.info("Start writing Set to file '" + fileToWrite.getName() + "'");
+        Iterator<T> iterator = setToWrite.iterator();
+        try {
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8));
+            String line;
+            boolean firstLine = true;
+            while (iterator.hasNext()) {
+                line = iterator.next().toString();
+                if (!(line.equals("") || line.equals("\n"))) { // do not write empty lines or just line breaks
+                    if (firstLine) {
+                        writer.write(line);
+                        firstLine = false;
+                    } else {
+                        writer.write("\n");
+                        writer.write(line);
+                    }
+                }
+            } // end while
+            writer.flush();
+            writer.close();
+            LOGGER.info("Finished writing file '" + fileToWrite.getName() + "'");
+        } catch (IOException e) {
+            LOGGER.error("Could not write file.", e);
+        }
+    }
 
     /**
      * Given a path to a model or vector file, this method determines whether it is a model or a vector file and
@@ -824,6 +877,33 @@ public class PythonServer {
         return instance;
     }
 
+    /**
+     * Checks whether all Python requirements are installed and whether the server is functional.
+     * @return True if the server is fully functional, else false.
+     */
+    public static boolean checkRequirements(){
+        PythonServer.getInstance();
+        HttpGet request = new HttpGet(serverUrl + "/check-requirements");
+        File requirementsFile = new File(DEFAULT_RESOURCES_DIRECTORY + "requirements.txt");
+        if(!requirementsFile.exists()){
+            LOGGER.error("Could not find requirements file.");
+            return false;
+        }
+        request.addHeader("requirements_file", requirementsFile.getAbsolutePath());
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            String resultMessage = EntityUtils.toString(entity);
+            System.out.println(resultMessage);
+            if(resultMessage.contains("good to go")) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (IOException ioe) {
+            LOGGER.error("Problem with http request.", ioe);
+            return false;
+        }
+    }
 
     /**
      * Shut down the service.

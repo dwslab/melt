@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.MultiConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.LeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.MaxGramLeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
@@ -9,11 +10,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class is capable of linking words to concepts in WordNet.
  */
-public class WordNetLinker implements LabelToConceptLinker {
+public class WordNetLinker implements LabelToConceptLinker, MultiConceptLinker {
 
 
 	private static Logger LOGGER = LoggerFactory.getLogger(WordNetLinker.class);
@@ -58,7 +60,6 @@ public class WordNetLinker implements LabelToConceptLinker {
 		} catch (IllegalArgumentException iae){
 			LOGGER.error("IllegalArgumentException while linking label '" + lowerCaseLabel + "'", iae);
 		}
-
 
         labelToBeLinked = normalizeForWordnetLookupWithTokenization(labelToBeLinked);
         if (dictionary.isInDictionary(labelToBeLinked)) {
@@ -154,4 +155,8 @@ public class WordNetLinker implements LabelToConceptLinker {
         return lookupString;
     }
 
+    @Override
+    public Set<String> getUris(String multiConceptLink) {
+        return null;
+    }
 }

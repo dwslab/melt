@@ -159,6 +159,37 @@ public class WordNetKnowledgeSource extends SemanticWordRelationDictionary {
 		return result;
 	}
 
+	@NotNull
+	public Set<String> getIdGivenLink(String link){
+		Set<String> result = new HashSet<>();
+		try {
+			IndexWord indexWordNoun = dictionary.getIndexWord(POS.NOUN, link);
+			if (indexWordNoun != null) {
+				indexWordNoun.getKey();
+			}
+
+			IndexWord indexWordVerb = dictionary.getIndexWord(POS.VERB, link);
+			if (indexWordVerb != null) {
+				//return true;
+			}
+
+			IndexWord indexWordAdjective = dictionary.getIndexWord(POS.ADJECTIVE, link);
+			if (indexWordAdjective != null) {
+				//return true;
+			}
+
+			IndexWord indexWordAdVerb = dictionary.getIndexWord(POS.ADVERB, link);
+			if (indexWordAdVerb != null) {
+				//return true;
+			}
+		} catch (JWNLException e) {
+			LOGGER.error("WordNet Error.", e);
+		}
+		return result;
+	}
+
+
+
 	@Override
 	public void close() {
 		try {
