@@ -5,10 +5,9 @@ nav_order: 8
 permalink: /faq
 ---
 
-## Frequently Asked Questions (FAQs)
+# Frequently Asked Questions (FAQs)
 
-**I have a multiple SEALS packages and I want to use MELT's group evaluation functionalities. What is the simplest way 
-to do so?**<br/>
+### I have a multiple SEALS packages and I want to use MELT's group evaluation functionalities. What is the simplest way to do so?
 SEALS packages were wrapped for the SEALS platform. If the matchers were not developed using MELT or you are not sure 
 whether they were developed with MELT, one option is to create the alignment files by executing the matchers 
 using the SEALS client. Afterwards, you can read the alignment files (e.g. method `loadFromFolder` of class 
@@ -22,21 +21,21 @@ a later point in time. You can also set the maximum time you want MELT to alloca
 does not finish within the given time limit, MELT will stop the process and proceed with the next test case or matcher.
 `ExecutorSeals` can read zipped, unzipped (or a mix of both) SEALS packages.<br/>
 
-**I am running a SEALS matcher that was packaged with MELT and uses some python component. On my system, the
-default python command does not refer to Python 3. How can this situation be resolved?**<br/>
+### I am running a SEALS matcher that was packaged with MELT and uses some python component. On my system, the default python command does not refer to Python 3. How can this situation be resolved?
 A folder `melt-resouces` in the working directory (perhaps `$SEALS_HOME`) has to be created. In there a file `python_command.txt` containing your full 
 python path should be placed. This applies to all MELT packaged matchers that use the ML module. 
 In other cases, you can also try to create a directory `oaei-resources` rather than `melt-resources`
 and place the python_command.txt` there.
 
-**Is there more documentation?**<br/>
+### Is there more documentation?
 MELT is far more powerful than documented here. This `README` is intended to give an overview of the framework.
 For specific code snippets, have a look at the examples. Note that classes, interfaces, and methods are extensively 
 documented using [JavaDoc](/javadoc_latest/index.html).
 
-## Common Errors which might appear
 
-**Building a combined jar with jena dependencies**<br/>
+# Common Errors which might appear
+
+### Building a combined jar with jena dependencies
 
 If you build a combined jar ("uber-jar" or "fat-jar", jar with dependencies) to try out your matchers especially with jena,
 then make sure you do not override the service initializers of jena.
@@ -89,7 +88,7 @@ An example could look like the following
 ```
 
 
-**Using largebio dataset without unlimiting entity expansion**<br/>
+### Using largebio dataset without unlimiting entity expansion
 
 If you encounter the following error:
 ```
@@ -109,3 +108,14 @@ or by calling
 TrackRepository.Largebio.unlimitEntityExpansion();
 ```
 which sets the property for the current JVM execution (but not for child processes.
+
+
+
+### ToolException when using SEALS Matcher
+
+In case you get a `ToolException` in SEALS Matcher which somehow talks about:
+```the functionality of called method is not supported```
+then this is a hint that the provided SEALS package is not able to use an input alignment.
+Within the MatcherSeals in MELT you can set an attribute `doNotUseInputAlignment` to `true`. 
+This will not pass an input alignment to the SEALS client even when one is available.
+This applies for example to LogMap.
