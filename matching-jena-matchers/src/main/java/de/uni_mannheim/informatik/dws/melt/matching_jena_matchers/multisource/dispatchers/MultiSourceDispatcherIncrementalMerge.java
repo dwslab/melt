@@ -196,18 +196,9 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                 }
             }
             
-            //run matcher
-            Object copiedInputAlignment = null;
-            if(inputAlignment != null)
-                copiedInputAlignment = objectMapper.readValue(objectMapper.writeValueAsString(inputAlignment), inputAlignment.getClass());
-            
-            Object copiedParameters = null;
-            if(parameters != null)
-                copiedParameters = objectMapper.readValue(objectMapper.writeValueAsString(parameters), parameters.getClass());
-            
             LOGGER.info("Run one to one match");
-            AlignmentAndParameters alignmentAndPrameters = GenericMatcherCaller.runMatcherMultipleRepresentations(
-                    this.oneToOneMatcher, source, target, copiedInputAlignment, copiedParameters);
+            AlignmentAndParameters alignmentAndPrameters = GenericMatcherCaller.runMatcherMultipleRepresentations(this.oneToOneMatcher, source, target, 
+                    DispatcherHelper.deepCopy(inputAlignment), DispatcherHelper.deepCopy(parameters));
             Alignment alignment = TypeTransformerRegistry.getTransformedObject(alignmentAndPrameters.getAlignment(), Alignment.class);
             if(alignment == null){
                 LOGGER.error("Could not transform result of matcher to alignment. Return input alignment.");

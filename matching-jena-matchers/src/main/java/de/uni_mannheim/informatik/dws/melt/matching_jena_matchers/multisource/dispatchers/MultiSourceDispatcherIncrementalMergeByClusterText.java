@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.d
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.Counter;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.URIUtil;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -13,11 +14,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Pattern;
+import org.apache.commons.lang.StringUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
@@ -113,7 +118,7 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
     }
     
     
-    private Counter<String> getBagOfWords(Model m){
+    public Counter<String> getBagOfWords(Model m){
         SimpleTokenizer tokenizer = new SimpleTokenizer(true);
         PorterStemmer porter = new PorterStemmer();
         Counter<String> bow = new Counter<>();
@@ -135,9 +140,37 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
                     bow.addAll(words);
                 }
             }
-            //TODO: add also fragment of subject propertery etc with URIUtil.
         }
+        
+        //add also URI fragments of subjects if they exist.
+        ResIterator r = m.listSubjects();
+        while(r.hasNext()){
+            Resource resource = r.next();
+            String resURI = resource.getURI();
+            if(resURI == null){
+                continue;
+            }
+            String fragment = URIUtil.getUriFragment(resURI);
+            if(StringUtils.isBlank(fragment)){
+                continue;
+            }
+            fragment = splitFragment(fragment);
+            Iterator<String> words = Arrays.stream(tokenizer.split(fragment))
+                    .filter(w -> !(EnglishStopWords.DEFAULT.contains(w.toLowerCase()) || EnglishPunctuations.getInstance().contains(w)))
+                    .map(porter::stem)
+                    .map(String::toLowerCase)
+                    .iterator();
+            bow.addAll(words);
+        }
+        
         return bow;
+    }
+    private static final Pattern URI_SEPARATOR = Pattern.compile("[-_~|]");
+    private static final Pattern CAMEL_CASE_SPLIT = Pattern.compile("(?<!^)(?<!\\s)(?=[A-Z][a-z])");
+
+    private static String splitFragment(String text) {
+        String s = CAMEL_CASE_SPLIT.matcher(text).replaceAll(" ");
+        return URI_SEPARATOR.matcher(s).replaceAll(" ");
     }
     
     private static final String NEWLINE = System.getProperty("line.separator");

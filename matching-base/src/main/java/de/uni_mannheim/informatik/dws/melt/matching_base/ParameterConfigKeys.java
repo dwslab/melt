@@ -95,4 +95,12 @@ public class ParameterConfigKeys {
      * It is used in URL2OntModelTransformer (and thus as parameter in OntologyCacheJena).
      */
     public static final String JENA_ONTMODEL_SPEC = "http://oaei.ontologymatching.org/jenaOntModelSpec";
+    
+    
+    /**
+     * A boolean value indicating if an unparsable alignment file should be automatically repaired.
+     * This defaults to true.
+     * It is used in URL2AlignmentTransformer.
+     */
+    public static final String ALLOW_ALIGNMENT_REPAIR = "http://oaei.ontologymatching.org/allowAlignmentRepair";
 }

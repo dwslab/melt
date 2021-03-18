@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers.TypeTransformerHelper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -60,11 +61,13 @@ public class AlignmentXmlRepair {
      * @throws SAXException A SAXException.
      */ 
     public static Alignment loadRepairedAlignment(File alignmentFile) throws IOException, SAXException{
-        File tmpFile = new File(alignmentFile.getParentFile(), alignmentFile.getName() + ".tmp");
-        repair(alignmentFile, tmpFile);
-        Alignment a = new Alignment(tmpFile);
-        tmpFile.delete();
-        return a;
+        File tmpFile = new File(alignmentFile.getParentFile(), alignmentFile.getName() + "-" + Long.toString(TypeTransformerHelper.getRandomPositiveNumber()) + ".tmp");
+        try{
+            repair(alignmentFile, tmpFile);
+            return new Alignment(tmpFile);
+        }finally{
+            tmpFile.delete();
+        }
     }
     
     /**

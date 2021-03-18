@@ -34,8 +34,14 @@ public class TypeTransformerHelper {
         return new File(folder, prefix + Long.toString(n) + suffix);
     }
     
+    public static Long getRandomPositiveNumber(){
+        long n = random.nextLong();
+        n = (n == Long.MIN_VALUE) ? 0 : Math.abs(n);
+        return n;
+    }
     
-    public <T> T getOrDefault(Properties parameters, String key, Class<? extends T> type, T defaultValue){        
+    
+    public static <T> T getOrDefault(Properties parameters, String key, Class<? extends T> type, T defaultValue){        
         Object value = parameters.get(key);
         if(value == null)
             return defaultValue;
@@ -47,7 +53,7 @@ public class TypeTransformerHelper {
         }
     }
     
-    public <T> T get(Properties parameters, String key, Class<? extends T> type){        
+    public static <T> T get(Properties parameters, String key, Class<? extends T> type){        
         Object value = parameters.get(key);
         if(value == null)
             return null;

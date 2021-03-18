@@ -244,7 +244,7 @@ public class ExecutorMultiSource {
     }
     
     
-    private static Map<Track, List<TestCase>> groupTestCasesByTrack(List<TestCase> testCases){
+    public static Map<Track, List<TestCase>> groupTestCasesByTrack(List<TestCase> testCases){
         Map<Track, List<TestCase>> map = new HashMap<>();
         for(TestCase testCase : testCases){
             map.computeIfAbsent(testCase.getTrack(), __-> new ArrayList<>()).add(testCase);

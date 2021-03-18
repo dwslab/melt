@@ -68,7 +68,7 @@ public class MultiSourceDispatcherIncrementalMergeTest {
         
         Collections.shuffle(models, new Random(1324));
         
-        SaveOrder oneToOneMatcher = new SaveOrder(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
+        SaveOrderMatcherForTest oneToOneMatcher = new SaveOrderMatcherForTest(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
         MultiSourceDispatcherIncrementalMerge merger = new MultiSourceDispatcherIncrementalMergeByOrder(oneToOneMatcher, 
                 MultiSourceDispatcherIncrementalMergeByOrder.AMOUNT_OF_CLASSES_ASCENDING);
         
@@ -83,7 +83,7 @@ public class MultiSourceDispatcherIncrementalMergeTest {
         ));
         
         
-        oneToOneMatcher = new SaveOrder(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
+        oneToOneMatcher = new SaveOrderMatcherForTest(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
         merger = new MultiSourceDispatcherIncrementalMergeByOrder(oneToOneMatcher, 
                 MultiSourceDispatcherIncrementalMergeByOrder.AMOUNT_OF_CLASSES_DECENDING);
         
@@ -98,7 +98,7 @@ public class MultiSourceDispatcherIncrementalMergeTest {
         ));
     }
     
-    private void assertAllOrders(SaveOrder oneToOneMatcher, List<Entry<String, Integer>> counts){
+    private void assertAllOrders(SaveOrderMatcherForTest oneToOneMatcher, List<Entry<String, Integer>> counts){
         Counter<String> aggregated = new Counter<>();
         
         oneToOneMatcher.assertOrder(0, 
@@ -156,44 +156,5 @@ class NoOp implements IMatcher<Object, Object, Object> {
     @Override
     public Object match(Object source, Object target, Object inputAlignment, Object parameters) throws Exception {
         return new Alignment();
-    }
-}
-
-
-class SaveOrder implements IMatcher<OntModel, Object, Object> {
-    private List<Entry<Counter<String>,Counter<String>>> order;
-    private DatasetIDExtractor extractor;
-    public SaveOrder(DatasetIDExtractor extractor){
-        this.order = new ArrayList<>();
-        this.extractor = extractor;
-    }
-    
-    @Override
-    public Object match(OntModel source, OntModel target, Object inputAlignment, Object parameters) throws Exception {
-        this.order.add(new AbstractMap.SimpleEntry<>(
-                getDatasetIdDistribution(source),
-                getDatasetIdDistribution(target)
-        ));        
-        return inputAlignment;
-    }
-    private Counter<String> getDatasetIdDistribution(OntModel m){
-        Counter<String> counter = new Counter<>();
-        ExtendedIterator<OntClass> i = m.listClasses();
-        while(i.hasNext()){
-            String uri = i.next().getURI();
-            if(uri != null)
-                counter.add(extractor.getDatasetID(uri));
-        }
-        return counter;
-    }
-    
-    public void clear(){
-        this.order.clear();
-    }
-    
-    public void assertOrder(int step, Counter<String> one, Counter<String> two){
-        Counter<String> source = order.get(step).getKey();
-        Counter<String> target = order.get(step).getValue();
-        assertTrue((source.equals(one) && target.equals(two)) || (source.equals(two) && target.equals(one)));
     }
 }
