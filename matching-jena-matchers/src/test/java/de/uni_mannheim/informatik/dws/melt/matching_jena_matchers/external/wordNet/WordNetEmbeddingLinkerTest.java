@@ -19,6 +19,13 @@ class WordNetEmbeddingLinkerTest {
         assertNull(linker.linkToSingleConcept("JPP"));
     }
 
+    @Test
+    void normalize(){
+        WordNetEmbeddingLinker linker = new WordNetEmbeddingLinker(loadFile("wn_rdf2vec_entities.txt"));
+        assertEquals("Chaldean-a", linker.normalize("http://wordnet-rdf.princeton" +
+                ".edu/rdf/lemma/Chaldean#Chaldean-a"));
+    }
+
     /**
      * Helper function to load files in class path that contain spaces.
      * @param fileName Name of the file.

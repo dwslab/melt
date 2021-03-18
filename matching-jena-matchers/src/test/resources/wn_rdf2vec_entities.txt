@@ -34,6 +34,7 @@ http://wordnet-rdf.princeton.edu/rdf/lemma/chastity#chastity-04856990-n
 http://wordnet-rdf.princeton.edu/rdf/lemma/throttle#throttle-02673313-n
 http://wordnet-rdf.princeton.edu/rdf/lemma/throttle#throttle-00173172-v
 http://wordnet-rdf.princeton.edu/rdf/lemma/throttle#throttle-02672816-n
+http://wordnet-rdf.princeton.edu/rdf/lemma/free_list#free_list-n
 http://wordnet-rdf.princeton.edu/rdf/lemma/free_list#free_list-06503159-n
 http://wordnet-rdf.princeton.edu/rdf/lemma/post#post-02390776-v
 http://wordnet-rdf.princeton.edu/rdf/lemma/poster#poster-09873916-n

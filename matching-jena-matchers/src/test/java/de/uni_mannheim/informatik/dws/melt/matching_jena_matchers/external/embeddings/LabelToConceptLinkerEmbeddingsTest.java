@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LabelToConceptLinkerEmbeddingsTest {
 
+
     @Test
     void linkToSingleConcept() {
         String pathToWiktionaryEntityFile = loadFile("dbnary_embedding_entities.txt").getAbsolutePath();

@@ -43,7 +43,7 @@ public class WordNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings {
     @Override
     public String normalize(String stringToBeNormalized) {
         //stringToBeNormalized = stringToBeNormalized.replaceAll("wn-lemma:.*#", "");
-        stringToBeNormalized.replaceAll("http://wordnet-rdf.princeton.edu/rdf/lemma/.*#", "");
+        stringToBeNormalized = stringToBeNormalized.replaceAll("http://wordnet-rdf\\.princeton\\.edu/rdf/lemma/.*#", "");
         stringToBeNormalized = stringToBeNormalized.replaceAll(" ", "_");
         return stringToBeNormalized;
     }

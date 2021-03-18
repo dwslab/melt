@@ -213,7 +213,10 @@ public class LinksToFile {
     static @NotNull Set<String> getUris(String link, LabelToConceptLinker linker) {
         Set<String> result = new HashSet<>();
         if (linker instanceof MultiConceptLinker) {
-            result.addAll(((MultiConceptLinker) linker).getUris(link));
+            Set<String> uris = ((MultiConceptLinker) linker).getUris(link);
+            if(uris != null) {
+                result.addAll(uris);
+            } else {result.add(link);}
         } else {
             result.add(link);
         }

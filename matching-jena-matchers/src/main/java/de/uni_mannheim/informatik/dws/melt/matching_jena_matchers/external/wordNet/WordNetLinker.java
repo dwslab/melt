@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * This class is capable of linking words to concepts in WordNet.
  */
-public class WordNetLinker implements LabelToConceptLinker, MultiConceptLinker {
+public class WordNetLinker implements LabelToConceptLinker {
 
 
 	private static Logger LOGGER = LoggerFactory.getLogger(WordNetLinker.class);
@@ -155,8 +155,4 @@ public class WordNetLinker implements LabelToConceptLinker, MultiConceptLinker {
         return lookupString;
     }
 
-    @Override
-    public Set<String> getUris(String multiConceptLink) {
-        return null;
-    }
 }
