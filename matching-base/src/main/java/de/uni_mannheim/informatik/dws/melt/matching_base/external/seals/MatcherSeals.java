@@ -2,6 +2,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.external.seals;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherFile;
+import de.uni_mannheim.informatik.dws.melt.matching_base.MatchingException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process.ExternalProcess;
 import java.io.File;
 import java.io.FileInputStream;
@@ -85,6 +86,11 @@ public class MatcherSeals extends MatcherFile{
      * Some matchers require this, because the do not close some resources.
      */
     private boolean freshMatcherInstance;
+    
+    /**
+     * If true, the input alignment is not passed to SEALS even if one is provided.
+     */
+    private boolean doNotUseInputAlignment;
 
     /**
      * The command to start java in the terminal. Typically, this is "java"
@@ -95,7 +101,7 @@ public class MatcherSeals extends MatcherFile{
     
     /**
      * Constructor with all parameters.
-     * IMPORTANT: the sealsHome folder will be deleted (do not use any folder which contains content).
+     * IMPORTANT: the sealsHome folder will be deleted (do not use any folder which contains content). USE IT WITH CARE.
      * @param matcherFileOrFolder The file (zip file) or folder which represents one matcher.
      * @param sealsClientJar The path to the local SEALS client JAR file.
      * @param sealsHome SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).
@@ -104,9 +110,10 @@ public class MatcherSeals extends MatcherFile{
      * @param timeoutTimeUnit The unit of the timeout.
      * @param javaRuntimeParameters Runtime parameters such as ("-Xmx25g", "-Xms15g").
      * @param freshMatcherInstance If true, the original matcher folder is untouched and the folder is copied
+     * @param doNotUseInputAlignment If true, the input alignment is not passed to SEALS even if one is provided.
      * @param javaCommand the java 1.8 command on the system. usually it is just java
      */
-    public MatcherSeals(File matcherFileOrFolder, File sealsClientJar, File sealsHome, File tmpFolder, long timeout, TimeUnit timeoutTimeUnit, List<String> javaRuntimeParameters, boolean freshMatcherInstance, String javaCommand) {
+    public MatcherSeals(File matcherFileOrFolder, File sealsClientJar, File sealsHome, File tmpFolder, long timeout, TimeUnit timeoutTimeUnit, List<String> javaRuntimeParameters, boolean freshMatcherInstance, boolean doNotUseInputAlignment, String javaCommand) {
         this.matcherFolder = prepareMatcherFolder(tmpFolder, matcherFileOrFolder);
         this.sealsClientJar = sealsClientJar;
         this.sealsHome = sealsHome;
@@ -115,6 +122,7 @@ public class MatcherSeals extends MatcherFile{
         this.timeoutTimeUnit = timeoutTimeUnit;
         this.javaRuntimeParameters = javaRuntimeParameters;
         this.freshMatcherInstance = freshMatcherInstance;
+        this.doNotUseInputAlignment = doNotUseInputAlignment;
         this.javaCommand = javaCommand;
         
         downloadSealsIfNecessary(this.sealsClientJar);
@@ -127,8 +135,8 @@ public class MatcherSeals extends MatcherFile{
         }
     }
     
-    public MatcherSeals(File matcherFileOrFolder, File sealsClientJar, long timeout, TimeUnit timeoutTimeUnit, List<String> javaRuntimeParameters, boolean freshMatcherInstance, String javaCommand) {
-        this(matcherFileOrFolder, sealsClientJar, createFolderWithRandomNumberInDirectory(DEFAULT_TMP_FOLDER, "meltSealsHome"), DEFAULT_TMP_FOLDER, timeout, timeoutTimeUnit, javaRuntimeParameters, freshMatcherInstance, javaCommand);
+    public MatcherSeals(File matcherFileOrFolder, File sealsClientJar, long timeout, TimeUnit timeoutTimeUnit, List<String> javaRuntimeParameters, boolean freshMatcherInstance, boolean doNotUseInputAlignment, String javaCommand) {
+        this(matcherFileOrFolder, sealsClientJar, createFolderWithRandomNumberInDirectory(DEFAULT_TMP_FOLDER, "meltSealsHome"), DEFAULT_TMP_FOLDER, timeout, timeoutTimeUnit, javaRuntimeParameters, freshMatcherInstance, doNotUseInputAlignment, javaCommand);
     }
     
     /**
@@ -137,7 +145,7 @@ public class MatcherSeals extends MatcherFile{
      * @param sealsClientJar the seals client jar
      */
     public MatcherSeals(File matcherFileOrFolder, File sealsClientJar) {
-        this(matcherFileOrFolder, sealsClientJar, 12, TimeUnit.HOURS, new ArrayList<>(), false, "java");
+        this(matcherFileOrFolder, sealsClientJar, 12, TimeUnit.HOURS, new ArrayList<>(), false, false, "java");
     }
     
     /**
@@ -243,7 +251,7 @@ public class MatcherSeals extends MatcherFile{
             if (this.javaRuntimeParameters != null) sealsProcess.addArguments(this.javaRuntimeParameters);
             
             sealsProcess.addArguments("-jar", this.sealsClientJar.getAbsolutePath(), currentInstance.getAbsolutePath());
-            if(inputAlignment == null){
+            if(inputAlignment == null || this.doNotUseInputAlignment){
                 sealsProcess.addArguments("-o", source.toString(), target.toString());
             }else{
                 sealsProcess.addArguments("-oi", source.toString(), target.toString(), inputAlignment.toString());
@@ -254,6 +262,12 @@ public class MatcherSeals extends MatcherFile{
             sealsProcess.addEnvironmentVariable("SEALS_HOME", this.sealsHome.getAbsolutePath());            
             sealsProcess.setTimeout(this.timeout, this.timeoutTimeUnit);            
             sealsProcess.run();
+            
+            if(alignmentResult.length() == 0){ //easy check if file is empty
+                LOGGER.error("The result of seals matcher is an empty file. This typcally happens when the matcher throws an error (see log messages of ExternalSEALS)."
+                        + "In some cases this happens because the matcher does not expect an input alignment. You can solve this by setting  doNotUseInputAlignment to true in MatcherSeals.");
+                throw new MatchingException("The result of seals matcher is an empty file.");
+            }
         }finally{
             if(this.freshMatcherInstance){
                 //delete fresh instance (dont follow sym links)

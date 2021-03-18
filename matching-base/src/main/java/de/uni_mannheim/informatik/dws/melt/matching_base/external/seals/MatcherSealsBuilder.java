@@ -51,6 +51,11 @@ public class MatcherSealsBuilder {
     private boolean freshMatcherInstance = false;
 
     /**
+     * If true, the input alignment is not passed to SEALS even if one is provided.
+     */
+    private boolean doNotUseInputAlignment = false;
+    
+    /**
      * The command to start java in the terminal. Typically, this is "java"
      * Seals needs java version 1.8
      */
@@ -97,6 +102,11 @@ public class MatcherSealsBuilder {
         this.freshMatcherInstance = freshMatcherInstance;
         return this;
     }
+    
+    public MatcherSealsBuilder setDoNotUseInputAlignment(boolean doNotUseInputAlignment) {
+        this.doNotUseInputAlignment = doNotUseInputAlignment;
+        return this;
+    }
 
     public MatcherSealsBuilder setJavaCommand(String javaCommand) {
         this.javaCommand = javaCommand;
@@ -115,6 +125,7 @@ public class MatcherSealsBuilder {
                 this.timeoutTimeUnit, 
                 this.javaRuntimeParameters, 
                 this.freshMatcherInstance,
+                this.doNotUseInputAlignment,
                 this.javaCommand);
     }
     
