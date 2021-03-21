@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -138,10 +138,20 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <th class="colLast" scope="col">Class and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarIndividualResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.McNemarIndividualResult</a></span></code>
 <div class="block">Local data structure.</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarTrackResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.McNemarTrackResult</a></span></code>
+<div class="block">Local data structure.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.SignificanceCount.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.SignificanceCount</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
@@ -222,7 +232,7 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarIndividualResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.McNemarIndividualResult</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarIndividualResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.McNemarIndividualResult</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.html#calculatePvalues-double-de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorMcNemarSignificance.TestType-">calculatePvalues</a></span>(double&nbsp;alpha,
                 <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.TestType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.TestType</a>&nbsp;testType)</code>&nbsp;</td>
 </tr>
@@ -266,6 +276,16 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.html#writeResultsToDirectory-java.io.File-">writeResultsToDirectory</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;baseDirectory)</code>
 <div class="block">Two files will be written.</div>
 </td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>private void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.html#writeTestCaseResultFile-java.util.Map-java.io.File-">writeTestCaseResultFile</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarIndividualResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.McNemarIndividualResult</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;pValues,
+                       <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;fileToWrite)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>private void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.html#writeTrackResultFile-java.util.Map-java.io.File-">writeTrackResultFile</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarIndividualResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.McNemarIndividualResult</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;pValues,
+                    <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;fileToWrite)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -377,14 +397,34 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 </dl>
 </li>
 </ul>
+<a name="writeTrackResultFile-java.util.Map-java.io.File-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeTrackResultFile</h4>
+<pre>private&nbsp;void&nbsp;writeTrackResultFile(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarIndividualResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.McNemarIndividualResult</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;pValues,
+                                  <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;fileToWrite)</pre>
+</li>
+</ul>
+<a name="writeTestCaseResultFile-java.util.Map-java.io.File-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeTestCaseResultFile</h4>
+<pre>private&nbsp;void&nbsp;writeTestCaseResultFile(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarIndividualResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.McNemarIndividualResult</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;pValues,
+                                     <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;fileToWrite)</pre>
+</li>
+</ul>
 <a name="calculatePvalues-double-de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorMcNemarSignificance.TestType-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>calculatePvalues</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarIndividualResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.McNemarIndividualResult</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;calculatePvalues(double&nbsp;alpha,
-                                                                                             <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.TestType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.TestType</a>&nbsp;testType)</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarIndividualResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.McNemarIndividualResult</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;calculatePvalues(double&nbsp;alpha,
+                                                                                         <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.TestType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.TestType</a>&nbsp;testType)</pre>
 </li>
 </ul>
 <a name="pValueConsideringFalsePositives-de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult-de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult-">
@@ -423,7 +463,7 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <dd><code>executionResult2</code> - Result 2.</dd>
 <dd><code>testType</code> - The type of test to be used.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>p value</dd>
+<dd>p value. NaN if p cannot be calculated.</dd>
 </dl>
 </li>
 </ul>
@@ -441,7 +481,7 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <dd><code>N</code> - N of nCr(N,r)</dd>
 <dd><code>R</code> - R of nCr(n,R)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>nCr(n,r)</dd>
+<dd>nCr(n, r)</dd>
 </dl>
 </li>
 </ul>
@@ -459,7 +499,7 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <dd><code>n</code> - N of nCr(N,r)</dd>
 <dd><code>r</code> - R of nCr(n,R)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>nCr(n,r)</dd>
+<dd>nCr(n, r)</dd>
 </dl>
 </li>
 </ul>
