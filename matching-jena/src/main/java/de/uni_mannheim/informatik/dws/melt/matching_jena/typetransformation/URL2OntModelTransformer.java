@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 
 public class URL2OntModelTransformer extends AbstractTypeTransformer<URL, OntModel>{
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(URL2OntModelTransformer.class);
 
     public URL2OntModelTransformer() {

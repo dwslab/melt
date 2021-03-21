@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 
 public class Model2OntModelTransformer extends AbstractTypeTransformer<Model, OntModel>{
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Model2OntModelTransformer.class);
 
     public Model2OntModelTransformer() {

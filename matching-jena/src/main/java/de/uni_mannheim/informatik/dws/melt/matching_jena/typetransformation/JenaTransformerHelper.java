@@ -11,9 +11,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A helper class for jena transformers.
- * It usually just retrives some properties for the transformation.
+ * It usually just retrieves some properties for the transformation.
  */
 public class JenaTransformerHelper {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(JenaTransformerHelper.class);
     
     public static OntModelSpec getSpec(Properties parameters){

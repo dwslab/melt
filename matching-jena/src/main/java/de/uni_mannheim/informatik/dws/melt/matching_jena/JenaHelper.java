@@ -10,7 +10,8 @@ import org.apache.jena.rdf.model.ModelFactory;
  * 
  */
 public class JenaHelper {
-    
+
+
     public static OntModel createNewOntModel(){
         return createNewOntModel(new Properties());
     }

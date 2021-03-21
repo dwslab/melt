@@ -22,12 +22,13 @@ import java.util.Map;
  * Alignment Systems Across Single Matching Task Via the McNemar's Test. 2018.</a>.
  */
 public class EvaluatorMcNemarSignificance extends Evaluator {
-    
+
+
     /**
      * Default Logger
      */
     private static Logger LOGGER = LoggerFactory.getLogger(EvaluatorMcNemarSignificance.class);
-    
+
     protected double alpha;
 
     /**
@@ -38,12 +39,12 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
     public EvaluatorMcNemarSignificance(ExecutionResultSet results) {
         this(results, 0.05);
     }
-    
+
     /**
      * Constructor.
      *
      * @param results The results of the matching process.
-     * @param alpha The desired alpha (probability of making a type 1 error.
+     * @param alpha   The desired alpha (probability of making a type 1 error.
      */
     public EvaluatorMcNemarSignificance(ExecutionResultSet results, double alpha) {
         super(results);
@@ -53,49 +54,109 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     /**
      * Two files will be written.
+     *
      * @param baseDirectory The directory to which the result shall be written.
      */
     @Override
     public void writeResultsToDirectory(File baseDirectory) {
-        try {
+            // make base directory if it does not exist
+            if (baseDirectory == null) {
+                LOGGER.error("The given base directory does not exist. ABORT.");
+                return;
+            }
+            if (baseDirectory.exists() && baseDirectory.isFile()) {
+                LOGGER.error("The given base directory is a file, please specify a directory. ABORT.");
+            }
+            if (!baseDirectory.exists()) {
+                baseDirectory.mkdirs();
+            }
 
             // with continuity correction
-            File resultFile = new File(baseDirectory, "McNemar_asymptotic_with_continuity_correction.csv");
-            BufferedWriter writer = new BufferedWriter(new FileWriter(resultFile));
-            writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Alpha,p,Significant?\n");
-            for(Map.Entry<McNemarIndividualResult, Double> entry : calculatePvalues(this.alpha, TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION).entrySet()){
-                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + (entry.getValue() < this.alpha) + "\n");
-            }
-            writer.flush();
-            writer.close();
+            Map<McNemarIndividualResult, Double> pValuesAsymptoticWithContinuityCorrection = calculatePvalues(this.alpha,
+                    TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION);
+            File testCaseResultFileWithContinuity = new File(baseDirectory, "TestCase_McNemar_asymptotic_with_continuity_correction" +
+                    ".csv");
+            File trackResultFile = new File(baseDirectory, "Track_McNemar_asymptotic_with_continuity_correction" +
+                    ".csv");
+            writeTestCaseResultFile(pValuesAsymptoticWithContinuityCorrection, testCaseResultFileWithContinuity);
+            writeTrackResultFile(pValuesAsymptoticWithContinuityCorrection, trackResultFile);
+
 
             // without continuity correction
-            resultFile = new File(baseDirectory, "McNemar_asymptotic.csv");
-            writer = new BufferedWriter(new FileWriter(resultFile));
-            writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Alpha,p,Significant?\n");
-            for(Map.Entry<McNemarIndividualResult, Double> entry : calculatePvalues(this.alpha, TestType.ASYMPTOTIC_TEST).entrySet()){
-                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + (entry.getValue() < this.alpha) + "\n");
+            Map<McNemarIndividualResult, Double> pValuesAsymptotic = calculatePvalues(this.alpha, TestType.ASYMPTOTIC_TEST);
+            File testCaseAsymptoticResultFile = new File(baseDirectory, "TestCase_McNemar_asymptotic.csv");
+            File trackAsymptoticResultFile = new File(baseDirectory, "Track_McNemar_asymptotic.csv");
+            writeTrackResultFile(pValuesAsymptotic, testCaseAsymptoticResultFile);
+            writeTestCaseResultFile(pValuesAsymptotic, trackAsymptoticResultFile);
+    }
+
+
+    private void writeTrackResultFile(Map<McNemarIndividualResult, Double> pValues,
+                                      File fileToWrite) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileToWrite));
+            writer.write("Track,Matcher Name 1,Matcher Name 2,Alpha,Significantly Different, Not Significantly " +
+                    "Different\n");
+            Map<McNemarTrackResult, SignificanceCount> trackResultMap = new HashMap<>();
+
+            for (Map.Entry<McNemarIndividualResult, Double> entry : pValues.entrySet()) {
+                boolean isSignificantlyDifferent = (entry.getValue() < this.alpha);
+                McNemarTrackResult trackResult = entry.getKey().getTrackResult();
+                if (trackResultMap.containsKey(trackResult)) {
+                    SignificanceCount count = trackResultMap.get(trackResult);
+                    if (isSignificantlyDifferent) {
+                        count.isSignificantlyDifferent++;
+                    } else {
+                        count.isNotSignificantlyDifferent++;
+                    }
+                } else {
+                    SignificanceCount count = new SignificanceCount(isSignificantlyDifferent);
+                    trackResultMap.put(trackResult, count);
+                }
+            }
+            for (Map.Entry<McNemarTrackResult, SignificanceCount> entry : trackResultMap.entrySet()) {
+                writer.write(entry.getKey().toString() + "," + entry.getValue().isSignificantlyDifferent + "," +
+                        entry.getValue().isNotSignificantlyDifferent + "\n");
             }
             writer.flush();
             writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            LOGGER.error("An error occurred while trying to write file '" + fileToWrite.getAbsolutePath() + "'.");
         }
     }
 
-    public HashMap<McNemarIndividualResult, Double> calculatePvalues(double alpha, TestType testType){
-        HashMap<McNemarIndividualResult, Double> result = new HashMap<>();
+    private void writeTestCaseResultFile(Map<McNemarIndividualResult, Double> pValues,
+                                                                       File fileToWrite) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileToWrite));
+            writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Alpha,p,Significantly Different?\n");
+            for (Map.Entry<McNemarIndividualResult, Double> entry : pValues.entrySet()) {
+                boolean isSignificantlyDifferent = (entry.getValue() < this.alpha);
+                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + isSignificantlyDifferent + "\n");
+            }
+            writer.flush();
+            writer.close();
+        } catch (IOException ioe) {
+            LOGGER.error("An error occurred while trying to write file '" + fileToWrite.getAbsolutePath() + "'.");
+        }
+    }
+
+    public Map<McNemarIndividualResult, Double> calculatePvalues(double alpha, TestType testType) {
+        Map<McNemarIndividualResult, Double> result = new HashMap<>();
         for (ExecutionResult result1 : results) {
-            for (ExecutionResult result2 : results){
-                if(result1.getTestCase().getName().equals(result2.getTestCase().getName()) && result1.getTrack().getName().equals(result2.getTrack().getName())){
+            for (ExecutionResult result2 : results) {
+                if (result1.getTestCase().getName().equals(result2.getTestCase().getName()) && result1.getTrack().getName().equals(result2.getTrack().getName())) {
                     McNemarIndividualResult mr = new McNemarIndividualResult(result1.getMatcherName(), result2.getMatcherName(), result1.getTestCase().getName(), result1.getTrack().getName(), alpha);
-                    double pValue = 1.0;
+                    double pValue;
                     try {
                         pValue = pValueConsideringFalsePositives(result1, result2, testType);
-                    } catch (ArithmeticException ae){
+                        if(Double.isNaN(pValue)){
+                            continue;
+                        }
+                        result.put(mr, pValue);
+                    } catch (ArithmeticException ae) {
                         ae.printStackTrace();
                     }
-                    result.put(mr, pValue);
                 }
             }
         }
@@ -103,18 +164,73 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
     }
 
 
+    public static class SignificanceCount {
+        public int isSignificantlyDifferent = 0;
+        public int isNotSignificantlyDifferent = 0;
+
+        public SignificanceCount(boolean significantlyDifferent) {
+            if (significantlyDifferent) {
+                isSignificantlyDifferent++;
+            } else {
+                isNotSignificantlyDifferent++;
+            }
+        }
+    }
+
     /**
      * Local data structure.
      * To be used for testing.
      */
-    public class McNemarIndividualResult{
+    public static class McNemarTrackResult {
+        public String matcherName1;
+        public String matcherName2;
+        public String trackName;
+        public double alpha;
+
+        public McNemarTrackResult(String matcherName1, String matcherName2, String trackName, double alpha) {
+            this.matcherName1 = matcherName1;
+            this.matcherName2 = matcherName2;
+            this.trackName = trackName;
+            this.alpha = alpha;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof McNemarTrackResult)) return false;
+
+            McNemarTrackResult that = (McNemarTrackResult) o;
+            return  this.matcherName1.equals(that.matcherName1) &&
+                    this.matcherName2.equals(that.matcherName2)  &&
+                    this.trackName.equals(that.trackName) &&
+                    this.alpha == that.alpha;
+        }
+
+        @Override
+        public int hashCode() {
+            return matcherName1.hashCode() + matcherName2.hashCode() + trackName.hashCode() + (int) (alpha * 10);
+        }
+
+        @Override
+        public String toString() {
+            return this.trackName + "," + this.matcherName1 + "," + this.matcherName2 + "," + alpha;
+        }
+    }
+
+    /**
+     * Local data structure.
+     * To be used for testing.
+     */
+    public static class McNemarIndividualResult {
+
+
         public String matcherName1;
         public String matcherName2;
         public String testCaseName;
         public String trackName;
         public double alpha;
 
-        public McNemarIndividualResult(String matcherName1, String matcherName2, String testCaseName, String trackName, double alpha){
+        public McNemarIndividualResult(String matcherName1, String matcherName2, String testCaseName, String trackName, double alpha) {
             this.matcherName1 = matcherName1;
             this.matcherName2 = matcherName2;
             this.testCaseName = testCaseName;
@@ -123,7 +239,7 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         }
 
         @Override
-        public boolean equals(Object o){
+        public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof McNemarIndividualResult)) return false;
 
@@ -136,33 +252,37 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         }
 
         @Override
-        public String toString(){
+        public String toString() {
             return this.trackName + "," + this.testCaseName + "," + this.matcherName1 + "," + this.matcherName2 + "," + alpha;
         }
-    }
 
+        public McNemarTrackResult getTrackResult() {
+            return new McNemarTrackResult(matcherName1, matcherName2, trackName, alpha);
+        }
+    }
 
     /**
      * Given two execution results, it is determined whether the two results are significantly different (p &lt; alpha).
      * The execution results must be from the same test case.
+     *
      * @param executionResult1 Result 1.
      * @param executionResult2 Result 2.
      * @return p value
      */
-    private double pValueConsideringFalsePositives(ExecutionResult executionResult1, ExecutionResult executionResult2){
+    private double pValueConsideringFalsePositives(ExecutionResult executionResult1, ExecutionResult executionResult2) {
         return pValueConsideringFalsePositives(executionResult1, executionResult2, TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION);
     }
 
-
-        /**
-         * GGiven two execution results, it is determined whether the two results are significantly different (p &lt; alpha).
-         * The execution results must be from the same test case.
-         * @param executionResult1 Result 1.
-         * @param executionResult2 Result 2.
-         * @param testType The type of test to be used.
-         * @return p value
-         */
-    private double pValueConsideringFalsePositives(ExecutionResult executionResult1, ExecutionResult executionResult2, TestType testType){
+    /**
+     * GGiven two execution results, it is determined whether the two results are significantly different (p &lt; alpha).
+     * The execution results must be from the same test case.
+     *
+     * @param executionResult1 Result 1.
+     * @param executionResult2 Result 2.
+     * @param testType         The type of test to be used.
+     * @return p value. NaN if p cannot be calculated.
+     */
+    private double pValueConsideringFalsePositives(ExecutionResult executionResult1, ExecutionResult executionResult2, TestType testType) {
 
         // initialize the chi square distribution
         ChiSquaredDistribution distribution = new ChiSquaredDistribution(1);
@@ -174,7 +294,6 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         int summand_01b = Alignment.subtraction(Alignment.subtraction(executionResult1.getSystemAlignment(), executionResult2.getSystemAlignment()), executionResult1.getReferenceAlignment()).size();
         int n01 = summand_01a + summand_01b;
 
-
         // n10
         Alignment A1_intersects_R = Alignment.intersection(executionResult1.getSystemAlignment(), executionResult1.getReferenceAlignment());
         Alignment A1_intersects_R_minus_A2 = Alignment.subtraction(A1_intersects_R, executionResult2.getSystemAlignment());
@@ -182,22 +301,26 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         int summand_10b = Alignment.subtraction(Alignment.subtraction(executionResult2.getSystemAlignment(), executionResult1.getSystemAlignment()), executionResult1.getReferenceAlignment()).size();
         int n10 = summand_10a + summand_10b;
 
-        //BigInteger pValueBig;
-        double pValue = 0.0;
-        if(testType == TestType.ASYMPTOTIC_TEST) {
-            if(n01 == 0 && n10 == 0){
+        if (testType == TestType.ASYMPTOTIC_TEST) {
+            if (n01 == 0 && n10 == 0) {
                 LOGGER.error("Significance cannot be determined using McNemar's Asymptotic test because" +
-                        "n01 == 0 and n10 == 0.");
+                        "n01 == 0 and n10 == 0. [Matchers: " + executionResult1.getMatcherName() + " | " +
+                                executionResult2.getMatcherName() + "]");
+                // most likely this is the case for identical alignments
+                return 1.0;
             }
-            if(n01 + n10 < 25){
+            if (n01 + n10 < 25) {
                 LOGGER.warn("A sufficient number of data is required: n01 + n10 >= 25. This is not the case here.");
+                return Double.NaN;
             }
             double chiSquare = Math.pow(n01 - n10, 2) / (n01 + n10);
             return (1.0 - distribution.cumulativeProbability(chiSquare));
-        } else if (testType == TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION){
-            if(n01 == 0 && n10 == 0){
+        } else if (testType == TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION) {
+            if (n01 == 0 && n10 == 0) {
                 LOGGER.error("Significance cannot be determined using McNemar's Asymptotic test with continuity " +
-                        "correction because n01 == 0 and n10 == 0.");
+                        "correction because n01 == 0 and n10 == 0. [Matchers: " + executionResult1.getMatcherName() + " | " +
+                executionResult2.getMatcherName() + "]");
+                // most likely this is the case for identical alignments
                 return 1.0;
             }
             double chiSquare = Math.pow(Math.abs(n01 - n10) - 1, 2) / (n01 + n10);
@@ -206,16 +329,16 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
         // TODO: mathematically midp and exact are easily available, but there needs to be a "smart" shortcut b/c the factorial is too large for int
         /**
-        else if (testType == TestType.EXACT_TEST){
-            int n = n01 + n10;
-            pValue = nCr(n, n01) * 0.25 + nCr(n, n10) * 0.25;
-            //pValueBig = nCrBigInt(n, n01).divide(BigInteger.valueOf(4)).add(nCrBigInt(n, n01)).divide(BigInteger.valueOf(4));
+         else if (testType == TestType.EXACT_TEST){
+         int n = n01 + n10;
+         pValue = nCr(n, n01) * 0.25 + nCr(n, n10) * 0.25;
+         //pValueBig = nCrBigInt(n, n01).divide(BigInteger.valueOf(4)).add(nCrBigInt(n, n01)).divide(BigInteger.valueOf(4));
 
-        } else if (testType == TestType.MID_P_TEST){
-            int n = n01 + n10;
-            double exactPvalue = nCr(n, n01) * 0.25 + nCr(n, n10) * 0.25;
-            pValue = exactPvalue - nCr(n, n01) * Math.pow(0.5, n);
-        }
+         } else if (testType == TestType.MID_P_TEST){
+         int n = n01 + n10;
+         double exactPvalue = nCr(n, n01) * 0.25 + nCr(n, n10) * 0.25;
+         pValue = exactPvalue - nCr(n, n01) * Math.pow(0.5, n);
+         }
          **/
 
         // (never reached)
@@ -225,46 +348,44 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     /**
      * From n choose r with large numbers.
+     *
      * @param N N of nCr(N,r)
      * @param R R of nCr(n,R)
-     * @return nCr(n,r)
+     * @return nCr(n, r)
      */
     static BigInteger nCrBigInt(final int N, final int R) {
         BigInteger ret = BigInteger.ONE;
         for (int k = 0; k < R; k++) {
-            ret = ret.multiply(BigInteger.valueOf(N-k))
-                    .divide(BigInteger.valueOf(k+1));
+            ret = ret.multiply(BigInteger.valueOf(N - k))
+                    .divide(BigInteger.valueOf(k + 1));
         }
         return ret;
     }
 
-
     /**
      * From n choose r.
+     *
      * @param n N of nCr(N,r)
      * @param r R of nCr(n,R)
-     * @return nCr(n,r)
+     * @return nCr(n, r)
      */
-    static long nCr(int n, int r)
-    {
+    static long nCr(int n, int r) {
         return fact(n) / (fact(r) *
                 fact(n - r));
     }
 
-
     /**
      * Returns the factorial of n.
+     *
      * @param n Value for which the factorial shall be calculated.
      * @return Factorial of n.
      */
-    static long fact(int n)
-    {
+    static long fact(int n) {
         long res = 1;
         for (long i = 2; i <= n; i++)
             res = res * i;
         return res;
     }
-
 
     /**
      * The supported test types.
@@ -275,6 +396,5 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         ASYMPTOTIC_TEST,
         ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION;
     }
-
 
 }

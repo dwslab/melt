@@ -8,7 +8,8 @@ import org.apache.jena.riot.system.ErrorHandler;
  * An Error handler that does nothing except for throwing an Exception in fatal cases.
  */
 public class ErrorHandlerCarryOn implements ErrorHandler {
-    
+
+
     @Override
     public void warning(String message, long line, long col) {
     }
