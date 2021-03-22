@@ -31,6 +31,24 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     protected double alpha;
 
+    // Default file names (files will be created in baseDirectory.
+    public static final String FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC =
+            "TestCase_McNemar_asymptotic.csv";
+    public static final String FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK =
+            "TestCase_McNemar_asymptotic_exact_fallback.csv";
+    public static final String FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC =
+            "Track_McNemar_asymptotic.csv";
+    public static final String FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK =
+            "Track_McNemar_asymptotic_exact_fallback.csv";
+    public static final String FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_CCORRECTION =
+            "TestCase_McNemar_asymptotic_with_continuity_correction.csv";
+    public static final String FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK =
+            "TestCase_McNemar_asymptotic_with_continuity_correction_exact_fallback.csv";
+    public static final String FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION =
+            "Track_McNemar_asymptotic_with_continuity_correction.csv";
+    public static final String FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK =
+            "Track_McNemar_asymptotic_with_continuity_correction_exact_fallback.csv";
+
     /**
      * Constructor. It runs the test with alpha=0.05
      *
@@ -51,7 +69,6 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         this.alpha = alpha;
     }
 
-
     /**
      * Two files will be written.
      *
@@ -59,64 +76,79 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
      */
     @Override
     public void writeResultsToDirectory(File baseDirectory) {
-            // make base directory if it does not exist
-            if (baseDirectory == null) {
-                LOGGER.error("The given base directory does not exist. ABORT.");
-                return;
-            }
-            if (baseDirectory.exists() && baseDirectory.isFile()) {
-                LOGGER.error("The given base directory is a file, please specify a directory. ABORT.");
-            }
-            if (!baseDirectory.exists()) {
-                baseDirectory.mkdirs();
-            }
+        // make base directory if it does not exist
+        if (baseDirectory == null) {
+            LOGGER.error("The given base directory does not exist. ABORT.");
+            return;
+        }
+        if (baseDirectory.exists() && baseDirectory.isFile()) {
+            LOGGER.error("The given base directory is a file, please specify a directory. ABORT.");
+        }
+        if (!baseDirectory.exists()) {
+            baseDirectory.mkdirs();
+        }
 
-            // with continuity correction
-            Map<McNemarIndividualResult, Double> pValuesAsymptoticWithContinuityCorrection = calculatePvalues(this.alpha,
-                    TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION);
-            File testCaseResultFileWithContinuity = new File(baseDirectory, "TestCase_McNemar_asymptotic_with_continuity_correction" +
-                    ".csv");
-            File trackResultFile = new File(baseDirectory, "Track_McNemar_asymptotic_with_continuity_correction" +
-                    ".csv");
-            writeTestCaseResultFile(pValuesAsymptoticWithContinuityCorrection, testCaseResultFileWithContinuity);
-            writeTrackResultFile(pValuesAsymptoticWithContinuityCorrection, trackResultFile);
+        // with continuity correction
+        Map<McNemarIndividualResult, Double> pValuesAsymptoticWithContinuityCorrection = calculatePvalues(this.alpha,
+                TestType.ASYMPTOTIC_CONTINUITY_CORRECTION);
+        File testCaseResultFileWithContinuity = new File(baseDirectory, FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_CCORRECTION);
+        File trackResultFile = new File(baseDirectory, FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION);
+        writeTestCaseResultFile(pValuesAsymptoticWithContinuityCorrection, testCaseResultFileWithContinuity);
+        writeTrackResultFile(pValuesAsymptoticWithContinuityCorrection, trackResultFile);
 
+        // with continuity correction and exact fallback
+        Map<McNemarIndividualResult, Double> pValuesAsymptoticContinuityCorrectionExactFallback =
+                calculatePvalues(this.alpha,
+                TestType.ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK);
+        File testCaseResultFileContinuityCorrectExactFallback = new File(baseDirectory,
+                FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK);
+        File trackResultFileContinuityCorrectExactFallback = new File(baseDirectory,
+                FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK);
+        writeTestCaseResultFile(pValuesAsymptoticContinuityCorrectionExactFallback, testCaseResultFileContinuityCorrectExactFallback);
+        writeTrackResultFile(pValuesAsymptoticContinuityCorrectionExactFallback, trackResultFileContinuityCorrectExactFallback);
 
-            // without continuity correction
-            Map<McNemarIndividualResult, Double> pValuesAsymptotic = calculatePvalues(this.alpha, TestType.ASYMPTOTIC_TEST);
-            File testCaseAsymptoticResultFile = new File(baseDirectory, "TestCase_McNemar_asymptotic.csv");
-            File trackAsymptoticResultFile = new File(baseDirectory, "Track_McNemar_asymptotic.csv");
-            writeTrackResultFile(pValuesAsymptotic, testCaseAsymptoticResultFile);
-            writeTestCaseResultFile(pValuesAsymptotic, trackAsymptoticResultFile);
+        // without continuity correction
+        Map<McNemarIndividualResult, Double> pValuesAsymptotic = calculatePvalues(this.alpha, TestType.ASYMPTOTIC);
+        File testCaseAsymptoticResultFile = new File(baseDirectory, FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC);
+        File trackAsymptoticResultFile = new File(baseDirectory, FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC);
+        writeTrackResultFile(pValuesAsymptotic, trackAsymptoticResultFile);
+        writeTestCaseResultFile(pValuesAsymptotic, testCaseAsymptoticResultFile);
+
+        // without continuity correction and exact fallback
+        Map<McNemarIndividualResult, Double> pValuesAsymptoticExactFallback = calculatePvalues(this.alpha,
+                TestType.ASYMPTOTIC_EXACT_FALLBACK);
+        File testCaseAsymptoticResultFileExactFallback = new File(baseDirectory,
+                FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK);
+        File trackAsymptoticResultFileExactFallback = new File(baseDirectory, FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK);
+        writeTrackResultFile(pValuesAsymptoticExactFallback, trackAsymptoticResultFileExactFallback);
+        writeTestCaseResultFile(pValuesAsymptoticExactFallback, testCaseAsymptoticResultFileExactFallback);
     }
 
-
-    private void writeTrackResultFile(Map<McNemarIndividualResult, Double> pValues,
-                                      File fileToWrite) {
+    /**
+     * Write the results file on the granularity of tracks.
+     * @param pValues The p values.
+     * @param fileToWrite The file that shall be written.
+     */
+    private void writeTrackResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileToWrite));
-            writer.write("Track,Matcher Name 1,Matcher Name 2,Alpha,Significantly Different, Not Significantly " +
-                    "Different\n");
+            writer.write("Track,Matcher Name 1,Matcher Name 2,Alpha,Significantly Different,Not Significantly " +
+                    "Different,Cannot be Determined\n");
             Map<McNemarTrackResult, SignificanceCount> trackResultMap = new HashMap<>();
 
             for (Map.Entry<McNemarIndividualResult, Double> entry : pValues.entrySet()) {
-                boolean isSignificantlyDifferent = (entry.getValue() < this.alpha);
                 McNemarTrackResult trackResult = entry.getKey().getTrackResult();
                 if (trackResultMap.containsKey(trackResult)) {
                     SignificanceCount count = trackResultMap.get(trackResult);
-                    if (isSignificantlyDifferent) {
-                        count.isSignificantlyDifferent++;
-                    } else {
-                        count.isNotSignificantlyDifferent++;
-                    }
+                    count.increment(Significance.getSignificance(entry.getValue(), alpha));
                 } else {
-                    SignificanceCount count = new SignificanceCount(isSignificantlyDifferent);
+                    SignificanceCount count = new SignificanceCount(Significance.getSignificance(entry.getValue(), alpha));
                     trackResultMap.put(trackResult, count);
                 }
             }
             for (Map.Entry<McNemarTrackResult, SignificanceCount> entry : trackResultMap.entrySet()) {
-                writer.write(entry.getKey().toString() + "," + entry.getValue().isSignificantlyDifferent + "," +
-                        entry.getValue().isNotSignificantlyDifferent + "\n");
+                writer.write(entry.getKey().toString() + "," + entry.getValue().significantlyDifferent + "," +
+                        entry.getValue().notSignificantlyDifferent + "," + entry.getValue().notDefined + "\n");
             }
             writer.flush();
             writer.close();
@@ -125,14 +157,24 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         }
     }
 
-    private void writeTestCaseResultFile(Map<McNemarIndividualResult, Double> pValues,
-                                                                       File fileToWrite) {
+    /**
+     * Write the results file on the granularity of test cases.
+     * @param pValues The p values.
+     * @param fileToWrite The file that shall be written.
+     */
+    private void writeTestCaseResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileToWrite));
             writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Alpha,p,Significantly Different?\n");
             for (Map.Entry<McNemarIndividualResult, Double> entry : pValues.entrySet()) {
-                boolean isSignificantlyDifferent = (entry.getValue() < this.alpha);
-                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + isSignificantlyDifferent + "\n");
+
+                String isSignificantlyDifferentString;
+                if(entry.getValue().isNaN()){
+                    isSignificantlyDifferentString = "<undefined>";
+                } else {
+                    isSignificantlyDifferentString = "" + (entry.getValue() < this.alpha);
+                }
+                writer.write(entry.getKey().toString() + "," + entry.getValue() + "," + isSignificantlyDifferentString + "\n");
             }
             writer.flush();
             writer.close();
@@ -150,9 +192,6 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
                     double pValue;
                     try {
                         pValue = pValueConsideringFalsePositives(result1, result2, testType);
-                        if(Double.isNaN(pValue)){
-                            continue;
-                        }
                         result.put(mr, pValue);
                     } catch (ArithmeticException ae) {
                         ae.printStackTrace();
@@ -163,16 +202,50 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         return result;
     }
 
+    /**
+     * Enumeration for Significance
+     */
+    enum Significance {
 
-    public static class SignificanceCount {
-        public int isSignificantlyDifferent = 0;
-        public int isNotSignificantlyDifferent = 0;
 
-        public SignificanceCount(boolean significantlyDifferent) {
-            if (significantlyDifferent) {
-                isSignificantlyDifferent++;
-            } else {
-                isNotSignificantlyDifferent++;
+        SIGNIFICANT,
+        NOT_SIGNIFICANT,
+        CANNOT_BE_DETERMINED;
+
+        static Significance getSignificance(Double p, double alpha) {
+            if (Double.isNaN(p)) {
+                return CANNOT_BE_DETERMINED;
+            }
+            if (p < alpha) {
+                return SIGNIFICANT;
+            } else return NOT_SIGNIFICANT;
+        }
+    }
+
+    /**
+     * Simple count for significance statistics.
+     */
+    static class SignificanceCount {
+
+
+        public int significantlyDifferent = 0;
+        public int notSignificantlyDifferent = 0;
+        public int notDefined = 0;
+
+        public SignificanceCount(Significance significance) {
+            increment(significance);
+        }
+
+        void increment(Significance significance) {
+            switch (significance) {
+                case SIGNIFICANT:
+                    significantlyDifferent++;
+                    return;
+                case NOT_SIGNIFICANT:
+                    notSignificantlyDifferent++;
+                    return;
+                case CANNOT_BE_DETERMINED:
+                    notDefined++;
             }
         }
     }
@@ -181,7 +254,9 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
      * Local data structure.
      * To be used for testing.
      */
-    public static class McNemarTrackResult {
+    static class McNemarTrackResult {
+
+
         public String matcherName1;
         public String matcherName2;
         public String trackName;
@@ -200,8 +275,8 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             if (!(o instanceof McNemarTrackResult)) return false;
 
             McNemarTrackResult that = (McNemarTrackResult) o;
-            return  this.matcherName1.equals(that.matcherName1) &&
-                    this.matcherName2.equals(that.matcherName2)  &&
+            return this.matcherName1.equals(that.matcherName1) &&
+                    this.matcherName2.equals(that.matcherName2) &&
                     this.trackName.equals(that.trackName) &&
                     this.alpha == that.alpha;
         }
@@ -270,7 +345,7 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
      * @return p value
      */
     private double pValueConsideringFalsePositives(ExecutionResult executionResult1, ExecutionResult executionResult2) {
-        return pValueConsideringFalsePositives(executionResult1, executionResult2, TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION);
+        return pValueConsideringFalsePositives(executionResult1, executionResult2, TestType.ASYMPTOTIC_CONTINUITY_CORRECTION);
     }
 
     /**
@@ -301,11 +376,11 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         int summand_10b = Alignment.subtraction(Alignment.subtraction(executionResult2.getSystemAlignment(), executionResult1.getSystemAlignment()), executionResult1.getReferenceAlignment()).size();
         int n10 = summand_10a + summand_10b;
 
-        if (testType == TestType.ASYMPTOTIC_TEST) {
+        if (testType == TestType.ASYMPTOTIC) {
             if (n01 == 0 && n10 == 0) {
-                LOGGER.error("Significance cannot be determined using McNemar's Asymptotic test because" +
+                LOGGER.warn("Significance cannot be determined using McNemar's Asymptotic test because" +
                         "n01 == 0 and n10 == 0. [Matchers: " + executionResult1.getMatcherName() + " | " +
-                                executionResult2.getMatcherName() + "]");
+                        executionResult2.getMatcherName() + "]");
                 // most likely this is the case for identical alignments
                 return 1.0;
             }
@@ -315,36 +390,52 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             }
             double chiSquare = Math.pow(n01 - n10, 2) / (n01 + n10);
             return (1.0 - distribution.cumulativeProbability(chiSquare));
-        } else if (testType == TestType.ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION) {
+        } else if (testType == TestType.ASYMPTOTIC_CONTINUITY_CORRECTION) {
             if (n01 == 0 && n10 == 0) {
-                LOGGER.error("Significance cannot be determined using McNemar's Asymptotic test with continuity " +
-                        "correction because n01 == 0 and n10 == 0. [Matchers: " + executionResult1.getMatcherName() + " | " +
-                executionResult2.getMatcherName() + "]");
+                LOGGER.warn("Significance cannot be determined using McNemar's Asymptotic test with continuity " +
+                        "correction because n01 == 0 and n10 == 0. [Matchers: " + executionResult1.getMatcherName() +
+                        " | " + executionResult2.getMatcherName() + "]");
                 // most likely this is the case for identical alignments
                 return 1.0;
             }
+            if (n01 + n10 < 25) {
+                LOGGER.warn("A sufficient number of data is required: n01 + n10 >= 25. This is not the case here.");
+                return Double.NaN;
+            }
             double chiSquare = Math.pow(Math.abs(n01 - n10) - 1, 2) / (n01 + n10);
             return (1.0 - distribution.cumulativeProbability(chiSquare));
+        } else if (testType == TestType.EXACT) {
+            int n = n01 + n10;
+            int result = 0;
+            for (int x = 0; x < n; x++) {
+                result += nCr(n, x) * 0.25;
+            }
+            return result;
+        } else if (testType == TestType.ASYMPTOTIC_EXACT_FALLBACK) {
+            double resultAsymptotic = pValueConsideringFalsePositives(executionResult1, executionResult2,
+                    TestType.ASYMPTOTIC);
+            if (Double.isNaN(resultAsymptotic)) {
+                return pValueConsideringFalsePositives(executionResult1, executionResult2, TestType.EXACT);
+            } else return resultAsymptotic;
+        } else if (testType == TestType.ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK){
+            double resultAsymptoticCCorrection = pValueConsideringFalsePositives(executionResult1, executionResult2,
+                    TestType.ASYMPTOTIC_CONTINUITY_CORRECTION);
+            if (Double.isNaN(resultAsymptoticCCorrection)) {
+                return pValueConsideringFalsePositives(executionResult1, executionResult2, TestType.EXACT);
+            } else return resultAsymptoticCCorrection;
         }
 
-        // TODO: mathematically midp and exact are easily available, but there needs to be a "smart" shortcut b/c the factorial is too large for int
-        /**
-         else if (testType == TestType.EXACT_TEST){
-         int n = n01 + n10;
-         pValue = nCr(n, n01) * 0.25 + nCr(n, n10) * 0.25;
-         //pValueBig = nCrBigInt(n, n01).divide(BigInteger.valueOf(4)).add(nCrBigInt(n, n01)).divide(BigInteger.valueOf(4));
-
-         } else if (testType == TestType.MID_P_TEST){
+        /*
+        else if (testType == TestType.MID_P_TEST){
          int n = n01 + n10;
          double exactPvalue = nCr(n, n01) * 0.25 + nCr(n, n10) * 0.25;
          pValue = exactPvalue - nCr(n, n01) * Math.pow(0.5, n);
          }
-         **/
+         */
 
-        // (never reached)
-        return 1.0;
+        // never reached:
+        return Double.NaN;
     }
-
 
     /**
      * From n choose r with large numbers.
@@ -370,8 +461,7 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
      * @return nCr(n, r)
      */
     static long nCr(int n, int r) {
-        return fact(n) / (fact(r) *
-                fact(n - r));
+        return fact(n) / (fact(r) * fact(n - r));
     }
 
     /**
@@ -382,19 +472,49 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
      */
     static long fact(int n) {
         long res = 1;
-        for (long i = 2; i <= n; i++)
+        for (long i = 2; i <= n; i++) {
             res = res * i;
+        }
         return res;
     }
 
     /**
-     * The supported test types.
+     * The supported test types for McNemar significance tests.
      */
     public enum TestType {
-        //EXACT_TEST,
-        //MID_P_TEST,
-        ASYMPTOTIC_TEST,
-        ASYMPTOTIC_TEST_WITH_CONTINUITY_CORRECTION;
-    }
 
+
+        /**
+         * Exact McNemar test.
+         * Only use the exact test for very small datasets, the factorial quickly gets too large.
+         * If you want to use the exact tests for small datasets automatically, use
+         * the types with automatic fallback to the exact tests for
+         * small data ({@link TestType#ASYMPTOTIC_EXACT_FALLBACK},
+         * {@link TestType#ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK}).
+         */
+        EXACT,
+
+        // Not implemented:
+        //MID_P_TEST,
+
+        /**
+         * Asymptotic test. Works only if b + c &gt; 25.
+         */
+        ASYMPTOTIC,
+
+        /**
+         * Asymptotic test. If b + c &gt; 25, the exact test is used.
+         */
+        ASYMPTOTIC_EXACT_FALLBACK,
+
+        /**
+         * Asymptotic test with continuity correction. If b + c &gt; 25, the exact test is used.
+         */
+        ASYMPTOTIC_CONTINUITY_CORRECTION,
+
+        /**
+         * Asymptotic test with continuity correction. If b + c &gt; 25, the exact test is used.
+         */
+        ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK;
+    }
 }
