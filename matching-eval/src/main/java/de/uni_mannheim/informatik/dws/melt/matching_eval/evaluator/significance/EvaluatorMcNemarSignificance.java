@@ -1,19 +1,20 @@
-package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator;
+package de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.significance;
 
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.Evaluator;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
+import static de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.significance.TestType.ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK;
 
 /**
  * Implementation of a significance test according to information specified in:
@@ -27,27 +28,40 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
     /**
      * Default Logger
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(EvaluatorMcNemarSignificance.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorMcNemarSignificance.class);
 
     protected double alpha;
 
     // Default file names (files will be created in baseDirectory.
+
     public static final String FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC =
             "TestCase_McNemar_asymptotic.csv";
-    public static final String FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK =
-            "TestCase_McNemar_asymptotic_exact_fallback.csv";
     public static final String FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC =
             "Track_McNemar_asymptotic.csv";
+    public static final String FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC =
+            "Cross_Track_McNemar_asymptotic.csv";
+
+    public static final String FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK =
+            "TestCase_McNemar_asymptotic_exact_fallback.csv";
     public static final String FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK =
             "Track_McNemar_asymptotic_exact_fallback.csv";
+    public static final String FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK =
+            "Cross_Track_McNemar_asymptotic_exact_fallback.csv";
+
     public static final String FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_CCORRECTION =
             "TestCase_McNemar_asymptotic_with_continuity_correction.csv";
-    public static final String FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK =
-            "TestCase_McNemar_asymptotic_with_continuity_correction_exact_fallback.csv";
     public static final String FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION =
             "Track_McNemar_asymptotic_with_continuity_correction.csv";
+    public static final String FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION =
+            "Cross_Track_McNemar_asymptotic_with_continuity_correction.csv";
+
+    public static final String FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK =
+            "TestCase_McNemar_asymptotic_with_continuity_correction_exact_fallback.csv";
     public static final String FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK =
             "Track_McNemar_asymptotic_with_continuity_correction_exact_fallback.csv";
+    public static final String FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK =
+            "Cross_Track_McNemar_asymptotic_with_continuity_correction_exact_fallback.csv";
+
 
     /**
      * Constructor. It runs the test with alpha=0.05
@@ -93,26 +107,32 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
                 TestType.ASYMPTOTIC_CONTINUITY_CORRECTION);
         File testCaseResultFileWithContinuity = new File(baseDirectory, FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_CCORRECTION);
         File trackResultFile = new File(baseDirectory, FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION);
+        File crossTrackResultFile = new File(baseDirectory, FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION);
         writeTestCaseResultFile(pValuesAsymptoticWithContinuityCorrection, testCaseResultFileWithContinuity);
         writeTrackResultFile(pValuesAsymptoticWithContinuityCorrection, trackResultFile);
+        writeCrossTrackResultFile(pValuesAsymptoticWithContinuityCorrection, crossTrackResultFile);
 
         // with continuity correction and exact fallback
         Map<McNemarIndividualResult, Double> pValuesAsymptoticContinuityCorrectionExactFallback =
-                calculatePvalues(this.alpha,
-                TestType.ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK);
+                calculatePvalues(alpha, ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK);
         File testCaseResultFileContinuityCorrectExactFallback = new File(baseDirectory,
                 FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK);
         File trackResultFileContinuityCorrectExactFallback = new File(baseDirectory,
                 FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK);
+        File crossTrackResultFileContinuityCorrectExactFallback = new File(baseDirectory,
+                FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK);
         writeTestCaseResultFile(pValuesAsymptoticContinuityCorrectionExactFallback, testCaseResultFileContinuityCorrectExactFallback);
         writeTrackResultFile(pValuesAsymptoticContinuityCorrectionExactFallback, trackResultFileContinuityCorrectExactFallback);
+        writeCrossTrackResultFile(pValuesAsymptoticContinuityCorrectionExactFallback, crossTrackResultFileContinuityCorrectExactFallback);
 
         // without continuity correction
         Map<McNemarIndividualResult, Double> pValuesAsymptotic = calculatePvalues(this.alpha, TestType.ASYMPTOTIC);
         File testCaseAsymptoticResultFile = new File(baseDirectory, FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC);
         File trackAsymptoticResultFile = new File(baseDirectory, FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC);
+        File crossTrackAsymptoticResultFile = new File(baseDirectory, FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC);
         writeTrackResultFile(pValuesAsymptotic, trackAsymptoticResultFile);
         writeTestCaseResultFile(pValuesAsymptotic, testCaseAsymptoticResultFile);
+        writeCrossTrackResultFile(pValuesAsymptotic, crossTrackAsymptoticResultFile);
 
         // without continuity correction and exact fallback
         Map<McNemarIndividualResult, Double> pValuesAsymptoticExactFallback = calculatePvalues(this.alpha,
@@ -120,8 +140,45 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
         File testCaseAsymptoticResultFileExactFallback = new File(baseDirectory,
                 FILE_NAME_TEST_CASE_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK);
         File trackAsymptoticResultFileExactFallback = new File(baseDirectory, FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK);
+        File crossTrackAsymptoticResultFileExactFallback = new File(baseDirectory,
+                FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK);
         writeTrackResultFile(pValuesAsymptoticExactFallback, trackAsymptoticResultFileExactFallback);
         writeTestCaseResultFile(pValuesAsymptoticExactFallback, testCaseAsymptoticResultFileExactFallback);
+        writeCrossTrackResultFile(pValuesAsymptoticExactFallback, crossTrackAsymptoticResultFileExactFallback);
+    }
+
+    /**
+     * Write the results file on the granularity of matchers.
+     * @param pValues The p values.
+     * @param fileToWrite The file that shall be written.
+     */
+    private void writeCrossTrackResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite){
+        try {
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite),
+                    StandardCharsets.UTF_8));
+            writer.write("Matcher Name 1,Matcher Name 2,Alpha,Significantly Different,Not Significantly " +
+                    "Different,Cannot be Determined\n");
+            Map<McNemarCrossTrackResult, SignificanceCount> resultMap = new HashMap<>();
+
+            for (Map.Entry<McNemarIndividualResult, Double> entry : pValues.entrySet()) {
+                McNemarCrossTrackResult crossTrackResult = entry.getKey().getCrossTrackResult();
+                if (resultMap.containsKey(crossTrackResult)) {
+                    SignificanceCount count = resultMap.get(crossTrackResult);
+                    count.increment(Significance.getSignificance(entry.getValue(), alpha));
+                } else {
+                    SignificanceCount count = new SignificanceCount(Significance.getSignificance(entry.getValue(), alpha));
+                    resultMap.put(crossTrackResult, count);
+                }
+            }
+            for (Map.Entry<McNemarCrossTrackResult, SignificanceCount> entry : resultMap.entrySet()) {
+                writer.write(entry.getKey().toString() + "," + entry.getValue().significantlyDifferent + "," +
+                        entry.getValue().notSignificantlyDifferent + "," + entry.getValue().notDefined + "\n");
+            }
+            writer.flush();
+            writer.close();
+        } catch (IOException ioe) {
+            LOGGER.error("An error occurred while trying to write file '" + fileToWrite.getAbsolutePath() + "'.");
+        }
     }
 
     /**
@@ -131,7 +188,8 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
      */
     private void writeTrackResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileToWrite));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite),
+                    StandardCharsets.UTF_8));
             writer.write("Track,Matcher Name 1,Matcher Name 2,Alpha,Significantly Different,Not Significantly " +
                     "Different,Cannot be Determined\n");
             Map<McNemarTrackResult, SignificanceCount> trackResultMap = new HashMap<>();
@@ -164,7 +222,8 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
      */
     private void writeTestCaseResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileToWrite));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite),
+                    StandardCharsets.UTF_8));
             writer.write("Track,Test Case,Matcher Name 1,Matcher Name 2,Alpha,p,Significantly Different?\n");
             for (Map.Entry<McNemarIndividualResult, Double> entry : pValues.entrySet()) {
 
@@ -200,140 +259,6 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             }
         }
         return result;
-    }
-
-    /**
-     * Enumeration for Significance
-     */
-    enum Significance {
-
-
-        SIGNIFICANT,
-        NOT_SIGNIFICANT,
-        CANNOT_BE_DETERMINED;
-
-        static Significance getSignificance(Double p, double alpha) {
-            if (Double.isNaN(p)) {
-                return CANNOT_BE_DETERMINED;
-            }
-            if (p < alpha) {
-                return SIGNIFICANT;
-            } else return NOT_SIGNIFICANT;
-        }
-    }
-
-    /**
-     * Simple count for significance statistics.
-     */
-    static class SignificanceCount {
-
-
-        public int significantlyDifferent = 0;
-        public int notSignificantlyDifferent = 0;
-        public int notDefined = 0;
-
-        public SignificanceCount(Significance significance) {
-            increment(significance);
-        }
-
-        void increment(Significance significance) {
-            switch (significance) {
-                case SIGNIFICANT:
-                    significantlyDifferent++;
-                    return;
-                case NOT_SIGNIFICANT:
-                    notSignificantlyDifferent++;
-                    return;
-                case CANNOT_BE_DETERMINED:
-                    notDefined++;
-            }
-        }
-    }
-
-    /**
-     * Local data structure.
-     * To be used for testing.
-     */
-    static class McNemarTrackResult {
-
-
-        public String matcherName1;
-        public String matcherName2;
-        public String trackName;
-        public double alpha;
-
-        public McNemarTrackResult(String matcherName1, String matcherName2, String trackName, double alpha) {
-            this.matcherName1 = matcherName1;
-            this.matcherName2 = matcherName2;
-            this.trackName = trackName;
-            this.alpha = alpha;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof McNemarTrackResult)) return false;
-
-            McNemarTrackResult that = (McNemarTrackResult) o;
-            return this.matcherName1.equals(that.matcherName1) &&
-                    this.matcherName2.equals(that.matcherName2) &&
-                    this.trackName.equals(that.trackName) &&
-                    this.alpha == that.alpha;
-        }
-
-        @Override
-        public int hashCode() {
-            return matcherName1.hashCode() + matcherName2.hashCode() + trackName.hashCode() + (int) (alpha * 10);
-        }
-
-        @Override
-        public String toString() {
-            return this.trackName + "," + this.matcherName1 + "," + this.matcherName2 + "," + alpha;
-        }
-    }
-
-    /**
-     * Local data structure.
-     * To be used for testing.
-     */
-    public static class McNemarIndividualResult {
-
-
-        public String matcherName1;
-        public String matcherName2;
-        public String testCaseName;
-        public String trackName;
-        public double alpha;
-
-        public McNemarIndividualResult(String matcherName1, String matcherName2, String testCaseName, String trackName, double alpha) {
-            this.matcherName1 = matcherName1;
-            this.matcherName2 = matcherName2;
-            this.testCaseName = testCaseName;
-            this.trackName = trackName;
-            this.alpha = alpha;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof McNemarIndividualResult)) return false;
-
-            McNemarIndividualResult that = (McNemarIndividualResult) o;
-            return this.matcherName1.equals(that.matcherName1) &&
-                    this.matcherName2.equals(that.matcherName2) &&
-                    this.testCaseName.equals(that.testCaseName) &&
-                    this.trackName.equals(that.trackName) &&
-                    this.alpha == that.alpha;
-        }
-
-        @Override
-        public String toString() {
-            return this.trackName + "," + this.testCaseName + "," + this.matcherName1 + "," + this.matcherName2 + "," + alpha;
-        }
-
-        public McNemarTrackResult getTrackResult() {
-            return new McNemarTrackResult(matcherName1, matcherName2, trackName, alpha);
-        }
     }
 
     /**
@@ -417,7 +342,7 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             if (Double.isNaN(resultAsymptotic)) {
                 return pValueConsideringFalsePositives(executionResult1, executionResult2, TestType.EXACT);
             } else return resultAsymptotic;
-        } else if (testType == TestType.ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK){
+        } else if (testType == ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK){
             double resultAsymptoticCCorrection = pValueConsideringFalsePositives(executionResult1, executionResult2,
                     TestType.ASYMPTOTIC_CONTINUITY_CORRECTION);
             if (Double.isNaN(resultAsymptoticCCorrection)) {
@@ -476,45 +401,5 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             res = res * i;
         }
         return res;
-    }
-
-    /**
-     * The supported test types for McNemar significance tests.
-     */
-    public enum TestType {
-
-
-        /**
-         * Exact McNemar test.
-         * Only use the exact test for very small datasets, the factorial quickly gets too large.
-         * If you want to use the exact tests for small datasets automatically, use
-         * the types with automatic fallback to the exact tests for
-         * small data ({@link TestType#ASYMPTOTIC_EXACT_FALLBACK},
-         * {@link TestType#ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK}).
-         */
-        EXACT,
-
-        // Not implemented:
-        //MID_P_TEST,
-
-        /**
-         * Asymptotic test. Works only if b + c &gt; 25.
-         */
-        ASYMPTOTIC,
-
-        /**
-         * Asymptotic test. If b + c &gt; 25, the exact test is used.
-         */
-        ASYMPTOTIC_EXACT_FALLBACK,
-
-        /**
-         * Asymptotic test with continuity correction. If b + c &gt; 25, the exact test is used.
-         */
-        ASYMPTOTIC_CONTINUITY_CORRECTION,
-
-        /**
-         * Asymptotic test with continuity correction. If b + c &gt; 25, the exact test is used.
-         */
-        ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK;
     }
 }
