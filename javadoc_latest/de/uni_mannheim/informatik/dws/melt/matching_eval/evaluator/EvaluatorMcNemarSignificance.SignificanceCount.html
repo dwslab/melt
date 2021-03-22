@@ -18,6 +18,12 @@
     catch(err) {
     }
 //-->
+var methods = {"i0":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 </script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -42,7 +48,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarTrackResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.Significance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.TestType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -70,13 +76,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.java.lang.Object">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.top">
@@ -106,8 +112,9 @@
 </dl>
 <hr>
 <br>
-<pre>public static class <span class="typeNameLabel">EvaluatorMcNemarSignificance.SignificanceCount</span>
+<pre>static class <span class="typeNameLabel">EvaluatorMcNemarSignificance.SignificanceCount</span>
 extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<div class="block">Simple count for significance statistics.</div>
 </li>
 </ul>
 </div>
@@ -128,11 +135,15 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.SignificanceCount.html#isNotSignificantlyDifferent">isNotSignificantlyDifferent</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.SignificanceCount.html#notDefined">notDefined</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.SignificanceCount.html#isSignificantlyDifferent">isSignificantlyDifferent</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.SignificanceCount.html#notSignificantlyDifferent">notSignificantlyDifferent</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.SignificanceCount.html#significantlyDifferent">significantlyDifferent</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -149,7 +160,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.SignificanceCount.html#SignificanceCount-boolean-">SignificanceCount</a></span>(boolean&nbsp;significantlyDifferent)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.SignificanceCount.html#SignificanceCount-de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorMcNemarSignificance.Significance-">SignificanceCount</a></span>(<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.Significance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.Significance</a>&nbsp;significance)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -160,6 +171,17 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>(package private) void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.SignificanceCount.html#increment-de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorMcNemarSignificance.Significance-">increment</a></span>(<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.Significance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.Significance</a>&nbsp;significance)</code>&nbsp;</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -181,22 +203,31 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="isSignificantlyDifferent">
+<a name="significantlyDifferent">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>isSignificantlyDifferent</h4>
-<pre>public&nbsp;int isSignificantlyDifferent</pre>
+<h4>significantlyDifferent</h4>
+<pre>public&nbsp;int significantlyDifferent</pre>
 </li>
 </ul>
-<a name="isNotSignificantlyDifferent">
+<a name="notSignificantlyDifferent">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>notSignificantlyDifferent</h4>
+<pre>public&nbsp;int notSignificantlyDifferent</pre>
+</li>
+</ul>
+<a name="notDefined">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>isNotSignificantlyDifferent</h4>
-<pre>public&nbsp;int isNotSignificantlyDifferent</pre>
+<h4>notDefined</h4>
+<pre>public&nbsp;int notDefined</pre>
 </li>
 </ul>
 </li>
@@ -207,13 +238,30 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="SignificanceCount-boolean-">
+<a name="SignificanceCount-de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorMcNemarSignificance.Significance-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SignificanceCount</h4>
-<pre>public&nbsp;SignificanceCount(boolean&nbsp;significantlyDifferent)</pre>
+<pre>public&nbsp;SignificanceCount(<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.Significance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.Significance</a>&nbsp;significance)</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="increment-de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorMcNemarSignificance.Significance-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>increment</h4>
+<pre>void&nbsp;increment(<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.Significance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorMcNemarSignificance.Significance</a>&nbsp;significance)</pre>
 </li>
 </ul>
 </li>
@@ -243,7 +291,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.McNemarTrackResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.Significance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorMcNemarSignificance.TestType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -271,13 +319,13 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.java.lang.Object">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.bottom">
