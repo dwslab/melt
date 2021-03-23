@@ -3,7 +3,9 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embe
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResourceWithSynonymCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SynonymConfidenceCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
+import org.javatuples.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +17,7 @@ import java.util.Set;
  * This class represents a single gensim embedding model.
  * It allows for simplified usage in matching systems.
  */
-public class GensimEmbeddingModel extends SemanticWordRelationDictionary {
+public class GensimEmbeddingModel extends SemanticWordRelationDictionary implements SynonymConfidenceCapability {
 
 
     /**
@@ -184,5 +186,18 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary {
 
     public void setThreshold(double threshold) {
         this.threshold = threshold;
+    }
+
+    @Override
+    public double getSynonymyConfidence(String linkedConcept1, String linkedConcept2) {
+        if(linkedConcept1 == null || linkedConcept2 ==  null){
+            return 0.0;
+        }
+        return gensim.getSimilarity(linkedConcept1, linkedConcept2, this.modelFilePath);
+    }
+
+    @Override
+    public double getStrongFormSynonymyConfidence(String linkedConcept1, String linkedConcept2) {
+        return getSynonymyConfidence(linkedConcept1, linkedConcept2);
     }
 }

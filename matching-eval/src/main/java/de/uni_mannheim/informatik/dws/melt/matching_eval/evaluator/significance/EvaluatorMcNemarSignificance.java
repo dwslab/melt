@@ -245,7 +245,15 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
     public Map<McNemarIndividualResult, Double> calculatePvalues(double alpha, TestType testType) {
         Map<McNemarIndividualResult, Double> result = new HashMap<>();
         for (ExecutionResult result1 : results) {
+            if(result1.getRefinements().size() > 0){
+                // for now we only work with raw results
+                continue;
+            }
             for (ExecutionResult result2 : results) {
+                if(result2.getRefinements().size() > 0){
+                    // for now we only work with raw results
+                    continue;
+                }
                 if (result1.getTestCase().getName().equals(result2.getTestCase().getName()) && result1.getTrack().getName().equals(result2.getTrack().getName())) {
                     McNemarIndividualResult mr = new McNemarIndividualResult(result1.getMatcherName(), result2.getMatcherName(), result1.getTestCase().getName(), result1.getTrack().getName(), alpha);
                     double pValue;

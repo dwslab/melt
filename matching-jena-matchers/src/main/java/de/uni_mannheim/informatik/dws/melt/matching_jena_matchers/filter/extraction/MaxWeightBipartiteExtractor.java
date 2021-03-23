@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filter {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MaxWeightBipartiteExtractor.class);
     
     private final static int DEFAULT_MULTIPLIER = 10000;

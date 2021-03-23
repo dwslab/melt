@@ -2,6 +2,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matc
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.GensimEmbeddingModel;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.GensimEmbeddingModelTest;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetKnowledgeSource;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.jena.ontology.OntModel;
@@ -19,6 +21,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class BackgroundMatcherTest {
 
 
+    @Test
+    void checkSynonymyConfidenceFunctionality(){
+        BackgroundMatcher backgroundMatcher = new BackgroundMatcher(new WordNetKnowledgeSource());
+        assertFalse(backgroundMatcher.isSynonymyConfidenceAvailable());
+        GensimEmbeddingModel gem = GensimEmbeddingModelTest.getDummyModel();
+        backgroundMatcher = new BackgroundMatcher(gem);
+        assertTrue(backgroundMatcher.isSynonymyConfidenceAvailable());
+        gem.close();
+    }
 
     @Test
     void match(){
@@ -69,12 +80,12 @@ class BackgroundMatcherTest {
 
         String[] s123456solution = {"hello", "world"};
 
-        assertTrue(s1result.size() == 2);
-        assertTrue(s2result.size() == 2);
-        assertTrue(s3result.size() == 2);
-        assertTrue(s4result.size() == 2);
-        assertTrue(s5result.size() == 2);
-        assertTrue(s6result.size() == 2);
+        assertEquals(s1result.size(), 2);
+        assertEquals(s2result.size(), 2);
+        assertEquals(s3result.size(), 2);
+        assertEquals(s4result.size(), 2);
+        assertEquals(s5result.size(), 2);
+        assertEquals(s6result.size(), 2);
 
         for(String solution : s123456solution){
             assertTrue(s1result.contains(solution));
@@ -85,7 +96,6 @@ class BackgroundMatcherTest {
             assertTrue(s6result.contains(solution));
         }
     }
-
 
     @Test
     void isTokenSynonymous(){
@@ -110,8 +120,8 @@ class BackgroundMatcherTest {
         list2.add(set2a);
 
         // case: synonymous sets, testing both ways
-        assertTrue(matcher.isTokenSetSynonymous(list1, list2));
-        assertTrue(matcher.isTokenSetSynonymous(list2, list1));
+        assertTrue(matcher.isTokenSetSynonymous(list1, list2).getValue0());
+        assertTrue(matcher.isTokenSetSynonymous(list2, list1).getValue0());
 
         // list 3
         List<Set<String>> list3 = new LinkedList<>();
@@ -121,8 +131,8 @@ class BackgroundMatcherTest {
         list3.add(set3);
 
         // case: non-synonymous sets, testing both ways
-        assertFalse(matcher.isTokenSetSynonymous(list3, list2));
-        assertFalse(matcher.isTokenSetSynonymous(list2, list3));
+        assertFalse(matcher.isTokenSetSynonymous(list3, list2).getValue0());
+        assertFalse(matcher.isTokenSetSynonymous(list2, list3).getValue0());
 
         // list 4
         List<Set<String>> list4 = new LinkedList<>();
@@ -133,8 +143,8 @@ class BackgroundMatcherTest {
         list4.add(set4);
 
         // case: non-synonymous set but one contains the other
-        assertFalse(matcher.isTokenSetSynonymous(list3, list4));
-        assertFalse(matcher.isTokenSetSynonymous(list4, list3));
+        assertFalse(matcher.isTokenSetSynonymous(list3, list4).getValue0());
+        assertFalse(matcher.isTokenSetSynonymous(list4, list3).getValue0());
 
 
         // list 5
@@ -150,8 +160,9 @@ class BackgroundMatcherTest {
         list6.add(set6);
 
         // case: non-synonymous, non-linkable
-        assertFalse(matcher.isTokenSetSynonymous(list5, list6));
-        assertFalse(matcher.isTokenSetSynonymous(list6, list5));
+        assertFalse(matcher.isTokenSetSynonymous(list5, list6).getValue0());
+        assertFalse(matcher.isTokenSetSynonymous(list6, list5).getValue0());
+        assertEquals(0.0, matcher.isTokenSetSynonymous(list6, list5).getValue1());
 
         // test for long lists
         List<Set<String>> list7 = new LinkedList<>();
@@ -174,8 +185,9 @@ class BackgroundMatcherTest {
         set8.add("warlock");
         list8.add(set8);
 
-        assertTrue(matcher.isTokenSetSynonymous(list8, list7));
-        assertTrue(matcher.isTokenSetSynonymous(list7, list8));
+        assertTrue(matcher.isTokenSetSynonymous(list8, list7).getValue0());
+        assertTrue(matcher.isTokenSetSynonymous(list7, list8).getValue0());
+        assertEquals(1.0, matcher.isTokenSetSynonymous(list7, list8).getValue1());
     }
 
     @Test
@@ -184,6 +196,4 @@ class BackgroundMatcherTest {
         matcher.setStrategy(ImplementedBackgroundMatchingStrategies.SYNONYMY);
         assertEquals("SYNONYMY", matcher.getStrategy().toString());
     }
-
-
 }
