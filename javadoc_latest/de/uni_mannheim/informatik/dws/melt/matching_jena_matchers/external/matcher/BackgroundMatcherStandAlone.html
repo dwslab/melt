@@ -212,6 +212,14 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcherStandAlone.html#BackgroundMatcherStandAlone-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.ImplementedBackgroundMatchingStrategies-boolean-double-">BackgroundMatcherStandAlone</a></span>(<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">SemanticWordRelationDictionary</a>&nbsp;backgroundKnowledgeSource,
+                           <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/ImplementedBackgroundMatchingStrategies.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher">ImplementedBackgroundMatchingStrategies</a>&nbsp;strategy,
+                           boolean&nbsp;isUseMaximumBipartite,
+                           double&nbsp;threshold)</code>
+<div class="block">Constructor</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcherStandAlone.html#BackgroundMatcherStandAlone-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.ImplementedBackgroundMatchingStrategies-double-">BackgroundMatcherStandAlone</a></span>(<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">SemanticWordRelationDictionary</a>&nbsp;backgroundKnowledgeSource,
                            <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/ImplementedBackgroundMatchingStrategies.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher">ImplementedBackgroundMatchingStrategies</a>&nbsp;strategy,
                            double&nbsp;threshold)</code>
@@ -397,7 +405,7 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <a name="BackgroundMatcherStandAlone-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.ImplementedBackgroundMatchingStrategies-double-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>BackgroundMatcherStandAlone</h4>
 <pre>public&nbsp;BackgroundMatcherStandAlone(<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">SemanticWordRelationDictionary</a>&nbsp;backgroundKnowledgeSource,
@@ -408,6 +416,26 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>backgroundKnowledgeSource</code> - The background knowledge source to be used.</dd>
 <dd><code>strategy</code> - The strategy to be applied.</dd>
+<dd><code>threshold</code> - The minimal required threshold that is required for a match.</dd>
+</dl>
+</li>
+</ul>
+<a name="BackgroundMatcherStandAlone-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.ImplementedBackgroundMatchingStrategies-boolean-double-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>BackgroundMatcherStandAlone</h4>
+<pre>public&nbsp;BackgroundMatcherStandAlone(<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">SemanticWordRelationDictionary</a>&nbsp;backgroundKnowledgeSource,
+                                   <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/ImplementedBackgroundMatchingStrategies.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher">ImplementedBackgroundMatchingStrategies</a>&nbsp;strategy,
+                                   boolean&nbsp;isUseMaximumBipartite,
+                                   double&nbsp;threshold)</pre>
+<div class="block">Constructor</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>backgroundKnowledgeSource</code> - The background knowledge source to be used.</dd>
+<dd><code>strategy</code> - The strategy to be applied.</dd>
+<dd><code>isUseMaximumBipartite</code> - True if a maximum bipartite extraction shall be performed (1-1 alignment).</dd>
 <dd><code>threshold</code> - The minimal required threshold that is required for a match.</dd>
 </dl>
 </li>
