@@ -235,7 +235,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
                 Pair<Boolean, Double> isMatchConfidencePair =
                         fullMatchUsingDictionaryWithLinks(uri2linksSource_1.getValue(), uri2linksTarget_2.getValue());
                 if (isMatchConfidencePair.getValue0()) {
-                    HashMap<String, Object> extensions = new HashMap<>();
+                    Map<String, Object> extensions = new HashMap<>();
                     extensions.put("http://custom#addedInStep", "performFullStringSynonymyMatching()");
                     double confidence = isMatchConfidencePair.getValue1();
                     alignment.add(uri2linksSource_1.getKey(), uri2linksTarget_2.getKey(), confidence,
