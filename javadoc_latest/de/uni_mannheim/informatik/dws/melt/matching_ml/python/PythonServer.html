@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":9,"i9":9,"i10":9,"i11":10,"i12":10,"i13":10,"i14":10,"i15":9,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":9,"i31":10,"i32":10,"i33":9,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":9,"i44":10,"i45":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":9,"i9":9,"i10":9,"i11":10,"i12":10,"i13":10,"i14":10,"i15":9,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":9,"i32":10,"i33":10,"i34":9,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":9,"i45":10,"i46":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -379,18 +379,25 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#isInVocabulary-java.lang.String-java.lang.String-">isInVocabulary</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;concept,
-              <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelOrVectorPath)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#isInVocabulary-java.lang.String-java.io.File-">isInVocabulary</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;concept,
+              <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;modelOrVectorPath)</code>
 <div class="block">Returns true when the concept can be found in the vocabulary of the model.</div>
 </td>
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#isInVocabulary-java.lang.String-java.lang.String-">isInVocabulary</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;concept,
+              <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelOrVectorPath)</code>
+<div class="block">Returns true when the concept can be found in the vocabulary of the model.</div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#isVectorCaching--">isVectorCaching</a></span>()</code>
 <div class="block">If true: enabled.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#learnAndApplyMLModel-java.io.File-java.io.File-int-int-">learnAndApplyMLModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;trainFile,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;predictFile,
@@ -399,38 +406,38 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Learn a ML model for a given training file.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>private <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#parseJSON-java.lang.String-">parseJSON</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;resultString)</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>private void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#printHello-java.lang.String-">printHello</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
 <div class="block">A quick technical demo.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#queryDoc2VecModel-java.lang.String-java.util.List-">queryDoc2VecModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelPath,
                  <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;alignment)</code>
 <div class="block">Method to query a doc2vec model (which has to be trained with trainDoc2VecModel) in a batch mode.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#queryVectorSpaceModel-java.lang.String-de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment-">queryVectorSpaceModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelPath,
                      <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment)</code>
 <div class="block">Method to query a vector space model (which has to be trained with trainVectorSpaceModel) in a batch mode.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#queryVectorSpaceModel-java.lang.String-java.util.List-">queryVectorSpaceModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelPath,
                      <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;alignment)</code>
 <div class="block">Method to query a vector space model (which has to be trained with trainVectorSpaceModel) in a batch mode.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#queryVectorSpaceModel-java.lang.String-java.lang.String-java.lang.String-">queryVectorSpaceModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelPath,
                      <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;documentIdOne,
@@ -438,43 +445,43 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Method to query a vector space model (which has to be trained with trainVectorSpaceModel).</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#runOpenEAModel-java.io.File-boolean-">runOpenEAModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;argumentFile,
               boolean&nbsp;save)</code>
 <div class="block">Run the openEA library.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#setPort-int-">setPort</a></span>(int&nbsp;port)</code>&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#setResourcesDirectory-java.io.File-">setResourcesDirectory</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;resourcesDirectory)</code>
 <div class="block">Set the directory where the python files will be copied to.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#setVectorCaching-boolean-">setVectorCaching</a></span>(boolean&nbsp;vectorCaching)</code>
 <div class="block">If vector caching is turned on, similarities will be calculated on Java site (rather than in Python) and
  vectors are held in memories.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#shutDown--">shutDown</a></span>()</code>
 <div class="block">Shut down the service.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>private boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#startServer--">startServer</a></span>()</code>
 <div class="block">Initializes the server.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#trainAndStoreMLModel-java.io.File-java.io.File-int-int-">trainAndStoreMLModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;trainFile,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;modelFile,
@@ -483,7 +490,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Learn a ML model for a given training file and stores it in the given model file.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#trainDoc2VecModel-java.lang.String-java.lang.String-de.uni_mannheim.informatik.dws.melt.matching_ml.python.Word2VecConfiguration-">trainDoc2VecModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelPath,
                  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;trainingFilePath,
@@ -491,14 +498,14 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Method to train a doc2vec model.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#trainVectorSpaceModel-java.lang.String-java.lang.String-">trainVectorSpaceModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelPath,
                      <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;trainingFilePath)</code>
 <div class="block">Method to train a vector space model.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#trainWord2VecModel-java.lang.String-java.lang.String-de.uni_mannheim.informatik.dws.melt.matching_ml.python.Word2VecConfiguration-">trainWord2VecModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelOrVectorPath,
                   <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;trainingFilePath,
@@ -506,7 +513,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Method to train a word2vec model.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#transformersPrediction-java.lang.String-java.io.File-boolean-java.lang.String-java.io.File-">transformersPrediction</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelName,
                       <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;predictionFilePath,
@@ -516,21 +523,21 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Run huggingface transformers library.</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#updateEnvironmentPath-java.util.Map-java.lang.String-">updateEnvironmentPath</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;environment,
                      <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pythonCommand)</code>
 <div class="block">Updates the environment variable PATH with additional python needed directories like env/lib/bin</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#writeModelAsTextFile-java.lang.String-java.lang.String-">writeModelAsTextFile</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelOrVectorPath,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileToWrite)</code>
 <div class="block">Writes the vectors to a human-readable text file.</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#writeModelAsTextFile-java.lang.String-java.lang.String-java.lang.String-">writeModelAsTextFile</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelOrVectorPath,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileToWrite,
@@ -538,21 +545,21 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Writes the vectors to a human-readable text file.</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>private static &lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#writeSetToFile-java.io.File-java.util.Set-">writeSetToFile</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;fileToWrite,
               <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;T&gt;&nbsp;setToWrite)</code>
 <div class="block">This method writes the content of a <code>Set&lt;String&gt;</code> to a file.</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#writeVocabularyToFile-java.lang.String-java.io.File-">writeVocabularyToFile</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelOrVectorPath,
                      <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;fileToWrite)</code>
 <div class="block">Writes the vocabulary of the given gensim model to a text file (UTF-8 encoded).</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_ml/python/PythonServer.html#writeVocabularyToFile-java.lang.String-java.lang.String-">writeVocabularyToFile</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;modelOrVectorPath,
                      <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileToWritePath)</code>
@@ -1100,6 +1107,25 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <dd><code>modelOrVectorPath</code> - The model path or vector file path leading to the file to be used.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The vector for the specified concept.</dd>
+</dl>
+</li>
+</ul>
+<a name="isInVocabulary-java.lang.String-java.io.File-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isInVocabulary</h4>
+<pre>public&nbsp;boolean&nbsp;isInVocabulary(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;concept,
+                              <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;modelOrVectorPath)</pre>
+<div class="block">Returns true when the concept can be found in the vocabulary of the model.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>concept</code> - The concept/URI that shall be looked up.</dd>
+<dd><code>modelOrVectorPath</code> - The model or vector file. Note that the vector file MUST end with .kv in
+                          order to be recognized as vector file.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>True if exists, else false.</dd>
 </dl>
 </li>
 </ul>
