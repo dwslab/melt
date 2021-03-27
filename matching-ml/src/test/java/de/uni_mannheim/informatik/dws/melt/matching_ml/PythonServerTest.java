@@ -53,10 +53,10 @@ class PythonServerTest {
         assertFalse(pythonServer.isInVocabulary("China", pathToModel));
 
         // test case 2: vector file
-        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
-        assertTrue(pythonServer.isInVocabulary("Europe", pathToVectorFile));
-        assertTrue(pythonServer.isInVocabulary("united", pathToVectorFile));
-        assertFalse(pythonServer.isInVocabulary("China", pathToVectorFile));
+        File vectorFile = new File(getPathOfResource("test_model_vectors.kv"));
+        assertTrue(pythonServer.isInVocabulary("Europe", vectorFile));
+        assertTrue(pythonServer.isInVocabulary("united", vectorFile));
+        assertFalse(pythonServer.isInVocabulary("China", vectorFile));
     }
 
     @Test
