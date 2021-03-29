@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EvaluatorCSVTest {
 
+
     private static Logger LOGGER = LoggerFactory.getLogger(EvaluatorCSVTest.class);
 
     /**
