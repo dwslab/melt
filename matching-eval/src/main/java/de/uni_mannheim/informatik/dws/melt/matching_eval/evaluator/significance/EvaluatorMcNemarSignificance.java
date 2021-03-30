@@ -37,15 +37,17 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
     protected double alpha;
 
     /**
-     * If we calculate the significance for a complete track, the crossTrackSignificanceShare defines the share
+     * If we calculate the significance for a complete track, the {@code trackSignificanceShare} defines the share
      * of test case alignments that need to be significantly different so that the track counts as significantly
      * different.
-     *
-     * For example: Given a track has 10 test cases and a crossTrackSignificanceShare of 0.5.
-     * If 4 alignments are significantly different, the track counts as not significant.
-     * If 5 or more alignments are significantly different, the track counts as significant.
+     * <p>
+     * For example: Given a track has 10 test cases and a {@code trackSignificanceShare} of 0.5.
+     * If 4 alignments are significantly different, the track counts as not significant for the matcher combination.
+     * If 5 or more alignments are significantly different, the track counts as significant for the matcher combination.
      */
-    private double crossTrackSignificanceShare = 0.5;
+    private double trackSignificanceShare = DEFAULT_TRACK_SIGNIFICANCE_SHARE;
+
+    public static final double DEFAULT_TRACK_SIGNIFICANCE_SHARE = 0.5;
 
 
     // Default file names (files will be created in baseDirectory.
@@ -184,10 +186,11 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     /**
      * Write the results file on the granularity of matchers.
-     * @param pValues The p values.
+     *
+     * @param pValues     The p values.
      * @param fileToWrite The file that shall be written.
      */
-    private void writeAggregatedTestcasesResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite){
+    private void writeAggregatedTestcasesResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite) {
         try {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite),
                     StandardCharsets.UTF_8));
@@ -207,10 +210,11 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     /**
      * Given a Map with p values, aggregate the number of significant/not significant alignments.
+     *
      * @param pValues P values.
      * @return Map with aggregated significance counts.
      */
-    private Map<McNemarCrossTrackResult, SignificanceCount> calculateAggregatedTestCaseMap(Map<McNemarIndividualResult, Double> pValues){
+    private Map<McNemarCrossTrackResult, SignificanceCount> calculateAggregatedTestCaseMap(Map<McNemarIndividualResult, Double> pValues) {
         Map<McNemarCrossTrackResult, SignificanceCount> resultMap = new HashMap<>();
         for (Map.Entry<McNemarIndividualResult, Double> entry : pValues.entrySet()) {
             McNemarCrossTrackResult crossTrackResult = entry.getKey().getCrossTrackResult();
@@ -227,10 +231,11 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     /**
      * Write the results file on the granularity of matchers.
-     * @param pValues The p values.
+     *
+     * @param pValues     The p values.
      * @param fileToWrite The file that shall be written.
      */
-    private void writeAggregatedTracksResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite){
+    private void writeAggregatedTracksResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite) {
         try {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite),
                     StandardCharsets.UTF_8));
@@ -240,22 +245,22 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             Map<McNemarCrossTrackResult, SignificanceCount> resultMap = new HashMap<>();
             Set<String> tracks = McNemarIndividualResult.getDistinctTracks(pValues);
 
-            for(String track : tracks){
+            for (String track : tracks) {
                 Map<McNemarIndividualResult, Double> trackResults =
                         McNemarIndividualResult.getEntriesForTrack(pValues, track);
                 int numberOfTestCases = McNemarIndividualResult.getNumberOfTestCases(trackResults);
                 Map<McNemarCrossTrackResult, SignificanceCount> testCaseResults = calculateAggregatedTestCaseMap(pValues);
 
-                for(Map.Entry<McNemarCrossTrackResult, SignificanceCount> entry : testCaseResults.entrySet()){
+                for (Map.Entry<McNemarCrossTrackResult, SignificanceCount> entry : testCaseResults.entrySet()) {
                     // let's determine whether we have a share of significant test case alignments which is large enough
                     double shareSignificantlyDifferentTCs =
                             (double) entry.getValue().significantlyDifferent / numberOfTestCases;
-                    boolean isSignificantlyDifferent = shareSignificantlyDifferentTCs >= crossTrackSignificanceShare;
+                    boolean isSignificantlyDifferent = shareSignificantlyDifferentTCs >= trackSignificanceShare;
 
-                    if(resultMap.containsKey(entry.getKey())){
+                    if (resultMap.containsKey(entry.getKey())) {
                         // we have an entry
                         SignificanceCount count = resultMap.get(entry.getKey());
-                        if(isSignificantlyDifferent){
+                        if (isSignificantlyDifferent) {
                             count.significantlyDifferent++;
                         } else {
                             count.notSignificantlyDifferent++;
@@ -264,7 +269,7 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
                     } else {
                         // we do not have an entry yet
                         SignificanceCount count;
-                        if(isSignificantlyDifferent){
+                        if (isSignificantlyDifferent) {
                             count = new SignificanceCount(Significance.SIGNIFICANT);
                         } else {
                             count = new SignificanceCount(Significance.NOT_SIGNIFICANT);
@@ -289,7 +294,8 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     /**
      * Write the results file on the granularity of tracks.
-     * @param pValues The p values.
+     *
+     * @param pValues     The p values.
      * @param fileToWrite The file that shall be written.
      */
     private void writeTrackResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite) {
@@ -323,7 +329,8 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
 
     /**
      * Write the results file on the granularity of test cases.
-     * @param pValues The p values.
+     *
+     * @param pValues     The p values.
      * @param fileToWrite The file that shall be written.
      */
     private void writeTestCaseResultFile(Map<McNemarIndividualResult, Double> pValues, File fileToWrite) {
@@ -334,7 +341,7 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             for (Map.Entry<McNemarIndividualResult, Double> entry : pValues.entrySet()) {
 
                 String isSignificantlyDifferentString;
-                if(entry.getValue().isNaN()){
+                if (entry.getValue().isNaN()) {
                     isSignificantlyDifferentString = "<undefined>";
                 } else {
                     isSignificantlyDifferentString = "" + (entry.getValue() < this.alpha);
@@ -351,12 +358,12 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
     public Map<McNemarIndividualResult, Double> calculatePvalues(double alpha, TestType testType) {
         Map<McNemarIndividualResult, Double> result = new HashMap<>();
         for (ExecutionResult result1 : results) {
-            if(result1.getRefinements().size() > 0){
+            if (result1.getRefinements().size() > 0) {
                 // for now we only work with raw results
                 continue;
             }
             for (ExecutionResult result2 : results) {
-                if(result2.getRefinements().size() > 0){
+                if (result2.getRefinements().size() > 0) {
                     // for now we only work with raw results
                     continue;
                 }
@@ -456,7 +463,7 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             if (Double.isNaN(resultAsymptotic)) {
                 return pValueConsideringFalsePositives(executionResult1, executionResult2, TestType.EXACT);
             } else return resultAsymptotic;
-        } else if (testType == ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK){
+        } else if (testType == ASYMPTOTIC_CONTINUITY_CORRECTION_EXACT_FALLBACK) {
             double resultAsymptoticCCorrection = pValueConsideringFalsePositives(executionResult1, executionResult2,
                     TestType.ASYMPTOTIC_CONTINUITY_CORRECTION);
             if (Double.isNaN(resultAsymptoticCCorrection)) {
@@ -515,5 +522,19 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
             res = res * i;
         }
         return res;
+    }
+
+    public double getTrackSignificanceShare() {
+        return trackSignificanceShare;
+    }
+
+    public void setTrackSignificanceShare(double trackSignificanceShare) {
+        if (trackSignificanceShare >= 0 && trackSignificanceShare <= 1.0) {
+            this.trackSignificanceShare = trackSignificanceShare;
+        } else {
+            LOGGER.error("The trackSignificanceShare is not in the boundaries [0, 1]. Using the default: " +
+                    DEFAULT_TRACK_SIGNIFICANCE_SHARE);
+            this.trackSignificanceShare = DEFAULT_TRACK_SIGNIFICANCE_SHARE;
+        }
     }
 }
