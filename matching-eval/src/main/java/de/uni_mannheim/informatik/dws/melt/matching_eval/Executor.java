@@ -592,7 +592,6 @@ public class Executor {
             return FALLBACK_MATCHER_NAME;
         return name;
     }
-    
 
     /**
      * Deletes all system results which are stored usually in the tmp folder.

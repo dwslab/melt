@@ -114,26 +114,26 @@ class EvaluatorMcNemarSignificanceTest {
 
         // overlap AML Lily
         List<String> crossTrackMcNemarAsymptotic = StringOperations.readListFromFile(new File(mcNemarBaseDirectory,
-                EvaluatorMcNemarSignificance.FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC));
+                EvaluatorMcNemarSignificance.FILE_NAME_AGGREGATED_TESTCASES_MC_NEMAR_ASYMPTOTIC));
         assertFalse(crossTrackMcNemarAsymptotic.get(0).contains("Test Case"));
         amlLilyCount(crossTrackMcNemarAsymptotic, 22);
 
         List<String> crossTrackMcNemarAsymptoticExactFallback =
                 StringOperations.readListFromFile(new File(mcNemarBaseDirectory,
-                        EvaluatorMcNemarSignificance.FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK));
+                        EvaluatorMcNemarSignificance.FILE_NAME_AGGREGATED_TESTCASES_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK));
         assertFalse(crossTrackMcNemarAsymptoticExactFallback.get(0).contains("Test Case"));
         assertTrackFileIsNotUndecided(crossTrackMcNemarAsymptoticExactFallback);
         amlLilyCount(crossTrackMcNemarAsymptoticExactFallback, 22);
 
         List<String> crossTrackMcNemarAsymptoticCcorrection =
                 StringOperations.readListFromFile(new File(mcNemarBaseDirectory,
-                        EvaluatorMcNemarSignificance.FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION));
+                        EvaluatorMcNemarSignificance.FILE_NAME_AGGREGATED_TESTCASES_MC_NEMAR_ASYMPTOTIC_CCORRECTION));
         assertFalse(crossTrackMcNemarAsymptoticCcorrection.get(0).contains("Test Case"));
         amlLilyCount(crossTrackMcNemarAsymptoticCcorrection, 22);
 
         List<String> crossTrackMcNemarAsymptoticCcorrectionExactFallback =
                 StringOperations.readListFromFile(new File(mcNemarBaseDirectory,
-                        EvaluatorMcNemarSignificance.FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK));
+                        EvaluatorMcNemarSignificance.FILE_NAME_AGGREGATED_TESTCASES_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK));
         assertFalse(crossTrackMcNemarAsymptoticCcorrectionExactFallback.get(0).contains("Test Case"));
         assertTrackFileIsNotUndecided(crossTrackMcNemarAsymptoticCcorrectionExactFallback);
         amlLilyCount(crossTrackMcNemarAsymptoticCcorrectionExactFallback, 22);
@@ -175,8 +175,8 @@ class EvaluatorMcNemarSignificanceTest {
     void checkFiles(File baseDirectory, int numberOfTestCases) {
         assertTrue(baseDirectory.exists());
 
-        // make sure that 12 files were written:
-        assertEquals(12, Objects.requireNonNull(baseDirectory.listFiles()).length);
+        // make sure that 16 files were written:
+        assertEquals(16, Objects.requireNonNull(baseDirectory.listFiles()).length);
 
         List<String> trackMcNemarAsymptotic = StringOperations.readListFromFile(new File(baseDirectory,
                 EvaluatorMcNemarSignificance.FILE_NAME_TRACK_MC_NEMAR_ASYMPTOTIC));
@@ -225,28 +225,27 @@ class EvaluatorMcNemarSignificanceTest {
         assertTrue(testCaseMcNemarAsymptoticCcorrectionExactFallback.get(0).contains("Test Case"));
         assertTestCaseFileIsNotUndecided(testCaseMcNemarAsymptoticCcorrectionExactFallback);
 
-
         List<String> crossTrackMcNemarAsymptotic = StringOperations.readListFromFile(new File(baseDirectory,
-                EvaluatorMcNemarSignificance.FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC));
+                EvaluatorMcNemarSignificance.FILE_NAME_AGGREGATED_TESTCASES_MC_NEMAR_ASYMPTOTIC));
         assertFalse(crossTrackMcNemarAsymptotic.get(0).contains("Test Case"));
         assertThatTotalSignificanceCountsAddUp(crossTrackMcNemarAsymptotic, numberOfTestCases);
 
         List<String> crossTrackMcNemarAsymptoticExactFallback =
                 StringOperations.readListFromFile(new File(baseDirectory,
-                        EvaluatorMcNemarSignificance.FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK));
+                        EvaluatorMcNemarSignificance.FILE_NAME_AGGREGATED_TESTCASES_MC_NEMAR_ASYMPTOTIC_EXACT_FALLBACK));
         assertFalse(crossTrackMcNemarAsymptoticExactFallback.get(0).contains("Test Case"));
         assertTrackFileIsNotUndecided(crossTrackMcNemarAsymptoticExactFallback);
         assertThatTotalSignificanceCountsAddUp(crossTrackMcNemarAsymptoticExactFallback, numberOfTestCases);
 
         List<String> crossTrackMcNemarAsymptoticCcorrection =
                 StringOperations.readListFromFile(new File(baseDirectory,
-                        EvaluatorMcNemarSignificance.FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION));
+                        EvaluatorMcNemarSignificance.FILE_NAME_AGGREGATED_TESTCASES_MC_NEMAR_ASYMPTOTIC_CCORRECTION));
         assertFalse(crossTrackMcNemarAsymptoticCcorrection.get(0).contains("Test Case"));
         assertThatTotalSignificanceCountsAddUp(crossTrackMcNemarAsymptoticCcorrection, numberOfTestCases);
 
         List<String> crossTrackMcNemarAsymptoticCcorrectionExactFallback =
                 StringOperations.readListFromFile(new File(baseDirectory,
-                        EvaluatorMcNemarSignificance.FILE_NAME_CROSS_TRACK_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK));
+                        EvaluatorMcNemarSignificance.FILE_NAME_AGGREGATED_TESTCASES_MC_NEMAR_ASYMPTOTIC_CCORRECTION_EXACT_FALLBACK));
         assertFalse(crossTrackMcNemarAsymptoticCcorrectionExactFallback.get(0).contains("Test Case"));
         assertTrackFileIsNotUndecided(crossTrackMcNemarAsymptoticCcorrectionExactFallback);
         assertThatTotalSignificanceCountsAddUp(crossTrackMcNemarAsymptoticCcorrectionExactFallback, numberOfTestCases);

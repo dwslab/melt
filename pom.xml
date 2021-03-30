@@ -283,6 +283,7 @@
                                 <exclude>**/BabelNetKnowledgeSourceTest.java</exclude>
                                 <exclude>**/DBpediaKnowledgeSourceTdbTest.java</exclude>
                                 <exclude>**/DBpediaLinkerTdbTest.java</exclude>
+                                <exclude>**/BabelNetRdfLinkerTest.java</exclude>
                             </excludes>
                         </configuration>
                     </plugin>

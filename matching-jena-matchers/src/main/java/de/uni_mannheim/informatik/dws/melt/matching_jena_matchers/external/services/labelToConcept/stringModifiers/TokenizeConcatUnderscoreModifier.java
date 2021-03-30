@@ -20,5 +20,4 @@ public class TokenizeConcatUnderscoreModifier implements StringModifier {
     public String getName() {
         return "TokenizeConcatUnderscore";
     }
-
 }

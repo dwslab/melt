@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * Links concepts to BabelNet.
+ * Links concepts to BabelNet (using the BabelNet indices).
  */
 public class BabelNetLinker implements LabelToConceptLinker {
 
