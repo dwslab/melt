@@ -14,27 +14,6 @@ Interface for filters. A filter is a matcher that does not add new correspondenc
 
 *Keywords: Filter*
 
-## ScaleAdditionalConfidence [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ScaleAdditionalConfidence.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ScaleAdditionalConfidence.java)
-
-Scales the additional correspondence confidence values (that were produced by other filters/matchers) linearly to a
- given interval (by default [0,1]). Each additional confidence is scaled separately and only the specified
- additional confidences are scaled. If all of them should be scaled, then leave the set of keys empty.
-
-*Keywords: Scale Additional Confidence*
-
-## ConfidenceCombiner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ConfidenceCombiner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ConfidenceCombiner.java)
-
-Combines the additional confidences and set the overall correspondence confidence to be the mean of the selected confidences.
- Can also be used to set the
-
-*Keywords: Confidence Combiner*
-
-## ScaleConfidence [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ScaleConfidence.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ScaleConfidence.java)
-
-Scales the correspondence confidence values linearly to an given interval (by default [0,1]).
-
-*Keywords: Scale Confidence*
-
 ## BadHostsFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/BadHostsFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/BadHostsFilter.java)
 
 This filter removes correspondences where the source or target has not the same host of the OntModels.
@@ -42,24 +21,14 @@ This filter removes correspondences where the source or target has not the same 
 
 *Keywords: Bad Hosts Filter*
 
-## TypeFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/TypeFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/TypeFilter.java)
+## ConfidenceFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ConfidenceFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ConfidenceFilter.java)
 
-Filters only class, instance or property matches.
+This filter returns only alignments with confidence greater or equals than a
+ specific threshold. Default is 0.9.
 
-*Keywords: Type Filter*
+ Thresholds can be set per type.
 
-## CardinalityFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/CardinalityFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/CardinalityFilter.java)
-
-This filter returns only the alignments with the highest confidence if there are n-to-m matched elements.
- This might not be the best solution.
-
-*Keywords: Cardinality Filter*
-
-## ReflexiveCorrespondenceFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ReflexiveCorrespondenceFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ReflexiveCorrespondenceFilter.java)
-
-Removes all reflexive edges (which maps A to A) from an alignment.
-
-*Keywords: Reflexive Correspondence Filter*
+*Keywords: Confidence Filter*
 
 ## MixedTypFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/MixedTypFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/MixedTypFilter.java)
 
@@ -75,21 +44,11 @@ Asserts a homogenous alignment (i.e. only the same type is matched).
 
 *Keywords: Mixed Typ Filter*
 
-## ConfidenceFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ConfidenceFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ConfidenceFilter.java)
+## ReflexiveCorrespondenceFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ReflexiveCorrespondenceFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ReflexiveCorrespondenceFilter.java)
 
-This filter returns only alignments with confidence greater or equals than a
- specific threshold. Default is 0.9.
+Removes all reflexive edges (which maps A to A) from an alignment.
 
- Thresholds can be set per type.
-
-*Keywords: Confidence Filter*
-
-## AnnonymousNodeFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AnnonymousNodeFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AnnonymousNodeFilter.java)
-
-This filter removes correspondences where the source or target has not the same host of the OntModels.
- E.g. it removes rdf:type=rdf:type or foaf:knows=foaf:knows
-
-*Keywords: Annonymous Node Filter*
+*Keywords: Reflexive Correspondence Filter*
 
 ## BaseFilterWithSetComparison [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/BaseFilterWithSetComparison.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/BaseFilterWithSetComparison.java)
 
@@ -97,19 +56,31 @@ Basic filter for instances which compares sets like neighbours or properties.
 
 *Keywords: Base Filter With Set Comparison*
 
+## TypeFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/TypeFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/TypeFilter.java)
+
+Filters only class, instance or property matches.
+
+*Keywords: Type Filter*
+
+## CardinalityFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/CardinalityFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/CardinalityFilter.java)
+
+This filter returns only the alignments with the highest confidence if there are n-to-m matched elements.
+ This might not be the best solution.
+
+*Keywords: Cardinality Filter*
+
 ## AdditionalConfidenceFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AdditionalConfidenceFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AdditionalConfidenceFilter.java)
 
 It filters based on the additional confidence. The key and threshold should be provided.
 
 *Keywords: Additional Confidence Filter*
 
-## NaiveAscendingExtractor [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/NaiveAscendingExtractor.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/NaiveAscendingExtractor.java)
+## AnnonymousNodeFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AnnonymousNodeFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AnnonymousNodeFilter.java)
 
-Naive ascending extraction as shown in "Analyzing Mapping Extraction Approaches" (C. Meilicke, H. Stuckenschmidt).
- It iterates over the sorted (ascending) correspondences and and uses the correspondence with the highest confidence.
- Afterwards removes every other correspondence with the same source or target.
+This filter removes correspondences where the source or target has not the same host of the OntModels.
+ E.g. it removes rdf:type=rdf:type or foaf:knows=foaf:knows
 
-*Keywords: Naive Ascending Extractor*
+*Keywords: Annonymous Node Filter*
 
 ## NaiveDescendingExtractor [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/NaiveDescendingExtractor.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/NaiveDescendingExtractor.java)
 
@@ -119,6 +90,14 @@ Naive descending extraction as shown in "Analyzing Mapping Extraction Approaches
  Previously it was called CardinalityFilter aka GreedyExtractor.
 
 *Keywords: Naive Descending Extractor*
+
+## NaiveAscendingExtractor [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/NaiveAscendingExtractor.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/NaiveAscendingExtractor.java)
+
+Naive ascending extraction as shown in "Analyzing Mapping Extraction Approaches" (C. Meilicke, H. Stuckenschmidt).
+ It iterates over the sorted (ascending) correspondences and and uses the correspondence with the highest confidence.
+ Afterwards removes every other correspondence with the same source or target.
+
+*Keywords: Naive Ascending Extractor*
 
 ## MaxWeightBipartiteExtractor [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/MaxWeightBipartiteExtractor.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/MaxWeightBipartiteExtractor.java)
 
@@ -142,13 +121,11 @@ Check if already matched individuals have a similar hierarchy (class hierarchy).
 
 *Keywords: Similar Hierarchy Filter*
 
-## BagOfWordsSetSimilarityFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/BagOfWordsSetSimilarityFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/BagOfWordsSetSimilarityFilter.java)
+## CommonPropertiesFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/CommonPropertiesFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/CommonPropertiesFilter.java)
 
-Filters individual/instance mappings by comparing literals.
- The literals are selected by the corresponding properties (leave empty to select all).
- The set of tokens created for each individual are compared with the SetSimilarity.
+Filter which deletes instance mappings if they have no matched properties in common.
 
-*Keywords: Bag Of Words Set Similarity Filter*
+*Keywords: Common Properties Filter*
 
 ## SimilarTypeFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/SimilarTypeFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/SimilarTypeFilter.java)
 
@@ -169,11 +146,34 @@ Checks for each instance mapping, how many already matched neighbours it has.
 
 *Keywords: Similar Neighbours Filter*
 
-## CommonPropertiesFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/CommonPropertiesFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/CommonPropertiesFilter.java)
+## BagOfWordsSetSimilarityFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/BagOfWordsSetSimilarityFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/BagOfWordsSetSimilarityFilter.java)
 
-Filter which deletes instance mappings if they have no matched properties in common.
+Filters individual/instance mappings by comparing literals.
+ The literals are selected by the corresponding properties (leave empty to select all).
+ The set of tokens created for each individual are compared with the SetSimilarity.
 
-*Keywords: Common Properties Filter*
+*Keywords: Bag Of Words Set Similarity Filter*
+
+## ScaleConfidence [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ScaleConfidence.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ScaleConfidence.java)
+
+Scales the correspondence confidence values linearly to an given interval (by default [0,1]).
+
+*Keywords: Scale Confidence*
+
+## ConfidenceCombiner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ConfidenceCombiner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ConfidenceCombiner.java)
+
+Combines the additional confidences and set the overall correspondence confidence to be the mean of the selected confidences.
+ Can also be used to set the
+
+*Keywords: Confidence Combiner*
+
+## ScaleAdditionalConfidence [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ScaleAdditionalConfidence.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ScaleAdditionalConfidence.java)
+
+Scales the additional correspondence confidence values (that were produced by other filters/matchers) linearly to a
+ given interval (by default [0,1]). Each additional confidence is scaled separately and only the specified
+ additional confidences are scaled. If all of them should be scaled, then leave the set of keys empty.
+
+*Keywords: Scale Additional Confidence*
 
 ## MachineLearningScikitFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/MachineLearningScikitFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/MachineLearningScikitFilter.java)
 
