@@ -78,14 +78,6 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
         Alignment alignment =  pipelineYAAAJena.match(source, target, inputAlignment, properties);
         alignment.addExtensionValue("http://a.com/matcherThreshold", "" + threshold);
         alignment.addExtensionValue("http://a.com/matcherStrategy", this.strategy.toString());
-
-        /*
-        if (this.backgroundKnowledgeSource instanceof GensimEmbeddingModel) {
-            alignment.addExtensionValue("http://a.com/strategyThreshold",
-                    "" + ((KnowledgeSourceEmbedding) this.backgroundKnowledgeSource).getThreshold());
-        }
-        */
-
         alignment.addExtensionValue("http://a.com/backgroundDataset", this.backgroundKnowledgeSource.getName());
         return alignment;
     }

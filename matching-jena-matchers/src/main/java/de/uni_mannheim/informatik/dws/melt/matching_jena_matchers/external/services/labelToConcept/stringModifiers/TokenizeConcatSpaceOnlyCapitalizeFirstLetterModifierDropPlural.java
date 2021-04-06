@@ -9,10 +9,10 @@ public class TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifierDropPlural impl
      * Constructor
      */
     public TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifierDropPlural(){
-        tokenizeModifier = new TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifier();
+        tokenizeModifier = new TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifier();
     }
 
-    private TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifier tokenizeModifier;
+    private TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifier tokenizeModifier;
 
     @Override
     public String modifyString(String stringToBeModified) {

@@ -57,7 +57,7 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
     /**
      * Data lookup.
      */
-    public Map<String, String> lookupMap;
+    Map<String, String> lookupMap;
 
     /**
      * Normalization
@@ -167,5 +167,9 @@ public abstract class LabelToConceptLinkerEmbeddings implements LabelToConceptLi
 
     public void setStringModificationSequence(LinkedList<StringModifier> stringModificationSequence) {
         this.stringModificationSequence = stringModificationSequence;
+    }
+
+    public Map<String, String> getLookupMap() {
+        return lookupMap;
     }
 }

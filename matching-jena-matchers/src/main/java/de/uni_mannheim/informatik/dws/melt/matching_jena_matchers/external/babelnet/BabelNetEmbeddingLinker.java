@@ -2,11 +2,12 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.babe
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SynonymConfidenceCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.LabelToConceptLinkerEmbeddings;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Map;
+import java.util.*;
 
 public class BabelNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings implements SynonymConfidenceCapability {
 
@@ -14,19 +15,9 @@ public class BabelNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings impl
     private static final Logger LOGGER = LoggerFactory.getLogger(BabelNetEmbeddingLinker.class);
 
     /**
-     * The file where the entities/concepts can be found.
-     */
-    File entityFile;
-
-    /**
      * Name of the linker.
      */
     String nameOfLinker;
-
-    /**
-     * Set of all available entities.
-     */
-    Map<String, String> entities;
 
     /**
      * Constructor
@@ -34,7 +25,16 @@ public class BabelNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings impl
      */
     public BabelNetEmbeddingLinker(File entityFile){
         super(entityFile);
+        stringModificationSequence.add(new PlainModifier());
+        stringModificationSequence.add(new TokenizeConcatUnderscoreLowercaseModifier());
+        stringModificationSequence.add(new TokenizeConcatUnderscoreCapitalizeModifier());
+        stringModificationSequence.add(new TokenizeConcatUnderscoreCapitalizeFirstLetterModifier());
     }
+
+    /**
+     * A set of string operations that are all performed.
+     */
+    List<StringModifier> stringModificationSequence = new ArrayList<>();
 
     /**
      * Constructor
@@ -46,7 +46,17 @@ public class BabelNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings impl
 
     @Override
     public String linkToSingleConcept(String labelToBeLinked) {
-        return this.entities.get(normalizeStatic(labelToBeLinked));
+        if(labelToBeLinked == null){
+            return null;
+        }
+        for(StringModifier modifier : stringModificationSequence) {
+            String modifiedLabel = modifier.modifyString(labelToBeLinked);
+            String link = super.getLookupMap().get(normalizeStatic(modifiedLabel));
+            if(link != null){
+                return link;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -59,13 +69,19 @@ public class BabelNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings impl
         this.nameOfLinker = nameOfLinker;
     }
 
+    private static final String URI_START_TOKEN = "http://babelnet.org/rdf/";
+
     /**
      * Normalize strings. Static so that behavior can be easily controlled by unit tests.
      * @param stringToBeNormalized The string that shall be normalized.
      * @return Normalized String.
      */
     public static String normalizeStatic(String stringToBeNormalized){
-        String result = stringToBeNormalized.replaceAll(" ", "_");
+        String result = stringToBeNormalized;
+        if(result.startsWith(URI_START_TOKEN)){
+            result = result.substring(URI_START_TOKEN.length());
+        }
+        result = result.replaceAll(" ", "_");
         result = result.replaceAll("\\.", "_");
         result = result.replaceAll("-", "_");
         if(result.startsWith("bn:")){

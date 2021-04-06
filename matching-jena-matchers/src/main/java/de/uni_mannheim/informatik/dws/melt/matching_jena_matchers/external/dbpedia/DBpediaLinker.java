@@ -88,7 +88,7 @@ public class DBpediaLinker implements LabelToConceptLinker, MultiConceptLinker {
         stringModificationSet.add(new TokenizeConcatSpaceLowercaseModifier());
         stringModificationSet.add(new TokenizeConcatSpaceModifierDropPlural());
         stringModificationSet.add(new TokenizeConcatSpaceLowercaseModifierDropPlural());
-        stringModificationSet.add(new TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifier());
+        stringModificationSet.add(new TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifier());
         stringModificationSet.add(new TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifierDropPlural());
         this.isUseTdb = dBpediaKnowledgeSource.isUseTdb();
         if(this.isUseTdb){

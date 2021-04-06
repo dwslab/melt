@@ -56,13 +56,18 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary impleme
 
     /**
      * Constructor
+     *
      * @param pathToModelOrVectorFile The file path to the gensim model or gensim vector file.
-     * @param pathToEntityFile The path to the vocabulary entries.
-     * @param threshold The threshold that shall be used for the synonymy strategy.
-     * @param linker The appropriate label to concept linker for the given embedding.
-     * @param knowledgeSourceName The name of the knowledge source (will be used as matcher name)
+     * @param pathToEntityFile        The path to the vocabulary entries.
+     * @param threshold               The threshold that shall be used for the synonymy strategy.
+     * @param linker                  The appropriate label to concept linker for the given embedding.
+     * @param knowledgeSourceName     The name of the knowledge source (will be used as matcher name)
      */
-    public GensimEmbeddingModel(String pathToModelOrVectorFile, String pathToEntityFile, double threshold, LabelToConceptLinkerEmbeddings linker, String knowledgeSourceName) {
+    public GensimEmbeddingModel(String pathToModelOrVectorFile,
+                                String pathToEntityFile,
+                                double threshold,
+                                LabelToConceptLinker linker,
+                                String knowledgeSourceName) {
         this.threshold = threshold;
         File modelFile = new File(pathToModelOrVectorFile);
         if (!modelFile.exists() && !modelFile.isDirectory()) {
@@ -121,18 +126,17 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary impleme
      * sim(B, D) = 0.05<br>
      * This method will return (0.75 + 0.25)/2 = 0.5
      *
-     *
      * @param links1 Set of links 1.
      * @param links2 Set of links 2.
      * @return Best average.
      */
-    public double getBestCrossAverage(Set<String> links1, Set<String> links2){
+    public double getBestCrossAverage(Set<String> links1, Set<String> links2) {
         double totalSimilarity = 0.0;
-        for(String link1 : links1){
+        for (String link1 : links1) {
             double similarity = 0.0;
-            for(String link2 : links2){
+            for (String link2 : links2) {
                 double checkSimilarity = gensim.getSimilarity(link1, link2, this.modelFilePath);
-                if(checkSimilarity > similarity){
+                if (checkSimilarity > similarity) {
                     similarity = checkSimilarity;
                 }
             }
@@ -143,13 +147,14 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary impleme
 
     /**
      * Note that the concepts have to be linked.
+     *
      * @param linkedWord_1 linked word 1
      * @param linkedWord_2 linked word 2
      * @return True if synonymous, else false.
      */
     @Override
     public boolean isStrongFormSynonymous(String linkedWord_1, String linkedWord_2) {
-        if(linkedWord_1 == null || linkedWord_2 ==  null){
+        if (linkedWord_1 == null || linkedWord_2 == null) {
             return false;
         }
         double similarity = getSynonymyConfidence(linkedWord_1, linkedWord_2);
@@ -175,7 +180,7 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary impleme
 
     /**
      * If we have two multi-concept links, the similarity of the best combination is returned.
-     *
+     * <p>
      * Example:<br>
      * Set 1: A, B; Set 2: C, D;<br>
      * sim(A, C) = 0.75<br>
@@ -184,25 +189,24 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary impleme
      * sim(B, D) = 0.05<br>
      * This method will return 0.75.
      *
-     *
      * @param linkedConcept1 Link 1.
      * @param linkedConcept2 Link 2.
      * @return Confidence.
      */
     @Override
     public double getSynonymyConfidence(String linkedConcept1, String linkedConcept2) {
-        if(linkedConcept1 == null || linkedConcept2 ==  null){
+        if (linkedConcept1 == null || linkedConcept2 == null) {
             return 0.0;
         }
-        if(linker instanceof MultiConceptLinker){
+        if (linker instanceof MultiConceptLinker) {
             Set<String> uris1 = ((MultiConceptLinker) linker).getUris(linkedConcept1);
             Set<String> uris2 = ((MultiConceptLinker) linker).getUris(linkedConcept2);
             double bestScore = 0.0;
 
-            for(String uri1 : uris1){
-                for(String uri2 : uris2){
+            for (String uri1 : uris1) {
+                for (String uri2 : uris2) {
                     double score = gensim.getSimilarity(uri1, uri2, this.modelFilePath);
-                    if(score > bestScore){
+                    if (score > bestScore) {
                         bestScore = score;
                     }
                 }

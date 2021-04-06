@@ -39,6 +39,7 @@ public class WikidataEmbeddingLinker implements LabelToConceptLinker {
                     // confirm the link as soon as we find a vector for it
                     return labelToBeLinked;
                 }
+                LOGGER.warn("Link part not found: '" + linkPart + "'");
             }
             // even though a link was found, there is no vector for it...
             LOGGER.error("No vectors found for link: '" + link + "'");
@@ -66,6 +67,7 @@ public class WikidataEmbeddingLinker implements LabelToConceptLinker {
                         // confirm the link as soon as we find a vector for it
                         continue checkLinks;
                     }
+                    LOGGER.warn("Link part not found: '" + linkPart + "'");
                 }
                 // even though a link was found, there is no vector for it...
                 LOGGER.error("No vectors found for link: '" + labelToBeLinked + "'");
