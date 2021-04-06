@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -197,10 +197,10 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#GensimEmbeddingModel-java.lang.String-java.lang.String-double-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.LabelToConceptLinkerEmbeddings-java.lang.String-">GensimEmbeddingModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pathToModelOrVectorFile,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#GensimEmbeddingModel-java.lang.String-java.lang.String-double-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker-java.lang.String-">GensimEmbeddingModel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pathToModelOrVectorFile,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pathToEntityFile,
                     double&nbsp;threshold,
-                    <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/LabelToConceptLinkerEmbeddings.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings">LabelToConceptLinkerEmbeddings</a>&nbsp;linker,
+                    <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/LabelToConceptLinker.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">LabelToConceptLinker</a>&nbsp;linker,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;knowledgeSourceName)</code>
 <div class="block">Constructor</div>
 </td>
@@ -254,47 +254,40 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#getSimilarity-java.lang.String-java.lang.String-">getSimilarity</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedWord_1,
-             <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedWord_2)</code>
-<div class="block">Calculate the similarity given two linked concepts.</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#getStrongFormSynonymyConfidence-java.lang.String-java.lang.String-">getStrongFormSynonymyConfidence</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept1,
                                <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept2)</code>
 <div class="block">Given two links, determine the degree of synonymy.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#getSynonymsLexical-java.lang.String-">getSynonymsLexical</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept)</code>
 <div class="block">Retrieves a list of synonyms independently of the word sense.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#getSynonymyConfidence-java.lang.String-java.lang.String-">getSynonymyConfidence</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept1,
                      <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept2)</code>
-<div class="block">Given two links, determine the degree of synonymy.</div>
+<div class="block">If we have two multi-concept links, the similarity of the best combination is returned.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#getThreshold--">getThreshold</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#isInDictionary-java.lang.String-">isInDictionary</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;word)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#isStrongFormSynonymous-java.lang.String-java.lang.String-">isStrongFormSynonymous</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedWord_1,
                       <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedWord_2)</code>
 <div class="block">Note that the concepts have to be linked.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#isSynonymous-java.lang.String-java.lang.String-">isSynonymous</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept1,
             <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept2)</code>
@@ -302,7 +295,7 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
  or word_1 and word_2.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/GensimEmbeddingModel.html#setThreshold-double-">setThreshold</a></span>(double&nbsp;threshold)</code>&nbsp;</td>
 </tr>
@@ -413,7 +406,7 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GensimEmbeddingModel-java.lang.String-java.lang.String-double-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.LabelToConceptLinkerEmbeddings-java.lang.String-">
+<a name="GensimEmbeddingModel-java.lang.String-java.lang.String-double-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -422,7 +415,7 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <pre>public&nbsp;GensimEmbeddingModel(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pathToModelOrVectorFile,
                             <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pathToEntityFile,
                             double&nbsp;threshold,
-                            <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/embeddings/LabelToConceptLinkerEmbeddings.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings">LabelToConceptLinkerEmbeddings</a>&nbsp;linker,
+                            <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/LabelToConceptLinker.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">LabelToConceptLinker</a>&nbsp;linker,
                             <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;knowledgeSourceName)</pre>
 <div class="block">Constructor</div>
 <dl>
@@ -620,24 +613,6 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 </dl>
 </li>
 </ul>
-<a name="getSimilarity-java.lang.String-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getSimilarity</h4>
-<pre>public&nbsp;double&nbsp;getSimilarity(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedWord_1,
-                            <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedWord_2)</pre>
-<div class="block">Calculate the similarity given two linked concepts.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>linkedWord_1</code> - Linked concept 1.</dd>
-<dd><code>linkedWord_2</code> - Linked concept 2.</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>Similarity score. Higher values mean higher similarity.</dd>
-</dl>
-</li>
-</ul>
 <a name="getThreshold--">
 <!--   -->
 </a>
@@ -664,16 +639,23 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <h4>getSynonymyConfidence</h4>
 <pre>public&nbsp;double&nbsp;getSynonymyConfidence(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept1,
                                     <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept2)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SynonymConfidenceCapability.html#getSynonymyConfidence-java.lang.String-java.lang.String-">SynonymConfidenceCapability</a></code></span></div>
-<div class="block">Given two links, determine the degree of synonymy.</div>
+<div class="block">If we have two multi-concept links, the similarity of the best combination is returned.
+ <p>
+ Example:<br>
+ Set 1: A, B; Set 2: C, D;<br>
+ sim(A, C) = 0.75<br>
+ sim(A, D) = 0.10<br>
+ sim(B, C) = 0.25<br>
+ sim(B, D) = 0.05<br>
+ This method will return 0.75.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SynonymConfidenceCapability.html#getSynonymyConfidence-java.lang.String-java.lang.String-">getSynonymyConfidence</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SynonymConfidenceCapability.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">SynonymConfidenceCapability</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>linkedConcept1</code> - Linked concept 1.</dd>
-<dd><code>linkedConcept2</code> - Linked concept 2.</dd>
+<dd><code>linkedConcept1</code> - Link 1.</dd>
+<dd><code>linkedConcept2</code> - Link 2.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>True if synonymous, else false.</dd>
+<dd>Confidence.</dd>
 </dl>
 </li>
 </ul>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6};
+var methods = {"i0":6,"i1":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -130,6 +130,12 @@ var activeTableTab = "activeTableTab";
 <div class="block">Given a link, multiple identifiers may be returned.</div>
 </td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/MultiConceptLinker.html#isMultiConceptLink-java.lang.String-">isMultiConceptLink</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;link)</code>
+<div class="block">Determine whether the link at hand is a multi-concept link.</div>
+</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -148,7 +154,7 @@ var activeTableTab = "activeTableTab";
 <a name="getUris-java.lang.String-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getUris</h4>
 <pre><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getUris(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;multiConceptLink)</pre>
@@ -158,6 +164,22 @@ var activeTableTab = "activeTableTab";
 <dd><code>multiConceptLink</code> - The link.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Multiple concepts (typically URIs).</dd>
+</dl>
+</li>
+</ul>
+<a name="isMultiConceptLink-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isMultiConceptLink</h4>
+<pre>boolean&nbsp;isMultiConceptLink(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;link)</pre>
+<div class="block">Determine whether the link at hand is a multi-concept link.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>link</code> - Link to be checked.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>True if multi-concept link, else false.</dd>
 </dl>
 </li>
 </ul>

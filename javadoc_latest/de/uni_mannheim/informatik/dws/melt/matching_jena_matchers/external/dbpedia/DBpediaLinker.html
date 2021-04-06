@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":9,"i3":9,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
+var methods = {"i0":10,"i1":10,"i2":9,"i3":9,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -282,41 +282,47 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/dbpedia/DBpediaLinker.html#isDiskBufferEnabled--">isDiskBufferEnabled</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/dbpedia/DBpediaLinker.html#isMultiConceptLink-java.lang.String-">isMultiConceptLink</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;link)</code>
+<div class="block">Determine whether the link at hand is a multi-concept link.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html?is-external=true" title="class or interface in java.util">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/dbpedia/DBpediaLinker.html#linkLabelToTokensLeftToRight-java.lang.String-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language-">linkLabelToTokensLeftToRight</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;labelToBeLinked,
                             <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language)</code>
 <div class="block">Splits the labelToBeLinked in ngrams up to infinite size and tries to link components.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/dbpedia/DBpediaLinker.html#linkToPotentiallyMultipleConcepts-java.lang.String-">linkToPotentiallyMultipleConcepts</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;labelToBeLinked)</code>
 <div class="block">This method tries to link <code>labelToBeLinked</code> to one concept if possible.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html?is-external=true" title="class or interface in java.util">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/dbpedia/DBpediaLinker.html#linkToPotentiallyMultipleConcepts-java.lang.String-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language-">linkToPotentiallyMultipleConcepts</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;labelToBeLinked,
                                  <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/dbpedia/DBpediaLinker.html#linkToSingleConcept-java.lang.String-">linkToSingleConcept</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;labelToBeLinked)</code>
 <div class="block">Link to a single concept.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/dbpedia/DBpediaLinker.html#linkToSingleConcept-java.lang.String-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language-">linkToSingleConcept</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;labelToBeLinked,
                    <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language)</code>
 <div class="block">Link to a single concept.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/dbpedia/DBpediaLinker.html#setDiskBufferEnabled-boolean-">setDiskBufferEnabled</a></span>(boolean&nbsp;diskBufferEnabled)</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/dbpedia/DBpediaLinker.html#setNameOfLinker-java.lang.String-">setNameOfLinker</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;nameOfLinker)</code>
 <div class="block">Set instance specific name of the linker.</div>
@@ -508,6 +514,25 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/javase/8/docs/api/java/uti
 <dd><code>multiConceptLink</code> - The lookup link.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Individual links, empty set if there are none.</dd>
+</dl>
+</li>
+</ul>
+<a name="isMultiConceptLink-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isMultiConceptLink</h4>
+<pre>public&nbsp;boolean&nbsp;isMultiConceptLink(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;link)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/MultiConceptLinker.html#isMultiConceptLink-java.lang.String-">MultiConceptLinker</a></code></span></div>
+<div class="block">Determine whether the link at hand is a multi-concept link.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/MultiConceptLinker.html#isMultiConceptLink-java.lang.String-">isMultiConceptLink</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/MultiConceptLinker.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">MultiConceptLinker</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>link</code> - Link to be checked.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>True if multi-concept link, else false.</dd>
 </dl>
 </li>
 </ul>
