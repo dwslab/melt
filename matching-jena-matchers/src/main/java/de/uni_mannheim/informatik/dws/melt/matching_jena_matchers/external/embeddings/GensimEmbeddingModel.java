@@ -1,11 +1,10 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResourceWithSynonymCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.MultiConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SynonymConfidenceCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
-import org.javatuples.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -153,7 +152,7 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary impleme
         if(linkedWord_1 == null || linkedWord_2 ==  null){
             return false;
         }
-        double similarity = getSimilarity(linkedWord_1, linkedWord_2);
+        double similarity = getSynonymyConfidence(linkedWord_1, linkedWord_2);
         return similarity > this.threshold;
     }
 
@@ -166,20 +165,6 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary impleme
         return this.knowledgeSourceName;
     }
 
-    /**
-     * Calculate the similarity given two linked concepts.
-     * @param linkedWord_1 Linked concept 1.
-     * @param linkedWord_2 Linked concept 2.
-     * @return Similarity score. Higher values mean higher similarity.
-     */
-    public double getSimilarity(String linkedWord_1, String linkedWord_2){
-        if(linkedWord_1 == null || linkedWord_2 ==  null){
-            // LOGGER.warn("Could not calculate similarity. Will return 0!"); // leads to excessive logging for combined strategies
-            return 0.0;
-        }
-        return gensim.getSimilarity(linkedWord_1, linkedWord_2, this.modelFilePath);
-    }
-
     public double getThreshold() {
         return threshold;
     }
@@ -188,12 +173,44 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary impleme
         this.threshold = threshold;
     }
 
+    /**
+     * If we have two multi-concept links, the similarity of the best combination is returned.
+     *
+     * Example:<br>
+     * Set 1: A, B; Set 2: C, D;<br>
+     * sim(A, C) = 0.75<br>
+     * sim(A, D) = 0.10<br>
+     * sim(B, C) = 0.25<br>
+     * sim(B, D) = 0.05<br>
+     * This method will return 0.75.
+     *
+     *
+     * @param linkedConcept1 Link 1.
+     * @param linkedConcept2 Link 2.
+     * @return Confidence.
+     */
     @Override
     public double getSynonymyConfidence(String linkedConcept1, String linkedConcept2) {
         if(linkedConcept1 == null || linkedConcept2 ==  null){
             return 0.0;
         }
-        return gensim.getSimilarity(linkedConcept1, linkedConcept2, this.modelFilePath);
+        if(linker instanceof MultiConceptLinker){
+            Set<String> uris1 = ((MultiConceptLinker) linker).getUris(linkedConcept1);
+            Set<String> uris2 = ((MultiConceptLinker) linker).getUris(linkedConcept2);
+            double bestScore = 0.0;
+
+            for(String uri1 : uris1){
+                for(String uri2 : uris2){
+                    double score = gensim.getSimilarity(uri1, uri2, this.modelFilePath);
+                    if(score > bestScore){
+                        bestScore = score;
+                    }
+                }
+            }
+            return bestScore;
+        } else {
+            return gensim.getSimilarity(linkedConcept1, linkedConcept2, this.modelFilePath);
+        }
     }
 
     @Override

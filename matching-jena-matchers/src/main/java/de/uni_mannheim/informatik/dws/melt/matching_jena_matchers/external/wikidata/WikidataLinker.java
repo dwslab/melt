@@ -454,4 +454,9 @@ public class WikidataLinker implements LabelToConceptLinker, MultiConceptLinker 
         this.isDiskBufferEnabled = diskBufferEnabled;
         initializeBuffers();
     }
+
+    @Override
+    public boolean isMultiConceptLink(String link) {
+        return link.startsWith(MULTI_CONCEPT_PREFIX);
+    }
 }

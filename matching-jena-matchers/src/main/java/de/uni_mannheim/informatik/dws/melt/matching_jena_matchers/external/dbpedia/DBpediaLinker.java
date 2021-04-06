@@ -119,6 +119,11 @@ public class DBpediaLinker implements LabelToConceptLinker, MultiConceptLinker {
         return result;
     }
 
+    @Override
+    public boolean isMultiConceptLink(String link) {
+        return link.startsWith(MULTI_CONCEPT_PREFIX);
+    }
+
     /**
      * Given a set of links where the links can be multi concept links or direct links, a set of only direct links
      * is returned.

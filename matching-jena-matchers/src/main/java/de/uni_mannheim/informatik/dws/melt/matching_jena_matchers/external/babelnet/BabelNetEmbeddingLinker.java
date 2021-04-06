@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.babelnet;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SynonymConfidenceCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.LabelToConceptLinkerEmbeddings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Map;
 
-public class BabelNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings {
+public class BabelNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings implements SynonymConfidenceCapability {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BabelNetEmbeddingLinker.class);
@@ -80,5 +81,15 @@ public class BabelNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings {
     @Override
     public String normalize(String stringToBeNormalized) {
         return normalizeStatic(stringToBeNormalized);
+    }
+
+    @Override
+    public double getSynonymyConfidence(String linkedConcept1, String linkedConcept2) {
+        return 0;
+    }
+
+    @Override
+    public double getStrongFormSynonymyConfidence(String linkedConcept1, String linkedConcept2) {
+        return 0;
     }
 }
