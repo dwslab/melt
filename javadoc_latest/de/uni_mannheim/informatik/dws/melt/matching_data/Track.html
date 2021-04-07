@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":10,"i2":10,"i3":9,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":9,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":9,"i31":9,"i32":10};
+var methods = {"i0":6,"i1":10,"i2":10,"i3":9,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":9,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":9,"i31":10,"i32":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -173,7 +173,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html#remoteLocation">remoteLocation</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html#skipTestsWithoutRefAlign">skipTestsWithoutRefAlign</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -227,6 +227,15 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
      <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;version,
      boolean&nbsp;useDuplicateFreeStorageLayout,
      <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected </code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html#Track-java.lang.String-java.lang.String-java.lang.String-boolean-de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness-boolean-">Track</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;remoteLocation,
+     <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+     <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;version,
+     boolean&nbsp;useDuplicateFreeStorageLayout,
+     <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness,
+     boolean&nbsp;skipTestsWithoutRefAlign)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -404,7 +413,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr id="i31" class="rowColor">
-<td class="colFirst"><code>static void</code></td>
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html#setSkipTestCasesWithoutRefAlign-boolean-">setSkipTestCasesWithoutRefAlign</a></span>(boolean&nbsp;skip)</code>&nbsp;</td>
 </tr>
 <tr id="i32" class="altColor">
@@ -460,7 +469,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>skipTestsWithoutRefAlign</h4>
-<pre>protected static&nbsp;boolean skipTestsWithoutRefAlign</pre>
+<pre>protected&nbsp;boolean skipTestsWithoutRefAlign</pre>
 </li>
 </ul>
 <a name="remoteLocation">
@@ -533,6 +542,20 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a name="Track-java.lang.String-java.lang.String-java.lang.String-boolean-de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>Track</h4>
+<pre>protected&nbsp;Track(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;remoteLocation,
+                <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;version,
+                boolean&nbsp;useDuplicateFreeStorageLayout,
+                <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness,
+                boolean&nbsp;skipTestsWithoutRefAlign)</pre>
+</li>
+</ul>
 <a name="Track-java.lang.String-java.lang.String-java.lang.String-boolean-de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness-">
 <!--   -->
 </a>
@@ -604,7 +627,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setSkipTestCasesWithoutRefAlign</h4>
-<pre>public static&nbsp;void&nbsp;setSkipTestCasesWithoutRefAlign(boolean&nbsp;skip)</pre>
+<pre>public&nbsp;void&nbsp;setSkipTestCasesWithoutRefAlign(boolean&nbsp;skip)</pre>
 </li>
 </ul>
 <a name="getRemoteLocation--">

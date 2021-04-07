@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9};
+var methods = {"i0":9,"i1":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -180,6 +180,12 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TrackRepository.Largebio.html#getArgumentForUnlimitEntityExpansion--">getArgumentForUnlimitEntityExpansion</a></span>()</code>
+<div class="block">Returns the program argument which sets jdk.xml.entityExpansionLimit to zero because large bio needs it for parsing at least in jena.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TrackRepository.Largebio.html#unlimitEntityExpansion--">unlimitEntityExpansion</a></span>()</code>
 <div class="block">Sets the system property of jdk.xml.entityExpansionLimit to zero because large bio needs it for parsing at least in jena.</div>
@@ -227,11 +233,12 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <a name="unlimitEntityExpansion--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>unlimitEntityExpansion</h4>
 <pre>public static&nbsp;void&nbsp;unlimitEntityExpansion()</pre>
 <div class="block">Sets the system property of jdk.xml.entityExpansionLimit to zero because large bio needs it for parsing at least in jena.
+ This modifies the current JVM.
  Call this function before parsing large bio ontologies and especially when getting the error:
  <code>
  JAXP00010001: The parser has encountered more than "64000" entity expansions in this document; this is the limit imposed by the JDK.
@@ -240,6 +247,23 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
  <code>
  JAXP00010001: Der Parser hat mehr als 64000 Entityerweiterungen in diesem Dokument gefunden. Dies ist der von JDK vorgeschriebene Grenzwert.
  </code></div>
+</li>
+</ul>
+<a name="getArgumentForUnlimitEntityExpansion--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getArgumentForUnlimitEntityExpansion</h4>
+<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getArgumentForUnlimitEntityExpansion()</pre>
+<div class="block">Returns the program argument which sets jdk.xml.entityExpansionLimit to zero because large bio needs it for parsing at least in jena.
+ This will not modify the current JVM but return the argument needed for executing another executable.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the argument which should be used.</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TrackRepository.Largebio.html#unlimitEntityExpansion--"><code>unlimitEntityExpansion()</code></a></dd>
+</dl>
 </li>
 </ul>
 </li>
