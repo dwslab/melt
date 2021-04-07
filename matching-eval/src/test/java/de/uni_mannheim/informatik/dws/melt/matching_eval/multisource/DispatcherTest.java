@@ -41,7 +41,7 @@ public class DispatcherTest {
         
         for(MatcherMultiSourceURL multiSourceMatcher : matchers){
             ConfusionMatrixMetric confusionMatrixMetric = new ConfusionMatrixMetric();
-            ExecutionResultSet s = ExecutorMultiSource.run(conferenceWithReferenceAlignment, multiSourceMatcher);
+            ExecutionResultSet s = ExecutorMultiSource.run(conferenceWithReferenceAlignment, multiSourceMatcher).toExecutionResultSet();
             for(ExecutionResult result : s){
                 ConfusionMatrix cm = confusionMatrixMetric.compute(result);
                 assertEquals(0, cm.getFalseNegativeSize());

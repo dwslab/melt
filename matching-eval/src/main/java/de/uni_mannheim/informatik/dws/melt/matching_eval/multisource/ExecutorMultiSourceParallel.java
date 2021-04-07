@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval.multisource;
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutorParallel;
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,28 +35,31 @@ public class ExecutorMultiSourceParallel {
     }
     
    
-    public ExecutionResultSet runMultipleMatchersMultipleTracks(List<Track> tracks, Map<String, Object> matchers){
+    public ExecutionResultSetMultiSource runMultipleMatchersMultipleTracks(List<Track> tracks, Map<String, Object> matchers){
         return runMultipleMatchersMultipleTracks(tracks, matchers, null);
     }
     
-    public ExecutionResultSet runMultipleMatchersMultipleTracks(List<Track> tracks, Map<String, Object> matchers, Properties additionalParameters){
+    public ExecutionResultSetMultiSource runMultipleMatchersMultipleTracks(List<Track> tracks, Map<String, Object> matchers, Properties additionalParameters){
         ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
 
-        List<Future<ExecutionResultSet>> futures = new ArrayList<>(tracks.size() * matchers.size());
+        List<Future<ExecutionResultMultiSource>> futures = new ArrayList<>(tracks.size() * matchers.size());
         for(Track track : tracks){
             List<TestCase> trackTestCases = track.getTestCases();
             List<URL> distinctOntologies = Track.getDistinctOntologies(trackTestCases);
             for(Entry<String, Object> matcher : matchers.entrySet()){
                 futures.add(exec.submit(new ExecutionRunnerMultiSource(
                         trackTestCases, matcher.getValue(), matcher.getKey(), distinctOntologies, 
-                        ExecutorMultiSource.getMostSpecificPartitioner(track), additionalParameters)));
+                        ExecutorMultiSource.getMostSpecificPartitioner(track), 
+                        ExecutorMultiSource.getCombinedInputAlignment(trackTestCases), additionalParameters)));
             }
         }
         
-        ExecutionResultSet results = new ExecutionResultSet();
-        for (Future<ExecutionResultSet> f : futures) {
+        ExecutionResultSetMultiSource results = new ExecutionResultSetMultiSource();
+        for (Future<ExecutionResultMultiSource> f : futures) {
             try {
-                results.addAll(f.get());// wait for a MatcherRunner to complete
+                ExecutionResultMultiSource result = f.get();// wait for a MatcherRunner to complete
+                if(result != null)
+                    results.add(result);
             } catch (InterruptedException | ExecutionException ex) {
                 LOGGER.warn("Error when waiting for parallel results of matcher execution.", ex);
             }
@@ -66,20 +68,20 @@ public class ExecutorMultiSourceParallel {
         return results;
     }
     
-    public ExecutionResultSet runMultipleMatchers(Track track, Map<String, Object> matchers){
+    public ExecutionResultSetMultiSource runMultipleMatchers(Track track, Map<String, Object> matchers){
         return runMultipleMatchers(track.getTestCases(), matchers);
     }
     
-    public ExecutionResultSet runMultipleMatchers(List<TestCase> testCases, Map<String, Object> matchers){
+    public ExecutionResultSetMultiSource runMultipleMatchers(List<TestCase> testCases, Map<String, Object> matchers){
         return runMultipleMatchers(testCases, matchers, null);
     }
     
-    public ExecutionResultSet runMultipleMatchers(List<TestCase> testCases, Map<String, Object> matchers, Properties additionalParameters){
+    public ExecutionResultSetMultiSource runMultipleMatchers(List<TestCase> testCases, Map<String, Object> matchers, Properties additionalParameters){
         ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
 
         Map<Track, List<TestCase>> trackToTestCase = ExecutorMultiSource.groupTestCasesByTrack(testCases);
         
-        List<Future<ExecutionResultSet>> futures = new ArrayList<>(trackToTestCase.size() * matchers.size());
+        List<Future<ExecutionResultMultiSource>> futures = new ArrayList<>(trackToTestCase.size() * matchers.size());
         for(Map.Entry<Track, List<TestCase>> trackToTestcases : trackToTestCase.entrySet()){
             Track track = trackToTestcases.getKey();
             List<TestCase> trackTestCases = trackToTestcases.getValue();
@@ -87,14 +89,17 @@ public class ExecutorMultiSourceParallel {
             for(Entry<String, Object> matcher : matchers.entrySet()){
                 futures.add(exec.submit(new ExecutionRunnerMultiSource(
                         trackTestCases, matcher.getValue(), matcher.getKey(), distinctOntologies, 
-                        ExecutorMultiSource.getMostSpecificPartitioner(track), additionalParameters)));
+                        ExecutorMultiSource.getMostSpecificPartitioner(track), 
+                        ExecutorMultiSource.getCombinedInputAlignment(trackTestCases),additionalParameters)));
             }
         }
         
-        ExecutionResultSet results = new ExecutionResultSet();
-        for (Future<ExecutionResultSet> f : futures) {
+        ExecutionResultSetMultiSource results = new ExecutionResultSetMultiSource();
+        for (Future<ExecutionResultMultiSource> f : futures) {
             try {
-                results.addAll(f.get());// wait for a MatcherRunner to complete
+                ExecutionResultMultiSource result = f.get();// wait for a MatcherRunner to complete
+                if(result != null)
+                    results.add(result);
             } catch (InterruptedException | ExecutionException ex) {
                 LOGGER.warn("Error when waiting for parallel results of matcher execution.", ex);
             }

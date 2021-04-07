@@ -12,6 +12,7 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.RDFDataMgr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +86,8 @@ public class OntologyCacheJena {
             return TdbUtil.getOntModelFromTDB(f.getAbsolutePath(), spec);
         }else{
             OntModel model = ModelFactory.createOntologyModel(spec);
-            model.read(uri);
+            //model.read(uri);
+            RDFDataMgr.read(model, uri);
             return model;
         }
     }

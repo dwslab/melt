@@ -350,11 +350,11 @@ public class EvaluatorCSV extends Evaluator {
         }
     }
     
-    private String getFormattedRuntime(long nanoSeconds){
+    public static String getFormattedRuntime(long nanoSeconds){
         return DurationFormatUtils.formatDuration(nanoSeconds/1000000, "HH:mm:ss");
     }
     
-    private long getSummedRuntimeOfResults(Set<ExecutionResult> results){
+    public static long getSummedRuntimeOfResults(Set<ExecutionResult> results){
         long summedRuntime = 0;
         for(ExecutionResult result : results){
             summedRuntime += result.getRuntime();

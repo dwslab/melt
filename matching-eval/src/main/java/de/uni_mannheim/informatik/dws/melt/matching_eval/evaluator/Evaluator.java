@@ -45,6 +45,14 @@ public abstract class Evaluator {
         }
         resultsDirectory = directory;
     }
+    
+    /**
+     * Returns the default results directory.
+     * @return the default results directory
+     */
+    public static File getDefaultResultsDirectory(){
+        return resultsDirectory;
+    }
 
     /**
      * Set of the individual instances of {@link ExecutionResult} for which an evaluation will be performed.
@@ -63,8 +71,12 @@ public abstract class Evaluator {
      * Perform an evaluation and persist the results of the evaluator in the default directory.
      */
     public void writeToDirectory(){
+        this.writeToDirectory(getDirectoryWithCurrentTime());
+    }
+    
+    public static File getDirectoryWithCurrentTime(){
         String dateAndTime = "results_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-        this.writeToDirectory(new File(resultsDirectory, dateAndTime));
+        return new File(resultsDirectory, dateAndTime);
     }
 
     /**

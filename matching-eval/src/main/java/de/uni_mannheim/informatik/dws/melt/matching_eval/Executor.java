@@ -631,4 +631,34 @@ public class Executor {
             f.delete();
         }
     }
+    
+    public static long getSummedRuntimeOfAllUnrefinedResults(ExecutionResultSet results){
+        long summedRuntime = 0;
+        for(ExecutionResult r : results.getUnrefinedResults()){
+            summedRuntime += r.getRuntime();
+        }
+        return summedRuntime;
+    }
+    
+    
+    /*****************************************
+     * Run On Top
+     *****************************************/
+    
+    /**
+     * Runs a matcher on top of another. This means that the previous matchings do not need to be recalculated.
+     * @param previousResults the results from the previous runs.
+     * @param oldMatcherName the matcher name which should exist in previous results
+     * @param newMatcherName the new matcher name
+     * @param matcher the actual matcher
+     * @return the execution results together with the new matcher
+     */
+//    public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet previousResults, String oldMatcherName, String newMatcherName, Object matcher){
+//        
+//        for(ExecutionResult result : previousResults.getGroup(oldMatcherName)){
+//            
+//        }
+//    }
+    
+    
 }

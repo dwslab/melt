@@ -29,7 +29,11 @@ benchmarkCache/
 trackCache/
 results/
 sealsResults/
+sealsTmp/
 melt-resources/
+oaeimatcher/
+serializationFolder/
+
 
 current_result.rdf
 result.rdf

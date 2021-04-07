@@ -11,9 +11,15 @@ import java.util.Set;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import static org.gradoop.famer.clustering.common.PropertyNames.GRAPH_LABEL;
 import static org.gradoop.famer.clustering.common.PropertyNames.SIM_VALUE;
+import org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering;
 import org.gradoop.famer.clustering.parallelClustering.center.Center;
+import org.gradoop.famer.clustering.parallelClustering.clip.CLIP;
+import org.gradoop.famer.clustering.parallelClustering.clip.dataStructures.CLIPConfig;
+import org.gradoop.famer.clustering.parallelClustering.common.connectedComponents.ConnectedComponents;
 import org.gradoop.famer.clustering.parallelClustering.common.dataStructures.ClusteringOutputType;
 import org.gradoop.famer.clustering.parallelClustering.common.dataStructures.PrioritySelection;
+import org.gradoop.famer.clustering.parallelClustering.mergeCenter.MergeCenter;
+import org.gradoop.famer.clustering.parallelClustering.star.Star;
 import org.gradoop.flink.model.impl.epgm.LogicalGraph;
 import org.gradoop.flink.util.FlinkAsciiGraphLoader;
 import org.gradoop.flink.util.GradoopFlinkConfig;
@@ -22,35 +28,71 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class TestFamerClustering {
+   
     
     @Test
-    public void testSimpleAlignment(){
-        FamerClustering clustering = new FamerClustering();
-        Center center = new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE);
+    public void testCenter(){
+        testClusteringApproach(new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
+    }
+    
+    @Test
+    public void testMergeCenter(){
+        testClusteringApproach(new MergeCenter(PrioritySelection.MIN, 1.0, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
+    }
+    
+    //@Test
+    public void testClip(){
+        CLIPConfig clipconfig = new CLIPConfig(0.0, 1, false, 0.5, 0.2, 0.3);
+        testClusteringApproach(new CLIP(clipconfig, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
+    }
+    
+    @Test
+    public void testStarOne(){
+        testClusteringApproach(new Star(PrioritySelection.MIN, Star.StarType.ONE, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
+    }
+    
+    @Test
+    public void testStarTwo(){
+        testClusteringApproach(new Star(PrioritySelection.MIN, Star.StarType.TWO, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
+    }
+    
+    @Test
+    public void testConnectedComponents(){
+        testClusteringApproach(new ConnectedComponents(Integer.MAX_VALUE, "", null, ClusteringOutputType.GRAPH), 3);
+    }
+    
+    private void testClusteringApproach(AbstractParallelClustering clustering, int numClusters){
         Alignment alignment = getTestAlignment();
         
-        Map<String, Long> actual = clustering.getClusters(alignment, center, getTestExtractor());
-        
-        assertEquals(4, new HashSet(actual.values()).size()); // 4 clusters
+        Map<String, Set<Long>> actual = FamerClustering.getClusters(alignment, clustering, getTestExtractor());
+            
+        Set<Long> actualClusterIds = getAllClusterIds(actual);
+
+        assertEquals(numClusters, actualClusterIds.size()); // 4 clusters
         Set<String> entities = alignment.getDistinctSourcesAsSet();
         entities.addAll(alignment.getDistinctTargetsAsSet());
         for(String k : actual.keySet()){
             assertTrue(entities.contains(k));
         }
     }
-    
         
+    private Set<Long> getAllClusterIds(Map<String, Set<Long>> mapping){
+        Set<Long> clusterIds = new HashSet<>();
+        for(Set<Long> set : mapping.values()){
+            clusterIds.addAll(set);
+        }
+        return clusterIds;
+    }
     
     @Test
     public void testDifferentClusteringOutputType(){
-        FamerClustering clustering = new FamerClustering();
         Alignment alignment = getTestAlignment();
                 
-        Map<String, Long> one = clustering.getClusters(alignment, 
+        Map<String, Set<Long>> one = FamerClustering.getClusters(alignment, 
                 new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), getTestExtractor());
-        Map<String, Long> two = clustering.getClusters(alignment, 
+        Map<String, Set<Long>> two = FamerClustering.getClusters(alignment, 
                 new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH_COLLECTION, Integer.MAX_VALUE), getTestExtractor());
-        Map<String, Long> three = clustering.getClusters(alignment, 
+        Map<String, Set<Long>> three = FamerClustering.getClusters(alignment, 
                 new Center(PrioritySelection.MIN, false, ClusteringOutputType.VERTEX_SET, Integer.MAX_VALUE), getTestExtractor());
         
         assertEquals(one, two);

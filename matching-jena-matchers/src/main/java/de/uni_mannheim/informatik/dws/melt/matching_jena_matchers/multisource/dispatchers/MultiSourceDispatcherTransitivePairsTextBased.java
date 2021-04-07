@@ -23,20 +23,20 @@ import smile.math.MathEx;
  * This dispatcher will compare the texts in a model and match the ones which are textually the clostest such that a connection between all ontologies exists.
  * Therefore exactly (number of models)-1 matching operations and no merges are executed.
  */
-public class MultiSourceDispatcherSomePairsTextBased extends MatcherMultiSourceURL implements MultiSourceDispatcher, IMatcherMultiSourceCaller{
+public class MultiSourceDispatcherTransitivePairsTextBased extends MatcherMultiSourceURL implements MultiSourceDispatcher, IMatcherMultiSourceCaller{
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherSomePairsTextBased.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherTransitivePairsTextBased.class);
     
     private final Object oneToOneMatcher;
     
     private double mindf;
     private double maxdf;
     
-    public MultiSourceDispatcherSomePairsTextBased(Object oneToOneMatcher) {
+    public MultiSourceDispatcherTransitivePairsTextBased(Object oneToOneMatcher) {
         this(oneToOneMatcher, 0.0, 1.0);
     }
     
-    public MultiSourceDispatcherSomePairsTextBased(Object oneToOneMatcher, double mindf, double maxdf) {
+    public MultiSourceDispatcherTransitivePairsTextBased(Object oneToOneMatcher, double mindf, double maxdf) {
         this.oneToOneMatcher = oneToOneMatcher;
         this.mindf = mindf;
         this.maxdf = maxdf;
