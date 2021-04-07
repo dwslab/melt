@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByClusterText.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherSomePairsOrderBased.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherTransitivePairsOrderBased.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.html" target="_top">Frames</a></li>
@@ -197,15 +197,19 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.html#REVERSED">REVERSED</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.html#RANDOM">RANDOM</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.html#REVERSED">REVERSED</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.html#UNIQUE_SUBJECTS_ASCENDING">UNIQUE_SUBJECTS_ASCENDING</a></span></code>
 <div class="block">Sorted by the number of unique subjects (of a triple /statement) in a model.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.html#UNIQUE_SUBJECTS_DECENDING">UNIQUE_SUBJECTS_DECENDING</a></span></code>
 <div class="block">Sorted by the number of unique subjects (of a triple /statement) in a model.</div>
@@ -403,11 +407,20 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <a name="UNIQUE_SUBJECTS_DECENDING">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>UNIQUE_SUBJECTS_DECENDING</h4>
 <pre>public static final&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt; UNIQUE_SUBJECTS_DECENDING</pre>
 <div class="block">Sorted by the number of unique subjects (of a triple /statement) in a model. Larger gets merged first.</div>
+</li>
+</ul>
+<a name="RANDOM">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RANDOM</h4>
+<pre>public static final&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt; RANDOM</pre>
 </li>
 </ul>
 </li>
@@ -518,7 +531,7 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByClusterText.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherSomePairsOrderBased.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherTransitivePairsOrderBased.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.html" target="_top">Frames</a></li>

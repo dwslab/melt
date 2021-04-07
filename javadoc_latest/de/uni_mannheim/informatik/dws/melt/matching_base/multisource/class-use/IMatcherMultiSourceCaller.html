@@ -82,10 +82,14 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="#de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer</a></td>
+<td class="colFirst"><a href="#de.uni_mannheim.informatik.dws.melt.matching_base.multisource">de.uni_mannheim.informatik.dws.melt.matching_base.multisource</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -94,6 +98,26 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="de.uni_mannheim.informatik.dws.melt.matching_base.multisource">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/multisource/IMatcherMultiSourceCaller.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">IMatcherMultiSourceCaller</a> in <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/multisource/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_base.multisource</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/multisource/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_base.multisource</a> that implement <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/multisource/IMatcherMultiSourceCaller.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">IMatcherMultiSourceCaller</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/multisource/MultiSourcePipelineSequential.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">MultiSourcePipelineSequential</a></span></code>
+<div class="block">Executes all multi source matchers one after the other.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">
 <!--   -->
 </a>
@@ -158,13 +182,13 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherSomePairsOrderBased.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MultiSourceDispatcherSomePairsOrderBased</a></span></code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherTransitivePairsOrderBased.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MultiSourceDispatcherTransitivePairsOrderBased</a></span></code>
 <div class="block">This dispatcher will match multiple ontologies by selecting a few pairs.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherSomePairsTextBased.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MultiSourceDispatcherSomePairsTextBased</a></span></code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherTransitivePairsTextBased.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MultiSourceDispatcherTransitivePairsTextBased</a></span></code>
 <div class="block">This dispatcher will compare the texts in a model and match the ones which are textually the clostest such that a connection between all ontologies exists.</div>
 </td>
 </tr>
