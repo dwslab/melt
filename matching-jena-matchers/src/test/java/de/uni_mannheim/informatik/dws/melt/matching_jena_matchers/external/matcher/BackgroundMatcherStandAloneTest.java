@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matc
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetKnowledgeSource;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetLinker;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.jena.ontology.OntModel;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,8 @@ class BackgroundMatcherStandAloneTest {
         try {
             BackgroundMatcherStandAlone backgroundMatcher = new BackgroundMatcherStandAlone(new WordNetKnowledgeSource(),
                     ImplementedBackgroundMatchingStrategies.SYNONYMY, 0.0);
+            assertNotNull(backgroundMatcher.getLinker());
+            assertTrue(backgroundMatcher.getLinker() instanceof WordNetLinker);
 
             SimpleStringMatcher stringMatcher = new SimpleStringMatcher();
 

@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wikidata;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
@@ -10,25 +10,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Link to Wikidata embeddings using the "normal" Wikidata linker ({@link WikidataLinker}.
+ * Link DBpedia embeddings using the "normal" DBpedia linker ({@link DBpediaLinker}.
  * This linker is suited for RDF2Vec Light embeddings.
  *
  * The linker is conceptually similar to
- * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia.DBpediaEmbeddingLinker}.
+ * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wikidata.WikidataEmbeddingLinker}.
  */
-public class WikidataEmbeddingLinker implements LabelToConceptLinker {
+public class DBpediaEmbeddingLinker implements LabelToConceptLinker {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WikidataEmbeddingLinker.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DBpediaEmbeddingLinker.class);
 
-    private static final WikidataLinker WIKIDATA_LINKER = new WikidataLinker();
+    private static DBpediaLinker dbpediaLinker;
 
-    /**
-     * Set of URIs for which an embedding is available.
-     */
-    Set<String> uris = new HashSet<>();
-
-    private String linkerName = "Wikidata Embedding Linker";
+    private String linkerName = "DBpedia Embedding Linker";
 
     /**
      * Just for debugging and analysis: A data structure to store URIs that were not found.
@@ -36,26 +31,50 @@ public class WikidataEmbeddingLinker implements LabelToConceptLinker {
     private final Set<String> urisNotFound = new HashSet<>();
 
     /**
-     * Constructor
-     * @param filePathToEntityFile A file holding the URIs for which an embedding exists.
+     * Set of URIs for which an embedding is available.
      */
-    public WikidataEmbeddingLinker(@NotNull String filePathToEntityFile) {
-        if(filePathToEntityFile == null){
-            LOGGER.error("File must not be null. The linker will not work.");
+    Set<String> uris;
+
+    /**
+     * Main Constructor
+     * @param linker The desired DBpedia linker configuration.
+     * @param filePathToUriFile UTF-8 encoded file holding the URIs for which an embedding exists.
+     */
+    public DBpediaEmbeddingLinker(DBpediaLinker linker, @NotNull String filePathToUriFile){
+        // linker
+        if(linker == null){
+            DBpediaKnowledgeSource dks = new DBpediaKnowledgeSource(true);
+            setDbpediaLinker(new DBpediaLinker(dks));
+        } else {
+            setDbpediaLinker(linker);
+        }
+
+        // URI file
+        if(filePathToUriFile == null){
+            LOGGER.error("URL file must not be null. The linker will not work.");
             return;
         }
-        uris = StringOperations.readSetFromFile(filePathToEntityFile);
+        uris = StringOperations.readSetFromFile(filePathToUriFile);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param filePathToUriFile UTF-8 encoded file holding the URIs for which an embedding exists.
+     */
+    public DBpediaEmbeddingLinker(String filePathToUriFile){
+        this(null, filePathToUriFile);
     }
 
     @Override
     public String linkToSingleConcept(String labelToBeLinked) {
-        String link = WIKIDATA_LINKER.linkToSingleConcept(labelToBeLinked);
-        if (link == null) {
+        String link = dbpediaLinker.linkToSingleConcept(labelToBeLinked);
+        if(link == null){
             return null;
         }
-        if (WIKIDATA_LINKER.isMultiConceptLink(link)) {
-            for (String linkPart : WIKIDATA_LINKER.getUris(link)) {
-                if (uris.contains(linkPart)) {
+        if(dbpediaLinker.isMultiConceptLink(link)){
+            for (String linkPart : dbpediaLinker.getUris(link)){
+                if(uris.contains(linkPart)){
                     // confirm the link as soon as we find a vector for it
                     return labelToBeLinked;
                 }
@@ -65,7 +84,7 @@ public class WikidataEmbeddingLinker implements LabelToConceptLinker {
             // even though a link was found, there is no vector for it...
             LOGGER.error("No vectors found for link: '" + link + "'");
             return null;
-        } else if (uris.contains(link)) {
+        } else if(uris.contains(link)){
             return link;
         } else {
             LOGGER.error("No vector found for link: '" + link + "'");
@@ -76,15 +95,15 @@ public class WikidataEmbeddingLinker implements LabelToConceptLinker {
 
     @Override
     public Set<String> linkToPotentiallyMultipleConcepts(String labelToBeLinked) {
-        Set<String> links = WIKIDATA_LINKER.linkToPotentiallyMultipleConcepts(labelToBeLinked);
+        Set<String> links = dbpediaLinker.linkToPotentiallyMultipleConcepts(labelToBeLinked);
         if (links == null) {
             return null;
         }
 
         checkLinks:
         for (String link : links) {
-            if (WIKIDATA_LINKER.isMultiConceptLink(link)) {
-                for (String linkPart : WIKIDATA_LINKER.getUris(link)) {
+            if (dbpediaLinker.isMultiConceptLink(link)) {
+                for (String linkPart : dbpediaLinker.getUris(link)) {
                     if (uris.contains(linkPart)) {
                         // confirm the link as soon as we find a vector for it
                         continue checkLinks;
@@ -116,6 +135,14 @@ public class WikidataEmbeddingLinker implements LabelToConceptLinker {
             return;
         }
         this.linkerName = nameOfLinker;
+    }
+
+    public static DBpediaLinker getDbpediaLinker() {
+        return dbpediaLinker;
+    }
+
+    public static void setDbpediaLinker(DBpediaLinker dbpediaLinker) {
+        DBpediaEmbeddingLinker.dbpediaLinker = dbpediaLinker;
     }
 
     public Set<String> getUrisNotFound() {

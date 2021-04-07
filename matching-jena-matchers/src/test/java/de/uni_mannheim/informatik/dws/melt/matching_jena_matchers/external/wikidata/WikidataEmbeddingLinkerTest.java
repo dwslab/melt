@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,6 +46,9 @@ class WikidataEmbeddingLinkerTest {
 
         // linkable and in entity list
         assertNull(linker.linkToPotentiallyMultipleConcepts("Jan Philipp Portisch Heiko Paulheim"));
+
+        Set<String> notFound = linker.getUrisNotFound();
+        assertTrue(notFound.size() > 0);
     }
 
     @Test
