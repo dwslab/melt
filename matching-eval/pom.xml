@@ -183,7 +183,7 @@
     <repositories>
         <repository><!-- used for mdsj -->
           <id>ukp-oss-releases</id>
-          <url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases/</url>
+          <url>https://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases/</url>
         </repository>
     </repositories>
 </project>
