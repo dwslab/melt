@@ -292,7 +292,7 @@ public class GenericMatcherMultiSourceCaller {
                         // compare parameter types
                         if(method.getReturnType() == paramTypes[1]){
                             int numberOfNonObjectParameters = 0;
-                            for(int i=0; i < 4; i++){
+                            for(int i=0; i < 3; i++){
                                 if(paramTypes[i] != Object.class)
                                     numberOfNonObjectParameters++;
                             }

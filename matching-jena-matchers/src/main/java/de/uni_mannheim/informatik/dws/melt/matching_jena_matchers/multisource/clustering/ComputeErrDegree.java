@@ -246,7 +246,7 @@ public class ComputeErrDegree <T>{
             measureValuesInter.put(interCommEdge.getKey(), err);
         }
         
-        Map<Entry<T,T>, Double> resultMap = new LinkedHashMap<>(); //TODO: change to HashMap
+        Map<Entry<T,T>, Double> resultMap = new LinkedHashMap<>(); //change to HashMap?
         for(Map.Entry<Integer, Map<Integer,Double>> sourceToMultiTarget : uniformDirectedEdges.entrySet()){
             int sourceCluster = idToCluster.get(sourceToMultiTarget.getKey());
             T sourceElement = idToElement.get(sourceToMultiTarget.getKey());

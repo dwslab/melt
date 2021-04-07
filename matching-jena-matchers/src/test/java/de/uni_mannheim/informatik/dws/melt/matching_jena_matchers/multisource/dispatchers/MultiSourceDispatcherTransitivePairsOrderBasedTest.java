@@ -16,7 +16,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.junit.jupiter.api.Test;
 
 
-public class MultiSourceDispatcherSomePairsOrderBasedTest {
+public class MultiSourceDispatcherTransitivePairsOrderBasedTest {
     @Test
     public void noSourceIsModifiedTest() throws Exception{
         
@@ -31,7 +31,7 @@ public class MultiSourceDispatcherSomePairsOrderBasedTest {
         Collections.shuffle(models, new Random(1234));
         
         SaveOrderMatcherForTest innerMatcher = new SaveOrderMatcherForTest(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
-        MultiSourceDispatcherSomePairsOrderBased merger = new MultiSourceDispatcherSomePairsOrderBased(innerMatcher, 
+        MultiSourceDispatcherTransitivePairsOrderBased merger = new MultiSourceDispatcherTransitivePairsOrderBased(innerMatcher, 
                 MultiSourceDispatcherIncrementalMergeByOrder.AMOUNT_OF_CLASSES_DECENDING, true);
         merger.match(models, null, null);
         
@@ -44,7 +44,7 @@ public class MultiSourceDispatcherSomePairsOrderBasedTest {
         
         
         innerMatcher = new SaveOrderMatcherForTest(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
-        merger = new MultiSourceDispatcherSomePairsOrderBased(innerMatcher, 
+        merger = new MultiSourceDispatcherTransitivePairsOrderBased(innerMatcher, 
                 MultiSourceDispatcherIncrementalMergeByOrder.AMOUNT_OF_CLASSES_DECENDING, false);
         merger.match(models, null, null);
         
@@ -58,7 +58,7 @@ public class MultiSourceDispatcherSomePairsOrderBasedTest {
         //sort by instances:
         
         innerMatcher = new SaveOrderMatcherForTest(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
-        merger = new MultiSourceDispatcherSomePairsOrderBased(innerMatcher, 
+        merger = new MultiSourceDispatcherTransitivePairsOrderBased(innerMatcher, 
                 MultiSourceDispatcherIncrementalMergeByOrder.AMOUNT_OF_INSTANCES_DECENDING, true);
         merger.match(models, null, null);
         
@@ -70,7 +70,7 @@ public class MultiSourceDispatcherSomePairsOrderBasedTest {
         
         
         innerMatcher = new SaveOrderMatcherForTest(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
-        merger = new MultiSourceDispatcherSomePairsOrderBased(innerMatcher, 
+        merger = new MultiSourceDispatcherTransitivePairsOrderBased(innerMatcher, 
                 MultiSourceDispatcherIncrementalMergeByOrder.AMOUNT_OF_INSTANCES_DECENDING, false);
         merger.match(models, null, null);
         

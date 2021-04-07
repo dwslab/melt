@@ -15,7 +15,7 @@ import org.apache.jena.vocabulary.RDFS;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MultiSourceDispatcherSomePairsTextBasedTest {
+public class MultiSourceDispatcherTransitivePairsTextBasedTest {
     @Test
     public void noSourceIsModifiedTest() throws Exception{
         
@@ -30,7 +30,7 @@ public class MultiSourceDispatcherSomePairsTextBasedTest {
         Collections.shuffle(models, new Random(1234));
         
         SaveOrderMatcherForTest innerMatcher = new SaveOrderMatcherForTest(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
-        MultiSourceDispatcherSomePairsTextBased merger = new MultiSourceDispatcherSomePairsTextBased(innerMatcher);
+        MultiSourceDispatcherTransitivePairsTextBased merger = new MultiSourceDispatcherTransitivePairsTextBased(innerMatcher);
         
         merger.match(models, null, null);
         

@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.d
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -60,7 +61,11 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
             inducedOrder.add(new ModelAndIndex(models.get(i), i, p));
         }
         
-        if(this.comparator != IDENTITY){
+        if(this.comparator == RANDOM){
+            Collections.shuffle(inducedOrder);
+        }else if(this.comparator == IDENTITY){
+            //do nothing - just use the order which is given
+        }else {
             inducedOrder.sort(this.comparator);
         }
         
@@ -180,6 +185,15 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
      * Sorted by the number of unique subjects (of a triple /statement) in a model. Larger gets merged first.
      */
     public static final Comparator<ModelAndIndex> UNIQUE_SUBJECTS_DECENDING = UNIQUE_SUBJECTS_ASCENDING.reversed();
+    
+    
+    public static final Comparator<ModelAndIndex> RANDOM = new Comparator<ModelAndIndex>() {
+        @Override
+        public int compare(ModelAndIndex left, ModelAndIndex right) {
+            //there is no random comparator, but we use it to check if we should do it randomly.
+            throw new UnsupportedOperationException();
+        }
+    };
     
     private static long iteratorSize(Iterator<?> i){
         long count = 0;

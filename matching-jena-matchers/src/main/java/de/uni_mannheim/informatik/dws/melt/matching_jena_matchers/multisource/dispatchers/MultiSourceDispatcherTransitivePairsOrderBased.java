@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
  * </ul>
  * Some comparators can be found at {@link MultiSourceDispatcherIncrementalMergeByOrder} as static attributes.
  */
-public class MultiSourceDispatcherSomePairsOrderBased extends MatcherMultiSourceURL implements MultiSourceDispatcher, IMatcherMultiSourceCaller{
+public class MultiSourceDispatcherTransitivePairsOrderBased extends MatcherMultiSourceURL implements MultiSourceDispatcher, IMatcherMultiSourceCaller{
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherSomePairsOrderBased.class);    
+    private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherTransitivePairsOrderBased.class);    
     private static final ObjectMapper objectMapper = new ObjectMapper();
     
     private final Object oneToOneMatcher;    
@@ -41,7 +41,7 @@ public class MultiSourceDispatcherSomePairsOrderBased extends MatcherMultiSource
     private final boolean firstVsRest;
     
     
-    public MultiSourceDispatcherSomePairsOrderBased(Object oneToOneMatcher, Comparator<? super ModelAndIndex> comparator, boolean firstVsRest) {
+    public MultiSourceDispatcherTransitivePairsOrderBased(Object oneToOneMatcher, Comparator<? super ModelAndIndex> comparator, boolean firstVsRest) {
         this.oneToOneMatcher = oneToOneMatcher;
         this.comparator = comparator;
         this.firstVsRest = firstVsRest;
