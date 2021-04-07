@@ -33,7 +33,6 @@
         </dependency>
     </dependencies>
 
-    
     <repositories>
         <repository>
             <id>maven.aksw.internal</id>
@@ -46,5 +45,4 @@
             <url>https://maven.aksw.org/repository/snapshots</url>
         </repository>
     </repositories>
-    
 </project>
