@@ -21,6 +21,10 @@ import java.util.concurrent.ConcurrentMap;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.*;
 
+/**
+ * DBpedia knowledge source.
+ * Works with the online endpoint and TDB 1.
+ */
 public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
 
 
@@ -80,7 +84,7 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
     private Dataset tdbDataset;
 
     /**
-     * TDB modeltdbDataset.getDefaultModel()
+     * TDB model
      */
     private Model tdbModel;
 
