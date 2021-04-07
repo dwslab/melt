@@ -43,6 +43,10 @@ public class TrackRepository{
     public static class Conference {
         /** Conference Testsuite V1 which is used all the time. */
         public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1");//new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1");
+    
+        /** Conference Testsuite V1 with all test cases ( even without reference alignment */
+        public static Track V1_ALL_TESTCASES = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1-all");
+        static{ V1_ALL_TESTCASES.setSkipTestCasesWithoutRefAlign(false); }
     }
 
     /**
@@ -51,6 +55,9 @@ public class TrackRepository{
      * It serves the purpose of evaluating the strengths and the weaknesses of matchers and measuring their progress, with a focus on multilingualism.
      */
     public static class Multifarm {
+        
+        /** All multifarm testcases in one track. */
+        public static Track ALL_IN_ONE_TRACK = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "multifarm", "all-v2");
 
         private static Set<String> languagePairs = new HashSet<String>(Arrays.asList( //all in all: 45
             "ar-cn", "ar-cz", "ar-de", "ar-en", "ar-es", "ar-fr", "ar-nl", "ar-pt", "ar-ru", 
@@ -396,6 +403,7 @@ public class TrackRepository{
         
         /**
          * Sets the system property of jdk.xml.entityExpansionLimit to zero because large bio needs it for parsing at least in jena.
+         * This modifies the current JVM.
          * Call this function before parsing large bio ontologies and especially when getting the error:
          * <code>
          * JAXP00010001: The parser has encountered more than "64000" entity expansions in this document; this is the limit imposed by the JDK.
@@ -407,6 +415,16 @@ public class TrackRepository{
          */
         public static void unlimitEntityExpansion(){
             System.getProperties().put("jdk.xml.entityExpansionLimit", "0");
+        }
+        
+        /**
+         * Returns the program argument which sets jdk.xml.entityExpansionLimit to zero because large bio needs it for parsing at least in jena.
+         * This will not modify the current JVM but return the argument needed for executing another executable.
+         * @see Largebio#unlimitEntityExpansion() 
+         * @return the argument which should be used.
+         */
+        public static String getArgumentForUnlimitEntityExpansion(){
+            return "-Djdk.xml.entityExpansionLimit=0";
         }
     }
     
