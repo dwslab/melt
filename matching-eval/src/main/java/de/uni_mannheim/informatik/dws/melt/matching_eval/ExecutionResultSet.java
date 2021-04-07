@@ -57,6 +57,14 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         this.addIndex(refinementSetIndex);
     }
 
+    /**
+     * Constructor
+     * @param executionResultSet All entries will be copied to the new Execution result set.
+     */
+    public ExecutionResultSet(ExecutionResultSet executionResultSet){
+        this();
+        this.addAll(executionResultSet);
+    }
 
     /**
      * Get a specific {@link ExecutionResult} which fulfills the specified parameters (testCase, matcherName) from

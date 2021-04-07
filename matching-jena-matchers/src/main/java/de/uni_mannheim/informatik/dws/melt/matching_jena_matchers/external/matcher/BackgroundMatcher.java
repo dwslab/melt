@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResourceWithSynonymCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SynonymConfidenceCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.GensimEmbeddingModel;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.io.IOoperations;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
@@ -14,6 +15,7 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Corresponde
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.javatuples.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +38,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     /**
      * Linker used to link labels to concepts.
      */
-    private LabelToConceptLinker linker;
+    private final LabelToConceptLinker linker;
 
     /**
      * Alignment
@@ -83,7 +85,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     /**
      * The value extractor used to obtain labels for resources.
      */
-    private ValueExtractor valueExtractor;
+    private final ValueExtractor valueExtractor;
 
     /**
      * If a concept cannot be linked as full string, the longest substrings are matched.
@@ -94,6 +96,11 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     private int multiConceptLinkerUpperLimit = 7;
 
     /**
+     * If true, there is a confidence score for each synonymy relation.
+     */
+    private final boolean isSynonymyConfidenceAvailable;
+
+    /**
      * Main Constructor
      *
      * @param knowledgeSourceToBeUsed Specify the knowledgeSource to be used.
@@ -102,6 +109,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      */
     public BackgroundMatcher(SemanticWordRelationDictionary knowledgeSourceToBeUsed, ImplementedBackgroundMatchingStrategies strategy, double threshold) {
         this.knowledgeSource = knowledgeSourceToBeUsed;
+        this.isSynonymyConfidenceAvailable = this.knowledgeSource instanceof SynonymConfidenceCapability;
         this.linker = this.knowledgeSource.getLinker();
         this.strategy = strategy;
         this.threshold = threshold;
@@ -134,7 +142,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         LOGGER.info("Running BackgroundMatcher with the following configuration:\n" + getConfigurationListing());
         ontology1 = sourceOntology;
         ontology2 = targetOntology;
-        if(m != null) {
+        if (m != null) {
             this.alignment = m;
         } else {
             this.alignment = new Alignment();
@@ -224,10 +232,14 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
         for (Map.Entry<String, Set<String>> uri2linksSource_1 : uris2linksSource_1.entrySet()) {
             for (Map.Entry<String, Set<String>> uri2linksTarget_2 : uris2linksTarget_2.entrySet()) {
-                if (fullMatchUsingDictionaryWithLinks(uri2linksSource_1.getValue(), uri2linksTarget_2.getValue())) {
-                    HashMap<String, Object> extensions = new HashMap<>();
+                Pair<Boolean, Double> isMatchConfidencePair =
+                        fullMatchUsingDictionaryWithLinks(uri2linksSource_1.getValue(), uri2linksTarget_2.getValue());
+                if (isMatchConfidencePair.getValue0()) {
+                    Map<String, Object> extensions = new HashMap<>();
                     extensions.put("http://custom#addedInStep", "performFullStringSynonymyMatching()");
-                    alignment.add(uri2linksSource_1.getKey(), uri2linksTarget_2.getKey(), 1.0, CorrespondenceRelation.EQUIVALENCE, extensions);
+                    double confidence = isMatchConfidencePair.getValue1();
+                    alignment.add(uri2linksSource_1.getKey(), uri2linksTarget_2.getKey(), confidence,
+                            CorrespondenceRelation.EQUIVALENCE, extensions);
                     if (isVerboseLoggingOutput) {
                         LOGGER.info(uri2linksSource_1.getKey() + " " + uri2linksTarget_2.getKey() + " (full word synonymy match)");
                         LOGGER.info(uri2linksSource_1.getKey() + ": (" + IOoperations.convertSetToStringPipeSeparated(uri2labelMap_1.get(uri2linksSource_1.getKey())) + ")");
@@ -244,27 +256,34 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      *
      * @param set1 Set 1 Set of links 1.
      * @param set2 Set 2 Set of links 2.
-     * @return true if there is a match, else false.
+     * @return Pair where (1) boolean indicating whether there is a match, (2) providing the match confidence.
      */
-    public boolean fullMatchUsingDictionaryWithLinks(Set<String> set1, Set<String> set2) {
+    public Pair<Boolean, Double> fullMatchUsingDictionaryWithLinks(Set<String> set1, Set<String> set2) {
         outerSet:
         for (String s1 : set1) {
             if (s1.length() < 100) {
                 String lookupTerm1 = linker.linkToSingleConcept(s1);
                 if (lookupTerm1 == null) continue outerSet;
-
                 innerSet:
                 for (String s2 : set2) {
                     if (s2.length() < 100) {
                         String lookupTerm2 = linker.linkToSingleConcept(s2);
                         if (lookupTerm2 == null) continue innerSet;
-                        if (compare(lookupTerm1, lookupTerm2)) return true;
+                        if (compare(lookupTerm1, lookupTerm2)) {
+                            if (knowledgeSource instanceof SynonymConfidenceCapability) {
+                                return new Pair<>(true,
+                                        ((SynonymConfidenceCapability) knowledgeSource).getSynonymyConfidence(lookupTerm1, lookupTerm2));
+                            } else {
+                                return new Pair<>(true, 1.0);
+                            }
+                        }
                     }
                 }
             }
         }
-        return false;
+        return new Pair<>(false, 0.0);
     }
+
 
     /**
      * Match based on token equality and synonymy.
@@ -280,13 +299,14 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
         for (HashMap.Entry<String, List<Set<String>>> uri2tokenLists_1 : uri2tokensMap_1.entrySet()) {
             for (HashMap.Entry<String, List<Set<String>>> uri2tokenLists_2 : uri2tokensMap_2.entrySet()) {
-                if (isTokenSetSynonymous(uri2tokenLists_1.getValue(), uri2tokenLists_2.getValue())) {
+                Pair<Boolean, Double> isSynonymousConfidencePair = isTokenSetSynonymous(uri2tokenLists_1.getValue(), uri2tokenLists_2.getValue());
+                if (isSynonymousConfidencePair.getValue0()) {
                     String uri1 = uri2tokenLists_1.getKey();
                     String uri2 = uri2tokenLists_2.getKey();
-
                     HashMap<String, Object> extensions = new HashMap<>();
                     extensions.put("http://custom#addedInStep", "performTokenBasedSynonymyMatching()");
-                    alignment.add(uri1, uri2, 1.0, CorrespondenceRelation.EQUIVALENCE, extensions);
+                    alignment.add(uri1, uri2, isSynonymousConfidencePair.getValue1(), CorrespondenceRelation.EQUIVALENCE,
+                            extensions);
                     if (isVerboseLoggingOutput) {
                         LOGGER.info(uri1 + " " + uri2 + " (token based synonymy match)");
                         LOGGER.info(uri1 + ": (" + IOoperations.convertSetToStringPipeSeparated(uri2labelMap_1.get(uri1)) + ")");
@@ -305,15 +325,16 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @param tokenList2 List of words
      * @return true if synonymous, else false
      */
-    boolean isTokenSetSynonymous(List<Set<String>> tokenList1, List<Set<String>> tokenList2) {
+    Pair<Boolean, Double> isTokenSetSynonymous(List<Set<String>> tokenList1, List<Set<String>> tokenList2) {
         for (Set<String> set1 : tokenList1) {
             for (Set<String> set2 : tokenList2) {
-                if (isTokenSynonymous(set1, set2)) {
-                    return true;
+                Pair<Boolean, Double> resultPair = isTokenSynonymous(set1, set2);
+                if (resultPair.getValue0()) {
+                    return resultPair;
                 }
             }
         }
-        return false;
+        return new Pair<>(false,0.0);
     }
 
     /**
@@ -324,9 +345,9 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @return true if the term of a set has a synonymous or equal counterpart in the other set. T
      * this is tested both ways (set1 -&gt; set2 and set2 -&gt; set1).
      */
-    public boolean isTokenSynonymous(Set<String> set1, Set<String> set2) {
+    public Pair<Boolean, Double> isTokenSynonymous(Set<String> set1, Set<String> set2) {
         if (set1.size() != set2.size()) {
-            return false;
+            return new Pair<>(false, 0.0);
         }
 
         // required to avoid modification to the passed sets
@@ -338,28 +359,35 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         workingSet2.removeAll(set1);
 
         HashSet<String> set2covered = new HashSet<>();
+        List<Double> comparisonScores = new ArrayList<>();
 
         // set 1 check
         nextS1:
         for (String s1 : workingSet1) {
             s1 = linker.linkToSingleConcept(s1);
-            if (s1 == null) return false; // synonymy cannot be determined
+            if (s1 == null) return new Pair<>(false, 0.0); // synonymy cannot be determined
             nextS2:
             for (String s2 : workingSet2) {
                 s2 = linker.linkToSingleConcept(s2);
-                if (s2 == null) return false; // synonymy cannot be determined
+                if (s2 == null) return new Pair<>(false, 0.0); // synonymy cannot be determined
                 if (set2covered.contains(s2)) continue nextS2; // already mapped
                 if (compare(s1, s2)) {
                     set2covered.add(s2);
+                    comparisonScores.add(compareScore(s1, s2));
                     continue nextS1;
                 } else {
                     // -> not strong form synonymous, no counterpart, return false
                     continue nextS2;
                 }
             }
-            return false;
+            return new Pair<>(false, 0.0);
         }
-        return true;
+        double score = 0.0;
+        for(double d : comparisonScores){
+            score += d;
+        }
+        score = score / set2covered.size();
+        return new Pair<>(true, score);
     }
 
     /**
@@ -376,10 +404,13 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
         for (HashMap.Entry<String, List<Set<String>>> uri2links_1 : uri2linksMap_1.entrySet()) {
             for (HashMap.Entry<String, List<Set<String>>> uri2links_2 : uri2linksMap_2.entrySet()) {
-                if (isLinkListSynonymous(uri2links_1.getValue(), uri2links_2.getValue())) {
+                Pair<Boolean, Double> isSynonymousConfidencePair = isLinkListSynonymous(uri2links_1.getValue(),
+                        uri2links_2.getValue());
+                if (isSynonymousConfidencePair.getValue0()) {
                     HashMap<String, Object> extensions = new HashMap<>();
                     extensions.put("http://custom#addedInStep", "longsestStringMatch");
-                    alignment.add(uri2links_1.getKey(), uri2links_2.getKey(), 1.0, CorrespondenceRelation.EQUIVALENCE, extensions);
+                    alignment.add(uri2links_1.getKey(), uri2links_2.getKey(), isSynonymousConfidencePair.getValue1(),
+                            CorrespondenceRelation.EQUIVALENCE, extensions);
                     if (isVerboseLoggingOutput) {
                         LOGGER.info(uri2links_1.getKey() + " " + uri2links_2.getKey() + " (longest string synonymy match)");
                         LOGGER.info(uri2links_1.getKey() + ": (" + IOoperations.convertSetToStringPipeSeparated(uri2labelMap_1.get(uri2links_1.getKey())) + ")");
@@ -397,15 +428,16 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @param list_2 List of links 2.
      * @return Returns true, if the links are synonymous.
      */
-    private boolean isLinkListSynonymous(List<Set<String>> list_1, List<Set<String>> list_2) {
+    private Pair<Boolean, Double> isLinkListSynonymous(List<Set<String>> list_1, List<Set<String>> list_2) {
         for (Set<String> set_1 : list_1) {
             for (Set<String> set_2 : list_2) {
-                if (isLinkSetSynonymous(set_1, set_2)) {
-                    return true;
+                Pair<Boolean, Double> isSynonymousConfidencePair = isLinkSetSynonymous(set_1, set_2);
+                if (isSynonymousConfidencePair.getValue0()) {
+                    return new Pair<>(true, isSynonymousConfidencePair.getValue1());
                 }
             }
         }
-        return false;
+        return new Pair<>(false, 0.0);
     }
 
     /**
@@ -415,10 +447,10 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @param set_2 Set 2.
      * @return True if synonymous, else false.
      */
-    private boolean isLinkSetSynonymous(Set<String> set_1, Set<String> set_2) {
+    private Pair<Boolean, Double> isLinkSetSynonymous(Set<String> set_1, Set<String> set_2) {
 
         if (set_1.size() != set_2.size()) {
-            return false;
+            return new Pair<>(false, 0.0);
         }
 
         // required to avoid modification to the passed sets
@@ -430,6 +462,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         workingSet2.removeAll(set_1);
 
         HashSet<String> set2covered = new HashSet<>();
+        List<Double> confidenceScores = new ArrayList<>();
 
         // set 1 check
         for (String s1 : workingSet1) {
@@ -440,13 +473,20 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
                 if (compare(s1, s2)) {
                     set2covered.add(s2);
+                    confidenceScores.add(compareScore(s1, s2));
                 } else {
                     // -> not strong form synonymous, no counterpart, return false
-                    return false;
+                    return new Pair<>(false, 0.0);
                 }
             }
         }
-        return true;
+
+        double confidence = 0.0;
+        for(double d : confidenceScores){
+            confidence += d;
+        }
+        confidence = confidence / set2covered.size();
+        return new Pair<>(true, confidence);
     }
 
     /**
@@ -472,7 +512,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
             List<Set<String>> list = new LinkedList<>();
             for (String label : uri2labels.getValue()) {
-                if(StringOperations.tokenizeBestGuess(label).length < multiConceptLinkerUpperLimit) {
+                if (StringOperations.tokenizeBestGuess(label).length < multiConceptLinkerUpperLimit) {
                     Set<String> linkedConcepts = linker.linkToPotentiallyMultipleConcepts(label);
                     if (linkedConcepts != null) {
                         list.add(linkedConcepts);
@@ -631,6 +671,13 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         return this.alignment.getCorrespondencesTarget(uri).iterator().hasNext();
     }
 
+    private double compareScore(String lookupTerm1, String lookupTerm2) {
+        if (strategy == ImplementedBackgroundMatchingStrategies.SYNONYMY && isSynonymyConfidenceAvailable) {
+            return ((SynonymConfidenceCapability) knowledgeSource).getStrongFormSynonymyConfidence(lookupTerm1, lookupTerm2);
+        }
+        return 1.0;
+    }
+
     /**
      * The compare method compares two concepts that are available in a background knowledge source.
      * The concepts will be compared using the specified {@link BackgroundMatcher#strategy} and the method will
@@ -710,5 +757,9 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
     public void setMultiConceptLinkerUpperLimit(int multiConceptLinkerUpperLimit) {
         this.multiConceptLinkerUpperLimit = multiConceptLinkerUpperLimit;
+    }
+
+    public boolean isSynonymyConfidenceAvailable() {
+        return isSynonymyConfidenceAvailable;
     }
 }

@@ -13,4 +13,11 @@ public interface MultiConceptLinker {
      * @return Multiple concepts (typically URIs).
      */
     Set<String> getUris(String multiConceptLink);
+
+    /**
+     * Determine whether the link at hand is a multi-concept link.
+     * @param link Link to be checked.
+     * @return True if multi-concept link, else false.
+     */
+    boolean isMultiConceptLink(String link);
 }

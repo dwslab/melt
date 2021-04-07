@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matc
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherPipelineYAAAJenaConstructor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.MaxWeightBipartiteExtractor;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.jena.ontology.OntModel;
 
@@ -43,12 +44,32 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
     public BackgroundMatcherStandAlone(SemanticWordRelationDictionary backgroundKnowledgeSource,
                                        ImplementedBackgroundMatchingStrategies strategy,
                                        double threshold){
+        this(backgroundKnowledgeSource, strategy, false, threshold);
+    }
+
+    /**
+     * Constructor
+     * @param backgroundKnowledgeSource The background knowledge source to be used.
+     * @param strategy The strategy to be applied.
+     * @param isUseMaximumBipartite True if a maximum bipartite extraction shall be performed (1-1 alignment).
+     * @param threshold The minimal required threshold that is required for a match.
+     */
+    public BackgroundMatcherStandAlone(SemanticWordRelationDictionary backgroundKnowledgeSource,
+                                       ImplementedBackgroundMatchingStrategies strategy,
+                                       boolean isUseMaximumBipartite,
+                                       double threshold){
         this.backgroundKnowledgeSource = backgroundKnowledgeSource;
         this.strategy = strategy;
         this.threshold = threshold;
         this.simpleStringMatcher = new SimpleStringMatcher();
         this.backgroundMatcher = new BackgroundMatcher(backgroundKnowledgeSource, strategy, threshold);
-        pipelineYAAAJena = new MatcherPipelineYAAAJenaConstructor(simpleStringMatcher, backgroundMatcher);
+
+        if(isUseMaximumBipartite){
+            MaxWeightBipartiteExtractor mwb = new MaxWeightBipartiteExtractor();
+            pipelineYAAAJena = new MatcherPipelineYAAAJenaConstructor(simpleStringMatcher, backgroundMatcher, mwb);
+        } else {
+            pipelineYAAAJena = new MatcherPipelineYAAAJenaConstructor(simpleStringMatcher, backgroundMatcher);
+        }
     }
 
     @Override
@@ -57,14 +78,6 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
         Alignment alignment =  pipelineYAAAJena.match(source, target, inputAlignment, properties);
         alignment.addExtensionValue("http://a.com/matcherThreshold", "" + threshold);
         alignment.addExtensionValue("http://a.com/matcherStrategy", this.strategy.toString());
-
-        /*
-        if (this.backgroundKnowledgeSource instanceof GensimEmbeddingModel) {
-            alignment.addExtensionValue("http://a.com/strategyThreshold",
-                    "" + ((KnowledgeSourceEmbedding) this.backgroundKnowledgeSource).getThreshold());
-        }
-        */
-
         alignment.addExtensionValue("http://a.com/backgroundDataset", this.backgroundKnowledgeSource.getName());
         return alignment;
     }

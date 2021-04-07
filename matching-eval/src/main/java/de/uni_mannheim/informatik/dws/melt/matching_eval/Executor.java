@@ -336,7 +336,7 @@ public class Executor {
     }
     
     private static long tryToGetRuntime(File logFile){
-        if(logFile.exists() == false)
+        if(!logFile.exists())
             return 0;
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))){
             String line;
@@ -488,14 +488,19 @@ public class Executor {
     }
     
     /**
-     * Load results that are produced by the MELT framework in the results folder.
+     * Load results that are produced by the MELT evaluator {@link de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV}
+     * in the results folder.
      *
      * @param folder Path to the results folder (the one with the time code e.g. results/results_2020-03-02_08-47-40)
      * @return {@link ExecutionResultSet} instance with the loaded results.
      */
     public static ExecutionResultSet loadFromMeltResultsFolder(File folder) {
+        if(folder == null){
+            LOGGER.error("The specified folder is null. Returning empty ResultSet.");
+            return new ExecutionResultSet();
+        }
         if (!folder.isDirectory()) {
-            LOGGER.error("The specified folder is not a directory. Returning empty resultSet.");
+            LOGGER.error("The specified folder is not a directory. Returning empty ResultSet.");
             return new ExecutionResultSet();
         }
         ExecutionResultSet results = new ExecutionResultSet();
@@ -520,9 +525,9 @@ public class Executor {
                             LOGGER.error("alignment file (systemAlignment.rdf) is missing in folder {}", matcherFolder.getAbsolutePath());
                             continue;
                         }
-                        File perfomanceFile = new File(matcherFolder, "performance.csv");
+                        File performanceFile = new File(matcherFolder, "performance.csv");
                         try {
-                            results.add(new ExecutionResult(testcase, matcherFolder.getName(), alignmentFile.toURI().toURL(), getTimeFromPerformanceCSV(perfomanceFile), null));
+                            results.add(new ExecutionResult(testcase, matcherFolder.getName(), alignmentFile.toURI().toURL(), getTimeFromPerformanceCSV(performanceFile), null));
                         } catch (MalformedURLException ex) {
                             LOGGER.error("Could not build URL for file " + alignmentFile.getName());
                         }
@@ -587,7 +592,6 @@ public class Executor {
             return FALLBACK_MATCHER_NAME;
         return name;
     }
-    
 
     /**
      * Deletes all system results which are stored usually in the tmp folder.

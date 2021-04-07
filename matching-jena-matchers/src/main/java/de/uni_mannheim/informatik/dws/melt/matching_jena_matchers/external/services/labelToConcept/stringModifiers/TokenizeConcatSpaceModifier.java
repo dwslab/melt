@@ -20,5 +20,4 @@ public class TokenizeConcatSpaceModifier implements StringModifier {
     public String getName() {
         return "TokenizeConcatSpace";
     }
-
 }

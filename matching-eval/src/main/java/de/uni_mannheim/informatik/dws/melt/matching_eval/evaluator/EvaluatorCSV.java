@@ -33,12 +33,13 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 
 /**
  * This evaluator is capable of persisting the results of the matching process in a CSV file (which can be consumed
- * in excel, for example).
+ * in Excel, for example).
  * It divides mappings into certain groups, namely: classes, properties, instances, and allConfusionMatrix.
  * If the alignment file are very large, it is better to use EvaluatorBasic.
  * @author Jan Portisch
  */
 public class EvaluatorCSV extends Evaluator {
+
 
     /**
      * If true: system alignments will be copied to the evaluation directories.
@@ -149,7 +150,6 @@ public class EvaluatorCSV extends Evaluator {
         this.correspondenceExtensions = getCorrespondenceExtensions(results);
     }
 
-
     /**
      * This method determines the unique {@link Correspondence} extensions that are used in the alignments.
      * @param results The result set.
@@ -219,7 +219,6 @@ public class EvaluatorCSV extends Evaluator {
        this(results, new ConfusionMatrixMetric());
     }
 
-
     /**
      * Constructor
      *
@@ -229,7 +228,6 @@ public class EvaluatorCSV extends Evaluator {
     public EvaluatorCSV(ExecutionResultSet results, boolean isPrintAsShortenedString){
         this(results, new ConfusionMatrixMetric(), isPrintAsShortenedString);
     }
-
 
     @Override
     public void writeResultsToDirectory(File baseDirectory) {
@@ -248,7 +246,6 @@ public class EvaluatorCSV extends Evaluator {
         alignmentsCube.write(baseDirectory);
         closePrinters();
     }
-
 
     /**
      * This method initializes global writers for the performance KPI CSV files.
@@ -276,16 +273,15 @@ public class EvaluatorCSV extends Evaluator {
             testCasePerformanceCubePrinter.flush();
             testCasePerformanceCubePrinter.close();
         } catch (IOException ioe) {
-            LOGGER.error("Coud not flush and close testCasePerformanceCubePrinter.", ioe);
+            LOGGER.error("Could not flush and close testCasePerformanceCubePrinter.", ioe);
         }
         try {
             trackPerformanceCubePrinter.flush();
             trackPerformanceCubePrinter.close();
         } catch (IOException ioe) {
-            LOGGER.error("Coud not flush and close trackPerformanceCubePrinter.", ioe);
+            LOGGER.error("Could not flush and close trackPerformanceCubePrinter.", ioe);
         }
     }
-
 
     /**
      * Write the aggregated overview file, i.e. KPIs such as recall or precision, for a matcher on a particular track.
@@ -366,7 +362,6 @@ public class EvaluatorCSV extends Evaluator {
         return summedRuntime;
     }
 
-
     /**
      * Creates one string array where the {@code putAtTheEnd} values are arranged at the end of the string.
      * @param putAtTheEnd To be put at the end.
@@ -385,7 +380,6 @@ public class EvaluatorCSV extends Evaluator {
         }
         return result;
     }
-
 
     /**
      * Write the overview file, i.e. KPIs such as recall or precision, for a matcher on a particular test case.
@@ -518,7 +512,6 @@ public class EvaluatorCSV extends Evaluator {
         return result;
     }
 
-
     /**
      * Get the header row for the individual statistics in the overall CSV file.
      *
@@ -531,7 +524,6 @@ public class EvaluatorCSV extends Evaluator {
         result.addAll(getHeaderAggregated());
         return result;
     }
-
 
     /**
      * Get the header row for the aggregated results on a per matcher basis.
@@ -564,7 +556,6 @@ public class EvaluatorCSV extends Evaluator {
         return result;
     }
 
-
     /**
      * Get the header row for the individual statistics in the overall CSV file.
      *
@@ -583,7 +574,6 @@ public class EvaluatorCSV extends Evaluator {
         }
         return result;
     }
-
 
     /**
      * Obtain an output stream that can be used to write the CSV file.
@@ -617,7 +607,6 @@ public class EvaluatorCSV extends Evaluator {
         }
         return this.alignmentsCube.toShortString();
     }
-
 
     //-------------------------------------------------------------------------------------------
     // Getters and Setters

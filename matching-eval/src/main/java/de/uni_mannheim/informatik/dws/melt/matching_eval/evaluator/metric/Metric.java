@@ -10,7 +10,8 @@ import java.util.Map;
  * @author Sven Hertling, Jan Portisch
  */
 public abstract class Metric<MetricResult> {
-    
+
+
     protected Map<ExecutionResult, MetricResult> cache = new HashMap<>();
         
     /**
@@ -20,12 +21,12 @@ public abstract class Metric<MetricResult> {
      * @return The metric result.
      */
     public MetricResult get(ExecutionResult executionResult){
-        MetricResult r = cache.get(executionResult);
-        if(r == null){
-            r = compute(executionResult);
-            this.cache.put(executionResult, r);
+        MetricResult result = cache.get(executionResult);
+        if(result == null){
+            result = compute(executionResult);
+            this.cache.put(executionResult, result);
         }
-        return r;
+        return result;
     }
     
     protected abstract MetricResult compute(ExecutionResult executionResult);

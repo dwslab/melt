@@ -1,0 +1,7 @@
+http://babelnet.org/rdf/fibrillin_n_EN
+http://babelnet.org/rdf/Membranous_n_EN
+http://babelnet.org/rdf/bearer_n_EN
+http://babelnet.org/rdf/Actin-binding_protein_n_EN
+http://babelnet.org/rdf/Fallopian_Tube_n_EN
+http://babelnet.org/rdf/articulatio_temporomandibularis_n_EN
+http://babelnet.org/rdf/Third_cervical_vertebra_n_EN

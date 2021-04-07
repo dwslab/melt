@@ -4,16 +4,22 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifierTest {
+class TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifierTest {
 
 
     @Test
     void modifyString() {
-        TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifier modifier = new TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifier();
+        TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifier modifier = new TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifier();
         assertEquals("European union", modifier.modifyString("european_union"));
         assertEquals("European union", modifier.modifyString("European_Union"));
         assertEquals("European union", modifier.modifyString("european union"));
         assertEquals("European union", modifier.modifyString("europeanUnion"));
         assertEquals("European union", modifier.modifyString("europeanUnion"));
+    }
+
+    @Test
+    void getName(){
+        TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifier modifier = new TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifier();
+        assertNotNull(modifier.getName());
     }
 }

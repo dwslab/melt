@@ -6,5 +6,7 @@ import java.io.Writer;
 import java.util.Map;
 
 public interface MetricResultPrinter <MetricResult> {
-    public void write(Map<ExecutionResult, MetricResult> results, Writer writer);
+
+
+    void write(Map<ExecutionResult, MetricResult> results, Writer writer);
 }

@@ -653,6 +653,18 @@ public class PythonServer {
      * Returns true when the concept can be found in the vocabulary of the model.
      *
      * @param concept           The concept/URI that shall be looked up.
+     * @param modelOrVectorPath The model or vector file. Note that the vector file MUST end with .kv in
+     *                          order to be recognized as vector file.
+     * @return True if exists, else false.
+     */
+    public boolean isInVocabulary(String concept, File modelOrVectorPath){
+        return isInVocabulary(concept, modelOrVectorPath.getAbsolutePath());
+    }
+
+    /**
+     * Returns true when the concept can be found in the vocabulary of the model.
+     *
+     * @param concept           The concept/URI that shall be looked up.
      * @param modelOrVectorPath The path to the model or vector file. Note that the vector file MUST end with .kv in
      *                          order to be recognized as vector file.
      * @return True if exists, else false.

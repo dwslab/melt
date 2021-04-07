@@ -1,14 +1,12 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers;
 
-import org.apache.commons.text.WordUtils;
-
-public class TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifier implements StringModifier {
+public class TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifier implements StringModifier {
 
 
     /**
      * Constructor
      */
-    public TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifier(){
+    public TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifier(){
         tokenizeModifier = new TokenizeConcatSpaceModifier();
     }
 

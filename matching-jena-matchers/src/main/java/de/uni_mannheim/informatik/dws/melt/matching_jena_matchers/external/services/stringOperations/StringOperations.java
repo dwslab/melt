@@ -456,7 +456,7 @@ public class StringOperations {
      * Reads a Set from the file as specified by the file path.
      *
      * @param filePath The path to the file that is to be read.
-     * @return The parsed file as HashSet.
+     * @return The parsed file as Set.
      */
     public static @NotNull Set<String> readSetFromFile(String filePath) {
         return readSetFromFile(new File(filePath));
@@ -466,10 +466,49 @@ public class StringOperations {
      * Reads a Set from the file as specified by the file.
      *
      * @param file The file that is to be read.
-     * @return The parsed file as HashSet.
+     * @return The parsed file as Set.
      */
     public static @NotNull Set<String> readSetFromFile(File file) {
         Set<String> result = new HashSet<>();
+        if (!file.exists()) {
+            LOGGER.error("File does not exist.");
+            return result;
+        }
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.add(line);
+            }
+        } catch (FileNotFoundException e) {
+            LOGGER.error("File not found.", e);
+            e.printStackTrace();
+        } catch (IOException e) {
+            LOGGER.error("IOException occurred.", e);
+            e.printStackTrace();
+        }
+        LOGGER.info("Entities read into cache.");
+        return result;
+    }
+
+    /**
+     * Reads a List from the file as specified by the file path.
+     *
+     * @param filePath The path to the file that is to be read.
+     * @return The parsed file as List.
+     */
+    public static @NotNull List<String> readListFromFile(String filePath) {
+        return readListFromFile(new File(filePath));
+    }
+
+    /**
+     * Reads a List from the file as specified by the file.
+     *
+     * @param file The file that is to be read.
+     * @return The parsed file as List.
+     */
+    public static @NotNull List<String> readListFromFile(File file) {
+        List<String> result = new ArrayList<>();
         if (!file.exists()) {
             LOGGER.error("File does not exist.");
             return result;

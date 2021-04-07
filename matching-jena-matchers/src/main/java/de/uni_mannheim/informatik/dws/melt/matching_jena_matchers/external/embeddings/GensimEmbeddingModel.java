@@ -1,8 +1,9 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResourceWithSynonymCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.MultiConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SynonymConfidenceCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ import java.util.Set;
  * This class represents a single gensim embedding model.
  * It allows for simplified usage in matching systems.
  */
-public class GensimEmbeddingModel extends SemanticWordRelationDictionary {
+public class GensimEmbeddingModel extends SemanticWordRelationDictionary implements SynonymConfidenceCapability {
 
 
     /**
@@ -55,13 +56,18 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary {
 
     /**
      * Constructor
+     *
      * @param pathToModelOrVectorFile The file path to the gensim model or gensim vector file.
-     * @param pathToEntityFile The path to the vocabulary entries.
-     * @param threshold The threshold that shall be used for the synonymy strategy.
-     * @param linker The appropriate label to concept linker for the given embedding.
-     * @param knowledgeSourceName The name of the knowledge source (will be used as matcher name)
+     * @param pathToEntityFile        The path to the vocabulary entries.
+     * @param threshold               The threshold that shall be used for the synonymy strategy.
+     * @param linker                  The appropriate label to concept linker for the given embedding.
+     * @param knowledgeSourceName     The name of the knowledge source (will be used as matcher name)
      */
-    public GensimEmbeddingModel(String pathToModelOrVectorFile, String pathToEntityFile, double threshold, LabelToConceptLinkerEmbeddings linker, String knowledgeSourceName) {
+    public GensimEmbeddingModel(String pathToModelOrVectorFile,
+                                String pathToEntityFile,
+                                double threshold,
+                                LabelToConceptLinker linker,
+                                String knowledgeSourceName) {
         this.threshold = threshold;
         File modelFile = new File(pathToModelOrVectorFile);
         if (!modelFile.exists() && !modelFile.isDirectory()) {
@@ -120,18 +126,17 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary {
      * sim(B, D) = 0.05<br>
      * This method will return (0.75 + 0.25)/2 = 0.5
      *
-     *
      * @param links1 Set of links 1.
      * @param links2 Set of links 2.
      * @return Best average.
      */
-    public double getBestCrossAverage(Set<String> links1, Set<String> links2){
+    public double getBestCrossAverage(Set<String> links1, Set<String> links2) {
         double totalSimilarity = 0.0;
-        for(String link1 : links1){
+        for (String link1 : links1) {
             double similarity = 0.0;
-            for(String link2 : links2){
+            for (String link2 : links2) {
                 double checkSimilarity = gensim.getSimilarity(link1, link2, this.modelFilePath);
-                if(checkSimilarity > similarity){
+                if (checkSimilarity > similarity) {
                     similarity = checkSimilarity;
                 }
             }
@@ -142,16 +147,17 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary {
 
     /**
      * Note that the concepts have to be linked.
+     *
      * @param linkedWord_1 linked word 1
      * @param linkedWord_2 linked word 2
      * @return True if synonymous, else false.
      */
     @Override
     public boolean isStrongFormSynonymous(String linkedWord_1, String linkedWord_2) {
-        if(linkedWord_1 == null || linkedWord_2 ==  null){
+        if (linkedWord_1 == null || linkedWord_2 == null) {
             return false;
         }
-        double similarity = getSimilarity(linkedWord_1, linkedWord_2);
+        double similarity = getSynonymyConfidence(linkedWord_1, linkedWord_2);
         return similarity > this.threshold;
     }
 
@@ -164,25 +170,55 @@ public class GensimEmbeddingModel extends SemanticWordRelationDictionary {
         return this.knowledgeSourceName;
     }
 
-    /**
-     * Calculate the similarity given two linked concepts.
-     * @param linkedWord_1 Linked concept 1.
-     * @param linkedWord_2 Linked concept 2.
-     * @return Similarity score. Higher values mean higher similarity.
-     */
-    public double getSimilarity(String linkedWord_1, String linkedWord_2){
-        if(linkedWord_1 == null || linkedWord_2 ==  null){
-            // LOGGER.warn("Could not calculate similarity. Will return 0!"); // leads to excessive logging for combined strategies
-            return 0.0;
-        }
-        return gensim.getSimilarity(linkedWord_1, linkedWord_2, this.modelFilePath);
-    }
-
     public double getThreshold() {
         return threshold;
     }
 
     public void setThreshold(double threshold) {
         this.threshold = threshold;
+    }
+
+    /**
+     * If we have two multi-concept links, the similarity of the best combination is returned.
+     * <p>
+     * Example:<br>
+     * Set 1: A, B; Set 2: C, D;<br>
+     * sim(A, C) = 0.75<br>
+     * sim(A, D) = 0.10<br>
+     * sim(B, C) = 0.25<br>
+     * sim(B, D) = 0.05<br>
+     * This method will return 0.75.
+     *
+     * @param linkedConcept1 Link 1.
+     * @param linkedConcept2 Link 2.
+     * @return Confidence.
+     */
+    @Override
+    public double getSynonymyConfidence(String linkedConcept1, String linkedConcept2) {
+        if (linkedConcept1 == null || linkedConcept2 == null) {
+            return 0.0;
+        }
+        if (linker instanceof MultiConceptLinker) {
+            Set<String> uris1 = ((MultiConceptLinker) linker).getUris(linkedConcept1);
+            Set<String> uris2 = ((MultiConceptLinker) linker).getUris(linkedConcept2);
+            double bestScore = 0.0;
+
+            for (String uri1 : uris1) {
+                for (String uri2 : uris2) {
+                    double score = gensim.getSimilarity(uri1, uri2, this.modelFilePath);
+                    if (score > bestScore) {
+                        bestScore = score;
+                    }
+                }
+            }
+            return bestScore;
+        } else {
+            return gensim.getSimilarity(linkedConcept1, linkedConcept2, this.modelFilePath);
+        }
+    }
+
+    @Override
+    public double getStrongFormSynonymyConfidence(String linkedConcept1, String linkedConcept2) {
+        return getSynonymyConfidence(linkedConcept1, linkedConcept2);
     }
 }

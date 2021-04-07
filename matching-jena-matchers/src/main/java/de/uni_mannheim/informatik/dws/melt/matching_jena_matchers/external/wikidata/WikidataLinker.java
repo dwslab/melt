@@ -116,7 +116,7 @@ public class WikidataLinker implements LabelToConceptLinker, MultiConceptLinker 
         stringModificationSet.add(new TokenizeConcatSpaceLowercaseModifier());
         stringModificationSet.add(new TokenizeConcatSpaceModifierDropPlural());
         stringModificationSet.add(new TokenizeConcatSpaceLowercaseModifierDropPlural());
-        stringModificationSet.add(new TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifier());
+        stringModificationSet.add(new TokenizeConcatSpaceCapitalizeFirstLetterLowercaseRestModifier());
         stringModificationSet.add(new TokenizeConcatSpaceOnlyCapitalizeFirstLetterModifierDropPlural());
     }
 
@@ -453,5 +453,10 @@ public class WikidataLinker implements LabelToConceptLinker, MultiConceptLinker 
         // re-initialize buffers
         this.isDiskBufferEnabled = diskBufferEnabled;
         initializeBuffers();
+    }
+
+    @Override
+    public boolean isMultiConceptLink(String link) {
+        return link.startsWith(MULTI_CONCEPT_PREFIX);
     }
 }

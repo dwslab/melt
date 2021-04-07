@@ -1,27 +1,26 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers;
 
-public class TokenizeConcatUnderscoreCapitalizeModifier implements StringModifier {
+public class TokenizeConcatUnderscoreCapitalizeFirstLetterModifier implements StringModifier {
 
 
     /**
      * Constructor
      */
-    public TokenizeConcatUnderscoreCapitalizeModifier(){
+    public TokenizeConcatUnderscoreCapitalizeFirstLetterModifier(){
         tokenizeModifier = new TokenizeConcatUnderscoreModifier();
-        capitalizeModifier = new CapitalizeFirstLettersModifier("_");
     }
 
     private TokenizeConcatUnderscoreModifier tokenizeModifier;
-    private CapitalizeFirstLettersModifier capitalizeModifier;
-
 
     @Override
     public String modifyString(String stringToBeModified) {
-        return capitalizeModifier.modifyString(tokenizeModifier.modifyString(stringToBeModified));
+        String result = tokenizeModifier.modifyString(stringToBeModified);
+        char upperCased = Character.toUpperCase(result.toCharArray()[0]);
+        return upperCased + result.substring(1);
     }
 
     @Override
     public String getName() {
-        return "TokenizeConcatUnderscoreCapitalizeModifier";
+        return "TokenizeConcatUnderscoreCapitalizeFirstLetterModifier";
     }
 }

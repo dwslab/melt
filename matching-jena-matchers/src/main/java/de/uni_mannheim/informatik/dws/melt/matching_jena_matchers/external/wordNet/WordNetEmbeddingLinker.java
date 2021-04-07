@@ -61,8 +61,8 @@ public class WordNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings {
         String[] posRanking = {"n", "v", "s", "r"};
         for(String pos : posRanking){
             String key = lookupKey + "-" + pos;
-            if(lookupMap.containsKey(key)){
-                return lookupMap.get(key);
+            if(super.getLookupMap().containsKey(key)){
+                return super.getLookupMap().get(key);
             }
         }
         // advanced lookup
@@ -71,8 +71,8 @@ public class WordNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings {
             modifiedConcept = modifier.modifyString(labelToBeLinked);
             for(String pos : posRanking){
                 String key = modifiedConcept + "-" + pos;
-                if(lookupMap.containsKey(key)){
-                    return lookupMap.get(key);
+                if(super.getLookupMap().containsKey(key)){
+                    return super.getLookupMap().get(key);
                 }
             }
         }
