@@ -46,7 +46,6 @@ public abstract class Track {
     static {
         File cacheFolder = new File(System.getProperty("user.home"), "oaei_track_cache");
         setCacheFolder(cacheFolder);
-        setSkipTestCasesWithoutRefAlign(true);
     }
 
     /**
@@ -55,7 +54,7 @@ public abstract class Track {
      */
     protected static File cacheFolder;
 
-    protected static boolean skipTestsWithoutRefAlign;
+    protected boolean skipTestsWithoutRefAlign;
     
     protected String remoteLocation;
     protected String name;
@@ -79,14 +78,18 @@ public abstract class Track {
      */
     protected GoldStandardCompleteness goldStandardCompleteness;
     
-    
-    protected Track(String remoteLocation, String name, String version, boolean useDuplicateFreeStorageLayout, GoldStandardCompleteness goldStandardCompleteness){
+    protected Track(String remoteLocation, String name, String version, boolean useDuplicateFreeStorageLayout, GoldStandardCompleteness goldStandardCompleteness, boolean skipTestsWithoutRefAlign){
         this.remoteLocation = remoteLocation;
         this.name = name;
         this.version = version;
         this.useDuplicateFreeStorageLayout = useDuplicateFreeStorageLayout;
         this.goldStandardCompleteness = goldStandardCompleteness;
         this.testCases = null; //initialized lazily
+        this.skipTestsWithoutRefAlign = skipTestsWithoutRefAlign;
+    }
+    
+    protected Track(String remoteLocation, String name, String version, boolean useDuplicateFreeStorageLayout, GoldStandardCompleteness goldStandardCompleteness){
+        this(remoteLocation, name, version, useDuplicateFreeStorageLayout, goldStandardCompleteness, true);
     }
     
     protected Track(String remoteLocation, String name, String version, boolean useDuplicateFreeStorageLayout){
@@ -125,8 +128,8 @@ public abstract class Track {
         }
     }
     
-    public static void setSkipTestCasesWithoutRefAlign(boolean skip){
-        skipTestsWithoutRefAlign = skip;
+    public void setSkipTestCasesWithoutRefAlign(boolean skip){
+        this.skipTestsWithoutRefAlign = skip;
     }
 
     public String getRemoteLocation() {
