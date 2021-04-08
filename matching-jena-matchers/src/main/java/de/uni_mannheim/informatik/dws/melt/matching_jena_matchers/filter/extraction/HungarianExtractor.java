@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HungarianExtractor extends MatcherYAAAJena implements Filter {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(HungarianExtractor.class);
     
     @Override
@@ -33,7 +34,8 @@ public class HungarianExtractor extends MatcherYAAAJena implements Filter {
     
     public static Alignment filter(Alignment inputAlignment){
         if(inputAlignment.getDistinctConfidencesAsSet().size() == 1){
-            //alignment api says that hungarian algorithmn runs in inifite loop when all correspondences hav same confidence
+            // alignment api says that hungarian algorithm runs in infinite loop when all correspondences have the same
+            // confidence
             LOGGER.warn("The input alignment has only one confidence. Defaulting to make a random one to one alignment.");
             return NaiveDescendingExtractor.filter(inputAlignment);
         }

@@ -73,7 +73,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
             }
         }
 
-        switch(heuristic){
+        switch(heuristic) {
             case NAIVE:
                 int maxConfidence = convertDoubleToInt(Collections.max(inputAlignment.getDistinctConfidencesAsSet()), multiplier);
                 for(MwbNode a : sourceNodeMapping.values()){
