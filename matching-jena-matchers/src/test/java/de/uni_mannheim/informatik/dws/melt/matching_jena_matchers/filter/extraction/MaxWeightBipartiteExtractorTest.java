@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Note that there is also {@link TestExtractors}.
+ */
 class MaxWeightBipartiteExtractorTest {
 
 
@@ -96,6 +99,30 @@ class MaxWeightBipartiteExtractorTest {
             assertEquals(2, result.size());
             assertTrue(result.contains(new Correspondence("A1", "C2", 1)));
             assertTrue(result.contains(new Correspondence("B1", "B2", 1)));
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    /**
+     * No optimal solution.
+     */
+    @Test
+    void filter5() {
+        MaxWeightBipartiteExtractor mwbe = new MaxWeightBipartiteExtractor();
+
+        Alignment alignment = new Alignment();
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                alignment.add("" + i, "" + j, 1);
+            }
+        }
+
+        try {
+            Alignment result = mwbe.match(ModelFactory.createOntologyModel(), ModelFactory.createOntologyModel(),
+                    alignment,
+                    null);
+            assertEquals(10, result.size());
         } catch (Exception e) {
             fail(e);
         }

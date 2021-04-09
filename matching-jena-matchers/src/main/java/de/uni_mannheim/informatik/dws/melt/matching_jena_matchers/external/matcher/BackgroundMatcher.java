@@ -151,7 +151,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         match(ontology1.listClasses(), ontology2.listClasses());
         match(ontology1.listDatatypeProperties(), ontology2.listDatatypeProperties());
         match(ontology1.listObjectProperties(), ontology2.listObjectProperties());
-        LOGGER.info("Mapping Completed");
+        LOGGER.info("Background Matcher Component: Mapping Completed");
         return this.alignment;
     }
 
@@ -568,6 +568,9 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
             Set<String> links = new HashSet();
             for (String label : uri2label.getValue()) {
+                if(label == null && label.trim().length() == 0){
+                    continue;
+                }
                 String linkedConcept = linker.linkToSingleConcept(label);
                 if (linkedConcept != null) {
                     links.add(linkedConcept);

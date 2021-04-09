@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Note that there is also {@link TestExtractors}.
+ */
 class HungarianExtractorTest {
 
 
@@ -15,14 +18,14 @@ class HungarianExtractorTest {
      */
     @Test
     void filter1() {
-        HungarianExtractor mwbe = new HungarianExtractor();
+        HungarianExtractor hungarianExtractor = new HungarianExtractor();
 
         Alignment alignment = new Alignment();
         alignment.add("A", "B", 1);
         alignment.add("A", "C", 1);
 
         try {
-            Alignment result = mwbe.match(ModelFactory.createOntologyModel(), ModelFactory.createOntologyModel(),
+            Alignment result = hungarianExtractor.match(ModelFactory.createOntologyModel(), ModelFactory.createOntologyModel(),
                     alignment,
                     null);
             assertEquals(1, result.size());
@@ -36,14 +39,14 @@ class HungarianExtractorTest {
      */
     @Test
     void filter2() {
-        HungarianExtractor mwbe = new HungarianExtractor();
+        HungarianExtractor hungarianExtractor = new HungarianExtractor();
 
         Alignment alignment = new Alignment();
         alignment.add("A", "B", 0.5);
         alignment.add("A", "C", 1);
 
         try {
-            Alignment result = mwbe.match(ModelFactory.createOntologyModel(), ModelFactory.createOntologyModel(),
+            Alignment result = hungarianExtractor.match(ModelFactory.createOntologyModel(), ModelFactory.createOntologyModel(),
                     alignment,
                     null);
             assertEquals(1, result.size());
@@ -58,7 +61,7 @@ class HungarianExtractorTest {
      */
     @Test
     void filter3() {
-        HungarianExtractor mwbe = new HungarianExtractor();
+        HungarianExtractor hungarianExtractor = new HungarianExtractor();
 
         Alignment alignment = new Alignment();
         alignment.add("A1", "B2", 0.5);
@@ -66,7 +69,7 @@ class HungarianExtractorTest {
         alignment.add("B1", "C2", 0.5);
 
         try {
-            Alignment result = mwbe.match(ModelFactory.createOntologyModel(), ModelFactory.createOntologyModel(),
+            Alignment result = hungarianExtractor.match(ModelFactory.createOntologyModel(), ModelFactory.createOntologyModel(),
                     alignment,
                     null);
             assertTrue(result.size() <= 2);
@@ -81,7 +84,7 @@ class HungarianExtractorTest {
      */
     @Test
     void filter4() {
-        HungarianExtractor mwbe = new HungarianExtractor();
+        HungarianExtractor hungarianExtractor = new HungarianExtractor();
 
         Alignment alignment = new Alignment();
         alignment.add("A1", "B2", 0.5);
@@ -90,7 +93,7 @@ class HungarianExtractorTest {
         alignment.add("B1", "B2", 1);
 
         try {
-            Alignment result = mwbe.match(ModelFactory.createOntologyModel(), ModelFactory.createOntologyModel(),
+            Alignment result = hungarianExtractor.match(ModelFactory.createOntologyModel(), ModelFactory.createOntologyModel(),
                     alignment,
                     null);
             assertEquals(2, result.size());
@@ -100,4 +103,5 @@ class HungarianExtractorTest {
             fail(e);
         }
     }
+
 }

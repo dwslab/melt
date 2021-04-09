@@ -1,9 +1,11 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherPipelineYAAAJenaConstructor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.HungarianExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.MaxWeightBipartiteExtractor;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.jena.ontology.OntModel;
@@ -52,12 +54,28 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
      * Constructor
      * @param backgroundKnowledgeSource The background knowledge source to be used.
      * @param strategy The strategy to be applied.
-     * @param isUseMaximumBipartite True if a maximum bipartite extraction shall be performed (1-1 alignment).
+     * @param isUseOneToOneExtractor True if alignment shall be transformed to a 1-1 alignment.
      * @param threshold The minimal required threshold that is required for a match.
      */
     public BackgroundMatcherStandAlone(SemanticWordRelationDictionary backgroundKnowledgeSource,
                                        ImplementedBackgroundMatchingStrategies strategy,
-                                       boolean isUseMaximumBipartite,
+                                       boolean isUseOneToOneExtractor,
+                                       double threshold){
+        this(backgroundKnowledgeSource, strategy, isUseOneToOneExtractor, null, threshold);
+    }
+
+    /**
+     * Constructor
+     * @param backgroundKnowledgeSource The background knowledge source to be used.
+     * @param strategy The strategy to be applied.
+     * @param isUseOneToOneExtractor True if alignment shall be transformed to a 1-1 alignment.
+     * @param extractor The desired extractor that shall be used.
+     * @param threshold The minimal required threshold that is required for a match.
+     */
+    public BackgroundMatcherStandAlone(SemanticWordRelationDictionary backgroundKnowledgeSource,
+                                       ImplementedBackgroundMatchingStrategies strategy,
+                                       boolean isUseOneToOneExtractor,
+                                       MatcherYAAAJena extractor,
                                        double threshold){
         this.backgroundKnowledgeSource = backgroundKnowledgeSource;
         this.strategy = strategy;
@@ -65,9 +83,15 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
         this.simpleStringMatcher = new SimpleStringMatcher();
         this.backgroundMatcher = new BackgroundMatcher(backgroundKnowledgeSource, strategy, threshold);
 
-        if(isUseMaximumBipartite){
-            MaxWeightBipartiteExtractor mwb = new MaxWeightBipartiteExtractor();
-            pipelineYAAAJena = new MatcherPipelineYAAAJenaConstructor(simpleStringMatcher, backgroundMatcher, mwb);
+        if(isUseOneToOneExtractor){
+            if(extractor == null) {
+                // default extractor: Use Hungarian at the moment due to infinity loop issues with MWBE.
+                //MaxWeightBipartiteExtractor mwb = new MaxWeightBipartiteExtractor();
+                HungarianExtractor he = new HungarianExtractor();
+                pipelineYAAAJena = new MatcherPipelineYAAAJenaConstructor(simpleStringMatcher, backgroundMatcher, he);
+            } else {
+                pipelineYAAAJena = new MatcherPipelineYAAAJenaConstructor(simpleStringMatcher, backgroundMatcher, extractor);
+            }
         } else {
             pipelineYAAAJena = new MatcherPipelineYAAAJenaConstructor(simpleStringMatcher, backgroundMatcher);
         }

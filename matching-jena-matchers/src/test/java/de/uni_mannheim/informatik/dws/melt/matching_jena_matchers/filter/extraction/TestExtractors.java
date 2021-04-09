@@ -29,10 +29,12 @@ import org.xml.sax.SAXException;
  * Test for multiple extractors
  */
 public class TestExtractors {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TestExtractors.class);
     
     /**
-     * Found in Ontology Matching (Book) - Euzenat, Jérôme, Shvaiko, Pavel - section 7.7 Alignment extraction page 191
+     * Found in Ontology Matching (Book) - Euzenat, Jérôme; Shvaiko, Pavel - Section 7.7 Alignment extraction page 191
      */
     private Correspondence a1 = new Correspondence("Product", "Book", 0.84);
     private Correspondence a2 = new Correspondence("Product", "Publisher", 0.9);
@@ -88,9 +90,8 @@ public class TestExtractors {
         assertTrue(cFiltered.containsAll(Arrays.asList(c1)));
     }
     
-    
     @Test
-    void testHungarianExtractor() throws Exception {
+    void testHungarianExtractor() {
         Alignment aFiltered = HungarianExtractor.filter(new Alignment(caseA));
         assertEquals(3, aFiltered.size());
         assertTrue(aFiltered.containsAll(Arrays.asList(a1, a5, a10)));
@@ -102,10 +103,9 @@ public class TestExtractors {
         assertEquals(2, cFiltered.size());
         assertTrue(cFiltered.containsAll(Arrays.asList(c2, c3)));
     }
-    
-    
+
     @Test
-    void testMaxWeightBipartiteExtractor() throws Exception {
+    void testMaxWeightBipartiteExtractor() {
         //same checks as in hungarian
         for(MwbInitHeuristic init : Arrays.asList(MwbInitHeuristic.NAIVE, MwbInitHeuristic.SIMPLE)){
             Alignment aFiltered = MaxWeightBipartiteExtractor.filter(new Alignment(caseA), init);
@@ -132,8 +132,7 @@ public class TestExtractors {
             }
         }
     }
-    
-    
+
     @Test
     void testRandomSavedAlignment() throws SAXException, IOException{
         Alignment caseD = new Alignment(TestExtractors.class.getClassLoader().getResourceAsStream("randomAlignmentForTestingExtractors.xml"));
@@ -142,8 +141,7 @@ public class TestExtractors {
             Alignment mwbge = MaxWeightBipartiteExtractor.filter(new Alignment(caseD), init);
             assertEquals(hungarian, mwbge);
         }
-        
-                
+
         //following alignment generated with
         //Alignment random = randomAlignment(10000,20,1000);
         //random.serialize(new File("targetSmallerThanSource.xml"));
@@ -154,8 +152,7 @@ public class TestExtractors {
             assertEquals(hungarian, mwbge);
         }
     }
-    
-    
+
     // following NOT suitable for general test, but good to see if it works...
     //@Test
     void testRandomAlignment() throws SAXException, IOException{
