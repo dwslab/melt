@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiktionary;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations;
@@ -51,6 +52,18 @@ public class WiktionaryKnowledgeSourceTdbTest {
             } catch (IOException e) {
                 LOGGER.error("Failed to remove persistence directory.");
             }
+        }
+    }
+
+    /**
+     * Not an actual test but can be used for quick experiments.
+     */
+    @Test
+    void synonymyPlayground(){
+        String term = "heart attack";
+        System.out.println("Synonyms for '" + term + "'");
+        for(String s: wiktionary.getSynonymsLexical(wiktionary.getLinker().linkToSingleConcept(term))){
+            System.out.println(s);
         }
     }
 
@@ -122,6 +135,15 @@ public class WiktionaryKnowledgeSourceTdbTest {
         assertTrue(wiktionary.isStrongFormSynonymous("dog", "hound"));
         assertTrue(wiktionary.isStrongFormSynonymous("dog", "dog"));
         assertFalse(wiktionary.isStrongFormSynonymous("dog", "cat"));
+        LabelToConceptLinker linker = wiktionary.getLinker();
+        assertFalse(wiktionary.isStrongFormSynonymous(
+                linker.linkToSingleConcept("dog"),
+                linker.linkToSingleConcept("cat"))
+        );
+        assertTrue(wiktionary.isStrongFormSynonymous(
+                linker.linkToSingleConcept("heart attack"),
+                linker.linkToSingleConcept("myocardial infarction"))
+        );
     }
 
     @Test

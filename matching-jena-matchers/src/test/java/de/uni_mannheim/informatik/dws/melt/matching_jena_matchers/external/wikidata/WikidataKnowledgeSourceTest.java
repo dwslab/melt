@@ -26,7 +26,7 @@ class WikidataKnowledgeSourceTest {
      */
     @Test
     void synonymyPlayground(){
-        String term = "option";
+        String term = "European Union";
         System.out.println("Synonyms for '" + term + "'");
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
         for(String s: wikidata.getSynonymsLexical(wikidata.getLinker().linkToSingleConcept(term))){

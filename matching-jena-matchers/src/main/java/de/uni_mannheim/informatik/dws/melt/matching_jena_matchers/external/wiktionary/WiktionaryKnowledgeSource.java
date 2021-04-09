@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.*;
 
@@ -187,6 +188,53 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
         askBuffer.put(key, result);
         commit(WIKTIONARY_ASK_BUFFER);
         return result;
+    }
+
+    /**
+     * Checks for synonymy by determining whether link1 is contained in the set of synonymous words of link2 or
+     * vice versa.
+     * @param link1 Word 1
+     * @param link2 Word 2
+     * @return True if the given words are synonymous, else false.
+     */
+    public boolean isStrongFormSynonymous(String link1, String link2){
+        if(link1 == null || link2 == null) {
+            return false;
+        }
+
+        Set<String> synonyms1 = getSynonymsEncoded(link1);
+        Set<String> synonyms2 = getSynonymsEncoded(link2);
+
+        if(synonyms1 == null && synonyms2 == null){
+            // only if both are null b/c one concept might not have synonyms but still be a synonym of the other concept
+            return false;
+        }
+        if(synonyms1 == null) {
+            synonyms1 = new HashSet<>();
+        }
+        if(synonyms2 == null) {
+            synonyms2 = new HashSet<>();
+        }
+
+        synonyms1.add(link1);
+        synonyms2.add(link2);
+
+        // remove empty strings to avoid false positives
+        synonyms1.remove("");
+        synonyms2.remove("");
+
+        if(synonyms1.contains(link2)) return true;
+        if(synonyms2.contains(link1)) return true;
+
+        return false;
+    }
+
+    public Set<String> getSynonymsEncoded(String linkedConcept){
+        Set<String> result = getSynonymsLexical(linkedConcept);
+        if(result == null){
+            return null;
+        }
+        return result.stream().map(WiktionaryKnowledgeSource::encodeWord).collect(Collectors.toSet());
     }
 
     @Override

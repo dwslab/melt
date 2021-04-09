@@ -11,6 +11,18 @@ class BabelNetKnowledgeSourceTest {
 
     private static BabelNetKnowledgeSource dictionary = new BabelNetKnowledgeSource();
 
+    /**
+     * Not an actual test but can be used for quick experiments.
+     */
+    @Test
+    void synonymyPlayground(){
+        String term = "European Union";
+        System.out.println("Synonyms for '" + term + "'");
+        for(String s: dictionary.getSynonymsLexical(dictionary.getLinker().linkToSingleConcept(term))){
+            System.out.println(s);
+        }
+    }
+
     @Test
     void isInDictionary() {
         assertTrue(dictionary.isInDictionary("european Union"));

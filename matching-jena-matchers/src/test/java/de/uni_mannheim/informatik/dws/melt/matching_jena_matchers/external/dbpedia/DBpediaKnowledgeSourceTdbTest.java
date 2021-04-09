@@ -42,6 +42,18 @@ public class DBpediaKnowledgeSourceTdbTest {
         deletePersistenceDirectory();
     }
 
+    /**
+     * Not an actual test but can be used for quick experiments.
+     */
+    @Test
+    void synonymyPlayground(){
+        String term = "European Union";
+        System.out.println("Synonyms for '" + term + "'");
+        for(String s: dbpedia.getSynonymsLexical(dbpedia.getLinker().linkToSingleConcept(term))){
+            System.out.println(s);
+        }
+    }
+
     @Test
     void concurrencyConstructor() {
         try {

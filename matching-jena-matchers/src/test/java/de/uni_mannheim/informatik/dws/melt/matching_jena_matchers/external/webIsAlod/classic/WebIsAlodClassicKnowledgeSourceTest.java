@@ -47,6 +47,23 @@ class WebIsAlodClassicKnowledgeSourceTest {
         }
     }
 
+    /**
+     * Not an actual test but can be used for quick experiments.
+     */
+    @Test
+    void synonymyPlayground(){
+        // TODO not (yet) implemented
+        /**
+        WebIsAlodClassicKnowledgeSource dictionary = new WebIsAlodClassicKnowledgeSource(0.5);
+        String term = "European Union";
+        System.out.println("Synonyms for '" + term + "'");
+
+        for(String s: dictionary.getSynonymsLexical(dictionary.getLinker().linkToSingleConcept(term))){
+            System.out.println(s);
+        }
+         **/
+    }
+
     @Test
     void isSynonymous() {
 

@@ -259,20 +259,15 @@ public class BackgroundMatcher extends MatcherYAAAJena {
      * @return Pair where (1) boolean indicating whether there is a match, (2) providing the match confidence.
      */
     public Pair<Boolean, Double> fullMatchUsingDictionaryWithLinks(Set<String> set1, Set<String> set2) {
-        outerSet:
         for (String s1 : set1) {
             if (s1.length() < 100) {
-                String lookupTerm1 = linker.linkToSingleConcept(s1);
-                if (lookupTerm1 == null) continue outerSet;
-                innerSet:
                 for (String s2 : set2) {
                     if (s2.length() < 100) {
-                        String lookupTerm2 = linker.linkToSingleConcept(s2);
-                        if (lookupTerm2 == null) continue innerSet;
-                        if (compare(lookupTerm1, lookupTerm2)) {
+                        if (compare(s1, s2)) {
                             if (knowledgeSource instanceof SynonymConfidenceCapability) {
                                 return new Pair<>(true,
-                                        ((SynonymConfidenceCapability) knowledgeSource).getSynonymyConfidence(lookupTerm1, lookupTerm2));
+                                        ((SynonymConfidenceCapability) knowledgeSource).getSynonymyConfidence(s1,
+                                                s2));
                             } else {
                                 return new Pair<>(true, 1.0);
                             }
@@ -334,7 +329,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
                 }
             }
         }
-        return new Pair<>(false,0.0);
+        return new Pair<>(false, 0.0);
     }
 
     /**
@@ -383,7 +378,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
             return new Pair<>(false, 0.0);
         }
         double score = 0.0;
-        for(double d : comparisonScores){
+        for (double d : comparisonScores) {
             score += d;
         }
         score = score / set2covered.size();
@@ -482,7 +477,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         }
 
         double confidence = 0.0;
-        for(double d : confidenceScores){
+        for (double d : confidenceScores) {
             confidence += d;
         }
         confidence = confidence / set2covered.size();
@@ -568,7 +563,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
 
             Set<String> links = new HashSet();
             for (String label : uri2label.getValue()) {
-                if(label == null && label.trim().length() == 0){
+                if (label == null && label.trim().length() == 0) {
                     continue;
                 }
                 String linkedConcept = linker.linkToSingleConcept(label);
