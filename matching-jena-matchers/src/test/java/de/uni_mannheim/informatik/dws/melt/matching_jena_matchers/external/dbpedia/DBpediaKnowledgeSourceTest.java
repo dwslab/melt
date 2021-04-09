@@ -34,6 +34,19 @@ class DBpediaKnowledgeSourceTest {
     }
 
     @Test
+    void isStrongFormSynonymous(){
+        DBpediaKnowledgeSource dbpedia = new DBpediaKnowledgeSource();
+        LabelToConceptLinker linker = dbpedia.getLinker();
+        assertTrue(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("SAP"),
+                linker.linkToSingleConcept("SAP SE")));
+        assertTrue(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("swap"),
+                linker.linkToSingleConcept("swap (finance)")));
+        assertFalse(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("SAP"),
+                linker.linkToSingleConcept("car")));
+        assertFalse(dbpedia.isStrongFormSynonymous(null, linker.linkToSingleConcept("car")));
+    }
+
+    @Test
     void getSynonymsLexical(){
         DBpediaKnowledgeSource dbpedia = new DBpediaKnowledgeSource();
         LabelToConceptLinker linker = dbpedia.getLinker();

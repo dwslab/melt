@@ -67,6 +67,18 @@ public class WiktionaryKnowledgeSourceTdbTest {
         }
     }
 
+    /**
+     * Not an actual test but can be used for quick experiments.
+     */
+    @Test
+    void hypernymyPlayground(){
+        String term = "card";
+        System.out.println("Hypernyms for '" + term + "'");
+        for(String s: wiktionary.getHypernyms(wiktionary.getLinker().linkToSingleConcept(term))){
+            System.out.println(s);
+        }
+    }
+
     @Test
     void encodeWord(){
         // we need this space encoding to ensure that it works on DBnary:

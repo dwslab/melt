@@ -215,6 +215,42 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
     }
 
     /**
+     * Checks for synonymy by determining whether link1 is contained in the set of synonymous words of link2 or
+     * vice versa.
+     * @param link1 Word 1
+     * @param link2 Word 2
+     * @return True if the given words are synonymous, else false.
+     */
+    public boolean isStrongFormSynonymous(String link1, String link2){
+        if(link1 == null || link2 == null) {
+            return false;
+        }
+
+        Set<String> uris1 = new HashSet<>();
+        Set<String> uris2 = new HashSet<>();
+
+        if(this.linker.isMultiConceptLink(link1)){
+            uris1.addAll(this.linker.getUris(link1));
+        } else {
+            uris1.add(link1);
+        }
+
+        if(this.linker.isMultiConceptLink(link2)){
+            uris2.addAll(this.linker.getUris(link2));
+        } else {
+            uris2.add(link2);
+        }
+
+        for(String uri : uris1){
+            if(uris2.contains(uri)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Builds a String query to obtain synonyms. The synonyms are represented by normal words/labels (not URIs).
      * @param link The link for which synonymous words shall be obtained.
      * @return A SPARQL query as String.

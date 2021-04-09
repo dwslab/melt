@@ -104,6 +104,18 @@ public class DBpediaKnowledgeSourceTdbTest {
     }
 
     @Test
+    void isStrongFormSynonymous(){
+        LabelToConceptLinker linker = dbpedia.getLinker();
+        assertTrue(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("SAP"),
+                linker.linkToSingleConcept("SAP SE")));
+        assertTrue(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("swap"),
+                linker.linkToSingleConcept("swap (finance)")));
+        assertFalse(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("SAP"),
+                linker.linkToSingleConcept("car")));
+        assertFalse(dbpedia.isStrongFormSynonymous(null, linker.linkToSingleConcept("car")));
+    }
+
+    @Test
     void getHypernyms() {
         dbpedia.setExcludedHypernyms(new HashSet<>());
         Set<String> result = dbpedia.getHypernyms(linker.linkToSingleConcept("SAP"));
