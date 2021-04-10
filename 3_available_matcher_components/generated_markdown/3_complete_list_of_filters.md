@@ -21,6 +21,22 @@ This filter removes correspondences where the source or target has not the same 
 
 *Keywords: Bad Hosts Filter*
 
+## TopXFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/TopXFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/TopXFilter.java)
+
+This filter keeps only the top X correspondences according to confidence.
+ The filter can be configured to be source-based (keep only the top X correspondences for each source node).
+ The filter can be configured to be target-based (keep only the top X correspondences for each target node).
+ The filter can be configured to be size-based (based on the smaller or larger side of the alignment).
+
+*Keywords: TopX Filter*
+
+## AnonymousNodeFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AnonymousNodeFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AnonymousNodeFilter.java)
+
+This filter removes correspondences where the source or target has not the same host of the OntModels.
+ E.g. it removes rdf:type=rdf:type or foaf:knows=foaf:knows
+
+*Keywords: Anonymous Node Filter*
+
 ## ConfidenceFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ConfidenceFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ConfidenceFilter.java)
 
 This filter returns only alignments with confidence greater or equals than a
@@ -74,13 +90,6 @@ This filter returns only the alignments with the highest confidence if there are
 It filters based on the additional confidence. The key and threshold should be provided.
 
 *Keywords: Additional Confidence Filter*
-
-## AnnonymousNodeFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AnnonymousNodeFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AnnonymousNodeFilter.java)
-
-This filter removes correspondences where the source or target has not the same host of the OntModels.
- E.g. it removes rdf:type=rdf:type or foaf:knows=foaf:knows
-
-*Keywords: Annonymous Node Filter*
 
 ## NaiveDescendingExtractor [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/NaiveDescendingExtractor.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/NaiveDescendingExtractor.java)
 
