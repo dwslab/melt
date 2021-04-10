@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -306,25 +306,37 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/wiktionary/WiktionaryKnowledgeSource.html#getSynonymsEncoded-java.lang.String-">getSynonymsEncoded</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept)</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/wiktionary/WiktionaryKnowledgeSource.html#getSynonymsLexical-java.lang.String-">getSynonymsLexical</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept)</code>
 <div class="block">Retrieves a list of synonyms independently of the word sense.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>private void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/wiktionary/WiktionaryKnowledgeSource.html#initialize--">initialize</a></span>()</code>
 <div class="block">Helper functions for constructor-independent actions.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/wiktionary/WiktionaryKnowledgeSource.html#isInDictionary-java.lang.String-">isInDictionary</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;word)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/wiktionary/WiktionaryKnowledgeSource.html#isInDictionary-java.lang.String-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language-">isInDictionary</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;word,
               <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language)</code>
 <div class="block">Language dependent query for existence in the dbnary dictionary.</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/wiktionary/WiktionaryKnowledgeSource.html#isStrongFormSynonymous-java.lang.String-java.lang.String-">isStrongFormSynonymous</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;link1,
+                      <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;link2)</code>
+<div class="block">Checks for synonymy by determining whether link1 is contained in the set of synonymous words of link2 or
+ vice versa.</div>
 </td>
 </tr>
 </table>
@@ -333,7 +345,7 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">SemanticWordRelationDictionary</a></h3>
-<code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isHypernym-java.lang.String-java.lang.String-">isHypernym</a>, <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isHypernym-java.lang.String-java.lang.String-int-">isHypernym</a>, <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isHypernymous-java.lang.String-java.lang.String-">isHypernymous</a>, <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isStrongFormSynonymous-java.lang.String-java.lang.String-">isStrongFormSynonymous</a>, <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isSynonymous-java.lang.String-java.lang.String-">isSynonymous</a>, <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isSynonymousOrHypernymous-java.lang.String-java.lang.String-">isSynonymousOrHypernymous</a></code></li>
+<code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isHypernym-java.lang.String-java.lang.String-">isHypernym</a>, <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isHypernym-java.lang.String-java.lang.String-int-">isHypernym</a>, <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isHypernymous-java.lang.String-java.lang.String-">isHypernymous</a>, <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isSynonymous-java.lang.String-java.lang.String-">isSynonymous</a>, <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isSynonymousOrHypernymous-java.lang.String-java.lang.String-">isSynonymousOrHypernymous</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -566,6 +578,38 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>boolean indicating whether the word exists in the dictionary in the corresponding language.</dd>
 </dl>
+</li>
+</ul>
+<a name="isStrongFormSynonymous-java.lang.String-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isStrongFormSynonymous</h4>
+<pre>public&nbsp;boolean&nbsp;isStrongFormSynonymous(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;link1,
+                                      <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;link2)</pre>
+<div class="block">Checks for synonymy by determining whether link1 is contained in the set of synonymous words of link2 or
+ vice versa.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SynonymCapability.html#isStrongFormSynonymous-java.lang.String-java.lang.String-">isStrongFormSynonymous</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SynonymCapability.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">SynonymCapability</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html#isStrongFormSynonymous-java.lang.String-java.lang.String-">isStrongFormSynonymous</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/SemanticWordRelationDictionary.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">SemanticWordRelationDictionary</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>link1</code> - Word 1</dd>
+<dd><code>link2</code> - Word 2</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>True if the given words are synonymous, else false.</dd>
+</dl>
+</li>
+</ul>
+<a name="getSynonymsEncoded-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSynonymsEncoded</h4>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getSynonymsEncoded(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;linkedConcept)</pre>
 </li>
 </ul>
 <a name="getSynonymsLexical-java.lang.String-">
