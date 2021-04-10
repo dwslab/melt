@@ -55,6 +55,17 @@ class DBpediaKnowledgeSourceTest {
     }
 
     @Test
+    void isHypernymous(){
+        DBpediaKnowledgeSource dbpedia = new DBpediaKnowledgeSource();
+        dbpedia.setExcludedHypernyms(new HashSet<>());
+        LabelToConceptLinker linker = dbpedia.getLinker();
+        assertTrue(dbpedia.isHypernymous(linker.linkToSingleConcept("SAP SE"),
+                linker.linkToSingleConcept("Societas Europaea")));
+        assertFalse(dbpedia.isHypernymous(linker.linkToSingleConcept("SAP SE"),
+                linker.linkToSingleConcept("cat")));
+    }
+
+    @Test
     void getHypernyms(){
         DBpediaKnowledgeSource dbpedia = new DBpediaKnowledgeSource();
         dbpedia.setExcludedHypernyms(new HashSet<>());

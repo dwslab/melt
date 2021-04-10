@@ -17,6 +17,7 @@ import org.apache.jena.ontology.OntModel;
  */
 public class ConfidenceFilter extends MatcherYAAAJena implements Filter {
 
+
     private double thresholdClass;
     private double thresholdObjectProperty;
     private double thresholdDatatypeProperty;

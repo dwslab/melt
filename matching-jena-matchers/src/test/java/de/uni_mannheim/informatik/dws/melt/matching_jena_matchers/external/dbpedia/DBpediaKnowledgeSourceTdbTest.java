@@ -57,11 +57,11 @@ public class DBpediaKnowledgeSourceTdbTest {
     @Test
     void concurrencyConstructor() {
         try {
-            String tdbpath = getKeyFromConfigFiles("dbpediaTdbDirectory");
-            if (tdbpath == null) {
+            String tdbPath = getKeyFromConfigFiles("dbpediaTdbDirectory");
+            if (tdbPath == null) {
                 fail("wiktionaryTdbDirectory not found in local_config.properties file.");
             }
-            DBpediaKnowledgeSource dbpedia2 = new DBpediaKnowledgeSource(tdbpath);
+            DBpediaKnowledgeSource dbpedia2 = new DBpediaKnowledgeSource(tdbPath);
             assertNotNull(dbpedia2);
         } catch (Exception e) {
             fail(e);
@@ -101,6 +101,16 @@ public class DBpediaKnowledgeSourceTdbTest {
         LabelToConceptLinker linker = dbpedia.getLinker();
         Set<String> result = dbpedia.getSynonymsLexical(linker.linkToSingleConcept("SAP"));
         assertTrue(result.contains("SAP SE"));
+    }
+
+    @Test
+    void isHypernymous(){
+        dbpedia.setExcludedHypernyms(new HashSet<>());
+        LabelToConceptLinker linker = dbpedia.getLinker();
+        assertTrue(dbpedia.isHypernymous(linker.linkToSingleConcept("SAP SE"),
+                linker.linkToSingleConcept("organisation")));
+        assertFalse(dbpedia.isHypernymous(linker.linkToSingleConcept("SAP SE"),
+                linker.linkToSingleConcept("cat")));
     }
 
     @Test

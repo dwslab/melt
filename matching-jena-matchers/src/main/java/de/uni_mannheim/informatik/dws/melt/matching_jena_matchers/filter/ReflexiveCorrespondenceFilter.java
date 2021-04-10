@@ -10,7 +10,7 @@ import org.apache.jena.ontology.OntModel;
 /**
  * Removes all reflexive edges (which maps A to A) from an alignment.
  */
-public class ReflexiveCorrespondenceFilter extends MatcherYAAAJena implements Filter{
+public class ReflexiveCorrespondenceFilter extends MatcherYAAAJena implements Filter {
      
 
     @Override

@@ -22,7 +22,9 @@ import org.slf4j.LoggerFactory;
  * @author Sven Hertling
  * @author Jan Portisch
  */
-public class Correspondence {
+public class Correspondence implements Comparable<Correspondence> {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Correspondence.class);
     
     protected String entityOne;
@@ -512,4 +514,9 @@ public class Correspondence {
         @Override
         public Double getValue(Correspondence c, QueryOptions queryOptions) { return c.getConfidence(); }
     };
+
+    @Override
+    public int compareTo(Correspondence that) {
+        return Double.compare(this.getConfidence(), that.getConfidence());
+    }
 }

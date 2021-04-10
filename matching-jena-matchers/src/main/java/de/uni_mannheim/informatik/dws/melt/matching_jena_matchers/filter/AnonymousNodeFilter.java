@@ -14,13 +14,15 @@ import java.util.Properties;
  * This filter removes correspondences where the source or target has not the same host of the OntModels.
  * E.g. it removes rdf:type=rdf:type or foaf:knows=foaf:knows
  */
-public class AnnonymousNodeFilter extends MatcherYAAAJena implements Filter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AnnonymousNodeFilter.class);
+public class AnonymousNodeFilter extends MatcherYAAAJena implements Filter {
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AnonymousNodeFilter.class);
 
     /**
      * Constructor
      */
-    public AnnonymousNodeFilter(){
+    public AnonymousNodeFilter(){
     }
     
     /**

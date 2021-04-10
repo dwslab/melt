@@ -15,6 +15,7 @@ import org.apache.jena.ontology.OntModel;
  */
 public class CardinalityFilter extends MatcherYAAAJena implements Filter {
 
+
    @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties p) throws Exception {
         return filter(inputAlignment);        

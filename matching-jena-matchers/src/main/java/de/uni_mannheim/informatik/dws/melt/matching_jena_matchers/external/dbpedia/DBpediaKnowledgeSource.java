@@ -179,6 +179,72 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
         return linker.linkToSingleConcept(word, Language.ENGLISH) != null;
     }
 
+    /**
+     * Checks for hypernymous words in a loose-form fashion: One concept needs to be a hypernym of the other concept
+     * where the order of concepts is irrelevant, i.e., the method returns (hypernymous(w1, w2) || hypernymous(w2, w1).
+     *
+     * The assumed language is English.
+     * CHECKS ONLY FOR LEVEL 1 HYPERNYMY - NO REASONING IS PERFORMED.
+     *
+     * @param linkedConcept_1 linked word 1
+     * @param linkedConcept_2 linked word 2
+     * @return True if the given words are hypernymous, else false.
+     */
+    @Override
+    public boolean isHypernymous(String linkedConcept_1, String linkedConcept_2){
+        if(linkedConcept_1 == null || linkedConcept_2 == null) {
+            return false;
+        }
+
+        Set<String> hypernymsTmp_1 = getHypernyms(linkedConcept_1);
+        Set<String> hypernymsTmp_2 = getHypernyms(linkedConcept_2);
+        Set<String> hypernyms_1 = new HashSet<>();
+        Set<String> hypernyms_2 = new HashSet<>();
+
+        for(String hypernymLink : hypernymsTmp_1){
+            if(this.linker.isMultiConceptLink(hypernymLink)){
+                hypernyms_1.addAll(this.linker.getUris(hypernymLink));
+            } else {
+                hypernyms_1.add(hypernymLink);
+            }
+        }
+
+        for(String hypernymLink : hypernymsTmp_2){
+            if(this.linker.isMultiConceptLink(hypernymLink)){
+                hypernyms_2.addAll(this.linker.getUris(hypernymLink));
+            } else {
+                hypernyms_2.add(hypernymLink);
+            }
+        }
+
+
+        if(this.linker.isMultiConceptLink(linkedConcept_1)){
+            for(String uri1 : this.linker.getUris(linkedConcept_1)){
+                if(hypernyms_2.contains(uri1)){
+                    return true;
+                }
+            }
+        } else {
+            if(hypernyms_2.contains(linkedConcept_1)){
+                return true;
+            }
+        }
+
+        if(this.linker.isMultiConceptLink(linkedConcept_2)){
+            for(String uri2 : this.linker.getUris(linkedConcept_2)){
+                if(hypernyms_1.contains(uri2)){
+                    return true;
+                }
+            }
+        } else {
+            if(hypernyms_1.contains(linkedConcept_2)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     @NotNull
     public Set<String> getSynonymsLexical(String linkedConcept) {
@@ -221,6 +287,7 @@ public class DBpediaKnowledgeSource extends SemanticWordRelationDictionary {
      * @param link2 Word 2
      * @return True if the given words are synonymous, else false.
      */
+    @Override
     public boolean isStrongFormSynonymous(String link1, String link2){
         if(link1 == null || link2 == null) {
             return false;
