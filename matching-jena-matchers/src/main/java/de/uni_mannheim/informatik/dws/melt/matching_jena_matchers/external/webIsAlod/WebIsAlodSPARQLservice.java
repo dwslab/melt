@@ -25,6 +25,7 @@ import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.externa
  */
 public class WebIsAlodSPARQLservice {
 
+
     /**
      * Default logger
      */
@@ -379,13 +380,13 @@ public class WebIsAlodSPARQLservice {
         }
         QueryExecution qe = QueryExecutionFactory.sparqlService(sparqlWebIsAlodEndpoint.toString(), getIsHypernymousAskQueryClassic(uri1, uri2, minimumConfidence, this.webIsAlodEndpoint.isClassic()));
         boolean result = safeAsk(qe);
+        qe.close();
         hypernymyAskBuffer.put(uriTuple, result);
         if (sparqlWebIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT)) {
             commit(ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER);
         } else {
             commit(ALOD_XL_HYPERNYMY_ASK_BUFFER);
         }
-        qe.close();
         return result;
     }
 

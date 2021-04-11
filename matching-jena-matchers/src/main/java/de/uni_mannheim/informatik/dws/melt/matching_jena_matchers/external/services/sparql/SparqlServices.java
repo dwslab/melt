@@ -61,8 +61,14 @@ public class SparqlServices {
             } catch (InterruptedException ie) {
                 LOGGER.error("Interrupted exception.", ie);
             }
-            LOGGER.error("Retry.");
-            result = queryExecutionInstance.execAsk();
+            try {
+                LOGGER.error("Retry.");
+                result = queryExecutionInstance.execAsk();
+            } catch (Exception e2){
+                LOGGER.error("Failed to execute ASK query. Returning false.", e2);
+                LOGGER.error("Problematic ASK query:\n" + queryExecutionInstance.getQuery().toString());
+                return false;
+            }
         } // end of catch
         return result;
     }

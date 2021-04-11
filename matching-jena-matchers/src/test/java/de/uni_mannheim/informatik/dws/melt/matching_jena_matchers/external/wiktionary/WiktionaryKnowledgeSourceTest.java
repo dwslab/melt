@@ -39,7 +39,6 @@ public class WiktionaryKnowledgeSourceTest {
         } catch (IOException e) {
             LOGGER.error("Failed to remove persistence directory.");
         }
-
     }
 
     @Test
@@ -54,6 +53,16 @@ public class WiktionaryKnowledgeSourceTest {
 
         // true positive check; check for correct encoding of %
         assertTrue(wiktionary.isInDictionary("%"));
+
+        assertTrue(wiktionary.isInDictionary("Alzheimer's"));
+        assertTrue(wiktionary.isInDictionary("Alzheimer's\n"));
+        assertTrue(wiktionary.isInDictionary("Alzheimer's Disease"));
+
+        // true positive with language
+        assertTrue(wiktionary.isInDictionary("Ähre", Language.GERMAN ));
+
+        // false positive check; check for stability with random signs
+        assertFalse(wiktionary.isInDictionary("<"));
 
         // false positive check
         assertFalse(wiktionary.isInDictionary("asdfasdfasdf"));
@@ -111,13 +120,13 @@ public class WiktionaryKnowledgeSourceTest {
         WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
         assertTrue(wiktionary.isSynonymous("dog", "hound"));
         assertTrue(wiktionary.isSynonymous("dog", "dog"));
-        assertFalse(wiktionary.isSynonymous("dog", "cat"));
+        assertFalse(wiktionary.isSynonymous("dog\n", "cat"));
     }
 
     @Test
     public void testIsStrongFromSynonymous() {
         WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
-        assertTrue(wiktionary.isStrongFormSynonymous("dog", "hound"));
+        assertTrue(wiktionary.isStrongFormSynonymous("dog\n", "hound"));
         assertTrue(wiktionary.isStrongFormSynonymous("dog", "dog"));
         assertFalse(wiktionary.isStrongFormSynonymous("dog", "cat"));
     }
@@ -125,6 +134,9 @@ public class WiktionaryKnowledgeSourceTest {
     @Test
     public void testHypernymy() {
         WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+        WiktionaryLinker linker = (WiktionaryLinker) wiktionary.getLinker();
+
+        // using default language
         assertTrue(wiktionary.getHypernyms("cat").contains("feline"));
         assertFalse(wiktionary.getHypernyms("cat").contains("dog"));
 

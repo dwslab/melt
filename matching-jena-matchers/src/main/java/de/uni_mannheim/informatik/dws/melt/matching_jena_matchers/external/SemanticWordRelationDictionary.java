@@ -99,12 +99,16 @@ public abstract class SemanticWordRelationDictionary implements ExternalResource
         Set<String> hypernyms_1 = getHypernyms(linkedConcept_1);
         Set<String> hypernyms_2 = getHypernyms(linkedConcept_2);
 
-        for(String hypernym : hypernyms_1){
-            if(linkedConcept_2.equals(hypernym)) return true;
-        }
-        for(String hypernym : hypernyms_2){
-            if(linkedConcept_1.equals(hypernym)) return true;
-        }
+        if(hypernyms_1 != null) {
+			for (String hypernym : hypernyms_1) {
+				if (linkedConcept_2.equals(hypernym)) return true;
+			}
+		}
+        if(hypernyms_2 != null) {
+			for (String hypernym : hypernyms_2) {
+				if (linkedConcept_1.equals(hypernym)) return true;
+			}
+		}
         return false;
     }
 
