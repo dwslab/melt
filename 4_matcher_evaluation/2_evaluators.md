@@ -65,7 +65,7 @@ You will also find an `aggregated/<matcher_directory>/aggregatedPerformance.csv`
 
 
 # EvaluatorMcNemarSignificance
-[`EvaluatorMcNemarSignificance`](https://github.com/dwslab/melt/blob/master/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/significance/EvaluatorMcNemarSignificance.java) is an implementation of [*Mohammadi, Majid; Atashin, Amir Ahooye; Hofman, Wout; Tan, Yaohua. Comparison of Ontology Alignment Systems Across Single Matching Task Via the McNemar's Test. 2018.*](https://dl.acm.org/doi/pdf/10.1145/3193573) in MELT.
+[`EvaluatorMcNemarSignificance`](https://github.com/dwslab/melt/blob/master/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/significance/EvaluatorMcNemarSignificance.java) is an implementation of *Mohammadi, Majid; Atashin, Amir Ahooye; Hofman, Wout; Tan, Yaohua. Comparison of Ontology Alignment Systems Across Single Matching Task Via the McNemar's Test. 2018.* in MELT ([open-access version of the paper](https://dl.acm.org/doi/pdf/10.1145/3193573)).
 
 The evaluator generates various CSV files for different significance methods (implemented are: asymptotic test, asymptotic test with continuity correction; each with and without fallback to the exact method) on different aggregation levels (from detailed to aggregated): 
 
