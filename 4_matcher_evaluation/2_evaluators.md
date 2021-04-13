@@ -11,7 +11,7 @@ permalink: /matcher-evaluation/evaluators
 - **EvaluatorBasic**: A basic evaluator that is easy on memory. Use this evaluator when you run into
 memory issues with `EvaluatorCSV` on very large evaluation problems. Note that this evaluator offers less
 functionality than the default evaluator.
-- **EvaluatorMcNemarSignificance**: An evaluator for statistical significance tests.
+- [**EvaluatorMcNemarSignificance**](#evaluatormcnemarsignificance): An evaluator for statistical significance tests.
  This evaluator allows checking whether multiple alignments are significantly different.
 - **DashboardBuilder**: This evaluator generates an interactive Web UI (*MELT Dashboard*) to analyze alignments
 in a self-service BI fashion. You can find an exemplary dashboard for the OAEI 2019
@@ -62,3 +62,14 @@ In the track directory, you will find a directory fore each test case of the tra
 In here, each matcher in the `ExecutionResultSet` that was run on this track will have a `<matcher_directory>/`.
 A `<matcher_directory>/` contains the performance of the system on the particular test case (`performance.csv`) as well as the actual system alignment (`systemAlignment.rdf`).
 You will also find an `aggregated/<matcher_directory>/aggregatedPerformance.csv` in the `<track_directory>/` containing the (aggregated micro/macro) performance of the particular matcher on the track.
+
+
+# EvaluatorMcNemarSignificance
+[`EvaluatorMcNemarSignificance`](https://github.com/dwslab/melt/blob/master/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/significance/EvaluatorMcNemarSignificance.java) is an implementation of [`Mohammadi, Majid; Atashin, Amir Ahooye; Hofman, Wout; Tan, Yaohua. Comparison of Ontology Alignment Systems Across Single Matching Task Via the McNemar's Test. 2018.`](https://dl.acm.org/doi/pdf/10.1145/3193573) in MELT.
+
+The evaluator generates various CSV files for different significance methods (implemented are: asymptotic test, asymptotic test with continuity correction; each with and without fallback to the exact method) on different aggregation levels (from detailed to aggregated): 
+
+- `Test_Case_<method>.csv` contains the individual p values per test case. No aggregation is performed.
+- `Aggregated_Testcases_<method>.csv` contains the number of (not) significantly different alignments (/test cases).
+- `Track_<method>.csv` contains the counts of the number of (not) significantly different alignments (/test cases) per track. If more than 50% of the test cases within a track are significantly different, the track counts as significantly different.
+- `Aggregated_Tracks_<method>.csv` contains the number of tracks on which systems are significantly different. If more than 50% of the test cases within a track are significantly different, the track counts as significantly different.
