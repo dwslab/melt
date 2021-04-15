@@ -33,7 +33,6 @@
         </dependency>
     </dependencies>
 
-    
     <repositories>
         <repository>
             <id>maven.aksw.internal</id>
@@ -41,5 +40,4 @@
             <url>https://maven.aksw.org/repository/internal</url>
         </repository>
     </repositories>
-    
 </project>

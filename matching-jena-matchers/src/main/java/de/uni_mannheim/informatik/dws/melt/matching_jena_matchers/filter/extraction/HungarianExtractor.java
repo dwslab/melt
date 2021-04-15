@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HungarianExtractor extends MatcherYAAAJena implements Filter {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(HungarianExtractor.class);
     
     @Override
@@ -33,7 +34,9 @@ public class HungarianExtractor extends MatcherYAAAJena implements Filter {
     
     public static Alignment filter(Alignment inputAlignment){
         if(inputAlignment.getDistinctConfidencesAsSet().size() == 1){
-            //alignment api says that hungarian algorithmn runs in inifite loop when all correspondences hav same confidence
+            // Alignment api says that hungarian algorithm runs in infinite loop when all correspondences have the same
+            // confidence.
+            // We use NaiveDescendingExtractor here to obtain deterministic results.
             LOGGER.warn("The input alignment has only one confidence. Defaulting to make a random one to one alignment.");
             return NaiveDescendingExtractor.filter(inputAlignment);
         }
@@ -63,16 +66,16 @@ public class HungarianExtractor extends MatcherYAAAJena implements Filter {
         
         int[][] assignment = HungarianAlgorithm.hgAlgorithm(values, "max");
         
-        Set<Correspondence> goodCoorespondes = new HashSet<>();        
+        Set<Correspondence> goodCorrespondences = new HashSet<>();
         for (int i = 0; i < assignment.length; i++){
             if(switchSourceTarget){
-                goodCoorespondes.add(inputAlignment.getCorrespondence(sources.get(assignment[i][1]), targets.get(assignment[i][0]), CorrespondenceRelation.EQUIVALENCE));          
+                goodCorrespondences.add(inputAlignment.getCorrespondence(sources.get(assignment[i][1]), targets.get(assignment[i][0]), CorrespondenceRelation.EQUIVALENCE));
             }else{
-                goodCoorespondes.add(inputAlignment.getCorrespondence(sources.get(assignment[i][0]), targets.get(assignment[i][1]), CorrespondenceRelation.EQUIVALENCE));          
+                goodCorrespondences.add(inputAlignment.getCorrespondence(sources.get(assignment[i][0]), targets.get(assignment[i][1]), CorrespondenceRelation.EQUIVALENCE));
             }
         }
         
-        inputAlignment.retainAll(goodCoorespondes);
+        inputAlignment.retainAll(goodCorrespondences);
         return inputAlignment;
     }
     

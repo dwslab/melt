@@ -9,6 +9,8 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
  * Basic filter for instances which compares sets like neighbours or properties.
  */
 public abstract class BaseFilterWithSetComparison extends MatcherYAAAJena implements Filter {
+
+
     /**
      * The threshold which should be larger or equal to be a valid match.
      * Computation is based on set similarity.

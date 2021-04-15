@@ -15,11 +15,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences.*;
 
 /**
  * Class utilizing DBnary, a SPARQL endpoint for Wiktionary.
+ * Alternatively, TDB1 can be used as offline storage.
  */
 public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
 
@@ -119,7 +121,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
         //tdbDataset = TDB2Factory.connectDataset(tdbDirectoryPath);
         tdbDataset = TDBFactory.createDataset(tdbDirectoryPath);
         tdbDataset.begin(ReadWrite.READ);
-        this.isDiskBufferEnabled = false;
+        this.isDiskBufferEnabled = true;
         initialize();
     }
 
@@ -165,28 +167,83 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      * @return boolean indicating whether the word exists in the dictionary in the corresponding language.
      */
     public boolean isInDictionary(String word, Language language) {
+        if(word == null || language == null){
+            return false;
+        }
         word = encodeWord(word);
         String key = "in_dict_" + word + "_" + language.toSparqlChar2();
         if(askBuffer.containsKey(key)){
             return askBuffer.get(key);
         }
-
         String queryString =
                 "PREFIX lexvo: <http://lexvo.org/id/iso639-3/>\r\n" +
                         "PREFIX dbnary: <http://kaiko.getalp.org/dbnary#>\r\n" +
                         "ASK {  <http://kaiko.getalp.org/dbnary/" + language.toWiktionaryChar3() + "/" + word + "> ?p ?o . }";
-        Query query = QueryFactory.create(queryString);
-        QueryExecution queryExecution;
-        if(isUseTdb) {
-            queryExecution = QueryExecutionFactory.create(query, tdbDataset);
-        } else {
-            queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
+        boolean result = false;
+        try {
+            Query query = QueryFactory.create(queryString);
+            QueryExecution queryExecution;
+            if (isUseTdb) {
+                queryExecution = QueryExecutionFactory.create(query, tdbDataset);
+            } else {
+                queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
+            }
+            result = queryExecution.execAsk();
+            queryExecution.close();
+        } catch (Exception e){
+            // logging actual error is disabled
+            LOGGER.warn("An error occurred while trying to look up: '" + word + "'. Returning false.");
         }
-        boolean result = queryExecution.execAsk();
-        queryExecution.close();
         askBuffer.put(key, result);
         commit(WIKTIONARY_ASK_BUFFER);
         return result;
+    }
+
+    /**
+     * Checks for synonymy by determining whether link1 is contained in the set of synonymous words of link2 or
+     * vice versa.
+     * @param link1 Word 1
+     * @param link2 Word 2
+     * @return True if the given words are synonymous, else false.
+     */
+    public boolean isStrongFormSynonymous(String link1, String link2){
+        if(link1 == null || link2 == null) {
+            return false;
+        }
+
+        Set<String> synonyms1 = getSynonymsEncoded(link1);
+        Set<String> synonyms2 = getSynonymsEncoded(link2);
+
+        if(synonyms1 == null && synonyms2 == null){
+            // only if both are null b/c one concept might not have synonyms but still be a synonym of the other concept
+            return false;
+        }
+        if(synonyms1 == null) {
+            synonyms1 = new HashSet<>();
+        }
+        if(synonyms2 == null) {
+            synonyms2 = new HashSet<>();
+        }
+
+        synonyms1.add(link1);
+        synonyms2.add(link2);
+
+        // remove empty strings to avoid false positives
+        synonyms1.remove("");
+        synonyms2.remove("");
+
+        if(synonyms1.contains(link2)) return true;
+        if(synonyms2.contains(link1)) return true;
+
+        return false;
+    }
+
+    public Set<String> getSynonymsEncoded(String linkedConcept){
+        Set<String> result = getSynonymsLexical(linkedConcept);
+        if(result == null){
+            return null;
+        }
+        return result.stream().map(WiktionaryKnowledgeSource::encodeWord).collect(Collectors.toSet());
     }
 
     @Override
@@ -237,18 +294,22 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                         "}\r\n" +
                         "}";
         //System.out.println(queryString);
-        Query query = QueryFactory.create(queryString);
-        QueryExecution queryExecution;
-        if(isUseTdb) {
-            queryExecution = QueryExecutionFactory.create(query, tdbDataset);
-        } else {
-            queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
+        try {
+            Query query = QueryFactory.create(queryString);
+            QueryExecution queryExecution;
+            if (isUseTdb) {
+                queryExecution = QueryExecutionFactory.create(query, tdbDataset);
+            } else {
+                queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
+            }
+            ResultSet queryResult = queryExecution.execSelect();
+            while (queryResult.hasNext()) {
+                result.add(getLemmaFromURI(queryResult.next().getResource("synonym").toString()));
+            }
+            queryExecution.close();
+        } catch (Exception e){
+            LOGGER.warn("Problem with query getSynonyms for word: '" + word + "'.");
         }
-        ResultSet queryResult = queryExecution.execSelect();
-        while (queryResult.hasNext()) {
-            result.add(getLemmaFromURI(queryResult.next().getResource("synonym").toString()));
-        }
-        queryExecution.close();
         synonymyBuffer.put(word + "_" + language.toWiktionaryChar3(), result);
         commit(WIKTIONARY_SYNONYMY_BUFFER);
         return result;
@@ -272,10 +333,13 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      */
     static String encodeWord(String word) {
         // we cannot use the Java default encoder due to some ideosyncratic encodings
+        word = word.trim();
         word = word.replace("%", "%25");
         word = word.replace(" ", "_");
         word = word.replace(".", "%2E");
         word = word.replace("^", "%5E");
+        word = word.replace("<", "%3C");
+        word = word.replace(">", "%3E");
         return word;
     }
 
@@ -298,12 +362,13 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      * @return A set of hypernyms.
      */
     public HashSet<String> getHypernyms(String linkedConcept, Language language) {
-        if (linkedConcept == null) return null;
-        linkedConcept = encodeWord(linkedConcept);
-        if (hypernymyBuffer.containsKey(linkedConcept + "_" + linkedConcept)) {
-            return hypernymyBuffer.get(linkedConcept + "_" + linkedConcept);
-        }
         HashSet<String> result = new HashSet<>();
+        if (linkedConcept == null) return result;
+        linkedConcept = encodeWord(linkedConcept);
+        String key = linkedConcept + "_" + language.toSparqlChar2();
+        if (hypernymyBuffer.containsKey(key)) {
+            return hypernymyBuffer.get(key);
+        }
         String queryString = "PREFIX dbnary: <http://kaiko.getalp.org/dbnary#>\n" +
                 "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX dbnarylan: <http://kaiko.getalp.org/dbnary/eng/>\n" +
@@ -336,13 +401,12 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                 result.add(getLemmaFromURI(queryResult.next().getResource("hypernym").toString()));
             }
             queryExecution.close();
-            hypernymyBuffer.put(linkedConcept + "_" + language.toWiktionaryChar3(), result);
-            commit(WIKTIONARY_HYPERNYMY_BUFFER);
-            return result;
         } catch (QueryParseException qpe) {
-            LOGGER.info("Faild to build query for concept '" + linkedConcept + "'", qpe);
-            return null;
+            LOGGER.warn("Failed to build getHypernyms query for concept '" + linkedConcept + "'");
         }
+        hypernymyBuffer.put(key, result);
+        commit(WIKTIONARY_HYPERNYMY_BUFFER);
+        return result;
     }
 
     /**

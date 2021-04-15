@@ -82,6 +82,9 @@ public class BabelNetKnowledgeSource extends SemanticWordRelationDictionary {
      * @return true if word found, else false.
      */
     public boolean isInDictionary(String word) {
+        if(word == null || word.trim().equals("")){
+            return false;
+        }
         BabelNetQuery query = new BabelNetQuery.Builder(word)
                 .from(Language.EN)
                 .build();

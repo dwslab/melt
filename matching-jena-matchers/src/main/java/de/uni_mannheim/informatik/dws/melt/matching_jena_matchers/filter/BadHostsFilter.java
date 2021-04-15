@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
  */
 public class BadHostsFilter extends MatcherYAAAJena implements Filter {
 
+
     /**
      * Default logger
      */

@@ -9,6 +9,17 @@ class WordNetKnowledgeSourceTest {
 
 
     @Test
+    void synonymyPlayground(){
+        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
+        String word = "equity";
+        System.out.println("Synonyms for '" + word + "'");
+        for (String synonym : wordnet.getSynonymsLexical(wordnet.getLinker().linkToSingleConcept(word))){
+            System.out.println(synonym);
+        }
+        wordnet.close();
+    }
+
+    @Test
     void getIdGivenLink(){
         WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         wordnet.getIdGivenLink("dog");
@@ -19,17 +30,6 @@ class WordNetKnowledgeSourceTest {
         WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
         assertTrue(wordnet.isSynonymous("dog", "hound"));
         assertFalse(wordnet.isSynonymous("dog", "car"));
-        wordnet.close();
-    }
-
-    @Test
-    void synonymyPlayground(){
-        WordNetKnowledgeSource wordnet = new WordNetKnowledgeSource();
-        String word = "equity";
-        System.out.println("Synonyms for '" + word + "'");
-        for (String synonym : wordnet.getSynonymsLexical(wordnet.getLinker().linkToSingleConcept(word))){
-            System.out.println(synonym);
-        }
         wordnet.close();
     }
 

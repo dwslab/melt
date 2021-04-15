@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
  * Allowed are only exact matches.
  */
 public class MixedTypFilter extends MatcherYAAAJena implements Filter {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MixedTypFilter.class);
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {

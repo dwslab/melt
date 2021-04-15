@@ -1,8 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiktionary;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,11 +27,11 @@ public class WiktionaryKnowledgeSourceTdbTest {
     public static void prepare() {
         deletePersistenceDirectory();
         String key = "wiktionaryTdbDirectory";
-        String tdbpath = getKeyFromConfigFiles("wiktionaryTdbDirectory");
-        if(tdbpath == null){
+        String tdbPath = getKeyFromConfigFiles("wiktionaryTdbDirectory");
+        if(tdbPath == null){
             fail("Cannot find config.properties or local_config.properties with key " + key);
         }
-        wiktionary = new WiktionaryKnowledgeSource(tdbpath);
+        wiktionary = new WiktionaryKnowledgeSource(tdbPath);
     }
 
     @AfterAll
@@ -45,12 +45,36 @@ public class WiktionaryKnowledgeSourceTdbTest {
      */
     private static void deletePersistenceDirectory() {
         File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
-        if (result != null && result.exists() && result.isDirectory()) {
+        if (result.exists() && result.isDirectory()) {
             try {
                 FileUtils.deleteDirectory(result);
             } catch (IOException e) {
                 LOGGER.error("Failed to remove persistence directory.");
             }
+        }
+    }
+
+    /**
+     * Not an actual test but can be used for quick experiments.
+     */
+    @Test
+    void synonymyPlayground(){
+        String term = "heart attack";
+        System.out.println("Synonyms for '" + term + "'");
+        for(String s: wiktionary.getSynonymsLexical(wiktionary.getLinker().linkToSingleConcept(term))){
+            System.out.println(s);
+        }
+    }
+
+    /**
+     * Not an actual test but can be used for quick experiments.
+     */
+    @Test
+    void hypernymyPlayground(){
+        String term = "card";
+        System.out.println("Hypernyms for '" + term + "'");
+        for(String s: wiktionary.getHypernyms(wiktionary.getLinker().linkToSingleConcept(term))){
+            System.out.println(s);
         }
     }
 
@@ -68,8 +92,11 @@ public class WiktionaryKnowledgeSourceTdbTest {
         // true positive check; check for correct encoding of spaces
         assertTrue(wiktionary.isInDictionary("seminal fluid"));
 
-        // true positive check; check for correct encoding of %
+        // true positive check; check for correct encoding of special characters
         assertTrue(wiktionary.isInDictionary("%"));
+        assertTrue(wiktionary.isInDictionary("Alzheimer's"));
+        assertTrue(wiktionary.isInDictionary("Alzheimer's\n"));
+        assertTrue(wiktionary.isInDictionary("Alzheimer's Disease"));
 
         // false positive check
         assertFalse(wiktionary.isInDictionary("asdfasdfasdf"));
@@ -122,6 +149,15 @@ public class WiktionaryKnowledgeSourceTdbTest {
         assertTrue(wiktionary.isStrongFormSynonymous("dog", "hound"));
         assertTrue(wiktionary.isStrongFormSynonymous("dog", "dog"));
         assertFalse(wiktionary.isStrongFormSynonymous("dog", "cat"));
+        LabelToConceptLinker linker = wiktionary.getLinker();
+        assertFalse(wiktionary.isStrongFormSynonymous(
+                linker.linkToSingleConcept("dog"),
+                linker.linkToSingleConcept("cat"))
+        );
+        assertTrue(wiktionary.isStrongFormSynonymous(
+                linker.linkToSingleConcept("heart attack"),
+                linker.linkToSingleConcept("myocardial infarction"))
+        );
     }
 
     @Test
@@ -132,6 +168,8 @@ public class WiktionaryKnowledgeSourceTdbTest {
         // assert linking process compatibility
         assertTrue(wiktionary.getHypernyms(wiktionary.getLinker().linkToSingleConcept("cat")).contains("feline"));
         assertFalse(wiktionary.getHypernyms(wiktionary.getLinker().linkToSingleConcept("cat")).contains("dog"));
+
+        wiktionary.getHypernyms(wiktionary.getLinker().linkToSingleConcept("Alzheimer's disease")).size();
     }
 
     @Test
@@ -145,5 +183,4 @@ public class WiktionaryKnowledgeSourceTdbTest {
         assertTrue(wiktionary.isSynonymousOrHypernymous(wiktionary.getLinker().linkToSingleConcept("dog"), wiktionary.getLinker().linkToSingleConcept("hound")));
         assertFalse(wiktionary.isSynonymousOrHypernymous(wiktionary.getLinker().linkToSingleConcept("dog"), wiktionary.getLinker().linkToSingleConcept("cat")));
     }
-
 }

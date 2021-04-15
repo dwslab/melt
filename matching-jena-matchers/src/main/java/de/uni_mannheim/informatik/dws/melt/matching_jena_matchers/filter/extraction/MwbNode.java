@@ -8,12 +8,14 @@ import java.util.Set;
  * The node of a graph.
  */
 class MwbNode implements Comparable<MwbNode>{
+
+
     /**
      * The graph structure (modeled only as successor).
      */
     private Set<MwbEdge> successor;
     /**
-     * The potenial as given in the algorithm.
+     * The potential as given in the algorithm.
      */
     private int potential;
     /**
@@ -28,7 +30,6 @@ class MwbNode implements Comparable<MwbNode>{
      * Shortest path property for restoring the path.
      */
     private MwbEdge predecessor;
-    
 
     public MwbNode() {
         this.successor = new HashSet<>();

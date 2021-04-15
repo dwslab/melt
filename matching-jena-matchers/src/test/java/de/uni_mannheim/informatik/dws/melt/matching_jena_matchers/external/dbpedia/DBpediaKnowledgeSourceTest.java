@@ -34,11 +34,35 @@ class DBpediaKnowledgeSourceTest {
     }
 
     @Test
+    void isStrongFormSynonymous(){
+        DBpediaKnowledgeSource dbpedia = new DBpediaKnowledgeSource();
+        LabelToConceptLinker linker = dbpedia.getLinker();
+        assertTrue(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("SAP"),
+                linker.linkToSingleConcept("SAP SE")));
+        assertTrue(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("swap"),
+                linker.linkToSingleConcept("swap (finance)")));
+        assertFalse(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("SAP"),
+                linker.linkToSingleConcept("car")));
+        assertFalse(dbpedia.isStrongFormSynonymous(null, linker.linkToSingleConcept("car")));
+    }
+
+    @Test
     void getSynonymsLexical(){
         DBpediaKnowledgeSource dbpedia = new DBpediaKnowledgeSource();
         LabelToConceptLinker linker = dbpedia.getLinker();
         Set<String> result = dbpedia.getSynonymsLexical(linker.linkToSingleConcept("SAP"));
         assertTrue(result.contains("SAP SE"));
+    }
+
+    @Test
+    void isHypernymous(){
+        DBpediaKnowledgeSource dbpedia = new DBpediaKnowledgeSource();
+        dbpedia.setExcludedHypernyms(new HashSet<>());
+        LabelToConceptLinker linker = dbpedia.getLinker();
+        assertTrue(dbpedia.isHypernymous(linker.linkToSingleConcept("SAP SE"),
+                linker.linkToSingleConcept("Societas Europaea")));
+        assertFalse(dbpedia.isHypernymous(linker.linkToSingleConcept("SAP SE"),
+                linker.linkToSingleConcept("cat")));
     }
 
     @Test

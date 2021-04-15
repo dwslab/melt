@@ -14,6 +14,7 @@ import org.apache.jena.ontology.OntModel;
  */
 public class AdditionalConfidenceFilter extends MatcherYAAAJena implements Filter {
 
+
     private double threshold;
     private String additionalConfidenceKey;
 
@@ -28,7 +29,7 @@ public class AdditionalConfidenceFilter extends MatcherYAAAJena implements Filte
     }
     
     /**
-     * Filters the given alignemtn such that in the returned alignment, only correspondences appear where
+     * Filters the given alignment such that in the returned alignment, only correspondences appear where
      * the additional confidence (provided by the key) is greater or equal to the given threshold.
      * @param alignment the initial alignment.
      * @param additionalConfidenceKey the key of the additional alignment.

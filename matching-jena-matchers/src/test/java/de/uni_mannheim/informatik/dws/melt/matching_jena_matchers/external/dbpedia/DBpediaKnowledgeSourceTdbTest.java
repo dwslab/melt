@@ -42,14 +42,26 @@ public class DBpediaKnowledgeSourceTdbTest {
         deletePersistenceDirectory();
     }
 
+    /**
+     * Not an actual test but can be used for quick experiments.
+     */
+    @Test
+    void synonymyPlayground(){
+        String term = "European Union";
+        System.out.println("Synonyms for '" + term + "'");
+        for(String s: dbpedia.getSynonymsLexical(dbpedia.getLinker().linkToSingleConcept(term))){
+            System.out.println(s);
+        }
+    }
+
     @Test
     void concurrencyConstructor() {
         try {
-            String tdbpath = getKeyFromConfigFiles("dbpediaTdbDirectory");
-            if (tdbpath == null) {
+            String tdbPath = getKeyFromConfigFiles("dbpediaTdbDirectory");
+            if (tdbPath == null) {
                 fail("wiktionaryTdbDirectory not found in local_config.properties file.");
             }
-            DBpediaKnowledgeSource dbpedia2 = new DBpediaKnowledgeSource(tdbpath);
+            DBpediaKnowledgeSource dbpedia2 = new DBpediaKnowledgeSource(tdbPath);
             assertNotNull(dbpedia2);
         } catch (Exception e) {
             fail(e);
@@ -89,6 +101,28 @@ public class DBpediaKnowledgeSourceTdbTest {
         LabelToConceptLinker linker = dbpedia.getLinker();
         Set<String> result = dbpedia.getSynonymsLexical(linker.linkToSingleConcept("SAP"));
         assertTrue(result.contains("SAP SE"));
+    }
+
+    @Test
+    void isHypernymous(){
+        dbpedia.setExcludedHypernyms(new HashSet<>());
+        LabelToConceptLinker linker = dbpedia.getLinker();
+        assertTrue(dbpedia.isHypernymous(linker.linkToSingleConcept("SAP SE"),
+                linker.linkToSingleConcept("organisation")));
+        assertFalse(dbpedia.isHypernymous(linker.linkToSingleConcept("SAP SE"),
+                linker.linkToSingleConcept("cat")));
+    }
+
+    @Test
+    void isStrongFormSynonymous(){
+        LabelToConceptLinker linker = dbpedia.getLinker();
+        assertTrue(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("SAP"),
+                linker.linkToSingleConcept("SAP SE")));
+        assertTrue(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("swap"),
+                linker.linkToSingleConcept("swap (finance)")));
+        assertFalse(dbpedia.isStrongFormSynonymous(linker.linkToSingleConcept("SAP"),
+                linker.linkToSingleConcept("car")));
+        assertFalse(dbpedia.isStrongFormSynonymous(null, linker.linkToSingleConcept("car")));
     }
 
     @Test
