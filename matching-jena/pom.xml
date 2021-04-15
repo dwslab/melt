@@ -19,7 +19,7 @@
 
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-            <artifactId>matching-yaaa</artifactId>
+            <artifactId>yet-another-alignment-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
