@@ -18,9 +18,13 @@ jobs:
       with:
         path: |
           ~/.m2
-          ~/.cache/pip
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2-
+    - name: Cache Python packages
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cache/pip
+        key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}
 #    From a runtime perspective, it would make sense to cache OAEI files. However, in order to test also the
 #    TrackRepostitory and related classes, we decided not to cache those files.
 #    - name: Cache OAEI
