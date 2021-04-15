@@ -20,7 +20,7 @@
         <!-- OWL API 5.x requires Java 8. OWLAPI 4.x requires Java 7. OWL API 3.5.x requires Java 6. -->
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-            <artifactId>matching-yaaa</artifactId>
+            <artifactId>yet-another-alignment-api</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
