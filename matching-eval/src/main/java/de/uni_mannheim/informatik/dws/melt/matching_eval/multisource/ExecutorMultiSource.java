@@ -62,6 +62,22 @@ public class ExecutorMultiSource {
         return resultSet;
     }
     
+    public static ExecutionResultSetMultiSource runMultipleMatchersWithAdditionalGraphs(List<TestCase> testCases, Map<String, Object> matchers, Properties additionalParameters, List<URL> additionalGraphs){
+        ExecutionResultSetMultiSource resultSet = new ExecutionResultSetMultiSource();        
+        for(Entry<Track, List<TestCase>> trackToTestcases : groupTestCasesByTrack(testCases).entrySet()){
+            Track track = trackToTestcases.getKey();
+            List<TestCase> trackTestCases = trackToTestcases.getValue();
+            List<URL> distinctOntologies = Track.getDistinctOntologies(trackTestCases);
+            distinctOntologies.addAll(additionalGraphs);
+            for(Entry<String, Object> matcher : matchers.entrySet()){
+                ExecutionResultMultiSource r = run(trackTestCases, matcher.getValue(), matcher.getKey(), distinctOntologies, getMostSpecificPartitioner(track), additionalParameters);
+                if(r != null)
+                    resultSet.add(r);
+            }
+        }
+        return resultSet;
+    }
+    
     public static ExecutionResultSetMultiSource run(Track track, Object matcher){
         return run(track.getTestCases(), matcher,Executor.getMatcherName(matcher));
     }

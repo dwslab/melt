@@ -40,12 +40,17 @@ public class ExecutorMultiSourceParallel {
     }
     
     public ExecutionResultSetMultiSource runMultipleMatchersMultipleTracks(List<Track> tracks, Map<String, Object> matchers, Properties additionalParameters){
+        return runMultipleMatchersMultipleTracks(tracks, matchers, additionalParameters, new ArrayList<>());
+    }
+    
+    public ExecutionResultSetMultiSource runMultipleMatchersMultipleTracks(List<Track> tracks, Map<String, Object> matchers, Properties additionalParameters, List<URL> additionalGraphs){
         ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
 
         List<Future<ExecutionResultMultiSource>> futures = new ArrayList<>(tracks.size() * matchers.size());
         for(Track track : tracks){
             List<TestCase> trackTestCases = track.getTestCases();
             List<URL> distinctOntologies = Track.getDistinctOntologies(trackTestCases);
+            distinctOntologies.addAll(additionalGraphs);
             for(Entry<String, Object> matcher : matchers.entrySet()){
                 futures.add(exec.submit(new ExecutionRunnerMultiSource(
                         trackTestCases, matcher.getValue(), matcher.getKey(), distinctOntologies, 
@@ -67,6 +72,8 @@ public class ExecutorMultiSourceParallel {
         exec.shutdown();
         return results;
     }
+    
+    
     
     public ExecutionResultSetMultiSource runMultipleMatchers(Track track, Map<String, Object> matchers){
         return runMultipleMatchers(track.getTestCases(), matchers);

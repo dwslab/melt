@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.OntoInfo;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,6 +15,7 @@ import java.lang.ProcessBuilder.Redirect;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -21,18 +23,24 @@ import java.util.List;
 import java.util.Properties;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Call the paris matcher.
+ * This is a wrapper for <a href="http://webdam.inria.fr/paris/">PARIS matching system</a> by Fabian Suchanek et al.
+ * The corresponding paper is called <a href="https://arxiv.org/abs/1111.7164">PARIS: Probabilistic Alignment of Relations, Instances, and Schema</a>.
+ * It will download the matcher if not already done and execute it as an external process. The equivalence files of the last iteration 
+ * are then read into a YAAA aligment. It is tested to run with java 1.7 and 1.8.
  */
-public class ParisMatcher extends MatcherYAAAJena {
+public class ParisMatcher extends MatcherYAAAJena{
     private static final Logger LOGGER = LoggerFactory.getLogger(ParisMatcher.class);
     
-    private static URL PARIS_WEB_LOCATION = createURL("http://webdam.inria.fr/paris/releases/paris_0_3.jar");
+    private static final URL PARIS_WEB_LOCATION = createURL("http://webdam.inria.fr/paris/releases/paris_0_3.jar");
+    private static final File SYSTEM_TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
     
     /**
      * Path to the Paris matcher jar file.
@@ -41,9 +49,9 @@ public class ParisMatcher extends MatcherYAAAJena {
     
     /**
      * Folder in which the ontologies and output file of PARIS are stored.
-     * It is removed after a run.
+     * The created folders in it are removed after a run.
      */
-    private File tmpFolderForResults;
+    private File tmpFolder;
     
     /**
      * The java command which is usually just "java" but can also be a fully qualified path to a java runtime.
@@ -60,13 +68,13 @@ public class ParisMatcher extends MatcherYAAAJena {
      * Be careful with the second parameter because the provided folder is deleted after a run.
      * Thus specify a non existent folder which is created and then removed.
      * @param pathToParisJar Path to the Paris matcher jar file. If file is not existent then version 0.3 it will be downloaded.
-     * @param tmpFolderForResultsDeleted Folder in which the ontologies and output file of PARIS are stored. It is removed after a run. BE CAREFUL!!!
+     * @param tmpFolder Folder in which the ontologies and output file of PARIS are stored. The created folders in it are removed after a run.
      * @param javaCommand The java command which is usually just "java" but can also be a fully qualified path to a java runtime.
      * @param javaRuntimeArguments  A list of java runtime arguments like "-Xmx2g" or the like
      */
-    public ParisMatcher(File pathToParisJar, File tmpFolderForResultsDeleted, String javaCommand, List<String> javaRuntimeArguments) {
+    public ParisMatcher(File pathToParisJar, File tmpFolder, String javaCommand, List<String> javaRuntimeArguments) {
         this.pathToParisJar = pathToParisJar;
-        this.tmpFolderForResults = tmpFolderForResultsDeleted;
+        this.tmpFolder = tmpFolder;
         this.javaCommand = javaCommand;
         this.javaRuntimeArguments = javaRuntimeArguments;
         
@@ -87,16 +95,25 @@ public class ParisMatcher extends MatcherYAAAJena {
      * @param javaRuntimeArguments  A list of java runtime arguments like "-Xmx2g" or the like
      */
     public ParisMatcher(File pathToParisJar, String javaCommand, List<String> javaRuntimeArguments) {
-        this(pathToParisJar, createTempDir("paris_matcher"), javaCommand, javaRuntimeArguments);
+        this(pathToParisJar, SYSTEM_TMP_DIR, javaCommand, javaRuntimeArguments);
     }
     
     /**
-     * Constructor which uses the default java executable (available in PATH) and maximum heap size of 10G.
+     * Constructor which uses the default java executable (available in PATH) and no java parameters are used.
      * A temp directory as a storage for files produced by PARIS is used.
      * @param pathToParisJar Path to the Paris matcher jar file. If file is not existent then version 0.3 it will be downloaded.
      */
     public ParisMatcher(File pathToParisJar) {
-        this(pathToParisJar, "java", Arrays.asList("-Xmx10g"));
+        this(pathToParisJar, "java", new ArrayList<>());
+    }
+    
+    /**
+     * Constructor which only needs the additional java runtime arguments.
+     * A temp directory as a storage for files produced by PARIS is used.
+     * @param javaRuntimeArguments A list of java runtime arguments like "-Xmx2g" or the like
+     */
+    public ParisMatcher(List<String> javaRuntimeArguments) {
+        this(new File("paris.jar"), "java", javaRuntimeArguments);
     }
     
     /**
@@ -109,20 +126,71 @@ public class ParisMatcher extends MatcherYAAAJena {
     }
     
     @Override
-    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        File outputFolder = new File(tmpFolderForResults, "outputfolder");
+    public Alignment match(URL source, URL target, Alignment inputAlignment, Properties properties) throws Exception {
+        File runFolder = createFolderWithRandomNumberInDirectory(this.tmpFolder, "paris_run");
+        runFolder.mkdirs();
+        
+        File outputFolder = new File(runFolder, "outputfolder");
         outputFolder.mkdirs();
         
         //1. save ontology in correct format
-        File sourceOntology = new File(tmpFolderForResults, "source.nt");
-        File targetOntology = new File(tmpFolderForResults, "target.nt");
-        saveOntologyToNTripleFile(source, sourceOntology);
-        saveOntologyToNTripleFile(target, targetOntology);
+        if(source.getPath().endsWith(".nt") && target.getPath().endsWith(".nt")){
+            LOGGER.info("Run Paris by coping source and target URLs");
+            FileUtils.copyURLToFile(source, new File(runFolder, "source.nt"));
+            FileUtils.copyURLToFile(target, new File(runFolder, "target.nt"));
+        }else if(source.getPath().endsWith(".nt")){
+            //only source is nt file:
+            LOGGER.info("Run Paris by copying source and transforming target to N-TRIPLE");
+            FileUtils.copyURLToFile(source, new File(runFolder, "source.nt"));
+            urlToNTripleFile(target, new File(runFolder, "target.nt"));
+        }else if(target.getPath().endsWith(".nt")){
+            //only target is nt file
+            LOGGER.info("Run Paris by transforming source to N-TRIPLE and copying target");
+            urlToNTripleFile(source, new File(runFolder, "source.nt"));
+            FileUtils.copyURLToFile(target, new File(runFolder, "target.nt"));
+        }else{
+            //none is nt file
+            LOGGER.info("Run Paris by transforming source and target to N-TRIPLE");
+            urlToNTripleFile(source, new File(runFolder, "source.nt"));
+            urlToNTripleFile(target, new File(runFolder, "target.nt"));
+        }
         
         //2. call external jar file
         //do not load it in this JVM because the classpath can collide (just start it as external process)
         try {
-            runProcess(tmpFolderForResults);
+            runProcess(runFolder);
+        } catch (IOException ex) {
+            LOGGER.error("Could not start external PARIS matcher", ex);
+        } catch (InterruptedException ex) {
+            LOGGER.error("External process is interrupted", ex);
+        }
+        
+        //3. load the results from the output folder
+        Alignment alignment = getAlignment(outputFolder);
+        //4. delete the created folder and files
+        FileUtils.deleteDirectory(runFolder);
+        return alignment;
+    }
+    
+    
+            
+    @Override
+    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
+        LOGGER.info("Run Paris based on OntModels.");
+        File runFolder = createFolderWithRandomNumberInDirectory(this.tmpFolder, "paris_run");
+        runFolder.mkdirs();
+        
+        File outputFolder = new File(runFolder, "outputfolder");
+        outputFolder.mkdirs();
+        
+        //1. save ontology in correct format
+        modelToNTripleFile(source, new File(runFolder, "source.nt"));
+        modelToNTripleFile(target, new File(runFolder, "target.nt"));
+                
+        //2. call external jar file
+        //do not load it in this JVM because the classpath can collide (just start it as external process)
+        try {
+            runProcess(runFolder);
         } catch (IOException ex) {
             LOGGER.error("Could not start external PARIS matcher", ex);
         } catch (InterruptedException ex) {
@@ -133,17 +201,20 @@ public class ParisMatcher extends MatcherYAAAJena {
         Alignment alignment = getAlignment(outputFolder);
         
         //4. delete the created folder and files
-        FileUtils.deleteDirectory(tmpFolderForResults);
+        FileUtils.deleteDirectory(runFolder);
         
         return alignment;
     }
     
     private void runProcess(File tmpFolderForResults) throws IOException, InterruptedException{
-        List<String> command = Arrays.asList(
-                javaCommand, "-jar", pathToParisJar.getCanonicalPath(), 
+        List<String> command = new ArrayList<>();
+        command.add(javaCommand);
+        command.addAll(javaRuntimeArguments);
+        command.addAll(Arrays.asList("-jar", pathToParisJar.getCanonicalPath(), 
                 "source.nt", "target.nt", "outputfolder" //the folder and files are created in the match method (PARIS only accepts relative folder)
-        );
-        LOGGER.info("Start external process (in folder {}) with following command: {}", tmpFolderForResults.getCanonicalPath(), String.join(" ", command));
+        ));
+        
+        LOGGER.info("Start external process (in folder {}) with following command: {}", tmpFolderForResults.getAbsolutePath(), String.join(" ", command));
 
         ProcessBuilder pb = new ProcessBuilder(command);
         pb.directory(tmpFolderForResults);
@@ -160,7 +231,7 @@ public class ParisMatcher extends MatcherYAAAJena {
     }
     
     private Alignment getAlignment(File outputFolder){
-        List<File> equivalenceFiles = new ArrayList();
+        List<File> equivalenceFiles = new ArrayList<>();
         //List<File> superRelationOneFiles = new ArrayList();
         //List<File> superRelationTwoFiles = new ArrayList();
         //List<File> superClassOneFiles = new ArrayList();
@@ -229,8 +300,14 @@ public class ParisMatcher extends MatcherYAAAJena {
     }
     
     
-    protected void saveOntologyToNTripleFile(OntModel m, File f){
-        try(OutputStream writer = new BufferedOutputStream(new FileOutputStream(f))){
+    private void urlToNTripleFile(URL url, File file){
+        Model model = ModelFactory.createDefaultModel();
+        RDFDataMgr.read(model, url.toString());
+        modelToNTripleFile(model, file);
+    }
+    
+    private void modelToNTripleFile(Model m, File file){
+        try(OutputStream writer = new BufferedOutputStream(new FileOutputStream(file))){
             RDFDataMgr.write(writer, m, RDFFormat.NTRIPLES);
         } catch (IOException ex) {
             LOGGER.error("Could not write OntModel to file.", ex);
@@ -244,14 +321,12 @@ public class ParisMatcher extends MatcherYAAAJena {
             throw new IllegalArgumentException(error.getMessage(), error);
         }
     }
-    
-    private static File createTempDir(String prefix){
-        try {
-            return Files.createTempDirectory(prefix).toFile();
-        } catch (IOException ex) {
-            LOGGER.warn("Could not create a temp directory (use one in current working directory)", ex);
-            return new File(prefix);
-        }
+        
+    private static final SecureRandom random = new SecureRandom();
+    private static File createFolderWithRandomNumberInDirectory(File folder, String prefix){
+        long n = random.nextLong();
+        n = (n == Long.MIN_VALUE) ? 0 : Math.abs(n);
+        return new File(folder, prefix + "-" + n);
     }
     
     /**
