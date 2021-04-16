@@ -220,24 +220,18 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html#sealsHome">sealsHome</a></span></code>
-<div class="block">Path to the SEALS home directory.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>private long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html#timeout">timeout</a></span></code>
 <div class="block">Time out for the external seals process.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/TimeUnit.html?is-external=true" title="class or interface in java.util.concurrent">TimeUnit</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html#timeoutTimeUnit">timeoutTimeUnit</a></span></code>
 <div class="block">Time unit for the process time out.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html#tmpFolder">tmpFolder</a></span></code>
 <div class="block">Path to a temporary folder.</div>
@@ -276,9 +270,8 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html#MatcherSeals-java.io.File-java.io.File-java.io.File-java.io.File-long-java.util.concurrent.TimeUnit-java.util.List-boolean-boolean-java.lang.String-">MatcherSeals</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;matcherFileOrFolder,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html#MatcherSeals-java.io.File-java.io.File-java.io.File-long-java.util.concurrent.TimeUnit-java.util.List-boolean-boolean-java.lang.String-">MatcherSeals</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;matcherFileOrFolder,
             <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;sealsClientJar,
-            <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;sealsHome,
             <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;tmpFolder,
             long&nbsp;timeout,
             <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/TimeUnit.html?is-external=true" title="class or interface in java.util.concurrent">TimeUnit</a>&nbsp;timeoutTimeUnit,
@@ -516,16 +509,6 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <div class="block">Path to the JAR of the SEALS client.</div>
 </li>
 </ul>
-<a name="sealsHome">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>sealsHome</h4>
-<pre>private&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a> sealsHome</pre>
-<div class="block">Path to the SEALS home directory.</div>
-</li>
-</ul>
 <a name="tmpFolder">
 <!--   -->
 </a>
@@ -533,7 +516,8 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <li class="blockList">
 <h4>tmpFolder</h4>
 <pre>private&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a> tmpFolder</pre>
-<div class="block">Path to a temporary folder. Default is set to the systems tmp.</div>
+<div class="block">Path to a temporary folder. Default is set to the systems tmp.
+ In this folder creates folders will be created and can be removed after execution.</div>
 </li>
 </ul>
 <a name="timeout">
@@ -626,7 +610,7 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="MatcherSeals-java.io.File-java.io.File-java.io.File-java.io.File-long-java.util.concurrent.TimeUnit-java.util.List-boolean-boolean-java.lang.String-">
+<a name="MatcherSeals-java.io.File-java.io.File-java.io.File-long-java.util.concurrent.TimeUnit-java.util.List-boolean-boolean-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -634,7 +618,6 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <h4>MatcherSeals</h4>
 <pre>public&nbsp;MatcherSeals(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;matcherFileOrFolder,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;sealsClientJar,
-                    <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;sealsHome,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;tmpFolder,
                     long&nbsp;timeout,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/TimeUnit.html?is-external=true" title="class or interface in java.util.concurrent">TimeUnit</a>&nbsp;timeoutTimeUnit,
@@ -648,7 +631,6 @@ extends <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/mat
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>matcherFileOrFolder</code> - The file (zip file) or folder which represents one matcher.</dd>
 <dd><code>sealsClientJar</code> - The path to the local SEALS client JAR file.</dd>
-<dd><code>sealsHome</code> - SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).</dd>
 <dd><code>tmpFolder</code> - folder to store the matcher temporary.</dd>
 <dd><code>timeout</code> - Timeout for one testcase as long.</dd>
 <dd><code>timeoutTimeUnit</code> - The unit of the timeout.</dd>

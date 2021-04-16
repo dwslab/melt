@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":9,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -139,7 +139,10 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ParisMatcher</span>
 extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena">MatcherYAAAJena</a></pre>
-<div class="block">Call the paris matcher.</div>
+<div class="block">This is a wrapper for <a href="http://webdam.inria.fr/paris/">PARIS matching system</a> by Fabian Suchanek et al.
+ The corresponding paper is called <a href="https://arxiv.org/abs/1111.7164">PARIS: Probabilistic Alignment of Relations, Instances, and Schema</a>.
+ It will download the matcher if not already done and execute it as an external process. The equivalence files of the last iteration 
+ are then read into a YAAA aligment. It is tested to run with java 1.7 and 1.8.</div>
 </li>
 </ul>
 </div>
@@ -206,8 +209,16 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/security/SecureRandom.html?is-external=true" title="class or interface in java.security">SecureRandom</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#random">random</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#SYSTEM_TMP_DIR">SYSTEM_TMP_DIR</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#tmpFolderForResults">tmpFolderForResults</a></span></code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#tmpFolder">tmpFolder</a></span></code>
 <div class="block">Folder in which the ontologies and output file of PARIS are stored.</div>
 </td>
 </tr>
@@ -239,12 +250,12 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#ParisMatcher-java.io.File-">ParisMatcher</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;pathToParisJar)</code>
-<div class="block">Constructor which uses the default java executable (available in PATH) and maximum heap size of 10G.</div>
+<div class="block">Constructor which uses the default java executable (available in PATH) and no java parameters are used.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#ParisMatcher-java.io.File-java.io.File-java.lang.String-java.util.List-">ParisMatcher</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;pathToParisJar,
-            <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;tmpFolderForResultsDeleted,
+            <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;tmpFolder,
             <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;javaCommand,
             <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;javaRuntimeArguments)</code>
 <div class="block">Constructor with all attributes.</div>
@@ -255,6 +266,11 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
             <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;javaCommand,
             <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;javaRuntimeArguments)</code>
 <div class="block">Constructor which uses a temp directory as a storage for files produced by PARIS.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#ParisMatcher-java.util.List-">ParisMatcher</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;javaRuntimeArguments)</code>
+<div class="block">Constructor which only needs the additional java runtime arguments.</div>
 </td>
 </tr>
 </table>
@@ -274,7 +290,8 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#createTempDir-java.lang.String-">createTempDir</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;prefix)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#createFolderWithRandomNumberInDirectory-java.io.File-java.lang.String-">createFolderWithRandomNumberInDirectory</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder,
+                                       <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;prefix)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a></code></td>
@@ -304,13 +321,28 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 </td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#match-java.net.URL-java.net.URL-de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment-java.util.Properties-">match</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;source,
+     <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;target,
+     <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
+     <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)</code>
+<div class="block">Aligns two ontologies specified via URL, with an input alignment
+ as Alignment object, and returns the mapping of the resulting alignment.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>private void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#modelToNTripleFile-org.apache.jena.rdf.model.Model-java.io.File-">modelToNTripleFile</a></span>(org.apache.jena.rdf.model.Model&nbsp;m,
+                  <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>private void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#runProcess-java.io.File-">runProcess</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;tmpFolderForResults)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#saveOntologyToNTripleFile-org.apache.jena.ontology.OntModel-java.io.File-">saveOntologyToNTripleFile</a></span>(org.apache.jena.ontology.OntModel&nbsp;m,
-                         <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;f)</code>&nbsp;</td>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>private void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html#urlToNTripleFile-java.net.URL-java.io.File-">urlToNTripleFile</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+                <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -318,7 +350,7 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_jena.<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena">MatcherYAAAJena</a></h3>
-<code><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html#getModelSpec--">getModelSpec</a>, <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html#match-java.net.URL-java.net.URL-de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment-java.util.Properties-">match</a>, <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html#readOntology-java.net.URL-org.apache.jena.ontology.OntModelSpec-">readOntology</a></code></li>
+<code><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html#getModelSpec--">getModelSpec</a>, <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html#readOntology-java.net.URL-org.apache.jena.ontology.OntModelSpec-">readOntology</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAA">
@@ -391,7 +423,16 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <ul class="blockList">
 <li class="blockList">
 <h4>PARIS_WEB_LOCATION</h4>
-<pre>private static&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a> PARIS_WEB_LOCATION</pre>
+<pre>private static final&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a> PARIS_WEB_LOCATION</pre>
+</li>
+</ul>
+<a name="SYSTEM_TMP_DIR">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SYSTEM_TMP_DIR</h4>
+<pre>private static final&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a> SYSTEM_TMP_DIR</pre>
 </li>
 </ul>
 <a name="pathToParisJar">
@@ -404,15 +445,15 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <div class="block">Path to the Paris matcher jar file.</div>
 </li>
 </ul>
-<a name="tmpFolderForResults">
+<a name="tmpFolder">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>tmpFolderForResults</h4>
-<pre>private&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a> tmpFolderForResults</pre>
+<h4>tmpFolder</h4>
+<pre>private&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a> tmpFolder</pre>
 <div class="block">Folder in which the ontologies and output file of PARIS are stored.
- It is removed after a run.</div>
+ The created folders in it are removed after a run.</div>
 </li>
 </ul>
 <a name="javaCommand">
@@ -428,11 +469,20 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <a name="javaRuntimeArguments">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>javaRuntimeArguments</h4>
 <pre>private&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; javaRuntimeArguments</pre>
 <div class="block">A list of java runtime arguments like "-Xmx2g" or the like</div>
+</li>
+</ul>
+<a name="random">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>random</h4>
+<pre>private static final&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/security/SecureRandom.html?is-external=true" title="class or interface in java.security">SecureRandom</a> random</pre>
 </li>
 </ul>
 </li>
@@ -450,7 +500,7 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <li class="blockList">
 <h4>ParisMatcher</h4>
 <pre>public&nbsp;ParisMatcher(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;pathToParisJar,
-                    <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;tmpFolderForResultsDeleted,
+                    <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;tmpFolder,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;javaCommand,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;javaRuntimeArguments)</pre>
 <div class="block">Constructor with all attributes.
@@ -459,7 +509,7 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pathToParisJar</code> - Path to the Paris matcher jar file. If file is not existent then version 0.3 it will be downloaded.</dd>
-<dd><code>tmpFolderForResultsDeleted</code> - Folder in which the ontologies and output file of PARIS are stored. It is removed after a run. BE CAREFUL!!!</dd>
+<dd><code>tmpFolder</code> - Folder in which the ontologies and output file of PARIS are stored. The created folders in it are removed after a run.</dd>
 <dd><code>javaCommand</code> - The java command which is usually just "java" but can also be a fully qualified path to a java runtime.</dd>
 <dd><code>javaRuntimeArguments</code> - A list of java runtime arguments like "-Xmx2g" or the like</dd>
 </dl>
@@ -490,11 +540,26 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <li class="blockList">
 <h4>ParisMatcher</h4>
 <pre>public&nbsp;ParisMatcher(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;pathToParisJar)</pre>
-<div class="block">Constructor which uses the default java executable (available in PATH) and maximum heap size of 10G.
+<div class="block">Constructor which uses the default java executable (available in PATH) and no java parameters are used.
  A temp directory as a storage for files produced by PARIS is used.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pathToParisJar</code> - Path to the Paris matcher jar file. If file is not existent then version 0.3 it will be downloaded.</dd>
+</dl>
+</li>
+</ul>
+<a name="ParisMatcher-java.util.List-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ParisMatcher</h4>
+<pre>public&nbsp;ParisMatcher(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;javaRuntimeArguments)</pre>
+<div class="block">Constructor which only needs the additional java runtime arguments.
+ A temp directory as a storage for files produced by PARIS is used.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>javaRuntimeArguments</code> - A list of java runtime arguments like "-Xmx2g" or the like</dd>
 </dl>
 </li>
 </ul>
@@ -518,6 +583,38 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="match-java.net.URL-java.net.URL-de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment-java.util.Properties-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>match</h4>
+<pre>public&nbsp;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;match(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;source,
+                       <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;target,
+                       <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
+                       <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)
+                throws <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAA.html#match-java.net.URL-java.net.URL-de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment-java.util.Properties-">MatcherYAAA</a></code></span></div>
+<div class="block">Aligns two ontologies specified via URL, with an input alignment
+ as Alignment object, and returns the mapping of the resulting alignment.
+
+ Note: This method might be called multiple times in a row when using the evaluation framework.
+ Make sure to return a mapping which is specific to the given inputs.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html#match-java.net.URL-java.net.URL-de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment-java.util.Properties-">match</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena">MatcherYAAAJena</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>source</code> - this url represents the source ontology</dd>
+<dd><code>target</code> - this url represents the target ontology</dd>
+<dd><code>inputAlignment</code> - this mapping represents the input alignment</dd>
+<dd><code>properties</code> - additional properties</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The resulting mapping of the matching process.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code> - An exception that was risen while matching.</dd>
+</dl>
+</li>
+</ul>
 <a name="match-org.apache.jena.ontology.OntModel-org.apache.jena.ontology.OntModel-de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment-java.util.Properties-">
 <!--   -->
 </a>
@@ -596,14 +693,24 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <pre>private&nbsp;<a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;getAlignmentHighestIteration(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;files)</pre>
 </li>
 </ul>
-<a name="saveOntologyToNTripleFile-org.apache.jena.ontology.OntModel-java.io.File-">
+<a name="urlToNTripleFile-java.net.URL-java.io.File-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>saveOntologyToNTripleFile</h4>
-<pre>protected&nbsp;void&nbsp;saveOntologyToNTripleFile(org.apache.jena.ontology.OntModel&nbsp;m,
-                                         <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;f)</pre>
+<h4>urlToNTripleFile</h4>
+<pre>private&nbsp;void&nbsp;urlToNTripleFile(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+                              <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</pre>
+</li>
+</ul>
+<a name="modelToNTripleFile-org.apache.jena.rdf.model.Model-java.io.File-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>modelToNTripleFile</h4>
+<pre>private&nbsp;void&nbsp;modelToNTripleFile(org.apache.jena.rdf.model.Model&nbsp;m,
+                                <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</pre>
 </li>
 </ul>
 <a name="createURL-java.lang.String-">
@@ -615,13 +722,14 @@ extends <a href="../../../../../../../de/uni_mannheim/informatik/dws/melt/matchi
 <pre>private static&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;createURL(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;url)</pre>
 </li>
 </ul>
-<a name="createTempDir-java.lang.String-">
+<a name="createFolderWithRandomNumberInDirectory-java.io.File-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>createTempDir</h4>
-<pre>private static&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;createTempDir(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;prefix)</pre>
+<h4>createFolderWithRandomNumberInDirectory</h4>
+<pre>private static&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;createFolderWithRandomNumberInDirectory(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder,
+                                                            <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;prefix)</pre>
 </li>
 </ul>
 </li>
