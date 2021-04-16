@@ -206,7 +206,10 @@ Matches properties based on same subject and object and the distribution.
 
 ## ParisMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.java)
 
-Call the paris matcher.
+This is a wrapper for <a href="http://webdam.inria.fr/paris/">PARIS matching system</a> by Fabian Suchanek et al.
+ The corresponding paper is called <a href="https://arxiv.org/abs/1111.7164">PARIS: Probabilistic Alignment of Relations, Instances, and Schema</a>.
+ It will download the matcher if not already done and execute it as an external process. The equivalence files of the last iteration 
+ are then read into a YAAA aligment. It is tested to run with java 1.7 and 1.8.
 
 *Keywords: Paris Matcher*
 
@@ -320,4 +323,10 @@ Better use MatcherYAAAPipeline because it can combine matchers which use differe
 
 
 *Keywords: MatcherYAAA Owl Api*
+
+## MatcherYAAA [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_owlapi/MatcherYAAA.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-owlapi/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_owlapi/MatcherYAAA.java)
+
+A matcher template for matchers that are based on the YAAA Framework.
+
+*Keywords: MatcherYAAA*
 
