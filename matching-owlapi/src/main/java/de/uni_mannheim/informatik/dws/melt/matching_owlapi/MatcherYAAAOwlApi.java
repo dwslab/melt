@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_owlapi;
 
-import de.uni_mannheim.informatik.dws.melt.matching_yaaa.MatcherYAAA;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 
 import java.net.URL;
@@ -33,6 +32,5 @@ public abstract class MatcherYAAAOwlApi extends MatcherYAAA {
         return this.match(owlapiSource, owlapiTarget, inputAlignment, properties);
     }
 
-    @Override
     public abstract Alignment match(OWLOntology source, OWLOntology target, Alignment inputAlignment, Properties p) throws Exception ;
 }

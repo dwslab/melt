@@ -7,6 +7,7 @@ import java.util.Set;
  */
 public interface LabelToConceptLinker {
 
+
     /**
      * Queries for a concept and returns a link that represents an entity in the background knowledge source such as the
      * {@link SemanticWordRelationDictionary}. Note that the link may not always be something intuitive such as a URI but
@@ -38,5 +39,4 @@ public interface LabelToConceptLinker {
      * @param nameOfLinker Name to be set.
      */
     void setNameOfLinker(String nameOfLinker);
-
 }
