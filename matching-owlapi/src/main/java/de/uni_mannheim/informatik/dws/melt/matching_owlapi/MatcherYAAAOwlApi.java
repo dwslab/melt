@@ -1,14 +1,14 @@
 package de.uni_mannheim.informatik.dws.melt.matching_owlapi;
 
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
-
+import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
 import java.net.URL;
 import java.util.Properties;
 
 import org.semanticweb.owlapi.model.OWLOntology;
 
 
-public abstract class MatcherYAAAOwlApi extends MatcherYAAA {
+public abstract class MatcherYAAAOwlApi extends MatcherYAAA implements IMatcher<OWLOntology, Alignment, Properties> {
 
 
     /**
@@ -32,5 +32,6 @@ public abstract class MatcherYAAAOwlApi extends MatcherYAAA {
         return this.match(owlapiSource, owlapiTarget, inputAlignment, properties);
     }
 
+    @Override
     public abstract Alignment match(OWLOntology source, OWLOntology target, Alignment inputAlignment, Properties p) throws Exception ;
 }
