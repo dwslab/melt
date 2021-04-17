@@ -58,8 +58,7 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
         }
         if(inputAlignment.getDistinctConfidencesAsSet().size() == 1){
             // Alignment api says that hungarian algorithm runs in infinite loop when all correspondences have the same
-            // confidence.
-            // We use NaiveDescendingExtractor here to obtain deterministic results.
+            // confidence. We use NaiveDescendingExtractor here to obtain deterministic results.
             LOGGER.warn("The input alignment has only one confidence. Defaulting to make a random one to one alignment.");
             return NaiveDescendingExtractor.filter(inputAlignment);
         }

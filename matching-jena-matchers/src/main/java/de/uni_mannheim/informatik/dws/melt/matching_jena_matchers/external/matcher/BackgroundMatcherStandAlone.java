@@ -133,4 +133,13 @@ public class BackgroundMatcherStandAlone extends MatcherYAAAJena {
     public LabelToConceptLinker getLinker(){
         return backgroundKnowledgeSource.getLinker();
     }
+
+    public void setIsVerboseLoggingOutput(boolean isVerboseLoggingOutput){
+        this.simpleStringMatcher.setVerboseLoggingOutput(isVerboseLoggingOutput);
+        this.backgroundMatcher.setVerboseLoggingOutput(isVerboseLoggingOutput);
+    }
+
+    public void getIsVerboseLoggingOutput(){
+        this.backgroundMatcher.isVerboseLoggingOutput();
+    }
 }

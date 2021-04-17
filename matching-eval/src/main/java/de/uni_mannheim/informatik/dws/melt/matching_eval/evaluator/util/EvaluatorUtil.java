@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
  * @author Sven Hertling, Jan Portisch
  */
 public class EvaluatorUtil {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorCopyResults.class);
 
     /**
@@ -31,5 +33,4 @@ public class EvaluatorUtil {
             LOGGER.error("Couldn't copy the results from the matcher to the results directory.", ex);
         }
     }
-    
 }

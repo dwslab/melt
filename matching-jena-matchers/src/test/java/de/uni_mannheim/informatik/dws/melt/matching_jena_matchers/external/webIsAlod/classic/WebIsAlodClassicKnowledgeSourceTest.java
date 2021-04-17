@@ -207,6 +207,19 @@ class WebIsAlodClassicKnowledgeSourceTest {
     }
 
     @Test
+    void setGetMinimumConfidence(){
+        WebIsAlodClassicKnowledgeSource source = new WebIsAlodClassicKnowledgeSource();
+
+        // ok case
+        source.setMinimumConfidence(0.5);
+        assertEquals(0.5, source.getMinimumConfidence());
+
+        // error case
+        source.setMinimumConfidence(1.5);
+        assertNotEquals(1.5, source.getMinimumConfidence());
+    }
+
+    @Test
     void isSynonymousOrHypernymyous(){
 
         //-------------------------------------------

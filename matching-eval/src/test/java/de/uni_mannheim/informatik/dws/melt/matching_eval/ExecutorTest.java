@@ -70,7 +70,7 @@ public class ExecutorTest {
         evaluatorCSV.writeResultsToDirectory(resultsFolder);
         assertTrue(resultsFolder.exists());
 
-        ExecutionResultSet ersLoaded = Executor.loadFromMeltResultsFolder(resultsFolder);
+        ExecutionResultSet ersLoaded = Executor.loadFromEvaluatorCsvResultsFolder(resultsFolder);
         Set<String> matcherNames = new HashSet<>();
 
         Iterator<String> iterator = ersLoaded.getDistinctMatchers().iterator();

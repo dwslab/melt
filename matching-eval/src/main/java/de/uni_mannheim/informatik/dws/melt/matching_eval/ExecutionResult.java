@@ -294,12 +294,7 @@ public class ExecutionResult {
      * @return Comparator that compares ExecutionResults by matcher name.
      */
     public static Comparator<ExecutionResult> getMatcherNameComparator(){
-        return new Comparator<ExecutionResult>() {
-            @Override
-            public int compare(ExecutionResult o1, ExecutionResult o2) {
-                return (int) (o1.getMatcherName().compareTo(o2.getMatcherName()));
-            }
-        };
+        return Comparator.comparing(ExecutionResult::getMatcherName);
     }
 
     /**

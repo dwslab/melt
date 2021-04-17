@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.MultiConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ import java.util.Set;
  * The linker is conceptually similar to
  * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wikidata.WikidataEmbeddingLinker}.
  */
-public class DBpediaEmbeddingLinker implements LabelToConceptLinker {
+public class DBpediaEmbeddingLinker implements LabelToConceptLinker, MultiConceptLinker {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DBpediaEmbeddingLinker.class);
@@ -76,7 +77,7 @@ public class DBpediaEmbeddingLinker implements LabelToConceptLinker {
             for (String linkPart : dbpediaLinker.getUris(link)){
                 if(uris.contains(linkPart)){
                     // confirm the link as soon as we find a vector for it
-                    return labelToBeLinked;
+                    return link;
                 }
                 urisNotFound.add(linkPart);
                 LOGGER.warn("Link part not found: '" + linkPart + "'");
@@ -147,5 +148,15 @@ public class DBpediaEmbeddingLinker implements LabelToConceptLinker {
 
     public Set<String> getUrisNotFound() {
         return urisNotFound;
+    }
+
+    @Override
+    public Set<String> getUris(String multiConceptLink) {
+        return dbpediaLinker.getUris(multiConceptLink);
+    }
+
+    @Override
+    public boolean isMultiConceptLink(String link) {
+        return dbpediaLinker.isMultiConceptLink(link);
     }
 }

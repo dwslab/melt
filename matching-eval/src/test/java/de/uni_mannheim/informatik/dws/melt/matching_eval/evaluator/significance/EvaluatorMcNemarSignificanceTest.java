@@ -79,7 +79,7 @@ class EvaluatorMcNemarSignificanceTest {
         checkFiles(mcNemarBaseDirectory, 1, 1);
 
         // null test (should fail gracefully)
-        evaluator.writeResultsToDirectory(null);
+        //evaluator.writeResultsToDirectory();
         deleteFile(mcNemarBaseDirectory);
     }
 
@@ -98,7 +98,7 @@ class EvaluatorMcNemarSignificanceTest {
         checkFiles(mcNemarBaseDirectory, 21, 1);
 
         // null test (should fail gracefully)
-        evaluator.writeResultsToDirectory(null);
+        //evaluator.writeResultsToDirectory(null);
         deleteFile(mcNemarBaseDirectory);
     }
 

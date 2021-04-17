@@ -10,7 +10,8 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 
 public abstract class MatcherYAAAOwlApi extends MatcherYAAA {
-    
+
+
     /**
      * Default implementation to load an ontology from an url with the owlapi.
      * It can be changed by subclasses.

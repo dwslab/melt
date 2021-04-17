@@ -6,6 +6,8 @@ import eu.sealsproject.platform.res.tool.api.ToolBridgeException;
 import eu.sealsproject.platform.res.tool.api.ToolException;
 import eu.sealsproject.platform.res.tool.api.ToolType;
 import eu.sealsproject.platform.res.tool.impl.AbstractPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * RawMatcher which implements the minimal interface for being executed under
@@ -16,6 +18,8 @@ import eu.sealsproject.platform.res.tool.impl.AbstractPlugin;
  */
 public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatchingToolBridge {
 
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MatcherURL.class);
 
     /**
      * Aligns two ontologies specified via their URL and returns the URL of the
@@ -46,16 +50,17 @@ public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatc
     public URL align(URL source, URL target, URL inputAlignment) throws ToolBridgeException {
         try {
             return match(source, target, inputAlignment);
-        } catch (Exception ex) {
-            throw new ToolException("Tool exception", ex);
+        } catch (Exception exception) {
+            LOGGER.error("Tool Exception!", exception);
+            throw new ToolException("Tool exception", exception);
         }
     }
 
     /**
      * Match two ontologies / knowledge graphs together and returns an alignment.
-     * @param source the source ontology / knowledge graph
-     * @param target the target ontology / knowledge graph
-     * @param inputAlignment the input alignment as URL
+     * @param source The source ontology / knowledge graph
+     * @param target The target ontology / knowledge graph
+     * @param inputAlignment The input alignment as URL
      *                       (<a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">alignment API format</a>)
      * @return An alignment as URL (most often as file URL) the format is again the
      * <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">alignment API format</a>.
@@ -67,8 +72,8 @@ public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatc
      * In our case the DemoMatcher can be executed on the fly. In case
      * prerequisites are required it can be checked here.
      *
-     * @return value which represents the boolean value if the matcher can be
-     * executed
+     * @return Value which represents the boolean value if the matcher can be
+     * executed.
      */
     @Override
     public boolean canExecute() {
@@ -79,7 +84,7 @@ public abstract class MatcherURL extends AbstractPlugin implements IOntologyMatc
      * This tool is an ontology matching tool. SEALS supports the evaluation of
      * different tool types like e.g., reasoner and storage systems.
      *
-     * @return the type of system - in this case OntologyMatchingTool
+     * @return The type of system - in this case OntologyMatchingTool.
      */
     @Override
     public ToolType getType() {

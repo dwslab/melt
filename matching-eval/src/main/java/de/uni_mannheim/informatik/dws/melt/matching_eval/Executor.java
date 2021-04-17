@@ -1,22 +1,18 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
-import java.io.BufferedReader;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
+
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,7 +40,7 @@ public class Executor {
 
     private static final String FALLBACK_MATCHER_NAME = "default_matcher";
 
-    private static Pattern timeRunning = Pattern.compile("MELT: Matcher finished within\\s*(\\d+)\\s*seconds");
+    private static final Pattern TIME_RUNNING = Pattern.compile("MELT: Matcher finished within\\s*(\\d+)\\s*seconds");
 
     /**
      * This method runs the specified matcher on the specified track.
@@ -341,7 +337,7 @@ public class Executor {
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))){
             String line;
             while ((line=reader.readLine()) != null) {
-                Matcher m = timeRunning.matcher(line);
+                Matcher m = TIME_RUNNING.matcher(line);
                 if(m.find())
                     return Long.parseLong(m.group(1));
             }
@@ -486,7 +482,18 @@ public class Executor {
     public static ExecutionResultSet loadFromKnowledgeGraphResultsFolder(String pathToFolder){
         return loadFromFolder(pathToFolder, TrackRepository.Knowledgegraph.V3);
     }
-    
+
+    /**
+     * Load results that are produced by the MELT evaluator {@link de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV}
+     * in the results folder.
+     *
+     * @param folderPath Path to the results folder (the one with the time code e.g. results/results_2020-03-02_08-47-40)
+     * @return {@link ExecutionResultSet} instance with the loaded results.
+     */
+    public static ExecutionResultSet loadFromEvaluatorCsvResultsFolder(String folderPath) {
+        return loadFromEvaluatorCsvResultsFolder(new File(folderPath), new HashSet<>());
+    }
+
     /**
      * Load results that are produced by the MELT evaluator {@link de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV}
      * in the results folder.
@@ -494,7 +501,29 @@ public class Executor {
      * @param folder Path to the results folder (the one with the time code e.g. results/results_2020-03-02_08-47-40)
      * @return {@link ExecutionResultSet} instance with the loaded results.
      */
-    public static ExecutionResultSet loadFromMeltResultsFolder(File folder) {
+    public static ExecutionResultSet loadFromEvaluatorCsvResultsFolder(File folder){
+        return loadFromEvaluatorCsvResultsFolder(folder, new HashSet<>());
+    }
+
+    public static ExecutionResultSet loadFromEvaluatorCsvResultsFolder(String folderPath, LocalTrack localTrack){
+        return loadFromEvaluatorCsvResultsFolder(new File(folderPath), localTrack);
+    }
+
+    public static ExecutionResultSet loadFromEvaluatorCsvResultsFolder(File folder, LocalTrack localTrack){
+        HashSet<LocalTrack> localTracks = new HashSet<>();
+        localTracks.add(localTrack);
+        return loadFromEvaluatorCsvResultsFolder(folder, localTracks);
+    }
+
+    /**
+     * Load results that are produced by the MELT evaluator {@link de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV}
+     * in the results folder.
+     *
+     * @param folder Path to the results folder (the one with the time code e.g. results/results_2020-03-02_08-47-40)
+     * @param localTracks A set of local tracks contained in the evaluation directory.
+     * @return {@link ExecutionResultSet} instance with the loaded results.
+     */
+    public static ExecutionResultSet loadFromEvaluatorCsvResultsFolder(File folder, Set<LocalTrack> localTracks) {
         if(folder == null){
             LOGGER.error("The specified folder is null. Returning empty ResultSet.");
             return new ExecutionResultSet();
@@ -504,9 +533,22 @@ public class Executor {
             return new ExecutionResultSet();
         }
         ExecutionResultSet results = new ExecutionResultSet();
+
+        Map<String, Track> trackNameVersionToTrackMap = TrackRepository.getMapFromTrackNameAndVersionToTrack();
+        if(localTracks != null){
+            for(LocalTrack track : localTracks){
+                try {
+                    trackNameVersionToTrackMap.put(URLEncoder.encode(track.getName(), "UTF-8") + "_" + URLEncoder.encode(track.getVersion(), "UTF-8"), track);
+                } catch (UnsupportedEncodingException e) {
+                    LOGGER.error("Encoding problem with local track '" + track.getName() + "'", e);
+                }
+            }
+        }
+
         for (File trackFolder : folder.listFiles()) {
             if(trackFolder.isDirectory()){
-                Track track = TrackRepository.getMapFromTrackNameAndVersionToTrack().get(trackFolder.getName());
+                Track track = trackNameVersionToTrackMap.get(trackFolder.getName());
+
                 if(track == null){
                     LOGGER.error("cannot read from folder {} because track doesn't exist.", trackFolder.getName());
                     continue;

@@ -147,7 +147,6 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
         }
         return result;
     }
-    
 
     /**
      * Obtain the distinct matcher names in this execution result set.
@@ -163,7 +162,7 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
      * @return Iterable over distinct matcher names.
      */
     public List<String> getDistinctMatchersSorted(){
-        return getSortedList(getDistinctMatchers(), Comparator.comparing(x->x.toLowerCase()));
+        return getSortedList(getDistinctMatchers(), Comparator.comparing(String::toLowerCase));
     }
 
     /**
@@ -179,7 +178,7 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
     }
     
     public List<String> getDistinctMatchersSorted(Track track){
-        return getSortedList(getDistinctMatchers(track), Comparator.comparing(x->x.toLowerCase()));
+        return getSortedList(getDistinctMatchers(track), Comparator.comparing(String::toLowerCase));
     }
 
 
@@ -196,7 +195,7 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
     }
     
     public List<String> getDistinctMatchersSorted(TestCase testCase){
-        return getSortedList(getDistinctMatchers(testCase), Comparator.comparing(x->x.toLowerCase()));
+        return getSortedList(getDistinctMatchers(testCase), Comparator.comparing(String::toLowerCase));
     }
 
     /**
@@ -300,9 +299,9 @@ public class ExecutionResultSet extends ConcurrentIndexedCollection<ExecutionRes
     }
     
     /**
-     * Returns the first execution result in this resultset.
+     * Returns the first execution result in this resultSet.
      * If it is empty return null.
-     * @return first result in this resultset
+     * @return First result in this resultSet.
      */
     public ExecutionResult getFirstResult(){
         if(this.isEmpty())

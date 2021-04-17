@@ -27,7 +27,8 @@ import org.slf4j.LoggerFactory;
  * random, alphabetically, top (this only comes into play when there are correspondences with the same confidence).
  */
 public class EvaluatorRank extends Evaluator {
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorRank.class);
 
     /**
