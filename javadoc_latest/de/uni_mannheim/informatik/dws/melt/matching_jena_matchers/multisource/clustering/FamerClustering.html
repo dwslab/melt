@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -150,6 +150,10 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <td class="colFirst"><code>private static org.slf4j.Logger</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#LOGGER">LOGGER</a></span></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html?is-external=true" title="class or interface in java.util.regex">Pattern</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#NON_DIGIT">NON_DIGIT</a></span></code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -192,13 +196,17 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#getClusteringFromLogicalGraphWithLong-org.gradoop.flink.model.impl.epgm.LogicalGraph-">getClusteringFromLogicalGraphWithLong</a></span>(org.gradoop.flink.model.impl.epgm.LogicalGraph&nbsp;clusteredGraph)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#getClusteringFromLogicalGraphClip-org.gradoop.flink.model.impl.epgm.LogicalGraph-">getClusteringFromLogicalGraphClip</a></span>(org.gradoop.flink.model.impl.epgm.LogicalGraph&nbsp;clusteredGraph)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#getClusteringFromLogicalGraphWithString-org.gradoop.flink.model.impl.epgm.LogicalGraph-">getClusteringFromLogicalGraphWithString</a></span>(org.gradoop.flink.model.impl.epgm.LogicalGraph&nbsp;clusteredGraph)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#getClusteringFromLogicalGraphWithLong-org.gradoop.flink.model.impl.epgm.LogicalGraph-">getClusteringFromLogicalGraphWithLong</a></span>(org.gradoop.flink.model.impl.epgm.LogicalGraph&nbsp;clusteredGraph)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#getClusteringFromLogicalGraphWithString-org.gradoop.flink.model.impl.epgm.LogicalGraph-">getClusteringFromLogicalGraphWithString</a></span>(org.gradoop.flink.model.impl.epgm.LogicalGraph&nbsp;clusteredGraph)</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#getClusters-de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment-org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering-de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor-">getClusters</a></span>(<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
            org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering&nbsp;clusteringAlgorithm,
@@ -206,17 +214,17 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <div class="block">Computes a map between uris and correspoding clusterId.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>private static <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/LogicalGraphAndSourceIds.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.clustering">LogicalGraphAndSourceIds</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#getLogicalGraphFromAlignment-de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment-de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor-">getLogicalGraphFromAlignment</a></span>(<a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
                             <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;datsetIdExtractor)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#instanceOfOne-java.lang.Object-java.lang.Class...-">instanceOfOne</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o,
              <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;...&nbsp;classes)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html#match-java.util.List-de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment-java.lang.Object-">match</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;models,
      <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
@@ -274,10 +282,19 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <a name="clusteringAlgorithm">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>clusteringAlgorithm</h4>
 <pre>private&nbsp;org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering clusteringAlgorithm</pre>
+</li>
+</ul>
+<a name="NON_DIGIT">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>NON_DIGIT</h4>
+<pre>private static&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html?is-external=true" title="class or interface in java.util.regex">Pattern</a> NON_DIGIT</pre>
 </li>
 </ul>
 </li>
@@ -392,6 +409,20 @@ implements <a href="../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <h4>getClusteringFromLogicalGraphWithString</h4>
 <pre>private static&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;&gt;&nbsp;getClusteringFromLogicalGraphWithString(org.gradoop.flink.model.impl.epgm.LogicalGraph&nbsp;clusteredGraph)
                                                                       throws <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getClusteringFromLogicalGraphClip-org.gradoop.flink.model.impl.epgm.LogicalGraph-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClusteringFromLogicalGraphClip</h4>
+<pre>private static&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;&gt;&nbsp;getClusteringFromLogicalGraphClip(org.gradoop.flink.model.impl.epgm.LogicalGraph&nbsp;clusteredGraph)
+                                                                throws <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
