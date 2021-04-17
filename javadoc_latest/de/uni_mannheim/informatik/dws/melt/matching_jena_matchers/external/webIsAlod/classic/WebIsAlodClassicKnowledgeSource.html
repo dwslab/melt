@@ -139,18 +139,22 @@ extends <a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/classic/WebIsAlodClassicKnowledgeSource.html#DEFAULT_MINIMUM_CONFIDENCE">DEFAULT_MINIMUM_CONFIDENCE</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>(package private) <a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/classic/WebIsAlodClassicLinker.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic">WebIsAlodClassicLinker</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/classic/WebIsAlodClassicKnowledgeSource.html#linker">linker</a></span></code>
 <div class="block">The linker that links input strings to terms.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/classic/WebIsAlodClassicKnowledgeSource.html#minimumConfidence">minimumConfidence</a></span></code>
 <div class="block">minimum confidence for synonymy queries.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>(package private) <a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/WebIsAlodSPARQLservice.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod">WebIsAlodSPARQLservice</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/classic/WebIsAlodClassicKnowledgeSource.html#sparqlService">sparqlService</a></span></code>
 <div class="block">SPARQL service instance required for requests.</div>
@@ -172,12 +176,23 @@ extends <a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/classic/WebIsAlodClassicKnowledgeSource.html#WebIsAlodClassicKnowledgeSource--">WebIsAlodClassicKnowledgeSource</a></span>()</code>
-<div class="block">Default constructor.</div>
+<div class="block">Constructor</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/classic/WebIsAlodClassicKnowledgeSource.html#WebIsAlodClassicKnowledgeSource-double-">WebIsAlodClassicKnowledgeSource</a></span>(double&nbsp;minimumConfidence)</code>
-<div class="block">Constructor</div>
+<div class="block">Web Default Constructor</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/classic/WebIsAlodClassicKnowledgeSource.html#WebIsAlodClassicKnowledgeSource-java.lang.String-">WebIsAlodClassicKnowledgeSource</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tdbDirectory)</code>
+<div class="block">Convenience constructor.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/webIsAlod/classic/WebIsAlodClassicKnowledgeSource.html#WebIsAlodClassicKnowledgeSource-java.lang.String-double-">WebIsAlodClassicKnowledgeSource</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tdbDirectory,
+                               double&nbsp;minimumConfidence)</code>
+<div class="block">TDB Default Constructor</div>
 </td>
 </tr>
 </table>
@@ -313,11 +328,24 @@ extends <a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <a name="minimumConfidence">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>minimumConfidence</h4>
 <pre>public&nbsp;double minimumConfidence</pre>
 <div class="block">minimum confidence for synonymy queries.</div>
+</li>
+</ul>
+<a name="DEFAULT_MINIMUM_CONFIDENCE">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>DEFAULT_MINIMUM_CONFIDENCE</h4>
+<pre>public static final&nbsp;double DEFAULT_MINIMUM_CONFIDENCE</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic.WebIsAlodClassicKnowledgeSource.DEFAULT_MINIMUM_CONFIDENCE">Constant Field Values</a></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -335,7 +363,7 @@ extends <a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <li class="blockList">
 <h4>WebIsAlodClassicKnowledgeSource</h4>
 <pre>public&nbsp;WebIsAlodClassicKnowledgeSource(double&nbsp;minimumConfidence)</pre>
-<div class="block">Constructor</div>
+<div class="block">Web Default Constructor</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>minimumConfidence</code> - The minimum required confidence for synonymy.</dd>
@@ -345,12 +373,41 @@ extends <a href="../../../../../../../../../de/uni_mannheim/informatik/dws/melt/
 <a name="WebIsAlodClassicKnowledgeSource--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>WebIsAlodClassicKnowledgeSource</h4>
 <pre>public&nbsp;WebIsAlodClassicKnowledgeSource()</pre>
-<div class="block">Default constructor.
- A minimum required confidence of 0.0 is used as default.</div>
+<div class="block">Constructor</div>
+</li>
+</ul>
+<a name="WebIsAlodClassicKnowledgeSource-java.lang.String-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>WebIsAlodClassicKnowledgeSource</h4>
+<pre>public&nbsp;WebIsAlodClassicKnowledgeSource(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tdbDirectory,
+                                       double&nbsp;minimumConfidence)</pre>
+<div class="block">TDB Default Constructor</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>tdbDirectory</code> - TDB 1 directory.</dd>
+<dd><code>minimumConfidence</code> - Minimum confidence</dd>
+</dl>
+</li>
+</ul>
+<a name="WebIsAlodClassicKnowledgeSource-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>WebIsAlodClassicKnowledgeSource</h4>
+<pre>public&nbsp;WebIsAlodClassicKnowledgeSource(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tdbDirectory)</pre>
+<div class="block">Convenience constructor.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>tdbDirectory</code> - TDB 1 directory.</dd>
+</dl>
 </li>
 </ul>
 </li>

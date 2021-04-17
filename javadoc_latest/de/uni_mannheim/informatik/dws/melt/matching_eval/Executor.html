@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -146,7 +146,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html?is-external=true" title="class or interface in java.util.regex">Pattern</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#timeRunning">timeRunning</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#TIME_RUNNING">TIME_RUNNING</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -228,6 +228,38 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromEvaluatorCsvResultsFolder-java.io.File-">loadFromEvaluatorCsvResultsFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder)</code>
+<div class="block">Load results that are produced by the MELT evaluator <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorCSV.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><code>EvaluatorCSV</code></a>
+ in the results folder.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromEvaluatorCsvResultsFolder-java.io.File-de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack-">loadFromEvaluatorCsvResultsFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder,
+                                 <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/LocalTrack.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">LocalTrack</a>&nbsp;localTrack)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromEvaluatorCsvResultsFolder-java.io.File-java.util.Set-">loadFromEvaluatorCsvResultsFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder,
+                                 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/LocalTrack.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">LocalTrack</a>&gt;&nbsp;localTracks)</code>
+<div class="block">Load results that are produced by the MELT evaluator <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorCSV.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><code>EvaluatorCSV</code></a>
+ in the results folder.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromEvaluatorCsvResultsFolder-java.lang.String-">loadFromEvaluatorCsvResultsFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;folderPath)</code>
+<div class="block">Load results that are produced by the MELT evaluator <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorCSV.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><code>EvaluatorCSV</code></a>
+ in the results folder.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromEvaluatorCsvResultsFolder-java.lang.String-de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack-">loadFromEvaluatorCsvResultsFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;folderPath,
+                                 <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/LocalTrack.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">LocalTrack</a>&nbsp;localTrack)</code>&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromFolder-java.io.File-de.uni_mannheim.informatik.dws.melt.matching_data.TestCase-">loadFromFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder,
               <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase)</code>
 <div class="block">Load raw results from folder structure like:
@@ -237,7 +269,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
  File names are treated as matcher names and they are associated with the given testcase.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromFolder-java.io.File-de.uni_mannheim.informatik.dws.melt.matching_data.Track-">loadFromFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder,
               <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track)</code>
@@ -249,14 +281,14 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
  File names are treated as matcher names and they are associated with the given testcase.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromFolder-java.lang.String-de.uni_mannheim.informatik.dws.melt.matching_data.TestCase-">loadFromFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pathToFolder,
               <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase)</code>
 <div class="block">Load results directly from a folder.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromFolder-java.lang.String-de.uni_mannheim.informatik.dws.melt.matching_data.Track-">loadFromFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;folder,
               <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track)</code>
@@ -268,7 +300,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
  File names are treated as matcher names and they are associated with the given testcase.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromKnowledgeGraphResultsFolder-java.lang.String-">loadFromKnowledgeGraphResultsFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pathToFolder)</code>
 <div class="block">Load raw results from a folder with the structure used by the
@@ -276,21 +308,14 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
  of the OAEI.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#loadFromMeltResultsFolder-java.io.File-">loadFromMeltResultsFolder</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder)</code>
-<div class="block">Load results that are produced by the MELT evaluator <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorCSV.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><code>EvaluatorCSV</code></a>
- in the results folder.</div>
-</td>
-</tr>
-<tr id="i14" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#run-java.util.List-eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge-">run</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases,
    eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&nbsp;matcher)</code>
 <div class="block">Run a matcher on a set of test cases.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#run-java.util.List-eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge-java.lang.String-">run</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases,
    eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&nbsp;matcher,
@@ -298,21 +323,21 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Run a matcher on a set of test cases.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#run-java.util.List-java.util.Map-">run</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases,
    <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&gt;&nbsp;matchers)</code>
 <div class="block">Run a set of matchers on a set of test cases.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#run-de.uni_mannheim.informatik.dws.melt.matching_data.TestCase-eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge-">run</a></span>(<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
    eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&nbsp;matcher)</code>
 <div class="block">Run the specified matcher on the specified test case.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#run-de.uni_mannheim.informatik.dws.melt.matching_data.TestCase-eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge-java.lang.String-">run</a></span>(<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
    eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&nbsp;matcher,
@@ -320,21 +345,21 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Run a matcher on a test case.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#run-de.uni_mannheim.informatik.dws.melt.matching_data.TestCase-java.util.Map-">run</a></span>(<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
    <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&gt;&nbsp;matchers)</code>
 <div class="block">Run a set of matchers on a specific test cases.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#run-de.uni_mannheim.informatik.dws.melt.matching_data.Track-eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge-">run</a></span>(<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
    eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&nbsp;matcher)</code>
 <div class="block">This method runs the specified matcher on the specified track.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#run-de.uni_mannheim.informatik.dws.melt.matching_data.Track-eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge-java.lang.String-">run</a></span>(<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
    eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&nbsp;matcher,
@@ -342,21 +367,21 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">This method runs the specified matcher on the specified track.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#run-de.uni_mannheim.informatik.dws.melt.matching_data.Track-java.util.Map-">run</a></span>(<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
    <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&gt;&nbsp;matchers)</code>
 <div class="block">Evaluate multiple matchers on the given track with this static method.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#runSingle-de.uni_mannheim.informatik.dws.melt.matching_data.TestCase-eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge-">runSingle</a></span>(<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
          eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&nbsp;matcher)</code>
 <div class="block">Run a single test case with one matcher.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#runSingle-de.uni_mannheim.informatik.dws.melt.matching_data.TestCase-eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge-java.lang.String-">runSingle</a></span>(<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
          eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&nbsp;matcher,
@@ -364,7 +389,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Run a single test case with one matcher.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#runTracks-java.util.List-eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge-java.lang.String-">runTracks</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&gt;&nbsp;tracks,
          eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&nbsp;matcher,
@@ -372,14 +397,14 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Run a matchers on multiple tracks.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#runTracks-java.util.List-java.util.Map-">runTracks</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&gt;&nbsp;tracks,
          <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&gt;&nbsp;matchers)</code>
 <div class="block">Run multiple matchers on multiple tracks.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>private static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/Executor.html#tryToGetRuntime-java.io.File-">tryToGetRuntime</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;logFile)</code>&nbsp;</td>
 </tr>
@@ -428,13 +453,13 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="timeRunning">
+<a name="TIME_RUNNING">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>timeRunning</h4>
-<pre>private static&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html?is-external=true" title="class or interface in java.util.regex">Pattern</a> timeRunning</pre>
+<h4>TIME_RUNNING</h4>
+<pre>private static final&nbsp;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html?is-external=true" title="class or interface in java.util.regex">Pattern</a> TIME_RUNNING</pre>
 </li>
 </ul>
 </li>
@@ -860,18 +885,74 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="loadFromMeltResultsFolder-java.io.File-">
+<a name="loadFromEvaluatorCsvResultsFolder-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>loadFromMeltResultsFolder</h4>
-<pre>public static&nbsp;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a>&nbsp;loadFromMeltResultsFolder(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder)</pre>
+<h4>loadFromEvaluatorCsvResultsFolder</h4>
+<pre>public static&nbsp;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a>&nbsp;loadFromEvaluatorCsvResultsFolder(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;folderPath)</pre>
+<div class="block">Load results that are produced by the MELT evaluator <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorCSV.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><code>EvaluatorCSV</code></a>
+ in the results folder.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>folderPath</code> - Path to the results folder (the one with the time code e.g. results/results_2020-03-02_08-47-40)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval"><code>ExecutionResultSet</code></a> instance with the loaded results.</dd>
+</dl>
+</li>
+</ul>
+<a name="loadFromEvaluatorCsvResultsFolder-java.io.File-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>loadFromEvaluatorCsvResultsFolder</h4>
+<pre>public static&nbsp;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a>&nbsp;loadFromEvaluatorCsvResultsFolder(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder)</pre>
 <div class="block">Load results that are produced by the MELT evaluator <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorCSV.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><code>EvaluatorCSV</code></a>
  in the results folder.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>folder</code> - Path to the results folder (the one with the time code e.g. results/results_2020-03-02_08-47-40)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval"><code>ExecutionResultSet</code></a> instance with the loaded results.</dd>
+</dl>
+</li>
+</ul>
+<a name="loadFromEvaluatorCsvResultsFolder-java.lang.String-de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>loadFromEvaluatorCsvResultsFolder</h4>
+<pre>public static&nbsp;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a>&nbsp;loadFromEvaluatorCsvResultsFolder(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;folderPath,
+                                                                   <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/LocalTrack.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">LocalTrack</a>&nbsp;localTrack)</pre>
+</li>
+</ul>
+<a name="loadFromEvaluatorCsvResultsFolder-java.io.File-de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>loadFromEvaluatorCsvResultsFolder</h4>
+<pre>public static&nbsp;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a>&nbsp;loadFromEvaluatorCsvResultsFolder(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder,
+                                                                   <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/LocalTrack.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">LocalTrack</a>&nbsp;localTrack)</pre>
+</li>
+</ul>
+<a name="loadFromEvaluatorCsvResultsFolder-java.io.File-java.util.Set-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>loadFromEvaluatorCsvResultsFolder</h4>
+<pre>public static&nbsp;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a>&nbsp;loadFromEvaluatorCsvResultsFolder(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;folder,
+                                                                   <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_data/LocalTrack.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">LocalTrack</a>&gt;&nbsp;localTracks)</pre>
+<div class="block">Load results that are produced by the MELT evaluator <a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorCSV.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator"><code>EvaluatorCSV</code></a>
+ in the results folder.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>folder</code> - Path to the results folder (the one with the time code e.g. results/results_2020-03-02_08-47-40)</dd>
+<dd><code>localTracks</code> - A set of local tracks contained in the evaluation directory.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><a href="../../../../../../de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval"><code>ExecutionResultSet</code></a> instance with the loaded results.</dd>
 </dl>
