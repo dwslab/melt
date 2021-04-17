@@ -16,13 +16,18 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Track repository which lists all different tracks in possibly multiple versions.
- *
- * @author Sven Hertling
  */
 public class TrackRepository{
-
-
     private static final Logger LOGGER = LoggerFactory.getLogger(TrackRepository.class);
+    
+    /**
+     * Folder where the tracks and the corresponding test cases shall be cached.
+     * This is just a forward call to Track.setCacheFolder but in TrackRepository, this function also makes sense.
+     * @param directory caching directory.
+     */
+    public static void setCacheFolder(File directory){
+        Track.setCacheFolder(directory);
+    }
     
     /**
      * Anatomy track.

@@ -18,10 +18,6 @@ public class MatcherSealsBuilder {
      */
     private File sealsClientJar = null;
 
-    /**
-     * Path to the SEALS home directory.
-     */
-    private File sealsHome = null;
     
     /**
      * Path to a temporary folder. Default is set to the systems tmp.
@@ -68,11 +64,6 @@ public class MatcherSealsBuilder {
         return this;
     }
 
-    public MatcherSealsBuilder setSealsHome(File sealsHome) {
-        this.sealsHome = sealsHome;
-        return this;
-    }
-
     public MatcherSealsBuilder setTmpFolder(File tmpFolder) {
         this.tmpFolder = tmpFolder;
         return this;
@@ -116,10 +107,8 @@ public class MatcherSealsBuilder {
     
     public MatcherSeals build(File fileOrFolder){
         File tmpSealsClientJar = this.sealsClientJar == null ? new File(this.tmpFolder, "seals-omt-client-v" + MatcherSeals.getSealsDownloadUrlVersion() + ".jar") : this.sealsClientJar;
-        File tmpsealsHome = this.sealsHome == null ? MatcherSeals.createFolderWithRandomNumberInDirectory(this.tmpFolder, "meltSealsHome") : sealsHome;
         return new MatcherSeals(fileOrFolder, 
-                tmpSealsClientJar, 
-                tmpsealsHome, 
+                tmpSealsClientJar,
                 this.tmpFolder,
                 this.timeout,
                 this.timeoutTimeUnit, 

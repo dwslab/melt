@@ -54,14 +54,10 @@ public class MatcherSeals extends MatcherFile{
      * Path to the JAR of the SEALS client.
      */
     private File sealsClientJar;
-
-    /**
-     * Path to the SEALS home directory.
-     */
-    private File sealsHome;
     
     /**
      * Path to a temporary folder. Default is set to the systems tmp.
+     * In this folder creates folders will be created and can be removed after execution.
      */
     private File tmpFolder;
 
@@ -104,7 +100,6 @@ public class MatcherSeals extends MatcherFile{
      * IMPORTANT: the sealsHome folder will be deleted (do not use any folder which contains content). USE IT WITH CARE.
      * @param matcherFileOrFolder The file (zip file) or folder which represents one matcher.
      * @param sealsClientJar The path to the local SEALS client JAR file.
-     * @param sealsHome SEALS Home directory. ALL files in this directory will be removed (this is SEALS default behaviour).
      * @param tmpFolder folder to store the matcher temporary.
      * @param timeout Timeout for one testcase as long.
      * @param timeoutTimeUnit The unit of the timeout.
@@ -113,10 +108,9 @@ public class MatcherSeals extends MatcherFile{
      * @param doNotUseInputAlignment If true, the input alignment is not passed to SEALS even if one is provided.
      * @param javaCommand the java 1.8 command on the system. usually it is just java
      */
-    public MatcherSeals(File matcherFileOrFolder, File sealsClientJar, File sealsHome, File tmpFolder, long timeout, TimeUnit timeoutTimeUnit, List<String> javaRuntimeParameters, boolean freshMatcherInstance, boolean doNotUseInputAlignment, String javaCommand) {
+    public MatcherSeals(File matcherFileOrFolder, File sealsClientJar, File tmpFolder, long timeout, TimeUnit timeoutTimeUnit, List<String> javaRuntimeParameters, boolean freshMatcherInstance, boolean doNotUseInputAlignment, String javaCommand) {
         this.matcherFolder = prepareMatcherFolder(tmpFolder, matcherFileOrFolder);
         this.sealsClientJar = sealsClientJar;
-        this.sealsHome = sealsHome;
         this.tmpFolder = tmpFolder;
         this.timeout = timeout;
         this.timeoutTimeUnit = timeoutTimeUnit;
@@ -126,17 +120,13 @@ public class MatcherSeals extends MatcherFile{
         this.javaCommand = javaCommand;
         
         downloadSealsIfNecessary(this.sealsClientJar);
-        if (!this.sealsHome.mkdirs() && !this.sealsHome.isDirectory()) {
-            LOGGER.error("Directory for seals home {} can not be created", this.sealsHome);
-        }
-        this.sealsHome.deleteOnExit();
         if (!this.tmpFolder.mkdirs() && !this.tmpFolder.isDirectory()) {
             LOGGER.error("Directory for tmp {} can not be created", this.tmpFolder);
         }
     }
     
     public MatcherSeals(File matcherFileOrFolder, File sealsClientJar, long timeout, TimeUnit timeoutTimeUnit, List<String> javaRuntimeParameters, boolean freshMatcherInstance, boolean doNotUseInputAlignment, String javaCommand) {
-        this(matcherFileOrFolder, sealsClientJar, createFolderWithRandomNumberInDirectory(DEFAULT_TMP_FOLDER, "meltSealsHome"), DEFAULT_TMP_FOLDER, timeout, timeoutTimeUnit, javaRuntimeParameters, freshMatcherInstance, doNotUseInputAlignment, javaCommand);
+        this(matcherFileOrFolder, sealsClientJar, DEFAULT_TMP_FOLDER, timeout, timeoutTimeUnit, javaRuntimeParameters, freshMatcherInstance, doNotUseInputAlignment, javaCommand);
     }
     
     /**
@@ -237,11 +227,13 @@ public class MatcherSeals extends MatcherFile{
         if(this.freshMatcherInstance){
             //copy folder to tmp directory
             currentInstance = createFolderWithRandomNumberInDirectory(this.tmpFolder, "meltFreshInstance");
-            LOGGER.info("Copy matcher {} to new directory because a fresh instance for each new matching task is requested.", this.matcherFolder.getName());
+            LOGGER.info("Copy matcher {} to new directory {} because a fresh instance for each new matching task is requested.", this.matcherFolder.getName(), currentInstance.getName());
             copyDirectory(currentInstance, this.matcherFolder);
         }else{
             currentInstance = this.matcherFolder;
         }
+        File sealsHome = createFolderWithRandomNumberInDirectory(this.tmpFolder, "meltSealsHome");
+        sealsHome.mkdirs();
         try{
             ExternalProcess sealsProcess = new ExternalProcess();
             sealsProcess.addStdErrConsumer(l-> LOGGER.info("ExternalSEALS(Err): {}", l));
@@ -258,8 +250,8 @@ public class MatcherSeals extends MatcherFile{
             }
             sealsProcess.addArguments("-f", alignmentResult.getAbsolutePath(), "-z");
             
-            sealsProcess.setWorkingDirectory(this.sealsHome);
-            sealsProcess.addEnvironmentVariable("SEALS_HOME", this.sealsHome.getAbsolutePath());            
+            sealsProcess.setWorkingDirectory(sealsHome);
+            sealsProcess.addEnvironmentVariable("SEALS_HOME", sealsHome.getAbsolutePath());            
             sealsProcess.setTimeout(this.timeout, this.timeoutTimeUnit);            
             sealsProcess.run();
             
@@ -276,6 +268,12 @@ public class MatcherSeals extends MatcherFile{
                         .map(Path::toFile)
                         .forEach(File::delete);
                 }
+            }
+            //delete seals home:
+            try (Stream<Path> walk = Files.walk(sealsHome.toPath())) {
+                walk.sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
             }
         }
     }

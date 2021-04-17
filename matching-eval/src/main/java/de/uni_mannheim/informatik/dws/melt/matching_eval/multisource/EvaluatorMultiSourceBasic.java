@@ -139,6 +139,8 @@ public class EvaluatorMultiSourceBasic extends EvaluatorMultiSource {
                 }
             }
         }
+        if(results.isEmpty())
+            LOGGER.warn("Did not read any results during the load funtion. Check folder {}", folder);
         return results;
     }
     

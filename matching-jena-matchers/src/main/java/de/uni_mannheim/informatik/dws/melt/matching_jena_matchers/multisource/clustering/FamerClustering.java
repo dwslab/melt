@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -38,7 +39,6 @@ import org.gradoop.famer.clustering.parallelClustering.common.dataStructures.Pri
 import org.gradoop.famer.clustering.parallelClustering.correlationClustering.CorrelationClustering;
 import org.gradoop.famer.clustering.parallelClustering.mergeCenter.MergeCenter;
 import org.gradoop.famer.clustering.parallelClustering.star.Star;
-import org.gradoop.famer.clustering.postprocessing.AbstractClusterPostprocessing;
 
 /**
  * A filter for multi source matching.
@@ -111,18 +111,24 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
                 LOGGER.warn("Tried to extract cluster IDs from graph but did not work. Returning empty map which can result in wrong filtering.");
                 return new HashMap<>();
             }
-        }
-        else if(instanceOfOne(clusteringAlgorithm, Star.class, ConnectedComponents.class)){
+        }else if(instanceOfOne(clusteringAlgorithm, Star.class, ConnectedComponents.class)){
             try {
                 return getClusteringFromLogicalGraphWithString(clusteredGraph);
             } catch (Exception ex) {
                 LOGGER.warn("Tried to extract cluster IDs from graph but did not work. Returning empty map which can result in wrong filtering.");
             }
+        }else if(instanceOfOne(clusteringAlgorithm, CLIP.class)){
+            try {
+                return getClusteringFromLogicalGraphClip(clusteredGraph);
+            } catch (Exception ex) {
+                LOGGER.warn("Tried to extract cluster IDs from graph but did not work. Returning empty map which can result in wrong filtering.");
+            }
         }else{
-            LOGGER.info("The clusteringAlgorithm is not known and we try to extract the correct clusterIDs");
+            LOGGER.info("The clusteringAlgorithm is not known and we try to extract the correct clusterIDs. Start with extracting datatype LONG.");
             try {
                 return getClusteringFromLogicalGraphWithLong(clusteredGraph);
             } catch (Exception ex) {
+                LOGGER.info("Datatype LONG did not work - continue with extracting String.");
                 try {
                     return getClusteringFromLogicalGraphWithString(clusteredGraph);
                 } catch (Exception e) {
@@ -155,6 +161,28 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
             for(String s : tuple.f1.split(",")){
                 try{
                     long clusterId = Long.parseLong(s);
+                    vertexToClusterId.computeIfAbsent(tuple.f0, __-> new HashSet<>()).add(clusterId);
+                }catch(NumberFormatException ex){
+                    LOGGER.warn("Could not parse clusterID to Long: {} This mapping between vetrex and cluster id will be skipped. Be warned.", s);
+                }
+            }
+        }
+        return vertexToClusterId;
+    }
+    
+    private static Pattern NON_DIGIT = Pattern.compile("\\D+");
+    private static Map<String, Set<Long>> getClusteringFromLogicalGraphClip(LogicalGraph clusteredGraph) throws Exception{
+        // https://git.informatik.uni-leipzig.de/dbs/FAMER/-/blob/master/famer-clustering/src/test/java/org/gradoop/famer/clustering/parallelClustering/clip/CLIPTest.java#L102
+
+        List<Tuple2<String, String>> list = clusteredGraph.getVertices().map(
+                vertex -> Tuple2.of(vertex.getLabel(), vertex.getPropertyValue(CLUSTER_ID).getString())
+        ).returns(new TypeHint<Tuple2<String, String>>() { }).collect();
+        
+        Map<String, Set<Long>> vertexToClusterId = new HashMap<>();
+        for(Tuple2<String, String> tuple : list){
+            for(String s : tuple.f1.split(",")){
+                try{
+                    long clusterId = Long.parseLong(NON_DIGIT.matcher(s).replaceAll(""));
                     vertexToClusterId.computeIfAbsent(tuple.f0, __-> new HashSet<>()).add(clusterId);
                 }catch(NumberFormatException ex){
                     LOGGER.warn("Could not parse clusterID to Long: {} This mapping between vetrex and cluster id will be skipped. Be warned.", s);

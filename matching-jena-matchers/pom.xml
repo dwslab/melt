@@ -87,6 +87,25 @@
             <groupId>org.gradoop.famer</groupId>
             <artifactId>famer-clustering</artifactId>
             <version>0.1.0-SNAPSHOT</version>
+            <!-- starting from version famer-clustering-0.1.0-20210414.064107-9
+            the following path is taken:
+            gradoop-flink -> flink-shaded-hadoop-2 -> zookeeper (3.4.10) -> slf4j-log4j
+            thus zookeeper is using a logging implementation which is should not do.
+            Thus we exclude it here --> 
+            <exclusions>
+                <exclusion>
+                  <groupId>org.slf4j</groupId>
+                  <artifactId>slf4j-log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                  <groupId>org.slf4j</groupId>
+                  <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                  <groupId>log4j</groupId>
+                  <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--dependency>

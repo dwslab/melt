@@ -33,5 +33,6 @@ public abstract class MatcherYAAAOwlApi extends MatcherYAAA {
         return this.match(owlapiSource, owlapiTarget, inputAlignment, properties);
     }
 
+    @Override
     public abstract Alignment match(OWLOntology source, OWLOntology target, Alignment inputAlignment, Properties p) throws Exception ;
 }
