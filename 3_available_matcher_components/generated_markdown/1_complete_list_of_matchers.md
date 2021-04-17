@@ -314,7 +314,7 @@ This matching module uses the <a href="https://github.com/nju-websoft/OpenEA">Op
 
 ## MatcherPipelineYAAAOwlApi [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_owlapi/MatcherPipelineYAAAOwlApi.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-owlapi/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_owlapi/MatcherPipelineYAAAOwlApi.java)
 
-Better use MatcherYAAAPipeline because it can combine matchers which use different APIS like Jena and OWLAPI etc
+Better use MatcherYAAAPipeline because it can combine matchers which use different APIs like Jena and OWLAPI etc.
 
 *Keywords: Matcher PipelineYAAA Owl Api*
 
