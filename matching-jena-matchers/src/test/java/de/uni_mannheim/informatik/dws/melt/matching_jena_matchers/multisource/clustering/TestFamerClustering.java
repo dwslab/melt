@@ -40,10 +40,10 @@ public class TestFamerClustering {
         testClusteringApproach(new MergeCenter(PrioritySelection.MIN, 1.0, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
     }
     
-    //@Test
+    @Test
     public void testClip(){
         CLIPConfig clipconfig = new CLIPConfig(0.0, 1, false, 0.5, 0.2, 0.3);
-        testClusteringApproach(new CLIP(clipconfig, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
+        testClusteringApproach(new CLIP(clipconfig, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 5);
     }
     
     @Test
