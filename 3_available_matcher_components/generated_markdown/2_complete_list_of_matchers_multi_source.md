@@ -6,13 +6,6 @@ nav_order: 2
 permalink: /matcher-components/full-matcher-multi-source-list
 ---
 # Complete List of Multi Source Matchers
-## IMatcherMultiSource [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/multisource/IMatcherMultiSource.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/multisource/IMatcherMultiSource.java)
-
-Generic matcher interface for matching multiple ontologies / knowledge graphs.
- It gets multiple ontologies / knowledge graphs, an input alignment and additional parameters.
-
-*Keywords: I Matcher Multi Source*
-
 ## MatcherMultiSourceURL [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/multisource/MatcherMultiSourceURL.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/multisource/MatcherMultiSourceURL.java)
 
 Multi source matcher which expects URLs as parameters. Better do not use this class but implement the interface IMatcherMultiSource.
@@ -25,6 +18,13 @@ Multi source matcher which expects URLs as parameters. Better do not use this cl
 Executes all multi source matchers one after the other.
 
 *Keywords: Multi Source Pipeline Sequential*
+
+## IMatcherMultiSource [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/multisource/IMatcherMultiSource.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/multisource/IMatcherMultiSource.java)
+
+Generic matcher interface for matching multiple ontologies / knowledge graphs.
+ It gets multiple ontologies / knowledge graphs, an input alignment and additional parameters.
+
+*Keywords: I Matcher Multi Source*
 
 ## IMatcherMultiSourceCaller [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/multisource/IMatcherMultiSourceCaller.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/multisource/IMatcherMultiSourceCaller.java)
 
@@ -39,6 +39,14 @@ Generic matcher interface for matching multiple ontologies / knowledge graphs wh
 
 *Keywords: Matcher Multi SourceYAAA Jena*
 
+## MultiSourceDispatcherIncrementalMergeByCluster [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByCluster.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByCluster.java)
+
+Matches multiple ontologies / knowledge graphs with an incremental merge approach.
+ This means that two ontologies are merged together and then possibly the union is merged with another ontology and so on.
+ The order how they are merged is defined by subclasses.
+
+*Keywords: Multi Source Dispatcher Incremental Merge By Cluster*
+
 ## MultiSourceDispatcherIncrementalMergeByClusterText [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByClusterText.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByClusterText.java)
 
 Matches multiple ontologies / knowledge graphs with an incremental merge approach.
@@ -46,6 +54,41 @@ Matches multiple ontologies / knowledge graphs with an incremental merge approac
  The order how they are merged is defined by subclasses.
 
 *Keywords: Multi Source Dispatcher Incremental Merge By Cluster Text*
+
+## MultiSourceDispatcherAllPairs [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherAllPairs.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherAllPairs.java)
+
+
+
+*Keywords: Multi Source Dispatcher All Pairs*
+
+## MultiSourceDispatcherIncrementalMerge [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMerge.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMerge.java)
+
+Matches multiple ontologies / knowledge graphs with an incremental merge approach.
+ This means that two ontologies are merged together and then possibly the union is merged with another ontology and so on.
+ The order how they are merged is defined by subclasses.
+
+*Keywords: Multi Source Dispatcher Incremental Merge*
+
+## MultiSourceDispatcherUnionToUnion [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherUnionToUnion.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherUnionToUnion.java)
+
+
+
+*Keywords: Multi Source Dispatcher Union To Union*
+
+## MultiSourceDispatcherTransitivePairsTextBased [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherTransitivePairsTextBased.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherTransitivePairsTextBased.java)
+
+This dispatcher will compare the texts in a model and match the ones which are textually the clostest such that a connection between all ontologies exists.
+ Therefore exactly (number of models)-1 matching operations and no merges are executed.
+
+*Keywords: Multi Source Dispatcher Transitive Pairs Text Based*
+
+## MultiSourceDispatcherIncrementalMergeByOrder [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.java)
+
+Matches multiple ontologies / knowledge graphs with an incremental merge approach.
+ This means that two ontologies are merged together and then possibly the union is merged with another ontology and so on.
+ The order how they are merged is defined by subclasses.
+
+*Keywords: Multi Source Dispatcher Incremental Merge By Order*
 
 ## MultiSourceDispatcherTransitivePairsOrderBased [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherTransitivePairsOrderBased.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherTransitivePairsOrderBased.java)
 
@@ -61,57 +104,6 @@ This dispatcher will match multiple ontologies by selecting a few pairs.
 
 *Keywords: Multi Source Dispatcher Transitive Pairs Order Based*
 
-## MultiSourceDispatcherIncrementalMergeByOrder [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByOrder.java)
-
-Matches multiple ontologies / knowledge graphs with an incremental merge approach.
- This means that two ontologies are merged together and then possibly the union is merged with another ontology and so on.
- The order how they are merged is defined by subclasses.
-
-*Keywords: Multi Source Dispatcher Incremental Merge By Order*
-
-## MultiSourceDispatcherAllPairs [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherAllPairs.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherAllPairs.java)
-
-
-
-*Keywords: Multi Source Dispatcher All Pairs*
-
-## MultiSourceDispatcherUnionToUnion [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherUnionToUnion.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherUnionToUnion.java)
-
-
-
-*Keywords: Multi Source Dispatcher Union To Union*
-
-## MultiSourceDispatcherTransitivePairsTextBased [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherTransitivePairsTextBased.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherTransitivePairsTextBased.java)
-
-This dispatcher will compare the texts in a model and match the ones which are textually the clostest such that a connection between all ontologies exists.
- Therefore exactly (number of models)-1 matching operations and no merges are executed.
-
-*Keywords: Multi Source Dispatcher Transitive Pairs Text Based*
-
-## MultiSourceDispatcherIncrementalMerge [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMerge.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMerge.java)
-
-Matches multiple ontologies / knowledge graphs with an incremental merge approach.
- This means that two ontologies are merged together and then possibly the union is merged with another ontology and so on.
- The order how they are merged is defined by subclasses.
-
-*Keywords: Multi Source Dispatcher Incremental Merge*
-
-## MultiSourceDispatcherIncrementalMergeByCluster [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByCluster.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMergeByCluster.java)
-
-Matches multiple ontologies / knowledge graphs with an incremental merge approach.
- This means that two ontologies are merged together and then possibly the union is merged with another ontology and so on.
- The order how they are merged is defined by subclasses.
-
-*Keywords: Multi Source Dispatcher Incremental Merge By Cluster*
-
-## FilterByErrorDegree [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FilterByErrorDegree.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FilterByErrorDegree.java)
-
-This filter of correspondences is based on the community structure of the correspondences.
- E.g. if many entities are fully connected, then this indicates that all of those correspondences are correct.
- But if tehre are some weakly connected entites, then this might indicate wrong correspondences.
-
-*Keywords: Filter By Error Degree*
-
 ## FamerClustering [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FamerClustering.java)
 
 A filter for multi source matching.
@@ -121,4 +113,12 @@ A filter for multi source matching.
  <a href="https://git.informatik.uni-leipzig.de/dbs/FAMER/-/tree/master/famer-clustering">The source code can be found at gitlab</a>.
 
 *Keywords: Famer Clustering*
+
+## FilterByErrorDegree [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FilterByErrorDegree.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/FilterByErrorDegree.java)
+
+This filter of correspondences is based on the community structure of the correspondences.
+ E.g. if many entities are fully connected, then this indicates that all of those correspondences are correct.
+ But if tehre are some weakly connected entites, then this might indicate wrong correspondences.
+
+*Keywords: Filter By Error Degree*
 
