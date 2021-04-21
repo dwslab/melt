@@ -52,25 +52,39 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
     
     private DatasetIDExtractor datsetIdExtractor;
     private AbstractParallelClustering clusteringAlgorithm;
+    private boolean addCorrespondences;
+    private boolean removeCorrespondences;
 
-    public FamerClustering(DatasetIDExtractor datsetIdExtractor, AbstractParallelClustering clusteringAlgorithm) {
+    
+    public FamerClustering(DatasetIDExtractor datsetIdExtractor, AbstractParallelClustering clusteringAlgorithm, boolean addCorrespondences, boolean removeCorrespondences) {
         this.datsetIdExtractor = datsetIdExtractor;
         this.clusteringAlgorithm = clusteringAlgorithm;
+        this.addCorrespondences = addCorrespondences;
+        this.removeCorrespondences = removeCorrespondences;
+    }
+    
+    public FamerClustering(DatasetIDExtractor datsetIdExtractor, AbstractParallelClustering clusteringAlgorithm) {
+        this(datsetIdExtractor, clusteringAlgorithm, false, true);
     }
     
     public FamerClustering(DatasetIDExtractor datsetIdExtractor) {
-        this.datsetIdExtractor = datsetIdExtractor;
-        this.clusteringAlgorithm = new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE);
+        this(datsetIdExtractor, new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE));
     }
     
     @Override
     public Alignment match(List<Object> models, Alignment inputAlignment, Object parameters) throws Exception {
-        return filter(inputAlignment);
+        return processAlignment(inputAlignment);
     }
     
-    public Alignment filter(Alignment inputAlignment){
+    public Alignment processAlignment(Alignment inputAlignment){
         Map<String, Set<Long>> clusters = getClusters(inputAlignment, this.clusteringAlgorithm, this.datsetIdExtractor);
-        return RemoveCorrespondencesBasedOnClusterAssignments.removeCorrespondencesMultiCluster(inputAlignment, clusters);
+        if(this.removeCorrespondences){
+            inputAlignment = ClusterUtil.removeCorrespondencesMultiCluster(inputAlignment, clusters);
+        }
+        if(this.addCorrespondences){
+            inputAlignment = ClusterUtil.addCorrespondencesMultiCluster(inputAlignment, clusters);
+        }
+        return inputAlignment;
     }
     
     /**
@@ -108,20 +122,20 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
             try {
                 return getClusteringFromLogicalGraphWithLong(clusteredGraph);
             } catch (Exception ex) {
-                LOGGER.warn("Tried to extract cluster IDs from graph but did not work. Returning empty map which can result in wrong filtering.");
+                LOGGER.warn("Tried to extract cluster IDs from graph but did not work. Returning empty map which can result in wrong filtering.", ex);
                 return new HashMap<>();
             }
         }else if(instanceOfOne(clusteringAlgorithm, Star.class, ConnectedComponents.class)){
             try {
                 return getClusteringFromLogicalGraphWithString(clusteredGraph);
             } catch (Exception ex) {
-                LOGGER.warn("Tried to extract cluster IDs from graph but did not work. Returning empty map which can result in wrong filtering.");
+                LOGGER.warn("Tried to extract cluster IDs from graph but did not work. Returning empty map which can result in wrong filtering.", ex);
             }
         }else if(instanceOfOne(clusteringAlgorithm, CLIP.class)){
             try {
                 return getClusteringFromLogicalGraphClip(clusteredGraph);
             } catch (Exception ex) {
-                LOGGER.warn("Tried to extract cluster IDs from graph but did not work. Returning empty map which can result in wrong filtering.");
+                LOGGER.warn("Tried to extract cluster IDs from graph but did not work. Returning empty map which can result in wrong filtering.", ex);
             }
         }else{
             LOGGER.info("The clusteringAlgorithm is not known and we try to extract the correct clusterIDs. Start with extracting datatype LONG.");

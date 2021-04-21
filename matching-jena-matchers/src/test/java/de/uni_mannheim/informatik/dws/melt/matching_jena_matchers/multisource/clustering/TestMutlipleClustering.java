@@ -27,7 +27,7 @@ public class TestMutlipleClustering {
     public void testFamer(){
 
         FamerClustering c = new FamerClustering(getTestExtractor());
-        Alignment actual = c.filter(getTestAlignment());
+        Alignment actual = c.processAlignment(getTestAlignment());
         
         Alignment expected = getTestAlignment();
         expected.removeCorrespondencesSourceTarget("http://b.com/b", "http://a.com/x");
