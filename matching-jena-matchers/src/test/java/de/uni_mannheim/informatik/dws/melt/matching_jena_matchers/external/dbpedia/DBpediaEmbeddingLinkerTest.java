@@ -26,7 +26,8 @@ class DBpediaEmbeddingLinkerTest {
     @Test
     void linkToSingleConcept() {
         // linkable and in entity list
-        assertNotNull(linker.linkToSingleConcept("mius"));
+        String link = linker.linkToSingleConcept("mius");
+        assertNotNull(link);
 
         //linkable but not in entity list
         assertNull(linker.linkToSingleConcept("Mia"));

@@ -18,5 +18,4 @@ public interface ExternalResource {
      * @return Name of the resource.
      */
     String getName();
-
 }

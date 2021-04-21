@@ -27,24 +27,44 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
     /**
      * minimum confidence for synonymy queries.
      */
-    public double minimumConfidence = - 1.0;
+    public double minimumConfidence;
+
+    public static final double DEFAULT_MINIMUM_CONFIDENCE = -1.0;
 
     /**
-     * Constructor
+     * Web Default Constructor
      * @param minimumConfidence The minimum required confidence for synonymy.
      */
     public WebIsAlodClassicKnowledgeSource(double minimumConfidence){
-        this();
+        sparqlService = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT);
+        linker = new WebIsAlodClassicLinker();
         this.minimumConfidence = minimumConfidence;
     }
 
     /**
-     * Default constructor.
-     * A minimum required confidence of 0.0 is used as default.
+     * Constructor
      */
     public WebIsAlodClassicKnowledgeSource(){
-        sparqlService = WebIsAlodSPARQLservice.getInstance(WebIsAlodSPARQLservice.WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT);
-        linker = new WebIsAlodClassicLinker();
+        this(DEFAULT_MINIMUM_CONFIDENCE);
+    }
+
+    /**
+     * TDB Default Constructor
+     * @param tdbDirectory TDB 1 directory.
+     * @param minimumConfidence Minimum confidence
+     */
+    public WebIsAlodClassicKnowledgeSource(String tdbDirectory, double minimumConfidence){
+        sparqlService = WebIsAlodSPARQLservice.getInstance(tdbDirectory);
+        linker = new WebIsAlodClassicLinker(tdbDirectory);
+        this.minimumConfidence = minimumConfidence;
+    }
+
+    /**
+     * Convenience constructor.
+     * @param tdbDirectory TDB 1 directory.
+     */
+    public WebIsAlodClassicKnowledgeSource(String tdbDirectory){
+        this(tdbDirectory, DEFAULT_MINIMUM_CONFIDENCE);
     }
 
     public boolean isInDictionary(String word) {
@@ -133,5 +153,4 @@ public class WebIsAlodClassicKnowledgeSource extends SemanticWordRelationDiction
     public double getMinimumConfidence() {
         return minimumConfidence;
     }
-
 }

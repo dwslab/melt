@@ -111,6 +111,15 @@ public class EvaluatorMcNemarSignificance extends Evaluator {
     /**
      * Two files will be written.
      *
+     * @param baseDirectoryPath The directory path to which the result shall be written.
+     */
+    public void writeResultsToDirectory(String baseDirectoryPath) {
+       writeResultsToDirectory(new File(baseDirectoryPath));
+    }
+
+    /**
+     * Two files will be written.
+     *
      * @param baseDirectory The directory to which the result shall be written.
      */
     @Override

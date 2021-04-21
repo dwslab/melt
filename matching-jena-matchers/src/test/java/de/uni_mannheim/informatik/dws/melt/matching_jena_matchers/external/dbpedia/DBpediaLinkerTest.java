@@ -48,6 +48,8 @@ class DBpediaLinkerTest {
 
         // error test
         assertNull(linker.linkToSingleConcept("THIS_CONCEPT_DOES NOT_EXIST_404"));
+        assertNull(linker.linkToSingleConcept(" "));
+        assertNull(linker.linkToSingleConcept(null));
 
         // space separation
         String schumannLink = linker.linkToSingleConcept("Robert Schuman");

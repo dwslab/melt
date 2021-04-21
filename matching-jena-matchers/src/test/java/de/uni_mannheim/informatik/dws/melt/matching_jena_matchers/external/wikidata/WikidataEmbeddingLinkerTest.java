@@ -27,10 +27,16 @@ class WikidataEmbeddingLinkerTest {
     @Test
     void linkToSingleConcept(){
         // linkable and in entity list
-        assertNotNull(linker.linkToSingleConcept("Jan Philipp Portisch"));
+        String link = linker.linkToSingleConcept("Jan Philipp Portisch");
+        assertNotNull(link);
 
         // linkable but not contained in entity list
-        assertNull(linker.linkToSingleConcept("Heiko Paulheim"));
+        link = linker.linkToSingleConcept("Heiko Paulheim");
+        assertNull(link);
+
+        // error cases
+        assertNull(linker.linkToSingleConcept(" "));
+        assertNull(linker.linkToSingleConcept(null));
     }
 
     @Test

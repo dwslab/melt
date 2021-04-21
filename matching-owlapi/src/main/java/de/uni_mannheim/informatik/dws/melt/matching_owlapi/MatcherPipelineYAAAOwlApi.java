@@ -7,9 +7,11 @@ import java.util.Properties;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 /**
- * Better use MatcherYAAAPipeline because it can combine matchers which use different APIS like Jena and OWLAPI etc
+ * Better use MatcherYAAAPipeline because it can combine matchers which use different APIs like Jena and OWLAPI etc.
  */
-public abstract class MatcherPipelineYAAAOwlApi extends MatcherYAAAOwlApi{
+public abstract class MatcherPipelineYAAAOwlApi extends MatcherYAAAOwlApi {
+
+
     protected List<MatcherYAAAOwlApi> matchers = initializeMatchers();
     
     protected abstract List<MatcherYAAAOwlApi> initializeMatchers();    
@@ -25,5 +27,4 @@ public abstract class MatcherPipelineYAAAOwlApi extends MatcherYAAAOwlApi{
     public List<MatcherYAAAOwlApi> getMatchers() {
         return matchers;
     }
-    
 }

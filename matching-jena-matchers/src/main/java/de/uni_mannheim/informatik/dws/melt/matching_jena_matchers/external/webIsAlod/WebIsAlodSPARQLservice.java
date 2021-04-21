@@ -4,11 +4,15 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.tdb.TDBFactory;
 import org.eclipse.collections.impl.map.mutable.ConcurrentHashMapUnsafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,7 +55,6 @@ public class WebIsAlodSPARQLservice {
      */
     private ConcurrentMap<String, String> labelUriBuffer;
 
-
     /**
      * If the disk-buffer is disabled, no buffers are read/written from/to the disk.
      * Default: true.
@@ -71,11 +74,26 @@ public class WebIsAlodSPARQLservice {
     /**
      * Singleton instances per endpoint.
      */
-    private static HashMap<WebIsAlodEndpoint, WebIsAlodSPARQLservice> instances;
+    private static HashMap<String, WebIsAlodSPARQLservice> instances;
 
     private static final String CLASSIC_CONFIDENCE = "<http://webisa.webdatacommons.org/ontology#>";
 
     private static final String XL_CONFIDENCE = "<http://webisa.webdatacommons.org/ontology/>";
+
+    /**
+     * True if a tdb source shall be used rather than an on-line SPARQL endpoint.
+     */
+    private boolean isUseTdb = false;
+
+    /**
+     * The TDB dataset into which the DBpedia data set was loaded.
+     */
+    private Dataset tdbDataset;
+
+    /**
+     * TDB model
+     */
+    private Model tdbModel;
 
     /**
      * Singleton Pattern to get Sparql service instance.
@@ -85,6 +103,60 @@ public class WebIsAlodSPARQLservice {
      */
     public static WebIsAlodSPARQLservice getInstance(WebIsAlodEndpoint sparqlWebIsAlodEndpoint) {
         return getInstance(sparqlWebIsAlodEndpoint, true);
+    }
+
+
+    /**
+     * Singleton to get TDB-based SPARQL instance.
+     *
+     * @param tdbDirectoryPath The path to the TDB directory.
+     * @return Instance
+     */
+    public static WebIsAlodSPARQLservice getInstance(String tdbDirectoryPath) {
+        return getInstance(tdbDirectoryPath, true);
+    }
+
+    /**
+     * Singleton to get TDB-based SPARQL instance.
+     *
+     * @param tdbDirectoryPath    The path to the TDB directory.
+     * @param isDiskBufferEnabled True if disk buffer shall be enabled.
+     * @return Instance.
+     */
+    public static WebIsAlodSPARQLservice getInstance(String tdbDirectoryPath, boolean isDiskBufferEnabled) {
+        File tdbDirectoryFile = new File(tdbDirectoryPath);
+        if (!tdbDirectoryFile.exists()) {
+            LOGGER.error("tdbDirectoryPath does not exist. - ABORTING PROGRAM");
+            return null;
+        }
+        if (!tdbDirectoryFile.isDirectory()) {
+            LOGGER.error("tdbDirectoryPath is not a directory. - ABORTING PROGRAM");
+            return null;
+        }
+        WebIsAlodSPARQLservice webIsAlodSPARQLservice;
+
+        try {
+            tdbDirectoryPath = tdbDirectoryFile.getCanonicalPath();
+        } catch (IOException e) {
+            LOGGER.error("Unable to obtain canonical file path of: '" + tdbDirectoryPath + "'. Using non-canonical " +
+                    "file path.", e);
+        }
+
+        if (instances == null) {
+            instances = new HashMap<>();
+            webIsAlodSPARQLservice = new WebIsAlodSPARQLservice(tdbDirectoryPath, isDiskBufferEnabled);
+            instances.put(tdbDirectoryPath, webIsAlodSPARQLservice);
+        } else {
+            webIsAlodSPARQLservice = instances.get(tdbDirectoryPath);
+            if (webIsAlodSPARQLservice != null) {
+                webIsAlodSPARQLservice.setDiskBufferEnabled(isDiskBufferEnabled);
+                return webIsAlodSPARQLservice;
+            } else {
+                webIsAlodSPARQLservice = new WebIsAlodSPARQLservice(tdbDirectoryPath, isDiskBufferEnabled);
+                instances.put(tdbDirectoryPath, webIsAlodSPARQLservice);
+            }
+        }
+        return webIsAlodSPARQLservice;
     }
 
     /**
@@ -99,7 +171,7 @@ public class WebIsAlodSPARQLservice {
         if (instances == null) {
             instances = new HashMap<>();
             webIsAlodSPARQLservice = new WebIsAlodSPARQLservice(sparqlWebIsAlodEndpoint, isDiskBufferEnabled);
-            instances.put(sparqlWebIsAlodEndpoint, webIsAlodSPARQLservice);
+            instances.put(sparqlWebIsAlodEndpoint.toString(), webIsAlodSPARQLservice);
         } else {
             webIsAlodSPARQLservice = instances.get(sparqlWebIsAlodEndpoint);
             if (webIsAlodSPARQLservice != null) {
@@ -107,7 +179,7 @@ public class WebIsAlodSPARQLservice {
                 return webIsAlodSPARQLservice;
             } else {
                 webIsAlodSPARQLservice = new WebIsAlodSPARQLservice(sparqlWebIsAlodEndpoint, isDiskBufferEnabled);
-                instances.put(sparqlWebIsAlodEndpoint, webIsAlodSPARQLservice);
+                instances.put(sparqlWebIsAlodEndpoint.toString(), webIsAlodSPARQLservice);
             }
         }
         return webIsAlodSPARQLservice;
@@ -116,12 +188,26 @@ public class WebIsAlodSPARQLservice {
     /**
      * Private Constructor (singleton pattern).
      *
-     * @param sparqlEnpoint       The SPARQL endpoint URI.
+     * @param sparqlEndpoint      The SPARQL endpoint URI.
      * @param isDiskBufferEnabled True if disk buffer is enabled.
      */
-    private WebIsAlodSPARQLservice(WebIsAlodEndpoint sparqlEnpoint, boolean isDiskBufferEnabled) {
-        this.webIsAlodEndpoint = sparqlEnpoint;
+    private WebIsAlodSPARQLservice(WebIsAlodEndpoint sparqlEndpoint, boolean isDiskBufferEnabled) {
+        this.webIsAlodEndpoint = sparqlEndpoint;
         this.isDiskBufferEnabled = isDiskBufferEnabled;
+        initializeBuffers();
+    }
+
+    /**
+     * Private TDB constructor (singleton pattern).
+     *
+     * @param tdbDirectoryPath    Path to the TDB 1 directory.
+     * @param isDiskBufferEnabled True if buffer enabled, else false.
+     */
+    private WebIsAlodSPARQLservice(String tdbDirectoryPath, boolean isDiskBufferEnabled) {
+        this.isUseTdb = true;
+        this.isDiskBufferEnabled = isDiskBufferEnabled;
+        this.tdbDataset = TDBFactory.createDataset(tdbDirectoryPath);
+        this.tdbModel = tdbDataset.getDefaultModel();
         initializeBuffers();
     }
 
@@ -175,7 +261,12 @@ public class WebIsAlodSPARQLservice {
                         uri + " <http://www.w3.org/2004/02/skos/core#skos:broader> ?hypernym .\n" +
                         "}";
         Query query = QueryFactory.create(queryString);
-        QueryExecution qe = QueryExecutionFactory.sparqlService(this.webIsAlodEndpoint.toString(), query);
+        QueryExecution qe;
+        if (isUseTdb) {
+            qe = QueryExecutionFactory.create(query, tdbModel);
+        } else {
+            qe = QueryExecutionFactory.sparqlService(this.webIsAlodEndpoint.toString(), query);
+        }
         boolean result = safeAsk(qe);
         qe.close();
         return result;
@@ -248,7 +339,14 @@ public class WebIsAlodSPARQLservice {
         if (synonymyAskBuffer.get(uriTuple) != null) {
             return synonymyAskBuffer.get(uriTuple);
         }
-        QueryExecution qe = QueryExecutionFactory.sparqlService(sparqlWebIsAlodEndpoint.toString(), getIsSynonymousAskQueryClassic(uri1, uri2, minimumConfidence, this.webIsAlodEndpoint.isClassic()));
+        QueryExecution qe;
+        String queryString = getIsSynonymousAskQueryClassic(uri1, uri2, minimumConfidence,
+                this.webIsAlodEndpoint.isClassic());
+        if (isUseTdb) {
+            qe = QueryExecutionFactory.create(queryString, tdbModel);
+        } else {
+            qe = QueryExecutionFactory.sparqlService(sparqlWebIsAlodEndpoint.toString(), queryString);
+        }
         boolean result = safeAsk(qe);
         synonymyAskBuffer.put(uriTuple, result);
         qe.close();
@@ -301,9 +399,13 @@ public class WebIsAlodSPARQLservice {
         } else {
             queryString = "SELECT DISTINCT ?hypernym WHERE\n" +
                     "{ <" + uri + "> <http://www.w3.org/2004/02/skos/core#broader> ?hypernym .}";
-
         }
-        QueryExecution qe = QueryExecutionFactory.sparqlService(this.webIsAlodEndpoint.toString(), queryString);
+        QueryExecution qe;
+        if (isUseTdb) {
+            qe = QueryExecutionFactory.create(queryString, tdbModel);
+        } else {
+            qe = QueryExecutionFactory.sparqlService(this.webIsAlodEndpoint.toString(), queryString);
+        }
         Set<String> result = new HashSet<>();
         ResultSet queryResult = safeExecution(qe);
         while (queryResult.hasNext()) {
@@ -333,7 +435,15 @@ public class WebIsAlodSPARQLservice {
         if (synonymyAskBuffer.get(uriTuple) != null) {
             return synonymyAskBuffer.get(uriTuple);
         }
-        QueryExecution qe = QueryExecutionFactory.sparqlService(sparqlWebIsAlodEndpoint.toString(), getIsSynonymousAskQueryClassic(uri1, uri2));
+        QueryExecution qe;
+        String queryString = getIsSynonymousAskQueryClassic(uri1, uri2);
+
+        if(isUseTdb){
+            qe = QueryExecutionFactory.create(queryString, tdbModel);
+        } else {
+            qe = QueryExecutionFactory.sparqlService(sparqlWebIsAlodEndpoint.toString(), queryString);
+        }
+
         boolean result = safeAsk(qe);
         synonymyAskBuffer.put(uriTuple, result);
         qe.close();
@@ -378,7 +488,15 @@ public class WebIsAlodSPARQLservice {
         if (hypernymyAskBuffer.get(uriTuple) != null) {
             return hypernymyAskBuffer.get(uriTuple);
         }
-        QueryExecution qe = QueryExecutionFactory.sparqlService(sparqlWebIsAlodEndpoint.toString(), getIsHypernymousAskQueryClassic(uri1, uri2, minimumConfidence, this.webIsAlodEndpoint.isClassic()));
+        QueryExecution qe;
+        String queryString = getIsHypernymousAskQueryClassic(uri1, uri2, minimumConfidence,
+                this.webIsAlodEndpoint.isClassic());
+
+        if(isUseTdb){
+            qe = QueryExecutionFactory.create(queryString, tdbModel);
+        } else {
+            qe = QueryExecutionFactory.sparqlService(sparqlWebIsAlodEndpoint.toString(), queryString);
+        }
         boolean result = safeAsk(qe);
         qe.close();
         hypernymyAskBuffer.put(uriTuple, result);
@@ -407,22 +525,20 @@ public class WebIsAlodSPARQLservice {
         if (isClassic) confidencePrefix = CLASSIC_CONFIDENCE;
         else confidencePrefix = XL_CONFIDENCE;
 
-        String query =
-                "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" +
-                        "PREFIX isaont: " + confidencePrefix + "\n" +
-                        "ASK\n" +
-                        "{\n" +
-                        "GRAPH ?g1 {\n" +
-                        uri1 + " skos:broader " + uri2 + ".\n" +
-                        "}\n" +
-                        "?g1 isaont:hasConfidence ?minConfidence1 .\n" +
-                        "GRAPH ?g2 {\n" +
-                        uri2 + " skos:broader " + uri1 + ".\n" +
-                        "}\n" +
-                        "?g2 isaont:hasConfidence ?minConfidence2 .\n" +
-                        "FILTER( ?minConfidence1> " + minimumConfidence + " && ?minConfidence2 > " + minimumConfidence + ")\n" + // && required, "AND" won't be compiled by jena
-                        "}";
-        return query;
+        return "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" +
+                "PREFIX isaont: " + confidencePrefix + "\n" +
+                "ASK\n" +
+                "{\n" +
+                "GRAPH ?g1 {\n" +
+                uri1 + " skos:broader " + uri2 + ".\n" +
+                "}\n" +
+                "?g1 isaont:hasConfidence ?minConfidence1 .\n" +
+                "GRAPH ?g2 {\n" +
+                uri2 + " skos:broader " + uri1 + ".\n" +
+                "}\n" +
+                "?g2 isaont:hasConfidence ?minConfidence2 .\n" +
+                "FILTER( ?minConfidence1> " + minimumConfidence + " && ?minConfidence2 > " + minimumConfidence + ")\n" + // && required, "AND" won't be compiled by jena
+                "}";
     }
 
     /**
@@ -461,11 +577,7 @@ public class WebIsAlodSPARQLservice {
     public static boolean isALODxlEndpointConcept(String uri) {
         try {
             uri = StringOperations.convertToTag(uri);
-            if (uri.endsWith("_>")) {
-                return false;
-            } else {
-                return true;
-            }
+            return !uri.endsWith("_>");
         } catch (NullPointerException npe) {
             System.out.println(uri);
         }
@@ -492,12 +604,11 @@ public class WebIsAlodSPARQLservice {
      * @return null if not found, else URI as String.
      */
     public String getUriUsingLabel(WebIsAlodEndpoint webIsAlodEndpoint, String label) {
-        String key = label;
         boolean isClassic = webIsAlodEndpoint.equals(WebIsAlodEndpoint.ALOD_CLASSIC_ENDPOINT);
 
         // buffer check
-        if (labelUriBuffer.containsKey(key)) {
-            String retrieved = labelUriBuffer.get(key);
+        if (labelUriBuffer.containsKey(label)) {
+            String retrieved = labelUriBuffer.get(label);
             if (retrieved.equals("null")) {
                 return null;
             } else return retrieved;
@@ -508,13 +619,18 @@ public class WebIsAlodSPARQLservice {
                         "?c <http://www.w3.org/2000/01/rdf-schema#label> \"" + label + "\"\n" +
                         "}";
         //LOGGER.info("Running the following query:\n" + queryString);
-        QueryExecution qe = QueryExecutionFactory.sparqlService(webIsAlodEndpoint.toString(), queryString);
+        QueryExecution qe;
+        if(isUseTdb){
+            qe = QueryExecutionFactory.create(queryString, tdbModel);
+        } else {
+            qe = QueryExecutionFactory.sparqlService(webIsAlodEndpoint.toString(), queryString);
+        }
         ResultSet results = safeExecution(qe);
         //LOGGER.info("Completed.");
 
         if (!results.hasNext()) {
             // Query was not successful.
-            labelUriBuffer.put(key, "null");
+            labelUriBuffer.put(label, "null");
             if (isClassic) {
                 commit(ALOD_CLASSIC_LABEL_URI_BUFFER);
             } else {
@@ -529,7 +645,7 @@ public class WebIsAlodSPARQLservice {
             QuerySolution solution = results.next();
             if (solution.getResource("c") != null && !solution.getResource("c").equals("")) {
                 resource = solution.getResource("c").toString();
-                labelUriBuffer.put(key, resource);
+                labelUriBuffer.put(label, resource);
                 qe.close();
                 if (isClassic) {
                     commit(ALOD_CLASSIC_LABEL_URI_BUFFER);
@@ -540,7 +656,7 @@ public class WebIsAlodSPARQLservice {
             }
         }
         // Nothing could be found.
-        labelUriBuffer.put(key, "null");
+        labelUriBuffer.put(label, "null");
         if (isClassic) {
             commit(ALOD_CLASSIC_LABEL_URI_BUFFER);
         } else {
@@ -586,15 +702,17 @@ public class WebIsAlodSPARQLservice {
                 persistenceService.closeDatabase(ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER);
                 persistenceService.closeDatabase(ALOD_CLASSIC_HYPERNYM_BUFFER);
                 persistenceService.closeDatabase(ALOD_CLASSIC_LABEL_URI_BUFFER);
-            } else if(! (instances.containsKey(WebIsAlodEndpoint.ALOD_XL_NO_PROXY) && instances.containsKey(WebIsAlodEndpoint.ALOD_XL_ENDPOINT)) ) {
-                // only close XL if there are no remaining XL endpoints (multiple exist so we cannot close the XL buffer if there is another open XL SPARQL service)
+            } else if (!(instances.containsKey(WebIsAlodEndpoint.ALOD_XL_NO_PROXY.toString()) &&
+                    instances.containsKey(WebIsAlodEndpoint.ALOD_XL_ENDPOINT.toString()))) {
+                // only close XL if there are no remaining XL endpoints (multiple exist so we cannot close the XL buffer
+                // if there is another open XL SPARQL service)
                 persistenceService.closeDatabase(ALOD_XL_SYONYMY_BUFFER);
                 persistenceService.closeDatabase(ALOD_XL_HYPERNYMY_ASK_BUFFER);
                 persistenceService.closeDatabase(ALOD_XL_HYPERNYM_BUFFER);
                 persistenceService.closeDatabase(ALOD_XL_LABEL_URI_BUFFER);
             }
         }
-        instances.remove(this.webIsAlodEndpoint);
+        instances.remove(this.webIsAlodEndpoint.toString());
     }
 
     public static void closeAllServices() {
@@ -636,9 +754,7 @@ public class WebIsAlodSPARQLservice {
          * @return true if classic endpoint, false if xl endpoint
          */
         public boolean isClassic() {
-            if (this == ALOD_CLASSIC_ENDPOINT) {
-                return true;
-            } else return false;
+            return this == ALOD_CLASSIC_ENDPOINT;
         }
     }
 

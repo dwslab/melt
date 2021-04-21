@@ -46,15 +46,19 @@ public class BabelNetEmbeddingLinker extends LabelToConceptLinkerEmbeddings impl
 
     @Override
     public String linkToSingleConcept(String labelToBeLinked) {
-        if(labelToBeLinked == null){
+        if(labelToBeLinked == null || labelToBeLinked.trim().equals("")){
             return null;
         }
-        for(StringModifier modifier : stringModificationSequence) {
-            String modifiedLabel = modifier.modifyString(labelToBeLinked);
-            String link = super.getLookupMap().get(normalizeStatic(modifiedLabel));
-            if(link != null){
-                return link;
+        try {
+            for (StringModifier modifier : stringModificationSequence) {
+                String modifiedLabel = modifier.modifyString(labelToBeLinked);
+                String link = super.getLookupMap().get(normalizeStatic(modifiedLabel));
+                if (link != null) {
+                    return link;
+                }
             }
+        } catch (Exception e){
+            LOGGER.error("An error occurred while matching the label: '" + labelToBeLinked + "'", e);
         }
         return null;
     }

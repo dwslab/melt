@@ -26,7 +26,7 @@ public class EvaluatorBasic extends Evaluator {
     /**
      * Default logger.
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(EvaluatorBasic.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorBasic.class);
 
     /**
      * Name of the file that will be written to the base directory.
@@ -133,14 +133,12 @@ public class EvaluatorBasic extends Evaluator {
                 if(result != null && result.getSystemAlignment() != null) {
                     Map<String, String> extensions = result.getSystemAlignment().getExtensions();
                     if (extensions != null) {
-                        for (String uri : extensions.keySet()) {
-                            uniqueExtensions.add(uri);
-                        }
+                        uniqueExtensions.addAll(extensions.keySet());
                     }
                 }
             }
         }
-        return new ArrayList<String>(uniqueExtensions);
+        return new ArrayList<>(uniqueExtensions);
     }
 
     /**
@@ -179,7 +177,6 @@ public class EvaluatorBasic extends Evaluator {
         }
         return result;
     }
-
 
     public static String getResultFileName() {
         return RESULT_FILE_NAME;

@@ -110,7 +110,6 @@ public class EvaluatorCSV extends Evaluator {
      */
     private ArrayList<String> correspondenceExtensions;
 
-
     /**
      * Constructor
      *
@@ -167,11 +166,8 @@ public class EvaluatorCSV extends Evaluator {
                 }
             }
         }
-        ArrayList<String> result = new ArrayList<String>();
-        result.addAll(uniqueExtensions);
-        return result;
+        return new ArrayList<>(uniqueExtensions);
     }
-
 
     /**
      * This method determines the unique {@link Alignment}
@@ -188,16 +184,13 @@ public class EvaluatorCSV extends Evaluator {
                 if(result != null && result.getSystemAlignment() != null) {
                     Map<String, String> extensions = result.getSystemAlignment().getExtensions();
                     if (extensions != null) {
-                        for (String uri : extensions.keySet()) {
-                            uniqueExtensions.add(uri);
-                        }
+                        uniqueExtensions.addAll(extensions.keySet());
                     }
                 }
             }
         }
         return new ArrayList<>(uniqueExtensions);
     }
-
 
     /**
      * Constructor
@@ -208,7 +201,6 @@ public class EvaluatorCSV extends Evaluator {
     public EvaluatorCSV(ExecutionResultSet results, ConfusionMatrixMetric metric) {
         this(results, metric, true);
     }
-
 
     /**
      * Constructor
@@ -264,7 +256,6 @@ public class EvaluatorCSV extends Evaluator {
         }
     }
 
-
     /**
      * This method flushes and closes global printers.
      */
@@ -291,7 +282,6 @@ public class EvaluatorCSV extends Evaluator {
      * @param baseDirectory Base directory where file shall be written.
      */
     private void writeAggregatedFileMatcherTrack(Track track, String matcher, File baseDirectory) {
-
         //Results
         Set<ExecutionResult> all = this.results.getGroup(track, matcher);
         
@@ -417,8 +407,6 @@ public class EvaluatorCSV extends Evaluator {
         if (allCm.getFalseNegative() != null)
             alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allCm.getFalseNegative(), AnalyticalAlignmentInformation.DefaultFeatures.EVALUATION_RESULT.toString(), "false negative");
 
-
-
         // residuals (true)
         if (allResidualCm.getTruePositive() != null)
             alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(allResidualCm.getTruePositive(), AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString(), "true");
@@ -436,7 +424,6 @@ public class EvaluatorCSV extends Evaluator {
         }
         alignmentsCube.getAnalyticalMappingInformation(testCase, matcher).addAll(nonResidualCorrespondence, AnalyticalAlignmentInformation.DefaultFeatures.RESIDUAL.toString(), "false");
         alignmentsCube.setCorrespondenceExtensions(this.getCorrespondenceExtensions(results));
-
 
         if(!onlyCalculateCube) {
             try {
@@ -549,9 +536,7 @@ public class EvaluatorCSV extends Evaluator {
         result.add("Total Runtime");
         result.add("Total Runtime(HH:MM:SS)");
         if(isPrintAlignmentExtensions) {
-            for (String extensionUri : this.alignmentExtensions) {
-                result.add(extensionUri);
-            }
+            result.addAll(this.alignmentExtensions);
         }
         return result;
     }
@@ -568,9 +553,7 @@ public class EvaluatorCSV extends Evaluator {
         result.add("Matcher");
         result.addAll(getHeaderIndividual());
         if(isPrintAlignmentExtensions) {
-            for (String extensionUri : this.alignmentExtensions) {
-                result.add(extensionUri);
-            }
+            result.addAll(this.alignmentExtensions);
         }
         return result;
     }

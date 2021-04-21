@@ -604,7 +604,7 @@ public class TrackRepository{
     
     /**
      * Return a map between track name and version and the track object.
-     * This is used to find tracks whenloading from file.
+     * This is used to find tracks when loading from file.
      * @return map between track name, version and the track object
      */
     public static Map<String, Track> getMapFromTrackNameAndVersionToTrack(){
@@ -616,8 +616,7 @@ public class TrackRepository{
         }
         return trackNameAndVersionToTrack;
     }
-    
-    
+
     /**
      * This method retrieves all tracks defined in the provided classes or any subclass of it.
      * It searches for fields which are defined as public static and has the type track or any collection of type track.

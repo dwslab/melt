@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class EvaluatorAlignmentAnalyzer extends Evaluator {
 
+
     private static Logger LOGGER = LoggerFactory.getLogger(EvaluatorAlignmentAnalyzer.class);
     
     /**
@@ -47,5 +48,4 @@ public class EvaluatorAlignmentAnalyzer extends Evaluator {
         if(!this.results.isEmpty())
             AlignmentAnalyzerMetric.writeAnalysisFile(results, new File(baseDirectory, "alignmentAnalysisOverview.csv"));
     }
-    
 }

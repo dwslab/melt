@@ -53,6 +53,7 @@ import java.util.stream.Collectors;
  */
 public class EvaluatorRankGroup extends Evaluator {
 
+
     /**
      * Default logger.
      */

@@ -85,7 +85,6 @@ jobs:
           ~/.m2
           ~/.cache/pip
         key: ${{ matrix.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ matrix.os }}-m2-
     - name: Setup Python
       uses: actions/setup-python@v1
       with:

@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Evaluator {
 
+
     /**
      * Default Logger
      */
@@ -112,11 +113,10 @@ public abstract class Evaluator {
         if(!directory.exists()) {
             directory.mkdirs();
         }
-        if(directory.isDirectory() == false){
+        if(!directory.isDirectory()){
             throw new IllegalArgumentException("Could not write evaluator results to baseDirectory because it is not a directory.");
         }
     }
-    
 
     /**
      * Given a base directory and an {@link ExecutionResult}, the target directory will be returned to which results can
@@ -132,7 +132,7 @@ public abstract class Evaluator {
                             URLEncoder.encode(executionResult.getTestCase().getName(), "UTF-8"),
                             URLEncoder.encode(executionResult.getMatcherName(), "UTF-8")).toFile();
         } catch (UnsupportedEncodingException ex) {
-            LOGGER.error("Could not crreate results folder", ex);
+            LOGGER.error("Could not create results folder", ex);
             return Paths.get(baseDirectory.getAbsolutePath()).toFile();
         }
     }
