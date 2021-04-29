@@ -1,0 +1,31 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.apache.lucene:lucene-core
+    versions:
+    - 8.7.0
+    - 8.8.0
+    - 8.8.1
+  - dependency-name: org.apache.lucene:lucene-queryparser
+    versions:
+    - 8.7.0
+    - 8.8.0
+    - 8.8.1
+  - dependency-name: org.apache.jena:jena-arq
+    versions:
+    - 3.17.0
+  - dependency-name: org.gitlab4j:gitlab4j-api
+    versions:
+    - 4.15.7
+  - dependency-name: org.apache.maven:maven-core
+    versions:
+    - 3.6.3
+  - dependency-name: org.apache.maven.plugins:maven-plugin-plugin
+    versions:
+    - 3.6.0
