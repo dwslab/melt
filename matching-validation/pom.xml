@@ -13,7 +13,7 @@
     <properties>
         <!-- project default compile: -->
         <jenaVersion>3.12.0</jenaVersion>
-        <owlapiVersion>5.1.11</owlapiVersion>
+        <owlapiVersion>5.1.17</owlapiVersion>
         <jenaPrefix>org.apache.jena.</jenaPrefix>
         <owlapiAdd>.orElse(null)</owlapiAdd>
     </properties>
