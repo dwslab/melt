@@ -7,11 +7,15 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia.DBpediaKnowledgeSource;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia.DBpediaLinker;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetKnowledgeSource;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorAllAnnotationProperties;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.HashSet;
@@ -28,12 +32,30 @@ import static org.junit.jupiter.api.Assertions.*;
 class LinksToFileTest {
 
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LinksToFileTest.class);
+
     @AfterAll
     static void cleanUp(){
         deleteFileIfExists("./trackLinks.txt");
         deleteFileIfExists("./testCaseLinks.txt");
         deleteFileIfExists("./testCaseLinksDBpedia.txt");
         deleteFileIfExists("./tc_list_links.txt");
+        deletePersistenceDirectory();
+    }
+
+    /**
+     * Delete the persistence directory.
+     */
+    public static void deletePersistenceDirectory() {
+        PersistenceService.getService().closePersistenceService();
+        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        if (result.exists() && result.isDirectory()) {
+            try {
+                FileUtils.deleteDirectory(result);
+            } catch (IOException e) {
+                LOGGER.error("Failed to remove persistence directory.", e);
+            }
+        }
     }
 
     static void deleteFileIfExists(String filePath){
@@ -172,7 +194,7 @@ class LinksToFileTest {
         ValueExtractor extractor = new ValueExtractorAllAnnotationProperties();
         LabelToConceptLinker linker = new DBpediaLinker(new DBpediaKnowledgeSource());
         LinksToFile.writeLinksToFile(fileToBeWritten, TrackRepository.Conference.V1.getFirstTestCase(), extractor,
-                linker, 5);
+                linker, 3);
         assertTrue(fileToBeWritten.exists());
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileToBeWritten));
