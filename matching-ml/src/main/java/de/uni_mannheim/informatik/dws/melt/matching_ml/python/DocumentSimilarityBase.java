@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,10 +33,11 @@ import org.slf4j.LoggerFactory;
  * represents a resource with with cell as identifier like URI and 
  * second cell the corresponding tokens (whitespace separated).
  */
-public abstract class DocumentSimilarityBase extends MatcherYAAAJena{
-    
-    private final static Logger LOGGER = LoggerFactory.getLogger(DocumentSimilarityBase.class);
-    private static final String newline = System.getProperty("line.separator");
+public abstract class DocumentSimilarityBase extends MatcherYAAAJena {
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentSimilarityBase.class);
+    private static final String NEW_LINE = System.getProperty("line.separator");
     
     protected File corpusFile;
     protected Collection<Property> textProperties;
@@ -45,7 +47,7 @@ public abstract class DocumentSimilarityBase extends MatcherYAAAJena{
     protected boolean matchIndividuals;
     
     
-    public DocumentSimilarityBase(){
+    public DocumentSimilarityBase() {
         this.corpusFile = null;
         this.textProperties = new ArrayList<>();
         this.addFragment = true;
@@ -54,13 +56,13 @@ public abstract class DocumentSimilarityBase extends MatcherYAAAJena{
         this.matchIndividuals = true;
     }
 
-    
-    protected void createCorpusFileIfNecessary(OntModel source, OntModel target) throws IOException{
+    protected void createCorpusFileIfNecessary(OntModel source, OntModel target) throws IOException {
         if(this.corpusFile == null){
             this.corpusFile = new File("./corpora.txt");
             LOGGER.info("Write corpus file to {} which is later removed.", this.corpusFile.getCanonicalPath());
             this.corpusFile.deleteOnExit();
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.corpusFile), "UTF-8"))){
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.corpusFile),
+                    StandardCharsets.UTF_8))){
                 if(matchClasses){
                     writeResourceText(source.listClasses(), writer);
                     writeResourceText(target.listClasses(), writer);
@@ -80,12 +82,12 @@ public abstract class DocumentSimilarityBase extends MatcherYAAAJena{
     protected void writeResourceText(ExtendedIterator<? extends OntResource> resources, Writer writer) throws IOException{
         while (resources.hasNext()) {
             OntResource r = resources.next();
-            if(r.isURIResource() == false)
+            if(!r.isURIResource())
                 continue;
             String textForResource = getResourceText(r).trim();
             if(textForResource.isEmpty())
                 continue;
-            writer.write(StringEscapeUtils.escapeCsv(r.getURI()) + "," + StringEscapeUtils.escapeCsv(textForResource) + newline);
+            writer.write(StringEscapeUtils.escapeCsv(r.getURI()) + "," + StringEscapeUtils.escapeCsv(textForResource) + NEW_LINE);
         }
     }
     
@@ -95,7 +97,7 @@ public abstract class DocumentSimilarityBase extends MatcherYAAAJena{
             String localName = r.getLocalName();
             if(localName != null){
                 String processed = processText(localName);
-                if(isBlank(processed) == false)
+                if(!isBlank(processed))
                     resourceText.add(processed);
             }
         }
@@ -115,7 +117,7 @@ public abstract class DocumentSimilarityBase extends MatcherYAAAJena{
                 Literal lit = n.asLiteral();
                 if(isString(lit)){
                     String processed = processText(lit.getLexicalForm());
-                    if(isBlank(processed) == false)
+                    if(!isBlank(processed))
                         resourceText.add(processed);
                 }
             }
@@ -126,8 +128,7 @@ public abstract class DocumentSimilarityBase extends MatcherYAAAJena{
     protected String processText(String text){
         return StringUtil.getProcessedString(text);
     }
-    
-        
+
     protected static boolean isString(Literal lit){        
         //check datatype
         String dtStr = lit.getDatatypeURI() ;
@@ -140,7 +141,7 @@ public abstract class DocumentSimilarityBase extends MatcherYAAAJena{
         }
         //datatype == null -> check for language tag
         String lang = lit.getLanguage();
-        if ( lang != null  && ! lang.equals(""))
+        if (lang != null  && ! lang.equals(""))
             return true;
         return false;
     }
@@ -151,7 +152,7 @@ public abstract class DocumentSimilarityBase extends MatcherYAAAJena{
             return true;
         }
         for (int i = 0; i < strLen; i++) {
-            if ((Character.isWhitespace(str.charAt(i)) == false)) {
+            if ((!Character.isWhitespace(str.charAt(i)))) {
                 return false;
             }
         }

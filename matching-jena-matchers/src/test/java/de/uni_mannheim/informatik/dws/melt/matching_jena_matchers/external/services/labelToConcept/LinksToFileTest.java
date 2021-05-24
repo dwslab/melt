@@ -22,6 +22,9 @@ import java.util.Set;
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations.readSetFromFile;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This test requires a working internet connection.
+ */
 class LinksToFileTest {
 
 
@@ -159,6 +162,9 @@ class LinksToFileTest {
         }
     }
 
+    /**
+     * This test requires that the SPARQL DBpedia endpoint is online.
+     */
     @Test
     void testWriteLinksToFileMultiConceptLinker() {
         File fileToBeWritten = new File("./testCaseLinksDBpedia.txt");

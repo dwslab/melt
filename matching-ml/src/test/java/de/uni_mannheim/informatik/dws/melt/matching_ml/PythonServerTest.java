@@ -83,7 +83,6 @@ class PythonServerTest {
         assertFalse(pythonServer.isInVocabulary("China", pathToVectorFile));
     }
 
-
     /**
      * Default test with cache.
      */
