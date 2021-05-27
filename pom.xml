@@ -26,9 +26,9 @@
         <module>matching-validation</module>
         <module>yet-another-alignment-api</module>
         <module>matching-data</module>
-        <module>receivers/cli-receiver</module>
-        <module>receivers/hobbit-receiver</module>
-        <module>receivers/http-receiver</module>
+        <module>cli-receiver</module>
+        <module>hobbit-receiver</module>
+        <module>http-receiver</module>
     </modules>
 
     <name>MELT - Matching EvaLuation Toolkit</name>
