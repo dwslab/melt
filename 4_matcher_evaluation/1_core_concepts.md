@@ -8,3 +8,14 @@ permalink: /matcher-evaluation/core-concepts
 
 # Matcher Evaluation Core Concepts
 Some content here.
+
+
+## ExecutionResultSet
+
+
+##  Evaluator
+
+An evaluator is an abstract class for creating any evaluation based on an ExecutionResultSet.
+
+
+## GoldStandardCompletness
