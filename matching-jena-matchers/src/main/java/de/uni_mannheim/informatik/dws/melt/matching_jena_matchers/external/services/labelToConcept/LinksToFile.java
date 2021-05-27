@@ -3,11 +3,10 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.serv
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.MultiConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorAllAnnotationProperties;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
 import org.apache.jena.util.iterator.ExtendedIterator;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations.writeSetToFile;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 
 /**
  * Service class writing the links of a test case / track to a file.
@@ -47,7 +47,7 @@ public class LinksToFile {
     public static <T> void writeLinksToFile(@NotNull String fileToWrite,
                                             @NotNull List<T> list,
                                             @NotNull LabelToConceptLinker linker) {
-        writeLinksToFile(new File(fileToWrite), list, new ValueExtractorAllAnnotationProperties(), linker, 7);
+        writeLinksToFile(new File(fileToWrite), list, new TextExtractorAllAnnotationProperties(), linker, 7);
     }
 
     /**
@@ -61,7 +61,7 @@ public class LinksToFile {
     public static <T> void writeLinksToFile(@NotNull File fileToWrite,
                                             @NotNull List<T> list,
                                             @NotNull LabelToConceptLinker linker) {
-        writeLinksToFile(fileToWrite, list, new ValueExtractorAllAnnotationProperties(), linker, 7);
+        writeLinksToFile(fileToWrite, list, new TextExtractorAllAnnotationProperties(), linker, 7);
     }
 
     /**
@@ -76,7 +76,7 @@ public class LinksToFile {
      */
     public static <T> void writeLinksToFile(@NotNull File fileToWrite,
                                             @NotNull List<T> list,
-                                            @NotNull ValueExtractor extractor,
+                                            @NotNull TextExtractor extractor,
                                             @NotNull LabelToConceptLinker linker,
                                             int maxLabelTokenLength) {
         if (list.size() > 0) {
@@ -94,7 +94,7 @@ public class LinksToFile {
     }
 
     static Set<String> getLinksTracks(@NotNull List<Track> trackList,
-                                      @NotNull ValueExtractor extractor,
+                                      @NotNull TextExtractor extractor,
                                       @NotNull LabelToConceptLinker linker,
                                       int maxLabelTokenLength) {
         List<TestCase> allTestCases = new ArrayList<>();
@@ -115,14 +115,14 @@ public class LinksToFile {
      */
     public static void writeLinksToFile(@NotNull File fileToWrite,
                                         @NotNull Track track,
-                                        @NotNull ValueExtractor extractor,
+                                        @NotNull TextExtractor extractor,
                                         @NotNull LabelToConceptLinker linker,
                                         int maxLabelTokenLength) {
         writeSetToFile(fileToWrite, getLinksTestcases(track.getTestCases(), extractor, linker, maxLabelTokenLength));
     }
 
     static Set<String> getLinksTestcases(@NotNull List<TestCase> testCaseList,
-                                         @NotNull ValueExtractor extractor,
+                                         @NotNull TextExtractor extractor,
                                          @NotNull LabelToConceptLinker linker,
                                          int maxLabelTokenLength) {
         Set<String> allLinks = new HashSet<>();
@@ -143,14 +143,14 @@ public class LinksToFile {
      */
     public static void writeLinksToFile(@NotNull File fileToWrite,
                                         @NotNull TestCase testCase,
-                                        @NotNull ValueExtractor extractor,
+                                        @NotNull TextExtractor extractor,
                                         @NotNull LabelToConceptLinker linker,
                                         int maxLabelTokenLength) {
         Set<String> allLinks = new HashSet<>(getLinks(testCase, extractor, linker, maxLabelTokenLength));
         writeSetToFile(fileToWrite, allLinks);
     }
 
-    static Set<String> getLinks(TestCase testCase, ValueExtractor extractor,
+    static Set<String> getLinks(TestCase testCase, TextExtractor extractor,
                                 LabelToConceptLinker linker,
                                 int maxLabelTokenLength) {
         Set<String> result = new HashSet<>();
@@ -162,7 +162,7 @@ public class LinksToFile {
         return result;
     }
 
-    static @NotNull Set<String> getLinksForOntModel(OntModel ontModel, ValueExtractor extractor,
+    static @NotNull Set<String> getLinksForOntModel(OntModel ontModel, TextExtractor extractor,
                                                     LabelToConceptLinker linker,
                                                     int maxLabelTokenLength) {
         Set<String> result = new HashSet<>();
@@ -173,7 +173,7 @@ public class LinksToFile {
     }
 
     static @NotNull Set<String> getLinksForIterator(ExtendedIterator<? extends OntResource> iterator,
-                                                    ValueExtractor valueExtractor, LabelToConceptLinker linker,
+                                                    TextExtractor valueExtractor, LabelToConceptLinker linker,
                                                     int maxLabelTokenLength) {
         Set<String> result = new HashSet<>();
         while (iterator.hasNext()) {

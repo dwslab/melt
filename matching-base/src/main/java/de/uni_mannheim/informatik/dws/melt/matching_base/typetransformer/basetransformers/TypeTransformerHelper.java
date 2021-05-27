@@ -1,9 +1,9 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
 import java.io.File;
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,26 +20,12 @@ public class TypeTransformerHelper {
         if(path != null){
             File folder = new File(path);
             if(folder.isDirectory()){
-                return createFileWithRandomNumber(folder, filePrefix, fileSuffix);
+                return FileUtil.createFileWithRandomNumber(folder, filePrefix, fileSuffix);
             }
             LOGGER.warn("The parameter key SERIALIZATION_FOLDER is not set to a folder which exists. Defaulting to the system tmp dir.");
         }        
         return File.createTempFile(filePrefix, fileSuffix);
-    }
-    
-    private static final SecureRandom random = new SecureRandom();
-    public static File createFileWithRandomNumber(File folder, String prefix, String suffix){
-        long n = random.nextLong();
-        n = (n == Long.MIN_VALUE) ? 0 : Math.abs(n);
-        return new File(folder, prefix + Long.toString(n) + suffix);
-    }
-    
-    public static Long getRandomPositiveNumber(){
-        long n = random.nextLong();
-        n = (n == Long.MIN_VALUE) ? 0 : Math.abs(n);
-        return n;
-    }
-    
+    }    
     
     public static <T> T getOrDefault(Properties parameters, String key, Class<? extends T> type, T defaultValue){        
         Object value = parameters.get(key);

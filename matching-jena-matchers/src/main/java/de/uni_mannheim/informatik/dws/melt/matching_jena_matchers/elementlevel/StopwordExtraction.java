@@ -3,8 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel;
 import de.uni_mannheim.informatik.dws.melt.matching_base.DataStore;
 import de.uni_mannheim.informatik.dws.melt.matching_base.OaeiOptions;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorProperty;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorProperty;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +24,7 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 
 /**
  * Extracts corpus dependent stopwords from instances, classes and properties.
@@ -35,7 +35,7 @@ public class StopwordExtraction extends MatcherYAAAJena {
     /**
      * Literal extractors to choose which literal/properties should be used.
      */
-    private List<ValueExtractor> valueExtractors;
+    private List<TextExtractor> valueExtractors;
     /**
      * Tokenizer function.
      */
@@ -63,7 +63,7 @@ public class StopwordExtraction extends MatcherYAAAJena {
      * @param stopwordsPercentage the percentage of how often a token should appear.
      * @param valueExtractors Literal extractors to choose which literal/properties should be used.
      */
-    public StopwordExtraction(Function<String, Collection<String>> tokenizer, boolean countDistinctTermsPerResource, int topNStopwords, double stopwordsPercentage, List<ValueExtractor> valueExtractors) {
+    public StopwordExtraction(Function<String, Collection<String>> tokenizer, boolean countDistinctTermsPerResource, int topNStopwords, double stopwordsPercentage, List<TextExtractor> valueExtractors) {
         this.valueExtractors = valueExtractors;
         this.tokenizer = tokenizer;
         this.countDistinctTermsPerResource = countDistinctTermsPerResource;
@@ -81,7 +81,7 @@ public class StopwordExtraction extends MatcherYAAAJena {
      * @param stopwordsPercentage the percentage of how often a token should appear.
      * @param valueExtractors Literal extractors to choose which literal/properties should be used.
      */
-    public StopwordExtraction(Function<String, Collection<String>> tokenizer, boolean countDistinctTermsPerResource, int topNStopwords, double stopwordsPercentage, ValueExtractor... valueExtractors) {
+    public StopwordExtraction(Function<String, Collection<String>> tokenizer, boolean countDistinctTermsPerResource, int topNStopwords, double stopwordsPercentage, TextExtractor... valueExtractors) {
         this(tokenizer, countDistinctTermsPerResource, topNStopwords, stopwordsPercentage, Arrays.asList(valueExtractors));
     }
     
@@ -92,7 +92,7 @@ public class StopwordExtraction extends MatcherYAAAJena {
      * @param properties the properies which should be used for extracting the literals (text).
      */
     public StopwordExtraction(Function<String, Collection<String>> tokenizer, int topNStopwords, Property... properties){
-        this(tokenizer, true, topNStopwords, 0.0d, ValueExtractorProperty.wrapExtractor(properties));
+        this(tokenizer, true, topNStopwords, 0.0d, TextExtractorProperty.wrapExtractor(properties));
     }
     
     /**
@@ -103,7 +103,7 @@ public class StopwordExtraction extends MatcherYAAAJena {
      * @param properties the properies which should be used for extracting the literals (text).
      */
     public StopwordExtraction(Function<String, Collection<String>> tokenizer, double stopwordsPercentage, Property... properties){
-        this(tokenizer, true, 0, stopwordsPercentage, ValueExtractorProperty.wrapExtractor(properties));
+        this(tokenizer, true, 0, stopwordsPercentage, TextExtractorProperty.wrapExtractor(properties));
     }
     
     @Override
@@ -141,7 +141,7 @@ public class StopwordExtraction extends MatcherYAAAJena {
         while (resources.hasNext()) {
             Resource res = resources.next();
             Set<String> extractedLiterals = new HashSet();
-            for(ValueExtractor extractor : this.valueExtractors){
+            for(TextExtractor extractor : this.valueExtractors){
                 extractedLiterals.addAll(extractor.extract(res));
             }
             if(!extractedLiterals.isEmpty())

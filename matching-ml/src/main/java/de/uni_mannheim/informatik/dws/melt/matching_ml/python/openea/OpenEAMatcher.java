@@ -1,6 +1,7 @@
 
 package de.uni_mannheim.informatik.dws.melt.matching_ml.python.openea;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.util.VectorOperations;
@@ -13,11 +14,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -46,7 +45,6 @@ public class OpenEAMatcher extends MatcherYAAAJena{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OpenEAMatcher.class);
     
-    private static final File DEFAULT_BASE_DIRECTORY = new File(System.getProperty("java.io.tmpdir")); //OR: new File("./")
     
     /**
      * Map of URIs (String) to double array.
@@ -99,14 +97,14 @@ public class OpenEAMatcher extends MatcherYAAAJena{
      * @param randomSeed the random seed for splitting the alignment into train and validation alignment.
      */
     public OpenEAMatcher(OpenEAConfiguration config, double fractionTrainCorrespondences, long randomSeed) {
-        this(DEFAULT_BASE_DIRECTORY, config, false, fractionTrainCorrespondences, randomSeed);
+        this(FileUtil.SYSTEM_TMP_FOLDER, config, false, fractionTrainCorrespondences, randomSeed);
     }
     
     /**
      * Makes a 80/20 train validation split and uses the default configuration and base folder.
      */
     public OpenEAMatcher() {
-        this(DEFAULT_BASE_DIRECTORY, getDefaultConfig(), false, 0.8, 1234);
+        this(FileUtil.SYSTEM_TMP_FOLDER, getDefaultConfig(), false, 0.8, 1234);
     }
     
     private static OpenEAConfiguration getDefaultConfig(){
@@ -119,7 +117,7 @@ public class OpenEAMatcher extends MatcherYAAAJena{
             LOGGER.error("Given alignment is empty - no training correspondences. Abort");
             return inputAlignment;
         }
-        File matchFolder = getRandomSubFolderOfBase();
+        File matchFolder = FileUtil.createFolderWithRandomNumberInDirectory(this.baseDirectory, "openeaDataset");
         matchFolder.mkdirs();
         File rel1 = new File(matchFolder, "rel_triples_1");
         File attr1 = new File(matchFolder, "attr_triples_1");
@@ -239,12 +237,5 @@ public class OpenEAMatcher extends MatcherYAAAJena{
                 }
             }
         }
-    }
-    
-    private static final SecureRandom random = new SecureRandom();
-    protected File getRandomSubFolderOfBase(){        
-        long n = random.nextLong();
-        n = (n == Long.MIN_VALUE) ? 0 : Math.abs(n);
-        return new File(this.baseDirectory, "openeaDataset-" + Long.toString(n));
     }
 }

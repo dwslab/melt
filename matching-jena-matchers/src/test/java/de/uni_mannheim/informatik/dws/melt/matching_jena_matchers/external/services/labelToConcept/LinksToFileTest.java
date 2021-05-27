@@ -3,14 +3,13 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.serv
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia.DBpediaKnowledgeSource;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.dbpedia.DBpediaLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetKnowledgeSource;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetLinker;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorAllAnnotationProperties;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
@@ -24,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations.readSetFromFile;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -72,7 +72,7 @@ class LinksToFileTest {
         myList.add(TrackRepository.Anatomy.Default.getFirstTestCase());
         File fileToBeWritten = new File("./tc_list_links.txt");
         fileToBeWritten.deleteOnExit();
-        ValueExtractor extractor = new ValueExtractorAllAnnotationProperties();
+        TextExtractor extractor = new TextExtractorAllAnnotationProperties();
         LabelToConceptLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
         LinksToFile.writeLinksToFile(fileToBeWritten, myList, extractor, linker, 1);
 
@@ -94,7 +94,7 @@ class LinksToFileTest {
         myList.add(TrackRepository.Anatomy.Default);
         File fileToBeWritten = new File("./track_list_links.txt");
         fileToBeWritten.deleteOnExit();
-        ValueExtractor extractor = new ValueExtractorAllAnnotationProperties();
+        TextExtractor extractor = new TextExtractorAllAnnotationProperties();
         LabelToConceptLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
         LinksToFile.writeLinksToFile(fileToBeWritten, myList, extractor, linker, 1);
 
@@ -116,7 +116,7 @@ class LinksToFileTest {
             myList.add("Hello");
             File fileToBeWritten = new File("./should_not_be_written.txt");
             fileToBeWritten.deleteOnExit();
-            ValueExtractor extractor = new ValueExtractorAllAnnotationProperties();
+            TextExtractor extractor = new TextExtractorAllAnnotationProperties();
             LabelToConceptLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
             LinksToFile.writeLinksToFile(fileToBeWritten, myList, extractor, linker, 100);
             assertFalse(fileToBeWritten.exists());
@@ -130,7 +130,7 @@ class LinksToFileTest {
         try {
             File fileToBeWritten = new File("./trackLinks.txt");
             fileToBeWritten.deleteOnExit();
-            ValueExtractor extractor = new ValueExtractorAllAnnotationProperties();
+            TextExtractor extractor = new TextExtractorAllAnnotationProperties();
             LabelToConceptLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
             LinksToFile.writeLinksToFile(fileToBeWritten, TrackRepository.Conference.V1, extractor, linker, 1000);
             assertTrue(fileToBeWritten.exists());
@@ -167,7 +167,7 @@ class LinksToFileTest {
     void testWriteLinksToFile() {
         File fileToBeWritten = new File("./testCaseLinks.txt");
         fileToBeWritten.deleteOnExit();
-        ValueExtractor extractor = new ValueExtractorAllAnnotationProperties();
+        TextExtractor extractor = new TextExtractorAllAnnotationProperties();
         LabelToConceptLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
         LinksToFile.writeLinksToFile(fileToBeWritten, TrackRepository.Conference.V1.getFirstTestCase(), extractor, linker, 1000);
         assertTrue(fileToBeWritten.exists());
@@ -191,7 +191,7 @@ class LinksToFileTest {
     void testWriteLinksToFileMultiConceptLinker() {
         File fileToBeWritten = new File("./testCaseLinksDBpedia.txt");
         fileToBeWritten.deleteOnExit();
-        ValueExtractor extractor = new ValueExtractorAllAnnotationProperties();
+        TextExtractor extractor = new TextExtractorAllAnnotationProperties();
         LabelToConceptLinker linker = new DBpediaLinker(new DBpediaKnowledgeSource());
         LinksToFile.writeLinksToFile(fileToBeWritten, TrackRepository.Conference.V1.getFirstTestCase(), extractor,
                 linker, 3);

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    
+    <script type="text/javascript">
+    $(function() {
+         $("btn-file-match#submit").click(function(){
+                 $.ajax({
+                     type: "POST",
+                     url: "PastSurgicalCustomItem",
+                     data: $('form.form-horizontal').serialize(),
+                             success: function(msg){
+                                      alert(msg);
+                             },
+                     error: function(){
+                     alert("failure");
+                 }
+               });
+         });
+    });
+    </script>
+    
+    <title>Run the matcher</title>
+  </head>
+  <body class="bg-light">
+    <div class="container">
+      <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="http://oaei.ontologymatching.org/oaeismall.jpg" alt="" width="150">
+        <h2>Run the matcher</h2>
+        <p class="lead">Below you can either upload two ontologies as a file or directly paste the ontologies in a textbox and run the matcher.</p>
+      </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Upload via file</h4>
+            </div>
+        </div>
+        <form id="runViaFile" method="post" action="match">
+            <div class="row">
+                <div class="col-md-5">
+                  <label for="sourceFile" class="form-label">Select source ontology / KG file</label>
+                  <input class="form-control" type="file" id="sourceFile">
+                </div>
+                
+                <div class="col-md-5">
+                  <label for="targetFile" class="form-label">Select target ontology / KG file</label>
+                  <input class="form-control" type="file" id="targetFile">
+                </div>
+                
+                <div class="col-md-2 d-flex"><!--offset-md-1-->
+                    <button id="btn-file-match" class="btn btn-primary form-control align-self-end" type="button">Run Matcher</button>
+                </div>
+            </div>
+        </form>
+        
+        
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h4>Upload via textbox</h4>
+            </div>
+        </div>
+        <form>
+            <div class="row">
+                <div class="form-group col-md-5">
+                    <label class="col-form-label" for="sourceText">Source ontology / KG</label>
+                    <textarea class="form-control" id="sourceText" rows="10"></textarea>
+                </div>
+                
+                <div class="form-group col-md-5">
+                    <label class="col-form-label" for="targetText">Target ontology / KG</label>
+                    <textarea class="form-control" id="targetText" rows="10"></textarea>
+                </div>
+                
+                
+                <div class="col-md-2 d-flex"><!--offset-md-1-->
+                    <button class="btn btn-primary form-control align-self-end" type="button">Run Matcher</button>
+
+                </div>
+                
+            </div>
+        </form>
+        
+      <div class="row mt-5">
+        <div class="col-md-10">
+            <h4>Result</h4>
+            <textarea class="form-control" id="resultText" rows="10"></textarea>
+        </div>
+      </div>
+
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; OAEI</p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="http://oaei.ontologymatching.org">Website</a></li>
+          <li class="list-inline-item"><a href="http://oaei.ontologymatching.org/committee.html">Committe</a></li>
+          <li class="list-inline-item"><a href="http://oaei.ontologymatching.org/doc/oaei-deontology.2.html">Data Policy</a></li>
+        </ul>
+      </footer>
+    </div>
+  
+  
+    <!-- Optional JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+  </body>
+</html>

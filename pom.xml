@@ -15,18 +15,20 @@
     </properties>
 
     <modules>
-        <module>hobbit-maven-plugin</module>
-        <module>hobbit-wrapper</module>
         <module>matching-assembly</module>
         <module>matching-base</module>
         <module>matching-eval</module>
         <module>matching-jena</module>
         <module>matching-jena-matchers</module>
+        <module>matching-maven-plugin</module>
         <module>matching-ml</module>
         <module>matching-owlapi</module>
         <module>matching-validation</module>
         <module>yet-another-alignment-api</module>
         <module>matching-data</module>
+        <module>receivers/cli-receiver</module>
+        <module>receivers/hobbit-receiver</module>
+        <module>receivers/http-receiver</module>
     </modules>
 
     <name>MELT - Matching EvaLuation Toolkit</name>

@@ -2,8 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matc
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BagOfWords;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorAllAnnotationProperties;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.io.IOoperations;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.BackgroundMatcherTools.getURIlabelMap;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 
 /**
  * A relatively simple matcher that can be used before running {@link BackgroundMatcher} to filter out simple matches.
@@ -32,7 +32,7 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
     /**
      * The value extractor used to obtain labels for resources.
      */
-    private ValueExtractor valueExtractor = new ValueExtractorAllAnnotationProperties();
+    private TextExtractor valueExtractor = new TextExtractorAllAnnotationProperties();
 
     /**
      * Alignment

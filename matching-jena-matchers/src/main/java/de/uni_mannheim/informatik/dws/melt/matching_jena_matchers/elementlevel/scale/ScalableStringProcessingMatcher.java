@@ -5,7 +5,6 @@ import com.github.liblevenshtein.transducer.ITransducer;
 import com.github.liblevenshtein.transducer.factory.TransducerBuilder;
 import de.uni_mannheim.informatik.dws.melt.matching_base.OaeiOptions;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 
 /**
  * Matcher which uses different String Matching approaches (stored in PropertySpecificStringProcessing) with a specific confidence.
@@ -43,7 +43,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScalableStringProcessingMatcher.class);
     
     protected Iterable<PropertySpecificStringProcessingMultipleReturn> processingElements;
-    protected Set<ValueExtractor> usedValueExtractors;
+    protected Set<TextExtractor> usedValueExtractors;
     
     protected boolean matchClasses = true;
     protected boolean matchProperties = true;
@@ -112,7 +112,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena {
             if(source.isURIResource() == false)
                 continue;
             String sourceURI = source.getURI();            
-            Map<ValueExtractor, Set<String>> valueMap = extractAllValues(source);
+            Map<TextExtractor, Set<String>> valueMap = extractAllValues(source);
             for(PropertySpecificStringProcessingMultipleReturn processing : this.processingElements){
                 Map<Object, Set<String>> tokenIndex = index.computeIfAbsent(processing, k->new HashMap<>());
                 for(String sourceLabels : getLiterals(processing, valueMap)){
@@ -134,7 +134,7 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena {
                 continue;
             String targetURI = target.getURI();
             
-            Map<ValueExtractor, Set<String>> valueMap = extractAllValues(target);
+            Map<TextExtractor, Set<String>> valueMap = extractAllValues(target);
             for(PropertySpecificStringProcessingMultipleReturn processing : this.processingElements){
                 Map<Object, Set<String>> tokenIndex = index.get(processing);
                 if(tokenIndex == null)
@@ -226,17 +226,17 @@ public class ScalableStringProcessingMatcher extends MatcherYAAAJena {
     }
     
     
-    protected Set<String> getLiterals(PropertySpecificStringProcessingMultipleReturn processing, Map<ValueExtractor, Set<String>> valueMap){
+    protected Set<String> getLiterals(PropertySpecificStringProcessingMultipleReturn processing, Map<TextExtractor, Set<String>> valueMap){
         Set<String> values = new HashSet<>();
-        for(ValueExtractor extractor : processing.getValueExtractors()){
+        for(TextExtractor extractor : processing.getValueExtractors()){
             values.addAll(valueMap.get(extractor));
         }
         return values;
     }
     
-    protected Map<ValueExtractor,Set<String>> extractAllValues(Resource r){
-        Map<ValueExtractor, Set<String>> literals = new HashMap<>();
-        for(ValueExtractor p : this.usedValueExtractors){
+    protected Map<TextExtractor,Set<String>> extractAllValues(Resource r){
+        Map<TextExtractor, Set<String>> literals = new HashMap<>();
+        for(TextExtractor p : this.usedValueExtractors){
             literals.put(p, p.extract(r));
         }
         return literals;

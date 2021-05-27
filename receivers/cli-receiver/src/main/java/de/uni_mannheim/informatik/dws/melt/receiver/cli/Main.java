@@ -1,8 +1,11 @@
 package de.uni_mannheim.informatik.dws.melt.receiver.cli;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.receiver.MainMatcherClassExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.apache.commons.cli.CommandLine;
@@ -19,17 +22,9 @@ import org.apache.commons.cli.ParseException;
  */
 public class Main {
     
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
         Options options = new Options();
-        
-        options.addOption(Option.builder("m")
-                .longOpt("matcher")
-                .hasArg()
-                .argName("fullName")
-                .required()
-                .desc("The full name of the matcher like de.uni_mannheim.informatik.dws.melt.MyMatcher")
-                .build());
-        
+
         options.addOption(Option.builder("s")
                 .longOpt("source")
                 .hasArg()
@@ -43,7 +38,7 @@ public class Main {
                 .hasArg()
                 .argName("URL")
                 .required()
-                .desc("The taregt ontology URI (usually a file uri pointing to a file containing an ontology).")
+                .desc("The target ontology URI (usually a file uri pointing to a file containing an ontology).")
                 .build());
         
         options.addOption(Option.builder("i")
@@ -76,8 +71,33 @@ public class Main {
             System.exit(1);
         }
         
-        AlignmentAndParameters result = GenericMatcherCaller.runMatcher(cmd.getOptionValue("m"), getURL(cmd, "s"), getURL(cmd, "t"), getURL(cmd, "i"), getURL(cmd, "p"));
-        System.out.println(TypeTransformerRegistry.getTransformedObject(result.getAlignment(), URL.class));
+        String mainClass;
+        try {
+            mainClass = MainMatcherClassExtractor.extractMainClass();
+        } catch (IOException ex) {
+            System.err.println("Could not extract Main class name. Do nothing." + ex.getMessage());
+            return;
+        }
+        
+        AlignmentAndParameters result = null;
+        try {
+            result = GenericMatcherCaller.runMatcher(mainClass, getURL(cmd, "s"), getURL(cmd, "t"), getURL(cmd, "i"), getURL(cmd, "p"));
+        } catch (Exception ex) {
+            System.err.println("Could not call the matcher. " + ex.getMessage());
+            ex.printStackTrace();
+            return;
+        }        
+        
+        if(result.getAlignment() == null){
+            System.err.println("The resulting alignment of the matcher is null.");
+            return;
+        }
+        try {
+            System.out.println(TypeTransformerRegistry.getTransformedObject(result.getAlignment(), URL.class));
+        } catch (TypeTransformationException ex) {
+            System.err.println("Cannot transform the alignment to a URL" + ex.getMessage());
+            ex.printStackTrace();
+        }
     }
     
     private static URL getURL(CommandLine cmd, String parameter){

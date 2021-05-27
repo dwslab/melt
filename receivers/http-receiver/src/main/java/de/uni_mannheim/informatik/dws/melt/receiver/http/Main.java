@@ -1,23 +1,23 @@
 package de.uni_mannheim.informatik.dws.melt.receiver.http;
 
-import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
-import eu.sealsproject.platform.res.tool.api.ToolBridgeException;
+import de.uni_mannheim.informatik.dws.melt.matching_base.receiver.MainMatcherClassExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.rmi.ServerException;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import java.util.logging.Level;
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
@@ -26,10 +26,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.QoSFilter;
+import org.eclipse.jetty.util.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,25 +46,57 @@ public class Main {
     public static void main(String[] args) throws Exception {    
         
         //curl -F 'source=@cmt.rdf' -F 'target=@conference.rdf' -d "param1=value1" http://127.0.0.1:8080/match
-        Server server = new Server(getPort());
+        
+        //parameters:
+        int port = getPort();
+        int maxParallelRequests = getMaxParallelRequests();
+       
+        Server server = new Server(port);
         
         ServletContextHandler context = new ServletContextHandler();
         context.setContextPath("/");
+        context.addFilter(getQoSFilter(maxParallelRequests), "/match", EnumSet.of(DispatcherType.REQUEST));
+        server.setHandler(context);
         
-        context.addFilter(getQoSFilter(getMaxParallelRequests()), "/match", EnumSet.of(DispatcherType.REQUEST));
         
+        //make the index page show up
+        URI rootURI = getRootDir();
+        if(rootURI != null){
+            context.setBaseResource(Resource.newResource(rootURI));
+            context.setWelcomeFiles(new String[]{"index.html"});
+        }
+        //https://stackoverflow.com/questions/20207477/serving-static-files-from-alternate-path-in-embedded-jetty
+        //https://stackoverflow.com/questions/39011587/jetty-default-servlet-context-path
+        
+        //first servlet which takes care about the match method and run the actual matcher
         ServletHolder uploadHolder = context.addServlet(MatcherServlet.class, "/match");
-        
         //the last number which is one means that all files are written on disk and that no in memory caching applies
         uploadHolder.getRegistration().setMultipartConfig(new MultipartConfigElement(LOCATION.getAbsolutePath(), -1, -1, 1));
 
-        server.setHandler(context);
+        //default servlet for mapping the index / welcome page
+        ServletHolder holderPwd = new ServletHolder("default", DefaultServlet.class);
+        holderPwd.setInitParameter("dirAllowed","false");
+        context.addServlet(holderPwd,"/");
         
         server.start();
         server.join();
     }
+    
+    private static URI getRootDir(){
+        URL indexURL = Main.class.getClassLoader().getResource("static/index.html");
+        if (indexURL == null){
+            return null;
+        }
+        try {
+            return indexURL.toURI().resolve("./").normalize();
+        } catch (URISyntaxException ex) {
+            return null;
+        }
+    }
 
     public static class MatcherServlet extends HttpServlet {
+
+        private static final long serialVersionUID = 1L;
 
         @Override
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -78,22 +112,29 @@ public class Main {
                     throw new ServerException("No multipart parameter target");
                 }
                 Part inputAlignment = request.getPart("inputAlignment");
+                Part parameters = request.getPart("parameters");
                 
                 File sourceFile = getFile(source, "source");
                 File targetFile = getFile(target, "target");
                 File inputAlignmentFile = getFile(inputAlignment, "inputAlignment");
+                File parametersFile = getFile(parameters, "parameters");
                 
                 URL inputAlignmentURL = null;
                 if(inputAlignmentFile != null)
                     inputAlignmentURL = inputAlignmentFile.toURI().toURL();
+                
+                URL parametersURL = null;
+                if(parametersFile != null)
+                    parametersURL = parametersFile.toURI().toURL();
                     
-                URL resultURL = runTool(sourceFile.toURI().toURL(), targetFile.toURI().toURL(), inputAlignmentURL,
-                        reduceToFirstValueAndExcludeKeys(request.getParameterMap()));
+                URL resultURL = runTool(sourceFile.toURI().toURL(), targetFile.toURI().toURL(), inputAlignmentURL, parametersURL);
                 
                 sourceFile.delete();
                 targetFile.delete();
                 if(inputAlignmentFile != null)
                     inputAlignmentFile.delete();
+                if(parametersFile != null)
+                    parametersFile.delete();
                 
                 if(resultURL != null){
                     sendFileContent(resultURL, response);
@@ -112,9 +153,13 @@ public class Main {
                 String inputAlignmentStr = request.getParameter("inputAlignment");
                 if(inputAlignmentStr != null)
                     inputAlignment = new URL(inputAlignmentStr);
+                
+                URL parameters = null;
+                String parametersStr = request.getParameter("parameters");
+                if(parametersStr != null)
+                    parameters = new URL(parametersStr);
                         
-                URL resultURL = runTool(new URL(sourceParam), new URL(targetParam), inputAlignment,
-                        reduceToFirstValueAndExcludeKeys(request.getParameterMap()));
+                URL resultURL = runTool(new URL(sourceParam), new URL(targetParam), inputAlignment, parameters);
                 
                 if(resultURL != null)
                     response.getWriter().write(resultURL.toString());
@@ -150,61 +195,40 @@ public class Main {
             }
         } catch (IOException ex) {
             LOGGER.error("Could not send the mapping file.", ex);
-            return;
         }    
     }
     
-    private static final Set<String> EXCLUDE_KEYS = new HashSet<>(Arrays.asList("source", "target", "inputAlignment"));
-    private static Map<String, String> reduceToFirstValueAndExcludeKeys(Map<String, String[]> map){
-        Map<String, String> firstValueMap = new HashMap<>();
-        for(Entry<String, String[]> entry : map.entrySet()){
-            if(EXCLUDE_KEYS.contains(entry.getKey()) == false &&  entry.getValue().length > 0){
-                firstValueMap.put(entry.getKey(), entry.getValue()[0]);
-            }
-        }
-        return firstValueMap;
-    }
     
-    private static URL runTool(URL source, URL target, URL inputAlignment, Map<String, String> parameters){
-        String implementingClass = "de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BaselineStringMatcher";
-        //TODO: delete
-        //String implementingClass = System.getenv("OAEI_MAIN");
-        if(implementingClass == null){
-            LOGGER.error("The system environment variable \"OAEI_MAIN\" is not defined - abort");
+    private static URL runTool(URL source, URL target, URL inputAlignment, URL parameters){
+        String mainClass;
+        try {
+            mainClass = MainMatcherClassExtractor.extractMainClass();
+        } catch (IOException ex) {
+            LOGGER.error("Could not extract Main class name. Do nothing." + ex.getMessage());
             return null;
         }
+        //mainClass = "de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BaselineStringMatcher";
         
-        IOntologyMatchingToolBridge bridge;
-        try {
-            Class clazz = Class.forName(implementingClass);
-            bridge = (IOntologyMatchingToolBridge) clazz.newInstance();
-        } catch (ClassNotFoundException ex) { 
-            LOGGER.error("Could not find class " + implementingClass, ex);
-            return null;
-        } catch (InstantiationException ex) {
-            LOGGER.error("Could not instantiate class " + implementingClass, ex);
-            return null;
-        } catch (IllegalAccessException ex) {
-            LOGGER.error("Could not access class " + implementingClass, ex);
-            return null;
-        }
         LOGGER.info("Server starts matcher class {} for task:\nSource:{}\nTarget:{}\nInputAlignment:{}\nParameter:{}", 
-                implementingClass, source, target, inputAlignment, parameters);
-        URL result;
+                mainClass, source, target, inputAlignment, parameters);
+        
+        AlignmentAndParameters result = null;
         try {
-            if(inputAlignment == null)
-                result = bridge.align(source, target);
-            else
-                result = bridge.align(source, target, inputAlignment);
-        } catch (ToolBridgeException ex) {
-            LOGGER.error("Could not call align method of IOntologyMatchingToolBridge: " + ex.getMessage(), ex);
+            result = GenericMatcherCaller.runMatcher(mainClass, source, target, inputAlignment, parameters);
+        } catch (Exception ex) {
+            LOGGER.error("Exception during matching.", ex);
             return null;
         }
-        if(result == null){
-            LOGGER.error("Result of IOntologyMatchingToolBridge is null");
+        if(result.getAlignment() == null){
+            LOGGER.error("The resulting alignment of the matcher is null.");
             return null;
         }
-        return result;
+        try {
+            return TypeTransformerRegistry.getTransformedObject(result.getAlignment(), URL.class);
+        } catch (TypeTransformationException ex) {
+            LOGGER.error("Cannot transform the alignment to a URL and then to a file.", ex);
+            return null;
+        }
     }
     
     
@@ -269,7 +293,7 @@ public class Main {
             try{
                 port = Integer.parseInt(envPort);
             }catch(NumberFormatException e){
-                System.out.println("could not parse port number");
+                LOGGER.warn("could not parse port number - using default port 8080");
             }
         }
         return port;
@@ -282,27 +306,35 @@ public class Main {
             try{
                 maxRequests = Integer.parseInt(max);
             }catch(NumberFormatException e){
-                System.out.println("could not parse MELT_MAX_REQUESTS");
+                LOGGER.warn("could not parse MELT_MAX_REQUESTS - using default value of 1");
             }
         }
         return maxRequests;
     }
     
-    
     private static File getLocation(){
-        String defaultLocation = new File(new File(System.getProperty("java.io.tmpdir")), "MELT-fileupload").getAbsolutePath();
-        
         String location = System.getenv("MELT_LOCATION");
         if(location == null){
-            location = defaultLocation;
+            return getDefaultLocation();
         }
         File locationDir = new File(location);
         if(locationDir.isDirectory() == false){
-            LOGGER.warn("Environment variable MELT_LOCATION is not a path to a directory. Use default: {}", defaultLocation);
-            locationDir = new File(defaultLocation);
+            LOGGER.warn("Environment variable MELT_LOCATION is not a path to a directory. Use default");
+            return getDefaultLocation();
         }
-        
-        if (!locationDir.exists()) locationDir.mkdirs();
+        locationDir.mkdirs();
         return locationDir;
     }
+    
+    private static File getDefaultLocation(){
+        try {
+            File f = Files.createTempDirectory("MELT-fileupload").toFile();
+            f.mkdirs();
+            return f;
+        } catch (IOException ex) {
+            LOGGER.error("Could not create a directory in the tmp folder", ex);
+            return null;
+        }
+    }
+    
 }

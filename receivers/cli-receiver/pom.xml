@@ -1,15 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-    <artifactId>cli-receiver</artifactId>
-    <version>1.0</version>
-    <name>MELT - Matching EvaLuation Toolkit | CLI Receiver</name>
+    <parent>
+        <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+        <artifactId>matching-parent</artifactId>
+        <version>2.7-SNAPSHOT</version>
+    </parent>
     
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+    <artifactId>cli-receiver</artifactId>
+    <name>MELT - Matching EvaLuation Toolkit | CLI Receiver</name>
 
     <dependencies>
         <dependency>
@@ -25,24 +23,4 @@
             <version>1.4</version>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase> 
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>

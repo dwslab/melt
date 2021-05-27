@@ -21,6 +21,10 @@ public class URL2OntModelTransformer extends AbstractTypeTransformer<URL, OntMod
     
     @Override
     public OntModel transform(URL value, Properties parameters) throws TypeTransformationException {
-        return OntologyCacheJena.get(value.toString(), JenaTransformerHelper.getSpec(parameters), JenaTransformerHelper.shouldUseCache(parameters));
+        return OntologyCacheJena.get(value.toString(), 
+                JenaTransformerHelper.getSpec(parameters), 
+                JenaTransformerHelper.shouldUseCache(parameters), 
+                JenaTransformerHelper.hintLang(parameters)
+        );
     }
 }

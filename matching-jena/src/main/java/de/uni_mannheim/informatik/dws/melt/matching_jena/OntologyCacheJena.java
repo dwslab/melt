@@ -7,12 +7,18 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import org.apache.jena.graph.Graph;
 
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFLanguages;
+import org.apache.jena.riot.RDFParser;
+import org.apache.jena.riot.system.ErrorHandlerFactory;
+import org.apache.jena.riot.system.StreamRDFLib;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +50,7 @@ public class OntologyCacheJena {
      */
     private static boolean isDeactivatedCache = false;
 
+    
     /**
      * Returns the OntModel for the given uri using a cache if indicated to do so.
      * @param uri The URI of the ontology that shall be cached.
@@ -51,14 +58,28 @@ public class OntologyCacheJena {
      * @param useCache Indicates whether the cache shall be used. If set to false, ontologies will not be held in memory but re-read every time time.
      * @return OntModel reference.
      */
-    public static synchronized OntModel get(String uri, OntModelSpec spec, boolean useCache) {
+    public static OntModel get(String uri, OntModelSpec spec, boolean useCache) {
+        return get(uri, spec, useCache, Lang.RDFXML); //RDF XML is the default in jena.
+        
+    }
+
+    /**
+     * Returns the OntModel for the given uri using a cache if indicated to do so.
+     * @param uri The URI of the ontology that shall be cached.
+     * @param spec The specification of the ontology.
+     * @param useCache Indicates whether the cache shall be used. If set to false, ontologies will not be held in memory but re-read every time time.
+     * @param hintlang Set the hint {@link Lang}. This is the RDF syntax used when there is no way to deduce the syntax (e.g. read from a InputStream,
+     * no recognized file extension, no recognized HTTP Content-Type provided).
+     * @return OntModel reference.
+     */
+    public static synchronized OntModel get(String uri, OntModelSpec spec, boolean useCache, Lang hintlang) {
         if (useCache) {
             String keyForCache = uri + "_" + spec.hashCode();
             OntModel model = ontologyCache.get(keyForCache);            
             if (model == null) {
                 // model not found in cache → read, put it there and return
                 LOGGER.info("Reading model into cache (" + uri + ")");
-                model = readOntModel(uri, spec);
+                model = readOntModel(uri, spec, hintlang);
                 if(!isDeactivatedCache){
                     ontologyCache.put(keyForCache, model);
                 }
@@ -70,7 +91,7 @@ public class OntologyCacheJena {
         } else {
             // → do not use cache
             // plain vanilla case: read ontology and return
-            return readOntModel(uri, spec);
+            return readOntModel(uri, spec, hintlang);
         }
     }
 
@@ -78,16 +99,26 @@ public class OntologyCacheJena {
      * Read and parse an ontology.
      * @param uri URI from which shall be read.
      * @param spec Jena Ontology Model specification.
+     * @param hintLang Set the hint {@link Lang}. This is the RDF syntax used when there is no way to deduce the syntax (e.g. read from a InputStream,
+     * no recognized file extension, no recognized HTTP Content-Type provided).
      * @return OntModel instance that was read.
      */
-    private static OntModel readOntModel(String uri, OntModelSpec spec){
+    private static OntModel readOntModel(String uri, OntModelSpec spec, Lang hintLang){
         File f = TdbUtil.getFileFromURL(uri);
         if(TdbUtil.isTDB1Dataset(f)){
             return TdbUtil.getOntModelFromTDB(f.getAbsolutePath(), spec);
         }else{
             OntModel model = ModelFactory.createOntologyModel(spec);
             //model.read(uri);
-            RDFDataMgr.read(model, uri);
+            //RDFDataMgr.read(model, uri);
+            RDFParser.create()
+                .source(uri)
+                .base(uri)
+                .errorHandler(ErrorHandlerFactory.errorHandlerWarn)
+                .lang(hintLang)
+                .context(null)
+                .parse(StreamRDFLib.graph(model.getGraph()));
+            
             return model;
         }
     }

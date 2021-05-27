@@ -1,9 +1,9 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena;
 
 import java.io.File;
-import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Paths;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
@@ -13,12 +13,14 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.tdb.TDBLoader;
 import org.apache.jena.tdb.store.GraphTDB;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * TDB util for generating and inspecting TDB datasets.
  */
 public class TdbUtil {
-    
+    private static final Logger LOGGER = LoggerFactory.getLogger(TdbUtil.class);
     
     public static void createTDB(String url, String tdblocation){
         Dataset d = TDBFactory.createDataset(tdblocation);
@@ -66,9 +68,9 @@ public class TdbUtil {
      */
     public static File getFileFromURL(String url){
         try {
-            return Paths.get(new URL(url).toURI()).toFile();
-        } catch (MalformedURLException | URISyntaxException ex) {
-            return new File(url); // if it is just a path and not a URL.
+            return Paths.get(new URI(url)).toFile();
+        }catch (URISyntaxException | IllegalArgumentException | FileSystemNotFoundException | SecurityException ex) {
+            return null;
         }
     }
     

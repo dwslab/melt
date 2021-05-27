@@ -1,6 +1,7 @@
 
 package de.uni_mannheim.informatik.dws.melt.matching_base.external.seals;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherFile;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatchingException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process.ExternalProcess;
@@ -39,9 +40,6 @@ public class MatcherSeals extends MatcherFile{
     public static String getSealsDownloadUrlVersion(){ return SEALS_DOWNLOAD_URL_VERSION; }
     private static final String SEALS_DOWNLOAD_URL = "https://github.com/DanFaria/OAEI_SealsClient/releases/download/v" + SEALS_DOWNLOAD_URL_VERSION + "/seals-omt-client.jar";
     
-    private static final String OS_NAME = System.getProperty("os.name");
-    private static final boolean IS_LINUX = OS_NAME.startsWith("Linux") || OS_NAME.startsWith("LINUX");
-    private static final File DEFAULT_TMP_FOLDER = new File(System.getProperty("java.io.tmpdir"));
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherSeals.class);
     
     
@@ -126,7 +124,7 @@ public class MatcherSeals extends MatcherFile{
     }
     
     public MatcherSeals(File matcherFileOrFolder, File sealsClientJar, long timeout, TimeUnit timeoutTimeUnit, List<String> javaRuntimeParameters, boolean freshMatcherInstance, boolean doNotUseInputAlignment, String javaCommand) {
-        this(matcherFileOrFolder, sealsClientJar, DEFAULT_TMP_FOLDER, timeout, timeoutTimeUnit, javaRuntimeParameters, freshMatcherInstance, doNotUseInputAlignment, javaCommand);
+        this(matcherFileOrFolder, sealsClientJar, FileUtil.SYSTEM_TMP_FOLDER, timeout, timeoutTimeUnit, javaRuntimeParameters, freshMatcherInstance, doNotUseInputAlignment, javaCommand);
     }
     
     /**
@@ -143,7 +141,7 @@ public class MatcherSeals extends MatcherFile{
      * @param matcherFileOrFolder The file (zip file) or folder which represents one matcher.
      */
     public MatcherSeals(File matcherFileOrFolder) {
-        this(matcherFileOrFolder, new File(DEFAULT_TMP_FOLDER, "seals-omt-client-v" + SEALS_DOWNLOAD_URL_VERSION + ".jar"));
+        this(matcherFileOrFolder, new File(FileUtil.SYSTEM_TMP_FOLDER, "seals-omt-client-v" + SEALS_DOWNLOAD_URL_VERSION + ".jar"));
     }
     
     private static void downloadSealsIfNecessary(File sealsClientJar){
@@ -180,7 +178,7 @@ public class MatcherSeals extends MatcherFile{
             if(matcherFileOrFolder.getName().endsWith(".zip")){
                 //unzip it to tmp folder
                 //make folder for unzipDirectory
-                File unzipFolder = createFolderWithRandomNumberInDirectory(tmpDirectory, "meltUnzip");
+                File unzipFolder = FileUtil.createFolderWithRandomNumberInDirectory(tmpDirectory, "meltUnzip");
                 unzipFolder.deleteOnExit();
                 LOGGER.info("Unzip seals matcher {} now.", matcherFileOrFolder.getName());
                 unzipToDirectory(unzipFolder, matcherFileOrFolder, true);
@@ -207,12 +205,6 @@ public class MatcherSeals extends MatcherFile{
         }
     }
     
-    private static final SecureRandom random = new SecureRandom();
-    public static File createFolderWithRandomNumberInDirectory(File folder, String prefix){
-        long n = random.nextLong();
-        n = (n == Long.MIN_VALUE) ? 0 : Math.abs(n);
-        return new File(folder, prefix + "-" + n);
-    }
     
     //https://stackoverflow.com/questions/29001162/how-to-get-the-value-which-i-sent-via-system-out-println
     //to store the log output of a matcher
@@ -226,13 +218,13 @@ public class MatcherSeals extends MatcherFile{
         File currentInstance;
         if(this.freshMatcherInstance){
             //copy folder to tmp directory
-            currentInstance = createFolderWithRandomNumberInDirectory(this.tmpFolder, "meltFreshInstance");
+            currentInstance = FileUtil.createFolderWithRandomNumberInDirectory(this.tmpFolder, "meltFreshInstance");
             LOGGER.info("Copy matcher {} to new directory {} because a fresh instance for each new matching task is requested.", this.matcherFolder.getName(), currentInstance.getName());
             copyDirectory(currentInstance, this.matcherFolder);
         }else{
             currentInstance = this.matcherFolder;
         }
-        File sealsHome = createFolderWithRandomNumberInDirectory(this.tmpFolder, "meltSealsHome");
+        File sealsHome = FileUtil.createFolderWithRandomNumberInDirectory(this.tmpFolder, "meltSealsHome");
         sealsHome.mkdirs();
         try{
             ExternalProcess sealsProcess = new ExternalProcess();
@@ -438,9 +430,7 @@ public class MatcherSeals extends MatcherFile{
     }
     
     private static String getDefaultMatcherName(){
-        long n = random.nextLong();
-        n = (n == Long.MIN_VALUE) ? 0 : Math.abs(n);
-        return "MatcherSeals-" + n;
+        return "MatcherSeals-" + FileUtil.getRandomPositiveNumber();
     }
     
     public String getTimeoutAsText() {

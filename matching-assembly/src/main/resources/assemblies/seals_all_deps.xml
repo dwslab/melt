@@ -46,27 +46,39 @@
             </excludes>
         </fileSet>
     </fileSets>
-        
+    
     <dependencySets>
+        <!--copy matching base to bin folder -->
+        <dependencySet>
+            <outputDirectory>bin</outputDirectory>
+            <scope>runtime</scope>
+            <includes>
+                <include>de.uni-mannheim.informatik.dws.melt:matching-base</include>
+            </includes>
+        </dependencySet>
+    
         <!-- copy all dependencies to bin/lib folder -->
         <dependencySet>
             <outputDirectory>bin/lib</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
             <scope>runtime</scope>
             <excludes>
-                <exclude>eu.sealsproject.domain.omt.metadata:omt-metadata</exclude><!--2.0-->
-                <exclude>eu.sealsproject.platform.repos:rrs-client</exclude><!--1.1-->
-                <exclude>eu.sealsproject.platform.repos:tdrs-client</exclude><!--1.1-b-->
-                <exclude>eu.sealsproject.platform.res:res-domain-api</exclude><!--1.1.1-->
-                <exclude>eu.sealsproject.platform.res:res-domain-impl</exclude><!--1.1.1-->
-                <exclude>eu.sealsproject.platform.res:res-resources</exclude><!--1.1.1-->
-                <exclude>eu.sealsproject.platform.res:res-tool-api</exclude><!--1.1.1-->
-                <exclude>eu.sealsproject.platform.res:res-tool-bundle-api</exclude><!--1.1.1-->
-                <exclude>eu.sealsproject.platform.res:res-tool-bundle-factory</exclude><!--1.1.1-->
-                <exclude>eu.sealsproject.platform.res:res-tool-bundle-loader</exclude><!--1.1.1-->
-                <exclude>eu.sealsproject.platform.res:res-tool-bundle-validator</exclude><!--1.1.1-->
-                <exclude>eu.sealsproject.platform.res:res-tool-impl</exclude><!--1.1.1-->
-                <exclude>eu.sealsproject.platform.res:res-tool-utils-core</exclude><!--1.1.1-->
+                <!-- those libraries are not available in maven and 
+                just trigger a warning in the build process - therefore just remove them
+                <exclude>eu.sealsproject.domain.omt.metadata:omt-metadata</exclude>
+                <exclude>eu.sealsproject.platform.repos:rrs-client</exclude>
+                <exclude>eu.sealsproject.platform.repos:tdrs-client</exclude>
+                <exclude>eu.sealsproject.platform.res:res-domain-api</exclude>
+                <exclude>eu.sealsproject.platform.res:res-domain-impl</exclude>
+                <exclude>eu.sealsproject.platform.res:res-resources</exclude>
+                <exclude>eu.sealsproject.platform.res:res-tool-api</exclude>
+                <exclude>eu.sealsproject.platform.res:res-tool-bundle-api</exclude>
+                <exclude>eu.sealsproject.platform.res:res-tool-bundle-factory</exclude>
+                <exclude>eu.sealsproject.platform.res:res-tool-bundle-loader</exclude>
+                <exclude>eu.sealsproject.platform.res:res-tool-bundle-validator</exclude>
+                <exclude>eu.sealsproject.platform.res:res-tool-impl</exclude>
+                <exclude>eu.sealsproject.platform.res:res-tool-utils-core</exclude>
+                -->
                 <exclude>de.uni-mannheim.informatik.dws.melt:res-tool-api</exclude><!--1.1.1-->
                 <exclude>de.uni-mannheim.informatik.dws.melt:res-domain-api</exclude><!--1.1.1-->
                 <exclude>de.uni-mannheim.informatik.dws.melt:res-tool-impl</exclude><!--1.1.1-->

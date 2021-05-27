@@ -1,11 +1,11 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.wrapper;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.OntoInfo;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,8 +14,6 @@ import java.io.OutputStream;
 import java.lang.ProcessBuilder.Redirect;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -40,7 +38,6 @@ public class ParisMatcher extends MatcherYAAAJena{
     private static final Logger LOGGER = LoggerFactory.getLogger(ParisMatcher.class);
     
     private static final URL PARIS_WEB_LOCATION = createURL("http://webdam.inria.fr/paris/releases/paris_0_3.jar");
-    private static final File SYSTEM_TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
     
     /**
      * Path to the Paris matcher jar file.
@@ -95,7 +92,7 @@ public class ParisMatcher extends MatcherYAAAJena{
      * @param javaRuntimeArguments  A list of java runtime arguments like "-Xmx2g" or the like
      */
     public ParisMatcher(File pathToParisJar, String javaCommand, List<String> javaRuntimeArguments) {
-        this(pathToParisJar, SYSTEM_TMP_DIR, javaCommand, javaRuntimeArguments);
+        this(pathToParisJar, FileUtil.SYSTEM_TMP_FOLDER, javaCommand, javaRuntimeArguments);
     }
     
     /**
@@ -127,7 +124,7 @@ public class ParisMatcher extends MatcherYAAAJena{
     
     @Override
     public Alignment match(URL source, URL target, Alignment inputAlignment, Properties properties) throws Exception {
-        File runFolder = createFolderWithRandomNumberInDirectory(this.tmpFolder, "paris_run");
+        File runFolder = FileUtil.createFolderWithRandomNumberInDirectory(this.tmpFolder, "paris_run");
         runFolder.mkdirs();
         
         File outputFolder = new File(runFolder, "outputfolder");
@@ -177,7 +174,7 @@ public class ParisMatcher extends MatcherYAAAJena{
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         LOGGER.info("Run Paris based on OntModels.");
-        File runFolder = createFolderWithRandomNumberInDirectory(this.tmpFolder, "paris_run");
+        File runFolder = FileUtil.createFolderWithRandomNumberInDirectory(this.tmpFolder, "paris_run");
         runFolder.mkdirs();
         
         File outputFolder = new File(runFolder, "outputfolder");
@@ -322,13 +319,6 @@ public class ParisMatcher extends MatcherYAAAJena{
         }
     }
         
-    private static final SecureRandom random = new SecureRandom();
-    private static File createFolderWithRandomNumberInDirectory(File folder, String prefix){
-        long n = random.nextLong();
-        n = (n == Long.MIN_VALUE) ? 0 : Math.abs(n);
-        return new File(folder, prefix + "-" + n);
-    }
-    
     /**
      * Compare file names by containing numbers.
      * File names have to separated by undersore like 100_xyz.ext and 1_abx.ext

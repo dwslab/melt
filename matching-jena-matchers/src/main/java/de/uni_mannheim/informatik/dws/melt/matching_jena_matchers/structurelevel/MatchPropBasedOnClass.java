@@ -18,17 +18,15 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 /**
  * Graph-based Matcher: Checks all matched classes and matches also properties
  * between them (domain and range) with mean value of both classes.
- *
- *
  * Example:
- * {@code
- *     foo <---already matched with c=0.5---> foo
+ * <pre>
+ *     foo  ---already matched with c=0.5---  foo
  *      |                                      |
- *     blub <--new with c=(0.5+0.4)/2=0.45--> bla 
+ *     blub  --new with c=(0.5+0.4)/2=0.45--  bla 
  *      |                                      |
  *      v                                      v
- *    bar <----already matched with c=0.4---> bar
- *  }
+ *     bar  ----already matched with c=0.4--- bar
+ * </pre>
  *
  *  In the example blub and bla are properties.
  */

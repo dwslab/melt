@@ -30,7 +30,21 @@ class OntologyCacheJenaTest {
         assertFalse(OntModelSpec.OWL_DL_MEM.hashCode() == OntModelSpec.OWL_DL_MEM_RDFS_INF.hashCode());
         assertFalse(OntModelSpec.OWL_DL_MEM.hashCode() == OntModelSpec.OWL_LITE_MEM.hashCode());
     }
+    
+    @Test
+    void parseAnatomyFileFromURL() {
+        OntModel model = OntologyCacheJena.get("http://oaei.webdatacommons.org/tdrs/testdata/persistent/anatomy_track/anatomy_track-default/suite/mouse-human-suite/component/source/");
+        assertTrue(model.size() > 0);
+    }
+    
+    @Test
+    void parseNotCorrectlyFormattedFile() {
+        File file = new File("./src/test/resources/badNtriple.nt");        
+        OntModel model = OntologyCacheJena.get(file);
+        assertTrue(model.size() > 0);
+    }
 
+    //http://oaei.webdatacommons.org/tdrs/testdata/persistent/anatomy_track/anatomy_track-default/suite/mouse-human-suite/component/source/
 
     @Test
     void getUrl() {

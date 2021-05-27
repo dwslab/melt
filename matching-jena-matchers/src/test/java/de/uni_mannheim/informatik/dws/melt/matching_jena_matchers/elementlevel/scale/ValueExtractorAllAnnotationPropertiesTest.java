@@ -2,7 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorAllAnnotationProperties;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class ValueExtractorAllAnnotationPropertiesTest {
 
         OntResource nervousSystem = humanOntology.getOntResource("http://human.owl#NCI_C12438");
 
-        ValueExtractorAllAnnotationProperties extractor = new ValueExtractorAllAnnotationProperties();
+        TextExtractorAllAnnotationProperties extractor = new TextExtractorAllAnnotationProperties();
 
         Set<String> result = extractor.extract(nervousSystem);
         assertTrue(result.size() > 1);

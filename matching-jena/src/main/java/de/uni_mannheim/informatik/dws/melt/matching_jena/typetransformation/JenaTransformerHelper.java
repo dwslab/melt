@@ -6,6 +6,8 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
 import java.util.Properties;
 import org.apache.jena.assembler.assemblers.OntModelSpecAssembler;
 import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFLanguages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +42,22 @@ public class JenaTransformerHelper {
         }else{
             LOGGER.warn("The value provided by ParameterConfigKeys.USE_ONTOLOGY_CACHE is not of boolean type. Defaulting to true.");
             return true;
+        }
+    }
+    
+    private static final Lang DEFAULT_HINT_LANG = Lang.RDFXML;
+    public static Lang hintLang(Properties parameters){
+        Object lang = parameters.get(ParameterConfigKeys.HINT_LANG);
+        if(lang == null)
+            return DEFAULT_HINT_LANG;
+        if(lang instanceof String){
+            Lang l = RDFLanguages.nameToLang((String)lang);
+            if(l == null)
+                return DEFAULT_HINT_LANG;
+            return l;
+        }else{
+            LOGGER.warn("The value provided by ParameterConfigKeys.HINT_LANG is not of type string. Defaulting to RDFXML.");
+            return DEFAULT_HINT_LANG;
         }
     }
     

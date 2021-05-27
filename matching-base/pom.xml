@@ -46,6 +46,22 @@
             <version>1.27</version>
         </dependency>
         
+        <!-- for docker (optional) projects which depennd on this and need the feature, needs to redeclare-->
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java-core</artifactId>
+            <version>3.2.7</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java-transport-httpclient5</artifactId>
+            <version>3.2.7</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        
         <!--test dependencies-->
         <dependency>
             <groupId>org.jgrapht</groupId>

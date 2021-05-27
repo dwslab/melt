@@ -56,6 +56,15 @@
             <useProjectArtifact>true</useProjectArtifact>
             <scope>runtime</scope>
         </dependencySet>
+        
+        <!--copy matching base to bin folder -->
+        <dependencySet>
+            <outputDirectory>bin</outputDirectory>
+            <scope>runtime</scope>
+            <includes>
+                <include>de.uni-mannheim.informatik.dws.melt:matching-base</include>
+            </includes>
+        </dependencySet>
     </dependencySets>
     
 </assembly>

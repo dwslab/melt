@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.ExternalResourceWithSynonymCapability;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
@@ -9,7 +8,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Synon
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.embeddings.GensimEmbeddingModel;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.io.IOoperations;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorAllAnnotationProperties;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
 import org.apache.jena.ontology.OntModel;
@@ -22,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.BackgroundMatcherTools.getURIlabelMap;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 
 /**
  * Template matcher where the background knowledge and the exploitation strategy (represented as {@link ImplementedBackgroundMatchingStrategies}) can be plugged-in.
@@ -85,7 +85,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     /**
      * The value extractor used to obtain labels for resources.
      */
-    private final ValueExtractor valueExtractor;
+    private final TextExtractor valueExtractor;
 
     /**
      * If a concept cannot be linked as full string, the longest substrings are matched.
@@ -113,7 +113,7 @@ public class BackgroundMatcher extends MatcherYAAAJena {
         this.linker = this.knowledgeSource.getLinker();
         this.strategy = strategy;
         this.threshold = threshold;
-        this.valueExtractor = new ValueExtractorAllAnnotationProperties();
+        this.valueExtractor = new TextExtractorAllAnnotationProperties();
     }
 
     /**

@@ -23,13 +23,13 @@ import org.apache.jena.rdf.model.StmtIterator;
 
 /**
  * Checks for each instance mapping, how many already matched neighbours it has.
- * 
+ * <pre>
  * Source_Subject ------Source_Property------Source_Object
  *      |                                         |
  * subjectCorrespondence                     objectCorrespondence
  *      |                                         |
  * Target_Subject ------Target_Property------Target_Object
- * 
+ * </pre>
  */
 public class SimilarNeighboursFilter extends BaseFilterWithSetComparison {
 

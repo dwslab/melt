@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena.ValueExtractor;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.valueExtractors.ValueExtractorProperty;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorProperty;
 import org.apache.jena.rdf.model.Property;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 
 public class PropertySpecificStringProcessingMultipleReturn {
 
 
-    private List<ValueExtractor> valueExtractors;
+    private List<TextExtractor> valueExtractors;
     private Function<String, Iterable<Object>> processing;
     private double confidence;
     
@@ -19,7 +19,7 @@ public class PropertySpecificStringProcessingMultipleReturn {
     private int minLengthForLevenshtein;
     
     
-    public PropertySpecificStringProcessingMultipleReturn(Function<String, Iterable<Object>> processing, double confidence, List<ValueExtractor> valueExtractors, int maxLevenshteinDistance, int minLengthForLevenshtein) {
+    public PropertySpecificStringProcessingMultipleReturn(Function<String, Iterable<Object>> processing, double confidence, List<TextExtractor> valueExtractors, int maxLevenshteinDistance, int minLengthForLevenshtein) {
         this.valueExtractors = valueExtractors;
         this.processing = processing;
         this.confidence = confidence;
@@ -27,20 +27,20 @@ public class PropertySpecificStringProcessingMultipleReturn {
         this.minLengthForLevenshtein = minLengthForLevenshtein;
     }
     
-    public PropertySpecificStringProcessingMultipleReturn(Function<String, Iterable<Object>> processing, double confidence, List<ValueExtractor> valueExtractors) {
+    public PropertySpecificStringProcessingMultipleReturn(Function<String, Iterable<Object>> processing, double confidence, List<TextExtractor> valueExtractors) {
         this(processing, confidence, valueExtractors, 0,0);
     }
     
-    public PropertySpecificStringProcessingMultipleReturn(Function<String, Iterable<Object>> processing, double confidence, ValueExtractor... valueExtractors) {
+    public PropertySpecificStringProcessingMultipleReturn(Function<String, Iterable<Object>> processing, double confidence, TextExtractor... valueExtractors) {
         this(processing, confidence, Arrays.asList(valueExtractors));
     }
     
     public PropertySpecificStringProcessingMultipleReturn(Function<String, Iterable<Object>> processing, double confidence, Property... properties) {
-        this(processing, confidence, ValueExtractorProperty.wrapExtractor(properties));
+        this(processing, confidence, TextExtractorProperty.wrapExtractor(properties));
     }
     
     
-    public List<ValueExtractor> getValueExtractors() {
+    public List<TextExtractor> getValueExtractors() {
         return valueExtractors;
     }
 

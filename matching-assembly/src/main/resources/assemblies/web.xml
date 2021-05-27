@@ -1,0 +1,41 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>web</id>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    
+    <containerDescriptorHandlers>
+        <containerDescriptorHandler>
+            <handlerName>writemainmatcherclasstofile</handlerName>
+            <configuration>
+                <mainclass>${oaei.mainClass}</mainclass>
+            </configuration>
+        </containerDescriptorHandler>
+    </containerDescriptorHandlers>
+    
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <includes>
+                <include>${project.groupId}:${project.artifactId}</include>
+            </includes>
+            <outputFileNameMapping>${project.build.finalName}.${project.packaging}</outputFileNameMapping>
+        </dependencySet>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>lib</outputDirectory>
+            <scope>runtime</scope>
+            <fileMode>0644</fileMode>
+        </dependencySet>
+    </dependencySets>
+            
+    <fileSets>
+        <!-- copy all files from {projectDirectory}/oaei-resources to {workingDir}/oaei-resources folder.
+        Because IDE makes {projectDirectory} to the current working directory, the resources can be accessed in the very same way.
+        new File("oaei-resources/...")-->
+        <fileSet>
+            <directory>${project.basedir}/oaei-resources</directory>
+            <outputDirectory>oaei-resources</outputDirectory>
+            <fileMode>0644</fileMode>
+        </fileSet>
+    </fileSets>
+</assembly>

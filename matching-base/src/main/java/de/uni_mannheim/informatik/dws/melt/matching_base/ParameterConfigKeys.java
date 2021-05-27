@@ -103,4 +103,17 @@ public class ParameterConfigKeys {
      * It is used in URL2AlignmentTransformer.
      */
     public static final String ALLOW_ALIGNMENT_REPAIR = "http://oaei.ontologymatching.org/allowAlignmentRepair";
+    
+    
+    /**
+     * A string decribing the format of the input files. This parameter is mainly used by HOBBIT.
+     */
+    public static final String FORMAT = "http://oaei.ontologymatching.org/format";
+    
+    /**
+     * A string decribing the RDF serialization format which is a hint for the reading code.
+     * Values can be: RDFXML, TTL, NTriple, NQuad etc
+     * @see https://jena.apache.org/documentation/io/rdf-input.html
+     */
+    public static final String HINT_LANG = "http://oaei.ontologymatching.org/format";
 }

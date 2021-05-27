@@ -3,6 +3,15 @@
     <id>hobbit</id>
     <includeBaseDirectory>false</includeBaseDirectory>
     
+    <containerDescriptorHandlers>
+        <containerDescriptorHandler>
+            <handlerName>writemainmatcherclasstofile</handlerName>
+            <configuration>
+                <mainclass>${oaei.mainClass}</mainclass>
+            </configuration>
+        </containerDescriptorHandler>
+    </containerDescriptorHandlers>
+    
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>true</useProjectArtifact>
