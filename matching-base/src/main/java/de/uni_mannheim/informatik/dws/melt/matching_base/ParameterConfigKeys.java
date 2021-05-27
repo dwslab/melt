@@ -112,8 +112,7 @@ public class ParameterConfigKeys {
     
     /**
      * A string decribing the RDF serialization format which is a hint for the reading code.
-     * Values can be: RDFXML, TTL, NTriple, NQuad etc
-     * @see https://jena.apache.org/documentation/io/rdf-input.html
+     * Values can be: RDFXML, TTL, NTriple, NQuad etc (see also the documentation in <a href="https://jena.apache.org/documentation/io/rdf-input.html">jena</a>).
      */
     public static final String HINT_LANG = "http://oaei.ontologymatching.org/format";
 }
