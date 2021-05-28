@@ -28,11 +28,11 @@ In other cases, you can also try to create a directory `oaei-resources` rather t
 and place the python_command.txt` there.
 
 ### Is there more documentation?
-MELT is far more powerful than documented here. This user guide is intended to give an overview of the framework. We extend this guide over time, however, if you have any feedback or want to contribute, feel free to do so.
+MELT is far more powerful than documented here. This user guide is intended to give an overview of the framework. We extend this guide over time. However, if you have any feedback or want to contribute, feel free to do so.
 For specific code snippets, have a look at the examples. Note that classes, interfaces, and methods are extensively documented using [JavaDoc](/javadoc_latest/index.html).
 
 
-# Common Errors which might appear
+# Common Errors
 
 ### Building a combined jar with jena dependencies
 

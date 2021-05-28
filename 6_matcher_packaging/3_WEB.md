@@ -7,8 +7,7 @@ permalink: /matcher-packaging/web
 ---
 # Web Packaging
 
-The web packaging requires the matcher to provide an HTTP endpoint.
-This can be achieved with a docker container or any other server.
+The Web packaging requires the matcher to provide an HTTP endpoint. This can be achieved with a docker container or any other server. The packaging format is independent of the MELT framework (a matcher does not have to be developed in MELT or use any other MELT technology) - however, MELT offers advanced services for packaging and evaluation.
 
 There are two possible `content types` (below: drop-down menu for "Request body"): (1) An URL encoded form and (2) multipart upload. For the first option, URLs are provided pointing to the data files. In this case, the matching server will access the URL and download the data. For the second option, the files are directly contained in the HTTP POST request. 
 
