@@ -8,7 +8,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 
 /**
  * Extracts the local name from the URI. This wraps the Jena method getLocalName of class Resource which maps itself to
- * {@link org.apache.jena.rdf.model.impl.Util#splitNamespaceXML(String)}.
+ * {@code org.apache.jena.rdf.model.impl.Util#splitNamespaceXML(String)}.
  */
 public class TextExtractorUrlLocalName implements TextExtractor {
 
@@ -17,11 +17,11 @@ public class TextExtractorUrlLocalName implements TextExtractor {
     public Set<String> extract(Resource r) {
         Set<String> values = new HashSet<>();
         String localName = r.getLocalName().trim().trim();
-        if(!localName.isEmpty())
+        if (!localName.isEmpty())
             values.add(localName);
         return values;
     }
-    
+
     @Override
     public int hashCode() {
         return 536789345;
@@ -37,5 +37,4 @@ public class TextExtractorUrlLocalName implements TextExtractor {
         }
         return getClass() == obj.getClass();
     }
-    
 }
