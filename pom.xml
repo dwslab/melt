@@ -151,6 +151,9 @@
                     <nohelp>true</nohelp>
                     <failOnWarnings>true</failOnWarnings>
                     <notimestamp>true</notimestamp>
+                    <!-- Fixing "An error has occurred in Javadoc report generation: Project contains Javadoc Warnings"
+                         in the GH actions pipeline:  -->
+                    <doclint>none</doclint>
                 </configuration>
                 <executions>
                     <execution>
