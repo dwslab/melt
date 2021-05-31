@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -34,8 +35,13 @@ public class SaveAsSealsRepo {
      * @param folder The folder containing the track data.
      */
     public static void save(Track track, String folder){
+        List<TestCase> testCases = track.getTestCases();
+        if(testCases.isEmpty()){
+            LOGGER.error("The given track has no testcases.");
+            return;
+        }
         try {
-            for(TestCase testCase : track.getTestCases()){
+            for(TestCase testCase : testCases){
                 FileUtils.copyURLToFile(testCase.getSource().toURL(), Paths.get(
                         folder,track.getName(), track.getVersion(), "suite",
                         testCase.getName(),"component", "source.xml").toFile());

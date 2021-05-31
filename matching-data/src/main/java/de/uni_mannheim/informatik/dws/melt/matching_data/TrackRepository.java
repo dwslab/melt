@@ -52,6 +52,9 @@ public class TrackRepository{
         /** Conference Testsuite V1 with all test cases ( even without reference alignment */
         public static Track V1_ALL_TESTCASES = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1-all");
         static{ V1_ALL_TESTCASES.setSkipTestCasesWithoutRefAlign(false); }
+        
+        /** Experimental Track for conference which maps conference ontologies to DBpedia. */
+        public static Track ConferenceDBpedia = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "conference", "conference-dbpedia");
     }
 
     /**
@@ -553,6 +556,12 @@ public class TrackRepository{
         
         /**This track contains only one testcase with a very small set of entities to check if matchers return at least something.**/
         public static Track SMALL_TEST = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "small-test", false, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+        
+        /** This version of the KG track contains test cases from the paper <a href="http://disi.unitn.it/~pavel/om2020/papers/om2020_LTpaper3.pdf"> A Gold Standard Dataset for Large Knowledge Graphs Matching</a>.
+            The <a href="https://github.com/OmaimaFallatah/KG_GoldeStandard">github repro is also available</a>. 
+         **/
+        public static Track CommonKG = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "commonkg", false, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+
     }
     
     /**
