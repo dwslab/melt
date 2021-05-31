@@ -29,8 +29,8 @@ MELT also provides a server which mocks the SEALS repository and hosts the follo
 Name | Repository | Suite-ID | Version-ID 
 ---- | ---------- | -------- | ----------
 [anatomy](http://oaei.ontologymatching.org/2019/anatomy/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `anatomy_track` | `anatomy_track-default`
-[conference](http://oaei.ontologymatching.org/2019/conference/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `conference` | - `conference-v1` <br> - `conference-v1-all` (also testcases without reference)
-[knowledgegraph](http://oaei.ontologymatching.org/2019/knowledgegraph/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `knowledgegraph` | `v3`
+[conference](http://oaei.ontologymatching.org/2019/conference/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `conference` | - `conference-v1` <br> - `conference-v1-all` (also testcases without reference) <br> - `conference-dbpedia`
+[knowledgegraph](http://oaei.ontologymatching.org/2019/knowledgegraph/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `knowledgegraph` | - `v3` <br/> - `commonkg` ([paper](https://github.com/OmaimaFallatah/KG_GoldeStandard))
 [iimb](http://islab.di.unimi.it/content/im_oaei/2018/) | `http://oaei.webdatacommons.org/tdrs/` | `iimb` | `v1`
 [biodiv](http://oaei.ontologymatching.org/2018/biodiv/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `biodiv` | `2018`
 [link](https://project-hobbit.eu/challenges/om2019/) | `http://oaei.webdatacommons.org/tdrs/` | `link` | `2017`
