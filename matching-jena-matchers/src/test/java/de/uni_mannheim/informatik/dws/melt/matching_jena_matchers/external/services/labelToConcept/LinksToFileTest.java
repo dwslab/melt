@@ -12,6 +12,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordN
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetLinker;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,11 +185,37 @@ class LinksToFileTest {
         }
     }
 
+    @Test
+    void testWriteLinksToFileMultiConceptLinkerWordnet() {
+        File fileToBeWritten = new File("./testCaseLinksWordnet.txt");
+        fileToBeWritten.deleteOnExit();
+        TextExtractor extractor = new TextExtractorAllAnnotationProperties();
+        LabelToConceptLinker linker = new WordNetLinker(new WordNetKnowledgeSource());
+        LinksToFile.writeLinksToFile(fileToBeWritten, TrackRepository.Conference.V1.getFirstTestCase(), extractor,
+                linker, 3);
+        assertTrue(fileToBeWritten.exists());
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileToBeWritten));
+            Set<String> resultSet = new HashSet<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                resultSet.add(line);
+                // make sure we do not get multi concept links
+                assertFalse(line.startsWith("#ML_"));
+            }
+            assertTrue(resultSet.size() > 10);
+        } catch (IOException ioe){
+            fail(ioe);
+        }
+    }
+
     /**
      * This test requires that the SPARQL DBpedia endpoint is online.
+     * Disabled since this may cause problems in the runtime due to HTTP errors.
      */
     @Test
-    void testWriteLinksToFileMultiConceptLinker() {
+    @Disabled
+    void testWriteLinksToFileMultiConceptLinkerDBpedia() {
         File fileToBeWritten = new File("./testCaseLinksDBpedia.txt");
         fileToBeWritten.deleteOnExit();
         TextExtractor extractor = new TextExtractorAllAnnotationProperties();

@@ -29,7 +29,8 @@ import org.slf4j.LoggerFactory;
  * This class wraps a matcher service.
  */
 public class MatcherHTTPCall extends MatcherURL{
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherHTTPCall.class);
     
     private static CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -41,7 +42,7 @@ public class MatcherHTTPCall extends MatcherURL{
     
     /**
      * If true, then the content of the file URI is read and transferred.
-     * If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
+     * If false, then only the URI is transferred but then the matching system needs to have access to the URI.
      */
     private boolean sendContent;
     
@@ -49,8 +50,7 @@ public class MatcherHTTPCall extends MatcherURL{
      * The RequestConfig which contains timeouts to be used in http call.
      */
     private RequestConfig requestConfig;
-    
-    
+
     /**
      * Creates a matcher which wraps a matching service available at the given URI with timeout options.
      * @param uri URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
@@ -72,7 +72,6 @@ public class MatcherHTTPCall extends MatcherURL{
                 .setConnectionRequestTimeout(connectionRequestTimeout)
                 .build();
     }
-    
 
     /**
      * Creates a matcher which wraps a matching service available at the given URI.

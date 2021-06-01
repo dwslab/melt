@@ -1,10 +1,12 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base;
 
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DataStoreTest {
+
 
     @Test
     void dataStoreTest(){
@@ -23,5 +25,4 @@ class DataStoreTest {
         ds.clear();
         assertFalse(ds.containsKey("key"));
     }
-
 }

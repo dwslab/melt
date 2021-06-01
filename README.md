@@ -1,14 +1,17 @@
 <h1 align="left">MELT - Matching EvaLuation Toolkit</h1>
 <p>
-<a href="https://github.com/dwslab/melt/actions/workflows/java_ci.yml"><img src="https://github.com/dwslab/melt/actions/workflows/java_ci.yml/badge.svg"></a>
+<a href="https://github.com/dwslab/melt/actions/workflows/java_build.yml"><img src="https://github.com/dwslab/melt/actions/workflows/java_build.yml/badge.svg"></a>
+<a href="https://github.com/dwslab/melt/actions/workflows/java_documentation.yml"><img src="https://github.com/dwslab/melt/actions/workflows/java_documentation.yml/badge.svg"></a>
 <a href="https://github.com/dwslab/melt/actions/workflows/documentation_check.yml"><img src="https://github.com/dwslab/melt/actions/workflows/documentation_check.yml/badge.svg"></a>
+<a href="https://github.com/dwslab/melt/actions/workflows/java_doclet.yml"><img src="https://github.com/dwslab/melt/actions/workflows/java_doclet.yml/badge.svg"></a>
+<!--a href="https://github.com/dwslab/melt/actions/workflows/java_coverage.yml"><img src="https://github.
+com/dwslab/melt/actions/workflows/java_coverage.yml/badge.svg"></a-->
 <a href="https://coveralls.io/github/dwslab/melt?branch=master"><img src="https://coveralls.io/repos/github/dwslab/melt/badge.svg?branch=master"></a>
 <a href="https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt"><img src="https://img.shields.io/maven-central/v/de.uni-mannheim.informatik.dws.melt/matching-eval"></a>
 <a href="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white"><img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white"></a>
 <a href="https://img.shields.io/github/license/dwslab/melt"><img src="https://img.shields.io/github/license/dwslab/melt"></a>
 </p>
 <p align="left" style="font-style:italic">A powerful framework for ontology, instance, and knowledge graph matching.</p>
-
 
 MELT is a powerful maven framework for developing, tuning, evaluating, and packaging ontology matching systems.
 It is optimized to be used in [OAEI](http://oaei.ontologymatching.org/) campaigns and allows to submit matchers to the SEALS and HOBBIT evaluation platform easily. MELT can also be used for non OAEI-related matching tasks and evaluation.
