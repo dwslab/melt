@@ -35,9 +35,10 @@
             <version>${matching.version}</version>
         </dependency>
         
+        <!-- This dependency is necessary for seals_external. It contains the cli wrapper. -->
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-            <artifactId>cli-receiver</artifactId>
+            <artifactId>receiver-cli</artifactId>
             <version>${matching.version}</version>
         </dependency>
 

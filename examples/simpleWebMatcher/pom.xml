@@ -34,9 +34,9 @@
         </dependency>
 
         <!-- This dependency is necessary for web submission. It contains the server wrapper. -->
-       <dependency>
+        <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-            <artifactId>http-receiver</artifactId>
+            <artifactId>receiver-http</artifactId>
             <version>${matching.version}</version>
         </dependency>
         
@@ -67,7 +67,7 @@
                             <build>
                                 <from>openjdk:8-jre-alpine</from><!--change it to a docker base image you want - this is just a small image which contains java-->
                                 <assembly><descriptorRef>web</descriptorRef></assembly>
-                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" de.uni_mannheim.informatik.dws.melt.receiver.http.Main</shell></cmd>
+                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" de.uni_mannheim.informatik.dws.melt.receiver_http.Main</shell></cmd>
                                 <workdir>/maven</workdir>
                                 <ports><port>8080</port></ports><!--port exposure to specify on which port the server runs -->
                             </build>
