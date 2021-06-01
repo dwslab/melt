@@ -36,18 +36,22 @@ public class StopwordExtraction extends MatcherYAAAJena {
      * Literal extractors to choose which literal/properties should be used.
      */
     private List<TextExtractor> valueExtractors;
+
     /**
      * Tokenizer function.
      */
     private Function<String, Collection<String>> tokenizer;
+
     /**
      * If true, counts only tokens only once (even if it appears in one literal multiple times or multiple times in different literals).
      */
     private boolean countDistinctTermsPerResource;
+
     /**
-     * Extracts the N top most tokensa s stopwords.
+     * Extracts the N top most tokens as stopwords.
      */
     private int topNStopwords;
+
     /**
      * The percentage how many resources this token must have to count as a stopword. Range between zero and one.
      */
@@ -55,11 +59,11 @@ public class StopwordExtraction extends MatcherYAAAJena {
 
     /**
      * Extracts the stopwords based on two criteria.
-     * 1) top most occuring tokens 2) percentage.
-     * It will stop if one of the two critia is fullfilled.
+     * 1) top most occurring tokens 2) percentage.
+     * It will stop if one of the two criteria is fulfilled.
      * @param tokenizer tokenizer
      * @param countDistinctTermsPerResource If true, counts only tokens only once (even if it appears in one literal multiple times or multiple times in different literals).
-     * @param topNStopwords how many stopswords to extract
+     * @param topNStopwords how many stopwords to extract
      * @param stopwordsPercentage the percentage of how often a token should appear.
      * @param valueExtractors Literal extractors to choose which literal/properties should be used.
      */
@@ -73,11 +77,11 @@ public class StopwordExtraction extends MatcherYAAAJena {
     
     /**
      * Extracts the stopwords based on two criteria.
-     * 1) top most occuring tokens 2) percentage.
-     * It will stop if one of the two critia is fullfilled.
+     * 1) top most occurring tokens 2) percentage.
+     * It will stop if one of the two criteria is fulfilled.
      * @param tokenizer tokenizer
      * @param countDistinctTermsPerResource If true, counts only tokens only once (even if it appears in one literal multiple times or multiple times in different literals).
-     * @param topNStopwords how many stopswords to extract
+     * @param topNStopwords how many stopwords to extract
      * @param stopwordsPercentage the percentage of how often a token should appear.
      * @param valueExtractors Literal extractors to choose which literal/properties should be used.
      */
@@ -88,8 +92,8 @@ public class StopwordExtraction extends MatcherYAAAJena {
     /**
      * Extracts the stopwords based on the top most occuring tokens.
      * @param tokenizer tokenizer
-     * @param topNStopwords how many stopswords to extract
-     * @param properties the properies which should be used for extracting the literals (text).
+     * @param topNStopwords how many stopwords to extract
+     * @param properties the properties which should be used for extracting the literals (text).
      */
     public StopwordExtraction(Function<String, Collection<String>> tokenizer, int topNStopwords, Property... properties){
         this(tokenizer, true, topNStopwords, 0.0d, TextExtractorProperty.wrapExtractor(properties));
@@ -100,7 +104,7 @@ public class StopwordExtraction extends MatcherYAAAJena {
      * E.g. a token is a stopword if it occurs in more than 3 percent (0.03) of all resources.
      * @param tokenizer tokenizer
      * @param stopwordsPercentage the percentage of how often a token should appear.
-     * @param properties the properies which should be used for extracting the literals (text).
+     * @param properties the properties which should be used for extracting the literals (text).
      */
     public StopwordExtraction(Function<String, Collection<String>> tokenizer, double stopwordsPercentage, Property... properties){
         this(tokenizer, true, 0, stopwordsPercentage, TextExtractorProperty.wrapExtractor(properties));

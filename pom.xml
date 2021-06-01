@@ -12,6 +12,7 @@
         <junit.version>5.8.0-M1</junit.version>
         <slf4j.version>1.7.30</slf4j.version>
         <surefire.version>3.0.0-M5</surefire.version>
+        <javadoc.version>3.3.0</javadoc.version>
     </properties>
 
     <modules>
@@ -145,15 +146,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>${javadoc.version}</version>
                 <configuration>
                     <show>private</show>
                     <nohelp>true</nohelp>
                     <failOnWarnings>true</failOnWarnings>
                     <notimestamp>true</notimestamp>
-                    <!-- Fixing "An error has occurred in Javadoc report generation: Project contains Javadoc Warnings"
-                         in the GH actions pipeline:  -->
-                    <doclint>none</doclint>
                 </configuration>
                 <executions>
                     <execution>
@@ -350,7 +348,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.2.0</version>
+                        <version>${javadoc.version}</version>
                         <configuration>
                             <doclet>de.uni_mannheim.informatik.dws.melt.doclet.MarkdownDoclet</doclet>
                             <!-- can be found at /documentation/melt_doclet - not installed by default -->
