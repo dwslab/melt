@@ -1,4 +1,4 @@
-name: Java Coverage and Documentation
+name: Java Documentation
 
 on: [push]
 
@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '11'
+          java-version: '8'
       - name: Print maven version
         run: mvn -version
       - name: Cache Maven packages
@@ -45,9 +45,7 @@ jobs:
         run: pip install -r ./matching-ml/src/main/resources/requirements.txt
       - name: Build with Maven and Run All Tests 📦🕵️
         #run: mvn -B package --file pom.xml
-        run: mvn clean install
-      - name: Coveralls
-        run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS }}
+        run: mvn clean install -DskipTests=True
       - name: Generate JavaDoc Documentation 📚
         run: mvn clean javadoc:aggregate
       - name: Deploy JavaDoc 🚀
