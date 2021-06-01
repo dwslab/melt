@@ -46,16 +46,3 @@ jobs:
           branch: gh-pages # The branch the action should deploy to.
           folder: target/site/apidocs
           target-folder: javadoc_latest
-      - name: Install the MarkDown DocLet 🔌
-        run: |
-          cd ./documentation/melt_doclet
-          mvn clean install
-      - name: Generate MarkDown Documentation 📚
-        run: mvn site -P ci-run
-      - name: Deploy MarkDown 🚀
-        uses: JamesIves/github-pages-deploy-action@4.0.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages # The branch the action should deploy to.
-          folder: target/site/apidocs/generated_markdown
-          target-folder: 3_available_matcher_components/generated_markdown
