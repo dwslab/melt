@@ -152,6 +152,7 @@ Checks for each instance mapping, how many already matched neighbours it has.
  subjectCorrespondence                     objectCorrespondence
       |                                         |
  Target_Subject ------Target_Property------Target_Object
+ 
 
 *Keywords: Similar Neighbours Filter*
 
@@ -189,4 +190,11 @@ Combines the additional confidences and set the overall correspondence confidenc
 This filter learns and applies a classifier given a training sample and an existing alignment.
 
 *Keywords: Machine Learning Scikit Filter*
+
+## NLPTransformersFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/NLPTransformersFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/NLPTransformersFilter.java)
+
+This filter extracts the corresponding text for a resource (with the specified and customizable extractor) given all correspondences.
+ The texts of the two resources are fed into the specified transformer model and the prediction is added in form of a confidence to the correspondence.
+
+*Keywords: NLP Transformers Filter*
 

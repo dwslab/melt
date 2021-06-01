@@ -72,12 +72,47 @@ Read the file "external/external_command.txt" and start an external process. The
 
 *Keywords: MatcherCLI From File*
 
+## MatcherDockerFile [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/docker/MatcherDockerFile.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/external/docker/MatcherDockerFile.java)
+
+This matcher creates a docker container based on a given docker image name.
+ Within this container a matcher server should be started.
+ Therefore it will use the MatcherHTTPCall internally to run the matcher.
+ For this Matcher to work you have to add the following dependency to YOUR pom:
+ 
+```
+ 
+<dependency>
+    <groupId>com.github.docker-java</groupId>
+    <artifactId>docker-java-core</artifactId>
+    <version>3.2.7</version><!--maybe update version-->
+</dependency>
+<dependency>
+    <groupId>com.github.docker-java</groupId>
+    <artifactId>docker-java-transport-httpclient5</artifactId>
+    <version>3.2.7</version><!--maybe update version-->
+</dependency>
+ 
+```
+
+With this in place everything should work.
+
+*Keywords: Matcher Docker File*
+
 ## MatcherSeals [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.java)
 
 This matcher wraps the SEALS client such that a SEALS zip file or folder can be executed.
  If multiple matcher should be instantiated, have a look at MatcherSealsBuilder buildFromFolder.
 
 *Keywords: Matcher Seals*
+
+## SealsWrapper [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/receiver/SealsWrapper.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/receiver/SealsWrapper.java)
+
+This class implements the SEALS interface (via MatcherURL) and calls the provided matcher class
+ (the matcher class is provided via a file in the SEALS package in folder /conf/extenal/main_class.txt ).
+ If this class is renamed or moved, then the name needs to be adjusted in matching assembly project
+ in file SealsDescriptorHandler.java (method finalizeArchiveCreation - line 45).
+
+*Keywords: Seals Wrapper*
 
 ## ReferenceMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_eval/util/ReferenceMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/util/ReferenceMatcher.java)
 
@@ -133,20 +168,15 @@ Matches properties based on same subject and object and the distribution.
 
 Graph-based Matcher: Checks all matched classes and matches also properties
  between them (domain and range) with mean value of both classes.
-
-
  Example:
  
-```
-foo <---already matched with c=0.5---> foo
+     foo  ---already matched with c=0.5---  foo
       |                                      |
-     blub <--new with c=(0.5+0.4)/2=0.45--> bla 
+     blub  --new with c=(0.5+0.4)/2=0.45--  bla 
       |                                      |
       v                                      v
-    bar <----already matched with c=0.4---> bar
-  
-```
-
+     bar  ----already matched with c=0.4--- bar
+ 
 
   In the example blub and bla are properties.
 
@@ -224,6 +254,15 @@ Just saves the ontologies in a specific format.
 This is a simple matcher that forwards a given alignment.
 
 *Keywords: Forward Matcher*
+
+## TrainingAlignmentGenerator [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/TrainingAlignmentGenerator.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/TrainingAlignmentGenerator.java)
+
+This matcher assumes that the input alignment is a kind of reference alignment.
+ After applying the recallMatcher given in the constructor, a new alignment is returned which
+ contains positive (equivalence relation) and negative(incompat relation) correspondences.
+ With the help of this alignment, supervised matchers can be trained.
+
+*Keywords: Training Alignment Generator*
 
 ## AlignmentSaveMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/AlignmentSaveMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/AlignmentSaveMatcher.java)
 
