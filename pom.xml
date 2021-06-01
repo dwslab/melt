@@ -210,7 +210,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
+                <version>0.8.7</version>
                 <configuration>
                     <excludes>
                         <exclude>de/uni_mannheim/informatik/dws/melt/matching_validation/**/*</exclude>
