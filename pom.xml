@@ -152,6 +152,7 @@
                     <nohelp>true</nohelp>
                     <failOnWarnings>true</failOnWarnings>
                     <notimestamp>true</notimestamp>
+                    <doclint>all,-missing</doclint>
                 </configuration>
                 <executions>
                     <execution>
