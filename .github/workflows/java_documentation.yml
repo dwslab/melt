@@ -1,4 +1,4 @@
-name: Java Documentation
+name: JavaDoc
 
 on: [push]
 
