@@ -45,7 +45,7 @@ You can use the search below to search the complete code base of MELT.
 </form>
 
 ## Modules Overview
-MELT is grouped into multiple maven modules which are described below.
+MELT is grouped into multiple [maven](https://maven.apache.org/what-is-maven.html) modules which are described below.
 
 ### matching-base
 Contains the basic interfaces to implement a matcher e.g. MatcherURL.
