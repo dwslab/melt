@@ -5,7 +5,8 @@
 <a href="https://github.com/dwslab/melt/actions/workflows/documentation_check.yml"><img src="https://github.com/dwslab/melt/actions/workflows/documentation_check.yml/badge.svg"></a>
 <a href="https://github.com/dwslab/melt/actions/workflows/java_doclet.yml"><img src="https://github.com/dwslab/melt/actions/workflows/java_doclet.yml/badge.svg"></a>
 <!--a href="https://github.com/dwslab/melt/actions/workflows/java_coverage.yml"><img src="https://github.
-com/dwslab/melt/actions/workflows/java_coverage.yml/badge.svg"></a-->
+com/dwslab/melt/actions/workflows/java_coverage.yml/badge.svg"></a--> <!-- Not displaying the coveralls action badge 
+b/c this is handled by the coveralls badge below: -->
 <a href="https://coveralls.io/github/dwslab/melt?branch=master"><img src="https://coveralls.io/repos/github/dwslab/melt/badge.svg?branch=master"></a>
 <a href="https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt"><img src="https://img.shields.io/maven-central/v/de.uni-mannheim.informatik.dws.melt/matching-eval"></a>
 <a href="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white"><img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white"></a>

@@ -7,7 +7,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_base;
  * @param <AlignmentClass> The specific type which can store an alignment e.g. (Alignment from YAAA)
  * @param <ParameterClass> The specific type which can store parameters. This is somewhat a map where the keys are string and the values are any objects e.g. java.util.Properties
  */
-public interface IMatcher <ModelClass, AlignmentClass, ParameterClass>{
+public interface IMatcher <ModelClass, AlignmentClass, ParameterClass> {
 
 
     /**

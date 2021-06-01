@@ -1,4 +1,4 @@
-name: Java Coverage
+name: Coveralls
 
 on: [push]
 
