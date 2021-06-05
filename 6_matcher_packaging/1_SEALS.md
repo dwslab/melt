@@ -7,17 +7,33 @@ permalink: /matcher-packaging/seals
 ---
 
 # Packaging Matchers for SEALS
+SEALS is a packaging format supported by most OAEI tracks.
+MELT allows to package and to evaluate SEALS matchers.
 
-## Steps
-1. Have a look at [examples/simpleJavaMatcher](/examples/simpleJavaMatcher)
-2. Adjust settings in pom.xml to your needs.
-3. Execute `mvn clean package` or `mvn clean install` and look in the `/target` directory for your zip file.
+## Package Your Matcher as SEALS Package with MELT
+
+### Package Your First Matcher
+**Prerequisites**: Maven and Java must be installed.
+
+1. Copy the project in [examples/simpleSealsMatcher](/examples/simpleJavaMatcher) to your workspace.
+2. Execute `mvn clean package` or `mvn clean install`.
+3. Check in the `/target` directory for your zip file (`simple-SealsMatcher-1.0-seals_external.zip`).
+
+### In More Detail
+You can use the [examples/simpleSealsMatcher](/examples/simpleJavaMatcher) as a template and change it to your needs. However, if you take a close look, you can see that it is sufficient to use the `pom.xml` as template since the packaging is managed through maven.
+
+You specify the matcher class in the `<oaei.mainClass>` tag.
+The matcher must implement interface [`IMatcher <ModelClass, AlignmentClass, ParameterClass>`](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/IMatcher.java). Note that the easiest way to develop your system is to extend any of the convenience matcher classes such as `MatcherYAAAJena` or `MatcherYAAAOwlApi` rather than implementing the interface yourself.
+
 
 ## Evaluate Your SEALS Package Using the OAEI SEALS Client 
 You can set up the <a href="https://github.com/DanFaria/OAEI_SealsClient">SEALS client</a> locally and evaluate your matcher. You can find the documentation
 of the client <a href="https://github.com/DanFaria/OAEI_SealsClient/blob/691b85003da0f6f391a04de85ad820b8a52b6118/SealsClientTutorial.pdf">here</a>.
 
+
 ## Evaluate a SEALS Package Using MELT
+**Prerequisites**: Java 8 (not necessarily as system Java distribution), successful installation of SEALS, maven project with dependency [`matching-eval`](https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt/matching-eval).
+
 You can evaluate any SEALS packaged matcher using the [`ExecutorSeals`]((https://github.com/dwslab/melt/blob/master/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutorSeals.java)).
 You may have to give execution rights to the SEALS jar (`chmod +x seals-omt-client.jar `).
 
