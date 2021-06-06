@@ -1,4 +1,4 @@
-name: Documentation Check
+name: Documentation Link Check
 
 on:
   push:

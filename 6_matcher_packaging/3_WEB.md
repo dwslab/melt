@@ -28,7 +28,7 @@ The swagger documentation is displayed below /
 [[open full screen documentation in a new tab]](https://dwslab.github.io/melt/6_matcher_packaging/swagger_ui_melt.html){:target="_blank"}
 
 <iframe src="https://dwslab.github.io/melt/6_matcher_packaging/swagger_ui_melt.html" scrolling="no"
-    style="border:0; width:100%; height:3000px; overflow:hidden;">
+    style="border:0; width:100%; height:2550px; overflow:hidden;">
 </iframe>
 
 # MELT Web Packaging
@@ -41,5 +41,5 @@ The swagger documentation is displayed below /
 3. Check in the `/target` directory for the `docker` directory.
 
 **Common Errors**
--  `Failed to execute goal io.fabric8:docker-maven-plugin:0.36.0:build`
+-  `Failed to execute goal io.fabric8:docker-maven-plugin:0.36.0:build`<br/>
 Make sure that docker is running.
