@@ -10,6 +10,7 @@ permalink: /matcher-development
 
 ## Release Version
 MELT is available in [maven central](https://repo1.maven.org/maven2/de/uni-mannheim/informatik/dws/melt/) and can be added as a dependency with e.g.:
+
 ```xml
 <dependency>
     <groupId>de.uni-mannheim.informatik.dws.melt</groupId>

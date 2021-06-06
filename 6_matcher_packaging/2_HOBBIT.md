@@ -9,10 +9,10 @@ permalink: /matcher-packaging/hobbit
 # Packaging Matchers for SEALS and HOBBIT
 
 ## TL;DR
-1. Have a look at [examples/simpleJavaMatcher](/examples/simpleJavaMatcher)
-2. Create hobbit account and gitlab access token
-3. Adjust settings in pom.xml to your needs
-4. Implement your matcher (see Matcher development)
+1. Have a look at [examples/simpleHobbitMatcher](https://github.com/dwslab/melt/tree/master/examples/simpleHobbitMatcher).
+2. Create hobbit account and gitlab access token.
+3. Adjust settings in pom.xml to your needs.
+4. Implement your matcher (see Matcher development).
 5. Execute ```mvn deploy``` to create seals zip and deploy docker image to hobbit server
    - if you only execute ```mvn install``` it will create seals zip and hobbit docker image locally
    - if you execute ```mvn package``` only seals zip will be created

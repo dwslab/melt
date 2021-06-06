@@ -15,7 +15,7 @@ MELT allows to package and to evaluate SEALS matchers.
 ### Package Your First Matcher
 **Prerequisites**: Maven and Java must be installed.
 
-1. Copy the project in [examples/simpleSealsMatcher](/examples/simpleJavaMatcher) to your workspace.
+1. Copy the project in [examples/simpleSealsMatcher](https://github.com/dwslab/melt/tree/master/examples/simpleSealsMatcher) to your workspace.
 2. Execute `mvn clean package` or `mvn clean install`.
 3. Check in the `/target` directory for your zip file (`simple-SealsMatcher-1.0-seals_external.zip`).
 

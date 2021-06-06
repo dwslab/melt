@@ -24,12 +24,22 @@ Interactive matching is not supported.
 
 
 ## Swagger documentation of the Web API
-melt/matcher-packaging/
-[Full screen documentation in a new tab](/melt/6_matcher_packaging/swagger_ui_melt.html){:target="_blank"}
+The swagger documentation is displayed below / 
+[open full screen documentation in a new tab](https://dwslab.github.io/melt/6_matcher_packaging/swagger_ui_melt.html){:target="_blank"}
 
-<iframe src="/melt/6_matcher_packaging/swagger_ui_melt.html" scrolling="no"
+<iframe src="https://dwslab.github.io/melt/6_matcher_packaging/swagger_ui_melt.html" scrolling="no"
     style="border:0; width:100%; height:3000px; overflow:hidden;">
 
 
 # MELT Web Packaging
 
+### Package Your First Matcher with MELT
+**Prerequisites**: Maven, Java, and Docker must be installed. Docker must be running during the build process.
+
+1. Copy the project in [examples/simpleHobbitMatcher/](https://github.com/dwslab/melt/tree/master/examples/simpleWebMatcher) to your workspace.
+2. Execute `mvn clean package` or `mvn clean install`.
+3. Check in the `/target` directory for the `docker` directory.
+
+**Common Errors**
+-  `Failed to execute goal io.fabric8:docker-maven-plugin:0.36.0:build`
+Make sure that docker is running.
