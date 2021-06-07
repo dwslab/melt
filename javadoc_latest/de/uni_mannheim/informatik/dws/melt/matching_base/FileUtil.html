@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -102,11 +102,16 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </thead>
 <tbody>
 <tr class="alt-color">
+<td class="col-first"><code>private static org.slf4j.Logger</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/security/SecureRandom.html" title="class or interface in java.security" class="external-link">SecureRandom</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#RANDOM">RANDOM</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#SYSTEM_TMP_FOLDER">SYSTEM_TMP_FOLDER</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -169,9 +174,23 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i2">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCanonicalPathIfPossible(java.io.File)">getCanonicalPathIfPossible</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
+<td class="col-last">
+<div class="block">Returns the canonical path (resolved symlink, and relative paths) of a file if possible.</div>
+</td>
+</tr>
+<tr class="row-color" id="i3">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getRandomPositiveNumber()">getRandomPositiveNumber</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>static long</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#lineCount(java.io.File)">lineCount</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
+<td class="col-last">
+<div class="block">Determines the count of lines in a file in a fast way.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -191,6 +210,12 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="field-details" id="field.detail">
 <h2>Field Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="LOGGER">
+<h3>LOGGER</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">org.slf4j.Logger</span>&nbsp;<span class="member-name">LOGGER</span></div>
+</section>
+</li>
 <li>
 <section class="detail" id="RANDOM">
 <h3>RANDOM</h3>
@@ -244,6 +269,34 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="detail" id="getRandomPositiveNumber()">
 <h3>getRandomPositiveNumber</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="member-name">getRandomPositiveNumber</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="lineCount(java.io.File)">
+<h3>lineCount</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="member-name">lineCount</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span></div>
+<div class="block">Determines the count of lines in a file in a fast way.
+ If counts the number of newlines. Thus, if the file contains only one row and no newline it will return zero.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>file</code> - the file to use</dd>
+<dt>Returns:</dt>
+<dd>the number of lines in the file</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getCanonicalPathIfPossible(java.io.File)">
+<h3>getCanonicalPathIfPossible</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getCanonicalPathIfPossible</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span></div>
+<div class="block">Returns the canonical path (resolved symlink, and relative paths) of a file if possible.
+ If this calls fails, then the absolute path is returned.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>file</code> - the file to get the canonical path from</dd>
+<dt>Returns:</dt>
+<dd>the canonical path or if not possible, the absolute path</dd>
+</dl>
 </section>
 </li>
 </ul>
