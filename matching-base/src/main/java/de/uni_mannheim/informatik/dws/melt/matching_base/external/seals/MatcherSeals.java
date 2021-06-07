@@ -253,7 +253,7 @@ public class MatcherSeals extends MatcherFile {
             sealsProcess.addArguments("-f", alignmentResult.getAbsolutePath(), "-z");
 
             sealsProcess.setWorkingDirectory(sealsHome);
-            sealsProcess.addEnvironmentVariable("SEALS_HOME", sealsHome.getAbsolutePath());
+            sealsProcess.addEnvironmentVariable("SEALS_HOME", FileUtil.getCanonicalPathIfPossible(sealsHome));
             sealsProcess.setTimeout(this.timeout, this.timeoutTimeUnit);
             sealsProcess.run();
 
