@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -140,7 +141,7 @@ public class ExternalProcess {
         LOGGER.info("Execute now following external process (command, directory, custom environment variables):");
         LOGGER.info("command        : {}", String.join(" ", substitutedArguments));
         LOGGER.debug("cmd arguments  : {}", substitutedArguments);
-        LOGGER.info("directory      : {}", this.workingDirectory == null ? new File("./") : this.workingDirectory);
+        LOGGER.info("directory      : {}", this.workingDirectory == null ? FileUtil.getCanonicalPathIfPossible(new File("./")) : FileUtil.getCanonicalPathIfPossible(this.workingDirectory));
         LOGGER.info("environmentVars: {}", this.environment == null ? "no custom variables" : this.environment);
         
         Process process;

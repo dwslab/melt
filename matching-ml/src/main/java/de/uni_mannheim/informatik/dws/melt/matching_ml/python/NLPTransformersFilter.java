@@ -79,12 +79,51 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
     
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        File inputFile = FileUtil.createFileWithRandomNumber(this.baseDir, "alignment_transformers_predict", ".txt");
-        
-        LOGGER.info("Write text to prediction file of transformers model (file: {}).", inputFile);
-        //this.corpusFile.deleteOnExit();
-        
         List<Correspondence> orderedCorrespondences = new ArrayList<>(inputAlignment);
+        LOGGER.info("Write text to prediction file");
+        File inputFile = writePredictionFile(source, target, orderedCorrespondences);
+        try{
+            LOGGER.info("Run prediction");
+            List<Double> confidenceList = predictConfidences(this.modelName, inputFile, this.usingTF, this.cudaVisibleDevices, this.transformersCache);
+            LOGGER.info("Finished prediction");
+            if(this.invertConfidences){
+                confidenceList = invertList(confidenceList);
+            }
+
+            if(orderedCorrespondences.size() != confidenceList.size()){
+                LOGGER.warn("Size of correspondences and predictions do not have the same size. Return input alignment.");
+                return inputAlignment;
+            }
+            for(int i=0; i < orderedCorrespondences.size(); i++){
+                orderedCorrespondences.get(i).addAdditionalConfidence(this.getClass(), confidenceList.get(i));
+            }
+        }finally{
+            inputFile.delete();
+        }
+        return inputAlignment;
+    }
+    
+
+    /**
+     * Creates a file which contains two columns in a csv format.
+     * The first column contains the text from the source entities and the second column contains the text from the target entities.
+     * The returned file is not automatically removed. This has to be done outside.
+     * @param source
+     * @param target
+     * @param inputAlignment
+     * @return the csv file or null in case of an error
+     */
+    public File createPredictionFile(OntModel source, OntModel target, Alignment inputAlignment) {
+        try {
+            return writePredictionFile(source, target, new ArrayList<>(inputAlignment));
+        } catch (IOException ex) {
+            LOGGER.warn("Could not create prediction file.", ex);
+            return null;
+        }
+    }
+    
+    private File writePredictionFile(OntModel source, OntModel target, List<Correspondence> orderedCorrespondences) throws IOException{
+        File inputFile = FileUtil.createFileWithRandomNumber(this.baseDir, "alignment_transformers_predict", ".txt");
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputFile), "UTF-8"))){
             for(Correspondence c : orderedCorrespondences){
                 String left = getTextFromResource(source.getResource(c.getEntityOne()));
@@ -97,51 +136,8 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
                 writer.write(StringEscapeUtils.escapeCsv(left) + "," + StringEscapeUtils.escapeCsv(right) + NEWLINE);
             }
         }
-        List<Double> confidenceList = predictConfidences(this.modelName, inputFile, this.usingTF, this.cudaVisibleDevices, this.transformersCache);
-        if(this.invertConfidences){
-            confidenceList = invertList(confidenceList);
-        }
-        
-        if(orderedCorrespondences.size() != confidenceList.size()){
-            LOGGER.warn("Size of correspondences and predictions do not have the same size. Return input alignment.");
-            return inputAlignment;
-        }
-        for(int i=0; i < orderedCorrespondences.size(); i++){
-            orderedCorrespondences.get(i).addAdditionalConfidence(this.getClass(), confidenceList.get(i));
-        }
-        return inputAlignment;
+        return inputFile;
     }
-    
-    
-    public void createTrainFile(OntModel source, OntModel target, Alignment inputAlignment) throws IOException{
-        
-        
-        
-        /*
-        if(this.corpusFile == null){
-            this.corpusFile = new File("./train.txt");
-            LOGGER.info("Write corpus file to {} which is later removed.", this.corpusFile.getCanonicalPath());
-            //this.corpusFile.deleteOnExit();
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.corpusFile), "UTF-8"))){
-                for(Correspondence c : inputAlignment){
-                    String clazz = c.getRelation() == CorrespondenceRelation.EQUIVALENCE ? "1" : "0";
-                    String left = process(String.join(" ", extractor.extract(source.getResource(c.getEntityOne()))));
-                    String right = process(String.join(" ", extractor.extract(target.getResource(c.getEntityTwo()))));    
-                    if(StringUtils.isBlank(left) || StringUtils.isBlank(right))
-                        continue;
-                    writer.write(StringEscapeUtils.escapeCsv(left) + "," + StringEscapeUtils.escapeCsv(right) + "," + 
-                             clazz + NEWLINE);
-                }
-            }
-        }
-        */
-    }
-    
-       /*
-    private String process(String s){
-        return s.replace("\n", " ").replace("\r", " ").replace("WtXmlEmptyTag", " ").trim().replaceAll(" +", " ");
-    }
-*/
     
     private String getTextFromResource(Resource r){
         StringBuilder sb = new StringBuilder();
@@ -159,7 +155,7 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
     }
 
     
-     /**
+    /**
      * Run huggingface transformers library.
      * @param predictionFilePath path to csv file with two columns (text left and text right).
      * @throws Exception in case something goes wrong.
