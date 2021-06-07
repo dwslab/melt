@@ -107,14 +107,14 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ArgumentScope.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process">ArgumentScope</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#arguments">arguments</a></span></code></th>
 <td class="col-last">
-<div class="block">The arguemnts to start the external process</div>
+<div class="block">The arguments to start the external process</div>
 </td>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#environment">environment</a></span></code></th>
 <td class="col-last">
-<div class="block">The varaibles in the environment which are used when starting an external process.</div>
+<div class="block">The variables in the environment which are used when starting an external process.</div>
 </td>
 </tr>
 <tr class="alt-color">
@@ -376,7 +376,7 @@ boolean&nbsp;inScope)</code></th>
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#clearEnvironment()">clearEnvironment</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Removes the user defined environemtn variables.</div>
+<div class="block">Removes the user defined environment variables.</div>
 </td>
 </tr>
 <tr class="row-color" id="i19">
@@ -397,7 +397,7 @@ boolean&nbsp;inScope)</code></th>
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#clearSubstitutionLoopkups()">clearSubstitutionLoopkups</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Clear all subsition lookups.</div>
+<div class="block">Clear all substitution lookups.</div>
 </td>
 </tr>
 <tr class="alt-color" id="i22">
@@ -437,7 +437,7 @@ boolean&nbsp;inScope)</code></th>
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTimeoutAsText()">getTimeoutAsText</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Returns the timeput as text which includes the timeout value and timeout unit.</div>
+<div class="block">Returns the timeout as text which includes the timeout value and timeout unit.</div>
 </td>
 </tr>
 <tr class="alt-color" id="i28">
@@ -487,7 +487,7 @@ boolean&nbsp;inScope)</code></th>
 <td class="col-first"><code>int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#run()">run</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Run the specified process in a synchronus manner.</div>
+<div class="block">Run the specified process in a synchronous manner.</div>
 </td>
 </tr>
 <tr class="alt-color" id="i36">
@@ -591,14 +591,14 @@ boolean&nbsp;inScope)</code></th>
 <section class="detail" id="environment">
 <h3>environment</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">environment</span></div>
-<div class="block">The varaibles in the environment which are used when starting an external process.</div>
+<div class="block">The variables in the environment which are used when starting an external process.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="arguments">
 <h3>arguments</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ArgumentScope.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process">ArgumentScope</a>&gt;</span>&nbsp;<span class="member-name">arguments</span></div>
-<div class="block">The arguemnts to start the external process</div>
+<div class="block">The arguments to start the external process</div>
 </section>
 </li>
 <li>
@@ -684,7 +684,8 @@ boolean&nbsp;inScope)</code></th>
 <h3>run</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">run</span>()
         throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/TimeoutException.html" title="class or interface in java.util.concurrent" class="external-link">TimeoutException</a></span></div>
-<div class="block">Run the specified process in a synchronus manner. This means it blocks until the timeout is over or the process is finished.</div>
+<div class="block">Run the specified process in a synchronous manner. This means it blocks until the timeout is over or the
+ process is finished.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the exit status of the process</dd>
@@ -752,10 +753,10 @@ boolean&nbsp;inScope)</code></th>
 <section class="detail" id="getTimeoutAsText()">
 <h3>getTimeoutAsText</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getTimeoutAsText</span>()</div>
-<div class="block">Returns the timeput as text which includes the timeout value and timeout unit.</div>
+<div class="block">Returns the timeout as text which includes the timeout value and timeout unit.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the timeput as text</dd>
+<dd>The timeout as text.</dd>
 </dl>
 </section>
 </li>
@@ -847,7 +848,7 @@ boolean&nbsp;inScope)</code></th>
 <div class="block">Add the consumer for the std:out processing. The consumer gets a new line whenever the process prints something on std:out.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>consumer</code> - the cinsumer to use for std:out</dd>
+<dd><code>consumer</code> - the consumer to use for std:out</dd>
 </dl>
 </section>
 </li>
@@ -865,7 +866,7 @@ boolean&nbsp;inScope)</code></th>
 <div class="block">Set the consumer for the std:err processing. The consumer gets a new line whenever the process prints something on std:err.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>consumer</code> - the cinsumer to use for std:err</dd>
+<dd><code>consumer</code> - the consumer to use for std:err</dd>
 </dl>
 </section>
 </li>
@@ -880,7 +881,7 @@ boolean&nbsp;inScope)</code></th>
 <section class="detail" id="clearEnvironment()">
 <h3>clearEnvironment</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">clearEnvironment</span>()</div>
-<div class="block">Removes the user defined environemtn variables.</div>
+<div class="block">Removes the user defined environment variables.</div>
 </section>
 </li>
 <li>
@@ -903,7 +904,7 @@ boolean&nbsp;inScope)</code></th>
 <div class="block">Adds multiple environment variables which are stored in a map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>map</code> - the map with additonal environment variables</dd>
+<dd><code>map</code> - the map with additional environment variables</dd>
 </dl>
 </section>
 </li>
@@ -1027,7 +1028,7 @@ boolean&nbsp;inScope)</span></div>
 <section class="detail" id="clearSubstitutionLoopkups()">
 <h3>clearSubstitutionLoopkups</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">clearSubstitutionLoopkups</span>()</div>
-<div class="block">Clear all subsition lookups.</div>
+<div class="block">Clear all substitution lookups.</div>
 </section>
 </li>
 <li>
