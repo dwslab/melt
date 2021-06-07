@@ -108,9 +108,9 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
      * Creates a file which contains two columns in a csv format.
      * The first column contains the text from the source entities and the second column contains the text from the target entities.
      * The returned file is not automatically removed. This has to be done outside.
-     * @param source
-     * @param target
-     * @param inputAlignment
+     * @param source the source model 
+     * @param target the target model
+     * @param inputAlignment the input alignment
      * @return the csv file or null in case of an error
      */
     public File createPredictionFile(OntModel source, OntModel target, Alignment inputAlignment) {
