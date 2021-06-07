@@ -47,6 +47,7 @@ With this in place everything should work.
 */
 public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherDockerFile.class);
     private static final String OS_NAME = System.getProperty("os.name");
     private static final boolean IS_WINDOWS = OS_NAME.startsWith("Windows");
@@ -125,8 +126,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
     public MatcherDockerFile(String imageName) {
         this(imageName, (File) null);
     }
-    
-     
+
     public void loadDockerFile(File dockerImageFile){
         loadDockerFileInternal(dockerImageFile);
     }

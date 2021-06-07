@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
  * When no ProcessOutputConsumer is added, the default is to discard it.
  */
 public class ExternalProcess {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ExternalProcess.class);
     
     private static final String OS_NAME = System.getProperty("os.name");
@@ -37,12 +39,12 @@ public class ExternalProcess {
     private File workingDirectory;
     
     /**
-     * The varaibles in the environment which are used when starting an external process.
+     * The variables in the environment which are used when starting an external process.
      */
     private Map<String, String> environment;
     
     /**
-     * The arguemnts to start the external process
+     * The arguments to start the external process
      */
     private List<ArgumentScope> arguments;
     
@@ -81,7 +83,6 @@ public class ExternalProcess {
      * Zero to wait forever.
      */
     private long timeoutForReadingThreadJoin;
-    
 
     public ExternalProcess(){
         this.workingDirectory = null;
@@ -95,15 +96,15 @@ public class ExternalProcess {
         this.milliSecondsBetweenSigtermAndSigkill = 3000;
         this.timeoutForReadingThreadJoin = 0;
     }
-    
-    
+
     public ExternalProcess(List<String> arguments){
         this();
         this.arguments.add(new ArgumentScope(arguments, false));
     }
     
     /**
-     * Run the specified process in a synchronus manner. This means it blocks until the timeout is over or the process is finished.
+     * Run the specified process in a synchronous manner. This means it blocks until the timeout is over or the
+     * process is finished.
      * @return the exit status of the process
      * @throws TimeoutException in case the timeout was hit
      */
@@ -147,19 +148,20 @@ public class ExternalProcess {
         try {
             process = pb.start();
         } catch (IOException ex) {
-            LOGGER.error("IOException happend when starting the external process. The process is maybe started but no further stopping is executed.", ex);
+            LOGGER.error("IOException happened when starting the external process. The process is maybe started but " +
+                    "no further stopping is executed.", ex);
             return 5;
         }
         
-        try{
+        try {
             Thread outCollectorThread = startReadingThread(process.getInputStream(), "ProcessStdOut", this.outConsumer);
             Thread errCollectorThread = startReadingThread(process.getErrorStream(), "ProcessStdErr", this.errConsumer);
             
             boolean matcherFinishesInTime = true;
             try {
-                if(this.timeout > 0){
+                if(this.timeout > 0) {
                     matcherFinishesInTime = process.waitFor(this.timeout, this.timeoutTimeUnit);
-                }else {
+                } else {
                     process.waitFor();
                 }
             } catch (InterruptedException ex) {
@@ -251,8 +253,8 @@ public class ExternalProcess {
     }
     
     /**
-     * Returns the timeput as text which includes the timeout value and timeout unit.
-     * @return the timeput as text
+     * Returns the timeout as text which includes the timeout value and timeout unit.
+     * @return The timeout as text.
      */
     public String getTimeoutAsText() {
         return this.timeout + " " + this.timeoutTimeUnit.toString().toLowerCase();
@@ -276,12 +278,10 @@ public class ExternalProcess {
         this.timeoutForReadingThreadJoin = timeoutForReadingThreadJoin;
     }
 
-    
     /***************************************
-     * Process termination 
+     * Process Termination
      * ***********************************/
-    
-    
+
     /**
      * Terminates the process.
      * @param process the process to terminate
@@ -389,7 +389,7 @@ public class ExternalProcess {
     
     /**
      * Add the consumer for the std:out processing. The consumer gets a new line whenever the process prints something on std:out.
-     * @param consumer the cinsumer to use for std:out
+     * @param consumer the consumer to use for std:out
      */
     public void addStdOutConsumer(ProcessOutputConsumer consumer){
         this.outConsumer.add(consumer);
@@ -404,7 +404,7 @@ public class ExternalProcess {
     
     /**
      * Set the consumer for the std:err processing. The consumer gets a new line whenever the process prints something on std:err.
-     * @param consumer the cinsumer to use for std:err
+     * @param consumer the consumer to use for std:err
      */
     public void addStdErrConsumer(ProcessOutputConsumer consumer){
         this.errConsumer.add(consumer);
@@ -419,11 +419,11 @@ public class ExternalProcess {
     
     
     /****************************
-      * Environment section  
+      * Environment Section
       ****************************/
     
     /**
-     * Removes the user defined environemtn variables.
+     * Removes the user defined environment variables.
      */
     public void clearEnvironment(){
         this.environment.clear();
@@ -440,7 +440,7 @@ public class ExternalProcess {
     
     /**
      * Adds multiple environment variables which are stored in a map.
-     * @param map the map with additonal environment variables
+     * @param map the map with additional environment variables
      */
     public void addEnvironmentVariableMap(Map<String, String> map){
         this.environment.putAll(map);
@@ -607,7 +607,7 @@ public class ExternalProcess {
      ****************************/
     
     /**
-     * Clear all subsition lookups.
+     * Clear all substitution lookups.
      */
     public void clearSubstitutionLoopkups() {
         this.substitutionLookups.clear();
@@ -913,27 +913,27 @@ class ArgumentScope {
                 String argumentName = argument.substring(openScope + 2, endScope);
                 
                 String result = lookUp(argumentName, substitutionLookups);
-                if(result == null){
+                if (result == null) {
                     if(inScope){
                         // we are in a scope and cannot replace a variable, so the whole scope is removed
                         return new ArrayList<>(); 
-                    }else{
-                        if(argumentName.startsWith("!")){
+                    } else {
+                        if (argumentName.startsWith("!")){
                             //TODO: maybe change to a non runtime exception
                             throw new RuntimeException("No value found for : " + argumentName.substring(1));
-                        }else{
+                        } else {
                             //do nothing in else branch because we will silently ignore it.
                             LOGGER.debug("Variable with name \"{}\" in commandline is not found. It is replaced with empty string.");
                         }
                     }
-                }else{
+                } else {
                     subsitutedArgument.append(result);
                 }
                 startScope = endScope + 1;
             }
             subsitutedArgument.append(argument.substring(startScope, argument.length()));
             String subsitutedArgumentString = subsitutedArgument.toString().trim();
-            if(subsitutedArgumentString.isEmpty() == false)
+            if (subsitutedArgumentString.isEmpty() == false)
                 subsitutedArguments.add(subsitutedArgumentString);
         }
         return subsitutedArguments;

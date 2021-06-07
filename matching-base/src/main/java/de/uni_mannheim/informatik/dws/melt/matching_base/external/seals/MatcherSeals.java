@@ -255,14 +255,6 @@ public class MatcherSeals extends MatcherFile {
             sealsProcess.setWorkingDirectory(sealsHome);
             sealsProcess.addEnvironmentVariable("SEALS_HOME", sealsHome.getAbsolutePath());
             sealsProcess.setTimeout(this.timeout, this.timeoutTimeUnit);
-
-            // for debugging
-            StringBuilder argumentsBuffer = new StringBuilder();
-            for (String arg : sealsProcess.getArguments()) {
-                argumentsBuffer.append(arg);
-                argumentsBuffer.append(" ");
-            }
-            LOGGER.info("Running the following command:\n{}", argumentsBuffer);
             sealsProcess.run();
 
             if (alignmentResult.length() == 0) { //easy check if file is empty

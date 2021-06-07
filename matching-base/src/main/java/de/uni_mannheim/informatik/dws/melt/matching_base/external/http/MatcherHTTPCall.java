@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This class wraps a matcher service.
  */
-public class MatcherHTTPCall extends MatcherURL{
+public class MatcherHTTPCall extends MatcherURL {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherHTTPCall.class);
