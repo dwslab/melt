@@ -223,7 +223,7 @@ public class GenericMatcherCaller {
      * @param inputAlignment the input alignment
      * @param parameters the parameters
      * @return alignment and parameters
-     * @throws Exception in case somethign goes wrong
+     * @throws Exception in case something goes wrong.
      */
     @SuppressWarnings("unchecked")
     private static AlignmentAndParameters runIMatcher(IMatcher matcher, Set<Object> sourceOntology, Set<Object> targetOntology, Object inputAlignment, Object parameters) throws Exception{

@@ -12,7 +12,8 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  * A simple string matcher using String equivalence as matching criterion.
  */
 public class SimpleStringMatcher implements IMatcher<OntModel,Alignment,Properties> {
-    
+
+
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties p) throws Exception {
         Alignment alignment = new Alignment();

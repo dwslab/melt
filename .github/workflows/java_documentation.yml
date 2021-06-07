@@ -1,4 +1,4 @@
-name: Java Coverage and Documentation
+name: JavaDoc
 
 on: [push]
 
@@ -28,14 +28,6 @@ jobs:
           path: |
             ~/.cache/pip
           key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}-1
-      #    From a runtime perspective, it would make sense to cache OAEI files. However, in order to test also the
-      #    TrackRepostitory and related classes, we decided not to cache those files.
-      #    - name: Cache OAEI
-      #      uses: actions/cache@v1
-      #      with:
-      #        path: ~/oaei_track_cache
-      #        key: ${{ runner.os }}-m2-${{ hashFiles('**/TrackRepository.java') }}
-      #        restore-keys: ${{ runner.os }}-oaei
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
@@ -43,11 +35,8 @@ jobs:
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
       - name: Install python dependencies
         run: pip install -r ./matching-ml/src/main/resources/requirements.txt
-      - name: Build with Maven and Run All Tests 📦🕵️
-        #run: mvn -B package --file pom.xml
-        run: mvn clean install
-      - name: Coveralls
-        run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS }}
+      - name: Build with Maven 📦
+        run: mvn clean install -DskipTests=True
       - name: Generate JavaDoc Documentation 📚
         run: mvn clean javadoc:aggregate
       - name: Deploy JavaDoc 🚀
@@ -57,16 +46,3 @@ jobs:
           branch: gh-pages # The branch the action should deploy to.
           folder: target/site/apidocs
           target-folder: javadoc_latest
-      - name: Install the MarkDown DocLet 🔌
-        run: |
-          cd ./documentation/melt_doclet
-          mvn clean install
-      - name: Generate MarkDown Documentation 📚
-        run: mvn site -P ci-run
-      - name: Deploy MarkDown 🚀
-        uses: JamesIves/github-pages-deploy-action@4.0.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages # The branch the action should deploy to.
-          folder: target/site/apidocs/generated_markdown
-          target-folder: 3_available_matcher_components/generated_markdown
