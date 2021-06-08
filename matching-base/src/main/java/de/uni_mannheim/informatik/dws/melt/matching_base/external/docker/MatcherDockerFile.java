@@ -147,8 +147,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
             LOGGER.warn("Could not load dockerImageFile.", ex);
         }
     }
-    
-    
+
     private void startContainer(){
         int containerPort = this.getContainerPort();
         this.hostPort = this.getFreePortOnHost();

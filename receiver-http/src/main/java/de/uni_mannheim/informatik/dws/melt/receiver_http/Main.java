@@ -100,7 +100,7 @@ public class Main {
 
         @Override
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            //we exepect a source and a target
+            // we expect a source and a target
             if(isMultipartContent(request)){
                 LOGGER.info("Got multipart request - start matching");
                 Part source = request.getPart("source");            
