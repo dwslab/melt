@@ -39,8 +39,14 @@
             <artifactId>receiver-http</artifactId>
             <version>${matching.version}</version>
         </dependency>
-        
-        
+
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>matching-eval</artifactId>
+            <version>${matching.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>

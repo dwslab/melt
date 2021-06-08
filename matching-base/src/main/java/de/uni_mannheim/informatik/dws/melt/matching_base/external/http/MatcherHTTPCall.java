@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
  */
 public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, URL>{
 
-
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherHTTPCall.class);
     
     private static CloseableHttpClient httpClient = HttpClients.createDefault();

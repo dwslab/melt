@@ -51,6 +51,7 @@ With this in place everything should work.
 */
 public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherDockerFile.class);
     private static final String OS_NAME = System.getProperty("os.name");
     private static final boolean IS_WINDOWS = OS_NAME.startsWith("Windows");
@@ -86,9 +87,9 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
 
     /**
      * Initializes a matcher which starts a docker image to create a docker container in which a HTTP server runs.
-     * @param imageName the image name to use (docker image name)
-     * @param dockerImageFile a file which contains the image
-     * @param config the config to connect to a docker machine
+     * @param imageName the image name to use (docker image name).
+     * @param dockerImageFile a file which contains the image.
+     * @param config the config to connect to a docker machine.
      * @param runOnlyLocalhost true if all ports should be bound to localhost. If false, all ports are bound to all interfaces (0.0.0.0) and makes the server also available from outside.
      * @param freshInstance if true, with every call of the match method, a new container is started (default is false because it should not be necessary).
      */
@@ -129,8 +130,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
     public MatcherDockerFile(String imageName) {
         this(imageName, (File) null);
     }
-    
-     
+
     public void loadDockerFile(File dockerImageFile){
         loadDockerFileInternal(dockerImageFile);
     }
