@@ -92,12 +92,14 @@ public class PrepareHobbitGitlab extends AbstractMojo{
     private GitLabApi makeGitLabConnection(String gitHost) throws MojoExecutionException{        
         //first check inline auth
         if(this.authConfig.getPassword() != null){
+            getLog().info("Found inline authconfig in pom.xml");
             return checkConnection(this.authConfig.getUsername(), this.authConfig.getPassword());
         }else{
             //second: check settings.xml
             for (Server server : settings.getServers()) {
                 String id = server.getId();
                 if(id.equals(gitHost + ":" + registryPort)){
+                    getLog().info("Found authconfig in settings.xml.");
                     return checkConnection(server.getUsername(), server.getPassword());
                 }
             }
@@ -108,6 +110,7 @@ public class PrepareHobbitGitlab extends AbstractMojo{
     private GitLabApi checkConnection(String user, String password){
         if(user == null || user.trim().isEmpty()){
             //then password needs to be access token
+            getLog().info("Use password as access token.");
             return new GitLabApi(this.giturl, password);
         }else{
             //first check: if it is the password of the user
@@ -115,6 +118,7 @@ public class PrepareHobbitGitlab extends AbstractMojo{
                 return GitLabApi.oauth2Login(this.giturl, user, password);
             } catch (GitLabApiException ex) {
                 //second: password needs to be access token
+                getLog().info("Password was not hobbit password. Use as access token.");
                 return new GitLabApi(this.giturl, password);
             }
         }
