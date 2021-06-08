@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.external.http;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherURL;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This class wraps a matcher service.
  */
-public class MatcherHTTPCall extends MatcherURL{
+public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, URL>{
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherHTTPCall.class);
@@ -96,22 +97,29 @@ public class MatcherHTTPCall extends MatcherURL{
     
     @Override
     public URL match(URL source, URL target, URL inputAlignment) throws Exception {
+        return match(source, target, inputAlignment, null);
+    }
+
+    @Override
+    public URL match(URL source, URL target, URL inputAlignment, URL parameters) throws Exception {
         //https://stackoverflow.com/questions/1378920/how-can-i-make-a-multipart-form-data-post-request-using-java?rq=1
         HttpPost request = new HttpPost(uri);
         
-        Properties p = new Properties();
-        p.setProperty("test", "bla");
-        
-        if(this.sendContent){            
-            MultipartEntityBuilder builder = MultipartEntityBuilder.create()
-                .addBinaryBody("source", source.openStream()) //TODO: close stream?
-                .addBinaryBody("target", target.openStream());
+        if(this.sendContent){
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.addBinaryBody("source", source.openStream()) //TODO: close stream?
+                   .addBinaryBody("target", target.openStream());
             if(inputAlignment != null)
                 builder.addBinaryBody("inputAlignment", inputAlignment.openStream());
             
-            for(Entry<Object, Object> entry : p.entrySet()){
-                builder.addTextBody(entry.getKey().toString(), entry.getValue().toString());
-            }
+            if(parameters != null)
+                builder.addBinaryBody("parameters", parameters.openStream());
+            
+            //Properties p = new Properties();
+            //p.setProperty("test", "bla");
+            //for(Entry<Object, Object> entry : p.entrySet()){
+            //    builder.addTextBody(entry.getKey().toString(), entry.getValue().toString());
+            //}
             request.setEntity(builder.build());
         }else{
             List<NameValuePair> params = new ArrayList<>();
@@ -120,12 +128,14 @@ public class MatcherHTTPCall extends MatcherURL{
             if(inputAlignment != null)
                 params.add(new BasicNameValuePair("inputAlignment", inputAlignment.toString()));
             
-            for(Entry<Object, Object> entry : p.entrySet()){
-                params.add(new BasicNameValuePair(entry.getKey().toString(), entry.getValue().toString()));
-            }
+            
+            //for(Entry<Object, Object> entry : p.entrySet()){
+            //    params.add(new BasicNameValuePair(entry.getKey().toString(), entry.getValue().toString()));
+            //}
             request.setEntity(new UrlEncodedFormEntity(params));
         }        
-        request.setConfig(this.requestConfig);        
+        request.setConfig(this.requestConfig);
+        LOGGER.info("Execute now the following HTTP request: {}", request);
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             HttpEntity entity = response.getEntity();
             if (entity == null) {
