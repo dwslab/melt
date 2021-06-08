@@ -9,10 +9,14 @@ info:
 externalDocs:
   description: "See the MELT repository"
   url: https://github.com/dwslab/melt
+servers:
+  - url: http://localhost:8080
 paths:
   /match:
     post:
       summary: Computes the alignment between the given ontologies/knowledge graphs as URLs
+      tags:
+        - match
       requestBody:
         required: true
         content:

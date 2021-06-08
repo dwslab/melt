@@ -44,7 +44,7 @@ public class Main {
     private static final File LOCATION = getLocation();
     
     public static void main(String[] args) throws Exception {    
-        
+        //Thread.sleep(20000);
         //curl -F 'source=@cmt.rdf' -F 'target=@conference.rdf' -d "param1=value1" http://127.0.0.1:8080/match
         
         //parameters:
@@ -59,12 +59,13 @@ public class Main {
         server.setHandler(context);
         
         
-        //make the index page show up
-        URI rootURI = getRootDir();
-        if(rootURI != null){
-            context.setBaseResource(Resource.newResource(rootURI));
-            context.setWelcomeFiles(new String[]{"index.html"});
-        }
+        //TODO: make the index page show up
+        //URI rootURI = getRootDir();
+        //if(rootURI != null){
+        //    LOGGER.info("Set root dir to: {}", rootURI);
+        //    context.setBaseResource(Resource.newResource(rootURI));
+        //    context.setWelcomeFiles(new String[]{"index.html"});
+        //}
         //https://stackoverflow.com/questions/20207477/serving-static-files-from-alternate-path-in-embedded-jetty
         //https://stackoverflow.com/questions/39011587/jetty-default-servlet-context-path
         
@@ -87,6 +88,7 @@ public class Main {
         if (indexURL == null){
             return null;
         }
+        LOGGER.info("indexURL: {}", indexURL);
         try {
             return indexURL.toURI().resolve("./").normalize();
         } catch (URISyntaxException ex) {

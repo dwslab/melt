@@ -1,11 +1,13 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.external.docker;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.ContainerConfig;
 import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports.Binding;
@@ -23,6 +25,8 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -152,9 +156,9 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
         int containerPort = this.getContainerPort();
         this.hostPort = this.getFreePortOnHost();
         
-        String bindingHostIp = null;
+        String bindingHostIp = null; //bind on all interfaces - this makes it also public
         if(this.runOnlyLocalhost){
-            bindingHostIp = "127.0.0.1";
+            bindingHostIp = "127.0.0.1"; // bind only on localhost - access only from the same machine
         }
         
         PortBinding binding = new PortBinding(new Binding(bindingHostIp, "" + this.hostPort), new ExposedPort(containerPort));
@@ -169,7 +173,24 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
                 .exec();
         
         this.containerId = r.getId();
+        if(this.containerId == null){
+            LOGGER.warn("Could not create container and start it because the container id is null.");
+            return;
+        }            
         dockerClient.startContainerCmd(this.containerId).exec();
+        LOGGER.info("Container started with id {}", this.containerId);
+        if(this.containerId.length() > 12){
+            LOGGER.info("To see log output of container, run: docker container logs {}", this.containerId.substring(0, 12));
+        }else{
+            LOGGER.info("To see log output of container, run: docker container logs {}", this.containerId);
+        }
+        /*
+        this.dockerClient.attachContainerCmd(this.containerId)
+                .withStdErr(true)
+                .withStdOut(true)
+                .withLogs(true)
+                .exec(new DockerLogCallback());
+        */
     }
     
     private void stopContainer(){
@@ -188,8 +209,9 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
         }
         
         URI uri = new URI("http://localhost:" + this.hostPort + "/match");
+        //Thread.sleep(10000);
+        //this.logAllLinesFromContainer();
         
-        //TODO: wait for the service to be up and running
         MatcherHTTPCall httpCall = new MatcherHTTPCall(uri, true, this.socketTimeout, this.connectTimeout, this.connectionRequestTimeout);
         URL result = httpCall.match(source, target, inputAlignment);
         
@@ -269,4 +291,56 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
         this.connectionRequestTimeout = connectionRequestTimeout;
     }
     
+    
+    /**
+     * Calling this function will log the last x lines from the container.
+     * @param numberOfLastLines the number of last lines to log.
+     */
+    public void logLastLinesFromContainer(int numberOfLastLines){
+        if(this.containerId == null || this.containerId.isEmpty()){
+            LOGGER.warn("Would like to log last lines of container but container is not started or allread stopped. Maybe the close method was already called?");
+            return;
+        }
+        
+        DockerLogCallback calback = dockerClient.logContainerCmd(this.containerId)
+                .withStdOut(true)
+                .withStdErr(true)
+                .withTail(numberOfLastLines)
+                .exec(new DockerLogCallback());
+        try {
+            calback.awaitCompletion(5, TimeUnit.SECONDS);
+        } catch (InterruptedException ex) {
+            LOGGER.warn("Interrupted during wait", ex);
+        }
+    }
+    
+    /**
+     * Calling this function will log all lines from the container.
+     */
+    public void logAllLinesFromContainer(){
+        if(this.containerId == null || this.containerId.isEmpty()){
+            LOGGER.warn("Would like to log last lines of container but container is not started or allread stopped. Maybe the close method was already called?");
+            return;
+        }
+        
+        DockerLogCallback calback = dockerClient.logContainerCmd(this.containerId)
+                .withStdOut(true)
+                .withStdErr(true)
+                .withTailAll()
+                .exec(new DockerLogCallback());
+        try {
+            calback.awaitCompletion(5, TimeUnit.SECONDS);
+        } catch (InterruptedException ex) {
+            LOGGER.warn("Interrupted during wait", ex);
+        }
+    }    
+}
+
+class DockerLogCallback extends ResultCallback.Adapter<Frame>{
+    private static final Logger LOGGER = LoggerFactory.getLogger(DockerLogCallback.class);
+
+    @Override
+    public void onNext(Frame item) {
+        LOGGER.info(item.toString());
+    }
 }

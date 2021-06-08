@@ -27,6 +27,6 @@
             <artifactId>jetty-servlets</artifactId>
             <version>9.4.34.v20201102</version>
         </dependency>
-        
+        <!--jetty versions with java versions: https://www.eclipse.org/jetty/documentation/jetty-9/index.html -->
     </dependencies>
 </project>
