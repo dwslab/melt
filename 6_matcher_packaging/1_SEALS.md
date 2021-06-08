@@ -38,6 +38,69 @@ of the client <a href="https://github.com/DanFaria/OAEI_SealsClient/blob/691b850
 
 It is recommended to use class `MatcherSeals` for wrapping any SEALS zip file as matcher. Since `MatcherSeals` implements `MatcherURL`, you can use an instantiated matcher with the default `Executor` to evaluate it (even together with non-SEALS matchers). You can also combine a `MatcherSeals` instance with any other matcher e.g. in a matching pipeline.
 
+*Example*
+```java
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.seals.MatcherSeals;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
+
+public class SealsMatcherPlayground {
+    public static void main(String[] args) {
+        File sealsZip = new File("<SEALS ZIP FILE PATH>");
+        String java8command = "<PATH TO JAVA 8 EXECUTABLE>";
+
+        // let's instantiate our seals matcher wrapper:
+        MatcherSeals matcherSeals = new MatcherSeals(sealsZip);
+
+        // if you do not have Java 8 as system java:
+        matcherSeals.setJavaCommand(java8command);
+
+        // let's run the matcher:
+        ExecutionResultSet ers = Executor.run(TrackRepository.Anatomy.Default.getFirstTestCase(), matcherSeals);
+
+        // finally, let's evaluate the execution result
+        EvaluatorCSV evaluatorCSV = new EvaluatorCSV(ers);
+        evaluatorCSV.writeToDirectory();
+    }
+}
+```
+
+MatcherSeals is also available through a builder pattern via `MatcherSealsBuilder`:
+
+*Example*
+```java
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.seals.MatcherSeals;
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.seals.MatcherSealsBuilder;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
+
+import java.io.File;
+
+public class SealsMatcherBuilderPlayground {
+
+    public static void main(String[] args) {
+        File sealsZip = new File("/Users/janportisch/IdeaProjects/melt/examples/simpleSealsMatcher/target" +
+                "/simpleSealsMatcher-1.0-seals_external.zip");
+        String java8command = "/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/bin/java";
+        MatcherSeals matcherSeals = new MatcherSealsBuilder()
+                .setJavaCommand(java8command)
+                .build(sealsZip);
+
+        ExecutionResultSet ers = Executor.run(TrackRepository.Anatomy.Default.getFirstTestCase(), matcherSeals);
+        EvaluatorCSV evaluatorCSV = new EvaluatorCSV(ers);
+        evaluatorCSV.writeToDirectory();
+    }
+}
+```
+
+`MatcherSeals` (and similarly `MatcherSealsBuilder`) offer a multitude of configuration options.
+Have a look at the javadoc for details.
+
+
 ### Evaluation Using `ExecutorSeals`
 **Prerequisites**: Java 8 (not necessarily as system Java distribution), successful installation of SEALS, maven project with dependency [`matching-eval`](https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt/matching-eval).
 
