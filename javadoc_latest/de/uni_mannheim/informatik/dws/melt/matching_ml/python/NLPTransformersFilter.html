@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -225,11 +225,13 @@ boolean&nbsp;invertConfidences)</code></th>
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
-<td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createTrainFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">createTrainFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">createPredictionFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Creates a file which contains two columns in a csv format.</div>
+</td>
 </tr>
 <tr class="row-color" id="i1">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
@@ -269,6 +271,13 @@ boolean&nbsp;usingTF,
 <td class="col-last">
 <div class="block">Run huggingface transformers library.</div>
 </td>
+</tr>
+<tr class="alt-color" id="i6">
+<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writePredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,java.util.List)">writePredictionFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+org.apache.jena.ontology.OntModel&nbsp;target,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../yet_another_alignment_api/Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;orderedCorrespondences)</code></th>
+<td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -452,12 +461,31 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </section>
 </li>
 <li>
-<section class="detail" id="createTrainFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">
-<h3>createTrainFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">createTrainFile</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;source,
+<section class="detail" id="createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">
+<h3>createPredictionFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">createPredictionFile</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
-<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</span>
-                     throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</span></div>
+<div class="block">Creates a file which contains two columns in a csv format.
+ The first column contains the text from the source entities and the second column contains the text from the target entities.
+ The returned file is not automatically removed. This has to be done outside.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>source</code> - the source model</dd>
+<dd><code>target</code> - the target model</dd>
+<dd><code>inputAlignment</code> - the input alignment</dd>
+<dt>Returns:</dt>
+<dd>the csv file or null in case of an error</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="writePredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,java.util.List)">
+<h3>writePredictionFile</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">writePredictionFile</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;source,
+org.apache.jena.ontology.OntModel&nbsp;target,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../yet_another_alignment_api/Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;orderedCorrespondences)</span>
+                          throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>

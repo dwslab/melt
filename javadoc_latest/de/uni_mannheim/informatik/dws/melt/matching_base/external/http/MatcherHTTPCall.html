@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -85,11 +85,12 @@ loadScripts(document, 'script');</script>
 <section class="description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge</code>, <code>eu.sealsproject.platform.res.tool.api.IPlugin</code>, <code>eu.sealsproject.platform.res.tool.api.IToolBridge</code></dd>
+<dd><code><a href="../../IMatcher.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IMatcher</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&gt;</code>, <code>eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge</code>, <code>eu.sealsproject.platform.res.tool.api.IPlugin</code>, <code>eu.sealsproject.platform.res.tool.api.IToolBridge</code></dd>
 </dl>
 <hr>
 <pre>public class <span class="type-name-label">MatcherHTTPCall</span>
-extends <a href="../../MatcherURL.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">MatcherURL</a></pre>
+extends <a href="../../MatcherURL.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">MatcherURL</a>
+implements <a href="../../IMatcher.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IMatcher</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&gt;</pre>
 <div class="block">This class wraps a matcher service.</div>
 </section>
 <section class="summary">
@@ -210,6 +211,16 @@ int&nbsp;connectionRequestTimeout)</code></th>
 <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;inputAlignment)</code></th>
 <td class="col-last">
 <div class="block">Match two ontologies / knowledge graphs together and returns an alignment.</div>
+</td>
+</tr>
+<tr class="row-color" id="i1">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.net.URL,java.net.URL,java.net.URL,java.net.URL)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;source,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;target,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;inputAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;parameters)</code></th>
+<td class="col-last">
+<div class="block">Aligns two ontologies/knowledge graphs given as the first and second parameter.</div>
 </td>
 </tr>
 </tbody>
@@ -361,6 +372,38 @@ boolean&nbsp;sendContent)</span></div>
  <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">alignment API format</a>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - in case something went wrong.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="match(java.net.URL,java.net.URL,java.net.URL,java.net.URL)">
+<h3>match</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></span>&nbsp;<span class="member-name">match</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;source,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;target,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;inputAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;parameters)</span>
+          throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../IMatcher.html#match(ModelClass,ModelClass,AlignmentClass,ParameterClass)">IMatcher</a></code></span></div>
+<div class="block">Aligns two ontologies/knowledge graphs given as the first and second parameter.
+ An additional input alignment can be given as well as parameters which further define how and what to match.
+ In case inputAlignment or parameters is not used, making them to the Object class, 
+ will required no additional transformations of these objects (no overhead).</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../../IMatcher.html#match(ModelClass,ModelClass,AlignmentClass,ParameterClass)">match</a></code>&nbsp;in interface&nbsp;<code><a href="../../IMatcher.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IMatcher</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&gt;</code></dd>
+<dt>Parameters:</dt>
+<dd><code>source</code> - this object represents the source ontology/knowledge graph</dd>
+<dd><code>target</code> - this object represents the target ontology/knowledge graph</dd>
+<dd><code>inputAlignment</code> - this object represents the input alignment.</dd>
+<dd><code>parameters</code> - object representing additional parameters.
+      Only add to this object and do not create a new Object like <code>parameters= new ...()</code> 
+      because otherwise the parameters are lost (<a href="https://stackoverflow.com/questions/40480/is-java-pass-by-reference-or-pass-by-value">java ist call by value</a>).
+      Sensible classes are <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link"><code>Properties</code></a> (preferred), <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map&lt;String, Object&gt;</code></a> or any similar data structure.
+      Some already specified keys (strings) can be found at <a href="../../ParameterConfigKeys.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base"><code>ParameterConfigKeys</code></a>.</dd>
+<dt>Returns:</dt>
+<dd>the resulting alignment of the matching process.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - any exception which occurs during matching</dd>
 </dl>
 </section>
 </li>

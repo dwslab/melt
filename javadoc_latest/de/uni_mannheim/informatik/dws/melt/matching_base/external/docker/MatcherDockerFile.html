@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -297,6 +297,20 @@ boolean&nbsp;freshInstance)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i6">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#logAllLinesFromContainer()">logAllLinesFromContainer</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Calling this function will log all lines from the container.</div>
+</td>
+</tr>
+<tr class="row-color" id="i7">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#logLastLinesFromContainer(int)">logLastLinesFromContainer</a></span>&#8203;(int&nbsp;numberOfLastLines)</code></th>
+<td class="col-last">
+<div class="block">Calling this function will log the last x lines from the container.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i8">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.net.URL,java.net.URL,java.net.URL)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;source,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;target,
@@ -305,7 +319,7 @@ boolean&nbsp;freshInstance)</code></th>
 <div class="block">Match two ontologies / knowledge graphs together and returns an alignment.</div>
 </td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="row-color" id="i9">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTimeouts(int,int,int)">setTimeouts</a></span>&#8203;(int&nbsp;socketTimeout,
 int&nbsp;connectTimeout,
@@ -314,12 +328,12 @@ int&nbsp;connectionRequestTimeout)</code></th>
 <div class="block">Sets the timeouts for the HTTP call which happens when the docker container is started and the call to the service is executed.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#startContainer()">startContainer</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="row-color" id="i11">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#stopContainer()">stopContainer</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
@@ -456,9 +470,9 @@ boolean&nbsp;freshInstance)</span></div>
 <div class="block">Initializes a matcher which starts a docker image to create a docker container in which a HTTP server runs.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>imageName</code> - the image name to use (docker image name)</dd>
-<dd><code>dockerImageFile</code> - a file which contains the image</dd>
-<dd><code>config</code> - the config to connect to a docker machine</dd>
+<dd><code>imageName</code> - the image name to use (docker image name).</dd>
+<dd><code>dockerImageFile</code> - a file which contains the image.</dd>
+<dd><code>config</code> - the config to connect to a docker machine.</dd>
 <dd><code>runOnlyLocalhost</code> - true if all ports should be bound to localhost. If false, all ports are bound to all interfaces (0.0.0.0) and makes the server also available from outside.</dd>
 <dd><code>freshInstance</code> - if true, with every call of the match method, a new container is started (default is false because it should not be necessary).</dd>
 </dl>
@@ -607,6 +621,24 @@ int&nbsp;connectionRequestTimeout)</span></div>
 <dd><code>connectionRequestTimeout</code> - timeout in milliseconds when requesting a connection from the connection manager.
       Zero means infinite timeout. Negative usually means systems default.</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="logLastLinesFromContainer(int)">
+<h3>logLastLinesFromContainer</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">logLastLinesFromContainer</span>&#8203;(<span class="parameters">int&nbsp;numberOfLastLines)</span></div>
+<div class="block">Calling this function will log the last x lines from the container.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>numberOfLastLines</code> - the number of last lines to log.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="logAllLinesFromContainer()">
+<h3>logAllLinesFromContainer</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">logAllLinesFromContainer</span>()</div>
+<div class="block">Calling this function will log all lines from the container.</div>
 </section>
 </li>
 </ul>
