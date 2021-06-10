@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Executing a Local Track
+title: Local Tracks
 parent: Matcher Evaluation
 nav_order: 3
 permalink: /matcher-evaluation/local-track
