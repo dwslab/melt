@@ -90,9 +90,11 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>build</goal><!--install phase-->
-                            <goal>save</goal><!--? phase-->
+                            <goal>build</goal>
+                            <goal>save</goal>
                         </goals>
+                        <!--execute build and save when calling "mvn install" -->
+                        <phase>install</phase>
                     </execution>
                 </executions>
             </plugin>
