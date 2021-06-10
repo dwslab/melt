@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -223,6 +223,25 @@ int&nbsp;connectionRequestTimeout)</code></th>
 <div class="block">Aligns two ontologies/knowledge graphs given as the first and second parameter.</div>
 </td>
 </tr>
+<tr class="alt-color" id="i2">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setSendContent(boolean)">setSendContent</a></span>&#8203;(boolean&nbsp;sendContent)</code></th>
+<td class="col-last">
+<div class="block">If true, then the content of the file URI is read and transferred.</div>
+</td>
+</tr>
+<tr class="row-color" id="i3">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTimeout(int)">setTimeout</a></span>&#8203;(int&nbsp;timeout)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTimeout(int,int,int)">setTimeout</a></span>&#8203;(int&nbsp;socketTimeout,
+int&nbsp;connectTimeout,
+int&nbsp;connectionRequestTimeout)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -404,6 +423,32 @@ boolean&nbsp;sendContent)</span></div>
 <dd>the resulting alignment of the matching process.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - any exception which occurs during matching</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setTimeout(int,int,int)">
+<h3>setTimeout</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setTimeout</span>&#8203;(<span class="parameters">int&nbsp;socketTimeout,
+int&nbsp;connectTimeout,
+int&nbsp;connectionRequestTimeout)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="setTimeout(int)">
+<h3>setTimeout</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setTimeout</span>&#8203;(<span class="parameters">int&nbsp;timeout)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="setSendContent(boolean)">
+<h3>setSendContent</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setSendContent</span>&#8203;(<span class="parameters">boolean&nbsp;sendContent)</span></div>
+<div class="block">If true, then the content of the file URI is read and transferred.
+ If false, then only the URI is tranferred but then the matching system needs to have access to the URI.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>sendContent</code> - the choise if the whole content is send or not.</dd>
 </dl>
 </section>
 </li>
