@@ -28,6 +28,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
  */
 public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(NLPTransformersFilter.class);
     private static final String NEWLINE = System.getProperty("line.separator");
     

@@ -26,7 +26,6 @@ import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -230,7 +229,8 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
         try{
             InspectImageResponse response = this.dockerClient.inspectImageCmd(this.imageName).exec();
             if(response == null){
-                LOGGER.warn("Wanted to inspect the docker image but somethin went wrong. Use default exposed port of docker image.");
+                LOGGER.warn("Wanted to inspect the docker image but something went wrong. Use default exposed port of" +
+                        " docker image.");
                 return DEFAULT_EXPOSED_PORT;
             }
             ContainerConfig config = response.getConfig();
@@ -248,7 +248,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
                 LOGGER.warn("Multiple ports are exposed by docker image. Just choose the first one.");
             }
             return ports[0].getPort();
-        }catch(NotFoundException ex){
+        } catch(NotFoundException ex) {
             LOGGER.warn("Docker image with name {} is not found. Use default exposed port of docker image.", this.imageName, ex);
             return DEFAULT_EXPOSED_PORT;
         }
@@ -264,7 +264,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
             //socket.setReuseAddress(true);//why? 
             return socket.getLocalPort();
         } catch (IOException ex) {
-            LOGGER.error("Could not find unsed port. Returning -1", ex);
+            LOGGER.error("Could not find free port. Returning -1", ex);
             return -1;
         }
     }
@@ -274,8 +274,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
         stopContainer();
         this.dockerClient.close();
     }
-    
-    
+
     /**
      * Sets the timeouts for the HTTP call which happens when the docker container is started and the call to the service is executed.
      * @param socketTimeout the time in milliseconds waiting for data – after the connection is established; 
@@ -291,24 +290,24 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
         this.connectionRequestTimeout = connectionRequestTimeout;
     }
     
-    
     /**
      * Calling this function will log the last x lines from the container.
      * @param numberOfLastLines the number of last lines to log.
      */
     public void logLastLinesFromContainer(int numberOfLastLines){
         if(this.containerId == null || this.containerId.isEmpty()){
-            LOGGER.warn("Would like to log last lines of container but container is not started or allread stopped. Maybe the close method was already called?");
+            LOGGER.warn("Would like to log last lines of container but container is not started or already stopped. " +
+                    "Maybe the close method was already called?");
             return;
         }
         
-        DockerLogCallback calback = dockerClient.logContainerCmd(this.containerId)
+        DockerLogCallback callback = dockerClient.logContainerCmd(this.containerId)
                 .withStdOut(true)
                 .withStdErr(true)
                 .withTail(numberOfLastLines)
                 .exec(new DockerLogCallback());
         try {
-            calback.awaitCompletion(5, TimeUnit.SECONDS);
+            callback.awaitCompletion(5, TimeUnit.SECONDS);
         } catch (InterruptedException ex) {
             LOGGER.warn("Interrupted during wait", ex);
         }
@@ -323,13 +322,13 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
             return;
         }
         
-        DockerLogCallback calback = dockerClient.logContainerCmd(this.containerId)
+        DockerLogCallback callback = dockerClient.logContainerCmd(this.containerId)
                 .withStdOut(true)
                 .withStdErr(true)
                 .withTailAll()
                 .exec(new DockerLogCallback());
         try {
-            calback.awaitCompletion(5, TimeUnit.SECONDS);
+            callback.awaitCompletion(5, TimeUnit.SECONDS);
         } catch (InterruptedException ex) {
             LOGGER.warn("Interrupted during wait", ex);
         }

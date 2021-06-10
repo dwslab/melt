@@ -105,17 +105,18 @@
                          Use the following line in case you have installed docker on windows or mac
                     <machine><name>default</name></machine>
                     -->
-                    
-                    <!-- inline authConfig not recommended but possible (see also https://dmp.fabric8.io/#authentication).
+
+                    <!-- inline authConfig not recommended but possible (in case you use accesstoken, you can omit the username here and only here).
                          Better use settings xml (one example is shown at the end of the file)
                     <authConfig>
                         <username>{hobbit_username}</username>
                         <password>{hobbit_password_or_accesstoken}</password>
                     </authConfig>
                     -->
-                    
+
                     <images>
                         <image>
+                            <!-- Ignore this syntax error. This will be set. -->
                             <name>${oaei.imageURL}</name>
                             <build>
                                 <from>openjdk:8-jre-alpine</from><!--change it to a docker base image you want - this is just a small image which contains java-->
