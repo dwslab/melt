@@ -144,6 +144,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
     }
      
     private void loadDockerFileInternal(File dockerImageFile){
+        LOGGER.info("Load docker image from file {} to docker registry.", dockerImageFile);
         try (InputStream imagePayload = new BufferedInputStream(new FileInputStream(dockerImageFile))) {
             this.dockerClient.loadImageCmd(imagePayload).exec();
         } catch (IOException ex) {
