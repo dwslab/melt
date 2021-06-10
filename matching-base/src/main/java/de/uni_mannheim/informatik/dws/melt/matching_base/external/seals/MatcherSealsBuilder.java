@@ -11,13 +11,14 @@ import org.slf4j.LoggerFactory;
 
 
 public class MatcherSealsBuilder {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherSealsBuilder.class);
 
     /**
      * Path to the JAR of the SEALS client.
      */
     private File sealsClientJar = null;
-
     
     /**
      * Path to a temporary folder. Default is set to the systems tmp.
@@ -103,8 +104,7 @@ public class MatcherSealsBuilder {
         this.javaCommand = javaCommand;
         return this;
     }
-    
-    
+
     public MatcherSeals build(File fileOrFolder){
         File tmpSealsClientJar = this.sealsClientJar == null ? new File(this.tmpFolder, "seals-omt-client-v" + MatcherSeals.getSealsDownloadUrlVersion() + ".jar") : this.sealsClientJar;
         return new MatcherSeals(fileOrFolder, 
@@ -117,8 +117,7 @@ public class MatcherSealsBuilder {
                 this.doNotUseInputAlignment,
                 this.javaCommand);
     }
-    
-    
+
     /**
      * Returns all possible MatcherSeals instances for a given file or directory.
      * If it is a file with zip extension, it will unzip it.
