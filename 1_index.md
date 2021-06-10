@@ -44,8 +44,24 @@ You can use the search below to search the complete code base of MELT.
 <button type="submit" name="button" class="btn btn-primary" onclick="window.open('https://github.com/search?q=' + encodeURIComponent(document.getElementById('searchText').value) + '+repo%3Adwslab%2Fmelt&type=Code','_blank');">Search with Github</button>
 </form>
 
+## Installation
+MELT is [distributed through maven central](https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt).
+You can directly include MELT dependencies in your maven project from there.
+If you want to use the latest MELT development version (e.g. to try out new features or to contribute to the MELT project), clone the github repository and install it locally (`mvn clean install`).
+
+### Special Installation Instructions for Module `matching-ml`
+The ML module of MELT executes python code in the background. Before installing/using the dependency locally you need to set up your system (once:
+- make sure python 3 is installed
+- install the requirements from the [`requirements.txt` file](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/resources/requirements.txt)
+
 ## Modules Overview
 MELT is grouped into multiple [maven](https://maven.apache.org/what-is-maven.html) modules which are described below.
+
+### hobbit-wrapper
+Contains a wrapper for HOBBIT platform (implements the interface used in HOBBIT and transforms the calls to MatcherURL interface).
+
+### hobbit-maven-plugin
+Maven Plugin for creating a container for the [HOBBIT platform](https://project-hobbit.eu/outcomes/hobbit-platform/).
 
 ### matching-base
 Contains the basic interfaces to implement a matcher e.g. MatcherURL.
@@ -73,13 +89,9 @@ Contains OWL-API-based classes related to matcher development as well as additio
 ### matching-validation
 Contains various validation services to validate new tracks and test cases. Validation includes parseability by multiple libraries using different releases and further checks.
 
-### hobbit-wrapper
-Contains a wrapper for HOBBIT platform (implements the interface used in HOBBIT and transforms the calls to MatcherURL interface).
-
-### hobbit-maven-plugin
-Maven Plugin for creating a container for the [HOBBIT platform](https://project-hobbit.eu/outcomes/hobbit-platform/).
-
-### receivers
+### receivers (receiver-hobbit, receiver-cli, receiver-http)
 Contains utilities to wrap a matcher to a specific interface such as HTTP, SEALS, HOBBIT etc.
 
+### yet-another-alignment-api
+MELT's alignment API containing the `Alignment` data structure and related functionality such as parsing or serializing of alignments.
 
