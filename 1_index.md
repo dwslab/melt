@@ -50,7 +50,7 @@ You can directly include MELT dependencies in your maven project from there.
 If you want to use the latest MELT development version (e.g. to try out new features or to contribute to the MELT project), clone the github repository and install it locally (`mvn clean install`).
 
 ### Special Installation Instructions for Module `matching-ml`
-The ML module of MELT executes python code in the background. Before installing/using the dependency locally you need to set up your system (once:
+The ML module of MELT executes python code in the background. Before installing/using the dependency locally, you need to prepare your machine (once):
 - make sure python 3 is installed
 - install the requirements from the [`requirements.txt` file](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/resources/requirements.txt)
 

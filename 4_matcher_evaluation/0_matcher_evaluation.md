@@ -19,7 +19,8 @@ For a local evaluation within MELT, multiple Metrics and Evaluators are availabl
 * If you want to implement your own evaluator, extend class `Evaluator` and have a look at our metrics before implementing
 your own metric - it might already be there.
 * If you know the OAEI and want to use its data: Good. You will never have to download anything from the Web site or fiddle around with file paths. 
-MELT can manage all the data. Just have a look at the `TrackRepository`, you will find everything you need there.
+MELT can manage all the data. Just have a look at the [`TrackRepository`](https://dwslab.github.io/melt/track-repository), you will find everything you need there.
+* If you want to use some data that is not available on the public repository: No problem. Just create a [`LocalTrack`](https://dwslab.github.io/melt/matcher-evaluation/local-track).
 
 ### In More Detail
 MELT defines a workflow for matcher execution and evaluation. Therefore, it utilizes the vocabulary used by the OAEI: A

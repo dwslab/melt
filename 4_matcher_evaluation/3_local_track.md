@@ -1,12 +1,12 @@
 ---
 layout: default
-title: Executing a local track
+title: Executing a Local Track
 parent: Matcher Evaluation
 nav_order: 3
 permalink: /matcher-evaluation/local-track
 ---
 
-# Evaluation of a local track
+# Evaluation of a Local Track
 
 You can also evaluate matcher against a local track i.e. a track which is no public available but only exists on your disk.
 To create a local track, all test cases need to exist in a folder structure similar to the following one:
@@ -24,7 +24,7 @@ track-name
 ```
 You can add as many test cases you want.
 The root folder represents the track whereas the child folders of it represents the test cases.
-The name of the test case fodlers directly correspond to the name of the test case. The name of the track is given in the constructor of the [LocalTrack](https://github.com/dwslab/melt/blob/master/matching-data/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_data/LocalTrack.java).
+The name of the test case fodlers directly correspond to the name of the test case. The name of the track is given in the constructor of the [`LocalTrack`](https://github.com/dwslab/melt/blob/master/matching-data/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_data/LocalTrack.java).
 In each of the test case folders, the following files can exist:
 - a source file which needs to be called `source.rdf`
 - a target file which needs to be called `target.rdf`
@@ -42,7 +42,7 @@ When creating the [LocalTrack](https://github.com/dwslab/melt/blob/master/matchi
 object, the name, version and the path (File object) to the root folder is required.
 
 
-## Execution of a matching system with two ontologies
+## Execution of a Matching System with Two Ontologies
 
 If you only want to excute a matcher with two local ontologies, you can directly call the matcher with the required arguments.
 Most matchers only expect a URL which can be a URL pointing to a file.
@@ -51,6 +51,6 @@ For example to call a SEALS matcher you can run the following:
 ```java
 File ontoOne = new File("onto1.rdf");
 File ontoTwo = new File("onto2.rdf");        
-MatcherSeals matcher = new MatcherSeals(new File("./mysealsMatcher"));
+MatcherSeals matcher = new MatcherSeals(new File("./mysealsMatcher.zip"));
 URL alignmentFile = matcher.align(ontoOne.toURI().toURL(), ontoTwo.toURI().toURL());
 ```

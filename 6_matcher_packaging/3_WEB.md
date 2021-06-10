@@ -88,4 +88,7 @@ Unfortunately, the MELT framework cannot extract the image name from the tar aut
 
 
 ### Evaluate and Re-Use a Running Web Service
+If you do not have a docker tar but instead you want to use a running Web service, you can use class `MatcherHTTPCall` to wrap the Web service as a matcher.
+You can then re-use the instance in any matching pipeline or evaluate the instance as shown in the following code exmaple:
+
 TODO
