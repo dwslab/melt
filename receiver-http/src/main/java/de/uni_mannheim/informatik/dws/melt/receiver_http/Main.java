@@ -79,6 +79,8 @@ public class Main {
         holderPwd.setInitParameter("dirAllowed","false");
         context.addServlet(holderPwd,"/");
         
+        LOGGER.info("Matching service runs at: http://localhost:{}/match", port);
+        
         server.start();
         server.join();
     }
