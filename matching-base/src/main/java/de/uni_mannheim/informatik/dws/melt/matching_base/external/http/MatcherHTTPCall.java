@@ -90,7 +90,7 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
      * @param uri URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
      */
     public MatcherHTTPCall(URI uri) {
-        this(uri, false);
+        this(uri, true);
     }
     
     
@@ -157,4 +157,26 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
             }
         }
     }
+    
+    public void setTimeout(int socketTimeout, int connectTimeout, int connectionRequestTimeout){
+        this.requestConfig = RequestConfig.custom()
+                .setSocketTimeout(socketTimeout)
+                .setConnectTimeout(connectTimeout)
+                .setConnectionRequestTimeout(connectionRequestTimeout)
+                .build();
+    }
+    
+    public void setTimeout(int timeout){
+        setTimeout(timeout, timeout, timeout);
+    }
+
+    /**
+     * If true, then the content of the file URI is read and transferred.
+     * If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
+     * @param sendContent the choise if the whole content is send or not.
+     */
+    public void setSendContent(boolean sendContent) {
+        this.sendContent = sendContent;
+    }
+    
 }
