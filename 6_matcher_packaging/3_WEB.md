@@ -39,7 +39,7 @@ MELT will generate a (Jetty) server for your matching system and will package ev
 
 1. Copy the project in [examples/simpleHobbitMatcher/](https://github.com/dwslab/melt/tree/master/examples/simpleWebMatcher) to your workspace.
 2. Execute `mvn clean package` or `mvn clean install`.
-3. Search in the `/target` directory of your maven project for the `docker` directory. You will find a directory carrying the name of the docker image. The tar file can be found in the `tmp` directory.
+3. Search in the `/target` directory for the tar.gz file. The file name represents the docker image name.
 
 **Common Errors**
 -  `Failed to execute goal io.fabric8:docker-maven-plugin:0.36.0:build`<br/>
@@ -49,7 +49,7 @@ Make sure that docker is running.
 # Evaluate and Re-Use a Web Interface Matcher in MELT
 
 ### Evaluate and Re-Use the Docker File
-If you have a docker tar together with the image name, you can use class `MatcherDockerFile` to wrap the docker tar as matcher.
+If you have a docker tar.gz together with the image name, you can use class `MatcherDockerFile` to wrap the docker tar as matcher.
 You can then re-use the instance in any matching pipeline or evaluate the instance as shown in the following code exmaple:
 
 ```java
@@ -83,8 +83,9 @@ public class EvaluationDockerMatcher {
 ```
 
 **Common Errors and Problems**
--  I have the docker tar but I am not sure about the image name.<br/>
-Unfortunately, the MELT framework cannot extract the image name from the tar automatically. However, you can run the docker image and then check for the image name with `docker images` in your terminal.
+-  I have the docker tar.gz but I am not sure about the image name.<br/>
+Unfortunately, the MELT framework cannot extract the image name from the tar.gz automatically. However, you can load the docker image and the image name will be printed on the console (`docker load -i <file>`). Note that
+that MELT names the tar.gz file according to the image name.
 
 
 ### Evaluate and Re-Use a Running Web Service

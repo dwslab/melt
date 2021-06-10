@@ -15,7 +15,7 @@ The MELT-ML module exposes some machine learning functionality that is implement
 through the start of a python process within Java. The communication is performed through local HTTP calls. This
 is also shown in the following figure. 
 
-<img src="https://raw.githubusercontent.com/dwslab/melt/gh-pages/media/melt_ml_architecture.png" alt="MELT Machine Learning module (MELT ML) architectural view.">
+<img src="https://raw.githubusercontent.com/dwslab/melt/gh-pages/media/melt_ml_architecture.png" alt="MELT Machine Learning module (MELT-ML module) architectural view.">
 
 The program will use the default `python` command of your system path.
 Note that Python 3 is required together with the dependencies listed 
