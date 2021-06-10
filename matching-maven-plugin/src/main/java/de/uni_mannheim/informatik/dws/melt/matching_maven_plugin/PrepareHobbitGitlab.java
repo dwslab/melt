@@ -115,7 +115,9 @@ public class PrepareHobbitGitlab extends AbstractMojo{
         }else{
             //first check: if it is the password of the user
             try {
-                return GitLabApi.oauth2Login(this.giturl, user, password);
+                GitLabApi api = GitLabApi.oauth2Login(this.giturl, user, password);
+                getLog().info("Password was hobbit password.");
+                return api;
             } catch (GitLabApiException ex) {
                 //second: password needs to be access token
                 getLog().info("Password was not hobbit password. Use as access token.");
