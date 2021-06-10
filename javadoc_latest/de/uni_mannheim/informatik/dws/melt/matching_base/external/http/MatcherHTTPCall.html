@@ -121,17 +121,31 @@ implements <a href="../../IMatcher.html" title="interface in de.uni_mannheim.inf
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
+<td class="col-first"><code>private int</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#maxTrials">maxTrials</a></span></code></th>
+<td class="col-last">
+<div class="block">The number of retry operations to perform when an exception occurs.</div>
+</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>private org.apache.http.client.config.RequestConfig</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#requestConfig">requestConfig</a></span></code></th>
 <td class="col-last">
 <div class="block">The RequestConfig which contains timeouts to be used in http call.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#sendContent">sendContent</a></span></code></th>
 <td class="col-last">
 <div class="block">If true, then the content of the file URI is read and transferred.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>private int</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#sleepTimeInSeconds">sleepTimeInSeconds</a></span></code></th>
+<td class="col-last">
+<div class="block">The amount of seconds to sleep when an exception occurred before retrying.</div>
 </td>
 </tr>
 <tr class="alt-color">
@@ -282,6 +296,20 @@ int&nbsp;connectionRequestTimeout)</code></th>
 </section>
 </li>
 <li>
+<section class="detail" id="maxTrials">
+<h3>maxTrials</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">maxTrials</span></div>
+<div class="block">The number of retry operations to perform when an exception occurs.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sleepTimeInSeconds">
+<h3>sleepTimeInSeconds</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">sleepTimeInSeconds</span></div>
+<div class="block">The amount of seconds to sleep when an exception occurred before retrying.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="uri">
 <h3>uri</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="member-name">uri</span></div>
@@ -345,7 +373,7 @@ boolean&nbsp;sendContent)</span></div>
 <dt>Parameters:</dt>
 <dd><code>uri</code> - URI where the matching service is located. URI can be created from string with <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html#create(java.lang.String)" title="class or interface in java.net" class="external-link"><code>URI.create(java.lang.String)</code></a>.</dd>
 <dd><code>sendContent</code> - If true, then the content of the file URI is read and transferred. 
-      If false, then only the URI is tranferred but then the matching system needs to have access to the URI.</dd>
+      If false, then only the URI is transferred but then the matching system needs to have access to the URI.</dd>
 </dl>
 </section>
 </li>
