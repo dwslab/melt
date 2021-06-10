@@ -20,7 +20,7 @@ MELT allows to package and to evaluate SEALS matchers.
 3. Check in the `/target` directory for your zip file (`simple-SealsMatcher-1.0-seals_external.zip`).
 
 ### In More Detail
-You can use the [examples/simpleSealsMatcher](https://github.com/dwslab/melt/tree/master/examples/simpleSealsMatcher) as a template and change it to your needs. However, if you take a close look, you can see that it is sufficient to use the `pom.xml` as template since the packaging is managed through maven.
+You can use the [examples/simpleSealsMatcher](https://github.com/dwslab/melt/tree/master/examples/simpleSealsMatcher) as a template and change it according to your needs. However, if you take a close look, you can see that it is sufficient to use the `pom.xml` as template since the packaging is managed through maven.
 
 You specify the matcher class in the `<oaei.mainClass>` tag.
 The matcher must implement interface [`IMatcher <ModelClass, AlignmentClass, ParameterClass>`](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/IMatcher.java). Note that the easiest way to develop your system is to extend any of the convenience matcher classes such as `MatcherURL`, `MatcherYAAAJena` or `MatcherYAAAOwlApi` rather than implementing the interface yourself.
@@ -30,13 +30,16 @@ The matcher must implement interface [`IMatcher <ModelClass, AlignmentClass, Par
 You can set up the <a href="https://github.com/DanFaria/OAEI_SealsClient">SEALS client</a> locally and evaluate your matcher. You can find the documentation
 of the client <a href="https://github.com/DanFaria/OAEI_SealsClient/blob/691b85003da0f6f391a04de85ad820b8a52b6118/SealsClientTutorial.pdf">here</a>.
 
+Alternatively, you can use the evaluation capabilities for SEALS packages by MELT as outlined below. 
+
 
 ## Evaluate and Re-Use a SEALS Package With MELT
 
 ### Evaluation and Re-Use with `MatcherSeals`
 **Prerequisites**: Java 8 (not necessarily as system Java distribution), maven project with dependency [`matching-eval`](https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt/matching-eval).
 
-It is recommended to use class `MatcherSeals` for wrapping any SEALS zip file as matcher. Since `MatcherSeals` implements `MatcherURL`, you can use an instantiated matcher with the default `Executor` to evaluate it (even together with non-SEALS matchers). You can also combine a `MatcherSeals` instance with any other matcher e.g. in a matching pipeline.
+It is recommended to use class [`MatcherSeals`](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.java) for wrapping any SEALS zip file as matcher. Since `MatcherSeals` implements `MatcherURL`, you can use an instantiated matcher with the default `Executor` to evaluate it (even together with non-SEALS matchers). You can also combine a `MatcherSeals` instance with any other matcher e.g. in a matching pipeline.
+Note: You do not have to install the SEALS client yourself. MELT takes care of this. Just wrap the SEALS zip file as shown in the example below.
 
 *Example*
 ```java
@@ -98,10 +101,10 @@ public class SealsMatcherBuilderPlayground {
 ```
 
 `MatcherSeals` (and similarly `MatcherSealsBuilder`) offer a multitude of configuration options.
-Have a look at the javadoc for details.
+Have a look at the [API documentation](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html) for details.
 
 
-### Evaluation Using `ExecutorSeals`
+### Evaluation Using `ExecutorSeals` (not recommended, but supported)
 **Prerequisites**: Java 8 (not necessarily as system Java distribution), successful installation of SEALS, maven project with dependency [`matching-eval`](https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt/matching-eval).
 
 If you merely want to evaluate SEALS packages, you can use [`ExecutorSeals`]((https://github.com/dwslab/melt/blob/master/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/ExecutorSeals.java)) (alternatively to `MatcherSeals`) .

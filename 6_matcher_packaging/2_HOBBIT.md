@@ -13,10 +13,11 @@ permalink: /matcher-packaging/hobbit
 2. Create hobbit account and gitlab access token.
 3. Adjust settings in pom.xml to your needs.
 4. Implement your matcher (see Matcher development).
-5. Execute ```mvn deploy``` to create seals zip and deploy docker image to hobbit server
-   - if you only execute ```mvn install``` it will create seals zip and hobbit docker image locally
-   - if you execute ```mvn package``` only seals zip will be created
-6. The seals zip can be found in the target folder and the hobbit docker image in the local docker repository
+5. Make sure docker is running on your machine.
+6. Execute ```mvn deploy``` to create seals zip and deploy docker image to hobbit server.
+   - If you only execute ```mvn install``` it will create seals zip and hobbit docker image locally.
+   - If you execute ```mvn package``` only seals zip will be created.
+7. The seals zip can be found in the target folder and the hobbit docker image in the local docker repository.
 
 ## In More Detail
 - for Hobbit submission
@@ -51,9 +52,9 @@ permalink: /matcher-packaging/hobbit
 ## Evaluate Your Matcher in HOBBIT
 
 - you can start an experiment in hobbit online platform
-  - go to page [http://master.project-hobbit.eu/](http://master.project-hobbit.eu/), log in and choose `Benchmarks`
- - select the benchmark you want to use
-  - select the system you want to use
-  - (optionally) specify configuration parameters and click on `submit`
- - click on the Hobbit ID in the pop up to see the results (reload the page if it is not finished)
-  - more information at the  hobbit wiki page ['Benchmarking'](https://hobbit-project.github.io/benchmarking) and ['Browsing Results'](https://hobbit-project.github.io/browsing_results.html).
+- go to page [http://master.project-hobbit.eu/](http://master.project-hobbit.eu/), log in and choose `Benchmarks`
+- select the benchmark you want to use
+- select the system you want to use
+- (optionally) specify configuration parameters and click on `submit`
+- click on the Hobbit ID in the pop up to see the results (reload the page if it is not finished)
+- More information can be found on the hobbit wiki page ['Benchmarking'](https://hobbit-project.github.io/benchmarking) and ['Browsing Results'](https://hobbit-project.github.io/browsing_results.html).
