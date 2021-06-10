@@ -6,7 +6,7 @@
         <version>2.7-SNAPSHOT</version>
     </parent>
     <artifactId>receiver-hobbit</artifactId>
-    <name>MELT - Matching EvaLuation Toolkit | HOBBIT Receiver</name>
+    <name>MELT - Matching EvaLuation Toolkit | Receiver HOBBIT</name>
     <description>Contains a wrapper for HOBBIT platform (implements the interface used in HOBBIT and transforms the calls to MatcherURL interface).</description>
     
     <dependencies>
