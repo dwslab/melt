@@ -10,8 +10,6 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Properties;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -31,10 +29,20 @@ import org.slf4j.LoggerFactory;
  */
 public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, URL>{
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherHTTPCall.class);
     
     private static CloseableHttpClient httpClient = HttpClients.createDefault();
-        
+
+    /**
+     * The number of retry operations to perform when an exception occurs.
+     */
+    private int maxTrials = 5;
+
+    /**
+     * The amount of seconds to sleep when an exception occurred before retrying.
+     */
+    private int sleepTimeInSeconds = 10;
     /**
      * URI where the matching service is located.
      */
@@ -78,7 +86,7 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
      * No timeout is applied.
      * @param uri URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
      * @param sendContent  If true, then the content of the file URI is read and transferred. 
-     *      If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
+     *      If false, then only the URI is transferred but then the matching system needs to have access to the URI.
      */
     public MatcherHTTPCall(URI uri, boolean sendContent) {
         this(uri, sendContent, 0, 0, 0);
@@ -104,7 +112,7 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
         //https://stackoverflow.com/questions/1378920/how-can-i-make-a-multipart-form-data-post-request-using-java?rq=1
         HttpPost request = new HttpPost(uri);
         
-        if(this.sendContent){
+        if (this.sendContent){
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.addBinaryBody("source", source.openStream()) //TODO: close stream?
                    .addBinaryBody("target", target.openStream());
@@ -120,7 +128,7 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
             //    builder.addTextBody(entry.getKey().toString(), entry.getValue().toString());
             //}
             request.setEntity(builder.build());
-        }else{
+        } else {
             List<NameValuePair> params = new ArrayList<>();
             params.add(new BasicNameValuePair("source", source.toString()));
             params.add(new BasicNameValuePair("target", target.toString()));
@@ -135,27 +143,46 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
         }        
         request.setConfig(this.requestConfig);
         LOGGER.info("Execute now the following HTTP request: {}", request);
-        try (CloseableHttpResponse response = httpClient.execute(request)) {
-            HttpEntity entity = response.getEntity();
-            if (entity == null) {
-                throw new Exception("No server response.");
-            } else {
-                if(response.getStatusLine().getStatusCode() != 200){
-                    LOGGER.error("Server returned a non 200 status code: {}",EntityUtils.toString(entity));
-                    throw new IOException("Server returned a non 200 status code.");
-                }
-                if(this.sendContent){
-                    File alignmentFile = File.createTempFile("alignment", ".rdf");
-                    try(OutputStream out = new FileOutputStream(alignmentFile)){
-                        entity.writeTo(out);
+
+        int currentTrials = 0;
+        boolean isStatusCodeError = false;
+
+        while(currentTrials < maxTrials) {
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
+                HttpEntity entity = response.getEntity();
+                if (entity == null) {
+                    throw new Exception("No server response.");
+                } else {
+                    if (response.getStatusLine().getStatusCode() != 200) {
+                        LOGGER.error("Server returned a non 200 status code: {}", EntityUtils.toString(entity));
+                        isStatusCodeError = true;
+                        throw new IOException("Server returned a non 200 status code.");
                     }
-                    return alignmentFile.toURI().toURL();
-                }else{
-                    String resultString = EntityUtils.toString(entity);
-                    return new URL(resultString);
+                    if (this.sendContent) {
+                        File alignmentFile = File.createTempFile("alignment", ".rdf");
+                        try (OutputStream out = new FileOutputStream(alignmentFile)) {
+                            entity.writeTo(out);
+                        }
+                        return alignmentFile.toURI().toURL();
+                    } else {
+                        String resultString = EntityUtils.toString(entity);
+                        return new URL(resultString);
+                    }
+                }
+            } catch (Exception e) {
+                if(isStatusCodeError){
+                    throw e;
+                }
+                currentTrials++;
+                LOGGER.error("An exception occurred. Sleep for " + sleepTimeInSeconds + " seconds.", e);
+                try {
+                    Thread.sleep(sleepTimeInSeconds * 1000);
+                } catch (InterruptedException ie) {
+                    LOGGER.error("Problem occurred while trying to sleep.", ie);
                 }
             }
         }
+        throw new Exception("The service could not be reached after " + maxTrials + ".");
     }
     
     public void setTimeout(int socketTimeout, int connectTimeout, int connectionRequestTimeout){

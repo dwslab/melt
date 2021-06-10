@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * }</pre>
 With this in place everything should work.
 */
-public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
+public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherDockerFile.class);
@@ -82,6 +82,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
     private int socketTimeout = 0;
     private int connectTimeout = 0;
     private int connectionRequestTimeout = 0;
+    private int initialWaitingTimeInSeconds = 8;
     
 
     /**
@@ -207,14 +208,18 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable{
         if(freshInstance){
             startContainer();
         }
-        
         URI uri = new URI("http://localhost:" + this.hostPort + "/match");
-        //Thread.sleep(10000);
-        //this.logAllLinesFromContainer();
-        
+
+        // Let's wait for some seconds before we try to connect via HTTP.
+        // Docker is typically not yet ready.
+        try {
+            Thread.sleep((long) initialWaitingTimeInSeconds * 1000);
+        } catch (InterruptedException ie) {
+            LOGGER.error("Problem occurred while trying to sleep.", ie);
+        }
         MatcherHTTPCall httpCall = new MatcherHTTPCall(uri, true, this.socketTimeout, this.connectTimeout, this.connectionRequestTimeout);
         URL result = httpCall.match(source, target, inputAlignment);
-        
+
         if(freshInstance){
             stopContainer();
         }
