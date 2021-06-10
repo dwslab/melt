@@ -89,7 +89,34 @@ that MELT names the tar.gz file according to the image name.
 
 
 ### Evaluate and Re-Use a Running Web Service
-If you do not have a docker tar but instead you want to use a running Web service, you can use class `MatcherHTTPCall` to wrap the Web service as a matcher.
+If you do not have a docker tar.gz but instead you want to use a running Web service, you can use class `MatcherHTTPCall` to wrap the Web service as a matcher. In the constructor, you have to specify the endpoint URL on which the service runs.
+The service must implement the [Web Interface](#web-interface-(http-matching-interface)).
 You can then re-use the instance in any matching pipeline or evaluate the instance as shown in the following code exmaple:
 
-TODO
+```java
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.http.MatcherHTTPCall;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
+
+import java.net.URI;
+
+public class EvaluationEndpoint {
+
+    public static void main(String[] args) throws Exception {
+        // wrap our web service (running in this case locally on port 8080)
+        URI matcherServiceUri = new URI("http://127.0.0.1:8080/match");
+        MatcherHTTPCall matcher = new MatcherHTTPCall(matcherServiceUri, true);
+        
+        // let's run the matcher
+        ExecutionResultSet ers = Executor.run(TrackRepository.Conference.V1.getFirstTestCase(), matcher);
+        
+        // let's evaluate the execution result set
+        EvaluatorCSV evaluatorCSV = new EvaluatorCSV(ers);
+        
+        // let's serialize the results
+        evaluatorCSV.writeToDirectory();
+    }
+}
+```
