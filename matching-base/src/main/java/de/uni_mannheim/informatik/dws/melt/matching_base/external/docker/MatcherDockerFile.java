@@ -82,7 +82,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
     private int socketTimeout = 0;
     private int connectTimeout = 0;
     private int connectionRequestTimeout = 0;
-    private int initialWaitingTimeInSeconds = 8;
+    private int initialWaitingTimeInSeconds = 0;
     
 
     /**
@@ -212,10 +212,12 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
 
         // Let's wait for some seconds before we try to connect via HTTP.
         // Docker is typically not yet ready.
-        try {
-            Thread.sleep((long) initialWaitingTimeInSeconds * 1000);
-        } catch (InterruptedException ie) {
-            LOGGER.error("Problem occurred while trying to sleep.", ie);
+        if(initialWaitingTimeInSeconds > 0) {
+            try {
+                Thread.sleep((long) initialWaitingTimeInSeconds * 1000);
+            } catch (InterruptedException ie) {
+                LOGGER.error("Problem occurred while trying to sleep.", ie);
+            }
         }
         MatcherHTTPCall httpCall = new MatcherHTTPCall(uri, true, this.socketTimeout, this.connectTimeout, this.connectionRequestTimeout);
         URL result = httpCall.match(source, target, inputAlignment);
@@ -338,7 +340,15 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
         } catch (InterruptedException ex) {
             LOGGER.warn("Interrupted during wait", ex);
         }
-    }    
+    }
+
+    public int getInitialWaitingTimeInSeconds() {
+        return initialWaitingTimeInSeconds;
+    }
+
+    public void setInitialWaitingTimeInSeconds(int initialWaitingTimeInSeconds) {
+        this.initialWaitingTimeInSeconds = initialWaitingTimeInSeconds;
+    }
 }
 
 class DockerLogCallback extends ResultCallback.Adapter<Frame>{

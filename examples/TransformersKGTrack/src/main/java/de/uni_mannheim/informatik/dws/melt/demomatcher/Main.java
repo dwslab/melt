@@ -53,9 +53,9 @@ public class Main {
         e.writeToDirectory();
     }
     
-    private static void writeConference(){
+    private static void writeConference() {
         List<TestCase> testCases = new ArrayList<>();
-        for(TestCase tc : TrackRepository.Conference.V1.getTestCases().subList(1, 2)){
+        for(TestCase tc : TrackRepository.Conference.V1.getTestCases()){
             testCases.add(TrackRepository.generateTestCaseWithSampledReferenceAlignment(tc, 0.3, 1324567));
         }
         

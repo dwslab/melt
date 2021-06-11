@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -103,7 +104,6 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
         }
         return inputAlignment;
     }
-    
 
     /**
      * Creates a file which contains two columns in a csv format.
@@ -125,12 +125,12 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
     
     private File writePredictionFile(OntModel source, OntModel target, List<Correspondence> orderedCorrespondences) throws IOException{
         File inputFile = FileUtil.createFileWithRandomNumber(this.baseDir, "alignment_transformers_predict", ".txt");
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputFile), "UTF-8"))){
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputFile), StandardCharsets.UTF_8))){
             for(Correspondence c : orderedCorrespondences){
                 String left = getTextFromResource(source.getResource(c.getEntityOne()));
                 String right = getTextFromResource(target.getResource(c.getEntityTwo()));
                 if(StringUtils.isBlank(left) || StringUtils.isBlank(right)){
-                    //setting to 0 if not extistent
+                    //setting to 0 if not existing
                     c.addAdditionalConfidence(this.getClass(), 0.0);
                     continue;
                 }

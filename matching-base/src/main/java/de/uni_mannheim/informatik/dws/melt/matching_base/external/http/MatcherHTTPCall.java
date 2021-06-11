@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_base.external.http;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherURL;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -27,11 +29,11 @@ import org.slf4j.LoggerFactory;
 /**
  * This class wraps a matcher service.
  */
-public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, URL>{
+public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, URL> {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherHTTPCall.class);
-    
+
     private static CloseableHttpClient httpClient = HttpClients.createDefault();
 
     /**
@@ -47,13 +49,13 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
      * URI where the matching service is located.
      */
     private URI uri;
-    
+
     /**
      * If true, then the content of the file URI is read and transferred.
      * If false, then only the URI is transferred but then the matching system needs to have access to the URI.
      */
     private boolean sendContent;
-    
+
     /**
      * The RequestConfig which contains timeouts to be used in http call.
      */
@@ -61,15 +63,16 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
 
     /**
      * Creates a matcher which wraps a matching service available at the given URI with timeout options.
-     * @param uri URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
-     * @param sendContent  If true, then the content of the file URI is read and transferred.
-     *      If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
-     * @param socketTimeout the time in milliseconds waiting for data – after the connection is established; 
-     *      maximum time between two data packets. Zero means infinite timeout. Negative usually means systems default.
-     * @param connectTimeout the timeout in milliseconds until a connection is established.
-     *      Zero means infinite timeout. Negative usually means systems default.
+     *
+     * @param uri                      URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
+     * @param sendContent              If true, then the content of the file URI is read and transferred.
+     *                                 If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
+     * @param socketTimeout            the time in milliseconds waiting for data – after the connection is established;
+     *                                 maximum time between two data packets. Zero means infinite timeout. Negative usually means systems default.
+     * @param connectTimeout           the timeout in milliseconds until a connection is established.
+     *                                 Zero means infinite timeout. Negative usually means systems default.
      * @param connectionRequestTimeout timeout in milliseconds when requesting a connection from the connection manager.
-     *      Zero means infinite timeout. Negative usually means systems default.
+     *                                 Zero means infinite timeout. Negative usually means systems default.
      */
     public MatcherHTTPCall(URI uri, boolean sendContent, int socketTimeout, int connectTimeout, int connectionRequestTimeout) {
         this.uri = uri;
@@ -84,24 +87,26 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
     /**
      * Creates a matcher which wraps a matching service available at the given URI.
      * No timeout is applied.
-     * @param uri URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
-     * @param sendContent  If true, then the content of the file URI is read and transferred. 
-     *      If false, then only the URI is transferred but then the matching system needs to have access to the URI.
+     *
+     * @param uri         URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
+     * @param sendContent If true, then the content of the file URI is read and transferred.
+     *                    If false, then only the URI is transferred but then the matching system needs to have access to the URI.
      */
     public MatcherHTTPCall(URI uri, boolean sendContent) {
         this(uri, sendContent, 0, 0, 0);
     }
-    
+
     /**
      * Creates a matcher which wraps a matching service available at the given URI.
      * Only the URIs of the test case are transferred to the system and no timeout is applied.
+     *
      * @param uri URI where the matching service is located. URI can be created from string with {@link URI#create(java.lang.String) }.
      */
     public MatcherHTTPCall(URI uri) {
         this(uri, true);
     }
-    
-    
+
+
     @Override
     public URL match(URL source, URL target, URL inputAlignment) throws Exception {
         return match(source, target, inputAlignment, null);
@@ -110,44 +115,47 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
     @Override
     public URL match(URL source, URL target, URL inputAlignment, URL parameters) throws Exception {
         //https://stackoverflow.com/questions/1378920/how-can-i-make-a-multipart-form-data-post-request-using-java?rq=1
-        HttpPost request = new HttpPost(uri);
-        
-        if (this.sendContent){
-            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            builder.addBinaryBody("source", source.openStream()) //TODO: close stream?
-                   .addBinaryBody("target", target.openStream());
-            if(inputAlignment != null)
-                builder.addBinaryBody("inputAlignment", inputAlignment.openStream());
-            
-            if(parameters != null)
-                builder.addBinaryBody("parameters", parameters.openStream());
-            
-            //Properties p = new Properties();
-            //p.setProperty("test", "bla");
-            //for(Entry<Object, Object> entry : p.entrySet()){
-            //    builder.addTextBody(entry.getKey().toString(), entry.getValue().toString());
-            //}
-            request.setEntity(builder.build());
-        } else {
-            List<NameValuePair> params = new ArrayList<>();
-            params.add(new BasicNameValuePair("source", source.toString()));
-            params.add(new BasicNameValuePair("target", target.toString()));
-            if(inputAlignment != null)
-                params.add(new BasicNameValuePair("inputAlignment", inputAlignment.toString()));
-            
-            
-            //for(Entry<Object, Object> entry : p.entrySet()){
-            //    params.add(new BasicNameValuePair(entry.getKey().toString(), entry.getValue().toString()));
-            //}
-            request.setEntity(new UrlEncodedFormEntity(params));
-        }        
-        request.setConfig(this.requestConfig);
-        LOGGER.info("Execute now the following HTTP request: {}", request);
 
         int currentTrials = 0;
         boolean isStatusCodeError = false;
 
-        while(currentTrials < maxTrials) {
+        while (currentTrials < maxTrials) {
+
+            HttpPost request = new HttpPost(uri);
+
+            if (this.sendContent) {
+                MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                builder.addBinaryBody("source", source.openStream()) //TODO: close stream?
+                        .addBinaryBody("target", target.openStream());
+                if (inputAlignment != null)
+                    builder.addBinaryBody("inputAlignment", inputAlignment.openStream());
+
+                if (parameters != null)
+                    builder.addBinaryBody("parameters", parameters.openStream());
+
+                //Properties p = new Properties();
+                //p.setProperty("test", "bla");
+                //for(Entry<Object, Object> entry : p.entrySet()){
+                //    builder.addTextBody(entry.getKey().toString(), entry.getValue().toString());
+                //}
+                request.setEntity(builder.build());
+            } else {
+                List<NameValuePair> params = new ArrayList<>();
+                params.add(new BasicNameValuePair("source", source.toString()));
+                params.add(new BasicNameValuePair("target", target.toString()));
+                if (inputAlignment != null)
+                    params.add(new BasicNameValuePair("inputAlignment", inputAlignment.toString()));
+
+
+                //for(Entry<Object, Object> entry : p.entrySet()){
+                //    params.add(new BasicNameValuePair(entry.getKey().toString(), entry.getValue().toString()));
+                //}
+                request.setEntity(new UrlEncodedFormEntity(params));
+            }
+            request.setConfig(this.requestConfig);
+            LOGGER.info("Execute now the following HTTP request: {}", request);
+
+
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 HttpEntity entity = response.getEntity();
                 if (entity == null) {
@@ -170,40 +178,46 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
                     }
                 }
             } catch (Exception e) {
-                if(isStatusCodeError){
+                if (isStatusCodeError) {
                     throw e;
                 }
                 currentTrials++;
-                LOGGER.error("An exception occurred. Sleep for " + sleepTimeInSeconds + " seconds.", e);
-                try {
-                    Thread.sleep(sleepTimeInSeconds * 1000);
-                } catch (InterruptedException ie) {
-                    LOGGER.error("Problem occurred while trying to sleep.", ie);
+                if (currentTrials < maxTrials) {
+                    LOGGER.info("Endpoint is not ready / an exception occurred. Sleep for " + sleepTimeInSeconds + " " +
+                            "seconds and retry...");
+                    try {
+                        Thread.sleep(sleepTimeInSeconds * 1000);
+                    } catch (InterruptedException ie) {
+                        LOGGER.error("Problem occurred while trying to sleep.", ie);
+                    }
+                } else {
+                    LOGGER.error("An exception occurred.", e);
                 }
             }
         }
         throw new Exception("The service could not be reached after " + maxTrials + ".");
     }
-    
-    public void setTimeout(int socketTimeout, int connectTimeout, int connectionRequestTimeout){
+
+    public void setTimeout(int socketTimeout, int connectTimeout, int connectionRequestTimeout) {
         this.requestConfig = RequestConfig.custom()
                 .setSocketTimeout(socketTimeout)
                 .setConnectTimeout(connectTimeout)
                 .setConnectionRequestTimeout(connectionRequestTimeout)
                 .build();
     }
-    
-    public void setTimeout(int timeout){
+
+    public void setTimeout(int timeout) {
         setTimeout(timeout, timeout, timeout);
     }
 
     /**
      * If true, then the content of the file URI is read and transferred.
      * If false, then only the URI is tranferred but then the matching system needs to have access to the URI.
+     *
      * @param sendContent the choise if the whole content is send or not.
      */
     public void setSendContent(boolean sendContent) {
         this.sendContent = sendContent;
     }
-    
+
 }
