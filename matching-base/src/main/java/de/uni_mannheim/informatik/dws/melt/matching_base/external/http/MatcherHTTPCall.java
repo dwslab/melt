@@ -133,11 +133,6 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
                 if (parameters != null)
                     builder.addBinaryBody("parameters", parameters.openStream());
 
-                //Properties p = new Properties();
-                //p.setProperty("test", "bla");
-                //for(Entry<Object, Object> entry : p.entrySet()){
-                //    builder.addTextBody(entry.getKey().toString(), entry.getValue().toString());
-                //}
                 request.setEntity(builder.build());
             } else {
                 List<NameValuePair> params = new ArrayList<>();
@@ -145,11 +140,9 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
                 params.add(new BasicNameValuePair("target", target.toString()));
                 if (inputAlignment != null)
                     params.add(new BasicNameValuePair("inputAlignment", inputAlignment.toString()));
+                if (parameters != null)
+                    params.add(new BasicNameValuePair("parameters", parameters.toString()));
 
-
-                //for(Entry<Object, Object> entry : p.entrySet()){
-                //    params.add(new BasicNameValuePair(entry.getKey().toString(), entry.getValue().toString()));
-                //}
                 request.setEntity(new UrlEncodedFormEntity(params));
             }
             request.setConfig(this.requestConfig);
