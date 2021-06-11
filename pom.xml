@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
     <artifactId>matching-parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.7-SNAPSHOT</version>
+    <version>3.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -64,7 +63,7 @@
         <connection>scm:git:git://github.com/dwslab/melt.git</connection>
         <developerConnection>scm:git:git@github.com:dwslab/melt.git</developerConnection>
         <url>https://github.com/dwslab/melt</url>
-        <tag>matching-parent-2.6</tag>
+        <tag>melt-3.0</tag>
     </scm>
 
     <distributionManagement>
