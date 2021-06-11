@@ -55,7 +55,7 @@
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>yet-another-alignment-api</artifactId>
-            <version>2.7-SNAPSHOT</version>
+            <version>${project.version}</version>
             <!--
             use exclusions as a last resort - why do we do it here?
             The main problem is that there are two versions of kryo in the classpath.
