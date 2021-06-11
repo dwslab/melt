@@ -13,8 +13,7 @@
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-base</artifactId>
-            <version>2.7-SNAPSHOT</version>
-            <scope>provided</scope> <!-- base library should always be in the classpath -->
+            <version>${project.version}</version>
         </dependency>
         
         <dependency>
