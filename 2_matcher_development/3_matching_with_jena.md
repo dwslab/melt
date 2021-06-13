@@ -36,7 +36,7 @@ Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Prop
 ```
 
 ## Chaining Jena Matchers
-You can chain multiple Jena matchers using classes `MatcherPipelineYAAA` (Jena-inedependent) or `MatcherPipelineYAAAJena` (only Jena matchers).
+You can chain multiple Jena matchers using classes `MatcherPipelineYAAA` (Jena-independent) or `MatcherPipelineYAAAJena` (only Jena matchers).
 
 ### Packaging Your First Jena Pipeline Matcher
 The following example can be found in the examples directory ([`simpleMatcherPipelineYAAAJena`](https://github.com/dwslab/melt/tree/master/examples/simpleMatcherPipelineYAAAJena)).
@@ -45,24 +45,10 @@ The `initializeMatchers()` method is implemented. In this method, two matchers a
 You can try out the new matcher by running the `main` method. Here, we run the matcher on the OAEI Anatomy test case. 
 
 If you remove a matcher component (method `initializeMatchers()`) and run the evaluation again, you will see that the performance changes.
-You can find a [list of all matching systems](https://dwslab.github.io/melt/matcher-components/full-matcher-list) and a [list of all filters](https://dwslab.github.io/melt/matcher-components/full-filter-list) in the corresponding section in the user guide.
+You can find a [list of all matching systems](https://dwslab.github.io/melt/matcher-components/full-matcher-list) and a [list of all filters](https://dwslab.github.io/melt/matcher-components/full-filter-list) in the corresponding sections in the user guide.
 
 ```java
-package de.uni_mannheim.informatik.dws.melt.demomatcher;
-
-import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherPipelineYAAAJena;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.ExactStringMatcher;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.BackgroundMatcher;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.ImplementedBackgroundMatchingStrategies;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordNet.WordNetKnowledgeSource;
-
-import java.util.ArrayList;
-import java.util.List;
+// imports...
 
 public class MyPipelineMatcher extends MatcherPipelineYAAAJena {
 
@@ -95,6 +81,9 @@ public class MyPipelineMatcher extends MatcherPipelineYAAAJena {
     }
 }
 ```
+
+Alternatively to extending class `MatcherPipelineYAAAJena`, you can use class `MatcherPipelineYAAAJenaConstructor` to pass the matching systems in the constructor.
+
 
 # Jena Helpers
 
