@@ -138,16 +138,15 @@ public class BackgroundMatcher extends MatcherYAAAJena {
     }
 
     @Override
-    public Alignment match(OntModel sourceOntology, OntModel targetOntology, Alignment m, Properties p) throws Exception {
+    public Alignment match(OntModel sourceOntology, OntModel targetOntology, Alignment inputAlignment, Properties p) throws Exception {
         LOGGER.info("Running BackgroundMatcher with the following configuration:\n" + getConfigurationListing());
         ontology1 = sourceOntology;
         ontology2 = targetOntology;
-        if (m != null) {
-            this.alignment = m;
+        if (inputAlignment != null) {
+            this.alignment = inputAlignment;
         } else {
             this.alignment = new Alignment();
         }
-
         match(ontology1.listClasses(), ontology2.listClasses());
         match(ontology1.listDatatypeProperties(), ontology2.listDatatypeProperties());
         match(ontology1.listObjectProperties(), ontology2.listObjectProperties());

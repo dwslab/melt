@@ -37,7 +37,7 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
     /**
      * Alignment
      */
-    private Alignment mapping = new Alignment();
+    private Alignment mapping;
 
     /**
      * Tracks clashed labels.
@@ -45,8 +45,8 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
     private HashMap<String, HashSet<String>> clashedLabels;
 
     @Override
-    public Alignment match(OntModel sourceOntology, OntModel targetOntology, Alignment m, Properties p) throws Exception {
-        initializeMappingProcess();
+    public Alignment match(OntModel sourceOntology, OntModel targetOntology, Alignment inputAlignment, Properties p) throws Exception {
+        initializeMappingProcess(inputAlignment);
         ontology1 = sourceOntology;
         ontology2 = targetOntology;
         match(ontology1.listClasses(), ontology2.listClasses());
@@ -74,10 +74,16 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
 
     /**
      * (Re-)initialize data structures.
+     *
+     * @param inputAlignment Input alignment
      */
-    private void initializeMappingProcess() {
+    private void initializeMappingProcess(Alignment inputAlignment) {
         LOGGER.info("Initialize Mapping");
-        mapping = new Alignment();
+        if (inputAlignment != null) {
+            mapping = inputAlignment;
+        } else {
+            mapping = new Alignment();
+        }
         clashedLabels = new HashMap<>();
         uri2labelMap_1 = new HashMap<>();
         uri2labelMap_2 = new HashMap<>();

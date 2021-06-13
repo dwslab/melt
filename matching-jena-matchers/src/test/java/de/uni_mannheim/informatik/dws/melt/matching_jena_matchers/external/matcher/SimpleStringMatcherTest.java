@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matc
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import org.apache.jena.ontology.OntModel;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -27,6 +28,28 @@ class SimpleStringMatcherTest {
                     null, null);
             assertNotNull(result.size());
             assertTrue(result.size() > 10);
+        } catch (Exception e){
+            LOGGER.error("A match exception occurred.", e);
+            fail();
+        }
+    }
+
+    /**
+     * Very simple test asserting that previous correspondences are kept.
+     */
+    @Test
+    void matchWithExistingInputAlignment() {
+        TestCase tc = TrackRepository.Conference.V1.getFirstTestCase();
+        SimpleStringMatcher matcher = new SimpleStringMatcher();
+        try {
+            Alignment inputAlignment = new Alignment();
+            Correspondence c = new Correspondence("ENTITY_1_TEST", "ENTITY_2_TEST");
+            inputAlignment.add(c);
+            Alignment result = matcher.match(tc.getSourceOntology(OntModel.class), tc.getTargetOntology(OntModel.class),
+                    inputAlignment, null);
+            assertNotNull(result.size());
+            assertTrue(result.size() > 0);
+            assertTrue(result.contains(c));
         } catch (Exception e){
             LOGGER.error("A match exception occurred.", e);
             fail();
