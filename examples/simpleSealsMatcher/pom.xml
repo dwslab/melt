@@ -17,7 +17,7 @@
         <oaei.copyright>(C) Mannheim, 2019</oaei.copyright> <!--optional copyright appearing in the seals descriptor file -->
         <oaei.license>GNU Lesser General Public License 2.1 or above</oaei.license> <!--optional license appearing in the seals descriptor file -->
 
-        <matching.version>2.7-SNAPSHOT</matching.version> <!-- version for all matching related packages -->
+        <matching.version>3.0</matching.version> <!-- version for all matching related packages -->
     </properties>
     
     <!-- Accessing the resources:

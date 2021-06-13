@@ -36,7 +36,7 @@ MELT is now available in [maven central](https://repo1.maven.org/maven2/de/uni-m
 <dependency>
     <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
     <artifactId>matching-eval</artifactId>
-    <version>2.6</version>
+    <version>3.0</version>
 </dependency>
 ```
 
