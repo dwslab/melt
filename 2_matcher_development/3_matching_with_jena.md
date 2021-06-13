@@ -88,10 +88,7 @@ Alternatively to extending class `MatcherPipelineYAAAJena`, you can use class `M
 # Jena Helpers
 
 ## LiteralExtractors
-A recurring problem is obtaining natural language representations for Jena resources. `LiteralExtractor`s address this problem by retrieving literals for any given Jena resource. Implementations include [LiteralExtractorAllLiterals](), [LiteralExtractorByProperty](), or [LiteralExtractorUrlFragment](). Refer to the [JavaDoc documentation]() to find all implementing classes.
+A recurring problem is obtaining natural language representations for Jena resources. `LiteralExtractor`s address this problem by retrieving literals for any given Jena resource. Implementations include [LiteralExtractorAllLiterals](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/literalExtractors/LiteralExtractorAllLiterals.java), [LiteralExtractorByProperty](), or [LiteralExtractorUrlFragment](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/literalExtractors/LiteralExtractorUrlFragment.java). Refer to the [JavaDoc documentation](https://javadoc.io/doc/de.uni-mannheim.informatik.dws.melt/matching-jena-matchers/latest/index.html) to find all implementing classes.
 
 ## ValueExtractors
 A recurring problem is obtaining natural language representations for Jena resources. `ValueExtractor`s address this problem by retrieving Strings for any given Jena resource. Note that in most cases (for example when the language annotation is relevant), a `LiteralExtractor` may be the better design option.
-
-
-
