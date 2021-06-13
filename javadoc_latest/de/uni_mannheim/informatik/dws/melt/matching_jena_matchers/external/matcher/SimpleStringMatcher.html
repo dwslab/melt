@@ -236,7 +236,7 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
 </tr>
 <tr class="alt-color" id="i2">
 <td class="col-first"><code>private void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#initializeMappingProcess()">initializeMappingProcess</a></span>()</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#initializeMappingProcess(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">initializeMappingProcess</a></span>&#8203;(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</code></th>
 <td class="col-last">
 <div class="block">(Re-)initialize data structures.</div>
 </td>
@@ -258,7 +258,7 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
 <td class="col-first"><code><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;sourceOntology,
 org.apache.jena.ontology.OntModel&nbsp;targetOntology,
-<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;m,
+<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">
 <div class="block">Aligns two ontologies specified via a Jena OntModel, with an input alignment
@@ -416,7 +416,7 @@ org.apache.jena.util.iterator.ExtendedIterator&lt;? extends org.apache.jena.onto
 <h3>match</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="member-name">match</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;sourceOntology,
 org.apache.jena.ontology.OntModel&nbsp;targetOntology,
-<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;m,
+<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../matching_jena/MatcherYAAAJena.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">MatcherYAAAJena</a></code></span></div>
@@ -433,7 +433,7 @@ org.apache.jena.ontology.OntModel&nbsp;targetOntology,
 <dt>Parameters:</dt>
 <dd><code>sourceOntology</code> - This OntModel represents the source ontology.</dd>
 <dd><code>targetOntology</code> - This OntModel represents the target ontology.</dd>
-<dd><code>m</code> - This mapping represents the input alignment.</dd>
+<dd><code>inputAlignment</code> - This mapping represents the input alignment.</dd>
 <dd><code>p</code> - Additional properties.</dd>
 <dt>Returns:</dt>
 <dd>The resulting alignment of the matching process.</dd>
@@ -443,10 +443,14 @@ org.apache.jena.ontology.OntModel&nbsp;targetOntology,
 </section>
 </li>
 <li>
-<section class="detail" id="initializeMappingProcess()">
+<section class="detail" id="initializeMappingProcess(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">
 <h3>initializeMappingProcess</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">initializeMappingProcess</span>()</div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">initializeMappingProcess</span>&#8203;(<span class="parameters"><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</span></div>
 <div class="block">(Re-)initialize data structures.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>inputAlignment</code> - Input alignment</dd>
+</dl>
 </section>
 </li>
 <li>

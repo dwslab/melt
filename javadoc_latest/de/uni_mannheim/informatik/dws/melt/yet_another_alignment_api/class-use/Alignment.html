@@ -1178,7 +1178,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">BackgroundMatcher.</span><code><span class="member-name-link"><a href="../../matching_jena_matchers/external/matcher/BackgroundMatcher.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;sourceOntology,
 org.apache.jena.ontology.OntModel&nbsp;targetOntology,
-<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;m,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
@@ -1194,7 +1194,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">SimpleStringMatcher.</span><code><span class="member-name-link"><a href="../../matching_jena_matchers/external/matcher/SimpleStringMatcher.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;sourceOntology,
 org.apache.jena.ontology.OntModel&nbsp;targetOntology,
-<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;m,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
@@ -1213,14 +1213,21 @@ org.apache.jena.ontology.OntModel&nbsp;targetOntology,
 </thead>
 <tbody>
 <tr class="alt-color">
+<td class="col-first"><code>private void</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">SimpleStringMatcher.</span><code><span class="member-name-link"><a href="../../matching_jena_matchers/external/matcher/SimpleStringMatcher.html#initializeMappingProcess(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">initializeMappingProcess</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</code></th>
+<td class="col-last">
+<div class="block">(Re-)initialize data structures.</div>
+</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">BackgroundMatcher.</span><code><span class="member-name-link"><a href="../../matching_jena_matchers/external/matcher/BackgroundMatcher.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;sourceOntology,
 org.apache.jena.ontology.OntModel&nbsp;targetOntology,
-<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;m,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">BackgroundMatcherStandAlone.</span><code><span class="member-name-link"><a href="../../matching_jena_matchers/external/matcher/BackgroundMatcherStandAlone.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -1228,11 +1235,11 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">SimpleStringMatcher.</span><code><span class="member-name-link"><a href="../../matching_jena_matchers/external/matcher/SimpleStringMatcher.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;sourceOntology,
 org.apache.jena.ontology.OntModel&nbsp;targetOntology,
-<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;m,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
