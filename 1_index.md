@@ -57,11 +57,9 @@ The ML module of MELT executes python code in the background. Before installing/
 ## Modules Overview
 MELT is grouped into multiple [maven](https://maven.apache.org/what-is-maven.html) modules which are described below.
 
-### hobbit-wrapper
-Contains a wrapper for HOBBIT platform (implements the interface used in HOBBIT and transforms the calls to MatcherURL interface).
 
-### hobbit-maven-plugin
-Maven Plugin for creating a container for the [HOBBIT platform](https://project-hobbit.eu/outcomes/hobbit-platform/).
+### matching-assembly
+Utility to automatically package matching systems.
 
 ### matching-base
 Contains the basic interfaces to implement a matcher e.g. MatcherURL.
@@ -72,11 +70,14 @@ Contains the MELT track repository implementation and data structures such as `T
 ### matching-eval
 Contains various tools to evaluate the performance of matchers and to analyze their result.
 
+### matching-jena-matchers
+Contains modularized matchers that can be used to quickly assemble matching systems. Note that it is possible to easily chain those matchers building a matching pipeline.
+
 ### matching-jena
 Contains [Jena-based](https://jena.apache.org/) classes related to matcher development as well as additional services such as caching of source and target ontologies.  
 
-### matching-jena-matchers
-Contains modularized matchers that can be used to quickly assemble matching systems. Note that it is possible to easily chain those matchers building a matching pipeline.
+### matching-maven-plugin
+Maven plugin for creating a container for the [HOBBIT platform](https://project-hobbit.eu/outcomes/hobbit-platform/).
 
 ### matching-ml
 The machine learning extension for MELT. The ML extension allows communicating with a Python backend.

@@ -27,7 +27,7 @@ The swagger documentation is displayed below /
 [[open full screen documentation in a new tab]](https://dwslab.github.io/melt/6_matcher_packaging/swagger_ui_melt.html){:target="_blank"}
 
 <iframe src="https://dwslab.github.io/melt/6_matcher_packaging/swagger_ui_melt.html" scrolling="no"
-    style="border:0; width:100%; height:2550px; overflow:hidden;">
+    style="border:0; width:100%; height:2750px; overflow:hidden;">
 </iframe>
 
 # MELT Web Packaging

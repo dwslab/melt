@@ -6,7 +6,7 @@ nav_order: 2
 permalink: /matcher-packaging/hobbit
 ---
 
-# Packaging Matchers for SEALS and HOBBIT
+# Packaging Matchers for HOBBIT
 
 ## TL;DR
 1. Have a look at [examples/simpleHobbitMatcher](https://github.com/dwslab/melt/tree/master/examples/simpleHobbitMatcher).
@@ -14,10 +14,9 @@ permalink: /matcher-packaging/hobbit
 3. Adjust settings in pom.xml to your needs.
 4. Implement your matcher (see Matcher development).
 5. Make sure docker is running on your machine.
-6. Execute ```mvn deploy``` to create seals zip and deploy docker image to hobbit server.
-   - If you only execute ```mvn install``` it will create seals zip and hobbit docker image locally.
-   - If you execute ```mvn package``` only seals zip will be created.
-7. The seals zip can be found in the target folder and the hobbit docker image in the local docker repository.
+6. Execute ```mvn deploy``` to deploy the docker image to hobbit server.
+   - If you only execute ```mvn install``` it will create the hobbit docker image locally.
+7.  The hobbit docker image can be found in the local docker repository.
 
 ## In More Detail
 - for Hobbit submission
@@ -41,13 +40,10 @@ permalink: /matcher-packaging/hobbit
 - implement your matcher (see Matcher development)
 - build your matcher
   - execute maven goals from command line or from any IDE
-  - ```mvn package``` will only build seals zip
-  - ```mvn install``` will create seals zip and hobbit docker image locally
+  - ```mvn install``` will create the hobbit docker image locally
       - On MacOS, you have to run ```export DOCKER_HOST=unix:///var/run/docker.sock``` (see [issue of docker-maven-plugin](https://github.com/spotify/docker-maven-plugin/issues/218)) in order to allow maven to communicate with docker.
-  - ```mvn deploy``` will create seals zip and deploy docker image to hobbit server
-- submit your matcher
-  - for SEALS upload the generated seals file ```{artifactId}-{version}-seals.zip``` in the target folder
-  - for Hobbit call ```mvn deploy```
+  - ```mvn deploy``` will deploy docker image to hobbit server.
+
 
 ## Evaluate Your Matcher in HOBBIT
 

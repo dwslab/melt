@@ -86,9 +86,8 @@ import java.io.File;
 public class SealsMatcherBuilderPlayground {
 
     public static void main(String[] args) {
-        File sealsZip = new File("/Users/janportisch/IdeaProjects/melt/examples/simpleSealsMatcher/target" +
-                "/simpleSealsMatcher-1.0-seals_external.zip");
-        String java8command = "/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/bin/java";
+        File sealsZip = new File("<SEALS ZIP FILE PATH>");
+        String java8command = "<JAVA 8 EXECUTABLE>";
         MatcherSeals matcherSeals = new MatcherSealsBuilder()
                 .setJavaCommand(java8command)
                 .build(sealsZip);
