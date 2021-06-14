@@ -398,9 +398,11 @@ boolean&nbsp;invertConfidences)</span></div>
    function in huggingface library</a>).</dd>
 <dd><code>tmpDir</code> - the tmp dir to use. Some files are created in this directory.</dd>
 <dd><code>usingTF</code> - if true, the models are run with tensorflow. If false, pytorch is used.</dd>
-<dd><code>cudaVisibleDevices</code> - a string wich is set to the environemnt variable CUDA_VISIBLE_DEVICES to select on which GPU the process should run. If null or empty, the default is used (all available GPUs).</dd>
+<dd><code>cudaVisibleDevices</code> - a string wich is set to the environment variable CUDA_VISIBLE_DEVICES to select on
+                           which GPU the process should run. If null or empty, the default is used (all available GPUs).</dd>
 <dd><code>transformersCache</code> - the cache of the transformers models when using a pretrained one. If null, the default is used.</dd>
-<dd><code>invertConfidences</code> - if true, the confidences are inverted in case the model predicts exactly the othere way around.</dd>
+<dd><code>invertConfidences</code> - if true, the confidences are inverted in case the model predicts exactly the others
+                          way around.</dd>
 </dl>
 </section>
 </li>
@@ -537,12 +539,13 @@ boolean&nbsp;usingTF,
    (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
    see first parameter pretrained_model_name_or_path of the from_pretrained
    function in huggingface library</a>).</dd>
-<dd><code>predictionFilePath</code> - path to csv file with two columns (text left and text right).</dd>
-<dd><code>usingTF</code> - if true, using tensorflow, if false use pytorch</dd>
-<dd><code>cudaVisibleDevices</code> - the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.</dd>
-<dd><code>transformersCache</code> - the directory where thre transformetrs library stores the models.</dd>
+<dd><code>predictionFilePath</code> - Path to csv file with two columns (text left and text right).</dd>
+<dd><code>usingTF</code> - If true, using tensorflow, if false use pytorch</dd>
+<dd><code>cudaVisibleDevices</code> - The devices visible in cuda (can be null) examples are "0" to show only the first
+                           GPU or "1,2" to show only the second and thirs GPU.</dd>
+<dd><code>transformersCache</code> - The directory where the transformers library stores the models.</dd>
 <dt>Returns:</dt>
-<dd>a list of confidences</dd>
+<dd>A list of confidences.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - in case something goes wrong.</dd>
 </dl>
