@@ -96,7 +96,7 @@ public static void main(String[] args) {
 
     // STEP 2: Run (execute) the 3 matchers to obtain an ExecutionResultSet instance
 
-    // Let's run the matchers on two tracks:
+    // Let's add all tracks we want to evaluate to a list
     List<Track> tracks = new ArrayList<>();
     tracks.add(TrackRepository.Conference.V1);
     tracks.add(TrackRepository.Anatomy.Default);
@@ -107,10 +107,12 @@ public static void main(String[] args) {
     matchers.put("SEALS Matcher", sealsMatcher);
     matchers.put("Docker Matcher", dockerMatcher);
 
+    // Let's run the matchers on the tracks:
     ExecutionResultSet result = Executor.run(TrackRepository.Conference.V1, matchers);
 
 
-    // Step 3: Use your favorite evaluator to interpret the result
+    // Step 3: Use your favorite evaluator to interpret the result.
+    //         The results are serialized in directory: "./results".
     EvaluatorCSV evaluatorCSV = new EvaluatorCSV(result);
     evaluatorCSV.writeToDirectory();
 }
