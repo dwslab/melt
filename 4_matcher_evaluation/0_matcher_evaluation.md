@@ -65,3 +65,53 @@ public class EvaluationPlayground {
     }
 }
 ```
+
+#### More Complex Evaluation Example
+MELT allows for much more complex evaluation scenarios. The following example [can be found on github](https://github.com/dwslab/melt/tree/master/examples/evaluationExample) (including an example SEALS package and an example Docker package). 
+
+Here, three matchers are run: (1) A matcher which is directly instantiated (`classMatcher`), (2) a SEALS matcher where the SEALS zip is wrapped to be a re-usable matcher (`sealsMatcher`), (3) a Docker matcher where the docker tar.gz file is wrapped to be a re-usable matcher (`dockerMatcher`).
+
+Note that we can execute all matchers using one evaluation protocol. Here, we use `EvaluatorCSV` to execute the systems on two tracks: OAEI Anatomy and OAEI Conference.
+
+If you want to learn more about packaging matchers as [SEALS package](https://dwslab.github.io/melt/matcher-packaging/seals) / [Docker Web package](https://dwslab.github.io/melt/matcher-packaging/web), read the corresponding sections on matcher packaging.
+
+```java
+public static void main(String[] args) {
+
+    // STEP 1: Let's initialize the matchers we want to evaluate
+
+    // CASE 1: A matcher we can directly instantiate:
+    SimpleStringMatcher classMatcher = new SimpleStringMatcher();
+
+    // CASE 2: SEALS Package
+    // If you have problems with your java version, have a look at our user guide on how to manually set
+    // a path to JAVA 8 for SEALS: https://dwslab.github.io/melt/matcher-packaging/seals#evaluate-and-re-use-a-seals-package-with-melt
+    File sealsFile = loadFile("simpleSealsMatcher-1.0-seals_external.zip");
+    MatcherSeals sealsMatcher = new MatcherSeals(sealsFile);
+
+    // CASE 3: Web Docker Package
+    File dockerFile = loadFile("simplewebmatcher-1.0-web-latest.tar.gz");
+    MatcherDockerFile dockerMatcher = new MatcherDockerFile("simplewebmatcher-1.0-web", dockerFile);
+
+
+    // STEP 2: Run (execute) the 3 matchers to obtain an ExecutionResultSet instance
+
+    // Let's run the matchers on two tracks:
+    List<Track> tracks = new ArrayList<>();
+    tracks.add(TrackRepository.Conference.V1);
+    tracks.add(TrackRepository.Anatomy.Default);
+
+    // Let's add all matchers to a map (key: matcher name, value: matcher instance)
+    Map<String, IOntologyMatchingToolBridge> matchers = new HashMap<>();
+    matchers.put("Class Matcher", classMatcher);
+    matchers.put("SEALS Matcher", sealsMatcher);
+    matchers.put("Docker Matcher", dockerMatcher);
+
+    ExecutionResultSet result = Executor.run(TrackRepository.Conference.V1, matchers);
+
+
+    // Step 3: Use your favorite evaluator to interpret the result
+    EvaluatorCSV evaluatorCSV = new EvaluatorCSV(result);
+    evaluatorCSV.writeToDirectory();
+}
+```

@@ -16,7 +16,7 @@ You can run any matcher class (your own implemenation) but also packaged matcher
 An `ExecutionResultSet` is the result of an `Executor`. It represents a collection of individual `ExecutionResult`s.
 
 ##  Evaluator
-An evaluator is an abstract class for creating any evaluation based on an ExecutionResultSet.
+An evaluator is an abstract class for creating any evaluation based on an `ExecutionResultSet`.
 
 ## Track and TrackRepository
 A track is a collection of multiple TestCases. A track may be available online via the MELT `TrackRepository`. 
@@ -25,4 +25,4 @@ A track is a collection of multiple TestCases. A track may be available online v
 A `TestCase` is an individual matching task that may belong to a `Track`. A test case consists of two URIs for source and target ontology/graph as well as an URI to the reference (also known as *solution* or *gold standard* of the matching task). 
 
 ## GoldStandardCompletness
-Most test cases are complete, i.e. correspondences that are not in the gold standard are regarded as wrong. However, if you have a (local) test case that is not complete, you can provide the level gold standard completeness via enum `GoldStandardCompleteness`. The default evaluators will later on correctly evaluate system alignments on incomplete or partially complete test cases. Please refer to the [API documentation](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_data/GoldStandardCompleteness.html) to learn about the individual levels of completeness that are supported in MELT.
+Most test cases are complete, i.e. correspondences that are not in the gold standard are regarded as wrong. However, if you have a (local) test case that is not complete, you can provide the level of gold standard completeness via enum `GoldStandardCompleteness`. The default evaluators will later on correctly evaluate system alignments for incomplete or partially complete test cases. Please refer to the [API documentation](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_data/GoldStandardCompleteness.html) to learn about the individual levels of completeness that are supported in MELT.
