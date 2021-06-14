@@ -155,6 +155,16 @@ public class MatcherSeals extends MatcherFile {
         this(matcherFileOrFolder, new File(FileUtil.SYSTEM_TMP_FOLDER, "seals-omt-client-v" + SEALS_DOWNLOAD_URL_VERSION + ".jar"));
     }
 
+    /**
+     * The SEALS client will be search in the systems tmp directory with the name seals-omt-client-v7.0.5.jar.
+     *
+     * @param matcherFileOrFolderPath The file (zip file) or folder which represents one matcher.
+     */
+    public MatcherSeals(String matcherFileOrFolderPath) {
+        this(new File(matcherFileOrFolderPath), new File(FileUtil.SYSTEM_TMP_FOLDER,
+                "seals-omt-client-v" + SEALS_DOWNLOAD_URL_VERSION + ".jar"));
+    }
+
     private static void downloadSealsIfNecessary(File sealsClientJar) {
         //download seals to given location if it does not exist
         if (sealsClientJar.exists() == false) {
@@ -215,10 +225,8 @@ public class MatcherSeals extends MatcherFile {
         }
     }
 
-
     //https://stackoverflow.com/questions/29001162/how-to-get-the-value-which-i-sent-via-system-out-println
     //to store the log output of a matcher
-
 
     @Override
     public void match(URL source, URL target, URL inputAlignment, File alignmentResult) throws Exception {

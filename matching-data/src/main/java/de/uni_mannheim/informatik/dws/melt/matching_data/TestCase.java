@@ -35,10 +35,12 @@ public class TestCase {
      * URI pointing to the source file for matching.
      */
     private final URI source;
+
     /**
      * URI pointing to the target file for matching.
      */
     private final URI target;
+
     /**
      * URI pointing to the reference file.
      */

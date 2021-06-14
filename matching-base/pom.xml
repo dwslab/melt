@@ -52,7 +52,7 @@
             <version>1.27</version>
         </dependency>
         
-        <!-- for docker (optional) projects which depennd on this and need the feature, needs to redeclare-->
+        <!-- for docker (optional) projects which depend on this and need the feature, needs to re-declare-->
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java-core</artifactId>

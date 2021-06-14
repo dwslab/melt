@@ -13,6 +13,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_data;
  * If both are incomplete nothing can be said about &lt;a,c,=,1.0&gt; or &lt;c,b,=,1.0&gt;.
  */
 public enum GoldStandardCompleteness {
+
+
     /**
      * The GS is complete and thus all correspondences <em>NOT</em> in gold standard are wrong.
      */

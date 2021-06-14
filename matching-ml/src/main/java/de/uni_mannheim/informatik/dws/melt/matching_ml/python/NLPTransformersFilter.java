@@ -52,9 +52,11 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
      *   function in huggingface library</a>).
      * @param tmpDir the tmp dir to use. Some files are created in this directory.
      * @param usingTF if true, the models are run with tensorflow. If false, pytorch is used.
-     * @param cudaVisibleDevices a string wich is set to the environemnt variable CUDA_VISIBLE_DEVICES to select on which GPU the process should run. If null or empty, the default is used (all available GPUs).
+     * @param cudaVisibleDevices a string wich is set to the environment variable CUDA_VISIBLE_DEVICES to select on
+     *                           which GPU the process should run. If null or empty, the default is used (all available GPUs).
      * @param transformersCache the cache of the transformers models when using a pretrained one. If null, the default is used.
-     * @param invertConfidences if true, the confidences are inverted in case the model predicts exactly the othere way around.
+     * @param invertConfidences if true, the confidences are inverted in case the model predicts exactly the others
+     *                          way around.
      */
     public NLPTransformersFilter(TextExtractor extractor, String modelName, File tmpDir, boolean usingTF, String cudaVisibleDevices, File transformersCache, boolean invertConfidences) {
         this.extractor = extractor;
@@ -99,7 +101,7 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
             for(int i=0; i < orderedCorrespondences.size(); i++){
                 orderedCorrespondences.get(i).addAdditionalConfidence(this.getClass(), confidenceList.get(i));
             }
-        }finally{
+        } finally {
             inputFile.delete();
         }
         return inputAlignment;
@@ -154,7 +156,6 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
             newList.add(1.0-d);
         return newList;
     }
-
     
     /**
      * Run huggingface transformers library.
@@ -173,12 +174,13 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
      *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
      *   see first parameter pretrained_model_name_or_path of the from_pretrained
      *   function in huggingface library</a>).
-     * @param predictionFilePath path to csv file with two columns (text left and text right).
-     * @param usingTF if true, using tensorflow, if false use pytorch
-     * @param cudaVisibleDevices the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.
-     * @param transformersCache the directory where thre transformetrs library stores the models.
+     * @param predictionFilePath Path to csv file with two columns (text left and text right).
+     * @param usingTF If true, using tensorflow, if false use pytorch
+     * @param cudaVisibleDevices The devices visible in cuda (can be null) examples are "0" to show only the first
+     *                           GPU or "1,2" to show only the second and thirs GPU.
+     * @param transformersCache The directory where the transformers library stores the models.
      * @throws Exception in case something goes wrong.
-     * @return a list of confidences
+     * @return A list of confidences.
      */
     public static List<Double> predictConfidences(String modelName, File predictionFilePath, boolean usingTF, String cudaVisibleDevices, File transformersCache) throws Exception{
         return PythonServer.getInstance().transformersPrediction(modelName, predictionFilePath, usingTF, cudaVisibleDevices, transformersCache);

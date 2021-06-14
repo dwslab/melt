@@ -8,6 +8,7 @@ import java.io.File;
 
 public class DashboardGenerator {
 
+
     public static void main(String[] args) {
 
         // set the path to the unzipped anatomy results folder here
@@ -23,13 +24,12 @@ public class DashboardGenerator {
         // ------------------------------------------------
         ExecutionResultSet executionResultSet = Executor.loadFromAnatomyResultsFolder(pathToAnatomyResultsFolder);
         executionResultSet.addAll(Executor.loadFromConferenceResultsFolder(pathToConferenceResultsFolder));
+
         DashboardBuilder pb = new DashboardBuilder(executionResultSet, "MELT Dashboard: OAEI 2019 Anatomy/Conference", 
                 "This (beta) dashboard is rendered using MELT. You can click on the diagrams (such as the pie/bar charts) to create selections. "
                         + "The dashboard will be updated instantly. If you make selections, reset buttons will appear that allow you to undo your"
                         + "selection.");
         pb.writeToFile(new File("anatomy_conference_dashboard.html"));
         System.out.println("Anatomy/Conference Dashboard written.");
-
     }
-
 }
