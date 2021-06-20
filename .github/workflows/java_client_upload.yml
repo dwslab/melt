@@ -34,4 +34,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: evaluation-client
           folder: jar
-          target-folder: /
+          target-folder: /jar
