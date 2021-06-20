@@ -1,0 +1,33 @@
+name: Push Evaluation Client
+
+on: [push]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false # this is required for the javadoc deploy plugin
+      - name: Set up JDK 15
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '8'
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-1
+        - name: Build with Maven 📦
+          run: |
+            cd ./matching-eval-client
+            mvn clean install -DskipTests=True
+      - name: Deploy Jar 🚀
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: evaluation-client
+          folder: target/matching-eval-client-3.1-SNAPSHOT.jar
+          target-folder: /

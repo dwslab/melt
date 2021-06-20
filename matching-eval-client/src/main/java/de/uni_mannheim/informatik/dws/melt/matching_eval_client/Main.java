@@ -9,9 +9,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
-import net.sf.extjwnl.data.Exc;
 import org.apache.commons.cli.*;
-import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
@@ -151,8 +149,7 @@ public class Main {
         try (InputStreamReader reader = new InputStreamReader(
                 new FileInputStream(new File(resultsDirectory, EvaluatorCSV.getTrackPerformanceCubeFileName())),
                 StandardCharsets.UTF_8);
-             CSVParser parser = new CSVParser(reader, EvaluatorCSV.getCsvFormat().withFirstRecordAsHeader());
-
+             CSVParser parser = new CSVParser(reader, EvaluatorCSV.getCsvFormat().withFirstRecordAsHeader())
         ) {
             for (CSVRecord record : parser.getRecords()) {
                 Map<String, String> recordMap = record.toMap();
