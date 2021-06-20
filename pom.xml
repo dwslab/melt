@@ -29,6 +29,7 @@
         <module>receiver-cli</module>
         <module>receiver-hobbit</module>
         <module>receiver-http</module>
+        <module>matching-eval-client</module>
     </modules>
 
     <name>MELT - Matching EvaLuation Toolkit</name>

@@ -14,9 +14,10 @@ import org.slf4j.LoggerFactory;
  * Helper for creating files etc.
  */
 public class FileUtil {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUtil.class);
-    
-    
+
     private static final SecureRandom RANDOM = new SecureRandom();
     
     public static final File SYSTEM_TMP_FOLDER = new File(System.getProperty("java.io.tmpdir"));

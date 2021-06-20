@@ -52,7 +52,7 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
      *   function in huggingface library</a>).
      * @param tmpDir the tmp dir to use. Some files are created in this directory.
      * @param usingTF if true, the models are run with tensorflow. If false, pytorch is used.
-     * @param cudaVisibleDevices a string wich is set to the environment variable CUDA_VISIBLE_DEVICES to select on
+     * @param cudaVisibleDevices a string which is set to the environment variable CUDA_VISIBLE_DEVICES to select on
      *                           which GPU the process should run. If null or empty, the default is used (all available GPUs).
      * @param transformersCache the cache of the transformers models when using a pretrained one. If null, the default is used.
      * @param invertConfidences if true, the confidences are inverted in case the model predicts exactly the others

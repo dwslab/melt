@@ -110,6 +110,10 @@ public class EvaluatorCSV extends Evaluator {
      */
     private ArrayList<String> correspondenceExtensions;
 
+    private static final String TRACK_PERFORMANCE_CUBE_FILE_NAME = "trackPerformanceCube.csv";
+
+    private static CSVFormat csvFormat = CSVFormat.DEFAULT;
+
     /**
      * Constructor
      *
@@ -247,9 +251,11 @@ public class EvaluatorCSV extends Evaluator {
     private void initializePrinters(File baseDirectory) {
         if(!baseDirectory.exists()) baseDirectory.mkdir();
         try {
-            testCasePerformanceCubePrinter = CSVFormat.DEFAULT.print(new File(baseDirectory, "testCasePerformanceCube.csv"), StandardCharsets.UTF_8);
+            testCasePerformanceCubePrinter = csvFormat.print(new File(baseDirectory, "testCasePerformanceCube.csv"),
+                    StandardCharsets.UTF_8);
             testCasePerformanceCubePrinter.printRecord(getHeaderTestCasePerformanceCube());
-            trackPerformanceCubePrinter = CSVFormat.DEFAULT.print(new File(baseDirectory, "trackPerformanceCube.csv"), StandardCharsets.UTF_8);
+            trackPerformanceCubePrinter = csvFormat.print(new File(baseDirectory, TRACK_PERFORMANCE_CUBE_FILE_NAME),
+                    StandardCharsets.UTF_8);
             trackPerformanceCubePrinter.printRecord(getHeaderTrackPerformanceCube());
         } catch (IOException ioe) {
             LOGGER.error("Could not initialize CSV Printers for performance cubes.");
@@ -322,7 +328,7 @@ public class EvaluatorCSV extends Evaluator {
                 } else extensionValues = new String[0];
             } else extensionValues = new String[0];
 
-            CSVPrinter printer = CSVFormat.DEFAULT.print(fileToBeWritten, StandardCharsets.UTF_8);
+            CSVPrinter printer = csvFormat.print(fileToBeWritten, StandardCharsets.UTF_8);
             printer.printRecord(getHeaderAggregated());
             printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "ALL", macroAllCm.getPrecision(), macroAllCm.getRecall(), macroAllResidualCm.getRecall(), macroAllCm.getF1measure(), microAllCm.getPrecision(), microAllCm.getRecall(), microAllResidualCm.getRecall(), microAllCm.getF1measure(), macroAllCm.getTruePositiveSize(), macroAllResidualCm.getTruePositiveSize(), macroAllCm.getFalsePositiveSize(), macroAllCm.getFalseNegativeSize(), macroAllCm.getNumberOfCorrespondences(), summedRuntime, formattedRuntime));
             trackPerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, track.getName(), matcher, "ALL", macroAllCm.getPrecision(), macroAllCm.getRecall(), macroAllResidualCm.getRecall(), macroAllCm.getF1measure(), microAllCm.getPrecision(), microAllCm.getRecall(), microAllResidualCm.getRecall(), microAllCm.getF1measure(), macroAllCm.getTruePositiveSize(), macroAllResidualCm.getTruePositiveSize(), macroAllCm.getFalsePositiveSize(), macroAllCm.getFalseNegativeSize(), macroAllCm.getNumberOfCorrespondences(), summedRuntime, formattedRuntime));
@@ -436,7 +442,7 @@ public class EvaluatorCSV extends Evaluator {
 
                 File fileToBeWritten = new File(super.getResultsFolderTrackTestcaseMatcher(baseDirectory, allExecutionResult), "performance.csv");
                 fileToBeWritten.getParentFile().mkdirs();
-                CSVPrinter printer =  CSVFormat.DEFAULT.print(fileToBeWritten, StandardCharsets.UTF_8);
+                CSVPrinter printer = csvFormat.print(fileToBeWritten, StandardCharsets.UTF_8);
                 printer.printRecord(getHeaderIndividual());
                 printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, "ALL", allCm.getPrecision(), allCm.getRecall(), allResidualCm.getRecall(), allCm.getF1measure(), allCm.getTruePositiveSize(), allCm.getFalsePositiveSize(), allCm.getFalseNegativeSize(), allCm.getNumberOfCorrespondences(), allExecutionResult.getRuntime(), getFormattedRuntime(allExecutionResult.getRuntime())));
                 testCasePerformanceCubePrinter.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, testCase.getTrack().getName(), testCase.getName(), matcher, "ALL", allCm.getPrecision(), allCm.getRecall(), allResidualCm.getRecall(), allCm.getF1measure(), allCm.getTruePositiveSize(), allCm.getFalsePositiveSize(), allCm.getFalseNegativeSize(), allCm.getNumberOfCorrespondences(), allExecutionResult.getRuntime(), getFormattedRuntime(allExecutionResult.getRuntime())));
@@ -534,7 +540,7 @@ public class EvaluatorCSV extends Evaluator {
         result.add("# of FN");
         result.add("# of Correspondences");
         result.add("Total Runtime");
-        result.add("Total Runtime(HH:MM:SS)");
+        result.add("Total Runtime (HH:MM:SS)");
         if(isPrintAlignmentExtensions) {
             result.addAll(this.alignmentExtensions);
         }
@@ -655,5 +661,21 @@ public class EvaluatorCSV extends Evaluator {
             this.alignmentExtensions = getAlignmentExtensions(results);
         }
         isPrintAlignmentExtensions = printAlignmentExtensions;
+    }
+
+    public static String getTrackPerformanceCubeFileName() {
+        return TRACK_PERFORMANCE_CUBE_FILE_NAME;
+    }
+
+    /**
+     * Returns the CSV format used to write all CSV files.
+     * @return CSVFormat
+     */
+    public static CSVFormat getCsvFormat() {
+        return csvFormat;
+    }
+
+    public static void setCsvFormat(CSVFormat csvFormat) {
+        EvaluatorCSV.csvFormat = csvFormat;
     }
 }
