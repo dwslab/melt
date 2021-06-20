@@ -70,6 +70,9 @@ Contains the MELT track repository implementation and data structures such as `T
 ### matching-eval
 Contains various tools to evaluate the performance of matchers and to analyze their result.
 
+### matching-eval-client
+Contains the code for the JAR that can be used to evaluate matchers in the command line.
+
 ### matching-jena-matchers
 Contains modularized matchers that can be used to quickly assemble matching systems. Note that it is possible to easily chain those matchers building a matching pipeline.
 
