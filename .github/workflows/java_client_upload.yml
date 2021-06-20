@@ -26,6 +26,8 @@ jobs:
           mvn clean install -DskipTests=True
       - name: Move jar to new folder
         run: |
+          pwd
+          ls -l
           mkdir jar
           mv ./target/matching-eval-client-3.1-SNAPSHOT.jar ./jar/matching-eval-client-3.1-SNAPSHOT.jar
       - name: Deploy Jar 🚀
