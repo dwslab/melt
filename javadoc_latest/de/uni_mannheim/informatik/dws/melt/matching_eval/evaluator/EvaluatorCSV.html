@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":9,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9,"i9":9,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":9,"i16":9,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":9,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -156,62 +156,72 @@ extends <a href="Evaluator.html" title="class in de.uni_mannheim.informatik.dws.
 </td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>private static org.apache.commons.csv.CSVFormat</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#csvFormat">csvFormat</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>private <a href="../refinement/TypeRefiner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.refinement">TypeRefiner</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#instanceRefiner">instanceRefiner</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isPrintAlignmentExtensions">isPrintAlignmentExtensions</a></span></code></th>
 <td class="col-last">
 <div class="block">If true: Alignment extensions are printed in CSV.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isPrintAsShortenedString">isPrintAsShortenedString</a></span></code></th>
 <td class="col-last">
 <div class="block">Indicates whether the CSV shall be printed with shortened strings.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isPrintCorrespondenceExtensions">isPrintCorrespondenceExtensions</a></span></code></th>
 <td class="col-last">
 <div class="block">If true: Correspondence extensions are printed in CSV.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private org.slf4j.Logger</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
 <td class="col-last">
 <div class="block">Default Logger</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private <a href="../refinement/TypeRefiner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.refinement">TypeRefiner</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#propertyRefiner">propertyRefiner</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private <a href="../refinement/ResidualRefiner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.refinement">ResidualRefiner</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#residualRefiner">residualRefiner</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../matching_base/IExplainerResource.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IExplainerResource</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#resourceExplainers">resourceExplainers</a></span></code></th>
 <td class="col-last">
 <div class="block">The explainers to be used in the CSV that will be written.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private org.apache.commons.csv.CSVPrinter</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#testCasePerformanceCubePrinter">testCasePerformanceCubePrinter</a></span></code></th>
 <td class="col-last">
 <div class="block">Printer which can be used to print an individual matcher performance for a test case
  (e.g.</div>
 </td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#TRACK_PERFORMANCE_CUBE_FILE_NAME">TRACK_PERFORMANCE_CUBE_FILE_NAME</a></span></code></th>
+<td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>private org.apache.commons.csv.CSVPrinter</code></td>
@@ -346,111 +356,128 @@ boolean&nbsp;isPrintAsShortenedString)</code></th>
 </td>
 </tr>
 <tr class="alt-color" id="i8">
+<td class="col-first"><code>static org.apache.commons.csv.CSVFormat</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCsvFormat()">getCsvFormat</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the CSV format used to write all CSV files.</div>
+</td>
+</tr>
+<tr class="row-color" id="i9">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getFormattedRuntime(long)">getFormattedRuntime</a></span>&#8203;(long&nbsp;nanoSeconds)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getHeaderAggregated()">getHeaderAggregated</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Get the header row for the aggregated results on a per matcher basis.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="row-color" id="i11">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getHeaderIndividual()">getHeaderIndividual</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Get the header row for the individual statistics.</div>
 </td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getHeaderTestCasePerformanceCube()">getHeaderTestCasePerformanceCube</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Get the header row for the individual statistics in the overall CSV file.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i12">
+<tr class="row-color" id="i13">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getHeaderTrackPerformanceCube()">getHeaderTrackPerformanceCube</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Get the header row for the individual statistics in the overall CSV file.</div>
 </td>
 </tr>
-<tr class="row-color" id="i13">
+<tr class="alt-color" id="i14">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../matching_base/IExplainerResource.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IExplainerResource</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getResourceExplainers()">getResourceExplainers</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i14">
+<tr class="row-color" id="i15">
 <td class="col-first"><code>static long</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getSummedRuntimeOfResults(java.util.Set)">getSummedRuntimeOfResults</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&gt;&nbsp;results)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i15">
+<tr class="alt-color" id="i16">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTrackPerformanceCubeFileName()">getTrackPerformanceCubeFileName</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i17">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#initializePrinters(java.io.File)">initializePrinters</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;baseDirectory)</code></th>
 <td class="col-last">
 <div class="block">This method initializes global writers for the performance KPI CSV files.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i16">
+<tr class="alt-color" id="i18">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isCopyAlignmentFiles()">isCopyAlignmentFiles</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i17">
+<tr class="row-color" id="i19">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isPrintAlignmentExtensions()">isPrintAlignmentExtensions</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i18">
+<tr class="alt-color" id="i20">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isPrintAsShortenedString()">isPrintAsShortenedString</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i19">
+<tr class="row-color" id="i21">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isPrintCorrespondenceExtensions()">isPrintCorrespondenceExtensions</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i20">
+<tr class="alt-color" id="i22">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setBaselineMatcher(eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge)">setBaselineMatcher</a></span>&#8203;(eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge&nbsp;baselineMatcher)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i21">
+<tr class="row-color" id="i23">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setConfusionMatrixMetric(de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrixMetric)">setConfusionMatrixMetric</a></span>&#8203;(<a href="metric/cm/ConfusionMatrixMetric.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm">ConfusionMatrixMetric</a>&nbsp;confusionMatrixMetric)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i22">
+<tr class="alt-color" id="i24">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCopyAlignmentFiles(boolean)">setCopyAlignmentFiles</a></span>&#8203;(boolean&nbsp;copyAlignmentFiles)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i23">
-<td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setPrintAlignmentExtensions(boolean)">setPrintAlignmentExtensions</a></span>&#8203;(boolean&nbsp;printAlignmentExtensions)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="alt-color" id="i24">
-<td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setPrintAsShortenedString(boolean)">setPrintAsShortenedString</a></span>&#8203;(boolean&nbsp;printAsShortenedString)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
 <tr class="row-color" id="i25">
-<td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setPrintCorrespondenceExtensions(boolean)">setPrintCorrespondenceExtensions</a></span>&#8203;(boolean&nbsp;printCorrespondenceExtensions)</code></th>
+<td class="col-first"><code>static void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCsvFormat(org.apache.commons.csv.CSVFormat)">setCsvFormat</a></span>&#8203;(org.apache.commons.csv.CSVFormat&nbsp;csvFormat)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i26">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setResourceExplainers(java.util.List)">setResourceExplainers</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../matching_base/IExplainerResource.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IExplainerResource</a>&gt;&nbsp;resourceExplainers)</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setPrintAlignmentExtensions(boolean)">setPrintAlignmentExtensions</a></span>&#8203;(boolean&nbsp;printAlignmentExtensions)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color" id="i27">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setPrintAsShortenedString(boolean)">setPrintAsShortenedString</a></span>&#8203;(boolean&nbsp;printAsShortenedString)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i28">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setPrintCorrespondenceExtensions(boolean)">setPrintCorrespondenceExtensions</a></span>&#8203;(boolean&nbsp;printCorrespondenceExtensions)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i29">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setResourceExplainers(java.util.List)">setResourceExplainers</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../matching_base/IExplainerResource.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IExplainerResource</a>&gt;&nbsp;resourceExplainers)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i30">
 <td class="col-first"><code>(package private) <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#toStringArrayWithArrayAtTheEnd(java.lang.String%5B%5D,java.lang.Object...)">toStringArrayWithArrayAtTheEnd</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;putAtTheEnd,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;individualValues)</code></th>
@@ -458,7 +485,7 @@ boolean&nbsp;isPrintAsShortenedString)</code></th>
 <div class="block">Creates one string array where the <code>putAtTheEnd</code> values are arranged at the end of the string.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i28">
+<tr class="row-color" id="i31">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeAggregatedFileMatcherTrack(de.uni_mannheim.informatik.dws.melt.matching_data.Track,java.lang.String,java.io.File)">writeAggregatedFileMatcherTrack</a></span>&#8203;(<a href="../../matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;matcher,
@@ -467,7 +494,7 @@ boolean&nbsp;isPrintAsShortenedString)</code></th>
 <div class="block">Write the aggregated overview file, i.e.</div>
 </td>
 </tr>
-<tr class="row-color" id="i29">
+<tr class="alt-color" id="i32">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeOverviewFileMatcherTestCase(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.lang.String,java.io.File,boolean)">writeOverviewFileMatcherTestCase</a></span>&#8203;(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;matcher,
@@ -477,7 +504,7 @@ boolean&nbsp;onlyCalculateCube)</code></th>
 <div class="block">Write the overview file, i.e.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i30">
+<tr class="row-color" id="i33">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeResultsToDirectory(java.io.File)">writeResultsToDirectory</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;baseDirectory)</code></th>
 <td class="col-last">&nbsp;</td>
@@ -618,6 +645,22 @@ boolean&nbsp;onlyCalculateCube)</code></th>
 <h3>correspondenceExtensions</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">correspondenceExtensions</span></div>
 <div class="block">The correspondence extensions that are to be printed.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="TRACK_PERFORMANCE_CUBE_FILE_NAME">
+<h3>TRACK_PERFORMANCE_CUBE_FILE_NAME</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">TRACK_PERFORMANCE_CUBE_FILE_NAME</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd><a href="../../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV.TRACK_PERFORMANCE_CUBE_FILE_NAME">Constant Field Values</a></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="csvFormat">
+<h3>csvFormat</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">org.apache.commons.csv.CSVFormat</span>&nbsp;<span class="member-name">csvFormat</span></div>
 </section>
 </li>
 </ul>
@@ -964,6 +1007,29 @@ boolean&nbsp;onlyCalculateCube)</span></div>
 <section class="detail" id="setPrintAlignmentExtensions(boolean)">
 <h3>setPrintAlignmentExtensions</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setPrintAlignmentExtensions</span>&#8203;(<span class="parameters">boolean&nbsp;printAlignmentExtensions)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getTrackPerformanceCubeFileName()">
+<h3>getTrackPerformanceCubeFileName</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getTrackPerformanceCubeFileName</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getCsvFormat()">
+<h3>getCsvFormat</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">org.apache.commons.csv.CSVFormat</span>&nbsp;<span class="member-name">getCsvFormat</span>()</div>
+<div class="block">Returns the CSV format used to write all CSV files.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>CSVFormat</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setCsvFormat(org.apache.commons.csv.CSVFormat)">
+<h3>setCsvFormat</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setCsvFormat</span>&#8203;(<span class="parameters">org.apache.commons.csv.CSVFormat&nbsp;csvFormat)</span></div>
 </section>
 </li>
 </ul>

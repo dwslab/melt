@@ -11,6 +11,7 @@ de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer
 de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers
 de.uni_mannheim.informatik.dws.melt.matching_data
 de.uni_mannheim.informatik.dws.melt.matching_eval
+de.uni_mannheim.informatik.dws.melt.matching_eval_client
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric
