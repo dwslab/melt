@@ -20,10 +20,10 @@ jobs:
           path: |
             ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-1
-        - name: Build with Maven 📦
-          run: |
-            cd ./matching-eval-client
-            mvn clean install -DskipTests=True
+      - name: Build with Maven 📦
+        run: |
+          cd ./matching-eval-client
+          mvn clean install -DskipTests=True
       - name: Deploy Jar 🚀
         uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
