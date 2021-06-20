@@ -24,10 +24,14 @@ jobs:
         run: |
           cd ./matching-eval-client
           mvn clean install -DskipTests=True
+      - name: Move jar to new folder
+        run: |
+          mkdir jar
+          mv ./target/matching-eval-client-3.1-SNAPSHOT.jar ./jar/matching-eval-client-3.1-SNAPSHOT.jar
       - name: Deploy Jar 🚀
         uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: evaluation-client
-          folder: target/matching-eval-client-3.1-SNAPSHOT.jar
+          folder: jar
           target-folder: /
