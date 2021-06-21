@@ -8,7 +8,6 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Corresponde
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +21,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
+import java.io.IOException;
 
 /**
  * This filter extracts the corresponding text for a resource (with the specified and customizable extractor) given all correspondences.
@@ -67,6 +67,21 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
         this.transformersCache = transformersCache;
         this.invertConfidences = invertConfidences;
     }
+    
+    /**
+     * Constructor with default values. Uses the systems default tmp dir, pytorch.
+     * @param extractor the extractor to select which text for each resource should be used.
+     * @param modelName the name of the pretrained model which
+     *   is downloaded or a path to a directory containing model weights
+     *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
+     *   see first parameter pretrained_model_name_or_path of the from_pretrained
+     *   function in huggingface library</a>).
+     * @param cudaVisibleDevices a string wich is set to the environment variable CUDA_VISIBLE_DEVICES to select on
+     *                           which GPU the process should run. If null or empty, the default is used (all available GPUs).
+     */
+    public NLPTransformersFilter(TextExtractor extractor, String modelName, String cudaVisibleDevices) {
+        this(extractor, modelName, FileUtil.SYSTEM_TMP_FOLDER, false, cudaVisibleDevices, null, false);
+    }
 
     /**
      * Constructor with default values. Uses the systems default tmp dir, pytorch, and all visible GPUs.
@@ -78,17 +93,39 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
      *   function in huggingface library</a>).
      */
     public NLPTransformersFilter(TextExtractor extractor, String modelName) {
-        this(extractor, modelName, FileUtil.SYSTEM_TMP_FOLDER, false, "", null, false);
+        this(extractor, modelName, "");
     }
     
     @Override
-    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        List<Correspondence> orderedCorrespondences = new ArrayList<>(inputAlignment);
-        LOGGER.info("Write text to prediction file");
-        File inputFile = writePredictionFile(source, target, orderedCorrespondences);
+    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception{
+        
+        File inputFile = FileUtil.createFileWithRandomNumber(this.baseDir, "alignment_transformers_predict", ".txt");
+        List<Correspondence> orderedCorrespondences = new ArrayList<>();
+        LOGGER.info("Write text to prediction file {}", inputFile);
+        int k = 0;
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputFile), StandardCharsets.UTF_8))){
+            for(Correspondence c : inputAlignment){
+                String left = getTextFromResource(source.getResource(c.getEntityOne()));
+                String right = getTextFromResource(target.getResource(c.getEntityTwo()));
+                if(StringUtils.isBlank(left) || StringUtils.isBlank(right)){
+                    //setting to 0 if not existing
+                    c.addAdditionalConfidence(this.getClass(), 0.0);
+                    continue;
+                }
+                orderedCorrespondences.add(c);
+                writer.write(StringEscapeUtils.escapeCsv(left) + "," + StringEscapeUtils.escapeCsv(right) + NEWLINE);
+                if(k > 100)
+                    break;
+                k++;
+            }
+        } catch (IOException ex) {
+            LOGGER.warn("Could not write text to prediction file. Return unodified input alignment.", ex);
+            return inputAlignment;
+        }
+
         try{
-            LOGGER.info("Run prediction");
-            List<Double> confidenceList = predictConfidences(this.modelName, inputFile, this.usingTF, this.cudaVisibleDevices, this.transformersCache);
+            LOGGER.info("Run prediction for {} examples", orderedCorrespondences.size());
+            List<Double> confidenceList = predictConfidences(inputFile);
             LOGGER.info("Finished prediction");
             if(this.invertConfidences){
                 confidenceList = invertList(confidenceList);
@@ -106,40 +143,44 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
         }
         return inputAlignment;
     }
+    
+    /**
+     * Create the prediction file which is a CSV file with two columns.
+     * The first column is the text from the left resource and the second column is the text from the right resource.
+     * @param source The source model
+     * @param target The target model
+     * @param trainingAlignment the alignment to process. All correspondences are used.
+     * @return the prediction file (CSV formatted)
+     * @throws IOException in case the writing fails.
+     */
+    public File createPredictionFile(OntModel source, OntModel target, Alignment trainingAlignment) throws IOException {
+        File file = FileUtil.createFileWithRandomNumber(this.baseDir, "alignment_transformers_predict", ".txt");
+        createPredictionFile(source, target, trainingAlignment, file, false);
+        return file;
+    }
 
     /**
-     * Creates a file which contains two columns in a csv format.
-     * The first column contains the text from the source entities and the second column contains the text from the target entities.
-     * The returned file is not automatically removed. This has to be done outside.
-     * @param source the source model 
-     * @param target the target model
-     * @param inputAlignment the input alignment
-     * @return the csv file or null in case of an error
+     * Create the prediction file which is a CSV file with two columns.
+     * The first column is the text from the left resource and the second column is the text from the right resource.
+     * @param source The source model
+     * @param target The target model
+     * @param trainingAlignment the alignment to process. All correspondences are used.
+     * @param outputFile the csv file to which the output should be written to.
+     * @param append if true, then the training alignment is append to the given file.
+     * @throws IOException in case the writing fails.
      */
-    public File createPredictionFile(OntModel source, OntModel target, Alignment inputAlignment) {
-        try {
-            return writePredictionFile(source, target, new ArrayList<>(inputAlignment));
-        } catch (IOException ex) {
-            LOGGER.warn("Could not create prediction file.", ex);
-            return null;
-        }
-    }
-    
-    private File writePredictionFile(OntModel source, OntModel target, List<Correspondence> orderedCorrespondences) throws IOException{
-        File inputFile = FileUtil.createFileWithRandomNumber(this.baseDir, "alignment_transformers_predict", ".txt");
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputFile), StandardCharsets.UTF_8))){
-            for(Correspondence c : orderedCorrespondences){
+    public void createPredictionFile(OntModel source, OntModel target, Alignment trainingAlignment, File outputFile, boolean append) throws IOException {
+        LOGGER.info("Write text to prediction file {}", outputFile);
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile, append), StandardCharsets.UTF_8))){
+            for(Correspondence c : trainingAlignment){
                 String left = getTextFromResource(source.getResource(c.getEntityOne()));
                 String right = getTextFromResource(target.getResource(c.getEntityTwo()));
                 if(StringUtils.isBlank(left) || StringUtils.isBlank(right)){
-                    //setting to 0 if not existing
-                    c.addAdditionalConfidence(this.getClass(), 0.0);
                     continue;
                 }
                 writer.write(StringEscapeUtils.escapeCsv(left) + "," + StringEscapeUtils.escapeCsv(right) + NEWLINE);
             }
         }
-        return inputFile;
     }
     
     private String getTextFromResource(Resource r){
@@ -167,22 +208,61 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
         return PythonServer.getInstance().transformersPrediction(this.modelName, predictionFilePath, this.usingTF, this.cudaVisibleDevices, this.transformersCache);
     }
 
-    /**
-     * Run huggingface transformers library.
-     * @param modelName the name of the pretrained model which
-     *   is downloaded or a path to a directory containing model weights
-     *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
-     *   see first parameter pretrained_model_name_or_path of the from_pretrained
-     *   function in huggingface library</a>).
-     * @param predictionFilePath Path to csv file with two columns (text left and text right).
-     * @param usingTF If true, using tensorflow, if false use pytorch
-     * @param cudaVisibleDevices The devices visible in cuda (can be null) examples are "0" to show only the first
-     *                           GPU or "1,2" to show only the second and thirs GPU.
-     * @param transformersCache The directory where the transformers library stores the models.
-     * @throws Exception in case something goes wrong.
-     * @return A list of confidences.
-     */
-    public static List<Double> predictConfidences(String modelName, File predictionFilePath, boolean usingTF, String cudaVisibleDevices, File transformersCache) throws Exception{
-        return PythonServer.getInstance().transformersPrediction(modelName, predictionFilePath, usingTF, cudaVisibleDevices, transformersCache);
+    //setter and getter
+
+    public TextExtractor getExtractor() {
+        return extractor;
+    }
+
+    public void setExtractor(TextExtractor extractor) {
+        this.extractor = extractor;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public File getBaseDir() {
+        return baseDir;
+    }
+
+    public void setBaseDir(File baseDir) {
+        this.baseDir = baseDir;
+    }
+
+    public boolean isUsingTF() {
+        return usingTF;
+    }
+
+    public void setUsingTF(boolean usingTF) {
+        this.usingTF = usingTF;
+    }
+
+    public String getCudaVisibleDevices() {
+        return cudaVisibleDevices;
+    }
+
+    public void setCudaVisibleDevices(String cudaVisibleDevices) {
+        this.cudaVisibleDevices = cudaVisibleDevices;
+    }
+
+    public File getTransformersCache() {
+        return transformersCache;
+    }
+
+    public void setTransformersCache(File transformersCache) {
+        this.transformersCache = transformersCache;
+    }
+
+    public boolean isInvertConfidences() {
+        return invertConfidences;
+    }
+
+    public void setInvertConfidences(boolean invertConfidences) {
+        this.invertConfidences = invertConfidences;
     }
 }
