@@ -1,34 +1,24 @@
 package de.uni_mannheim.informatik.dws.melt.demomatcher;
 
-import de.uni_mannheim.informatik.dws.melt.matching_external.MatcherExternal;
-
-import java.io.File;
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.MatcherCLI;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper for the external Python matcher.
  * RDFlib is required in python environment.
  */
-public class DemoPythonMatcher extends MatcherExternal {
-
+public class DemoPythonMatcher extends MatcherCLI {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DemoPythonMatcher.class);
+   
     @Override
-    protected List<String> getCommand(URL source, URL target, URL inputAlignment) throws Exception {
-        List<String> command = new ArrayList<>();
-        command.add(getPythonCommand());
-        command.add("oaei-resources" + File.separator + "pythonMatcher.py");
-        command.add(source.toString());
-        command.add(target.toString());
-        if(inputAlignment != null)
-            command.add(inputAlignment.toString());
-        return command;
-        //return new ArrayList(Arrays.asList("python", "oaei-resources" + File.separator + "pythonMatcher.py", source.toString(), target.toString()))
+    protected String getCommand() throws Exception {
+        return getPythonCommand() + " oaei-resources${file.separator}pythonMatcher.py ${source} ${target} $[${inputAlignment}] $[${parameters}]";
     }
     
     /**
@@ -39,14 +29,9 @@ public class DemoPythonMatcher extends MatcherExternal {
         Path filePath = Paths.get("oaei-resources", "python_command.txt");
         if(Files.exists(filePath)){
             try {
-                String fileContent = new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
-                return fileContent.replace("\r", "").replace("\n", "")
-                        .replace("{File.pathSeparator}", File.pathSeparator)
-                        .replace("{File.separator}", File.separator)
-                        .trim();
-            } catch (IOException ex) { return "python"; }
-        } else{
-            return "python";
+                return new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8).replace("\r", "").replace("\n", "").trim();
+            } catch (IOException ex) { LOGGER.warn("Could not read python command file", ex);}
         }
+        return "python";
     }
 }

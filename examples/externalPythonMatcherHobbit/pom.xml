@@ -17,15 +17,14 @@
         <oaei.license>GNU Lesser General Public License 2.1 or above</oaei.license> <!--optional license appearing in the seals descriptor file -->
 
         <maven.deploy.skip>true</maven.deploy.skip><!-- needed to call mvn deploy without having a distributionManagement -->
-        <matching.version>2.6</matching.version> <!-- version for all matching related packages -->
+        <matching.version>3.0</matching.version> <!-- version for all matching related packages -->
     </properties>
     
     
     <dependencies>
-        <!-- dependency for external matchers - for other matchers you can replace it with artifactId: matching-base -->
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-            <artifactId>matching-external</artifactId>
+            <artifactId>matching-base</artifactId>
             <version>${matching.version}</version>
         </dependency>
         
@@ -34,12 +33,13 @@
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-eval</artifactId>
             <version>${matching.version}</version>
+            <scope>test</scope>
         </dependency>
         
         <!-- This dependency is necessary for hobbit submission. It contains the wrapper. -->
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-            <artifactId>hobbit-wrapper</artifactId>
+            <artifactId>receiver-hobbit</artifactId>
             <version>${matching.version}</version>
         </dependency>
         
@@ -62,11 +62,16 @@
             To remove the matcher from the platform just delete the Gitlab project.--> 
             <plugin>
                 <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-                <artifactId>hobbit-maven-plugin</artifactId>
+                <artifactId>matching-maven-plugin</artifactId>
                 <version>${matching.version}</version>
                 <configuration>
-                    <!-- inline authConfig not recommended but possible - better use settings xml (one example is shown at the end of the file
-                    <accesstoken>{accesstoken}</accesstoken>  -->
+                    <!-- inline authConfig not recommended but possible (in case you use accesstoken, you can omit the username here and only here).
+                         Better use settings xml (one example is shown at the end of the file)
+                    <authConfig>
+                        <username>{hobbit_username}</username>
+                        <password>{hobbit_password_or_accesstoken}</password>
+                    </authConfig>
+                    -->
                     <benchmarks>
                         <!-- in case you change the benchmarks, you also have to increase your version number -->
                         <benchmark>bench:AnatomyAPI</benchmark>
@@ -79,7 +84,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <goals><goal>prepareGitlab</goal></goals>
+                        <goals><goal>prepareHobbitGitlab</goal></goals>
                     </execution>
                 </executions>
             </plugin>
@@ -88,18 +93,20 @@
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.26.0</version>                
+                <version>0.36.0</version>                
                 <configuration>
                     <!-- further machine configuration options: https://dmp.fabric8.io/#docker-machine
-                    uncomment the following line in case you have installed docker on windows or mac-->
-                    <!--machine><name>default</name></machine-->
-                    
-                    <!-- inline authConfig not recommended but possible - better use settings xml (one example is shown at the end of the file 
-                         see also https://dmp.fabric8.io/#authentication
+                         Use the following line in case you have installed docker on windows or mac
+                    <machine><name>default</name></machine>
+                    -->
+
+                    <!-- inline authConfig not recommended but possible (in case you use accesstoken, you can omit the username here and only here).
+                         Better use settings xml (one example is shown at the end of the file)
                     <authConfig>
-                        <username>{username}</username>
-                        <password>{password}</password>
-                    </authConfig>  -->
+                        <username>{hobbit_username}</username>
+                        <password>{hobbit_password_or_accesstoken}</password>
+                    </authConfig>
+                    -->
                     
                     <images>
                         <image>
@@ -112,8 +119,7 @@
                                 </runCmds>
                                 <assembly><descriptorRef>hobbit</descriptorRef></assembly>
                                 <env><OAEI_MAIN>${oaei.mainClass}</OAEI_MAIN></env>
-                                <!-- if you develop for SPIMBENCH benchmark, then replace the last parameter with: de.uni_mannheim.informatik.dws.melt.hobbit_wrapper.spimbench.HobbitSPIMBENCHWrapper  (works with Melt 2.6-SNAPSHOT or above)-->
-                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter de.uni_mannheim.informatik.dws.melt.hobbit_wrapper.HobbitWrapper</shell></cmd>
+                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter de.uni_mannheim.informatik.dws.melt.receiver_hobbit.HobbitWrapper</shell></cmd>
                                 <workdir>/maven</workdir>
                             </build>
                         </image>
@@ -122,7 +128,7 @@
                 <dependencies>
                     <dependency>
                         <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-                        <artifactId>hobbit-assembly</artifactId>
+                        <artifactId>matching-assembly</artifactId>
                         <version>${matching.version}</version>
                     </dependency>
                 </dependencies>
@@ -141,24 +147,24 @@
         </plugins>
     </build>
 </project>
-<!-- config example for settings file which is usually located at ~/.m2/settings.xml (you can create the file if it does not exist)
-     username and password are used for pushing the docker image and privateKey is necessary for creating gitlab projects and system.ttl files:
+
+
+<!-- Example for settings.xml file which is usually located at ~/.m2/settings.xml 
+     (As absolute path in Windows: C:\Users\{user}\.m2\settings.xml and in Unix based systems: /home/{user}/.m2/settings.xml ).
+     You can create the file if it does not exist. 
+     The username is the hobbit username and the password can either be the password used in hobbit or 
+     an access token created in the gitlab instance of hobbit (https://git.project-hobbit.eu). 
+     More info at https://dwslab.github.io/melt/matcher-packaging/hobbit
+
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
                       https://maven.apache.org/xsd/settings-1.0.0.xsd">
   <servers>
     <server>
-      <id>git.project-hobbit.eu</id>
-      <username>{username}</username>
-      <password>{password}</password>
-      <privateKey>{gitlab_access_token}</privateKey>
-    </server>
-    <server>
       <id>git.project-hobbit.eu:4567</id>
-      <username>{username}</username>
-      <password>{password}</password>
-      <privateKey>{gitlab_access_token}</privateKey>
+      <username>{hobbit_username}</username>
+      <password>{hobbit_password_or_accesstoken}</password>
     </server>
   </servers>
 </settings>

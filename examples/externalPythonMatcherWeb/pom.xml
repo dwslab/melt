@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-    <artifactId>external-python-matcher-seals</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
+    <artifactId>external-python-matcher-web</artifactId><!-- id used as matcher id in descriptor file of seals package and as the project name in gitlab (hobbit) -->
     <packaging>jar</packaging>
     <version>1.0</version><!-- version appearing in descriptor file of seals package and system.ttl file in hobbit -->
     <description>External Python matcher demo</description><!-- description appearing in descriptor file of seals package and system.ttl file in hobbit -->
@@ -27,6 +27,13 @@
             <artifactId>matching-base</artifactId>
             <version>${matching.version}</version>
         </dependency>
+        
+        <!-- This dependency is necessary for web submission. It contains the server wrapper. -->
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>receiver-http</artifactId>
+            <version>${matching.version}</version>
+        </dependency>
        
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
@@ -45,10 +52,29 @@
 
     <build>
         <plugins>
-            <!-- the following plugin will generate a seals assemably -->
+            <!-- the following plugin will generate a docker image and save it into the target folder -->
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.36.0</version>
+                <configuration>
+                    <!-- further machine configuration options: https://dmp.fabric8.io/#docker-machine
+                         Use the following line in case you have installed docker on windows or mac
+                    <machine><name>default</name></machine>
+                    -->
+                    <images>
+                        <image>
+                            <name>%a-%v-web</name>
+                            <build>
+                                <from>openjdk:8-jre-alpine</from><!--change it to a docker base image you want - this is just a small image which contains java-->
+                                <assembly><descriptorRef>web</descriptorRef></assembly>
+                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" de.uni_mannheim.informatik.dws.melt.receiver_http.Main</shell></cmd>
+                                <workdir>/maven</workdir>
+                                <ports><port>8080</port></ports><!--port exposure to specify on which port the server runs -->
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
@@ -58,13 +84,12 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <phase>package</phase>
-                        <goals><goal>single</goal></goals>
-                        <!-- there exists three descriptors:
-                        1) "seals" - removes all dependencies available in seals client regardless of their version.#
-                        2) "seals_all_deps" - adds all dependencies of your project (please note that this can cause problems when using jena for example)
-                        3) "seals_external" - creates a wrapper around the matcher so that no inference with seals happens (the matcher has to log to std err only).-->
-                        <configuration><descriptorRefs><descriptorRef>seals</descriptorRef></descriptorRefs></configuration>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>save</goal>
+                        </goals>
+                        <!--execute build and save when calling "mvn install" -->
+                        <phase>install</phase>
                     </execution>
                 </executions>
             </plugin>
