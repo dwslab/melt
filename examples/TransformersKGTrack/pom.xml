@@ -65,7 +65,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.uni_mannheim.informatik.dws.melt.demomatcher.Main</mainClass>
+                            <mainClass>de.uni_mannheim.informatik.dws.melt.demomatcher.de.uni_mannheim.informatik.dws.melt.matching_eval_client.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

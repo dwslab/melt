@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EvaluatorCSVTest {
 
 
-    private static Logger LOGGER = LoggerFactory.getLogger(EvaluatorCSVTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorCSVTest.class);
 
     /**
      * This tests uses the 2018 alignment files for DOME and ALOD2Vec and evaluates them on the OAEI Anatomy data set
@@ -70,11 +70,8 @@ class EvaluatorCSVTest {
                 } else loop_1 = false;
             }
 
-        } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
-            fail();
-        } catch (IOException ioe){
-            ioe.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
             fail();
         }
 
@@ -148,11 +145,8 @@ class EvaluatorCSVTest {
                     assertTrue(tpAndFp < cNumber, "The following assertion failed: " + tpAndFp + " < " + cNumber);
                 } else loop_1 = false;
             }
-        } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
-            fail();
-        } catch (IOException ioe){
-            ioe.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
             fail();
         }
         try {
@@ -225,18 +219,32 @@ class EvaluatorCSVTest {
                     assertFalse(tpAndFp < cNumber, "The following assertion failed: " + tpAndFp + " < " + cNumber);
                 } else loop_1 = false;
             }
-        } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
-            fail();
-        } catch (IOException ioe){
-            ioe.printStackTrace();
-            fail();
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail(e);
         }
         try {
             FileUtils.deleteDirectory(baseDirectory);
         } catch (IOException ioe) {
             LOGGER.error("Could not clean up after test. Test directory 'testBaseDirectory' still exists on disk.", ioe);
         }
+    }
+
+    /**
+     * Just asserting that the track performance cube file name is set.
+     */
+    @Test
+    void getTrackPerformanceCubeFileName(){
+        assertNotNull(EvaluatorCSV.getTrackPerformanceCubeFileName());
+        assertNotEquals("", EvaluatorCSV.getTrackPerformanceCubeFileName().trim());
+    }
+
+    /**
+     * Just asserting that the CsvFormat is set.
+     */
+    @Test
+    void getCsvFormat(){
+        assertNotNull(EvaluatorCSV.getCsvFormat());
     }
 
     /**
