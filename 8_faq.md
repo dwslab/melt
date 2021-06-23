@@ -52,6 +52,10 @@ Caused by: java.lang.NullPointerException
         at org.apache.jena.sys.JenaSystem.init(JenaSystem.java:115)
         ...
 ```
+Or this:
+```
+java.lang.SecurityException: Invalid signature file digest for Manifest main attributes.
+```
 In such a case use the [maven shade plugin](https://maven.apache.org/plugins/maven-shade-plugin/index.html) with a [ServicesResourceTransformer](https://maven.apache.org/plugins/maven-shade-plugin/examples/resource-transformers.html)
 to [build an exectuable jar](https://maven.apache.org/plugins/maven-shade-plugin/examples/executable-jar.html).
 .
@@ -72,6 +76,18 @@ An example could look like the following
                     </transformer>
                     <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                   </transformers>
+                  <filters>
+                    <filter>
+                      <artifact>*:*</artifact>
+                      <excludes>
+                        <!-- Some jars are signed but shading breaks that. Don't include signing files. 
+                        Otherwise you get: java.lang.SecurityException: Invalid signature file digest for Manifest main attributes.-->
+                        <exclude>META-INF/*.SF</exclude>
+                        <exclude>META-INF/*.DSA</exclude>
+                        <exclude>META-INF/*.RSA</exclude>
+                      </excludes>
+                    </filter>
+                  </filters>
                 </configuration>
                 <executions>
                   <execution>
@@ -106,7 +122,7 @@ or by calling
 ```
 TrackRepository.Largebio.unlimitEntityExpansion();
 ```
-which sets the property for the current JVM execution (but not for child processes.
+which sets the property for the current JVM execution (but not for child processes).
 
 
 
