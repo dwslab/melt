@@ -22,8 +22,8 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-1
       - name: Build with Maven 📦
         run: |
-          cd ./matching-eval-client
           mvn clean install -DskipTests=True
+          cd ./matching-eval-client
       - name: Move jar to new folder
         run: |
           mkdir jar
