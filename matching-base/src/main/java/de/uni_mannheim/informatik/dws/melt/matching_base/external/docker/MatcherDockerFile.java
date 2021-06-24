@@ -9,6 +9,7 @@ import com.github.dockerjava.api.model.ContainerConfig;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports.Binding;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
@@ -101,6 +102,13 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
                 .dockerHost(config.getDockerHost())
                 .sslConfig(config.getSSLConfig())
                 .build());
+        try{
+            Info i = this.dockerClient.infoCmd().exec();
+            LOGGER.info("Connected to docker machine: {}", i.getName());
+        }catch(Exception ex){
+            LOGGER.warn("No connection to docker could be established. Check if docker is running on your machine.");
+            throw new DockerNotRunningException("Docker is probably not running.", ex);
+        }
         
         if(dockerImageFile != null)
             loadDockerFileInternal(dockerImageFile);
