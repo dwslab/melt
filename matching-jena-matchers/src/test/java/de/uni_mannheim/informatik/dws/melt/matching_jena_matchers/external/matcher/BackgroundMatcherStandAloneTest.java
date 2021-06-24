@@ -15,7 +15,7 @@ class BackgroundMatcherStandAloneTest {
 
     @Test
     void match() {
-        TestCase tc1 = TrackRepository.Conference.V1.getFirstTestCase();
+        TestCase tc1 = TrackRepository.Conference.V1.getTestCase(0);
         try {
             BackgroundMatcherStandAlone backgroundMatcher = new BackgroundMatcherStandAlone(new WordNetKnowledgeSource(),
                     ImplementedBackgroundMatchingStrategies.SYNONYMY, 0.0);
