@@ -19,7 +19,7 @@ class BackgroundMatcherStandAloneTest {
 
     @Test
     void match() {
-        TestCase tc1 = TrackRepository.Conference.V1.getTestCase(0);
+        TestCase tc1 = TrackRepository.Conference.V1.getTestCase("confof-iasted");
         LOGGER.info("Test Case Name: " + tc1.getName());
         LOGGER.info("Source: " + tc1.getSource().toString());
         LOGGER.info("Target: " + tc1.getTarget().toString());
