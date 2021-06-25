@@ -97,18 +97,66 @@ public class PythonServer {
      */
     private File resourcesDirectory = new File(DEFAULT_RESOURCES_DIRECTORY);
 
-    private static final int DEFAULT_PORT = 1808;
+    private static final int DEFAULT_PORT = 41193;
 
     /**
      * The port that shall be used.
      */
     private static int port = DEFAULT_PORT;
 
-
+    /**
+     * In case someone wants to configure the python command programatically.
+     * Precedence always has the external file.
+     */
+    private static String pythonCommandBackup = null;
+    
+    /**
+     * If set to true, all python files (e.g. python server melt and requirements.txt file) will be overridden with every execution.
+     * Set it to false for testing and debugging new features in python server.
+     */
+    private static boolean overridePythonFiles = true;
 
     /************************************
      * Transformer section
      ***********************************/
+    
+    /**
+     * Run huggingface transformers library.
+     * @param initialModelName the name of the pretrained model which should be finetuned.
+     * @param resultingModelLocation the directory where the resulting model should be stored.
+     * @param trainingFile path to csv file with three columns (text left, text right, label 1/0).
+     * @param config the configuration of the transformers trainer. All parameters of the trainer arguments can be used.
+     * @param usingTF if true, using tensorflow, if false use pytorch
+     * @param cudaVisibleDevices the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.
+     * @param transformersCache the directory where thre transformetrs library stores the models.
+     * @throws Exception in case something goes wrong.
+     */
+    public void transformersFineTuning(String initialModelName, File resultingModelLocation, File trainingFile, TransformerConfiguration config, boolean usingTF, String cudaVisibleDevices, File transformersCache) throws Exception{
+        HttpGet request = new HttpGet(serverUrl + "/transformers-finetuning");
+        request.addHeader("initialModelName", initialModelName);
+        request.addHeader("resultingModelLocation", getCanonicalPath(resultingModelLocation));
+        request.addHeader("trainingFile", getCanonicalPath(trainingFile));
+        request.addHeader("config", config.toJsonString());
+        request.addHeader("usingTF", Boolean.toString(usingTF));
+        
+        if(cudaVisibleDevices != null && cudaVisibleDevices.isEmpty() == false)
+            request.addHeader("cudaVisibleDevices", cudaVisibleDevices);
+        
+        if(transformersCache != null)
+            request.addHeader("transformersCache", getCanonicalPath(transformersCache));
+
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                }
+            }
+        }
+    }
     
     /**
      * Run huggingface transformers library.
@@ -121,14 +169,19 @@ public class PythonServer {
      * @param usingTF if true, using tensorflow, if false use pytorch
      * @param cudaVisibleDevices the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.
      * @param transformersCache the directory where thre transformetrs library stores the models.
+     * @param changeClass if false the confidences of class 1 are used, if true the confidences of class 2 are used. 
+     * @param config the config for the trainer arguments.
      * @throws Exception in case something goes wrong.
      * @return a list of confidences
      */
-    public List<Double> transformersPrediction(String modelName, File predictionFilePath, boolean usingTF, String cudaVisibleDevices, File transformersCache) throws Exception{
+    public List<Double> transformersPrediction(String modelName, File predictionFilePath, boolean usingTF, String cudaVisibleDevices, File transformersCache, boolean changeClass, TransformerConfiguration config) throws Exception{
+        //curl http://127.0.0.1:41193/transformers-prediction
         HttpGet request = new HttpGet(serverUrl + "/transformers-prediction");
         request.addHeader("modelName", modelName);
         request.addHeader("predictionFilePath", getCanonicalPath(predictionFilePath));
         request.addHeader("usingTF", Boolean.toString(usingTF));
+        request.addHeader("changeClass", Boolean.toString(changeClass));
+        request.addHeader("config", config.toJsonString());
         
         if(cudaVisibleDevices != null && cudaVisibleDevices.isEmpty() == false)
             request.addHeader("cudaVisibleDevices", cudaVisibleDevices);
@@ -809,17 +862,7 @@ public class PythonServer {
      * @return The canonical model path as String.
      */
     private String getCanonicalPath(String filePath) {
-        File modelFile = new File(filePath);
-        if (!modelFile.exists() || modelFile.isDirectory()) {
-            LOGGER.error("ERROR: The specified model path does not exist or is a directory.");
-            return filePath;
-        }
-        try {
-            return modelFile.getCanonicalPath();
-        } catch (IOException e) {
-            LOGGER.error("Could not derive canonical model path.", e);
-            return filePath;
-        }
+        return getCanonicalPath(new File(filePath));
     }
     
     /**
@@ -829,13 +872,13 @@ public class PythonServer {
      * @return The canonical path as String.
      */
     private String getCanonicalPath(File file) {
-        if (!file.exists() || file.isDirectory()) {
-            LOGGER.error("ERROR: The specified model path does not exist or is a directory.");
+        if (!file.exists()) {
+            LOGGER.warn("The specified path does not exist: {}", file);
         }
         try {
             return file.getCanonicalPath();
         } catch (IOException e) {
-            LOGGER.error("Could not derive canonical model path.", e);
+            LOGGER.warn("Could not retrieve canonical path of file. Use absolute path instead");
             return file.getAbsolutePath();
         }
     }
@@ -952,6 +995,10 @@ public class PythonServer {
      * @param resourceName ie.: "/SmartLibrary.dll"
      */
     private void exportResource(File baseDirectory, String resourceName) {
+        File destination = new File(baseDirectory,resourceName);
+        if(PythonServer.overridePythonFiles == false && destination.exists())
+            return;
+        
         // there must not be an OS-specific separator - a forward slash is strictly required here (getResourceAsStream)!
         try (InputStream stream = this.getClass().getResourceAsStream("/" + resourceName)){
             if(stream == null) {
@@ -959,7 +1006,7 @@ public class PythonServer {
             }
             int readBytes;
             byte[] buffer = new byte[4096];
-            try (OutputStream resStreamOut = new FileOutputStream(new File(baseDirectory,resourceName))){
+            try (OutputStream resStreamOut = new FileOutputStream(destination)){
                 while ((readBytes = stream.read(buffer)) > 0) {
                     resStreamOut.write(buffer, 0, readBytes);
                 }
@@ -1032,7 +1079,7 @@ public class PythonServer {
                 }
                 httpClient.close();
                 if (i == maxTrials -1){
-                    LOGGER.error("Failed to start the gensim server after " + maxTrials + " trials.");
+                    LOGGER.error("Failed to start the python server after " + maxTrials + " trials.");
                     isHookStarted = false;
                     isShutDown = true;
                     return false;
@@ -1062,7 +1109,6 @@ public class PythonServer {
      * @return The python executable path.
      */
     protected String getPythonCommand(){
-        String pythonCommand = "python";
         Path filePath = Paths.get(this.getResourcesDirectoryPath(), "python_command.txt");
         if(Files.exists(filePath)){
             LOGGER.info("Python command file detected.");
@@ -1077,7 +1123,11 @@ public class PythonServer {
                 LOGGER.warn("The file which should contain the python command could not be read.", ex);
             }
         }
-        return pythonCommand;
+        if(PythonServer.pythonCommandBackup != null && !PythonServer.pythonCommandBackup.isEmpty()){
+            return PythonServer.pythonCommandBackup;
+        }else{
+            return "python"; //the default
+        }
     }
 
     /**
@@ -1178,6 +1228,24 @@ public class PythonServer {
 
     public File getResourcesDirectory() {
         return resourcesDirectory;
+    }
+
+    /**
+     * Sets the python command programatically. This is used when no extrnal file python_command.txt is found.
+     * @param pythonCommandBackup the python command.
+     */
+    public static void setPythonCommandBackup(String pythonCommandBackup) {
+        PythonServer.pythonCommandBackup = pythonCommandBackup.trim();
+    }
+    
+    /**
+     * If set to true, all python files (e.g. python server melt and requirements.txt file) will be overridden with every execution.
+     * If you want to make changes to the python server (e.g. to develop and test a feature) you can set it to false.
+     * Then all modifications to these files will not be changed.
+     * @param overrideFiles if true, override the python server files.
+     */
+    public static void setOverridePythonFiles(boolean overrideFiles) {
+        PythonServer.overridePythonFiles = overrideFiles;
     }
 
     /**

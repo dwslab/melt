@@ -40,7 +40,8 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
     private boolean usingTF;
     private String cudaVisibleDevices;
     private File transformersCache;
-    private boolean invertConfidences;
+    private boolean changeClass;
+    private TransformerConfiguration config;
 
     /**
      * Init with all parameters.
@@ -55,17 +56,18 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
      * @param cudaVisibleDevices a string which is set to the environment variable CUDA_VISIBLE_DEVICES to select on
      *                           which GPU the process should run. If null or empty, the default is used (all available GPUs).
      * @param transformersCache the cache of the transformers models when using a pretrained one. If null, the default is used.
-     * @param invertConfidences if true, the confidences are inverted in case the model predicts exactly the others
-     *                          way around.
+     * @param changeClass if false the confidences of class 1 are used, if true the confidences of class 2 are used.
+     * @param config config for training arguments.
      */
-    public NLPTransformersFilter(TextExtractor extractor, String modelName, File tmpDir, boolean usingTF, String cudaVisibleDevices, File transformersCache, boolean invertConfidences) {
+    public NLPTransformersFilter(TextExtractor extractor, String modelName, File tmpDir, boolean usingTF, String cudaVisibleDevices, File transformersCache, boolean changeClass, TransformerConfiguration config) {
         this.extractor = extractor;
         this.modelName = modelName;
         this.baseDir = tmpDir;
         this.usingTF = usingTF;
         this.cudaVisibleDevices = cudaVisibleDevices;
         this.transformersCache = transformersCache;
-        this.invertConfidences = invertConfidences;
+        this.changeClass = changeClass;
+        this.config = config;
     }
     
     /**
@@ -80,7 +82,7 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
      *                           which GPU the process should run. If null or empty, the default is used (all available GPUs).
      */
     public NLPTransformersFilter(TextExtractor extractor, String modelName, String cudaVisibleDevices) {
-        this(extractor, modelName, FileUtil.SYSTEM_TMP_FOLDER, false, cudaVisibleDevices, null, false);
+        this(extractor, modelName, FileUtil.SYSTEM_TMP_FOLDER, false, cudaVisibleDevices, null, false, new TransformerConfiguration());
     }
 
     /**
@@ -102,7 +104,6 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
         File inputFile = FileUtil.createFileWithRandomNumber(this.baseDir, "alignment_transformers_predict", ".txt");
         List<Correspondence> orderedCorrespondences = new ArrayList<>();
         LOGGER.info("Write text to prediction file {}", inputFile);
-        int k = 0;
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputFile), StandardCharsets.UTF_8))){
             for(Correspondence c : inputAlignment){
                 String left = getTextFromResource(source.getResource(c.getEntityOne()));
@@ -114,9 +115,6 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
                 }
                 orderedCorrespondences.add(c);
                 writer.write(StringEscapeUtils.escapeCsv(left) + "," + StringEscapeUtils.escapeCsv(right) + NEWLINE);
-                if(k > 100)
-                    break;
-                k++;
             }
         } catch (IOException ex) {
             LOGGER.warn("Could not write text to prediction file. Return unodified input alignment.", ex);
@@ -127,9 +125,6 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
             LOGGER.info("Run prediction for {} examples", orderedCorrespondences.size());
             List<Double> confidenceList = predictConfidences(inputFile);
             LOGGER.info("Finished prediction");
-            if(this.invertConfidences){
-                confidenceList = invertList(confidenceList);
-            }
 
             if(orderedCorrespondences.size() != confidenceList.size()){
                 LOGGER.warn("Size of correspondences and predictions do not have the same size. Return input alignment.");
@@ -190,13 +185,6 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
         }
         return sb.toString().trim();
     }
-        
-    private List<Double> invertList(List<Double> list){
-        List<Double> newList = new ArrayList<>(list.size());
-        for(Double d : list)
-            newList.add(1.0-d);
-        return newList;
-    }
     
     /**
      * Run huggingface transformers library.
@@ -205,7 +193,7 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
      * @return a list of confidences
      */
     public List<Double> predictConfidences(File predictionFilePath) throws Exception{
-        return PythonServer.getInstance().transformersPrediction(this.modelName, predictionFilePath, this.usingTF, this.cudaVisibleDevices, this.transformersCache);
+        return PythonServer.getInstance().transformersPrediction(this.modelName, predictionFilePath, this.usingTF, this.cudaVisibleDevices, this.transformersCache, this.changeClass, this.config);
     }
 
     //setter and getter
@@ -258,11 +246,11 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
         this.transformersCache = transformersCache;
     }
 
-    public boolean isInvertConfidences() {
-        return invertConfidences;
+    public boolean isChangeClass() {
+        return changeClass;
     }
 
-    public void setInvertConfidences(boolean invertConfidences) {
-        this.invertConfidences = invertConfidences;
+    public void setChangeClass(boolean changeClass) {
+        this.changeClass = changeClass;
     }
 }

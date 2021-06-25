@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from gensim import corpora, models, similarities, matutils
 from scipy import linalg
 import csv
+import json
 import numpy as np
 import logging
 import os
@@ -1333,8 +1334,152 @@ def run_openea():
         return "ERROR " + traceback.format_exc()
 
 
+
+
+############################################
+#          Tranformers section with helper functions
+############################################
+
+def transformers_create_dataset(using_tensorflow, tokenizer, left_sentences, right_sentences, labels=None):
+    tensor_type = "tf" if using_tensorflow else "pt"
+    encodings  = tokenizer(left_sentences, right_sentences, return_tensors=tensor_type, padding=True, truncation="longest_first")
+    
+    if using_tensorflow:
+        import tensorflow as tf
+        if labels:
+            return tf.data.Dataset.from_tensor_slices((dict(encodings),labels))
+        else:
+            return tf.data.Dataset.from_tensor_slices(dict(encodings)) # TODO: check
+    else:
+        import torch
+        if labels:
+            class MyDatasetWithLabels(torch.utils.data.Dataset):
+                def __init__(self, encodings, labels):
+                    self.encodings = encodings
+                    self.labels = labels
+
+                def __getitem__(self, idx):
+                    item = {key: val[idx].detach().clone() for key, val in self.encodings.items()}
+                    item['labels'] = torch.tensor(self.labels[idx])
+                    return item
+
+                def __len__(self):
+                    return len(self.labels)
+            return MyDatasetWithLabels(encodings, labels)
+        else:
+            class MyDataset(torch.utils.data.Dataset):
+                def __init__(self, encodings):
+                    self.encodings = encodings
+
+                def __getitem__(self, idx):
+                    item = {key: val[idx].detach().clone() for key, val in self.encodings.items()}
+                    return item
+
+                def __len__(self):
+                    return len(self.encodings.input_ids)
+            return MyDataset(encodings)
+
+def transformers_read_file(file_path, with_labels):
+    data_left = []
+    data_right = []
+    labels = []
+    with open(file_path, encoding="utf-8") as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=",")
+        for row in readCSV:
+            data_left.append(row[0])
+            data_right.append(row[1])
+            if with_labels:
+                labels.append(int(row[2]))
+    return data_left, data_right, labels
+
+def add_attribute_if_existent(instance_object, attribute_key, attribute_value):
+    if hasattr(instance_object, attribute_key):
+        setattr(instance_object, attribute_key, attribute_value)
+
+def transformers_get_training_arguments(using_tensorflow, resulting_model_location, parameter_dict):
+    if using_tensorflow:
+        from transformers import TFTrainingArguments
+        training_args = TFTrainingArguments(resulting_model_location)
+    else:
+        from transformers import TrainingArguments
+        training_args = TrainingArguments(resulting_model_location)
+
+
+    # setting training argument with setattr because some versions of transformers library do not have these attributes. 
+    add_attribute_if_existent(training_args, 'save_strategy', 'no')
+    add_attribute_if_existent(training_args, 'disable_tqdm', True)
+    # the following is for ray hyperparameter tuning
+    # see https://github.com/huggingface/transformers/issues/11249
+    add_attribute_if_existent(training_args, 'skip_memory_metrics', True)
+
+
+    for param_key, param_value in parameter_dict.items():
+        if not hasattr(training_args, param_key):
+            raise AttributeError('module `TrainingArguments` has no attribute ' + str(param_key))
+        setattr(training_args, param_key, param_value)
+
+    return training_args
+
+def transformers_init(request):
+    import os
+
+    if "cudaVisibleDevices" in request.headers:
+        os.environ["CUDA_VISIBLE_DEVICES"] = request.headers.get(
+            "cudaVisibleDevices"
+        )
+
+    if "transformersCache" in request.headers:
+        os.environ["TRANSFORMERS_CACHE"] = request.headers.get("transformersCache")
+
 @app.route("/transformers-prediction", methods=["GET"])
 def transformers_prediction():
+    try:
+        transformers_init(request)
+
+        using_tensorflow = request.headers.get("usingTF").lower() == "true"
+        model_name = request.headers.get("modelName")
+        prediction_file_path = request.headers.get("predictionFilePath")
+        change_class = request.headers.get("changeClass")
+        parameter_string = request.headers.get("config")
+        parameters = json.loads(parameter_string)
+
+
+        from transformers import AutoTokenizer
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        
+        print("Prepare transformers dataset and tokenize")
+        data_left, data_right, _ = transformers_read_file(prediction_file_path, False)
+        predict_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left, data_right)
+        
+        training_args = transformers_get_training_arguments(using_tensorflow, './transformers_prediction_folder', parameters)
+        
+        print("Loading transformers model")
+        if using_tensorflow:
+            from transformers import TFTrainer, TFAutoModelForSequenceClassification
+
+            with training_args.strategy.scope():
+                model = TFAutoModelForSequenceClassification.from_pretrained(model_name)
+
+            trainer = TFTrainer(model=model,args=training_args)
+        else:
+            from transformers import Trainer, AutoModelForSequenceClassification
+            model = AutoModelForSequenceClassification.from_pretrained(model_name)
+
+            trainer = Trainer(model=model,args=training_args)
+        
+        print("Run prediction")
+        pred_out = trainer.predict(predict_dataset)
+        class_index = 1 if change_class else 0
+        scores = pred_out.predictions[:, class_index]
+        return jsonify(scores.tolist())
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
+
+
+
+@app.route("/transformers-finetuning", methods=["GET"])
+def transformers_finetuning():
     try:
         import os
 
@@ -1347,56 +1492,89 @@ def transformers_prediction():
             os.environ["TRANSFORMERS_CACHE"] = request.headers.get("transformersCache")
 
         using_tensorflow = request.headers.get("usingTF").lower() == "true"
-        model_name = request.headers.get("modelName")
-        prediction_file_path = request.headers.get("predictionFilePath")
-
-        import csv
+        initialModelName_name = request.headers.get("initialModelName")
+        resulting_model_location = request.headers.get("resultingModelLocation")
+        training_file = request.headers.get("trainingFile")
+        parameter_string = request.headers.get("config")
+        parameter = json.loads(parameter_string)
 
         data_left = []
         data_right = []
-        with open(prediction_file_path, encoding="utf-8") as csvfile:
+        labels = []
+        with open(training_file, encoding="utf-8") as csvfile:
             readCSV = csv.reader(csvfile, delimiter=",")
             for row in readCSV:
                 data_left.append(row[0])
                 data_right.append(row[1])
+                labels.append(int(row[2]))
 
-        from transformers import AutoTokenizer
+        tokenizer = AutoTokenizer.from_pretrained(initial_model_name)
 
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        if using_tensorflow:
+            from transformers import TFTrainingArguments
+            training_args = TFTrainingArguments(resulting_model_location)
+        else:
+            from transformers import TrainingArguments
+            training_args = TrainingArguments(resulting_model_location)
+
+
+        # setting training argument with setattr because some versions of transformers library do not have these attributes. 
+        add_attribute_if_existent(training_args, 'save_strategy', 'no')
+        add_attribute_if_existent(training_args, 'disable_tqdm', True)
+        # the following is for ray hyperparameter tuning
+        # see https://github.com/huggingface/transformers/issues/11249
+        add_attribute_if_existent(training_args, 'skip_memory_metrics', True)
+
+
+        for param_key, param_value in parameter.items():
+            if not hasattr(training_args, param_key):
+                raise AttributeError('module `TrainingArguments` has no attribute ' + str(param_key))
+            setattr(training_args, param_key, param_value)
+
 
         if using_tensorflow:
             import tensorflow as tf
-            from transformers import TFAutoModelForSequenceClassification
+            from transformers import TFTrainer, TFAutoModelForSequenceClassification
+            encodings  = tokenizer(data_left,data_right,return_tensors="tf",padding=True,truncation="longest_first") # return_tensors="tf",
+            dataset = tf.data.Dataset.from_tensor_slices((dict(encodings),labels))
 
-            tokens = tokenizer(
-                data_left,
-                data_right,
-                return_tensors="tf",
-                padding=True,
-                truncation="longest_first",
+            with training_args.strategy.scope():
+                model = TFAutoModelForSequenceClassification.from_pretrained(initial_model_name)
+
+            trainer = TFTrainer(
+                model=model,
+                args=training_args,
+                train_dataset=dataset
             )
-            model = TFAutoModelForSequenceClassification.from_pretrained(model_name)
-            classification = model(tokens)[0]
-            scores = tf.nn.softmax(classification, axis=1).numpy()[:, 1]
         else:
             import torch
-            from transformers import AutoModelForSequenceClassification
+            from transformers import Trainer, AutoModelForSequenceClassification
+            class MyDataset(torch.utils.data.Dataset):
+                def __init__(self, encodings, labels):
+                    self.encodings = encodings
+                    self.labels = labels
 
-            tokens = tokenizer(
-                data_left,
-                data_right,
-                return_tensors="pt",
-                padding=True,
-                truncation="longest_first",
+                def __getitem__(self, idx):
+                    item = {key: val[idx].detach().clone() for key, val in self.encodings.items()}
+                    item['labels'] = torch.tensor(self.labels[idx])
+                    return item
+
+                def __len__(self):
+                    return len(self.labels)
+            encodings  = tokenizer(data_left,data_right,return_tensors="pt",padding=True,truncation="longest_first")
+            dataset = MyDataset(encodings, labels)
+            model = AutoModelForSequenceClassification.from_pretrained(initial_model_name)
+
+            trainer = Trainer(
+                model=model,
+                args=training_args,
+                train_dataset=dataset
             )
-            model = AutoModelForSequenceClassification.from_pretrained(model_name)
-            classification = model(**tokens).logits
-            scores = [e[1] for e in torch.softmax(classification, dim=1).tolist()]
 
-        return jsonify(scores)
+        trainer.train()
+        trainer.save_model()
     except Exception as e:
         import traceback
-
         return "ERROR " + traceback.format_exc()
 
 
