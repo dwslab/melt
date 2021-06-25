@@ -14,6 +14,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -161,6 +162,7 @@ public abstract class Track {
             }
             testCases = readFromCache();
         }
+        testCases.sort((TestCase o1, TestCase o2) -> o1.getName().compareTo(o2.getName()));
         return testCases;
     }
     
