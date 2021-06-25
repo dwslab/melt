@@ -7,15 +7,22 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wordN
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.jena.ontology.OntModel;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BackgroundMatcherStandAloneTest {
 
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BackgroundMatcherStandAloneTest.class);
+
     @Test
     void match() {
-        TestCase tc1 = TrackRepository.Conference.V1.getFirstTestCase();
+        TestCase tc1 = TrackRepository.Conference.V1.getTestCase("confof-iasted");
+        LOGGER.info("Test Case Name: " + tc1.getName());
+        LOGGER.info("Source: " + tc1.getSource().toString());
+        LOGGER.info("Target: " + tc1.getTarget().toString());
         try {
             BackgroundMatcherStandAlone backgroundMatcher = new BackgroundMatcherStandAlone(new WordNetKnowledgeSource(),
                     ImplementedBackgroundMatchingStrategies.SYNONYMY, 0.0);
@@ -34,7 +41,8 @@ class BackgroundMatcherStandAloneTest {
             assertTrue(bkResult.size() > 1);
             assertNotNull(stringResult);
             assertTrue(stringResult.size() > 1);
-            assertTrue(bkResult.size() > stringResult.size());
+            assertTrue(bkResult.size() > stringResult.size(), "BK result size: " + bkResult.size() + "\n" +
+                    "String result size: " + stringResult.size() + "\n");
         } catch (Exception e){
             fail(e);
         }
