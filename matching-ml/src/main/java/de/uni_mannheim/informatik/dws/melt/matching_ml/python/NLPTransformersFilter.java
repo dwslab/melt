@@ -122,7 +122,7 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
         }
 
         try{
-            LOGGER.info("Run prediction for {} examples", orderedCorrespondences.size());
+            LOGGER.info("Run prediction for {} examples ({} correspondences do not have enough text to be processed).", orderedCorrespondences.size(), inputAlignment.size() - orderedCorrespondences.size());
             List<Double> confidenceList = predictConfidences(inputFile);
             LOGGER.info("Finished prediction");
 
