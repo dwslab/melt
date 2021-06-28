@@ -84,7 +84,6 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
     private int connectTimeout = 0;
     private int connectionRequestTimeout = 0;
     private int initialWaitingTimeInSeconds = 0;
-    
 
     /**
      * Initializes a matcher which starts a docker image to create a docker container in which a HTTP server runs.
@@ -102,17 +101,17 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
                 .dockerHost(config.getDockerHost())
                 .sslConfig(config.getSSLConfig())
                 .build());
-        try{
+        try {
             Info i = this.dockerClient.infoCmd().exec();
             LOGGER.info("Connected to docker machine: {}", i.getName());
-        }catch(Exception ex){
+        } catch(Exception ex) {
             LOGGER.warn("No connection to docker could be established. Check if docker is running on your machine.");
             throw new DockerNotRunningException("Docker is probably not running.", ex);
         }
         
         if(dockerImageFile != null)
             loadDockerFileInternal(dockerImageFile);
-        if(freshInstance == false){
+        if(!freshInstance){
             startContainer();
         }
     }
@@ -130,13 +129,22 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
     public MatcherDockerFile(String imageName, File dockerImageFile) {
         this(imageName, dockerImageFile, getDockerConfigBuilder().build());
     }
-    
-    //public MatcherDockerFile(String imageName, DockerClientConfig config) {
-    //    this(imageName, null, config);
-    //}
-    
+
+    /**
+     * Constructor.
+     * @param imageName Name of the image. The image must already be in the local docker registry.
+     */
     public MatcherDockerFile(String imageName) {
         this(imageName, (File) null);
+    }
+
+    /**
+     * Constructor. Obtains the image name form the file name.
+     * @param dockerImageFile The file which contains the image. The file must carry the name of the image optionally
+     *                       succeeded by a '-latest' postfix.
+     */
+    public MatcherDockerFile(File dockerImageFile){
+        this(getImageNameFromFile(dockerImageFile), dockerImageFile);
     }
 
     public void loadDockerFile(File dockerImageFile){
@@ -328,7 +336,36 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
             LOGGER.warn("Interrupted during wait", ex);
         }
     }
-    
+
+    /**
+     * The naming convention of the MELT Web Docker files is such that the files carry the name of the image
+     * with an optional postfix of '-latest' such as 'my_image-latest.tar.gz'
+     * @param dockerFilePath The docker file path of which the image name shall be retrieved.
+     * @return The image name as String.
+     */
+    public static String getImageNameFromFile(String dockerFilePath){
+        return getImageNameFromFile(new File(dockerFilePath));
+    }
+
+    /**
+     * The naming convention of the MELT Web Docker files is such that the files carry the name of the image
+     * with an optional postfix of '-latest' such as 'my_image-latest.tar.gz'
+     * @param dockerFile The docker file of which the image name shall be retrieved.
+     * @return The image name as String.
+     */
+    public static String getImageNameFromFile(File dockerFile){
+        String fileName = dockerFile.getName();
+
+        // step 1: remove '.tar.gz'
+        String imageName = fileName.substring(0, fileName.length() - 7);
+
+        // step 2: remove '-latest' if it is there
+        if(imageName.endsWith("-latest")){
+            imageName = imageName.substring(0, imageName.length() - 7);
+        }
+        return imageName;
+    }
+
     /**
      * Calling this function will log all lines from the container.
      */

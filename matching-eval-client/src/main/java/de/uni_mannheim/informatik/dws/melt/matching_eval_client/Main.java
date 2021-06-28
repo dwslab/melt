@@ -1,9 +1,12 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval_client;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.docker.MatcherDockerFile;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.http.MatcherHTTPCall;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.seals.MatcherSeals;
+import de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.SealsTrack;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
@@ -54,8 +57,8 @@ public class Main {
         String[] systems;
         final String missingSystemString = "Please specify systems to evaluate using the --systems option.\n" +
                 "You can call --help for documentation/help. ABORTING PROGRAM...";
-        if (cmd.hasOption(SYSTEMS_OPTION_STRING)) {
-            systems = cmd.getOptionValues(SYSTEMS_OPTION_STRING);
+        if (cmd.hasOption(SYSTEMS_OPTION)) {
+            systems = cmd.getOptionValues(SYSTEMS_OPTION);
         } else {
             System.out.println(missingSystemString);
             return;
@@ -67,14 +70,44 @@ public class Main {
 
         // get evaluation track
         Track track = null;
-        if (cmd.hasOption(TRACK_OPTION_STRING)) {
-            String[] trackData = cmd.getOptionValues(TRACK_OPTION_STRING);
+        TestCase testCase = null;
+        if (cmd.hasOption(TRACK_OPTION)) {
+            String[] trackData = cmd.getOptionValues(TRACK_OPTION);
             if (trackData.length != 3) {
                 System.out.printf("Please state the track data as follows:\n" +
-                        "--%s <location_uri> <collection_name> <version>\n", TRACK_OPTION_STRING);
+                        "--%s <location_uri> <collection_name> <version>\n", TRACK_OPTION);
                 return;
             }
             track = new SealsTrack(trackData[0], trackData[1], trackData[2]);
+        } else if (cmd.hasOption(LOCAL_TRACK_OPTION)) {
+            String[] trackData = cmd.getOptionValues(LOCAL_TRACK_OPTION);
+            if(trackData.length != 3){
+                System.out.printf("Please state the local track data as follows:\n" +
+                        "--%s <location> <name> <version>\n", TRACK_OPTION);
+                return;
+            }
+            // unfortunately, the local track constructor uses the parameters in a different order
+            track = new LocalTrack(trackData[1], trackData[2], trackData[0]);
+        } else if (cmd.hasOption(LOCAL_TEST_CASE_OPTION)){
+            String[] testCaseData = cmd.getOptionValues(LOCAL_TEST_CASE_OPTION);
+            if(testCaseData.length != 3){
+                System.out.printf("Please state the local test case data as follows:\n" +
+                        "--%s <onto1-path> <onto2-path> <reference-path>\n", LOCAL_TEST_CASE_OPTION);
+                return;
+            }
+            File onto1 = new File(testCaseData[0]);
+            File onto2 = new File(testCaseData[1]);
+            File reference = new File(testCaseData[2]);
+
+            testCase = new TestCase("Local TC",
+                    onto1.toURI(),
+                    onto2.toURI(),
+                    reference.toURI(),
+                    null);
+        } else {
+            System.out.printf("Please provide a track, local track, or local testcase.\n" +
+                    "Call --%s for help.", HELP_OPTION_STRING);
+            return;
         }
 
         // checking if java8 is defined:
@@ -92,7 +125,18 @@ public class Main {
             if (system.toLowerCase().endsWith(".tar.gz")) {
                 // we assume it is in MELT WEB DOCKER format:
                 System.out.printf("Recognized MELT WEB DOCKER package:\n%s\n", system);
-                System.out.println("MELT WEB DOCKER is not yet supported. Skipping matcher...\n");
+                System.out.println("Please make sure that docker is running on your system.");
+                File dockerFile = new File(system);
+                if(dockerFile.isDirectory()){
+                    System.out.println("The provided file is a directory: " + system);
+                    continue;
+                }
+                if(!dockerFile.exists()){
+                    System.out.println("The provided docker file does not exist: " + system);
+                    continue;
+                }
+                MatcherDockerFile matcherDockerFile = new MatcherDockerFile(new File(system));
+                matchers.put(system, matcherDockerFile);
             } else if (system.toLowerCase().endsWith(".zip")) {
                 // we assume it is a SEALS package:
                 System.out.printf("Recognized SEALS package:\n%s\n", system);
@@ -118,7 +162,14 @@ public class Main {
             return;
         }
 
-        ExecutionResultSet ers = Executor.run(track, matchers);
+        // run track or test case
+        ExecutionResultSet ers = null;
+        if(track != null) {
+            ers = Executor.run(track, matchers);
+        } else {
+            ers = Executor.run(testCase, matchers);
+        }
+
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(ers);
 
         // decide on results directory
@@ -171,24 +222,45 @@ public class Main {
         }
     }
 
-    private static final String SYSTEMS_OPTION_STRING = "systems";
-    private static final String TRACK_OPTION_STRING = "track";
+    private static final String SYSTEMS_OPTION = "systems";
+    private static final String TRACK_OPTION = "track";
+    private static final String LOCAL_TRACK_OPTION = "local-track";
+    private static final String LOCAL_TEST_CASE_OPTION = "local-testcase";
     private static final String HELP_OPTION_STRING = "help";
     private static final String RESULTS_DIRECTORY_OPTION = "results";
     private static final String JAVA8_OPTION = "java8";
 
+    /**
+     * Generates the options available in the CLI.
+     * @return Options instance.
+     */
     private static Options getOptions() {
         Options options = new Options();
 
         // Alignment system option
-        Option systemOption = new Option("s", SYSTEMS_OPTION_STRING, true, "The alignment systems.");
+        Option systemOption = new Option("s", SYSTEMS_OPTION, true, "The alignment systems.");
         systemOption.setArgs(Option.UNLIMITED_VALUES);
         options.addOption(systemOption);
 
         // Track option
-        Option trackOption = new Option("t", TRACK_OPTION_STRING, true, "The track to execute.");
+        Option trackOption = new Option("t", TRACK_OPTION, true, "The track to execute.\n" +
+                "Three arguments are required: -t <location_uri> <collection_name> <version>"
+        );
         trackOption.setArgs(3);
         options.addOption(trackOption);
+
+        // Local track option
+        Option localTrackOption = new Option("lt", LOCAL_TRACK_OPTION, true, "The local track to execute.\n" +
+                "Three arguments are required: -lt <folder-to-testcases> <name> <version>");
+        trackOption.setArgs(3);
+        options.addOption(localTrackOption);
+
+        // local test case option
+        Option localTestcaseOption = new Option("ltc", LOCAL_TEST_CASE_OPTION, true,
+                "Alternative to a local track you can also just specify two ontologies and a\n" +
+                        "reference alignment: -ltc <onto1-path> <onto2-pat> <reference-path>");
+        localTestcaseOption.setArgs(3);
+        options.addOption(localTestcaseOption);
 
         // Help option
         Option helpOption = new Option("h", HELP_OPTION_STRING, false,

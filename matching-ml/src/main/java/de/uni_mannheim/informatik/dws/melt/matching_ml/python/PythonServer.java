@@ -127,12 +127,11 @@ public class PythonServer {
      * @param trainingFile path to csv file with three columns (text left, text right, label 1/0).
      * @param usingTF if true, using tensorflow, if false use pytorch
      * @param cudaVisibleDevices the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.
-     * @param transformersCache the directory where thre transformetrs library stores the models.
+     * @param transformersCache the directory where the transformers library stores the models.
      * @param config the configuration of the transformers trainer. All parameters of the <a href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">huggingface training arguments</a> can be used.
      * @throws Exception in case something goes wrong.
      */
     public void transformersFineTuning(String initialModelName, File resultingModelLocation, File trainingFile, boolean usingTF, String cudaVisibleDevices, File transformersCache, TransformerConfiguration config) throws Exception{
-        
         HttpGet request = new HttpGet(serverUrl + "/transformers-finetuning");
         request.addHeader("initialModelName", initialModelName);
         request.addHeader("resultingModelLocation", getCanonicalPath(resultingModelLocation));

@@ -1,13 +1,11 @@
-/*
-package de.uni_mannheim.informatik.dws.melt.matching_eval.visualization;
 
-import cubix.Cubix;
+package de.uni_mannheim.informatik.dws.melt.matching_eval.visualization;
+/*
 import cubix.CubixJavaAPI;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
 import java.io.File;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
@@ -26,13 +24,14 @@ public class AlignmentCube {
         if(i.hasNext() == false){
             LOGGER.warn("ExecutionResultSet has no results to visulize.");
         }
-        runAlignmentCube(results, i.next().getTestCase());
+        TestCase testCase = i.next().getTestCase();
+        LOGGER.info("Using arbitrary testcase {}", testCase);
+        runAlignmentCube(results, testCase);
     }
     
     public static void runAlignmentCube(ExecutionResultSet results, TestCase testcase){
         Set<ExecutionResult> r = results.getGroup(testcase);
         List<File> alignmentFiles = getSystemResults(r);
-        
         
         CubixJavaAPI.run(
                 new File(testcase.getSource()),
@@ -40,16 +39,15 @@ public class AlignmentCube {
                 alignmentFiles,
                 null,
                 true);
-        
-        
-        //CubixJavaAPI.run(
-        //        new File("C:\\dev\\OntMatching\\AlignmentCubes\\Datasets\\Conference-AML-2013-2015-RA2016\\confOf.owl"),
-        //        new File("C:\\dev\\OntMatching\\AlignmentCubes\\Datasets\\Conference-AML-2013-2015-RA2016\\ekaw.owl"),
-        //        Arrays.asList(new File("C:\\dev\\OntMatching\\AlignmentCubes\\Datasets\\Conference-AML-2013-2015-RA2016\\Alignments").listFiles()),
-        //        null,
-        //        true);  
-        
-        //Cubix.main(new String[0]);
+    }
+    
+    public static void runAlignmentCube(ExecutionResult result){
+        CubixJavaAPI.run(
+                new File(result.getTestCase().getSource()),
+                new File(result.getTestCase().getTarget()),
+                Arrays.asList(urlToFile(result.getOriginalSystemAlignment())),
+                null,
+                true);
     }
     
     
@@ -73,6 +71,5 @@ public class AlignmentCube {
           return new File(url.getPath());
         }
     }
-    
 }
 */

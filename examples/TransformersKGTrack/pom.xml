@@ -22,6 +22,16 @@
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-jena-matchers</artifactId>
             <version>${matching.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.haifengl</groupId>
+                    <artifactId>smile-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.haifengl</groupId>
+                    <artifactId>smile-nlp</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <dependency>
@@ -34,6 +44,16 @@
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-eval</artifactId>
             <version>${matching.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.haifengl</groupId>
+                    <artifactId>smile-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.haifengl</groupId>
+                    <artifactId>smile-nlp</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <dependency>

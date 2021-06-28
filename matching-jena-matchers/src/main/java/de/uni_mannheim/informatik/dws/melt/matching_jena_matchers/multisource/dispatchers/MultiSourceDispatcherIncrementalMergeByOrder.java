@@ -1,11 +1,22 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TdbUtil;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.jena.ontology.OntModel;
@@ -94,6 +105,18 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
     }
     
     
+    @Override
+    protected boolean isLeftModelGreater(Set<Object> leftOntology, Set<Object> rightOntology, Properties p) throws TypeTransformationException{
+        if(this.comparator == MODEL_SIZE_ASCENDING_NTRIPLES_FAST){
+           return this.comparator.compare(new ModelAndIndex(leftOntology, 0, p), new ModelAndIndex(rightOntology, 1, p)) > 0;
+        }else if(this.comparator == MODEL_SIZE_DECENDING_NTRIPLES_FAST){
+           return this.comparator.compare(new ModelAndIndex(leftOntology, 0, p), new ModelAndIndex(rightOntology, 1, p)) < 0;
+        }else{
+            return super.isLeftModelGreater(leftOntology, rightOntology, p);
+        }
+    }
+    
+    
     /**
      * Sorted by the number of triples in a model. This means small models/ontologies/knowledge graphs will be merged first.
      */
@@ -114,6 +137,40 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
      * Sorted by the number of triples in a model. This means large models/ontologies/knowledge graphs will be merged first.
      */
     public static final Comparator<ModelAndIndex> MODEL_SIZE_DECENDING = MODEL_SIZE_ASCENDING.reversed();
+    
+    /**
+     * Sorted by the number of triples in a model.
+     * This is a fast variant for ntriple files which only counts the number of lines to make it faster.
+     * This means small models/ontologies/knowledge graphs will be merged first.
+     */
+    public static final Comparator<ModelAndIndex> MODEL_SIZE_ASCENDING_NTRIPLES_FAST = new Comparator<ModelAndIndex>() {
+        private Map<URL, Long> fileCache = new HashMap<>();
+        
+        @Override
+        public int compare(ModelAndIndex left, ModelAndIndex right) {
+            Long one = fileCache.computeIfAbsent(left.getModel(URL.class), this::getLineCount);
+            Long two = fileCache.computeIfAbsent(right.getModel(URL.class), this::getLineCount);
+            return one.compareTo(two);
+        }
+        
+        private Long getLineCount(URL url){
+            try {
+                File file = Paths.get(url.toURI()).toFile();
+                if(file == null)
+                    return 0L;
+                return FileUtil.lineCount(file);
+            }catch (URISyntaxException | IllegalArgumentException | FileSystemNotFoundException | SecurityException ex) {
+                return 0L;
+            }
+        }
+    };
+    
+    /**
+     * Sorted by the number of triples in a model.
+     * This is a fast variant for ntriple files which only counts the number of lines to make it faster.
+     * This means large models/ontologies/knowledge graphs will be merged first.
+     */
+    public static final Comparator<ModelAndIndex> MODEL_SIZE_DECENDING_NTRIPLES_FAST = MODEL_SIZE_ASCENDING_NTRIPLES_FAST.reversed();
     
     
     public static final Comparator<ModelAndIndex> IDENTITY = Comparator.comparing(ModelAndIndex::getIndex);
@@ -187,6 +244,10 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
     public static final Comparator<ModelAndIndex> UNIQUE_SUBJECTS_DECENDING = UNIQUE_SUBJECTS_ASCENDING.reversed();
     
     
+    /**
+     * This comparator is only used as a constant to determine if a random ordering should be used.
+     * If the comparator is really called, it will throw an exception.
+     */
     public static final Comparator<ModelAndIndex> RANDOM = new Comparator<ModelAndIndex>() {
         @Override
         public int compare(ModelAndIndex left, ModelAndIndex right) {
