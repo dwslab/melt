@@ -112,22 +112,27 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOCAL_TRACK_OPTION_STRING">LOCAL_TRACK_OPTION_STRING</a></span></code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOCAL_TEST_CASE_OPTION">LOCAL_TEST_CASE_OPTION</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#RESULTS_DIRECTORY_OPTION">RESULTS_DIRECTORY_OPTION</a></span></code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOCAL_TRACK_OPTION">LOCAL_TRACK_OPTION</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#SYSTEMS_OPTION_STRING">SYSTEMS_OPTION_STRING</a></span></code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#RESULTS_DIRECTORY_OPTION">RESULTS_DIRECTORY_OPTION</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#TRACK_OPTION_STRING">TRACK_OPTION_STRING</a></span></code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#SYSTEMS_OPTION">SYSTEMS_OPTION</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#TRACK_OPTION">TRACK_OPTION</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
@@ -177,7 +182,9 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <tr class="alt-color" id="i0">
 <td class="col-first"><code>private static org.apache.commons.cli.Options</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getOptions()">getOptions</a></span>()</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Generates the options available in the CLI.</div>
+</td>
 </tr>
 <tr class="row-color" id="i1">
 <td class="col-first"><code>static void</code></td>
@@ -203,32 +210,42 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="SYSTEMS_OPTION_STRING">
-<h3>SYSTEMS_OPTION_STRING</h3>
-<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">SYSTEMS_OPTION_STRING</span></div>
+<section class="detail" id="SYSTEMS_OPTION">
+<h3>SYSTEMS_OPTION</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">SYSTEMS_OPTION</span></div>
 <dl class="notes">
 <dt>See Also:</dt>
-<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_eval_client.Main.SYSTEMS_OPTION_STRING">Constant Field Values</a></dd>
+<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_eval_client.Main.SYSTEMS_OPTION">Constant Field Values</a></dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="TRACK_OPTION_STRING">
-<h3>TRACK_OPTION_STRING</h3>
-<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">TRACK_OPTION_STRING</span></div>
+<section class="detail" id="TRACK_OPTION">
+<h3>TRACK_OPTION</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">TRACK_OPTION</span></div>
 <dl class="notes">
 <dt>See Also:</dt>
-<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_eval_client.Main.TRACK_OPTION_STRING">Constant Field Values</a></dd>
+<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_eval_client.Main.TRACK_OPTION">Constant Field Values</a></dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="LOCAL_TRACK_OPTION_STRING">
-<h3>LOCAL_TRACK_OPTION_STRING</h3>
-<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">LOCAL_TRACK_OPTION_STRING</span></div>
+<section class="detail" id="LOCAL_TRACK_OPTION">
+<h3>LOCAL_TRACK_OPTION</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">LOCAL_TRACK_OPTION</span></div>
 <dl class="notes">
 <dt>See Also:</dt>
-<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_eval_client.Main.LOCAL_TRACK_OPTION_STRING">Constant Field Values</a></dd>
+<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_eval_client.Main.LOCAL_TRACK_OPTION">Constant Field Values</a></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="LOCAL_TEST_CASE_OPTION">
+<h3>LOCAL_TEST_CASE_OPTION</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">LOCAL_TEST_CASE_OPTION</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_eval_client.Main.LOCAL_TEST_CASE_OPTION">Constant Field Values</a></dd>
 </dl>
 </section>
 </li>
@@ -294,6 +311,11 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="detail" id="getOptions()">
 <h3>getOptions</h3>
 <div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">org.apache.commons.cli.Options</span>&nbsp;<span class="member-name">getOptions</span>()</div>
+<div class="block">Generates the options available in the CLI.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Options instance.</dd>
+</dl>
 </section>
 </li>
 </ul>
