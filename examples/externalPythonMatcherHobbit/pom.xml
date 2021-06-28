@@ -118,7 +118,6 @@
                                     <run>apk add --update openjdk8-jre</run><!-- install java because we need it -->
                                 </runCmds>
                                 <assembly><descriptorRef>hobbit</descriptorRef></assembly>
-                                <env><OAEI_MAIN>${oaei.mainClass}</OAEI_MAIN></env>
                                 <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" org.hobbit.core.run.ComponentStarter de.uni_mannheim.informatik.dws.melt.receiver_hobbit.HobbitWrapper</shell></cmd>
                                 <workdir>/maven</workdir>
                             </build>
