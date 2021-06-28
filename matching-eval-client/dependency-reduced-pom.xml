@@ -50,6 +50,48 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>com.github.docker-java</groupId>
+      <artifactId>docker-java-core</artifactId>
+      <version>3.2.7</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>docker-java-api</artifactId>
+          <groupId>com.github.docker-java</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>docker-java-transport</artifactId>
+          <groupId>com.github.docker-java</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>bcpkix-jdk15on</artifactId>
+          <groupId>org.bouncycastle</groupId>
+        </exclusion>
+      </exclusions>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.github.docker-java</groupId>
+      <artifactId>docker-java-transport-httpclient5</artifactId>
+      <version>3.2.7</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>httpclient5</artifactId>
+          <groupId>org.apache.httpcomponents.client5</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jna</artifactId>
+          <groupId>net.java.dev.jna</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>docker-java-transport</artifactId>
+          <groupId>com.github.docker-java</groupId>
+        </exclusion>
+      </exclusions>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>5.8.0-M1</version>

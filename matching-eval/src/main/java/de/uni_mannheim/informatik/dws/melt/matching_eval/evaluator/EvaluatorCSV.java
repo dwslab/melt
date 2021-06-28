@@ -249,7 +249,12 @@ public class EvaluatorCSV extends Evaluator {
      * @param baseDirectory The base directory to which the CSV files shall be written to.
      */
     private void initializePrinters(File baseDirectory) {
-        if(!baseDirectory.exists()) baseDirectory.mkdir();
+        if(!baseDirectory.exists()) {if(baseDirectory.mkdir()){
+        LOGGER.info("Created evaluation directory: %s", baseDirectory.getAbsolutePath());
+        } else {
+            LOGGER.error("Failed to create base directory %s", baseDirectory.getAbsolutePath());
+        }
+        }
         try {
             testCasePerformanceCubePrinter = csvFormat.print(new File(baseDirectory, "testCasePerformanceCube.csv"),
                     StandardCharsets.UTF_8);
