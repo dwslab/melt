@@ -88,11 +88,28 @@
             <artifactId>commons-cli</artifactId>
             <version>1.4</version>
         </dependency>
+
         <!-- yes, we add a log4j binding here b/c we only want to print errors when running the CLI -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java-core</artifactId>
+            <version>3.2.7</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java-transport-httpclient5</artifactId>
+            <version>3.2.7</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

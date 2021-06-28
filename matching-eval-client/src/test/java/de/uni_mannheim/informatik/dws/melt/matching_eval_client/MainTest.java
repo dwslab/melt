@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
+
+import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,6 +36,17 @@ class MainTest {
     void evaluateSingleSealsFile() {
         Main.main(new String[]{"-s",
                 loadFile("simpleSealsMatcher-1.0-seals_external.zip").getAbsolutePath(),
+                "-t", "http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1",
+                "-j", "/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/bin/java"});
+    }
+
+    /**
+     * Simple docker evaluation.
+     */
+    @Test
+    @Disabled
+    void evaluateSingleDockerFile() {
+        Main.main(new String[]{"-s",
                 loadFile("simplewebmatcher-1.0-web-latest.tar.gz").getAbsolutePath(),
                 "-t", "http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1",
                 "-j", "/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/bin/java"});
@@ -48,16 +59,11 @@ class MainTest {
      * @return File in case of success, else null.
      */
     private File loadFile(String fileName) {
-        try {
-            File result = FileUtils.toFile(this.getClass().getClassLoader().getResource(fileName).toURI().toURL());
-            assertTrue(result.exists(), "Required resource not available.");
-            return result;
-        } catch (URISyntaxException | MalformedURLException exception) {
-            exception.printStackTrace();
-            fail("Could not load file.", exception);
-            return null;
-        }
+        URL fileURL = this.getClass().getClassLoader().getResource(fileName);
+        assertNotNull(fileURL, "Could not load file.");
+        File result = FileUtils.toFile(fileURL);
+        assertTrue(result.exists(), "Required resource not available.");
+        return result;
     }
-
 
 }
