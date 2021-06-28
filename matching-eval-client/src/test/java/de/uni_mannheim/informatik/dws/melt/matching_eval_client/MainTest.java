@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval_client;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -45,7 +46,6 @@ class MainTest {
     void evaluateSingleSealsFileOnJava8() {
         String resultsDirectoryPath = "./cli_results";
         File resultsDirectory = new File(resultsDirectoryPath);
-        resultsDirectory.deleteOnExit();
         Main.main(new String[]{"-s",
                 loadFile("simpleSealsMatcher-1.0-seals_external.zip").getAbsolutePath(),
                 "-t", "http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1",
@@ -58,12 +58,18 @@ class MainTest {
         // check single file in directory
         File trackPerformanceCubeFile = new File(resultsDirectory, "trackPerformanceCube.csv");
         assertTrue(trackPerformanceCubeFile.exists());
+    }
 
-        // enforce deletion so that the next test works
+    @AfterAll
+    static void cleanUp(){
+        deleteDirectory("./cli_results");
+    }
+
+    static void deleteDirectory(String dirPath){
         try {
-            FileUtils.deleteDirectory(resultsDirectory);
+            FileUtils.deleteDirectory(new File(dirPath));
         } catch (IOException ioe){
-            LOGGER.error("Could not delete directory " + resultsDirectoryPath);
+            LOGGER.error("Could not delete directory " + dirPath);
         }
     }
 
