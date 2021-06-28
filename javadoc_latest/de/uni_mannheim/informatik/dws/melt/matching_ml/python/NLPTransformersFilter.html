@@ -15,8 +15,8 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
 var tableTab = "table-tab";
@@ -123,6 +123,16 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>private boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#changeClass">changeClass</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>private <a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#config">config</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#cudaVisibleDevices">cudaVisibleDevices</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -133,31 +143,26 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
-<td class="col-first"><code>private boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#invertConfidences">invertConfidences</a></span></code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="alt-color">
 <td class="col-first"><code>private static org.slf4j.Logger</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#modelName">modelName</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#NEWLINE">NEWLINE</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#transformersCache">transformersCache</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#usingTF">usingTF</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -192,15 +197,24 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 </td>
 </tr>
 <tr class="row-color">
-<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,boolean,java.lang.String,java.io.File,boolean)">NLPTransformersFilter</a></span>&#8203;(<a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,boolean,java.lang.String,java.io.File,boolean,de.uni_mannheim.informatik.dws.melt.matching_ml.python.TransformerConfiguration)">NLPTransformersFilter</a></span>&#8203;(<a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;tmpDir,
 boolean&nbsp;usingTF,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache,
-boolean&nbsp;invertConfidences)</code></th>
+boolean&nbsp;changeClass,
+<a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config)</code></th>
 <td class="col-last">
 <div class="block">Init with all parameters.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.lang.String)">NLPTransformersFilter</a></span>&#8203;(<a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices)</code></th>
+<td class="col-last">
+<div class="block">Constructor with default values.</div>
 </td>
 </tr>
 </tbody>
@@ -213,7 +227,7 @@ boolean&nbsp;invertConfidences)</code></th>
 <section class="method-summary" id="method.summary">
 <h2>Method Summary</h2>
 <div class="member-summary" id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="active-table-tab">All Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t1" class="table-tab" onclick="show(1);">Static Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="table-tab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="table-tab" onclick="show(8);">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="active-table-tab">All Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="table-tab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="table-tab" onclick="show(8);">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <table class="summary-table" aria-labelledby="t0">
 <thead>
@@ -228,22 +242,63 @@ boolean&nbsp;invertConfidences)</code></th>
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">createPredictionFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
-<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</code></th>
+<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment)</code></th>
 <td class="col-last">
-<div class="block">Creates a file which contains two columns in a csv format.</div>
+<div class="block">Create the prediction file which is a CSV file with two columns.</div>
 </td>
 </tr>
 <tr class="row-color" id="i1">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">createPredictionFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+org.apache.jena.ontology.OntModel&nbsp;target,
+<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputFile,
+boolean&nbsp;append)</code></th>
+<td class="col-last">
+<div class="block">Create the prediction file which is a CSV file with two columns.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i2">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getBaseDir()">getBaseDir</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i3">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCudaVisibleDevices()">getCudaVisibleDevices</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code><a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getExtractor()">getExtractor</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i5">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getModelName()">getModelName</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTextFromResource(org.apache.jena.rdf.model.Resource)">getTextFromResource</a></span>&#8203;(org.apache.jena.rdf.model.Resource&nbsp;r)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i2">
-<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#invertList(java.util.List)">invertList</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;list)</code></th>
+<tr class="row-color" id="i7">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTransformersCache()">getTransformersCache</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="alt-color" id="i8">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isChangeClass()">isChangeClass</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i9">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isUsingTF()">isUsingTF</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i10">
 <td class="col-first"><code><a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -254,29 +309,46 @@ org.apache.jena.ontology.OntModel&nbsp;target,
  as Alignment object, and returns the mapping of the resulting alignment.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i11">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#predictConfidences(java.io.File)">predictConfidences</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;predictionFilePath)</code></th>
 <td class="col-last">
 <div class="block">Run huggingface transformers library.</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
-<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#predictConfidences(java.lang.String,java.io.File,boolean,java.lang.String,java.io.File)">predictConfidences</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;predictionFilePath,
-boolean&nbsp;usingTF,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</code></th>
-<td class="col-last">
-<div class="block">Run huggingface transformers library.</div>
-</td>
+<tr class="alt-color" id="i12">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setBaseDir(java.io.File)">setBaseDir</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;baseDir)</code></th>
+<td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i6">
-<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writePredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,java.util.List)">writePredictionFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
-org.apache.jena.ontology.OntModel&nbsp;target,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../yet_another_alignment_api/Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;orderedCorrespondences)</code></th>
+<tr class="row-color" id="i13">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setChangeClass(boolean)">setChangeClass</a></span>&#8203;(boolean&nbsp;changeClass)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i14">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCudaVisibleDevices(java.lang.String)">setCudaVisibleDevices</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i15">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">setExtractor</a></span>&#8203;(<a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i16">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setModelName(java.lang.String)">setModelName</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i17">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTransformersCache(java.io.File)">setTransformersCache</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i18">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setUsingTF(boolean)">setUsingTF</a></span>&#8203;(boolean&nbsp;usingTF)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
@@ -364,9 +436,15 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </section>
 </li>
 <li>
-<section class="detail" id="invertConfidences">
-<h3>invertConfidences</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">invertConfidences</span></div>
+<section class="detail" id="changeClass">
+<h3>changeClass</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">changeClass</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="config">
+<h3>config</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a></span>&nbsp;<span class="member-name">config</span></div>
 </section>
 </li>
 </ul>
@@ -378,7 +456,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,boolean,java.lang.String,java.io.File,boolean)">
+<section class="detail" id="&lt;init&gt;(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,boolean,java.lang.String,java.io.File,boolean,de.uni_mannheim.informatik.dws.melt.matching_ml.python.TransformerConfiguration)">
 <h3>NLPTransformersFilter</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">NLPTransformersFilter</span>&#8203;(<span class="parameters"><a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
@@ -386,7 +464,8 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 boolean&nbsp;usingTF,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache,
-boolean&nbsp;invertConfidences)</span></div>
+boolean&nbsp;changeClass,
+<a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config)</span></div>
 <div class="block">Init with all parameters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -401,8 +480,28 @@ boolean&nbsp;invertConfidences)</span></div>
 <dd><code>cudaVisibleDevices</code> - a string which is set to the environment variable CUDA_VISIBLE_DEVICES to select on
                            which GPU the process should run. If null or empty, the default is used (all available GPUs).</dd>
 <dd><code>transformersCache</code> - the cache of the transformers models when using a pretrained one. If null, the default is used.</dd>
-<dd><code>invertConfidences</code> - if true, the confidences are inverted in case the model predicts exactly the others
-                          way around.</dd>
+<dd><code>changeClass</code> - if false the confidences of class 1 are used, if true the confidences of class 2 are used.</dd>
+<dd><code>config</code> - config for training arguments.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.lang.String)">
+<h3>NLPTransformersFilter</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">NLPTransformersFilter</span>&#8203;(<span class="parameters"><a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices)</span></div>
+<div class="block">Constructor with default values. Uses the systems default tmp dir, pytorch.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>extractor</code> - the extractor to select which text for each resource should be used.</dd>
+<dd><code>modelName</code> - the name of the pretrained model which
+   is downloaded or a path to a directory containing model weights
+   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
+   see first parameter pretrained_model_name_or_path of the from_pretrained
+   function in huggingface library</a>).</dd>
+<dd><code>cudaVisibleDevices</code> - a string wich is set to the environment variable CUDA_VISIBLE_DEVICES to select on
+                           which GPU the process should run. If null or empty, the default is used (all available GPUs).</dd>
 </dl>
 </section>
 </li>
@@ -467,30 +566,42 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <h3>createPredictionFile</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">createPredictionFile</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
-<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</span></div>
-<div class="block">Creates a file which contains two columns in a csv format.
- The first column contains the text from the source entities and the second column contains the text from the target entities.
- The returned file is not automatically removed. This has to be done outside.</div>
+<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment)</span>
+                          throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Create the prediction file which is a CSV file with two columns.
+ The first column is the text from the left resource and the second column is the text from the right resource.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>source</code> - the source model</dd>
-<dd><code>target</code> - the target model</dd>
-<dd><code>inputAlignment</code> - the input alignment</dd>
+<dd><code>source</code> - The source model</dd>
+<dd><code>target</code> - The target model</dd>
+<dd><code>trainingAlignment</code> - the alignment to process. All correspondences are used.</dd>
 <dt>Returns:</dt>
-<dd>the csv file or null in case of an error</dd>
+<dd>the prediction file (CSV formatted)</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - in case the writing fails.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="writePredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,java.util.List)">
-<h3>writePredictionFile</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">writePredictionFile</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;source,
+<section class="detail" id="createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">
+<h3>createPredictionFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">createPredictionFile</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../yet_another_alignment_api/Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;orderedCorrespondences)</span>
+<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputFile,
+boolean&nbsp;append)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Create the prediction file which is a CSV file with two columns.
+ The first column is the text from the left resource and the second column is the text from the right resource.</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>source</code> - The source model</dd>
+<dd><code>target</code> - The target model</dd>
+<dd><code>trainingAlignment</code> - the alignment to process. All correspondences are used.</dd>
+<dd><code>outputFile</code> - the csv file to which the output should be written to.</dd>
+<dd><code>append</code> - if true, then the training alignment is append to the given file.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - in case the writing fails.</dd>
 </dl>
 </section>
 </li>
@@ -498,12 +609,6 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <section class="detail" id="getTextFromResource(org.apache.jena.rdf.model.Resource)">
 <h3>getTextFromResource</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getTextFromResource</span>&#8203;(<span class="parameters">org.apache.jena.rdf.model.Resource&nbsp;r)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="invertList(java.util.List)">
-<h3>invertList</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</span>&nbsp;<span class="member-name">invertList</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;list)</span></div>
 </section>
 </li>
 <li>
@@ -523,32 +628,87 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </section>
 </li>
 <li>
-<section class="detail" id="predictConfidences(java.lang.String,java.io.File,boolean,java.lang.String,java.io.File)">
-<h3>predictConfidences</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</span>&nbsp;<span class="member-name">predictConfidences</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;predictionFilePath,
-boolean&nbsp;usingTF,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</span>
-                                       throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">Run huggingface transformers library.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>modelName</code> - the name of the pretrained model which
-   is downloaded or a path to a directory containing model weights
-   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
-   see first parameter pretrained_model_name_or_path of the from_pretrained
-   function in huggingface library</a>).</dd>
-<dd><code>predictionFilePath</code> - Path to csv file with two columns (text left and text right).</dd>
-<dd><code>usingTF</code> - If true, using tensorflow, if false use pytorch</dd>
-<dd><code>cudaVisibleDevices</code> - The devices visible in cuda (can be null) examples are "0" to show only the first
-                           GPU or "1,2" to show only the second and thirs GPU.</dd>
-<dd><code>transformersCache</code> - The directory where the transformers library stores the models.</dd>
-<dt>Returns:</dt>
-<dd>A list of confidences.</dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - in case something goes wrong.</dd>
-</dl>
+<section class="detail" id="getExtractor()">
+<h3>getExtractor</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a></span>&nbsp;<span class="member-name">getExtractor</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">
+<h3>setExtractor</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setExtractor</span>&#8203;(<span class="parameters"><a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getModelName()">
+<h3>getModelName</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getModelName</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setModelName(java.lang.String)">
+<h3>setModelName</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setModelName</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getBaseDir()">
+<h3>getBaseDir</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">getBaseDir</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setBaseDir(java.io.File)">
+<h3>setBaseDir</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setBaseDir</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;baseDir)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="isUsingTF()">
+<h3>isUsingTF</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isUsingTF</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setUsingTF(boolean)">
+<h3>setUsingTF</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setUsingTF</span>&#8203;(<span class="parameters">boolean&nbsp;usingTF)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getCudaVisibleDevices()">
+<h3>getCudaVisibleDevices</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getCudaVisibleDevices</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setCudaVisibleDevices(java.lang.String)">
+<h3>setCudaVisibleDevices</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setCudaVisibleDevices</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getTransformersCache()">
+<h3>getTransformersCache</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">getTransformersCache</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setTransformersCache(java.io.File)">
+<h3>setTransformersCache</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setTransformersCache</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="isChangeClass()">
+<h3>isChangeClass</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isChangeClass</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setChangeClass(boolean)">
+<h3>setChangeClass</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setChangeClass</span>&#8203;(<span class="parameters">boolean&nbsp;changeClass)</span></div>
 </section>
 </li>
 </ul>

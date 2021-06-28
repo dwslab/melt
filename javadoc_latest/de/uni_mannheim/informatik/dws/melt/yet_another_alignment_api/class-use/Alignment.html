@@ -2923,19 +2923,30 @@ int&nbsp;numberOfParallelJobs)</code></th>
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">NLPTransformersFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/NLPTransformersFilter.html#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">createPredictionFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
-<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</code></th>
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment)</code></th>
 <td class="col-last">
-<div class="block">Creates a file which contains two columns in a csv format.</div>
+<div class="block">Create the prediction file which is a CSV file with two columns.</div>
 </td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">NLPTransformersFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/NLPTransformersFilter.html#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">createPredictionFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+org.apache.jena.ontology.OntModel&nbsp;target,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputFile,
+boolean&nbsp;append)</code></th>
+<td class="col-last">
+<div class="block">Create the prediction file which is a CSV file with two columns.</div>
+</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>private static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">MachineLearningScikitFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/MachineLearningScikitFilter.html#filterAlignment(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.List,java.util.List)">filterAlignment</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;fullAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;orderedAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;predictions)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">Doc2vecModelMatcher.</span><code><span class="member-name-link"><a href="../../matching_ml/python/Doc2vecModelMatcher.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -2943,7 +2954,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">MachineLearningScikitFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/MachineLearningScikitFilter.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -2951,7 +2962,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">NLPTransformersFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/NLPTransformersFilter.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -2959,7 +2970,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">VectorSpaceModelMatcher.</span><code><span class="member-name-link"><a href="../../matching_ml/python/VectorSpaceModelMatcher.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -2967,7 +2978,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">PythonServer.</span><code><span class="member-name-link"><a href="../../matching_ml/python/PythonServer.html#queryVectorSpaceModel(java.lang.String,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">queryVectorSpaceModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelPath,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment)</code></th>
@@ -2975,7 +2986,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <div class="block">Method to query a vector space model (which has to be trained with trainVectorSpaceModel) in a batch mode.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">MachineLearningScikitFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/MachineLearningScikitFilter.html#trainAndApplyMLModel(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.List,int,int)">trainAndApplyMLModel</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainAlignment,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;predictAlignment,
@@ -2986,7 +2997,7 @@ int&nbsp;numberOfParallelJobs)</code></th>
 <div class="block">Trains a machine learning model in python and applies it to the predictAlignment to filter it.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">MachineLearningScikitFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/MachineLearningScikitFilter.html#trainAndStoreMLModel(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,java.util.List,int,int)">trainAndStoreMLModel</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;modelFile,
@@ -2997,14 +3008,14 @@ int&nbsp;numberOfParallelJobs)</code></th>
 <div class="block">Trains a machine learning model in python based on the given alignment and then stores the best model in a file.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">Doc2vecModelMatcher.</span><code><span class="member-name-link"><a href="../../matching_ml/python/Doc2vecModelMatcher.html#updateConfidences(de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer,java.lang.String,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">updateConfidences</a></span>&#8203;(<a href="../../matching_ml/python/PythonServer.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">PythonServer</a>&nbsp;pythonServer,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">VectorSpaceModelMatcher.</span><code><span class="member-name-link"><a href="../../matching_ml/python/VectorSpaceModelMatcher.html#updateConfidences(de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer,java.lang.String,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">updateConfidences</a></span>&#8203;(<a href="../../matching_ml/python/PythonServer.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">PythonServer</a>&nbsp;pythonServer,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
