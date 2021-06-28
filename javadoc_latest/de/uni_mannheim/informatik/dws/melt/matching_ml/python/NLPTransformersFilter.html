@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -123,6 +123,16 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>private boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#changeClass">changeClass</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>private <a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#config">config</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#cudaVisibleDevices">cudaVisibleDevices</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -133,31 +143,26 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
-<td class="col-first"><code>private boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#invertConfidences">invertConfidences</a></span></code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="alt-color">
 <td class="col-first"><code>private static org.slf4j.Logger</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#modelName">modelName</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#NEWLINE">NEWLINE</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#transformersCache">transformersCache</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#usingTF">usingTF</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -192,13 +197,14 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 </td>
 </tr>
 <tr class="row-color">
-<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,boolean,java.lang.String,java.io.File,boolean)">NLPTransformersFilter</a></span>&#8203;(<a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,boolean,java.lang.String,java.io.File,boolean,de.uni_mannheim.informatik.dws.melt.matching_ml.python.TransformerConfiguration)">NLPTransformersFilter</a></span>&#8203;(<a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;tmpDir,
 boolean&nbsp;usingTF,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache,
-boolean&nbsp;invertConfidences)</code></th>
+boolean&nbsp;changeClass,
+<a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config)</code></th>
 <td class="col-last">
 <div class="block">Init with all parameters.</div>
 </td>
@@ -283,21 +289,16 @@ boolean&nbsp;append)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i8">
-<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#invertList(java.util.List)">invertList</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;list)</code></th>
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isChangeClass()">isChangeClass</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color" id="i9">
 <td class="col-first"><code>boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isInvertConfidences()">isInvertConfidences</a></span>()</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="alt-color" id="i10">
-<td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isUsingTF()">isUsingTF</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code><a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -308,16 +309,21 @@ org.apache.jena.ontology.OntModel&nbsp;target,
  as Alignment object, and returns the mapping of the resulting alignment.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i12">
+<tr class="row-color" id="i11">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#predictConfidences(java.io.File)">predictConfidences</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;predictionFilePath)</code></th>
 <td class="col-last">
 <div class="block">Run huggingface transformers library.</div>
 </td>
 </tr>
-<tr class="row-color" id="i13">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setBaseDir(java.io.File)">setBaseDir</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;baseDir)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i13">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setChangeClass(boolean)">setChangeClass</a></span>&#8203;(boolean&nbsp;changeClass)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i14">
@@ -332,20 +338,15 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </tr>
 <tr class="alt-color" id="i16">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setInvertConfidences(boolean)">setInvertConfidences</a></span>&#8203;(boolean&nbsp;invertConfidences)</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setModelName(java.lang.String)">setModelName</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color" id="i17">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setModelName(java.lang.String)">setModelName</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="alt-color" id="i18">
-<td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTransformersCache(java.io.File)">setTransformersCache</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i19">
+<tr class="alt-color" id="i18">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setUsingTF(boolean)">setUsingTF</a></span>&#8203;(boolean&nbsp;usingTF)</code></th>
 <td class="col-last">&nbsp;</td>
@@ -435,9 +436,15 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </section>
 </li>
 <li>
-<section class="detail" id="invertConfidences">
-<h3>invertConfidences</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">invertConfidences</span></div>
+<section class="detail" id="changeClass">
+<h3>changeClass</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">changeClass</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="config">
+<h3>config</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a></span>&nbsp;<span class="member-name">config</span></div>
 </section>
 </li>
 </ul>
@@ -449,7 +456,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,boolean,java.lang.String,java.io.File,boolean)">
+<section class="detail" id="&lt;init&gt;(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,boolean,java.lang.String,java.io.File,boolean,de.uni_mannheim.informatik.dws.melt.matching_ml.python.TransformerConfiguration)">
 <h3>NLPTransformersFilter</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">NLPTransformersFilter</span>&#8203;(<span class="parameters"><a href="../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
@@ -457,7 +464,8 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 boolean&nbsp;usingTF,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache,
-boolean&nbsp;invertConfidences)</span></div>
+boolean&nbsp;changeClass,
+<a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config)</span></div>
 <div class="block">Init with all parameters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -472,8 +480,8 @@ boolean&nbsp;invertConfidences)</span></div>
 <dd><code>cudaVisibleDevices</code> - a string which is set to the environment variable CUDA_VISIBLE_DEVICES to select on
                            which GPU the process should run. If null or empty, the default is used (all available GPUs).</dd>
 <dd><code>transformersCache</code> - the cache of the transformers models when using a pretrained one. If null, the default is used.</dd>
-<dd><code>invertConfidences</code> - if true, the confidences are inverted in case the model predicts exactly the others
-                          way around.</dd>
+<dd><code>changeClass</code> - if false the confidences of class 1 are used, if true the confidences of class 2 are used.</dd>
+<dd><code>config</code> - config for training arguments.</dd>
 </dl>
 </section>
 </li>
@@ -604,12 +612,6 @@ boolean&nbsp;append)</span>
 </section>
 </li>
 <li>
-<section class="detail" id="invertList(java.util.List)">
-<h3>invertList</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</span>&nbsp;<span class="member-name">invertList</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;list)</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="predictConfidences(java.io.File)">
 <h3>predictConfidences</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</span>&nbsp;<span class="member-name">predictConfidences</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;predictionFilePath)</span>
@@ -698,15 +700,15 @@ boolean&nbsp;append)</span>
 </section>
 </li>
 <li>
-<section class="detail" id="isInvertConfidences()">
-<h3>isInvertConfidences</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isInvertConfidences</span>()</div>
+<section class="detail" id="isChangeClass()">
+<h3>isChangeClass</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isChangeClass</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="setInvertConfidences(boolean)">
-<h3>setInvertConfidences</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setInvertConfidences</span>&#8203;(<span class="parameters">boolean&nbsp;invertConfidences)</span></div>
+<section class="detail" id="setChangeClass(boolean)">
+<h3>setChangeClass</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setChangeClass</span>&#8203;(<span class="parameters">boolean&nbsp;changeClass)</span></div>
 </section>
 </li>
 </ul>

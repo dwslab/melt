@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":9,"i9":9,"i10":9,"i11":10,"i12":10,"i13":10,"i14":10,"i15":9,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":9,"i32":10,"i33":10,"i34":9,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":9,"i45":10,"i46":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":9,"i9":9,"i10":9,"i11":10,"i12":10,"i13":10,"i14":10,"i15":9,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":9,"i32":9,"i33":9,"i34":10,"i35":10,"i36":9,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":9,"i48":10,"i49":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -168,10 +168,24 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>private static boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#overridePythonFiles">overridePythonFiles</a></span></code></th>
+<td class="col-last">
+<div class="block">If set to true, all python files (e.g.</div>
+</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>private static int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#port">port</a></span></code></th>
 <td class="col-last">
 <div class="block">The port that shall be used.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#pythonCommandBackup">pythonCommandBackup</a></span></code></th>
+<td class="col-last">
+<div class="block">In case someone wants to configure the python command programatically.</div>
 </td>
 </tr>
 <tr class="alt-color">
@@ -483,17 +497,31 @@ boolean&nbsp;save)</code></th>
 </tr>
 <tr class="row-color" id="i31">
 <td class="col-first"><code>static void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setOverridePythonFiles(boolean)">setOverridePythonFiles</a></span>&#8203;(boolean&nbsp;overrideFiles)</code></th>
+<td class="col-last">
+<div class="block">If set to true, all python files (e.g.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i32">
+<td class="col-first"><code>static void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setPort(int)">setPort</a></span>&#8203;(int&nbsp;port)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i32">
+<tr class="row-color" id="i33">
+<td class="col-first"><code>static void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setPythonCommandBackup(java.lang.String)">setPythonCommandBackup</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pythonCommandBackup)</code></th>
+<td class="col-last">
+<div class="block">Sets the python command programatically.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i34">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setResourcesDirectory(java.io.File)">setResourcesDirectory</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resourcesDirectory)</code></th>
 <td class="col-last">
 <div class="block">Set the directory where the python files will be copied to.</div>
 </td>
 </tr>
-<tr class="row-color" id="i33">
+<tr class="row-color" id="i35">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setVectorCaching(boolean)">setVectorCaching</a></span>&#8203;(boolean&nbsp;vectorCaching)</code></th>
 <td class="col-last">
@@ -501,21 +529,21 @@ boolean&nbsp;save)</code></th>
  vectors are held in memories.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i34">
+<tr class="alt-color" id="i36">
 <td class="col-first"><code>static void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#shutDown()">shutDown</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Shut down the service.</div>
 </td>
 </tr>
-<tr class="row-color" id="i35">
+<tr class="row-color" id="i37">
 <td class="col-first"><code>private boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#startServer()">startServer</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Initializes the server.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i36">
+<tr class="alt-color" id="i38">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#trainAndStoreMLModel(java.io.File,java.io.File,int,int)">trainAndStoreMLModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainFile,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;modelFile,
@@ -525,7 +553,7 @@ int&nbsp;jobs)</code></th>
 <div class="block">Learn a ML model for a given training file and stores it in the given model file.</div>
 </td>
 </tr>
-<tr class="row-color" id="i37">
+<tr class="row-color" id="i39">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#trainDoc2VecModel(java.lang.String,java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_ml.python.Word2VecConfiguration)">trainDoc2VecModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelPath,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;trainingFilePath,
@@ -534,7 +562,7 @@ int&nbsp;jobs)</code></th>
 <div class="block">Method to train a doc2vec model.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i38">
+<tr class="alt-color" id="i40">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#trainVectorSpaceModel(java.lang.String,java.lang.String)">trainVectorSpaceModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelPath,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;trainingFilePath)</code></th>
@@ -542,7 +570,7 @@ int&nbsp;jobs)</code></th>
 <div class="block">Method to train a vector space model.</div>
 </td>
 </tr>
-<tr class="row-color" id="i39">
+<tr class="row-color" id="i41">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#trainWord2VecModel(java.lang.String,java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_ml.python.Word2VecConfiguration)">trainWord2VecModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelOrVectorPath,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;trainingFilePath,
@@ -551,10 +579,12 @@ int&nbsp;jobs)</code></th>
 <div class="block">Method to train a word2vec model.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i40">
-<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#transformersPrediction(java.lang.String,java.io.File,boolean,java.lang.String,java.io.File)">transformersPrediction</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;predictionFilePath,
+<tr class="alt-color" id="i42">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#transformersFineTuning(java.lang.String,java.io.File,java.io.File,de.uni_mannheim.informatik.dws.melt.matching_ml.python.TransformerConfiguration,boolean,java.lang.String,java.io.File)">transformersFineTuning</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile,
+<a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config,
 boolean&nbsp;usingTF,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</code></th>
@@ -562,7 +592,20 @@ boolean&nbsp;usingTF,
 <div class="block">Run huggingface transformers library.</div>
 </td>
 </tr>
-<tr class="row-color" id="i41">
+<tr class="row-color" id="i43">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#transformersPrediction(java.lang.String,java.io.File,boolean,java.lang.String,java.io.File,boolean,de.uni_mannheim.informatik.dws.melt.matching_ml.python.TransformerConfiguration)">transformersPrediction</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;predictionFilePath,
+boolean&nbsp;usingTF,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache,
+boolean&nbsp;changeClass,
+<a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config)</code></th>
+<td class="col-last">
+<div class="block">Run huggingface transformers library.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i44">
 <td class="col-first"><code>protected void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#updateEnvironmentPath(java.util.Map,java.lang.String)">updateEnvironmentPath</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;environment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pythonCommand)</code></th>
@@ -570,7 +613,7 @@ boolean&nbsp;usingTF,
 <div class="block">Updates the environment variable PATH with additional python needed directories like env/lib/bin</div>
 </td>
 </tr>
-<tr class="alt-color" id="i42">
+<tr class="row-color" id="i45">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeModelAsTextFile(java.lang.String,java.lang.String)">writeModelAsTextFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelOrVectorPath,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;fileToWrite)</code></th>
@@ -578,7 +621,7 @@ boolean&nbsp;usingTF,
 <div class="block">Writes the vectors to a human-readable text file.</div>
 </td>
 </tr>
-<tr class="row-color" id="i43">
+<tr class="alt-color" id="i46">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeModelAsTextFile(java.lang.String,java.lang.String,java.lang.String)">writeModelAsTextFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelOrVectorPath,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;fileToWrite,
@@ -587,7 +630,7 @@ boolean&nbsp;usingTF,
 <div class="block">Writes the vectors to a human-readable text file.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i44">
+<tr class="row-color" id="i47">
 <td class="col-first"><code>private static &lt;T&gt;&nbsp;void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeSetToFile(java.io.File,java.util.Set)">writeSetToFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;fileToWrite,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;&nbsp;setToWrite)</code></th>
@@ -595,7 +638,7 @@ boolean&nbsp;usingTF,
 <div class="block">This method writes the content of a <code>Set&lt;String&gt;</code> to a file.</div>
 </td>
 </tr>
-<tr class="row-color" id="i45">
+<tr class="alt-color" id="i48">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeVocabularyToFile(java.lang.String,java.io.File)">writeVocabularyToFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelOrVectorPath,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;fileToWrite)</code></th>
@@ -603,7 +646,7 @@ boolean&nbsp;usingTF,
 <div class="block">Writes the vocabulary of the given gensim model to a text file (UTF-8 encoded).</div>
 </td>
 </tr>
-<tr class="alt-color" id="i46">
+<tr class="row-color" id="i49">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeVocabularyToFile(java.lang.String,java.lang.String)">writeVocabularyToFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelOrVectorPath,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;fileToWritePath)</code></th>
@@ -719,6 +762,22 @@ boolean&nbsp;usingTF,
 </section>
 </li>
 <li>
+<section class="detail" id="pythonCommandBackup">
+<h3>pythonCommandBackup</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">pythonCommandBackup</span></div>
+<div class="block">In case someone wants to configure the python command programatically.
+ Precedence always has the external file.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="overridePythonFiles">
+<h3>overridePythonFiles</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">overridePythonFiles</span></div>
+<div class="block">If set to true, all python files (e.g. python server melt and requirements.txt file) will be overridden with every execution.
+ Set it to false for testing and debugging new features in python server.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="instance">
 <h3>instance</h3>
 <div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="PythonServer.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">PythonServer</a></span>&nbsp;<span class="member-name">instance</span></div>
@@ -763,13 +822,41 @@ boolean&nbsp;usingTF,
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="transformersPrediction(java.lang.String,java.io.File,boolean,java.lang.String,java.io.File)">
+<section class="detail" id="transformersFineTuning(java.lang.String,java.io.File,java.io.File,de.uni_mannheim.informatik.dws.melt.matching_ml.python.TransformerConfiguration,boolean,java.lang.String,java.io.File)">
+<h3>transformersFineTuning</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">transformersFineTuning</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile,
+<a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config,
+boolean&nbsp;usingTF,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</span>
+                            throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Run huggingface transformers library.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>initialModelName</code> - the name of the pretrained model which should be finetuned.</dd>
+<dd><code>resultingModelLocation</code> - the directory where the resulting model should be stored.</dd>
+<dd><code>trainingFile</code> - path to csv file with three columns (text left, text right, label 1/0).</dd>
+<dd><code>config</code> - the configuration of the transformers trainer. All parameters of the trainer arguments can be used.</dd>
+<dd><code>usingTF</code> - if true, using tensorflow, if false use pytorch</dd>
+<dd><code>cudaVisibleDevices</code> - the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.</dd>
+<dd><code>transformersCache</code> - the directory where thre transformetrs library stores the models.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - in case something goes wrong.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="transformersPrediction(java.lang.String,java.io.File,boolean,java.lang.String,java.io.File,boolean,de.uni_mannheim.informatik.dws.melt.matching_ml.python.TransformerConfiguration)">
 <h3>transformersPrediction</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</span>&nbsp;<span class="member-name">transformersPrediction</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;predictionFilePath,
 boolean&nbsp;usingTF,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</span>
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache,
+boolean&nbsp;changeClass,
+<a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config)</span>
                                     throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Run huggingface transformers library.</div>
 <dl class="notes">
@@ -783,6 +870,8 @@ boolean&nbsp;usingTF,
 <dd><code>usingTF</code> - if true, using tensorflow, if false use pytorch</dd>
 <dd><code>cudaVisibleDevices</code> - the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.</dd>
 <dd><code>transformersCache</code> - the directory where thre transformetrs library stores the models.</dd>
+<dd><code>changeClass</code> - if false the confidences of class 1 are used, if true the confidences of class 2 are used.</dd>
+<dd><code>config</code> - the config for the trainer arguments.</dd>
 <dt>Returns:</dt>
 <dd>a list of confidences</dd>
 <dt>Throws:</dt>
@@ -1356,6 +1445,30 @@ int&nbsp;jobs)</span>
 <section class="detail" id="getResourcesDirectory()">
 <h3>getResourcesDirectory</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">getResourcesDirectory</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setPythonCommandBackup(java.lang.String)">
+<h3>setPythonCommandBackup</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setPythonCommandBackup</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pythonCommandBackup)</span></div>
+<div class="block">Sets the python command programatically. This is used when no extrnal file python_command.txt is found.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>pythonCommandBackup</code> - the python command.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setOverridePythonFiles(boolean)">
+<h3>setOverridePythonFiles</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setOverridePythonFiles</span>&#8203;(<span class="parameters">boolean&nbsp;overrideFiles)</span></div>
+<div class="block">If set to true, all python files (e.g. python server melt and requirements.txt file) will be overridden with every execution.
+ If you want to make changes to the python server (e.g. to develop and test a feature) you can set it to false.
+ Then all modifications to these files will not be changed.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>overrideFiles</code> - if true, override the python server files.</dd>
+</dl>
 </section>
 </li>
 <li>
