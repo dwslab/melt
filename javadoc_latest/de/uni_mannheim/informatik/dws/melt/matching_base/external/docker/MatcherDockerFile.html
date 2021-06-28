@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":9,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -220,23 +220,31 @@ With this in place everything should work.</div>
 </thead>
 <tbody>
 <tr class="alt-color">
-<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String)">MatcherDockerFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;imageName)</code></th>
-<td class="col-last">&nbsp;</td>
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.io.File)">MatcherDockerFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerImageFile)</code></th>
+<td class="col-last">
+<div class="block">Constructor.</div>
+</td>
 </tr>
 <tr class="row-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String)">MatcherDockerFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;imageName)</code></th>
+<td class="col-last">
+<div class="block">Constructor.</div>
+</td>
+</tr>
+<tr class="alt-color">
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String,java.io.File)">MatcherDockerFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;imageName,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerImageFile)</code></th>
 <td class="col-last">
 <div class="block">Loads the images in the docker file given by dockerImageFile.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String,java.io.File,com.github.dockerjava.core.DockerClientConfig)">MatcherDockerFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;imageName,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerImageFile,
 com.github.dockerjava.core.DockerClientConfig&nbsp;config)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String,java.io.File,com.github.dockerjava.core.DockerClientConfig,boolean,boolean)">MatcherDockerFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;imageName,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerImageFile,
 com.github.dockerjava.core.DockerClientConfig&nbsp;config,
@@ -292,35 +300,51 @@ boolean&nbsp;freshInstance)</code></th>
 </td>
 </tr>
 <tr class="alt-color" id="i4">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getImageNameFromFile(java.io.File)">getImageNameFromFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerFile)</code></th>
+<td class="col-last">
+<div class="block">The naming convention of the MELT Web Docker files is such that the files carry the name of the image
+ with an optional postfix of '-latest' such as 'my_image-latest.tar.gz'</div>
+</td>
+</tr>
+<tr class="row-color" id="i5">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getImageNameFromFile(java.lang.String)">getImageNameFromFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dockerFilePath)</code></th>
+<td class="col-last">
+<div class="block">The naming convention of the MELT Web Docker files is such that the files carry the name of the image
+ with an optional postfix of '-latest' such as 'my_image-latest.tar.gz'</div>
+</td>
+</tr>
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getInitialWaitingTimeInSeconds()">getInitialWaitingTimeInSeconds</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#loadDockerFile(java.io.File)">loadDockerFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerImageFile)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="alt-color" id="i8">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#loadDockerFileInternal(java.io.File)">loadDockerFileInternal</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerImageFile)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="row-color" id="i9">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#logAllLinesFromContainer()">logAllLinesFromContainer</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Calling this function will log all lines from the container.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#logLastLinesFromContainer(int)">logLastLinesFromContainer</a></span>&#8203;(int&nbsp;numberOfLastLines)</code></th>
 <td class="col-last">
 <div class="block">Calling this function will log the last x lines from the container.</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="row-color" id="i11">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.net.URL,java.net.URL,java.net.URL)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;source,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;target,
@@ -329,12 +353,12 @@ boolean&nbsp;freshInstance)</code></th>
 <div class="block">Match two ontologies / knowledge graphs together and returns an alignment.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setInitialWaitingTimeInSeconds(int)">setInitialWaitingTimeInSeconds</a></span>&#8203;(int&nbsp;initialWaitingTimeInSeconds)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="row-color" id="i13">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTimeouts(int,int,int)">setTimeouts</a></span>&#8203;(int&nbsp;socketTimeout,
 int&nbsp;connectTimeout,
@@ -343,12 +367,12 @@ int&nbsp;connectionRequestTimeout)</code></th>
 <div class="block">Sets the timeouts for the HTTP call which happens when the docker container is started and the call to the service is executed.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i12">
+<tr class="alt-color" id="i14">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#startContainer()">startContainer</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i13">
+<tr class="row-color" id="i15">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#stopContainer()">stopContainer</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
@@ -525,6 +549,23 @@ com.github.dockerjava.core.DockerClientConfig&nbsp;config)</span></div>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>MatcherDockerFile</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">MatcherDockerFile</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;imageName)</span></div>
+<div class="block">Constructor.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>imageName</code> - Name of the image. The image must already be in the local docker registry.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.io.File)">
+<h3>MatcherDockerFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">MatcherDockerFile</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerImageFile)</span></div>
+<div class="block">Constructor. Obtains the image name form the file name.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>dockerImageFile</code> - The file which contains the image. The file must carry the name of the image optionally
+                       succeeded by a '-latest' postfix.</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -652,6 +693,34 @@ int&nbsp;connectionRequestTimeout)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>numberOfLastLines</code> - the number of last lines to log.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getImageNameFromFile(java.lang.String)">
+<h3>getImageNameFromFile</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getImageNameFromFile</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dockerFilePath)</span></div>
+<div class="block">The naming convention of the MELT Web Docker files is such that the files carry the name of the image
+ with an optional postfix of '-latest' such as 'my_image-latest.tar.gz'</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>dockerFilePath</code> - The docker file path of which the image name shall be retrieved.</dd>
+<dt>Returns:</dt>
+<dd>The image name as String.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getImageNameFromFile(java.io.File)">
+<h3>getImageNameFromFile</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getImageNameFromFile</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerFile)</span></div>
+<div class="block">The naming convention of the MELT Web Docker files is such that the files carry the name of the image
+ with an optional postfix of '-latest' such as 'my_image-latest.tar.gz'</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>dockerFile</code> - The docker file of which the image name shall be retrieved.</dd>
+<dt>Returns:</dt>
+<dd>The image name as String.</dd>
 </dl>
 </section>
 </li>
