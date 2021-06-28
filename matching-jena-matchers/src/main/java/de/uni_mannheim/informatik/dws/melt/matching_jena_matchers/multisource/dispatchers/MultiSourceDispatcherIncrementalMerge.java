@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.IMatcherMultiSourceCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MatcherMultiSourceURL;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MultiSourceDispatcher;
@@ -9,10 +10,14 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.Generic
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.JenaHelper;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TdbUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.multisource.IndexBasedJenaMatcher;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.JenaTransformerHelper;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -46,7 +52,8 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     private final Map<List<Set<Object>>, int[][]> mergeTreeCache;
     
     private boolean useCacheForMergeTree;
-    private boolean addInformationToUnion;    
+    private boolean addInformationToUnion;
+    private boolean lowMemoryOverhead;
     private List<Alignment> intermediateAlignments;
 
     /**
@@ -61,6 +68,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         this.mergeTreeCache = new HashMap<>();
         this.addInformationToUnion = addInformationToUnion;
         this.intermediateAlignments = null; // default is not to save intermediate alignments
+        this.lowMemoryOverhead = false;
     }
     
     public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher) {
@@ -218,10 +226,23 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
             }
             mergeSourceIntoTarget(sourceModel, targetModel, alignment, addInformationToUnion);
             
-            mergedOntologies.add(new HashSet<>(Arrays.asList(targetModel))); 
+            if(this.lowMemoryOverhead){
+                //in low memory overhead the target is tdb and doesn't need to be removed.
+                removeOntModelFromSet(source);
+            }
+            mergedOntologies.add(new HashSet<>(Arrays.asList(targetModel)));
         }
         
         return new AlignmentAndParameters(finalAlignment, parameters);
+    }
+    
+    private void removeOntModelFromSet(Set<Object> set){
+        for (Iterator<Object> i = set.iterator(); i.hasNext();) {
+            Object element = i.next();
+            if (element instanceof Model) {
+                i.remove();
+            }
+        }
     }
     
     public void clearAndStartSavingIntermediateAlignments(){
@@ -244,7 +265,16 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     public void setAddInformationToUnion(boolean addInformationToUnion){
         this.addInformationToUnion = addInformationToUnion;
     }
-    
+
+    /**
+     * If set to true, the memory overhead is reduced by two facts:
+     * 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
+     * Thus the matcher needs to deal with TDB folder as input. This is not the case for most matchers.
+     * @param lowMemoryOverhead if true, the matching will be memory performant.
+     */
+    public void setLowMemoryOverhead(boolean lowMemoryOverhead) {
+        this.lowMemoryOverhead = lowMemoryOverhead;
+    }
     
              
     /**
@@ -260,7 +290,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     
     
     
-    private boolean isLeftModelGreater(Set<Object> leftOntology, Set<Object> rightOntology, Properties p) throws TypeTransformationException{
+    protected boolean isLeftModelGreater(Set<Object> leftOntology, Set<Object> rightOntology, Properties p) throws TypeTransformationException{
         Model leftModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(leftOntology, Model.class, p);
         Model rightModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(rightOntology, Model.class, p);
         if(leftModel == null || rightModel == null){
@@ -278,13 +308,28 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     }
     
     private Set<Object> getCopiedModel(Set<Object> modelRepresentations, Properties parameters) throws TypeTransformationException{
-        Model model = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, Model.class, parameters);
-        if(model == null){
-            throw new IllegalArgumentException("Could not transform model during copying.");
+        if(this.lowMemoryOverhead){
+            URL modelURL = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, URL.class, parameters);
+            //File tdbLocation = new File("incrementalMergeintermediateKG");
+            File tdbLocation = FileUtil.createFolderWithRandomNumberInDirectory(new File("./"), "incrementalMergeintermediateKG");
+            tdbLocation.mkdirs();
+            OntModel copiedModel = TdbUtil.bulkLoadToTdbOntModel(tdbLocation.getAbsolutePath(), modelURL.toString(), JenaTransformerHelper.getSpec(parameters));
+            Set<Object> models = new HashSet<>();
+            models.add(copiedModel);
+            try {
+                models.add(tdbLocation.toURI().toURL());
+            } catch (MalformedURLException ex) {} //Do nothing
+            return models;
+        }else{
+            Model model = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, Model.class, parameters);
+            if(model == null){
+                throw new IllegalArgumentException("Could not transform model during copying.");
+            }
+            OntModel copiedModel = JenaHelper.createNewOntModel(parameters);
+
+            copiedModel.add(model);
+            return new HashSet<>(Arrays.asList(copiedModel));
         }
-        OntModel copiedModel = JenaHelper.createNewOntModel(parameters);
-        copiedModel.add(model);
-        return new HashSet<>(Arrays.asList(copiedModel));
     }
     
     

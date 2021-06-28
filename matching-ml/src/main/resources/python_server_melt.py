@@ -10,10 +10,11 @@ import sys
 import pkg_resources
 from pkg_resources import DistributionNotFound
 import pathlib
+import tempfile
 
 logging.basicConfig(
-    handlers=[logging.FileHandler(__file__ + ".log", "a+", "utf-8")],
-    format="%(asctime)s %(levelname)s:%(message)s",
+    handlers=[logging.FileHandler(__file__ + ".log", "a+", "utf-8"), logging.StreamHandler(sys.stdout)],
+    format="PythonServer: %(asctime)s %(levelname)s:%(message)s",
     level=logging.INFO,
 )
 
@@ -48,14 +49,14 @@ def check_requirements() -> str:
         A message listing installed and potentially missing requirements.
     """
     requirements_file = request.headers.get("requirements_file")
-    logging.info(f"received requirements file path: {requirements_file}")
+    app.logger.info(f"received requirements file path: {requirements_file}")
     with pathlib.Path(requirements_file).open() as requirements_txt:
         requirements = pkg_resources.parse_requirements(requirements_txt)
         ok_requirements = []
         missing_requirements = []
         for requirement in requirements:
             requirement = str(requirement)
-            print(f"Checking {requirement}")
+            app.logger.info(f"Checking {requirement}")
             try:
                 pkg_resources.require(requirement)
                 ok_requirements.append(requirement)
@@ -73,8 +74,7 @@ def check_requirements() -> str:
                 message += "\n\t" + r
         else:
             message += "\n=> Everything is installed. You are good to go!"
-        print(message)
-        logging.info(message)
+        app.logger.info(message)
         return message
 
 class MySentences(object):
@@ -93,11 +93,11 @@ class MySentences(object):
     def __iter__(self):
         try:
             if os.path.isdir(self.file_or_directory_path):
-                logging.info("Directory detected.")
+                app.logger.info("Directory detected.")
                 for file_name in os.listdir(self.file_or_directory_path):
-                    logging.info("Processing file: " + file_name)
+                    app.logger.info("Processing file: " + file_name)
                     if file_name[-2:] in "gz":
-                        logging.info("Gzip file detected! Using gzip.open().")
+                        app.logger.info("Gzip file detected! Using gzip.open().")
                         for line in gzip.open(
                             os.path.join(self.file_or_directory_path, file_name),
                             mode="rt",
@@ -116,9 +116,9 @@ class MySentences(object):
                             words = line.split(" ")
                             yield words
             else:
-                logging.info("Processing file: " + self.file_or_directory_path)
+                app.logger.info("Processing file: " + self.file_or_directory_path)
                 if self.file_or_directory_path[-2:] in "gz":
-                    logging.info("Gzip file detected! Using gzip.open().")
+                    app.logger.info("Gzip file detected! Using gzip.open().")
                     for line in gzip.open(
                         self.file_or_directory_path, mode="rt", encoding="utf-8"
                     ):
@@ -133,9 +133,9 @@ class MySentences(object):
                         words = line.split(" ")
                         yield words
         except Exception:
-            logging.error("Failed reading file:")
-            logging.error(self.file_or_directory_path)
-            logging.exception("Stack Trace:")
+            app.logger.error("Failed reading file:")
+            app.logger.error(self.file_or_directory_path)
+            app.logger.exception("Stack Trace:")
 
 
 @app.route("/get-vocabulary-size", methods=["GET"])
@@ -173,7 +173,7 @@ def train_word_2_vec():
         epochs = request.headers.get("epochs")
 
         sentences = MySentences(file_path)
-        logging.info("Sentences object initialized.")
+        app.logger.info("Sentences object initialized.")
 
         if cbow_or_sg == "sg":
             model = models.Word2Vec(
@@ -200,13 +200,13 @@ def train_word_2_vec():
                 iter=int(iterations),
             )
 
-        logging.info("Model object initialized. Building Vocabulary...")
+        app.logger.info("Model object initialized. Building Vocabulary...")
         model.build_vocab(sentences)
-        logging.info("Vocabulary built. Training now...")
+        app.logger.info("Vocabulary built. Training now...")
         model.train(
             sentences=sentences, total_examples=model.corpus_count, epochs=int(epochs)
         )
-        logging.info("Model trained.")
+        app.logger.info("Model trained.")
 
         model.save(model_path)
         model.wv.save(vector_path)
@@ -217,7 +217,7 @@ def train_word_2_vec():
         return "True"
 
     except Exception as exception:
-        logging.exception("An exception occurred.")
+        app.logger.exception("An exception occurred.")
         return "False"
 
 
@@ -259,7 +259,7 @@ def get_vectors(model_path=None, vector_path=None):
     """
     if vector_path is None:
         if model_path in active_models:
-            # logging.info("Found model in cache.")
+            # app.logger.info("Found model in cache.")
             model = active_models[model_path]
             vectors = model.wv
         else:
@@ -267,7 +267,7 @@ def get_vectors(model_path=None, vector_path=None):
             active_models[model_path] = model
             vectors = model.wv
     elif vector_path in active_vectors:
-        # logging.info("Found vector file in cache.")
+        # app.logger.info("Found vector file in cache.")
         vectors = active_vectors[vector_path]
     else:
         vectors = models.KeyedVectors.load(vector_path, mmap="r")
@@ -285,7 +285,7 @@ def get_similarity_given_model():
     vectors = get_vectors(model_path=model_path, vector_path=vector_path)
 
     if vectors is None:
-        logging.error("Could not instantiate vectors.")
+        app.logger.error("Could not instantiate vectors.")
         return 0.0
 
     if concept_1 is None or concept_2 is None:
@@ -293,19 +293,16 @@ def get_similarity_given_model():
             "ERROR! concept_1 and/or concept_2 not found in header. "
             "Similarity cannot be calculated."
         )
-        print(message)
-        logging.error(message)
+        app.logger.error(message)
         return message
 
     if concept_1 not in vectors.vocab:
         message = "ERROR! concept_1 not in the vocabulary."
-        print(message)
-        logging.error(message)
+        app.logger.error(message)
         return message
     if concept_2 not in vectors.vocab:
         message = "ERROR! concept_2 not in the vocabulary."
-        print(message)
-        logging.error(message)
+        app.logger.error(message)
         return message
     similarity = vectors.similarity(concept_1, concept_2)
     return str(similarity)
@@ -319,19 +316,17 @@ def get_vector_given_model():
     vectors = get_vectors(model_path=model_path, vector_path=vector_path)
 
     if vectors is None:
-        logging.error("Could not instantiate vectors.")
+        app.logger.error("Could not instantiate vectors.")
         return 0.0
 
     if concept is None:
         message = "ERROR! concept not found in header. " "Vector cannot be retrieved."
-        print(message)
-        logging.error(message)
+        app.logger.error(message)
         return message
 
     if concept not in vectors.vocab:
         message = "ERROR! Concept '" + str(concept) + "' not in the vocabulary."
-        print(message)
-        logging.error(message)
+        app.logger.error(message)
         return message
 
     result = ""
@@ -396,7 +391,7 @@ def query_doc2vec_model_batch():
             return "ERROR! Model not active"
         result_list = []
         for (source, target) in content["documentIds"]:
-            # logging.info("processing: %s and %s", source, target)
+            # app.logger.info("processing: %s and %s", source, target)
             try:
                 doc2vec_similarity = float(model.docvecs.similarity(source, target))
                 result_list.append(doc2vec_similarity)
@@ -470,10 +465,10 @@ def query_vector_space_model_batch():
 
         result_list = []
         for (source, target) in content["documentIds"]:
-            # logging.info("processing: %s and %s", source, target)
+            # app.logger.info("processing: %s and %s", source, target)
             source_position = corpus.id2pos.get(source)
             target_position = corpus.id2pos.get(target)
-            # logging.info("pos: %s and %s", source_position, target_position)
+            # app.logger.info("pos: %s and %s", source_position, target_position)
             if source_position is None or target_position is None:
                 result_list.append(-2.0)
                 continue
@@ -732,7 +727,7 @@ class CsvCorpus(object):
             readCSV = csv.reader(csvfile, delimiter=",")
             for i, row in enumerate(readCSV):
                 if row[0] in self.id2pos:
-                    logging.info(
+                    app.logger.info(
                         "Document ID %s already in file - the last one is used only",
                         row[0],
                     )
@@ -765,7 +760,7 @@ def write_vectors_as_text_file():
                 for element in np.nditer(vector):
                     final_string += str(element) + " "
             else:
-                logging.info(
+                app.logger.info(
                     "WARN: The following concept has not been found in the vector space: "
                     + concept
                 )
@@ -780,11 +775,11 @@ def write_vectors_as_text_file():
                 for element in np.nditer(vector):
                     final_string += str(element) + " "
             else:
-                logging.info(
+                app.logger.info(
                     "WARN: The following concept has not been found in the vector space: "
                     + concept
                 )
-                logging.info("Trying to resolve new URI.")
+                app.logger.info("Trying to resolve new URI.")
             final_string += "\n"
     with open(file_to_write, "w+") as f:
         f.write(final_string)
@@ -797,7 +792,7 @@ def read_concept_file(path_to_concept_file):
         for lemma in concept_file:
             lemma = lemma.replace("\n", "").replace("\r", "")
             result.append(lemma)
-    logging.info("Concept file read: " + str(path_to_concept_file))
+    app.logger.info("Concept file read: " + str(path_to_concept_file))
     return result
 
 
@@ -929,8 +924,8 @@ def analyze(word_vector_src, word_vector_tgt, lexicon):
         if src in word_vector_src and dst in word_vector_tgt:
             diff_vector_list.append(word_vector_src[src] - word_vector_tgt[dst])
     t = np.array(diff_vector_list)
-    logging.info(matrix_diff)
-    logging.info(t)
+    app.logger.info(matrix_diff)
+    app.logger.info(t)
 
     principalComponents = PCA(n_components=2).fit_transform(matrix_diff)
 
@@ -1216,8 +1211,7 @@ def run_grid_search(df_train, cv, n_jobs):
             },
         ]
 
-        logging.info("Run grid search with cv: %s and jobs: %s", cv, n_jobs)
-        print("Run grid search with cv: %s and jobs: %s" % (cv, n_jobs))
+        app.logger.info("Run grid search with cv: %s and jobs: %s" % (cv, n_jobs))
         grid = GridSearchCV(
             Pipeline(
                 [("scaler", preprocessing.MaxAbsScaler()), ("estimator", svm.SVC())]
@@ -1231,10 +1225,8 @@ def run_grid_search(df_train, cv, n_jobs):
         )
         grid.fit(X_train, y_train)
 
-        logging.info("cross validation: best f1 score: %s", grid.best_score_)
-        logging.info("cross validation: chosen model: %s", grid.best_params_)
-        print("cross validation: best f1 score: %s" % grid.best_score_)
-        print("cross validation: chosen model: %s" % grid.best_params_)
+        app.logger.info("cross validation: best f1 score: %s", grid.best_score_)
+        app.logger.info("cross validation: chosen model: %s", grid.best_params_)
 
         return grid.best_estimator_
     except Exception as e:
@@ -1436,41 +1428,44 @@ def transformers_prediction():
     try:
         transformers_init(request)
 
-        using_tensorflow = request.headers.get("usingTF").lower() == "true"
         model_name = request.headers.get("modelName")
         prediction_file_path = request.headers.get("predictionFilePath")
-        change_class = request.headers.get("changeClass")
-        parameter_string = request.headers.get("config")
-        parameters = json.loads(parameter_string)
-
+        using_tensorflow = request.headers.get("usingTF").lower() == "true"
+        change_class = bool(request.headers.get("changeClass"))
+        config = json.loads(request.headers.get("config"))
 
         from transformers import AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         
-        print("Prepare transformers dataset and tokenize")
+        app.logger.info("Prepare transformers dataset and tokenize")
         data_left, data_right, _ = transformers_read_file(prediction_file_path, False)
+        assert len(data_left) == len(data_right)
         predict_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left, data_right)
-        
-        training_args = transformers_get_training_arguments(using_tensorflow, './transformers_prediction_folder', parameters)
-        
-        print("Loading transformers model")
-        if using_tensorflow:
-            from transformers import TFTrainer, TFAutoModelForSequenceClassification
+        app.logger.info("Transformers dataset contains %s rows.", len(data_left))
 
-            with training_args.strategy.scope():
-                model = TFAutoModelForSequenceClassification.from_pretrained(model_name)
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            training_args = transformers_get_training_arguments(using_tensorflow, tmpdirname, config)
 
-            trainer = TFTrainer(model=model,args=training_args)
-        else:
-            from transformers import Trainer, AutoModelForSequenceClassification
-            model = AutoModelForSequenceClassification.from_pretrained(model_name)
+            app.logger.info("Loading transformers model")
+            if using_tensorflow:
+                from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
-            trainer = Trainer(model=model,args=training_args)
-        
-        print("Run prediction")
-        pred_out = trainer.predict(predict_dataset)
+                with training_args.strategy.scope():
+                    model = TFAutoModelForSequenceClassification.from_pretrained(model_name)
+
+                trainer = TFTrainer(model=model,args=training_args)
+            else:
+                from transformers import Trainer, AutoModelForSequenceClassification
+                model = AutoModelForSequenceClassification.from_pretrained(model_name)
+
+                trainer = Trainer(model=model,args=training_args)
+
+            app.logger.info("Run prediction")
+            pred_out = trainer.predict(predict_dataset)
         class_index = 1 if change_class else 0
         scores = pred_out.predictions[:, class_index]
+        app.logger.info("delete model")
+        del model
         return jsonify(scores.tolist())
     except Exception as e:
         import traceback
@@ -1481,98 +1476,45 @@ def transformers_prediction():
 @app.route("/transformers-finetuning", methods=["GET"])
 def transformers_finetuning():
     try:
-        import os
-
-        if "cudaVisibleDevices" in request.headers:
-            os.environ["CUDA_VISIBLE_DEVICES"] = request.headers.get(
-                "cudaVisibleDevices"
-            )
-
-        if "transformersCache" in request.headers:
-            os.environ["TRANSFORMERS_CACHE"] = request.headers.get("transformersCache")
-
-        using_tensorflow = request.headers.get("usingTF").lower() == "true"
+        transformers_init(request)
+        
         initialModelName_name = request.headers.get("initialModelName")
         resulting_model_location = request.headers.get("resultingModelLocation")
         training_file = request.headers.get("trainingFile")
-        parameter_string = request.headers.get("config")
-        parameter = json.loads(parameter_string)
+        using_tensorflow = request.headers.get("usingTF").lower() == "true"
+        config = json.loads(request.headers.get("config"))
 
-        data_left = []
-        data_right = []
-        labels = []
-        with open(training_file, encoding="utf-8") as csvfile:
-            readCSV = csv.reader(csvfile, delimiter=",")
-            for row in readCSV:
-                data_left.append(row[0])
-                data_right.append(row[1])
-                labels.append(int(row[2]))
+        from transformers import AutoTokenizer
+        tokenizer = AutoTokenizer.from_pretrained(initialModelName_name)
+        
+        app.logger.info("Prepare transformers dataset and tokenize")
+        data_left, data_right, labels = transformers_read_file(training_file, True)
+        assert len(data_left) == len(data_right) == len(labels)
+        training_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left, data_right, labels)
+        app.logger.info("Transformers dataset contains %s examples.", len(training_dataset))
 
-        tokenizer = AutoTokenizer.from_pretrained(initial_model_name)
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            training_args = transformers_get_training_arguments(using_tensorflow, tmpdirname, config)
 
-        if using_tensorflow:
-            from transformers import TFTrainingArguments
-            training_args = TFTrainingArguments(resulting_model_location)
-        else:
-            from transformers import TrainingArguments
-            training_args = TrainingArguments(resulting_model_location)
+            app.logger.info("Loading transformers model")
+            if using_tensorflow:
+                from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
+                with training_args.strategy.scope():
+                    model = TFAutoModelForSequenceClassification.from_pretrained(initialModelName_name)
 
-        # setting training argument with setattr because some versions of transformers library do not have these attributes. 
-        add_attribute_if_existent(training_args, 'save_strategy', 'no')
-        add_attribute_if_existent(training_args, 'disable_tqdm', True)
-        # the following is for ray hyperparameter tuning
-        # see https://github.com/huggingface/transformers/issues/11249
-        add_attribute_if_existent(training_args, 'skip_memory_metrics', True)
+                trainer = TFTrainer(model=model, train_dataset=training_dataset, args=training_args)
+            else:
+                from transformers import Trainer, AutoModelForSequenceClassification
+                model = AutoModelForSequenceClassification.from_pretrained(initialModelName_name)
 
+                trainer = Trainer(model=model, train_dataset=training_dataset, args=training_args)
 
-        for param_key, param_value in parameter.items():
-            if not hasattr(training_args, param_key):
-                raise AttributeError('module `TrainingArguments` has no attribute ' + str(param_key))
-            setattr(training_args, param_key, param_value)
+            app.logger.info("Run training")
+            trainer.train()
 
-
-        if using_tensorflow:
-            import tensorflow as tf
-            from transformers import TFTrainer, TFAutoModelForSequenceClassification
-            encodings  = tokenizer(data_left,data_right,return_tensors="tf",padding=True,truncation="longest_first") # return_tensors="tf",
-            dataset = tf.data.Dataset.from_tensor_slices((dict(encodings),labels))
-
-            with training_args.strategy.scope():
-                model = TFAutoModelForSequenceClassification.from_pretrained(initial_model_name)
-
-            trainer = TFTrainer(
-                model=model,
-                args=training_args,
-                train_dataset=dataset
-            )
-        else:
-            import torch
-            from transformers import Trainer, AutoModelForSequenceClassification
-            class MyDataset(torch.utils.data.Dataset):
-                def __init__(self, encodings, labels):
-                    self.encodings = encodings
-                    self.labels = labels
-
-                def __getitem__(self, idx):
-                    item = {key: val[idx].detach().clone() for key, val in self.encodings.items()}
-                    item['labels'] = torch.tensor(self.labels[idx])
-                    return item
-
-                def __len__(self):
-                    return len(self.labels)
-            encodings  = tokenizer(data_left,data_right,return_tensors="pt",padding=True,truncation="longest_first")
-            dataset = MyDataset(encodings, labels)
-            model = AutoModelForSequenceClassification.from_pretrained(initial_model_name)
-
-            trainer = Trainer(
-                model=model,
-                args=training_args,
-                train_dataset=dataset
-            )
-
-        trainer.train()
-        trainer.save_model()
+            app.logger.info("Save model")
+            trainer.save_model(resulting_model_location)
     except Exception as e:
         import traceback
         return "ERROR " + traceback.format_exc()
@@ -1588,7 +1530,7 @@ def hello_demo() -> str:
         A simple greeting.
     """
     name_to_greet = request.headers.get("name")
-    print(name_to_greet)
+    app.logger.info(name_to_greet)
     return "Hello " + str(name_to_greet) + "!"
 
 
@@ -1605,6 +1547,17 @@ if __name__ == "__main__":
     try:
         if len(sys.argv) == 2:
             logging.info("Received argument: " + sys.argv[1])
+            int_port = int(sys.argv[1])
+            if int_port > 0:
+                port = int_port
+        elif len(sys.argv) == 3:
+            numeric_level = getattr(logging, sys.argv[2].upper(), None)
+            if not isinstance(numeric_level, int):
+                logging.info("Cannot parse log level " + sys.argv[2])
+            else:
+                logging.getLogger().setLevel(numeric_level)
+                logging.getLogger('werkzeug').setLevel(numeric_level)
+            logging.info("Received port and log level")
             int_port = int(sys.argv[1])
             if int_port > 0:
                 port = int_port

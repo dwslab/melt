@@ -121,25 +121,23 @@ public class PythonServer {
      ***********************************/
     
     /**
-     * Run huggingface transformers library.
+     * Finetune a transformers model with the given parameters and write this model to a given folder.
      * @param initialModelName the name of the pretrained model which should be finetuned.
      * @param resultingModelLocation the directory where the resulting model should be stored.
      * @param trainingFile path to csv file with three columns (text left, text right, label 1/0).
-     * @param config the configuration of the transformers trainer. All parameters of the trainer arguments can be used.
      * @param usingTF if true, using tensorflow, if false use pytorch
      * @param cudaVisibleDevices the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.
      * @param transformersCache the directory where the transformers library stores the models.
+     * @param config the configuration of the transformers trainer. All parameters of the <a href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">huggingface training arguments</a> can be used.
      * @throws Exception in case something goes wrong.
      */
-    public void transformersFineTuning(String initialModelName, File resultingModelLocation, File trainingFile,
-                                       TransformerConfiguration config, boolean usingTF,
-                                       String cudaVisibleDevices, File transformersCache) throws Exception{
+    public void transformersFineTuning(String initialModelName, File resultingModelLocation, File trainingFile, boolean usingTF, String cudaVisibleDevices, File transformersCache, TransformerConfiguration config) throws Exception{
         HttpGet request = new HttpGet(serverUrl + "/transformers-finetuning");
         request.addHeader("initialModelName", initialModelName);
         request.addHeader("resultingModelLocation", getCanonicalPath(resultingModelLocation));
         request.addHeader("trainingFile", getCanonicalPath(trainingFile));
-        request.addHeader("config", config.toJsonString());
         request.addHeader("usingTF", Boolean.toString(usingTF));
+        request.addHeader("config", config.toJsonString());
         
         if(cudaVisibleDevices != null && cudaVisibleDevices.isEmpty() == false)
             request.addHeader("cudaVisibleDevices", cudaVisibleDevices);
@@ -161,7 +159,7 @@ public class PythonServer {
     }
     
     /**
-     * Run huggingface transformers library.
+     * Run a transformers model on a CSV file with two columns (text left and text right) to predict if they describe the same concept.
      * @param modelName the name of the pretrained model which
      *   is downloaded or a path to a directory containing model weights
      *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
@@ -172,7 +170,7 @@ public class PythonServer {
      * @param cudaVisibleDevices the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.
      * @param transformersCache the directory where thre transformetrs library stores the models.
      * @param changeClass if false the confidences of class 1 are used, if true the confidences of class 2 are used. 
-     * @param config the config for the trainer arguments.
+     * @param config the configuration of the transformers trainer. All parameters of the <a href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">huggingface training arguments</a> can be used.
      * @throws Exception in case something goes wrong.
      * @return a list of confidences
      */
@@ -1051,6 +1049,7 @@ public class PythonServer {
         String pythonCommand = getPythonCommand();
         List<String> command = new ArrayList<>(Arrays.asList(pythonCommand, canonicalPath));
         command.add("" + PythonServer.getPort());
+        command.add(getLogLevel());
         ProcessBuilder pb = new ProcessBuilder(command);
         pb.directory(new File(System.getProperty("user.dir")));
         updateEnvironmentPath(pb.environment(), pythonCommand);
@@ -1104,6 +1103,20 @@ public class PythonServer {
             isHookStarted = true;
         }
         return true;
+    }
+    
+    private String getLogLevel(){
+        if(LOGGER.isTraceEnabled() || LOGGER.isDebugEnabled()){
+            return "DEBUG";
+        }else if(LOGGER.isInfoEnabled()){
+            return "INFO";
+        }else if(LOGGER.isWarnEnabled()){
+            return "WARNING";
+        }else if(LOGGER.isErrorEnabled()){
+            return "ERROR";
+        }else{
+            return "CRITICAL"; //actually not used by slf4j
+        }
     }
 
     /**
