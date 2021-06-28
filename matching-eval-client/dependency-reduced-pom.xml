@@ -7,6 +7,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>matching-eval-client</artifactId>
+  <name>MELT - Matching EvaLuation Toolkit | MELT Evaluation Client</name>
+  <description>This module contains a CLI tool to evaluate matchers.</description>
   <build>
     <plugins>
       <plugin>

@@ -128,10 +128,12 @@ public class PythonServer {
      * @param config the configuration of the transformers trainer. All parameters of the trainer arguments can be used.
      * @param usingTF if true, using tensorflow, if false use pytorch
      * @param cudaVisibleDevices the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.
-     * @param transformersCache the directory where thre transformetrs library stores the models.
+     * @param transformersCache the directory where the transformers library stores the models.
      * @throws Exception in case something goes wrong.
      */
-    public void transformersFineTuning(String initialModelName, File resultingModelLocation, File trainingFile, TransformerConfiguration config, boolean usingTF, String cudaVisibleDevices, File transformersCache) throws Exception{
+    public void transformersFineTuning(String initialModelName, File resultingModelLocation, File trainingFile,
+                                       TransformerConfiguration config, boolean usingTF,
+                                       String cudaVisibleDevices, File transformersCache) throws Exception{
         HttpGet request = new HttpGet(serverUrl + "/transformers-finetuning");
         request.addHeader("initialModelName", initialModelName);
         request.addHeader("resultingModelLocation", getCanonicalPath(resultingModelLocation));

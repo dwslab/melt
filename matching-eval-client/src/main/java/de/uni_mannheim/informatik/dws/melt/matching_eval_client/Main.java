@@ -1,8 +1,10 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval_client;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.docker.MatcherDockerFile;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.http.MatcherHTTPCall;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.seals.MatcherSeals;
+import de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.SealsTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
@@ -75,6 +77,15 @@ public class Main {
                 return;
             }
             track = new SealsTrack(trackData[0], trackData[1], trackData[2]);
+        } else if (cmd.hasOption(LOCAL_TRACK_OPTION_STRING)) {
+            String[] trackData = cmd.getOptionValues(LOCAL_TRACK_OPTION_STRING);
+            if(trackData.length != 3){
+                System.out.printf("Please state the local track data as follows:\n" +
+                        "--%s <location> <name> <version>\n", TRACK_OPTION_STRING);
+                return;
+            }
+            // unfortunately, the local track constructor uses the parameters in a different order
+            track = new LocalTrack(trackData[1], trackData[2], trackData[0]);
         }
 
         // checking if java8 is defined:
@@ -92,7 +103,18 @@ public class Main {
             if (system.toLowerCase().endsWith(".tar.gz")) {
                 // we assume it is in MELT WEB DOCKER format:
                 System.out.printf("Recognized MELT WEB DOCKER package:\n%s\n", system);
-                System.out.println("MELT WEB DOCKER is not yet supported. Skipping matcher...\n");
+                System.out.println("Please make sure that docker is running on your system.");
+                File dockerFile = new File(system);
+                if(dockerFile.isDirectory()){
+                    System.out.println("The provided file is a directory: " + system);
+                    continue;
+                }
+                if(!dockerFile.exists()){
+                    System.out.println("The provided docker file does not exist: " + system);
+                    continue;
+                }
+                MatcherDockerFile matcherDockerFile = new MatcherDockerFile(new File(system));
+                matchers.put(system, matcherDockerFile);
             } else if (system.toLowerCase().endsWith(".zip")) {
                 // we assume it is a SEALS package:
                 System.out.printf("Recognized SEALS package:\n%s\n", system);
@@ -173,6 +195,7 @@ public class Main {
 
     private static final String SYSTEMS_OPTION_STRING = "systems";
     private static final String TRACK_OPTION_STRING = "track";
+    private static final String LOCAL_TRACK_OPTION_STRING = "local-track";
     private static final String HELP_OPTION_STRING = "help";
     private static final String RESULTS_DIRECTORY_OPTION = "results";
     private static final String JAVA8_OPTION = "java8";
@@ -186,9 +209,16 @@ public class Main {
         options.addOption(systemOption);
 
         // Track option
-        Option trackOption = new Option("t", TRACK_OPTION_STRING, true, "The track to execute.");
+        Option trackOption = new Option("t", TRACK_OPTION_STRING, true, "The track to execute.\n" +
+                "Three arguments are required: -t <location_uri> <collection_name> <version>"
+        );
         trackOption.setArgs(3);
         options.addOption(trackOption);
+
+        // Local track option
+        Option localTrackOption = new Option("lt", LOCAL_TRACK_OPTION_STRING, true, "The local track to execute.\n" +
+                "Three arguments are required: -lt <folder-to-testcases> <name> <version>");
+        trackOption.setArgs(3);
 
         // Help option
         Option helpOption = new Option("h", HELP_OPTION_STRING, false,

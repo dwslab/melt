@@ -16,15 +16,15 @@ class MainTest {
      * Quickly show the help / make sure no exceptions are thrown.
      */
     @Test
-    void showHelp(){
-       Main.main(new String[]{"-h"});
+    void showHelp() {
+        Main.main(new String[]{"-h"});
     }
 
     /**
      * Make sure not exceptions are thrown.
      */
     @Test
-    void noParameters(){
+    void noParameters() {
         Main.main(null);
     }
 
@@ -33,22 +33,26 @@ class MainTest {
      */
     @Test
     @Disabled
-    void evaluateSingleSealsFile(){
-        Main.main(new String[]{"-s", loadFile("simpleSealsMatcher-1.0-seals_external.zip").getAbsolutePath(),
-        "-t", "http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1", "-j", "/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/bin/java"});
+    void evaluateSingleSealsFile() {
+        Main.main(new String[]{"-s",
+                loadFile("simpleSealsMatcher-1.0-seals_external.zip").getAbsolutePath(),
+                loadFile("simplewebmatcher-1.0-web-latest.tar.gz").getAbsolutePath(),
+                "-t", "http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1",
+                "-j", "/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/bin/java"});
     }
 
     /**
      * Helper function to load files in class path that contain spaces.
+     *
      * @param fileName Name of the file.
      * @return File in case of success, else null.
      */
-    private File loadFile(String fileName){
+    private File loadFile(String fileName) {
         try {
-            File result =  FileUtils.toFile(this.getClass().getClassLoader().getResource(fileName).toURI().toURL());
+            File result = FileUtils.toFile(this.getClass().getClassLoader().getResource(fileName).toURI().toURL());
             assertTrue(result.exists(), "Required resource not available.");
             return result;
-        } catch (URISyntaxException | MalformedURLException exception){
+        } catch (URISyntaxException | MalformedURLException exception) {
             exception.printStackTrace();
             fail("Could not load file.", exception);
             return null;
