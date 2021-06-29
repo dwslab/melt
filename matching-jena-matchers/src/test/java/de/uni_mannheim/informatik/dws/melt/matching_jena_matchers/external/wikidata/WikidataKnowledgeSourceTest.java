@@ -241,6 +241,7 @@ class WikidataKnowledgeSourceTest {
         // Unit test 2
         // -----------
         // Hops: 2
+        /*
         String[] clusterMemberTerms2 = {"dog", "aquatic mammal"};
         limitOfHops = 3;
 
@@ -252,6 +253,8 @@ class WikidataKnowledgeSourceTest {
 
         assertTrue(closestConcepts.getValue0().contains("http://www.wikidata.org/entity/Q729"));
         assertEquals(3, closestConcepts.getValue1());
+        */
+
 
         // Unit test 3
         // -----------
