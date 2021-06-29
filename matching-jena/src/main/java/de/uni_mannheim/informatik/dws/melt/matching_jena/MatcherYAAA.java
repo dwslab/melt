@@ -18,15 +18,19 @@ public abstract class MatcherYAAA extends MatcherFile {
 
     @Override
     public void match(URL source, URL target, URL inputAlignment, File alignmentFile) throws Exception {
-        Alignment alignment = new Alignment();
+        Alignment alignment;
         
-        if(inputAlignment != null){
+        if(inputAlignment == null){
+            alignment = new Alignment();
+        }else{
             alignment = AlignmentParser.parse(inputAlignment);
         }
         Properties p = new Properties();
         
         alignment = this.match(source, target, alignment, p);
         
+        if(alignment == null)
+            alignment = new Alignment();
         AlignmentSerializer.serialize(alignment, alignmentFile);
     }
 

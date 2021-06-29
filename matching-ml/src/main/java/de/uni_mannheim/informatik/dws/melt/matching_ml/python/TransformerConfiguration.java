@@ -8,7 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Parameters for nlptransformers
+ * This class represents the arguments for the huggingface trainer.
+ * Any of the training arguments which are <a href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">listed on the documentation</a>
+ * can be used.
+ * <pre>{@code 
+ * TransformerConfiguration config = new TransformerConfiguration("do_train", true, "warmup_ratio", 0.2, ...);
+ * config.addParameter("logging_strategy", "no");
+ * }</pre>
  */
 public class TransformerConfiguration {
     

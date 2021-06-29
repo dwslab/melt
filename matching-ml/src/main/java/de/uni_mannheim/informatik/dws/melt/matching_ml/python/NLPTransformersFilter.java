@@ -57,7 +57,7 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
      *                           which GPU the process should run. If null or empty, the default is used (all available GPUs).
      * @param transformersCache the cache of the transformers models when using a pretrained one. If null, the default is used.
      * @param changeClass if false the confidences of class 1 are used, if true the confidences of class 2 are used.
-     * @param config config for training arguments.
+     * @param config configuration of the huggingface trainer via the training arguments. Any of the training arguments can be used. See {@link TransformerConfiguration}
      */
     public NLPTransformersFilter(TextExtractor extractor, String modelName, File tmpDir, boolean usingTF, String cudaVisibleDevices, File transformersCache, boolean changeClass, TransformerConfiguration config) {
         this.extractor = extractor;
