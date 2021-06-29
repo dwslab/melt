@@ -6,12 +6,6 @@ nav_order: 1
 permalink: /matcher-components/full-matcher-list
 ---
 # Complete List of Matchers
-## MatcherFile [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherFile.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherFile.java)
-
-For this matcher the results file that shall be written can be specified.
-
-*Keywords: Matcher File*
-
 ## IMatcherCaller [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/IMatcherCaller.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/IMatcherCaller.java)
 
 A matcher interface which allows the matcher to call other matchers as well.
@@ -31,6 +25,20 @@ Generic matcher interface which just implements one method called match.
 
 *Keywords: I Matcher*
 
+## MatcherURL [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherURL.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherURL.java)
+
+RawMatcher which implements the minimal interface for being executed under
+ the SEALS platform. The only method which should be implemented is the
+ align(URL, URL, URL) method.
+
+*Keywords: MatcherURL*
+
+## MatcherString [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherString.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherString.java)
+
+
+
+*Keywords: Matcher String*
+
 ## MatcherCombination [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherCombination.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherCombination.java)
 
 Combines multiple matchers.
@@ -39,19 +47,11 @@ Combines multiple matchers.
 
 *Keywords: Matcher Combination*
 
-## MatcherString [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherString.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherString.java)
+## MatcherFile [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherFile.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherFile.java)
 
+For this matcher the results file that shall be written can be specified.
 
-
-*Keywords: Matcher String*
-
-## MatcherURL [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherURL.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/MatcherURL.java)
-
-RawMatcher which implements the minimal interface for being executed under
- the SEALS platform. The only method which should be implemented is the
- align(URL, URL, URL) method.
-
-*Keywords: MatcherURL*
+*Keywords: Matcher File*
 
 ## SealsWrapper [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/receiver/SealsWrapper.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/receiver/SealsWrapper.java)
 
@@ -61,6 +61,19 @@ This class implements the SEALS interface (via MatcherURL) and calls the provide
  in file SealsDescriptorHandler.java (method finalizeArchiveCreation - line 45).
 
 *Keywords: Seals Wrapper*
+
+## MatcherSeals [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.java)
+
+This matcher wraps the SEALS client such that a SEALS zip file or folder can be executed.
+ If multiple matcher should be instantiated, have a look at MatcherSealsBuilder buildFromFolder.
+
+*Keywords: Matcher Seals*
+
+## MatcherHTTPCall [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/http/MatcherHTTPCall.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/external/http/MatcherHTTPCall.java)
+
+This class wraps a matcher service.
+
+*Keywords: MatcherHTTP Call*
 
 ## MatcherDockerFile [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/docker/MatcherDockerFile.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/external/docker/MatcherDockerFile.java)
 
@@ -88,12 +101,6 @@ With this in place everything should work.
 
 *Keywords: Matcher Docker File*
 
-## MatcherHTTPCall [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/http/MatcherHTTPCall.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/external/http/MatcherHTTPCall.java)
-
-This class wraps a matcher service.
-
-*Keywords: MatcherHTTP Call*
-
 ## MatcherCLI [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/cli/MatcherCLI.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/external/cli/MatcherCLI.java)
 
 Matcher for running external matchers (require the subclass to create a command to execute).
@@ -107,13 +114,6 @@ Read the file "external/external_command.txt" and start an external process. The
 
 *Keywords: MatcherCLI From File*
 
-## MatcherSeals [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.java)
-
-This matcher wraps the SEALS client such that a SEALS zip file or folder can be executed.
- If multiple matcher should be instantiated, have a look at MatcherSealsBuilder buildFromFolder.
-
-*Keywords: Matcher Seals*
-
 ## ReferenceMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_eval/util/ReferenceMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/util/ReferenceMatcher.java)
 
 A matcher which tries to detect the testcase and return the reference alignment.
@@ -121,11 +121,11 @@ A matcher which tries to detect the testcase and return the reference alignment.
 
 *Keywords: Reference Matcher*
 
-## MatcherPipelineYAAAJena [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherPipelineYAAAJena.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherPipelineYAAAJena.java)
+## MatcherYAAAJena [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.java)
 
-Better use MatcherYAAAPipeline because it can combine matchers which use different APIS like Jena and OWLAPI etc
+A matcher template for matchers that are based on Apache Jena.
 
-*Keywords: Matcher PipelineYAAA Jena*
+*Keywords: MatcherYAAA Jena*
 
 ## MatcherPipelineYAAA [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherPipelineYAAA.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherPipelineYAAA.java)
 
@@ -133,11 +133,11 @@ A matcher template for matchers that are based on YAAA.
 
 *Keywords: Matcher PipelineYAAA*
 
-## MatcherYAAAJena [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAAJena.java)
+## MatcherYAAA [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAA.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAA.java)
 
-A matcher template for matchers that are based on Apache Jena.
+A matcher template for matchers that are based on the YAAA Framework.
 
-*Keywords: MatcherYAAA Jena*
+*Keywords: MatcherYAAA*
 
 ## MatcherPipelineYAAAJenaConstructor [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherPipelineYAAAJenaConstructor.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherPipelineYAAAJenaConstructor.java)
 
@@ -146,29 +146,11 @@ Better use MatcherPipelineYAAA because it can combine matchers which use differe
 
 *Keywords: Matcher PipelineYAAA Jena Constructor*
 
-## MatcherYAAA [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAA.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAA.java)
+## MatcherPipelineYAAAJena [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherPipelineYAAAJena.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherPipelineYAAAJena.java)
 
-A matcher template for matchers that are based on the YAAA Framework.
+Better use MatcherYAAAPipeline because it can combine matchers which use different APIS like Jena and OWLAPI etc
 
-*Keywords: MatcherYAAA*
-
-## MatchPropBasedOnClass [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/structurelevel/MatchPropBasedOnClass.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/structurelevel/MatchPropBasedOnClass.java)
-
-Graph-based Matcher: Checks all matched classes and matches also properties
- between them (domain and range) with mean value of both classes.
- Example:
- 
-     foo  ---already matched with c=0.5---  foo
-      |                                      |
-     blub  --new with c=(0.5+0.4)/2=0.45--  bla 
-      |                                      |
-      v                                      v
-     bar  ----already matched with c=0.4--- bar
- 
-
-  In the example blub and bla are properties.
-
-*Keywords: Match Prop Based On Class*
+*Keywords: Matcher PipelineYAAA Jena*
 
 ## AdditionalConfidenceByFunction [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/AdditionalConfidenceByFunction.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/AdditionalConfidenceByFunction.java)
 
@@ -178,11 +160,14 @@ Adds an additional confidence by a user chosen function which gets a ontResource
 
 *Keywords: Additional Confidence By Function*
 
-## ForwardMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ForwardMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ForwardMatcher.java)
+## TrainingAlignmentGenerator [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/TrainingAlignmentGenerator.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/TrainingAlignmentGenerator.java)
 
-This is a simple matcher that forwards a given alignment.
+This matcher assumes that the input alignment is a kind of reference alignment.
+ After applying the recallMatcher given in the constructor, a new alignment is returned which
+ contains positive (equivalence relation) and negative(incompat relation) correspondences.
+ With the help of this alignment, supervised matchers can be trained.
 
-*Keywords: Forward Matcher*
+*Keywords: Training Alignment Generator*
 
 ## NoOpMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/NoOpMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/NoOpMatcher.java)
 
@@ -202,62 +187,35 @@ Just saves the ontologies in a specific format.
 
 *Keywords: Alignment Save Matcher*
 
-## TrainingAlignmentGenerator [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/TrainingAlignmentGenerator.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/TrainingAlignmentGenerator.java)
-
-This matcher assumes that the input alignment is a kind of reference alignment.
- After applying the recallMatcher given in the constructor, a new alignment is returned which
- contains positive (equivalence relation) and negative(incompat relation) correspondences.
- With the help of this alignment, supervised matchers can be trained.
-
-*Keywords: Training Alignment Generator*
-
 ## FileSaveMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/FileSaveMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/FileSaveMatcher.java)
 
 Just saves the ontologies in a specific format.
 
 *Keywords: File Save Matcher*
 
-## BackgroundMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.java)
+## ForwardMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ForwardMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ForwardMatcher.java)
 
-Template matcher where the background knowledge and the exploitation strategy (represented as ImplementedBackgroundMatchingStrategies) can be plugged-in.
- This matcher can be used as matching component. It is sensible to use a simple string matcher before running this
- matcher to increase the performance by filtering out simple matches. If you want a pre-packaged stand-alone
- background-based matching system, you can try out BackgroundMatcherStandAlone.
- <br>
- This matcher relies on a similarity metric that is implemented within the background source and used in
- BackgroundMatcher#compare(String, String).
+This is a simple matcher that forwards a given alignment.
 
-*Keywords: Background Matcher*
-
-## SimpleStringMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/SimpleStringMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/SimpleStringMatcher.java)
-
-A relatively simple matcher that can be used before running BackgroundMatcher to filter out simple matches.
-
-*Keywords: Simple String Matcher*
-
-## BackgroundMatcherStandAlone [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcherStandAlone.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcherStandAlone.java)
-
-Matcher which applies String matching and matches then with the provided background knowledge source and strategy.
-
-*Keywords: Background Matcher Stand Alone*
-
-## BaselineStringMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/BaselineStringMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/BaselineStringMatcher.java)
-
-A very basic string matcher that can be used as baseline for matchers.
-
-*Keywords: Baseline String Matcher*
-
-## StringMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/StringMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/StringMatcher.java)
-
-
-
-*Keywords: String Matcher*
+*Keywords: Forward Matcher*
 
 ## ExactStringMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/ExactStringMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/ExactStringMatcher.java)
 
 Matcher which creates correspondences based on exact string match.
 
 *Keywords: Exact String Matcher*
+
+## StopwordExtraction [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/StopwordExtraction.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/StopwordExtraction.java)
+
+Extracts corpus dependent stopwords from instances, classes and properties.
+
+*Keywords: Stopword Extraction*
+
+## BaselineStringMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/BaselineStringMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/BaselineStringMatcher.java)
+
+A very basic string matcher that can be used as baseline for matchers.
+
+*Keywords: Baseline String Matcher*
 
 ## SynonymTextMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/SynonymTextMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/SynonymTextMatcher.java)
 
@@ -267,11 +225,11 @@ Matches resource A (source) to B (target) iff they have at least one label in th
 
 *Keywords: Synonym Text Matcher*
 
-## StopwordExtraction [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/StopwordExtraction.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/StopwordExtraction.java)
+## StringMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/StringMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/StringMatcher.java)
 
-Extracts corpus dependent stopwords from instances, classes and properties.
 
-*Keywords: Stopword Extraction*
+
+*Keywords: String Matcher*
 
 ## ScalableStringProcessingMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/scale/ScalableStringProcessingMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/scale/ScalableStringProcessingMatcher.java)
 
@@ -293,17 +251,17 @@ Matcher which uses different String Matching approaches (stored in PropertySpeci
 
 *Keywords: Scalable String Processing Matcher*
 
-## MatchPropBasedOnInstances [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/instancelevel/MatchPropBasedOnInstances.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/instancelevel/MatchPropBasedOnInstances.java)
-
-Matches properties based on same subject and object and the distribution.
-
-*Keywords: Match Prop Based On Instances*
-
 ## MatchClassBasedOnInstances [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/instancelevel/MatchClassBasedOnInstances.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/instancelevel/MatchClassBasedOnInstances.java)
 
 A matcher which matches classes based on already instance matches.
 
 *Keywords: Match Class Based On Instances*
+
+## MatchPropBasedOnInstances [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/instancelevel/MatchPropBasedOnInstances.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/instancelevel/MatchPropBasedOnInstances.java)
+
+Matches properties based on same subject and object and the distribution.
+
+*Keywords: Match Prop Based On Instances*
 
 ## ParisMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.java)
 
@@ -313,6 +271,55 @@ This is a wrapper for <a href="http://webdam.inria.fr/paris/">PARIS matching sys
  are then read into a YAAA aligment. It is tested to run with java 1.7 and 1.8.
 
 *Keywords: Paris Matcher*
+
+## BackgroundMatcherStandAlone [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcherStandAlone.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcherStandAlone.java)
+
+Matcher which applies String matching and matches then with the provided background knowledge source and strategy.
+
+*Keywords: Background Matcher Stand Alone*
+
+## BackgroundMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.java)
+
+Template matcher where the background knowledge and the exploitation strategy (represented as ImplementedBackgroundMatchingStrategies) can be plugged-in.
+ This matcher can be used as matching component. It is sensible to use a simple string matcher before running this
+ matcher to increase the performance by filtering out simple matches. If you want a pre-packaged stand-alone
+ background-based matching system, you can try out BackgroundMatcherStandAlone.
+ <br>
+ This matcher relies on a similarity metric that is implemented within the background source and used in
+ BackgroundMatcher#compare(String, String).
+
+*Keywords: Background Matcher*
+
+## SimpleStringMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/SimpleStringMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/SimpleStringMatcher.java)
+
+A relatively simple matcher that can be used before running BackgroundMatcher to filter out simple matches.
+
+*Keywords: Simple String Matcher*
+
+## MatchPropBasedOnClass [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/structurelevel/MatchPropBasedOnClass.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/structurelevel/MatchPropBasedOnClass.java)
+
+Graph-based Matcher: Checks all matched classes and matches also properties
+ between them (domain and range) with mean value of both classes.
+ Example:
+ 
+     foo  ---already matched with c=0.5---  foo
+      |                                      |
+     blub  --new with c=(0.5+0.4)/2=0.45--  bla 
+      |                                      |
+      v                                      v
+     bar  ----already matched with c=0.4--- bar
+ 
+
+  In the example blub and bla are properties.
+
+*Keywords: Match Prop Based On Class*
+
+## Doc2vecModelMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/Doc2vecModelMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/Doc2vecModelMatcher.java)
+
+Updates the confidence of already matched resources.
+ It writes a textual representation of each resource to a csv file (text generation can be modified by subclassing and overriding getResourceText method).
+
+*Keywords: Doc2vec Model Matcher*
 
 ## VectorSpaceModelMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/VectorSpaceModelMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/VectorSpaceModelMatcher.java)
 
@@ -328,13 +335,6 @@ A base class for all matchers which write a csv file where every line
  second cell the corresponding tokens (whitespace separated).
 
 *Keywords: Document Similarity Base*
-
-## Doc2vecModelMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/Doc2vecModelMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/Doc2vecModelMatcher.java)
-
-Updates the confidence of already matched resources.
- It writes a textual representation of each resource to a csv file (text generation can be modified by subclassing and overriding getResourceText method).
-
-*Keywords: Doc2vec Model Matcher*
 
 ## OpenEAMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/openea/OpenEAMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/openea/OpenEAMatcher.java)
 
