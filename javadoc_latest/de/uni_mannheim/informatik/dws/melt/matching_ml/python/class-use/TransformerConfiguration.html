@@ -126,15 +126,15 @@ loadScripts(document, 'script');</script>
 <tbody>
 <tr class="alt-color">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><span class="type-name-label">PythonServer.</span><code><span class="member-name-link"><a href="../PythonServer.html#transformersFineTuning(java.lang.String,java.io.File,java.io.File,de.uni_mannheim.informatik.dws.melt.matching_ml.python.TransformerConfiguration,boolean,java.lang.String,java.io.File)">transformersFineTuning</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
+<th class="col-second" scope="row"><span class="type-name-label">PythonServer.</span><code><span class="member-name-link"><a href="../PythonServer.html#transformersFineTuning(java.lang.String,java.io.File,java.io.File,boolean,java.lang.String,java.io.File,de.uni_mannheim.informatik.dws.melt.matching_ml.python.TransformerConfiguration)">transformersFineTuning</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile,
-<a href="../TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config,
 boolean&nbsp;usingTF,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</code></th>
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache,
+<a href="../TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config)</code></th>
 <td class="col-last">
-<div class="block">Run huggingface transformers library.</div>
+<div class="block">Finetune a transformers model with the given parameters and write this model to a given folder.</div>
 </td>
 </tr>
 <tr class="row-color">
@@ -147,7 +147,7 @@ boolean&nbsp;usingTF,
 boolean&nbsp;changeClass,
 <a href="../TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config)</code></th>
 <td class="col-last">
-<div class="block">Run huggingface transformers library.</div>
+<div class="block">Run a transformers model on a CSV file with two columns (text left and text right) to predict if they describe the same concept.</div>
 </td>
 </tr>
 </tbody>

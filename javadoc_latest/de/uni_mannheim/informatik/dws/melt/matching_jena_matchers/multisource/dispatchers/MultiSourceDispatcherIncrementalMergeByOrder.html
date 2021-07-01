@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":9};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -165,7 +165,21 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#MODEL_SIZE_ASCENDING_NTRIPLES_FAST">MODEL_SIZE_ASCENDING_NTRIPLES_FAST</a></span></code></th>
+<td class="col-last">
+<div class="block">Sorted by the number of triples in a model.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#MODEL_SIZE_DECENDING">MODEL_SIZE_DECENDING</a></span></code></th>
+<td class="col-last">
+<div class="block">Sorted by the number of triples in a model.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#MODEL_SIZE_DECENDING_NTRIPLES_FAST">MODEL_SIZE_DECENDING_NTRIPLES_FAST</a></span></code></th>
 <td class="col-last">
 <div class="block">Sorted by the number of triples in a model.</div>
 </td>
@@ -173,7 +187,9 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 <tr class="row-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#RANDOM">RANDOM</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">This comparator is only used as a constant to determine if a random ordering should be used.</div>
+</td>
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</code></td>
@@ -256,6 +272,13 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 </td>
 </tr>
 <tr class="row-color" id="i1">
+<td class="col-first"><code>protected boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isLeftModelGreater(java.util.Set,java.util.Set,java.util.Properties)">isLeftModelGreater</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;leftOntology,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;rightOntology,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i2">
 <td class="col-first"><code>private static long</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#iteratorSize(java.util.Iterator)">iteratorSize</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&lt;?&gt;&nbsp;i)</code></th>
 <td class="col-last">&nbsp;</td>
@@ -266,7 +289,7 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 </div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MultiSourceDispatcherIncrementalMerge">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.<a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MultiSourceDispatcherIncrementalMerge</a></h3>
-<code><a href="MultiSourceDispatcherIncrementalMerge.html#clearAndStartSavingIntermediateAlignments()">clearAndStartSavingIntermediateAlignments</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#getIntermediateAlignments()">getIntermediateAlignments</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#match(java.util.List,java.net.URL,java.net.URL)">match</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#match(java.util.List,java.lang.Object,java.lang.Object)">match</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#mergeSourceIntoTarget(org.apache.jena.rdf.model.Model,org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,boolean)">mergeSourceIntoTarget</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#needsTransitiveClosureForEvaluation()">needsTransitiveClosureForEvaluation</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setAddInformationToUnion(boolean)">setAddInformationToUnion</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setUseCacheForMergeTree(boolean)">setUseCacheForMergeTree</a></code></div>
+<code><a href="MultiSourceDispatcherIncrementalMerge.html#clearAndStartSavingIntermediateAlignments()">clearAndStartSavingIntermediateAlignments</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#getIntermediateAlignments()">getIntermediateAlignments</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#match(java.util.List,java.net.URL,java.net.URL)">match</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#match(java.util.List,java.lang.Object,java.lang.Object)">match</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#mergeSourceIntoTarget(org.apache.jena.rdf.model.Model,org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,boolean)">mergeSourceIntoTarget</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#needsTransitiveClosureForEvaluation()">needsTransitiveClosureForEvaluation</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setAddInformationToUnion(boolean)">setAddInformationToUnion</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setLowMemoryOverhead(boolean)">setLowMemoryOverhead</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setUseCacheForMergeTree(boolean)">setUseCacheForMergeTree</a></code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -308,6 +331,24 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 <h3>MODEL_SIZE_DECENDING</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</span>&nbsp;<span class="member-name">MODEL_SIZE_DECENDING</span></div>
 <div class="block">Sorted by the number of triples in a model. This means large models/ontologies/knowledge graphs will be merged first.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="MODEL_SIZE_ASCENDING_NTRIPLES_FAST">
+<h3>MODEL_SIZE_ASCENDING_NTRIPLES_FAST</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</span>&nbsp;<span class="member-name">MODEL_SIZE_ASCENDING_NTRIPLES_FAST</span></div>
+<div class="block">Sorted by the number of triples in a model.
+ This is a fast variant for ntriple files which only counts the number of lines to make it faster.
+ This means small models/ontologies/knowledge graphs will be merged first.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="MODEL_SIZE_DECENDING_NTRIPLES_FAST">
+<h3>MODEL_SIZE_DECENDING_NTRIPLES_FAST</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</span>&nbsp;<span class="member-name">MODEL_SIZE_DECENDING_NTRIPLES_FAST</span></div>
+<div class="block">Sorted by the number of triples in a model.
+ This is a fast variant for ntriple files which only counts the number of lines to make it faster.
+ This means large models/ontologies/knowledge graphs will be merged first.</div>
 </section>
 </li>
 <li>
@@ -368,6 +409,8 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 <section class="detail" id="RANDOM">
 <h3>RANDOM</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="ModelAndIndex.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ModelAndIndex</a>&gt;</span>&nbsp;<span class="member-name">RANDOM</span></div>
+<div class="block">This comparator is only used as a constant to determine if a random ordering should be used.
+ If the comparator is really called, it will throw an exception.</div>
 </section>
 </li>
 </ul>
@@ -429,6 +472,21 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 <dd>mergingTree for n models, this is a n-1 by 2 matrix where row i describes the merging of clusters at step i of the clustering. 
       If an element j in the row is less than n, then observation j was merged at this stage. 
       If j &ge; n then the merge was with the cluster formed at the (earlier) stage j-n of the algorithm.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isLeftModelGreater(java.util.Set,java.util.Set,java.util.Properties)">
+<h3>isLeftModelGreater</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isLeftModelGreater</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;leftOntology,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;rightOntology,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</span>
+                              throws <span class="exceptions"><a href="../../../matching_base/typetransformer/TypeTransformationException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">TypeTransformationException</a></span></div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="MultiSourceDispatcherIncrementalMerge.html#isLeftModelGreater(java.util.Set,java.util.Set,java.util.Properties)">isLeftModelGreater</a></code>&nbsp;in class&nbsp;<code><a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MultiSourceDispatcherIncrementalMerge</a></code></dd>
+<dt>Throws:</dt>
+<dd><code><a href="../../../matching_base/typetransformer/TypeTransformationException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">TypeTransformationException</a></code></dd>
 </dl>
 </section>
 </li>

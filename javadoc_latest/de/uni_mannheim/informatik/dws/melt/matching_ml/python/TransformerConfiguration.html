@@ -82,7 +82,13 @@ loadScripts(document, 'script');</script>
 <hr>
 <pre>public class <span class="type-name-label">TransformerConfiguration</span>
 extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></pre>
-<div class="block">Parameters for nlptransformers</div>
+<div class="block">This class represents the arguments for the huggingface trainer.
+ Any of the training arguments which are <a href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">listed on the documentation</a>
+ can be used.
+ <pre><code>
+ TransformerConfiguration config = new TransformerConfiguration("do_train", true, "warmup_ratio", 0.2, ...);
+ config.addParameter("logging_strategy", "no");
+ </code></pre></div>
 </section>
 <section class="summary">
 <ul class="summary-list">

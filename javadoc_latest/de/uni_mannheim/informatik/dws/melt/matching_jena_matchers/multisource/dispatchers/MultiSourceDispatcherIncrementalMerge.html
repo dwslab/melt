@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":6,"i5":9,"i6":9,"i7":10,"i8":10,"i9":10,"i10":9,"i11":9,"i12":9,"i13":10,"i14":10,"i15":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":6,"i5":9,"i6":9,"i7":10,"i8":10,"i9":10,"i10":9,"i11":9,"i12":9,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -130,21 +130,26 @@ implements <a href="../../../matching_base/multisource/MultiSourceDispatcher.htm
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>private boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#lowMemoryOverhead">lowMemoryOverhead</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;,&#8203;int[][]&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mergeTreeCache">mergeTreeCache</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private static com.fasterxml.jackson.databind.ObjectMapper</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#objectMapper">objectMapper</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#oneToOneMatcher">oneToOneMatcher</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#useCacheForMergeTree">useCacheForMergeTree</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -244,7 +249,7 @@ org.apache.jena.graph.Node&nbsp;node)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color" id="i7">
-<td class="col-first"><code>private boolean</code></td>
+<td class="col-first"><code>protected boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isLeftModelGreater(java.util.Set,java.util.Set,java.util.Properties)">isLeftModelGreater</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;leftOntology,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;rightOntology,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
@@ -300,11 +305,24 @@ org.apache.jena.rdf.model.Model&nbsp;target,
 </td>
 </tr>
 <tr class="alt-color" id="i14">
+<td class="col-first"><code>private void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#removeOntModelFromSet(java.util.Set)">removeOntModelFromSet</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;set)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i15">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setAddInformationToUnion(boolean)">setAddInformationToUnion</a></span>&#8203;(boolean&nbsp;addInformationToUnion)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i15">
+<tr class="alt-color" id="i16">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setLowMemoryOverhead(boolean)">setLowMemoryOverhead</a></span>&#8203;(boolean&nbsp;lowMemoryOverhead)</code></th>
+<td class="col-last">
+<div class="block">If set to true, the memory overhead is reduced by two facts:
+ 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.</div>
+</td>
+</tr>
+<tr class="row-color" id="i17">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setUseCacheForMergeTree(boolean)">setUseCacheForMergeTree</a></span>&#8203;(boolean&nbsp;useCache)</code></th>
 <td class="col-last">&nbsp;</td>
@@ -361,6 +379,12 @@ org.apache.jena.rdf.model.Model&nbsp;target,
 <section class="detail" id="addInformationToUnion">
 <h3>addInformationToUnion</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">addInformationToUnion</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="lowMemoryOverhead">
+<h3>lowMemoryOverhead</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">lowMemoryOverhead</span></div>
 </section>
 </li>
 <li>
@@ -474,6 +498,12 @@ boolean&nbsp;addInformationToUnion)</span></div>
 </section>
 </li>
 <li>
+<section class="detail" id="removeOntModelFromSet(java.util.Set)">
+<h3>removeOntModelFromSet</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">removeOntModelFromSet</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;set)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="clearAndStartSavingIntermediateAlignments()">
 <h3>clearAndStartSavingIntermediateAlignments</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">clearAndStartSavingIntermediateAlignments</span>()</div>
@@ -503,6 +533,19 @@ boolean&nbsp;addInformationToUnion)</span></div>
 </section>
 </li>
 <li>
+<section class="detail" id="setLowMemoryOverhead(boolean)">
+<h3>setLowMemoryOverhead</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setLowMemoryOverhead</span>&#8203;(<span class="parameters">boolean&nbsp;lowMemoryOverhead)</span></div>
+<div class="block">If set to true, the memory overhead is reduced by two facts:
+ 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
+ Thus the matcher needs to deal with TDB folder as input. This is not the case for most matchers.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>lowMemoryOverhead</code> - if true, the matching will be memory performant.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getMergeTree(java.util.List,java.lang.Object)">
 <h3>getMergeTree</h3>
 <div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">int[][]</span>&nbsp;<span class="member-name">getMergeTree</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
@@ -523,10 +566,10 @@ boolean&nbsp;addInformationToUnion)</span></div>
 <li>
 <section class="detail" id="isLeftModelGreater(java.util.Set,java.util.Set,java.util.Properties)">
 <h3>isLeftModelGreater</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isLeftModelGreater</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;leftOntology,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isLeftModelGreater</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;leftOntology,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;rightOntology,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</span>
-                            throws <span class="exceptions"><a href="../../../matching_base/typetransformer/TypeTransformationException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">TypeTransformationException</a></span></div>
+                              throws <span class="exceptions"><a href="../../../matching_base/typetransformer/TypeTransformationException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">TypeTransformationException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="../../../matching_base/typetransformer/TypeTransformationException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">TypeTransformationException</a></code></dd>
