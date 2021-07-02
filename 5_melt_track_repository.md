@@ -23,8 +23,10 @@ TrackRepository.Conference.V1.getTestCases();
 The resulting instances can be directly used by the Executor or any other MELT functionality that requires tracks or
 test cases.
 
-## Available tracks as SEALS Repository
-MELT also provides a server which mocks the SEALS repository and hosts the following tracks:
+## Available Tracks
+MELT also provides a server with default datasets used by the OAEI. 
+They are identified by three components: (1) Repository, (2) Track/Suite - ID, and (3) Version ID.
+The MELT repository is built so that it is fully compatible with the former SEALS client. For example, you can still use the SEALS client JAR to fetch the data from the MELT repository.
 
 Name | Repository | Suite-ID | Version-ID 
 ---- | ---------- | -------- | ----------
