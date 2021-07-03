@@ -13,7 +13,7 @@ line and outputs the results via the standard output of the process - similar to
 
 ## Wrapping a Python Matcher
 
-### Project Anatomy
+### Project Overview
 The example project [can be found on GitHub](https://github.com/dwslab/melt/tree/master/examples/externalPythonMatcherWeb).
 
 The matcher is completely implemented in Python. All python resources can be found in directory `oaei-resources`. For parsing the ontologies, rdflib is used. Alignment services like serialization are handled in file `AlignmentFormat.py`. Note that MELT does not offer comprehensive matcher development tooling in other programming languages than Java.
@@ -28,3 +28,5 @@ In the demo project, you can see that we install the `rdflib` dependency (`<run>
 
 When you run `mvn clean install`, MELT will wrap a server around your matcher and put everything neatly in a docker container that you can share. In the `target` directory of your project, you will find a sharable docker container (file ending with `.tar.gz`). Others can then execute your matcher without installing any dependencies etc.
 
+### Wrapping as SEALS/HOBBIT Package
+You can also find an example project for [SEALS packaging](https://github.com/dwslab/melt/tree/master/examples/externalPythonMatcherSeals) as well as for [HOBBIT](https://github.com/dwslab/melt/tree/master/examples/externalPythonMatcherHobbit) packaging.
