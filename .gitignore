@@ -54,6 +54,21 @@ matching-eval/log.txt
 # Python
 playground.py
 
+# (Python) Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# (Python) PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# (Python) Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
 # datasets
 **/datasets/*.xml
 
@@ -105,3 +120,6 @@ babelnet.var.properties
 jlt.var.properties
 matching-jena-matchers/config/babelnet.properties
 matching-jena-matchers/config/babelnet.var.properties
+
+# evaluation client
+matching-eval-client/dependency-reduced-pom.xml
