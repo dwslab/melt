@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from gensim import corpora, models, similarities, matutils
 from scipy import linalg
+from scipy.special import softmax
 import csv
 import json
 import numpy as np
@@ -1463,7 +1464,9 @@ def transformers_prediction():
             app.logger.info("Run prediction")
             pred_out = trainer.predict(predict_dataset)
         class_index = 1 if change_class else 0
-        scores = pred_out.predictions[:, class_index]
+        # sigmoid: scores = 1 / (1 + np.exp(-pred_out.predictions, axis=1[:, class_index]))
+        # compute softmax to get class probabilities (scores between 0 and 1)
+        scores = softmax(pred_out.predictions, axis=1)[:, class_index]
         app.logger.info("delete model")
         del model
         return jsonify(scores.tolist())
@@ -1503,18 +1506,20 @@ def transformers_finetuning():
                 with training_args.strategy.scope():
                     model = TFAutoModelForSequenceClassification.from_pretrained(initialModelName_name)
 
-                trainer = TFTrainer(model=model, train_dataset=training_dataset, args=training_args)
+                trainer = TFTrainer(model=model, tokenizer=tokenizer, train_dataset=training_dataset, args=training_args)
             else:
                 from transformers import Trainer, AutoModelForSequenceClassification
                 model = AutoModelForSequenceClassification.from_pretrained(initialModelName_name)
-
-                trainer = Trainer(model=model, train_dataset=training_dataset, args=training_args)
+                
+                # tokenizer is added to the trainer because only in this case the tokenizer will be saved along the model to be reused.
+                trainer = Trainer(model=model, tokenizer=tokenizer, train_dataset=training_dataset, args=training_args)
 
             app.logger.info("Run training")
             trainer.train()
 
             app.logger.info("Save model")
             trainer.save_model(resulting_model_location)
+        return "True"
     except Exception as e:
         import traceback
         return "ERROR " + traceback.format_exc()
