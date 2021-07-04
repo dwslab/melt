@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -181,11 +181,18 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="row-color" id="i3">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCanonicalPathIfPossible(java.lang.String)">getCanonicalPathIfPossible</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;filePath)</code></th>
+<td class="col-last">
+<div class="block">Returns the canonical path (resolved symlink, and relative paths) of a file if possible.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i4">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getRandomPositiveNumber()">getRandomPositiveNumber</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i5">
 <td class="col-first"><code>static long</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#lineCount(java.io.File)">lineCount</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
 <td class="col-last">
@@ -294,6 +301,20 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>file</code> - the file to get the canonical path from</dd>
+<dt>Returns:</dt>
+<dd>the canonical path or if not possible, the absolute path</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getCanonicalPathIfPossible(java.lang.String)">
+<h3>getCanonicalPathIfPossible</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getCanonicalPathIfPossible</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;filePath)</span></div>
+<div class="block">Returns the canonical path (resolved symlink, and relative paths) of a file if possible.
+ If this calls fails, then the absolute path is returned.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>filePath</code> - the file patha s a string. This can be a relative file path like ./fooBar</dd>
 <dt>Returns:</dt>
 <dd>the canonical path or if not possible, the absolute path</dd>
 </dl>
