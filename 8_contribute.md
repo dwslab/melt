@@ -26,7 +26,11 @@ You can easily change files directly in your Web browser by clicking on the edit
 
 ![image](/media/contribute_via_browser.png)
 
-Alternatively, you can also [fork the project](https://docs.github.com/en/get-started/quickstart/fork-a-repo) (remember to `git checkout gh-pages`), apply your changes locally, and perform a [pull request]((https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)).
+Note that when you commit a documentation change, you have to set the pull request for branch `gh-pages` (not `master`):
+
+![image](/media/branch_selection.png)
+
+Alternatively to changes in the Web UI, you can also [fork the project](https://docs.github.com/en/get-started/quickstart/fork-a-repo) (remember to `git checkout gh-pages`), apply your changes locally, and perform a [pull request]((https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)).
 
 After you applied your changes and they have been confirmed by the administrators, the new page will be automatically built by our pipeline and will immediately appear in the rendered user guide.
 
