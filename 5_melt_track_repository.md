@@ -25,7 +25,7 @@ test cases.
 
 ## Available Tracks
 MELT also provides a server with default datasets used by the OAEI. 
-They are identified by three components: (1) Repository, (2) Track/Suite - ID, and (3) Version ID.
+They are identified by three components: (1) Repository (location-URI), (2) Track/Suite - ID (collection-name), and (3) Version ID. The [MELT evaluation client](https://dwslab.github.io/melt/matcher-evaluation/client) uses these track identifiers.
 The MELT repository is built so that it is fully compatible with the former SEALS client. For example, you can still use the SEALS client JAR to fetch the data from the MELT repository.
 
 Name | Repository | Suite-ID | Version-ID 
