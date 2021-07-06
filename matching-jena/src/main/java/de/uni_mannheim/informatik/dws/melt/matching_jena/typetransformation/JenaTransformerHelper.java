@@ -33,18 +33,6 @@ public class JenaTransformerHelper {
         return ontModelSpec;
     }
     
-    public static boolean shouldUseCache(Properties parameters){
-        Object caching = parameters.get(ParameterConfigKeys.USE_ONTOLOGY_CACHE);
-        if(caching == null)
-            return true;
-        if(caching instanceof Boolean){
-            return (Boolean) caching;
-        }else{
-            LOGGER.warn("The value provided by ParameterConfigKeys.USE_ONTOLOGY_CACHE is not of boolean type. Defaulting to true.");
-            return true;
-        }
-    }
-    
     private static final Lang DEFAULT_HINT_LANG = Lang.RDFXML;
     public static Lang hintLang(Properties parameters){
         Object lang = parameters.get(ParameterConfigKeys.HINT_LANG);

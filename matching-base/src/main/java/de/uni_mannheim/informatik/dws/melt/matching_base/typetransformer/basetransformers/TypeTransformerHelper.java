@@ -50,4 +50,16 @@ public class TypeTransformerHelper {
             return null;
         }
     }
+    
+    public static boolean shouldUseOntologyCache(Properties parameters){
+        Object caching = parameters.get(ParameterConfigKeys.USE_ONTOLOGY_CACHE);
+        if(caching == null)
+            return true;
+        if(caching instanceof Boolean){
+            return (Boolean) caching;
+        }else{
+            LOGGER.warn("The value provided by ParameterConfigKeys.USE_ONTOLOGY_CACHE is not of boolean type. Defaulting to true.");
+            return true;
+        }
+    }
 }
