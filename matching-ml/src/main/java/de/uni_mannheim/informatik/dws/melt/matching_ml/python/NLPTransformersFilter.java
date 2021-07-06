@@ -118,6 +118,13 @@ public class NLPTransformersFilter extends MatcherYAAAJena implements Filter {
             }
         } catch (IOException ex) {
             LOGGER.warn("Could not write text to prediction file. Return unodified input alignment.", ex);
+            inputFile.delete();
+            return inputAlignment;
+        }
+        
+        if(orderedCorrespondences.isEmpty()){
+            LOGGER.warn("No correspondences have enough text to be processed (the input alignment has {} correspondences) - the input alignment is returned unchanged.", inputAlignment.size());
+            inputFile.delete();
             return inputAlignment;
         }
 
