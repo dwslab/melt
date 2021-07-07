@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":10,"i6":9,"i7":10};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":10,"i7":9,"i8":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -178,10 +178,15 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr class="row-color" id="i1">
 <td class="col-first"><code>static org.semanticweb.owlapi.model.OWLOntology</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#get(java.lang.String)">get</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#get(java.io.File)">get</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i2">
+<td class="col-first"><code>static org.semanticweb.owlapi.model.OWLOntology</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#get(java.lang.String)">get</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i3">
 <td class="col-first"><code>static org.semanticweb.owlapi.model.OWLOntology</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#get(java.lang.String,boolean)">get</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
 boolean&nbsp;useCache)</code></th>
@@ -189,28 +194,28 @@ boolean&nbsp;useCache)</code></th>
 <div class="block">Returns the OntModel for the given uri using a cache if indicated to do so.</div>
 </td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="alt-color" id="i4">
 <td class="col-first"><code>static org.semanticweb.owlapi.model.OWLOntology</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#get(java.net.URL)">get</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;url)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i5">
 <td class="col-first"><code>static org.semanticweb.owlapi.model.OWLOntology</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#get(java.net.URL,boolean)">get</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;url,
 boolean&nbsp;useCache)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isDeactivatedCache()">isDeactivatedCache</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>private static org.semanticweb.owlapi.model.OWLOntology</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#readOWLOntology(java.lang.String)">readOWLOntology</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="alt-color" id="i8">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setDeactivatedCache(boolean)">setDeactivatedCache</a></span>&#8203;(boolean&nbsp;deactivatedCache)</code></th>
 <td class="col-last">
@@ -321,6 +326,12 @@ boolean&nbsp;useCache)</span></div>
 <section class="detail" id="get(java.net.URL)">
 <h3>get</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">org.semanticweb.owlapi.model.OWLOntology</span>&nbsp;<span class="member-name">get</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;url)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="get(java.io.File)">
+<h3>get</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">org.semanticweb.owlapi.model.OWLOntology</span>&nbsp;<span class="member-name">get</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span></div>
 </section>
 </li>
 <li>

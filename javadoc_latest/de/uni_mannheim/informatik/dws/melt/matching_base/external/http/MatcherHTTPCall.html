@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -111,44 +111,49 @@ implements <a href="../../IMatcher.html" title="interface in de.uni_mannheim.inf
 </thead>
 <tbody>
 <tr class="alt-color">
+<td class="col-first"><code>static boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#CHECK_URL">CHECK_URL</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>private static org.apache.http.impl.client.CloseableHttpClient</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#httpClient">httpClient</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private static org.slf4j.Logger</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#maxTrials">maxTrials</a></span></code></th>
 <td class="col-last">
 <div class="block">The number of retry operations to perform when an exception occurs.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private org.apache.http.client.config.RequestConfig</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#requestConfig">requestConfig</a></span></code></th>
 <td class="col-last">
 <div class="block">The RequestConfig which contains timeouts to be used in http call.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#sendContent">sendContent</a></span></code></th>
 <td class="col-last">
 <div class="block">If true, then the content of the file URI is read and transferred.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#sleepTimeInSeconds">sleepTimeInSeconds</a></span></code></th>
 <td class="col-last">
 <div class="block">The amount of seconds to sleep when an exception occurred before retrying.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#uri">uri</a></span></code></th>
 <td class="col-last">
@@ -175,19 +180,25 @@ implements <a href="../../IMatcher.html" title="interface in de.uni_mannheim.inf
 </thead>
 <tbody>
 <tr class="alt-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String)">MatcherHTTPCall</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</code></th>
+<td class="col-last">
+<div class="block">Creates a matcher which wraps a matching service available at the given URI.Only the URIs of the test case are transferred to the system and no timeout is applied.</div>
+</td>
+</tr>
+<tr class="row-color">
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.net.URI)">MatcherHTTPCall</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri)</code></th>
 <td class="col-last">
 <div class="block">Creates a matcher which wraps a matching service available at the given URI.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.net.URI,boolean)">MatcherHTTPCall</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri,
 boolean&nbsp;sendContent)</code></th>
 <td class="col-last">
 <div class="block">Creates a matcher which wraps a matching service available at the given URI.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.net.URI,boolean,int,int,int)">MatcherHTTPCall</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri,
 boolean&nbsp;sendContent,
 int&nbsp;socketTimeout,
@@ -219,6 +230,21 @@ int&nbsp;connectionRequestTimeout)</code></th>
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
+<td class="col-first"><code>int</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMaxTrials()">getMaxTrials</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i1">
+<td class="col-first"><code>int</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getSleepTimeInSeconds()">getSleepTimeInSeconds</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i2">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isSendContent()">isSendContent</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i3">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.net.URL,java.net.URL,java.net.URL)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;source,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;target,
@@ -227,7 +253,7 @@ int&nbsp;connectionRequestTimeout)</code></th>
 <div class="block">Match two ontologies / knowledge graphs together and returns an alignment.</div>
 </td>
 </tr>
-<tr class="row-color" id="i1">
+<tr class="alt-color" id="i4">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.net.URL,java.net.URL,java.net.URL,java.net.URL)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;source,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;target,
@@ -237,19 +263,29 @@ int&nbsp;connectionRequestTimeout)</code></th>
 <div class="block">Aligns two ontologies/knowledge graphs given as the first and second parameter.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i2">
+<tr class="row-color" id="i5">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setMaxTrials(int)">setMaxTrials</a></span>&#8203;(int&nbsp;maxTrials)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setSendContent(boolean)">setSendContent</a></span>&#8203;(boolean&nbsp;sendContent)</code></th>
 <td class="col-last">
 <div class="block">If true, then the content of the file URI is read and transferred.</div>
 </td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="row-color" id="i7">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setSleepTimeInSeconds(int)">setSleepTimeInSeconds</a></span>&#8203;(int&nbsp;sleepTimeInSeconds)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i8">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTimeout(int)">setTimeout</a></span>&#8203;(int&nbsp;timeout)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i9">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTimeout(int,int,int)">setTimeout</a></span>&#8203;(int&nbsp;socketTimeout,
 int&nbsp;connectTimeout,
@@ -293,6 +329,12 @@ int&nbsp;connectionRequestTimeout)</code></th>
 <section class="detail" id="httpClient">
 <h3>httpClient</h3>
 <div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">org.apache.http.impl.client.CloseableHttpClient</span>&nbsp;<span class="member-name">httpClient</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="CHECK_URL">
+<h3>CHECK_URL</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">CHECK_URL</span></div>
 </section>
 </li>
 <li>
@@ -389,6 +431,20 @@ boolean&nbsp;sendContent)</span></div>
 </dl>
 </section>
 </li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String)">
+<h3>MatcherHTTPCall</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">MatcherHTTPCall</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span>
+                throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URISyntaxException.html" title="class or interface in java.net" class="external-link">URISyntaxException</a></span></div>
+<div class="block">Creates a matcher which wraps a matching service available at the given URI.Only the URIs of the test case are transferred to the system and no timeout is applied.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>uri</code> - URI where the matching service is located as string.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URISyntaxException.html" title="class or interface in java.net" class="external-link">URISyntaxException</a></code> - in case the given URI is not parsable</dd>
+</dl>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -478,6 +534,36 @@ int&nbsp;connectionRequestTimeout)</span></div>
 <dt>Parameters:</dt>
 <dd><code>sendContent</code> - the choise if the whole content is send or not.</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isSendContent()">
+<h3>isSendContent</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isSendContent</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getMaxTrials()">
+<h3>getMaxTrials</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">getMaxTrials</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setMaxTrials(int)">
+<h3>setMaxTrials</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setMaxTrials</span>&#8203;(<span class="parameters">int&nbsp;maxTrials)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getSleepTimeInSeconds()">
+<h3>getSleepTimeInSeconds</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">getSleepTimeInSeconds</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setSleepTimeInSeconds(int)">
+<h3>setSleepTimeInSeconds</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setSleepTimeInSeconds</span>&#8203;(<span class="parameters">int&nbsp;sleepTimeInSeconds)</span></div>
 </section>
 </li>
 </ul>
