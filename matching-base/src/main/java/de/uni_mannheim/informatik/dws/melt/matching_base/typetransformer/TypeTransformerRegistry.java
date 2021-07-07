@@ -111,7 +111,10 @@ public class TypeTransformerRegistry {
         //jena related
         "de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.OntModel2URLTransformer",
         "de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.URL2OntModelTransformer",
-        "de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.Model2OntModelTransformer"
+        "de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.Model2OntModelTransformer",
+        
+        //owlapi related
+        "de.uni_mannheim.informatik.dws.melt.matching_owlapi.typetransformation.URL2OWLOntology"
     );
     
     /**

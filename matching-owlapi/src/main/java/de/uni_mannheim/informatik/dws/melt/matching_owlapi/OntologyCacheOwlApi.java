@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_owlapi;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -81,6 +82,10 @@ public class OntologyCacheOwlApi {
     
     public static OWLOntology get(URL url){
         return get(url, true);
+    }
+    
+    public static OWLOntology get(File file){
+        return get(file.toURI().toString(), true);
     }
 
     public boolean isDeactivatedCache() {

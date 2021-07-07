@@ -280,7 +280,7 @@ public class Main {
     
     private static String getFilenameExtension(String filename, String defaultValue){
         if (filename == null) {
-            return null;
+            return defaultValue;
         }
         final int index = filename.lastIndexOf('.');
         if (index == -1) {
