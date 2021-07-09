@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.MissingImportHandlingStrategy;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +25,6 @@ public class OntologyCacheOwlApi {
      * The internal cache for ontologies that is dependent on the OntModelSpec.
      */
     private static Map<String, OWLOntology> ontologyCache = new HashMap<>();
-    
-    private static OWLOntologyManager man = OWLManager.createOWLOntologyManager();
 
     /**
      * This flag indicates whether the cache is to be used (i.e., ontologies are held in memory).
@@ -37,7 +37,7 @@ public class OntologyCacheOwlApi {
      * @param useCache Indicates whether the cache shall be used. If set to false, ontologies will not be held in memory but re-read every time time.
      * @return OntModel reference.
      */
-    public static OWLOntology get(String uri, boolean useCache) {
+    public static synchronized OWLOntology get(String uri, boolean useCache) {
         if (useCache) {
             OWLOntology model = ontologyCache.get(uri);            
             if (model == null) {
@@ -59,6 +59,7 @@ public class OntologyCacheOwlApi {
         }
     }
     private static OWLOntology readOWLOntology(String uri){
+        OWLOntologyManager man = createManager();
         try {
             return man.loadOntologyFromOntologyDocument(IRI.create(uri));
         } catch (OWLOntologyCreationException ex) {
@@ -70,6 +71,18 @@ public class OntologyCacheOwlApi {
                 return null;
             }
         }        
+    }
+    
+    private static OWLOntologyManager createManager(){
+        OWLOntologyManager man = OWLManager.createOWLOntologyManager();
+        
+        //in case the ontology import another ontology which does not work, ignore silently
+        //see issue https://github.com/owlcs/owlapi/issues/503
+        //same as in https://github.com/ernestojimenezruiz/logmap-matcher/blob/2f139a5a0bcc9377dd5744155af39d85d6dec205/src/main/java/uk/ac/ox/krr/logmap2/OntologyLoader.java#L117
+        OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
+        config = config.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
+        man.setOntologyLoaderConfiguration(config);
+        return man;
     }
     
     public static OWLOntology get(URL url, boolean useCache) {
@@ -106,7 +119,7 @@ public class OntologyCacheOwlApi {
      */
     public void setDeactivatedCache(boolean deactivatedCache) {
         if(deactivatedCache){
-            this.emptyCache();
+            emptyCache();
         }
         isDeactivatedCache = deactivatedCache;
     }
