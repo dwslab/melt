@@ -43,7 +43,7 @@ MELT is now available in [maven central](https://repo1.maven.org/maven2/de/uni-m
 ### Developer Version
 If you want to use the bleeding edge, but don't want to build it yourself 
 (by cloning the repository and execute `mvn install` in the main directory),
-you can use [jitpack.io](https://jitpack.io/#dwslab/melt/) :
+you can use [jitpack.io](https://jitpack.io/#dwslab/melt/) (note the change of the groupId):
 
 ```xml
 <dependency>
