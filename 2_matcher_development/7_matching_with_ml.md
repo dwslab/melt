@@ -7,7 +7,7 @@ permalink: /matcher-development/with-ml
 
 ---
 
-# Matching with Machine Learning
+# Matching with Machine Learning | General Information
 
 
 ## Python Integration
@@ -30,3 +30,12 @@ use the executable of a certain Anaconda environment.
 C:\Users\myUser\Anaconda3\envs\matching\python.exe
 ```
 Here, an Anaconda environment, named `matching` will be used.
+
+
+# Matching with Transformer Models
+
+MELT offers the usage of transformer models through a filter class `NLPTransformersFilter`. For reasons of performance, it is sensible to use a high-recall matcher first and use the transformer components for the final selection of correspondences. Any transformer model that is locally available or available via the [huggingface repository](https://huggingface.co/) can be used in MELT. 
+
+In a first step, the filter will write a (temporary) CSV file to disk with the string representations of each correspondence. The desired string representations can be defined with a `TextExtractor`. The transformer python code is called via the python server (see above). 
+
+
