@@ -17,7 +17,8 @@ import org.slf4j.LoggerFactory;
  * }</pre>
  */
 public class TransformerConfiguration {
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TransformerConfiguration.class);
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     
@@ -46,8 +47,7 @@ public class TransformerConfiguration {
         }
         return map;
     }
-    
-    
+
     public TransformerConfiguration addParameter(String key, Object value){
         this.config.put(key, value);
         return this;
