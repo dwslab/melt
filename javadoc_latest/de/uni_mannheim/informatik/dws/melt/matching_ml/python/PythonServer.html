@@ -607,7 +607,8 @@ boolean&nbsp;usingTF,
 boolean&nbsp;changeClass,
 <a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config)</code></th>
 <td class="col-last">
-<div class="block">Run a transformers model on a CSV file with two columns (text left and text right) to predict if they describe the same concept.</div>
+<div class="block">Run a transformers model on a CSV file with two columns (text left and text right) to predict if they describe
+ the same concept.</div>
 </td>
 </tr>
 <tr class="row-color" id="i45">
@@ -863,22 +864,23 @@ boolean&nbsp;usingTF,
 boolean&nbsp;changeClass,
 <a href="TransformerConfiguration.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">TransformerConfiguration</a>&nbsp;config)</span>
                                     throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">Run a transformers model on a CSV file with two columns (text left and text right) to predict if they describe the same concept.</div>
+<div class="block">Run a transformers model on a CSV file with two columns (text left and text right) to predict if they describe
+ the same concept.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>modelName</code> - the name of the pretrained model which
-   is downloaded or a path to a directory containing model weights
-   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
-   see first parameter pretrained_model_name_or_path of the from_pretrained
-   function in huggingface library</a>).</dd>
+                           is downloaded or a path to a directory containing model weights
+                           (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
+                           see first parameter pretrained_model_name_or_path of the from_pretrained
+                           function in huggingface library</a>).</dd>
 <dd><code>predictionFilePath</code> - path to csv file with two columns (text left and text right).</dd>
 <dd><code>usingTF</code> - if true, using tensorflow, if false use pytorch</dd>
 <dd><code>cudaVisibleDevices</code> - the devices visible in cuda (can be null) examples are "0" to show only the first GPU or "1,2" to show only the second and thirs GPU.</dd>
-<dd><code>transformersCache</code> - the directory where thre transformetrs library stores the models.</dd>
+<dd><code>transformersCache</code> - the directory where the transformers library stores the models.</dd>
 <dd><code>changeClass</code> - if false the confidences of class 1 are used, if true the confidences of class 2 are used.</dd>
 <dd><code>config</code> - the configuration of the transformers trainer. All parameters of the <a href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">huggingface training arguments</a> can be used.</dd>
 <dt>Returns:</dt>
-<dd>a list of confidences</dd>
+<dd>A list of confidences.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - in case something goes wrong.</dd>
 </dl>
@@ -1190,14 +1192,14 @@ int&nbsp;jobs)</span>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">getVocabularyTerms</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelOrVectorPath)</span></div>
 <div class="block">Returns the full vocabulary of the specified model as HashSet (e.g. for fast indexing).
  Be aware that this operation can be very memory-consuming for very large models.
-
+ <p>
  Note: If you want to just check whether a concept exists in the vocabulary, it is better to call
  <a href="#isInVocabulary(java.lang.String,java.lang.String)"><code>isInVocabulary(String, String)</code></a>.Note further that you do not need to build your own
  cache if the PythonServer has enabled vector caching (you can check this with <a href="#isVectorCaching()"><code>isVectorCaching()</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>modelOrVectorPath</code> - The path to the model or vector file. Note that the vector file MUST end with .kv in
-      *                   order to be recognized as vector file.</dd>
+                          *                   order to be recognized as vector file.</dd>
 <dt>Returns:</dt>
 <dd>Returns all vocabulary entries without vectors in a String HashSet.</dd>
 </dl>
@@ -1240,7 +1242,7 @@ int&nbsp;jobs)</span>
 <dd><code>T</code> - Type of the Set.</dd>
 <dt>Parameters:</dt>
 <dd><code>fileToWrite</code> - File which will be created and in which the data will
-                       be written.</dd>
+                    be written.</dd>
 <dd><code>setToWrite</code> - Set whose content will be written into fileToWrite.</dd>
 </dl>
 </section>
@@ -1430,7 +1432,7 @@ int&nbsp;jobs)</span>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>modelOrVectorPath</code> - The path to the model or vector file. Note that the vector file MUST end with .kv in
-      *                          order to be recognized as vector file.</dd>
+                          *                          order to be recognized as vector file.</dd>
 <dd><code>fileToWrite</code> - The file that will be written.</dd>
 </dl>
 </section>
@@ -1445,10 +1447,10 @@ int&nbsp;jobs)</span>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>modelOrVectorPath</code> - The path to the model or vector file. Note that the vector file MUST end with .kv in
-      *                          order to be recognized as vector file.</dd>
+                          *                          order to be recognized as vector file.</dd>
 <dd><code>fileToWrite</code> - The file that will be written.</dd>
 <dd><code>entityFile</code> - The vocabulary that shall appear in the text file (can be null if all words shall be written).
-                   The file must contain one word per line. The contents must be a subset of the vocabulary.</dd>
+                          The file must contain one word per line. The contents must be a subset of the vocabulary.</dd>
 </dl>
 </section>
 </li>
