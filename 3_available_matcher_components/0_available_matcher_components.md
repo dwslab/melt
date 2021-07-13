@@ -7,7 +7,7 @@ permalink: /matcher-components
 ---
 
 # Available Matchers and Filters
-MELT offers a wide range of-out-of-the-box matchers and filters. Below, we list the most significant mathcers and filters. 
+MELT offers a wide range of-out-of-the-box matchers and filters. Below, we list the most significant matchers and filters. 
 The remaining pages in this section list all available matchers and filters in MELT.
 
 A **filter** is a matcher that does not add new correspondences to the alignment but instead
