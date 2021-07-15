@@ -15,7 +15,7 @@
         <dependency>
             <groupId>net.sourceforge.owlapi</groupId>
             <artifactId>owlapi-distribution</artifactId>
-            <version>5.1.9</version> <!-- latest 5.x version is 5.1.9 , ltest 4.x version is 4.5.5 latest 3.x version is 3.5.7-->
+            <version>5.1.17</version> <!-- latest 5.x version is 5.1.17 , ltest 4.x version is 4.5.5 latest 3.x version is 3.5.7-->
         </dependency>
         <!-- OWL API 5.x requires Java 8. OWLAPI 4.x requires Java 7. OWL API 3.5.x requires Java 6. -->
         <dependency>
