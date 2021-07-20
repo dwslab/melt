@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.demomatcher;
+package de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.scale.PropertySpecificStringProcessing;
@@ -19,7 +19,7 @@ import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.SKOS;
 
 
-public class BaseMatcher extends MatcherYAAAJena{
+public class RecallMatcherKgTrack extends MatcherYAAAJena{
     private static Pattern NON_ASCII_CHARS = Pattern.compile("[^\\x00-\\x7F]");
     private static Pattern NON_ALPHANUMERIC_CHARS = Pattern.compile("[^A-Za-z0-9\\s]");
     
