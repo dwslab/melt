@@ -46,8 +46,7 @@ public class TransformersTrainerArguments {
         }
         return map;
     }
-    
-    
+
     public TransformersTrainerArguments addParameter(String key, Object value){
         this.config.put(key, value);
         return this;

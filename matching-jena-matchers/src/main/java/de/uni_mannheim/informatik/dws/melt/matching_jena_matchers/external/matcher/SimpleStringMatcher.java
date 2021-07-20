@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BagOfWords;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
@@ -52,7 +53,7 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
         match(ontology1.listClasses(), ontology2.listClasses());
         match(ontology1.listDatatypeProperties(), ontology2.listDatatypeProperties());
         match(ontology1.listObjectProperties(), ontology2.listObjectProperties());
-        match(ontology1.listDatatypeProperties(), ontology2.listDatatypeProperties());
+        match(ontology1.listIndividuals(), ontology2.listDatatypeProperties());
         LOGGER.info("Mapping Completed");
         return this.mapping;
     }
