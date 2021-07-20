@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_ml.python;
+package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,22 +16,22 @@ import org.slf4j.LoggerFactory;
  * config.addParameter("logging_strategy", "no");
  * }</pre>
  */
-public class TransformerConfiguration {
+public class TransformersTrainerArguments {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(TransformerConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransformersTrainerArguments.class);
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     
     private final Map<String, Object> config;
     
-    public TransformerConfiguration(){
+    public TransformersTrainerArguments(){
         this.config = new HashMap<>();
     }
     
-    public TransformerConfiguration(Map<String, Object> config){
+    public TransformersTrainerArguments(Map<String, Object> config){
         this.config = config;
     }
     
-    public TransformerConfiguration(Object... config){
+    public TransformersTrainerArguments(Object... config){
         this.config = parseExtensions(config);
     }
     
@@ -48,7 +48,7 @@ public class TransformerConfiguration {
     }
     
     
-    public TransformerConfiguration addParameter(String key, Object value){
+    public TransformersTrainerArguments addParameter(String key, Object value){
         this.config.put(key, value);
         return this;
     }
