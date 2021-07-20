@@ -332,6 +332,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
                 .exec(new DockerLogCallback());
         try {
             callback.awaitCompletion(5, TimeUnit.SECONDS);
+
         } catch (InterruptedException ex) {
             LOGGER.warn("Interrupted during wait", ex);
         }
@@ -366,12 +367,35 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
         return imageName;
     }
 
+    public String getAllLogLinesFromContainer(){
+        if(this.containerId == null || this.containerId.isEmpty()){
+            LOGGER.warn("Would like to log last lines of container but container is not started or already stopped. " +
+                    "Maybe the close method was already called?");
+            return "";
+        }
+
+        DockerStringCallback callback = dockerClient.logContainerCmd(this.containerId)
+                .withStdOut(true)
+                .withStdErr(true)
+                .withTailAll()
+                .exec(new DockerStringCallback());
+
+        try {
+            callback.awaitCompletion(5, TimeUnit.SECONDS);
+            return callback.getLog();
+        } catch (InterruptedException ex) {
+            LOGGER.warn("Interrupted during wait", ex);
+            return "";
+        }
+    }
+
     /**
-     * Calling this function will log all lines from the container.
+     * Calling this function will log all lines from the container using SLF4J.
      */
     public void logAllLinesFromContainer(){
         if(this.containerId == null || this.containerId.isEmpty()){
-            LOGGER.warn("Would like to log last lines of container but container is not started or allread stopped. Maybe the close method was already called?");
+            LOGGER.warn("Would like to log last lines of container but container is not started or already stopped. " +
+                    "Maybe the close method was already called?");
             return;
         }
         
@@ -396,7 +420,28 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
     }
 }
 
-class DockerLogCallback extends ResultCallback.Adapter<Frame>{
+/**
+ * ResultCallback collecting the full log and returning it as a single string for further processing.
+ * May be memory-intense for very large logs.
+ */
+class DockerStringCallback extends ResultCallback.Adapter<Frame> {
+
+    StringBuilder logBuilder = new StringBuilder();
+
+    @Override
+    public void onNext(Frame item){
+        logBuilder.append(item.toString()).append("\n");
+    }
+
+    public String getLog(){
+        return logBuilder.toString();
+    }
+}
+
+/**
+ * ResultCallback logging directly using the SLF4J logger.
+ */
+class DockerLogCallback extends ResultCallback.Adapter<Frame> {
     private static final Logger LOGGER = LoggerFactory.getLogger(DockerLogCallback.class);
 
     @Override

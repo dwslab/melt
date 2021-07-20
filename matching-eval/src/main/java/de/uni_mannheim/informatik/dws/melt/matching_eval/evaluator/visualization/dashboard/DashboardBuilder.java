@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DashboardBuilder extends Evaluator {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardBuilder.class);
     
     protected Supplier<String> csvSupplier;
@@ -58,9 +59,7 @@ public class DashboardBuilder extends Evaluator {
     protected String additionalText;
     
     protected boolean dataLoadingIndicator;
-    
-    
-    
+
     public DashboardBuilder(Supplier<String> csvSupplier, ExecutionResultSet executionResultSet, String titleOfPage, String additionalText){
         super(executionResultSet);
         Velocity.setProperty("resource.loaders", "classpath");
@@ -102,7 +101,7 @@ public class DashboardBuilder extends Evaluator {
     }
 
     /**
-     * Consructor
+     * Constructor
      * @param executionResultSet The execution result set to be evaluated and printed.
      */
     public DashboardBuilder(ExecutionResultSet executionResultSet){
@@ -182,8 +181,7 @@ public class DashboardBuilder extends Evaluator {
         );
         return addElement(e);
     }
-    
-    
+
     public DashboardBuilder addMetricTableSelectedAndMatcher(){
         DcjsElement e = new DcjsElement("dc.dataTable", "metricTableSelectedAndMatcher");
         
@@ -537,9 +535,7 @@ public class DashboardBuilder extends Evaluator {
         this.dataLoadingIndicator = newState;
         return this;
     }
-    
-    
-    
+
     @Override
     public void writeResultsToDirectory(File baseDirectory) {
         writeToFile(new File(baseDirectory, "meltDashboard.html"));

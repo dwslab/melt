@@ -81,16 +81,16 @@ public class Main {
             track = new SealsTrack(trackData[0], trackData[1], trackData[2]);
         } else if (cmd.hasOption(LOCAL_TRACK_OPTION)) {
             String[] trackData = cmd.getOptionValues(LOCAL_TRACK_OPTION);
-            if(trackData.length != 3){
+            if (trackData.length != 3) {
                 System.out.printf("Please state the local track data as follows:\n" +
                         "--%s <location> <name> <version>\n", TRACK_OPTION);
                 return;
             }
             // unfortunately, the local track constructor uses the parameters in a different order
             track = new LocalTrack(trackData[1], trackData[2], trackData[0]);
-        } else if (cmd.hasOption(LOCAL_TEST_CASE_OPTION)){
+        } else if (cmd.hasOption(LOCAL_TEST_CASE_OPTION)) {
             String[] testCaseData = cmd.getOptionValues(LOCAL_TEST_CASE_OPTION);
-            if(testCaseData.length != 3){
+            if (testCaseData.length != 3) {
                 System.out.printf("Please state the local test case data as follows:\n" +
                         "--%s <onto1-path> <onto2-path> <reference-path>\n", LOCAL_TEST_CASE_OPTION);
                 return;
@@ -127,11 +127,11 @@ public class Main {
                 System.out.printf("Recognized MELT WEB DOCKER package:\n%s\n", system);
                 System.out.println("Please make sure that docker is running on your system.");
                 File dockerFile = new File(system);
-                if(dockerFile.isDirectory()){
+                if (dockerFile.isDirectory()) {
                     System.out.println("The provided file is a directory: " + system);
                     continue;
                 }
-                if(!dockerFile.exists()){
+                if (!dockerFile.exists()) {
                     System.out.println("The provided docker file does not exist: " + system);
                     continue;
                 }
@@ -164,12 +164,14 @@ public class Main {
 
         // run track or test case
         ExecutionResultSet ers = null;
-        if(track != null) {
+        System.out.println("Running matching systems...");
+        if (track != null) {
             ers = Executor.run(track, matchers);
         } else {
             ers = Executor.run(testCase, matchers);
         }
 
+        System.out.println("Evaluating matching system results...");
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(ers);
 
         // decide on results directory
@@ -204,7 +206,7 @@ public class Main {
         ) {
             for (CSVRecord record : parser.getRecords()) {
                 Map<String, String> recordMap = record.toMap();
-                if(recordMap.get("Type").equalsIgnoreCase("ALL")) {
+                if (recordMap.get("Type").equalsIgnoreCase("ALL")) {
                     System.out.println("\n");
                     System.out.printf("Matcher: %s\n", recordMap.get("Matcher"));
                     System.out.printf("Macro Precision: %s\n", recordMap.get("Macro Precision (P)"));
@@ -214,6 +216,19 @@ public class Main {
                     System.out.printf("Micro Recall: %s\n", recordMap.get("Micro Recall (R)"));
                     System.out.printf("Micro F1: %s\n", recordMap.get("Micro F1"));
                     System.out.printf("Total Runtime (HH:MM:SS): %s\n", recordMap.get("Total Runtime (HH:MM:SS)"));
+                    try {
+                        if (
+                                recordMap.get("Matcher").endsWith(".tar.gz") &&
+                                        ((Double) Double.parseDouble(recordMap.get("Macro F1"))).equals(0.0d)
+                        ) {
+                            System.out.printf("Since F1 is 0, you can find the full log of %s below:\n", recordMap.get(
+                                    "Matcher"));
+                            System.out.println(((MatcherDockerFile) matchers.get(recordMap.get("Matcher")))
+                                    .getAllLogLinesFromContainer());
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Tried to print the log since the F1 is 0 but failed to do so.");
+                    }
                 }
             }
         } catch (Exception e) {
@@ -232,6 +247,7 @@ public class Main {
 
     /**
      * Generates the options available in the CLI.
+     *
      * @return Options instance.
      */
     private static Options getOptions() {
