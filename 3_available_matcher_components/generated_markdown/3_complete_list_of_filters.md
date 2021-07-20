@@ -185,16 +185,38 @@ Filters individual/instance mappings by comparing literals.
 
 *Keywords: Bag Of Words Set Similarity Filter*
 
-## NLPTransformersFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/NLPTransformersFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/NLPTransformersFilter.java)
-
-This filter extracts the corresponding text for a resource (with the specified and customizable extractor) given all correspondences.
- The texts of the two resources are fed into the specified transformer model and the prediction is added in form of a confidence to the correspondence.
-
-*Keywords: NLP Transformers Filter*
-
 ## MachineLearningScikitFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/MachineLearningScikitFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/MachineLearningScikitFilter.java)
 
 This filter learns and applies a classifier given a training sample and an existing alignment.
 
 *Keywords: Machine Learning Scikit Filter*
+
+## TransformersFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.java)
+
+This filter extracts the corresponding text for a resource (with the specified and customizable extractor) given all correspondences in the input alignment.
+ The texts of the two resources are fed into the specified transformer model and the prediction is added in form of a confidence to the correspondence.
+ No filtering is applied in this class.
+
+*Keywords: Transformers Filter*
+
+## TransformersFineTuner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.java)
+
+This class is used to finetune a transformer model based on a generated dataset.
+ It comes in two fashions. First, it can be used to generate a fine-tuned model with every call of the match method.
+ The input alignment of the match method is used to generate a training dataset.
+ Thus the input alignment should contain positive correspondences (with an equivalence relation) and negative correspondences (with another relation than equivalence).
+ 
+ As a second fashion, this matcher can be used to only generate the training file (by possibly multiple calls to the match method).
+ Thus within the match method only the training file is written. After all calls to the match method, one can call the #finetuneModel()  function to 
+ train the model on the whole dataset.
+ 
+ In both cases, the fine-tuned model as well as the tokenizer is written to the specified directory.
+
+*Keywords: Transformers Fine Tuner*
+
+## TransformersFineTunerHpSearch [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.java)
+
+
+
+*Keywords: Transformers Fine Tuner Hp Search*
 
