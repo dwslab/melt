@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from gensim import corpora, models, similarities, matutils
 from scipy import linalg
+from scipy.special import softmax
 import csv
 import json
 import numpy as np
@@ -11,6 +12,8 @@ import pkg_resources
 from pkg_resources import DistributionNotFound
 import pathlib
 import tempfile
+import glob
+from datetime import datetime
 
 logging.basicConfig(
     handlers=[logging.FileHandler(__file__ + ".log", "a+", "utf-8"), logging.StreamHandler(sys.stdout)],
@@ -1334,6 +1337,9 @@ def run_openea():
 
 def transformers_create_dataset(using_tensorflow, tokenizer, left_sentences, right_sentences, labels=None):
     tensor_type = "tf" if using_tensorflow else "pt"
+    # padding (padding=True) is not applied here because the tokenizer is given to the trainer 
+    # which does the padding for each batch (more efficient)
+    # TODO: remove padding here and generate no dataset but just give the encodings to the trainer
     encodings  = tokenizer(left_sentences, right_sentences, return_tensors=tensor_type, padding=True, truncation="longest_first")
     
     if using_tensorflow:
@@ -1384,32 +1390,28 @@ def transformers_read_file(file_path, with_labels):
                 labels.append(int(row[2]))
     return data_left, data_right, labels
 
-def add_attribute_if_existent(instance_object, attribute_key, attribute_value):
-    if hasattr(instance_object, attribute_key):
-        setattr(instance_object, attribute_key, attribute_value)
-
-def transformers_get_training_arguments(using_tensorflow, resulting_model_location, parameter_dict):
+def transformers_get_training_arguments(using_tensorflow, user_parameters, system_parameters):
+    import dataclasses
     if using_tensorflow:
         from transformers import TFTrainingArguments
-        training_args = TFTrainingArguments(resulting_model_location)
+        allowed_arguments = set([field.name for field in dataclasses.fields(TFTrainingArguments)])
     else:
         from transformers import TrainingArguments
-        training_args = TrainingArguments(resulting_model_location)
-
-
-    # setting training argument with setattr because some versions of transformers library do not have these attributes. 
-    add_attribute_if_existent(training_args, 'save_strategy', 'no')
-    add_attribute_if_existent(training_args, 'disable_tqdm', True)
-    # the following is for ray hyperparameter tuning
-    # see https://github.com/huggingface/transformers/issues/11249
-    add_attribute_if_existent(training_args, 'skip_memory_metrics', True)
-
-
-    for param_key, param_value in parameter_dict.items():
-        if not hasattr(training_args, param_key):
-            raise AttributeError('module `TrainingArguments` has no attribute ' + str(param_key))
-        setattr(training_args, param_key, param_value)
-
+        allowed_arguments = set([field.name for field in dataclasses.fields(TrainingArguments)])
+    
+    training_arguments = dict(user_parameters)
+    training_arguments.update(system_parameters)
+    
+    not_available = training_arguments.keys() - allowed_arguments
+    if len(not_available) > 0:
+        app.logger.warning("The following attributes are not set as training arguments because" + 
+                        "they do not exist in the currently installed version of transformer: " + str(not_available))
+        for key_not_avail in not_available:
+            del training_arguments[key_not_avail]
+    if using_tensorflow:
+        training_args = TFTrainingArguments(**training_arguments)
+    else:
+        training_args = TrainingArguments(**training_arguments)
     return training_args
 
 def transformers_init(request):
@@ -1430,9 +1432,10 @@ def transformers_prediction():
 
         model_name = request.headers.get("modelName")
         prediction_file_path = request.headers.get("predictionFilePath")
+        tmp_dir = request.headers.get("tmpDir")
         using_tensorflow = request.headers.get("usingTF").lower() == "true"
         change_class = bool(request.headers.get("changeClass"))
-        config = json.loads(request.headers.get("config"))
+        training_arguments = json.loads(request.headers.get("trainingArguments"))
 
         from transformers import AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -1443,29 +1446,33 @@ def transformers_prediction():
         predict_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left, data_right)
         app.logger.info("Transformers dataset contains %s rows.", len(data_left))
 
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            training_args = transformers_get_training_arguments(using_tensorflow, tmpdirname, config)
+        
+        with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
+            fixed_arguments = {
+                'output_dir': os.path.join(tmpdirname, "trainer_output_dir"),
+            }
+            training_args = transformers_get_training_arguments(using_tensorflow, training_arguments, fixed_arguments)
 
             app.logger.info("Loading transformers model")
             if using_tensorflow:
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
                 with training_args.strategy.scope():
-                    model = TFAutoModelForSequenceClassification.from_pretrained(model_name)
+                    model = TFAutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
 
-                trainer = TFTrainer(model=model,args=training_args)
+                trainer = TFTrainer(model=model, tokenizer=tokenizer, args=training_args)
             else:
                 from transformers import Trainer, AutoModelForSequenceClassification
-                model = AutoModelForSequenceClassification.from_pretrained(model_name)
+                model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
 
-                trainer = Trainer(model=model,args=training_args)
+                trainer = Trainer(model=model, tokenizer=tokenizer, args=training_args)
 
             app.logger.info("Run prediction")
             pred_out = trainer.predict(predict_dataset)
         class_index = 1 if change_class else 0
-        scores = pred_out.predictions[:, class_index]
-        app.logger.info("delete model")
-        del model
+        # sigmoid: scores = 1 / (1 + np.exp(-pred_out.predictions, axis=1[:, class_index]))
+        # compute softmax to get class probabilities (scores between 0 and 1)
+        scores = softmax(pred_out.predictions, axis=1)[:, class_index]
         return jsonify(scores.tolist())
     except Exception as e:
         import traceback
@@ -1478,14 +1485,15 @@ def transformers_finetuning():
     try:
         transformers_init(request)
         
-        initialModelName_name = request.headers.get("initialModelName")
+        initial_model_name = request.headers.get("modelName")
         resulting_model_location = request.headers.get("resultingModelLocation")
+        tmp_dir = request.headers.get("tmpDir")
         training_file = request.headers.get("trainingFile")
         using_tensorflow = request.headers.get("usingTF").lower() == "true"
-        config = json.loads(request.headers.get("config"))
+        training_arguments = json.loads(request.headers.get("trainingArguments"))
 
         from transformers import AutoTokenizer
-        tokenizer = AutoTokenizer.from_pretrained(initialModelName_name)
+        tokenizer = AutoTokenizer.from_pretrained(initial_model_name)
         
         app.logger.info("Prepare transformers dataset and tokenize")
         data_left, data_right, labels = transformers_read_file(training_file, True)
@@ -1493,32 +1501,222 @@ def transformers_finetuning():
         training_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left, data_right, labels)
         app.logger.info("Transformers dataset contains %s examples.", len(training_dataset))
 
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            training_args = transformers_get_training_arguments(using_tensorflow, tmpdirname, config)
+        with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
+            fixed_arguments = {
+                'output_dir': os.path.join(tmpdirname, "trainer_output_dir"),
+                'save_strategy' : 'no',
+                'disable_tqdm' : True,
+            }
+        
+            training_args = transformers_get_training_arguments(using_tensorflow, training_arguments, fixed_arguments)
 
             app.logger.info("Loading transformers model")
             if using_tensorflow:
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
                 with training_args.strategy.scope():
-                    model = TFAutoModelForSequenceClassification.from_pretrained(initialModelName_name)
+                    model = TFAutoModelForSequenceClassification.from_pretrained(initial_model_name, num_labels=2)
 
-                trainer = TFTrainer(model=model, train_dataset=training_dataset, args=training_args)
+                trainer = TFTrainer(model=model, tokenizer=tokenizer, train_dataset=training_dataset, args=training_args)
             else:
                 from transformers import Trainer, AutoModelForSequenceClassification
-                model = AutoModelForSequenceClassification.from_pretrained(initialModelName_name)
-
-                trainer = Trainer(model=model, train_dataset=training_dataset, args=training_args)
+                model = AutoModelForSequenceClassification.from_pretrained(initial_model_name, num_labels=2)
+                
+                # tokenizer is added to the trainer because only in this case the tokenizer will be saved along the model to be reused.
+                trainer = Trainer(model=model, tokenizer=tokenizer, train_dataset=training_dataset, args=training_args)
 
             app.logger.info("Run training")
             trainer.train()
 
             app.logger.info("Save model")
             trainer.save_model(resulting_model_location)
+        return "True"
     except Exception as e:
         import traceback
         return "ERROR " + traceback.format_exc()
 
+
+@app.route("/transformers-finetuning-hp-search", methods=["GET"])
+def transformers_finetuning_hp_search():
+    try:
+        transformers_init(request)
+        
+        initial_model_name = request.headers.get("modelName")
+        resulting_model_location = request.headers.get("resultingModelLocation")
+        tmp_dir = request.headers.get("tmpDir")
+        training_file = request.headers.get("trainingFile")
+        using_tensorflow = request.headers.get("usingTF").lower() == "true"
+        training_arguments = json.loads(request.headers.get("trainingArguments"))
+        number_of_trials = int(request.headers.get("numberOfTrials"))
+        test_size = float(request.headers.get("testSize"))
+        optimizing_metric = request.headers.get("optimizingMetric")
+
+        hp_space = json.loads(request.headers.get("hpSpace"))
+        hp_mutations = json.loads(request.headers.get("hpMutations"))
+
+        if optimizing_metric not in set(['loss', 'accuracy', 'f1', 'precision', 'recall', 'auc']):
+            raise ValueError("optimize_metric is not one of loss, accuracy, f1, precision, recall, auc.")
+
+        optimize_direction = 'minimize' if optimizing_metric == 'loss' else 'maximize'
+
+        from transformers import AutoTokenizer
+        tokenizer = AutoTokenizer.from_pretrained(initial_model_name)
+        
+        app.logger.info("Prepare transformers dataset and tokenize")
+        data_left, data_right, labels = transformers_read_file(training_file, True)
+        assert len(data_left) == len(data_right) == len(labels)
+        
+        from sklearn.model_selection import train_test_split
+        [data_left_train, data_left_test, data_right_train, data_right_test, labels_train, labels_test] = train_test_split(data_left, data_right, labels, stratify=labels, test_size=test_size)
+    
+        training_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left_train, data_right_train, labels_train)
+        eval_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left_test, data_right_test, labels_test)
+
+        app.logger.info("Transformers dataset for training has %s and for eval %s examples.", len(training_dataset), len(eval_dataset))
+        
+        with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
+            fixed_arguments = {
+                'output_dir': os.path.join(tmpdirname, "trainer_output_dir"),
+                'disable_tqdm' : True,
+                'skip_memory_metrics' : True, # see https://github.com/huggingface/transformers/issues/11249
+                'save_strategy' : 'epoch',
+                'do_eval' : True,
+                'evaluation_strategy': 'epoch',
+                'report_to': 'none',
+            }
+            training_args = transformers_get_training_arguments(using_tensorflow, training_arguments, fixed_arguments)
+            
+            from sklearn.metrics import accuracy_score, roc_auc_score, precision_recall_fscore_support
+            def compute_metrics(pred):
+                labels = pred.label_ids
+                preds = pred.predictions.argmax(-1)
+                acc = accuracy_score(labels, preds)
+                precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average='binary', pos_label=1, zero_division=0)
+                preds_proba = softmax(pred.predictions, axis=1)[:, 1]
+                auc = roc_auc_score(labels, preds_proba)
+                return {
+                    'accuracy': acc,
+                    'f1': f1,
+                    'precision': precision,
+                    'recall': recall,
+                    'auc': auc
+                }
+
+            app.logger.info("Loading transformers model")
+            if using_tensorflow:
+                from transformers import TFTrainer, TFAutoModelForSequenceClassification
+                
+                def model_init():
+                    # TODO: check if necessary with training_args.strategy.scope():
+                    return TFAutoModelForSequenceClassification.from_pretrained(initial_model_name, num_labels=2)
+
+                trainer = TFTrainer(
+                    model_init=model_init,
+                    tokenizer=tokenizer,
+                    train_dataset=training_dataset,
+                    eval_dataset=eval_dataset,
+                    compute_metrics=compute_metrics,
+                    args=training_args
+                )
+            else:
+                from transformers import Trainer, AutoModelForSequenceClassification
+                def model_init():
+                    return AutoModelForSequenceClassification.from_pretrained(initial_model_name, num_labels=2)
+                
+                # tokenizer is added to the trainer because only in this case the tokenizer will be saved along the model to be reused.
+                trainer = Trainer(
+                    model_init=model_init,
+                    tokenizer=tokenizer,
+                    train_dataset=training_dataset,
+                    eval_dataset=eval_dataset,
+                    compute_metrics=compute_metrics,
+                    args=training_args
+                )
+             
+            # based on the following example: https://docs.ray.io/en/master/tune/examples/pbt_transformers.html
+            app.logger.info("Run hyperparameter search")
+            
+            ray_local_dir = os.path.join(tmpdirname, 'ray_local_dir')
+            run_name = 'run_' + datetime.today().strftime("%Y-%m-%d_%H-%M-%S")
+            
+            import ray
+            ray.init(include_dashboard=False, ignore_reinit_error=True)
+            from ray import tune
+            from ray.tune.schedulers import PopulationBasedTraining
+            
+            # process search space
+            def process_search_space(search_space):
+                for key, value in search_space.items():
+                    function_to_call = getattr(tune, value['name'], None)
+                    if function_to_call is None:
+                        raise ValueError('the following function name is not part of ray.tune: ' + str(value['name']))
+                    search_space[key] = function_to_call(**value['params'])
+            process_search_space(hp_space)
+            process_search_space(hp_mutations)
+            
+            app.logger.info("hp_space: " + str(hp_space))
+            app.logger.info("hp_mutations: " + str(hp_mutations))
+
+            best_run = trainer.hyperparameter_search(
+                hp_space=lambda _: hp_space,
+                backend="ray",
+                n_trials=number_of_trials,
+                compute_objective=lambda x: x['eval_' + optimizing_metric],
+                direction=optimize_direction,
+                scheduler=PopulationBasedTraining(
+                    time_attr="training_iteration",
+                    perturbation_interval=1,
+                    metric="objective",
+                    mode=optimize_direction[:3],
+                    hyperparam_mutations=hp_mutations,
+                ),
+                keep_checkpoints_num=1,
+                checkpoint_score_attr="training_iteration",
+                raise_on_failed_trial=False,
+                resources_per_trial={"cpu": 1, "gpu": 1},
+                local_dir=ray_local_dir,
+                name=run_name,
+            )
+
+            ray.shutdown()
+            
+            matching_folders = glob.glob(os.path.join(ray_local_dir, run_name, "_objective_" + best_run.run_id +"*", "checkpoint_*", "checkpoint-*"))
+            if not matching_folders:
+                app.logger.warning("Could not find a checkpoint directory to load to best model from. Return without saving any model.")
+                return "ERROR Could not find a checkpoint directory to load to best model from"
+            app.logger.info("Found best model in checkpoint folder: " + str(matching_folders[0]))
+
+            if using_tensorflow:
+                with training_args.strategy.scope():
+                    model = TFAutoModelForSequenceClassification.from_pretrained(matching_folders[0], num_labels=2)
+                tokenizer = AutoTokenizer.from_pretrained(matching_folders[0])
+                trainer = TFTrainer(
+                    model=model,
+                    tokenizer=tokenizer,
+                    eval_dataset=eval_dataset,
+                    compute_metrics=compute_metrics,
+                    args=training_args
+                )
+            else:
+                model = AutoModelForSequenceClassification.from_pretrained(matching_folders[0], num_labels=2)
+                tokenizer = AutoTokenizer.from_pretrained(matching_folders[0])
+                trainer = Trainer(
+                    model=model,
+                    tokenizer=tokenizer,
+                    eval_dataset=eval_dataset,
+                    compute_metrics=compute_metrics,
+                    args=training_args
+                )
+            
+            app.logger.info("Best model scored:")
+            trainer.evaluate()
+
+            app.logger.info("Save model")
+            trainer.save_model(resulting_model_location)
+        return "True"
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
 
 @app.route("/hello", methods=["GET"])
 def hello_demo() -> str:

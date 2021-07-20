@@ -113,6 +113,13 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
             loadDockerFileInternal(dockerImageFile);
         if(!freshInstance){
             startContainer();
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if(this.containerId != null){
+                    LOGGER.info("JVM shutdown detected and container {} is shut down now. Please call close method of MatcherDockerFile to remove this message.", this.containerId);
+                    this.stopContainer();
+                    LOGGER.info("Shutdown completed.");
+                }
+            }));
         }
     }
     
@@ -197,9 +204,9 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
         dockerClient.startContainerCmd(this.containerId).exec();
         LOGGER.info("Container started with id {}", this.containerId);
         if(this.containerId.length() > 12){
-            LOGGER.info("To see log output of container, run: docker container logs {}", this.containerId.substring(0, 12));
+            LOGGER.info("To see log output of container during execution, run: docker container logs {}", this.containerId.substring(0, 12));
         }else{
-            LOGGER.info("To see log output of container, run: docker container logs {}", this.containerId);
+            LOGGER.info("To see log output of container during execution, run: docker container logs {}", this.containerId);
         }
         /*
         this.dockerClient.attachContainerCmd(this.containerId)
@@ -224,24 +231,26 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
         if(freshInstance){
             startContainer();
         }
-        URI uri = new URI("http://localhost:" + this.hostPort + "/match");
+        try{
+            URI uri = new URI("http://localhost:" + this.hostPort + "/match");
 
-        // Let's wait for some seconds before we try to connect via HTTP.
-        // Docker is typically not yet ready.
-        if(initialWaitingTimeInSeconds > 0) {
-            try {
-                Thread.sleep((long) initialWaitingTimeInSeconds * 1000);
-            } catch (InterruptedException ie) {
-                LOGGER.error("Problem occurred while trying to sleep.", ie);
+            // Let's wait for some seconds before we try to connect via HTTP.
+            // Docker is typically not yet ready.
+            if(initialWaitingTimeInSeconds > 0) {
+                try {
+                    Thread.sleep((long) initialWaitingTimeInSeconds * 1000);
+                } catch (InterruptedException ie) {
+                    LOGGER.error("Problem occurred while trying to sleep.", ie);
+                }
+            }
+            MatcherHTTPCall httpCall = new MatcherHTTPCall(uri, true, this.socketTimeout, this.connectTimeout, this.connectionRequestTimeout);
+            URL result = httpCall.match(source, target, inputAlignment);
+            return result;
+        }finally{
+            if(freshInstance){
+                stopContainer();
             }
         }
-        MatcherHTTPCall httpCall = new MatcherHTTPCall(uri, true, this.socketTimeout, this.connectTimeout, this.connectionRequestTimeout);
-        URL result = httpCall.match(source, target, inputAlignment);
-
-        if(freshInstance){
-            stopContainer();
-        }
-        return result;
     }
     
     /**

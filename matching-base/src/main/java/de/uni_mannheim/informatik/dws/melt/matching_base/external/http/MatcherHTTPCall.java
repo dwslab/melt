@@ -8,9 +8,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.io.FilenameUtils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -18,6 +20,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -35,6 +38,7 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherHTTPCall.class);
 
     private static CloseableHttpClient httpClient = HttpClients.createDefault();
+    public static boolean CHECK_URL = true;
 
     /**
      * The number of retry operations to perform when an exception occurs.
@@ -76,6 +80,9 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
      */
     public MatcherHTTPCall(URI uri, boolean sendContent, int socketTimeout, int connectTimeout, int connectionRequestTimeout) {
         this.uri = uri;
+        if(CHECK_URL && this.uri.getScheme().equals("http") == false && this.uri.getScheme().equals("https") == false){
+            LOGGER.warn("The scheme of the URI given to call a matcher is not http(s). This may be a cause of error (if the URL is fine, you can disable this warning with MatcherHTTPCall.CHECK_URL=false;)");
+        }
         this.sendContent = sendContent;
         this.requestConfig = RequestConfig.custom()
                 .setSocketTimeout(socketTimeout)
@@ -105,6 +112,16 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
     public MatcherHTTPCall(URI uri) {
         this(uri, true);
     }
+    
+    /**
+     * Creates a matcher which wraps a matching service available at the given URI.Only the URIs of the test case are transferred to the system and no timeout is applied.
+     *
+     * @param uri URI where the matching service is located as string.
+     * @throws java.net.URISyntaxException in case the given URI is not parsable
+     */
+    public MatcherHTTPCall(String uri) throws URISyntaxException {
+        this(new URI(uri));
+    }
 
 
     @Override
@@ -125,13 +142,14 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
 
             if (this.sendContent) {
                 MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-                builder.addBinaryBody("source", source.openStream()) //TODO: close stream?
-                        .addBinaryBody("target", target.openStream());
+                builder.addBinaryBody("source", source.openStream(), ContentType.DEFAULT_BINARY, FilenameUtils.getName(source.getPath())); //TODO: close stream?
+                builder.addBinaryBody("target", target.openStream(), ContentType.DEFAULT_BINARY, FilenameUtils.getName(target.getPath()));
+
                 if (inputAlignment != null)
-                    builder.addBinaryBody("inputAlignment", inputAlignment.openStream());
+                    builder.addBinaryBody("inputAlignment", inputAlignment.openStream(), ContentType.DEFAULT_BINARY, FilenameUtils.getName(inputAlignment.getPath()));
 
                 if (parameters != null)
-                    builder.addBinaryBody("parameters", parameters.openStream());
+                    builder.addBinaryBody("parameters", parameters.openStream(), ContentType.DEFAULT_BINARY, FilenameUtils.getName(parameters.getPath()));
 
                 request.setEntity(builder.build());
             } else {
@@ -213,4 +231,23 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
         this.sendContent = sendContent;
     }
 
+    public boolean isSendContent() {
+        return sendContent;
+    }
+
+    public int getMaxTrials() {
+        return maxTrials;
+    }
+
+    public void setMaxTrials(int maxTrials) {
+        this.maxTrials = maxTrials;
+    }
+
+    public int getSleepTimeInSeconds() {
+        return sleepTimeInSeconds;
+    }
+
+    public void setSleepTimeInSeconds(int sleepTimeInSeconds) {
+        this.sleepTimeInSeconds = sleepTimeInSeconds;
+    }
 }

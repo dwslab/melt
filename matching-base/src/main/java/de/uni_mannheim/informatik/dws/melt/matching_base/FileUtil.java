@@ -77,4 +77,14 @@ public class FileUtil {
             return file.getAbsolutePath();
         }
     }
+    
+    /**
+     * Returns the canonical path (resolved symlink, and relative paths) of a file if possible.
+     * If this calls fails, then the absolute path is returned.
+     * @param filePath the file patha s a string. This can be a relative file path like ./fooBar
+     * @return the canonical path or if not possible, the absolute path 
+     */
+    public static String getCanonicalPathIfPossible(String filePath){
+        return getCanonicalPathIfPossible(new File(filePath));
+    }
 }
