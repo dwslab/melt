@@ -29,7 +29,7 @@ class AnatomyMatchingPipelineTest {
                 transformerModel, transformersCache), transformerModel));
          */
 
-        transformerModel = "sentence-transformers/paraphrase-TinyBERT-L6-v2";
+        transformerModel = "bert-base-cased-finetuned-mrpc";
         ers.addAll(Executor.run(TrackRepository.Anatomy.Default, new AnatomyMatchingPipeline(gpu,
                 transformerModel, transformersCache), transformerModel));
 

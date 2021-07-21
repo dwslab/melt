@@ -1,32 +1,19 @@
 package de.uni_mannheim.informatik.dws.melt.examples.transformers;
 
-import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherAnatomy;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.MaxWeightBipartiteExtractor;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalExtractors.LiteralExtractorAllAnnotationProperties;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalExtractors.LiteralExtractorFallback;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalExtractors.LiteralExtractorUrlFragment;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorFallback;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorUrlFragment;
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+
 import java.io.File;
-import java.util.Properties;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.jena.ontology.OntModel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +21,11 @@ import org.slf4j.LoggerFactory;
  * This class is also the main class that will be run when executing the JAR.
  */
 public class Main {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
-    
-    public static void main(String[] args) throws Exception{
+
+    public static void main(String[] args) throws Exception {
         //CLI setup:
         Options options = new Options();
 
@@ -45,37 +34,46 @@ public class Main {
                 .hasArg()
                 .desc("Which GPUs to use. This can be comma separated. Eg. 0,1 which uses GPU zero and one.")
                 .build());
-        
+
         options.addOption(Option.builder("tc")
                 .longOpt("transformerscache")
                 .hasArg()
                 .desc("The file path to the transformers cache.")
                 .build());
-        
+
         options.addOption(Option.builder("p")
                 .longOpt("python")
                 .hasArg()
                 .desc("The python command to use.")
                 .build());
-        
+
         options.addOption(Option.builder("c")
                 .longOpt("cache")
                 .hasArg()
-                .argName("path")                
-                .desc("The path to the cache folder for ontologies")
+                .argName("path")
+                .desc("The path to the cache folder for ontologies.")
                 .build());
 
         options.addOption(Option.builder("h")
-                .longOpt("help")           
+                .longOpt("help")
                 .desc("Print this help message.")
                 .build());
 
         options.addOption(Option.builder("tm")
-                .longOpt("transformermodel")
-                .hasArg()
-                .desc("The transformer model to be used.")
+                .longOpt("transformermodels")
+                .hasArgs()
+                .valueSeparator(' ')
+                .desc("The transformer models to be used, separated by space.")
                 .build());
-        
+
+        options.addOption(Option.builder("tracks")
+                .longOpt("tracks")
+                .hasArgs()
+                .valueSeparator(' ')
+                .desc("The tracks to be used, separated by spaces.")
+                .build()
+        );
+
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         CommandLine cmd = null;
@@ -86,39 +84,98 @@ public class Main {
             formatter.printHelp("java -jar ", options);
             System.exit(1);
         }
-        
-        if(cmd.hasOption("h")){
+
+        if (cmd.hasOption("h")) {
             formatter.printHelp("java -jar ", options);
             System.exit(1);
         }
-        if(cmd.hasOption("p")){
+        if (cmd.hasOption("p")) {
             String p = cmd.getOptionValue("p");
             LOGGER.info("Setting python command to {}", p);
             PythonServer.setPythonCommandBackup(p);
         }
-        
-        if(cmd.hasOption("c")){
+
+        if (cmd.hasOption("c")) {
             File cacheFile = new File(cmd.getOptionValue("c"));
             Track.setCacheFolder(cacheFile);
         }
-        
+
         String gpu = cmd.getOptionValue("g", "");
         File transformersCache = null;
-        if(cmd.hasOption("tc")){
+        if (cmd.hasOption("tc")) {
             transformersCache = new File(cmd.getOptionValue("tc"));
         }
 
-        // "bert-base-cased-finetuned-mrpc"
-        String transformerModel = cmd.getOptionValue("tm", "paraphrase-TinyBERT-L6-v2");
-        
-        anatomy(gpu, transformerModel, transformersCache);
+        if (cmd.hasOption("tm")) {
+            transformerModels = cmd.getOptionValues("tm");
+        }
+
+        String[] trackStrings;
+        if (cmd.hasOption("tracks")) {
+            trackStrings = cmd.getOptionValues("tracks");
+            for (String trackString : trackStrings) {
+                trackString = trackString.toLowerCase(Locale.ROOT).trim();
+                switch (trackString) {
+                    case "conference":
+                        tracks.add(TrackRepository.Conference.V1);
+                        break;
+                    case "anatomy":
+                        tracks.add(TrackRepository.Anatomy.Default);
+                        break;
+                    case "kg":
+                    case "knowledge-graphs":
+                    case "knowledgegraphs":
+                    case "knowledgegraph":
+                        tracks.add(TrackRepository.Knowledgegraph.V4);
+                        break;
+                    default:
+                        System.out.println("Could not map track: " + trackString);
+                }
+            }
+        }
+
+        if (tracks.size() == 0) {
+            System.out.println("No tracks specified. Using anatomy...");
+            tracks.add(TrackRepository.Anatomy.Default);
+        }
+
+        zeroShotEvaluation(gpu, transformerModels, transformersCache, tracks);
     }
-    
-    static void anatomy(String gpu, String transformerModel, File transformersCache) throws Exception{
-        ExecutionResultSet ers = Executor.run(TrackRepository.Anatomy.Default, new AnatomyMatchingPipeline(gpu,
-                transformerModel, transformersCache));
+
+    // just used for testing!
+    static List<Track> tracks = new ArrayList<>();
+    static String[] transformerModels;
+
+    static void zeroShotEvaluation(String gpu, String[] transformerModels, File transformersCache,
+                                   List<Track> tracks) throws Exception {
+        if (tracks == null || tracks.size() == 0) {
+            System.out.println("No tracks specified. ABORTING program.");
+            return;
+        }
+        if (transformerModels == null || transformerModels.length == 0) {
+            System.out.println("No transformer model specified. ABORTING program.");
+            return;
+        }
+
+        List<TestCase> testCases = new ArrayList<>();
+        for (Track track : tracks) {
+            testCases.addAll(track.getTestCases());
+        }
+
+        ExecutionResultSet ers = new ExecutionResultSet();
+
+        for (String transformerModel : transformerModels) {
+            try {
+                ers.addAll(Executor.run(testCases, new AnatomyMatchingPipeline(gpu,
+                        transformerModel, transformersCache), transformerModel));
+            } catch (Exception e){
+                System.out.println("A problem occurred with transformer: '" + transformerModel + "'.\n" +
+                        "Continuing process...");
+            }
+        }
+
         EvaluatorCSV evaluator = new EvaluatorCSV(ers);
         evaluator.writeToDirectory();
     }
-    
+
 }
