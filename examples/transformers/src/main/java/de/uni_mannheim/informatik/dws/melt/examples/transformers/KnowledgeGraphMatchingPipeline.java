@@ -1,11 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.examples.transformers;
 
-import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherAnatomy;
+import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherKgTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.MaxWeightBipartiteExtractor;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorFallback;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorUrlFragment;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFilter;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.jena.ontology.OntModel;
@@ -15,10 +12,10 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Properties;
 
-public class AnatomyMatchingPipeline extends MatcherYAAAJena {
+public class KnowledgeGraphMatchingPipeline extends MatcherYAAAJena {
 
 
-    public AnatomyMatchingPipeline(String gpu, String transformerModel, File transformersCache){
+    public KnowledgeGraphMatchingPipeline(String gpu, String transformerModel, File transformersCache){
         this.gpu = gpu;
         this.transformerModel = transformerModel;
         this.transformersCache = transformersCache;
@@ -28,19 +25,15 @@ public class AnatomyMatchingPipeline extends MatcherYAAAJena {
     private String transformerModel;
     private File transformersCache;
 
-    private static Logger LOGGER = LoggerFactory.getLogger(AnatomyMatchingPipeline.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeGraphMatchingPipeline.class);
 
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        Alignment recallAlignment = new RecallMatcherAnatomy().match(source, target, new Alignment(), properties);
+        Alignment recallAlignment = new RecallMatcherKgTrack().match(source, target, new Alignment(), properties);
+
         LOGGER.info("Recall alignment with {} correspondences", recallAlignment.size());
 
-        TextExtractorFallback extractorFallback = new TextExtractorFallback(
-                new TextExtractorAllAnnotationProperties(),
-                new TextExtractorUrlFragment()
-        );
-
-        TransformersFilter zeroShot = new TransformersFilter(extractorFallback, transformerModel);
+        TransformersFilter zeroShot = new TransformersFilter(null, transformerModel);
         zeroShot.setCudaVisibleDevices(gpu);
         zeroShot.setTransformersCache(transformersCache);
         zeroShot.setTmpDir(new File("./mytmpDir_filter"));
@@ -48,6 +41,7 @@ public class AnatomyMatchingPipeline extends MatcherYAAAJena {
         Alignment alignmentWithConfidence = zeroShot.match(source, target, recallAlignment, properties);
 
         MaxWeightBipartiteExtractor extractorMatcher = new MaxWeightBipartiteExtractor();
+
         return extractorMatcher.match(source, target, alignmentWithConfidence, null);
     }
 }

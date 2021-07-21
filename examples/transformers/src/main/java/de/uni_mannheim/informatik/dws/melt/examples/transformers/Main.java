@@ -1,11 +1,14 @@
 package de.uni_mannheim.informatik.dws.melt.examples.transformers;
 
+import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherAnatomy;
+import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherKgTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.SimpleStringMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 
 import java.io.File;
@@ -62,6 +65,7 @@ public class Main {
         options.addOption(Option.builder("tm")
                 .longOpt("transformermodels")
                 .hasArgs()
+                .required()
                 .valueSeparator(' ')
                 .desc("The transformer models to be used, separated by space.")
                 .build());
@@ -157,25 +161,46 @@ public class Main {
             return;
         }
 
-        List<TestCase> testCases = new ArrayList<>();
+        List<TestCase> testCasesNoKG = new ArrayList<>();
+        List<TestCase> testCasesKG = new ArrayList<>();
         for (Track track : tracks) {
-            testCases.addAll(track.getTestCases());
+            if(track != TrackRepository.Knowledgegraph.V4) {
+                testCasesNoKG.addAll(track.getTestCases());
+            } else {
+                testCasesKG.addAll(track.getTestCases());
+            }
         }
 
         ExecutionResultSet ers = new ExecutionResultSet();
 
+        if(testCasesNoKG.size() > 0) {
+            ers.addAll(Executor.run(testCasesNoKG, new RecallMatcherKgTrack()));
+            ers.addAll(Executor.run(testCasesNoKG, new RecallMatcherAnatomy()));
+            ers.addAll(Executor.run(testCasesNoKG, new SimpleStringMatcher()));
+        }
+
+        if(testCasesKG.size() > 0){
+            ers.addAll(Executor.run(testCasesKG, new RecallMatcherKgTrack()));
+            ers.addAll(Executor.run(testCasesNoKG, new RecallMatcherAnatomy()));
+            ers.addAll(Executor.run(testCasesNoKG, new SimpleStringMatcher()));
+        }
+
         for (String transformerModel : transformerModels) {
             try {
-                ers.addAll(Executor.run(testCases, new AnatomyMatchingPipeline(gpu,
-                        transformerModel, transformersCache), transformerModel));
+                if(testCasesNoKG.size() > 0) {
+                    ers.addAll(Executor.run(testCasesNoKG, new AnatomyMatchingPipeline(gpu,
+                            transformerModel, transformersCache), transformerModel));
+                }
+                if(testCasesKG.size() > 0){
+                    ers.addAll(Executor.run(testCasesKG, new KnowledgeGraphMatchingPipeline(gpu,
+                            transformerModel, transformersCache), transformerModel));
+                }
             } catch (Exception e){
                 System.out.println("A problem occurred with transformer: '" + transformerModel + "'.\n" +
                         "Continuing process...");
             }
         }
-
         EvaluatorCSV evaluator = new EvaluatorCSV(ers);
         evaluator.writeToDirectory();
     }
-
 }

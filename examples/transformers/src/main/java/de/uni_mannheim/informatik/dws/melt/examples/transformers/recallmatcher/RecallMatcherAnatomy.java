@@ -29,7 +29,6 @@ public class RecallMatcherAnatomy extends MatcherYAAAJena {
     }
 
     private void matchResources(ExtendedIterator<? extends OntResource> sourceResources, ExtendedIterator<? extends OntResource> targetResources, Alignment alignment) {
-
         List<? extends OntResource> list1 = sourceResources.toList();
         List<? extends OntResource> list2 = targetResources.toList();
 

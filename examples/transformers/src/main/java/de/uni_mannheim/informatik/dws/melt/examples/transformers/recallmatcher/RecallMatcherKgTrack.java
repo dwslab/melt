@@ -22,7 +22,6 @@ import org.apache.jena.vocabulary.SKOS;
 public class RecallMatcherKgTrack extends MatcherYAAAJena {
 
     
-    private static Pattern NON_ASCII_CHARS = Pattern.compile("[^\\x00-\\x7F]");
     private static Pattern NON_ALPHANUMERIC_CHARS = Pattern.compile("[^A-Za-z0-9\\s]");
     
     public static Property wikiPageWikiLinkText = ModelFactory.createDefaultModel().createProperty("http://dbkwik.webdatacommons.org/ontology/wikiPageWikiLinkText");
