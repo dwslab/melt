@@ -22,6 +22,7 @@ public abstract class TransformersBase extends MatcherYAAAJena {
     protected boolean usingTensorflow;
     protected String cudaVisibleDevices;
     protected File transformersCache;
+    protected TransformersMultiProcessing multiProcessing;
 
     /**
      * Constructor with all required parameters.
@@ -42,6 +43,7 @@ public abstract class TransformersBase extends MatcherYAAAJena {
         this.usingTensorflow = false;
         this.cudaVisibleDevices = ""; //use all GPUs
         this.transformersCache = null; //use default
+        this.multiProcessing = TransformersMultiProcessing.DEFAULT_MULTI_PROCESS;
     }
     
     /**
@@ -204,6 +206,28 @@ public abstract class TransformersBase extends MatcherYAAAJena {
             throw new IllegalArgumentException("transformersCache is not a directory or is not existent.");
         }
     }
+
+    /**
+     * Returns the multiprocessing value of the transformer.
+     * The transformers library may not free all memory from GPU.
+     * Thus the prediction and training are wrapped in an external process.
+     * This enum defines how the process is started and if multiprocessing should be used at all.
+     * Default is to use the system dependent default.
+     * @return the enum which represent the multi process starting method.
+     */
+    public TransformersMultiProcessing getMultiProcessing() {
+        return multiProcessing;
+    }
     
-    
+    /**
+     * Sets the multiprocessing value of the transformer.
+     * The transformers library may not free all memory from GPU.
+     * Thus the prediction and training are wrapped in an external process.
+     * This enum defines how the process is started and if multiprocessing should be used at all.
+     * Default is to use the system dependent default.
+     * @param multiProcessing the enum which represent the multi process starting method.
+     */
+    public void setMultiProcessing(TransformersMultiProcessing multiProcessing) {
+        this.multiProcessing = multiProcessing;
+    }
 }

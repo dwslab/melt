@@ -43,6 +43,7 @@ public class TransformersFineTuner extends TransformersBase implements Filter {
 
     //memory issue with transformers library
     //https://github.com/huggingface/transformers/issues/6753
+    //https://github.com/huggingface/transformers/issues/1742
     
     /**
      * Run the training of a NLP transformer.
