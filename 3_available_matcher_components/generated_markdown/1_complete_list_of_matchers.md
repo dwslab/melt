@@ -338,7 +338,7 @@ A base class for all matchers which write a csv file where every line
 
 ## TransformersBase [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.java)
 
-This is a base class for all Tranformers.
+This is a base class for all Transformers.
  It just contains some variables and getter and setters.
 
 *Keywords: Transformers Base*
