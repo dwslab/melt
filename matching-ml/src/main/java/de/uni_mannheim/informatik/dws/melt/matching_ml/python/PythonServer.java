@@ -173,7 +173,9 @@ public class PythonServer {
      * @return a list of confidences
      */
     public List<Double> transformersPrediction(TransformersFilter filter, File predictionFilePath) throws PythonServerException {
-        //curl http://127.0.0.1:41193/transformers-prediction
+        //curl http://127.0.0.1:41193/transformers-prediction -H "modelName: bert-base-cased-finetuned-mrpc" -H "usingTF: false" \
+        // -H "trainingArguments: {}"  -H "tmpDir: ./my_tmp_dir" -H "cudaVisibleDevices: 0" -H "transformersCache: ./cache_transformers" \
+        // -H "predictionFilePath: ./train.txt" -H "changeClass: false" -H "multiProcessing: default_multi_process" 
         HttpGet request = new HttpGet(serverUrl + "/transformers-prediction");
         transformersUpdateBaseRequest(filter, request);
         
@@ -193,6 +195,7 @@ public class PythonServer {
         request.addHeader("usingTF", Boolean.toString(base.isUsingTensorflow()));
         request.addHeader("trainingArguments", base.getTrainingArguments().toJsonString());
         request.addHeader("tmpDir", getCanonicalPath(base.getTmpDir()));
+        request.addHeader("multiProcessing", base.getMultiProcessing().toString());
         
         String cudaVisibleDevices = base.getCudaVisibleDevices();
         if(cudaVisibleDevices != null){

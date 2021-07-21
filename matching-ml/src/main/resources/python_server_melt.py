@@ -1425,8 +1425,22 @@ def transformers_init(request):
     if "transformersCache" in request.headers:
         os.environ["TRANSFORMERS_CACHE"] = request.headers.get("transformersCache")
 
-@app.route("/transformers-prediction", methods=["GET"])
-def transformers_prediction():
+def run_function_multi_process(request, func):
+    multi_processing = request.headers.get("multiProcessing")
+    if multi_processing == 'no_multi_process':
+        return func(request)
+    else:
+        import multiprocessing as mp 
+        def wrapper_func(queue, request):
+            queue.put(func(request))
+        ctx = mp.get_context() if multi_processing == 'default_multi_process' else mp.get_context(multi_processing)
+        queue = ctx.Queue()
+        process = ctx.Process(target=wrapper_func, args=(queue, request,))
+        process.start()
+        process.join()
+        return queue.get()
+
+def inner_transformers_prediction(request):
     try:
         transformers_init(request)
 
@@ -1450,6 +1464,7 @@ def transformers_prediction():
         with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
             fixed_arguments = {
                 'output_dir': os.path.join(tmpdirname, "trainer_output_dir"),
+                'disable_tqdm' : True,
             }
             training_args = transformers_get_training_arguments(using_tensorflow, training_arguments, fixed_arguments)
 
@@ -1478,10 +1493,11 @@ def transformers_prediction():
         import traceback
         return "ERROR " + traceback.format_exc()
 
+@app.route("/transformers-prediction", methods=["GET"])
+def transformers_prediction():
+    return run_function_multi_process(request, inner_transformers_prediction)
 
-
-@app.route("/transformers-finetuning", methods=["GET"])
-def transformers_finetuning():
+def inner_transformers_finetuning(request):
     try:
         transformers_init(request)
         
@@ -1535,6 +1551,9 @@ def transformers_finetuning():
         import traceback
         return "ERROR " + traceback.format_exc()
 
+@app.route("/transformers-finetuning", methods=["GET"])
+def transformers_finetuning():
+    return run_function_multi_process(request, inner_transformers_finetuning)
 
 @app.route("/transformers-finetuning-hp-search", methods=["GET"])
 def transformers_finetuning_hp_search():
