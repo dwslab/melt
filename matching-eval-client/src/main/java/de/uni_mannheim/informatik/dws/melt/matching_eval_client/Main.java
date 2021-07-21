@@ -163,7 +163,7 @@ public class Main {
         }
 
         // run track or test case
-        ExecutionResultSet ers = null;
+        ExecutionResultSet ers;
         System.out.println("Running matching systems...");
         if (track != null) {
             ers = Executor.run(track, matchers);

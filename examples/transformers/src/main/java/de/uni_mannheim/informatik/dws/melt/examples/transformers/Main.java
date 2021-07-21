@@ -3,8 +3,17 @@ package de.uni_mannheim.informatik.dws.melt.examples.transformers;
 import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherAnatomy;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.MaxWeightBipartiteExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalExtractors.LiteralExtractorAllAnnotationProperties;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalExtractors.LiteralExtractorFallback;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalExtractors.LiteralExtractorUrlFragment;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorFallback;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorUrlFragment;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -34,13 +43,13 @@ public class Main {
         options.addOption(Option.builder("g")
                 .longOpt("gpu")
                 .hasArg()
-                .desc("which GPUs to use. This can be comma separated. Eg. 0,1 which uses GPU zero and one.")
+                .desc("Which GPUs to use. This can be comma separated. Eg. 0,1 which uses GPU zero and one.")
                 .build());
         
-        options.addOption(Option.builder("t")
+        options.addOption(Option.builder("tc")
                 .longOpt("transformerscache")
                 .hasArg()
-                .desc("the file path to the transformers cache.")
+                .desc("The file path to the transformers cache.")
                 .build());
         
         options.addOption(Option.builder("p")
@@ -55,11 +64,17 @@ public class Main {
                 .argName("path")                
                 .desc("The path to the cache folder for ontologies")
                 .build());
+
         options.addOption(Option.builder("h")
                 .longOpt("help")           
                 .desc("Print this help message.")
                 .build());
-        
+
+        options.addOption(Option.builder("tm")
+                .longOpt("transformermodel")
+                .hasArg()
+                .desc("The transformer model to be used.")
+                .build());
         
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -88,35 +103,22 @@ public class Main {
         }
         
         String gpu = cmd.getOptionValue("g", "");
-        
         File transformersCache = null;
-        if(cmd.hasOption("t")){
-            transformersCache = new File(cmd.getOptionValue("t"));
+        if(cmd.hasOption("tc")){
+            transformersCache = new File(cmd.getOptionValue("tc"));
         }
+
+        // "bert-base-cased-finetuned-mrpc"
+        String transformerModel = cmd.getOptionValue("tm", "paraphrase-TinyBERT-L6-v2");
         
-        anatomy(gpu, transformersCache);
+        anatomy(gpu, transformerModel, transformersCache);
     }
     
-    private static void anatomy(String gpu, File transformersCache) throws Exception{
-        Executor.run(TrackRepository.Anatomy.Default, new MatcherYAAAJena() {
-            @Override
-            public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-                Alignment recallAlignment = new RecallMatcherAnatomy().match(source, target, new Alignment(), properties);
-                LOGGER.info("Recall alignment with {} correspondences", recallAlignment.size());
-                
-                //TODO: use new model and extractor
-                TransformersFilter zeroShot = new TransformersFilter(null, "bert-base-cased-finetuned-mrpc");
-                zeroShot.setCudaVisibleDevices(gpu);
-                zeroShot.setTransformersCache(transformersCache);
-                zeroShot.setTmpDir(new File("./mytmpDir_filter"));
-                
-                Alignment alignmentWithConfidence = zeroShot.match(source, target, recallAlignment, properties);
-                
-                //TODO: other filters
-                
-                return alignmentWithConfidence;
-            }
-        });
+    static void anatomy(String gpu, String transformerModel, File transformersCache) throws Exception{
+        ExecutionResultSet ers = Executor.run(TrackRepository.Anatomy.Default, new AnatomyMatchingPipeline(gpu,
+                transformerModel, transformersCache));
+        EvaluatorCSV evaluator = new EvaluatorCSV(ers);
+        evaluator.writeToDirectory();
     }
     
 }

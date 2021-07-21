@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.io.BufferedWriter;
@@ -30,6 +29,7 @@ import java.io.IOException;
  * No filtering is applied in this class.
  */
 public class TransformersFilter extends TransformersBase implements Filter {
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransformersFilter.class);
     private static final String NEWLINE = System.getProperty("line.separator");
@@ -81,7 +81,7 @@ public class TransformersFilter extends TransformersBase implements Filter {
             return inputAlignment;
         }
 
-        try{
+        try {
             LOGGER.info("Run prediction for {} examples ({} correspondences do not have enough text to be processed).", orderedCorrespondences.size(), inputAlignment.size() - orderedCorrespondences.size());
             List<Double> confidenceList = predictConfidences(inputFile);
             LOGGER.info("Finished prediction");
