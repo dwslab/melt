@@ -8,7 +8,11 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherPipelineYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.SimpleStringMatcher;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorFallback;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorUrlFragment;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 
 import java.io.File;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFineTuner;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,6 +154,36 @@ public class Main {
     // just used for testing!
     static List<Track> tracks = new ArrayList<>();
     static String[] transformerModels;
+
+    static void fineTuned(List<Track> tracks, Float[] fractions, String[] transformerModels, File targetDir) {
+        List<TestCase> trainingTrack =
+                TrackRepository.generateTrackWithSampledReferenceAlignment(TrackRepository.Knowledgegraph.V4, 0.5,
+                41, false);
+
+        TextExtractorFallback extractorFallback = new TextExtractorFallback(
+                new TextExtractorAllAnnotationProperties(),
+                new TextExtractorUrlFragment()
+        );
+
+        // TODO: loop over models...
+        TransformersFineTuner fineTuner = new TransformersFineTuner(extractorFallback, transformerModels[0],
+                new File(targetDir, transformerModels[0]));
+
+        // TODO
+        // pipeline: recall matcher ->  -> fineTuner
+
+        Executor.run(trainingTrack, fineTuner);
+
+        try {
+            fineTuner.finetuneModel();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        // perform evaluation for model like in zero shot
+
+
+    }
 
     static void zeroShotEvaluation(String gpu, String[] transformerModels, File transformersCache,
                                    List<Track> tracks) throws Exception {

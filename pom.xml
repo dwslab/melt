@@ -316,7 +316,7 @@
             </build>
         </profile>
 
-        <!-- This profile runs tests that stricly require Java 8 -->
+        <!-- This profile runs tests that strictly require Java 8 -->
         <profile>
             <id>java8-tests</id>
             <activation>
