@@ -51,11 +51,13 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
     /**
      * Finetune a given model with the provided text in the csv file (three columns: first text, second text, label(0/1))
      * @param trainingFile csv file with three columns: first text, second text, label(0/1)
+     * @return the final location (directory) of the finetuned model (which is also given in the constructor)
      * @throws java.lang.Exception in case of any error
      */
     @Override
-    public void finetuneModel(File trainingFile) throws Exception{
+    public File finetuneModel(File trainingFile) throws Exception{
         PythonServer.getInstance().transformersFineTuningHpSearch(this, trainingFile);
+        return this.resultingModelLocation;
     }
 
     /**
