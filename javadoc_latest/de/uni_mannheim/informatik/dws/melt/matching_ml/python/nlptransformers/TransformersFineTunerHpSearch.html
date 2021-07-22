@@ -215,7 +215,7 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
-<td class="col-first"><code>void</code></td>
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#finetuneModel(java.io.File)">finetuneModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</code></th>
 <td class="col-last">
 <div class="block">Finetune a given model with the provided text in the csv file (three columns: first text, second text, label(0/1))</div>
@@ -402,7 +402,7 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 <li>
 <section class="detail" id="finetuneModel(java.io.File)">
 <h3>finetuneModel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">finetuneModel</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">finetuneModel</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Finetune a given model with the provided text in the csv file (three columns: first text, second text, label(0/1))</div>
 <dl class="notes">
@@ -410,6 +410,8 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 <dd><code><a href="TransformersFineTuner.html#finetuneModel(java.io.File)">finetuneModel</a></code>&nbsp;in class&nbsp;<code><a href="TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>trainingFile</code> - csv file with three columns: first text, second text, label(0/1)</dd>
+<dt>Returns:</dt>
+<dd>the final location (directory) of the finetuned model (which is also given in the constructor)</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - in case of any error</dd>
 </dl>
