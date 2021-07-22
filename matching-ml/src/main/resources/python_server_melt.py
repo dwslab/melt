@@ -64,7 +64,6 @@ def check_requirements() -> str:
                 pkg_resources.require(requirement)
                 ok_requirements.append(requirement)
             except Exception as error:
-                missing = str(error)
                 missing_requirements.append(requirement)
         message = "Dependency Check"
         if len(ok_requirements) > 0:
@@ -1332,7 +1331,7 @@ def run_openea():
 
 
 ############################################
-#          Tranformers section with helper functions
+# Transformers section with helper functions
 ############################################
 
 def transformers_create_dataset(using_tensorflow, tokenizer, left_sentences, right_sentences, labels=None):
@@ -1340,7 +1339,7 @@ def transformers_create_dataset(using_tensorflow, tokenizer, left_sentences, rig
     # padding (padding=True) is not applied here because the tokenizer is given to the trainer 
     # which does the padding for each batch (more efficient)
     # TODO: remove padding here and generate no dataset but just give the encodings to the trainer
-    encodings  = tokenizer(left_sentences, right_sentences, return_tensors=tensor_type, padding=True, truncation="longest_first")
+    encodings = tokenizer(left_sentences, right_sentences, return_tensors=tensor_type, padding=True, truncation="longest_first")
     
     if using_tensorflow:
         import tensorflow as tf

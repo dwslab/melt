@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Langu
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.SemanticWordRelationDictionary;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.LabelToConceptLinker;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices;
 import org.apache.jena.query.*;
 import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
@@ -180,6 +181,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                         "PREFIX dbnary: <http://kaiko.getalp.org/dbnary#>\r\n" +
                         "ASK {  <http://kaiko.getalp.org/dbnary/" + language.toWiktionaryChar3() + "/" + word + "> ?p ?o . }";
         boolean result = false;
+
         try {
             Query query = QueryFactory.create(queryString);
             QueryExecution queryExecution;
@@ -188,7 +190,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             } else {
                 queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, query);
             }
-            result = queryExecution.execAsk();
+            result = SparqlServices.safeAsk(queryExecution);
             queryExecution.close();
         } catch (Exception e){
             // logging actual error is disabled

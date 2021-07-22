@@ -29,7 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.apache.http.client.methods.HttpPost;
@@ -113,13 +112,14 @@ public class PythonServer {
     private static int port = DEFAULT_PORT;
 
     /**
-     * In case someone wants to configure the python command programatically.
+     * In case someone wants to configure the python command programmatically.
      * Precedence always has the external file.
      */
     private static String pythonCommandBackup = null;
 
     /**
-     * If set to true, all python files (e.g. python server melt and requirements.txt file) will be overridden with every execution.
+     * If set to true, all python files (e.g. python server melt and requirements.txt file) will be overridden with
+     * every execution.
      * Set it to false for testing and debugging new features in python server.
      */
     private static boolean overridePythonFiles = true;
@@ -1292,7 +1292,7 @@ public class PythonServer {
     }
 
     /**
-     * Sets the python command programatically. This is used when no extrnal file python_command.txt is found.
+     * Sets the python command programmatically. This is used when no external file python_command.txt is found.
      *
      * @param pythonCommandBackup the python command.
      */
