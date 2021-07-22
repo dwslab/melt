@@ -1448,7 +1448,7 @@ def inner_transformers_prediction(request):
         prediction_file_path = request.headers.get("predictionFilePath")
         tmp_dir = request.headers.get("tmpDir")
         using_tensorflow = request.headers.get("usingTF").lower() == "true"
-        change_class = bool(request.headers.get("changeClass"))
+        change_class = request.headers.get("changeClass").lower() == "true"
         training_arguments = json.loads(request.headers.get("trainingArguments"))
 
         from transformers import AutoTokenizer
@@ -1484,7 +1484,7 @@ def inner_transformers_prediction(request):
 
             app.logger.info("Run prediction")
             pred_out = trainer.predict(predict_dataset)
-        class_index = 1 if change_class else 0
+        class_index = 0 if change_class else 1
         # sigmoid: scores = 1 / (1 + np.exp(-pred_out.predictions, axis=1[:, class_index]))
         # compute softmax to get class probabilities (scores between 0 and 1)
         scores = softmax(pred_out.predictions, axis=1)[:, class_index]
