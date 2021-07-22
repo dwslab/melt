@@ -34,9 +34,14 @@ Here, an Anaconda environment, named `matching` will be used.
 
 # Matching with Transformer Models
 
-## Transformer as Filter
-MELT offers the usage of transformer models through a filter class `NLPTransformersFilter`. For reasons of performance, it is sensible to use a high-recall matcher first and use the transformer components for the final selection of correspondences. Any transformer model that is locally available or available via the [huggingface repository](https://huggingface.co/) can be used in MELT. 
+## Using a Transformer as Filter
+MELT offers the usage of transformer models through a filter class [`TransformersFilter`](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.java). For reasons of performance, it is sensible to use a high-recall matcher first and use the transformer components for the final selection of correspondences. Any transformer model that is locally available or available via the [huggingface repository](https://huggingface.co/) can be used in MELT. 
 
 In a first step, the filter will write a (temporary) CSV file to disk with the string representations of each correspondence. The desired string representations can be defined with a `TextExtractor`. The transformer python code is called via the python server (see above). 
+
+ The `TransformerFilter` is intended to be used in a matching pipeline:
+
+<img src="https://raw.githubusercontent.com/dwslab/melt/gh-pages/media/transformer_pipeline.png" alt="MELT TransformersFilter pipeline">
+
 
 

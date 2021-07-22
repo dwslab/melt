@@ -12,7 +12,7 @@ The remaining pages in this section list all available matchers and filters in M
 
 A **filter** is a matcher that does not add new correspondences to the alignment but instead
 further processes the given alignment by (1) removing correspondences and/or (2) adding new feature weights to
-existing correspondences. MELT default filters implement the [Filter](/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/Filter.java) interface.
+existing correspondences. MELT filters implement the [`Filter`](/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/Filter.java) interface.
 
 **List of Matchers (Selection)**
 - [`BaselineStringMatcher`](/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/BaselineStringMatcher.java)<br/>
