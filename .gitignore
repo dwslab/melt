@@ -100,6 +100,7 @@ Playground[0-9].java
 
 # documentation: avoid adding temporal file versions when opened in libre office
 documentation/.~lock.melt_ml_architecture_image.odp#
+documentation/.~lock.melt_transformers_graphics.odp#
 python_command.txt
 index.index.0
 
