@@ -76,13 +76,15 @@ public class TransformersFilter extends TransformersBase implements Filter {
         }
         
         if(orderedCorrespondences.isEmpty()){
-            LOGGER.warn("No correspondences have enough text to be processed (the input alignment has {} correspondences) - the input alignment is returned unchanged.", inputAlignment.size());
+            LOGGER.warn("No correspondences have enough text to be processed (the input alignment has {} " +
+                    "correspondences) - the input alignment is returned unchanged.", inputAlignment.size());
             inputFile.delete();
             return inputAlignment;
         }
 
         try {
-            LOGGER.info("Run prediction for {} examples ({} correspondences do not have enough text to be processed).", orderedCorrespondences.size(), inputAlignment.size() - orderedCorrespondences.size());
+            LOGGER.info("Run prediction for {} examples ({} correspondences do not have enough text to be processed).",
+                    orderedCorrespondences.size(), inputAlignment.size() - orderedCorrespondences.size());
             List<Double> confidenceList = predictConfidences(inputFile);
             LOGGER.info("Finished prediction");
 

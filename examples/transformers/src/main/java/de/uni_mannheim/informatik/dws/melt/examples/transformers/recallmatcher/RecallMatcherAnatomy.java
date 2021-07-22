@@ -20,6 +20,7 @@ public class RecallMatcherAnatomy extends MatcherYAAAJena {
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment alignment, Properties p) throws Exception {
         SimpleStringMatcher smatch = new SimpleStringMatcher();
+        smatch.setVerboseLoggingOutput(false);
         alignment.addAll(smatch.match(source, target, alignment, p));
         matchResources(source.listClasses(), target.listClasses(), alignment);
         matchResources(source.listDatatypeProperties(), target.listDatatypeProperties(), alignment);

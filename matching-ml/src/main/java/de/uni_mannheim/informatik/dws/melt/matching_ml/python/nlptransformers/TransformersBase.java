@@ -200,10 +200,10 @@ public abstract class TransformersBase extends MatcherYAAAJena {
      * @param transformersCache The transformers cache folder.
      */
     public void setTransformersCache(File transformersCache) {
-        if(transformersCache == null || transformersCache.isDirectory()){
+        if(transformersCache == null || transformersCache.isDirectory()) {
             this.transformersCache = transformersCache; //null sets the default value
-        } else{
-            throw new IllegalArgumentException("transformersCache is not a directory or is not existent.");
+        } else {
+            throw new IllegalArgumentException("transformersCache is not a directory or does not exist.");
         }
     }
 

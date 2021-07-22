@@ -173,19 +173,23 @@ public class Main {
 
         ExecutionResultSet ers = new ExecutionResultSet();
 
+        SimpleStringMatcher ssm = new SimpleStringMatcher();
+        ssm.setVerboseLoggingOutput(false);
+
         if(testCasesNoKG.size() > 0) {
             ers.addAll(Executor.run(testCasesNoKG, new RecallMatcherKgTrack()));
             ers.addAll(Executor.run(testCasesNoKG, new RecallMatcherAnatomy()));
-            ers.addAll(Executor.run(testCasesNoKG, new SimpleStringMatcher()));
+            ers.addAll(Executor.run(testCasesNoKG, ssm));
         }
 
         if(testCasesKG.size() > 0){
             ers.addAll(Executor.run(testCasesKG, new RecallMatcherKgTrack()));
-            ers.addAll(Executor.run(testCasesNoKG, new RecallMatcherAnatomy()));
-            ers.addAll(Executor.run(testCasesNoKG, new SimpleStringMatcher()));
+            ers.addAll(Executor.run(testCasesKG, new RecallMatcherAnatomy()));
+            ers.addAll(Executor.run(testCasesKG, ssm));
         }
 
         for (String transformerModel : transformerModels) {
+            System.out.println("Processing transformer model: " + transformerModel);
             try {
                 if(testCasesNoKG.size() > 0) {
                     ers.addAll(Executor.run(testCasesNoKG, new AnatomyMatchingPipeline(gpu,
@@ -198,6 +202,7 @@ public class Main {
             } catch (Exception e){
                 System.out.println("A problem occurred with transformer: '" + transformerModel + "'.\n" +
                         "Continuing process...");
+                e.printStackTrace();
             }
         }
         EvaluatorCSV evaluator = new EvaluatorCSV(ers);
