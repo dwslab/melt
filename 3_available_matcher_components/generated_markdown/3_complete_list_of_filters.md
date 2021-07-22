@@ -204,11 +204,12 @@ This filter extracts the corresponding text for a resource (with the specified a
 This class is used to finetune a transformer model based on a generated dataset.
  It comes in two fashions. First, it can be used to generate a fine-tuned model with every call of the match method.
  The input alignment of the match method is used to generate a training dataset.
- Thus the input alignment should contain positive correspondences (with an equivalence relation) and negative correspondences (with another relation than equivalence).
+ Thus, the input alignment should contain positive correspondences (with an equivalence relation) and negative
+ correspondences (with another relation than equivalence).
  
  As a second fashion, this matcher can be used to only generate the training file (by possibly multiple calls to the match method).
- Thus within the match method only the training file is written. After all calls to the match method, one can call the #finetuneModel()  function to 
- train the model on the whole dataset.
+ Thus, within the match method only the training file is written. After all calls to the match method, one can call
+ the #finetuneModel()  function to train the model on the whole dataset.
  
  In both cases, the fine-tuned model as well as the tokenizer is written to the specified directory.
 
