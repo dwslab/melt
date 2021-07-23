@@ -60,7 +60,7 @@ class DBpediaKnowledgeSourceTest {
         dbpedia.setExcludedHypernyms(new HashSet<>());
         LabelToConceptLinker linker = dbpedia.getLinker();
         assertTrue(dbpedia.isHypernymous(linker.linkToSingleConcept("SAP SE"),
-                linker.linkToSingleConcept("Societas Europaea")));
+                linker.linkToSingleConcept("public company")));
         assertFalse(dbpedia.isHypernymous(linker.linkToSingleConcept("SAP SE"),
                 linker.linkToSingleConcept("cat")));
     }

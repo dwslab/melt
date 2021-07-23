@@ -44,7 +44,6 @@ class DBpediaLinkerTest {
         assertNotNull(sapLink);
         Set<String> sapUris = linker.getUris(sapLink);
         assertTrue(sapUris.contains("http://dbpedia.org/resource/SAP"));
-        assertTrue(sapUris.contains("http://dbpedia.org/resource/Shina_Peller")); // dbo:alias SAP@en
 
         // error test
         assertNull(linker.linkToSingleConcept("THIS_CONCEPT_DOES NOT_EXIST_404"));

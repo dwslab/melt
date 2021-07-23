@@ -9,6 +9,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherPipelineYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.SimpleStringMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorFallback;
@@ -155,7 +156,13 @@ public class Main {
     static List<Track> tracks = new ArrayList<>();
     static String[] transformerModels;
 
-    static void fineTuned(List<Track> tracks, Float[] fractions, String[] transformerModels, File targetDir) {
+
+    static void fineTunedPerTestCase(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
+                                     File transformersCache, File targetDir) {
+        if(!isOk(transformerModels, tracks)){
+            return;
+        }
+
         List<TestCase> trainingTrack =
                 TrackRepository.generateTrackWithSampledReferenceAlignment(TrackRepository.Knowledgegraph.V4, 0.5,
                 41, false);
@@ -165,34 +172,68 @@ public class Main {
                 new TextExtractorUrlFragment()
         );
 
-        // TODO: loop over models...
-        TransformersFineTuner fineTuner = new TransformersFineTuner(extractorFallback, transformerModels[0],
-                new File(targetDir, transformerModels[0]));
+        ExecutionResultSet ers = new ExecutionResultSet();
+        for (String model : transformerModels) {
+            for(TestCase tc : trainingTrack) {
+                // Step 1: Training
+                // ----------------
 
-        // TODO
-        // pipeline: recall matcher ->  -> fineTuner
+                File finetunedModelFile = new File(targetDir, model + "_" + tc.getName());
 
-        Executor.run(trainingTrack, fineTuner);
+                // Step 1.1.: Running the test case
+                TransformersFineTuner fineTuner = new TransformersFineTuner(extractorFallback, model,
+                        finetunedModelFile);
+                MatcherPipelineYAAAJena trainingPipelineMatcher = new MatcherPipelineYAAAJena() {
+                    @Override
+                    protected List<MatcherYAAAJena> initializeMatchers() {
+                        List<MatcherYAAAJena> result = new ArrayList<>();
+                        if(tc.getTrack().equals(TrackRepository.Knowledgegraph.V4)){
+                            result.add(new RecallMatcherKgTrack());
+                        } else {
+                            result.add(new RecallMatcherAnatomy());
+                        }
+                        result.add(fineTuner);
+                        return result;
+                    }
+                };
+                Executor.run(tc, trainingPipelineMatcher);
 
-        try {
-            fineTuner.finetuneModel();
-        } catch (Exception e){
-            e.printStackTrace();
+                // Step 1.2: Fine-Tuning the Model
+                try {
+                    fineTuner.finetuneModel();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // Step 2: Apply Model
+                // -------------------
+                MatcherYAAAJena matcher;
+                if(tc.getTrack().equals(TrackRepository.Knowledgegraph.V4)){
+                    matcher = new KnowledgeGraphMatchingPipeline(gpu,
+                        finetunedModelFile.getAbsolutePath(), transformersCache);
+                } else {
+                    matcher = new AnatomyMatchingPipeline(gpu,
+                            finetunedModelFile.getAbsolutePath(), transformersCache);
+                }
+                ers.addAll(Executor.run(tc, matcher, model + "(fine-tuned per TestCase)"));
+            }
         }
-
-        // perform evaluation for model like in zero shot
-
-
+        EvaluatorCSV evaluator = new EvaluatorCSV(ers);
+        evaluator.writeToDirectory();
     }
 
+
+    /**
+     * Performs a zero shot evaluation on the given models using the provided tracks.
+     * @param gpu The GPU to be used.
+     * @param transformerModels Models (Strings) to be used.
+     * @param transformersCache Cache for transformers.
+     * @param tracks Tracks to be evaluated.
+     * @throws Exception General exception.
+     */
     static void zeroShotEvaluation(String gpu, String[] transformerModels, File transformersCache,
                                    List<Track> tracks) throws Exception {
-        if (tracks == null || tracks.size() == 0) {
-            System.out.println("No tracks specified. ABORTING program.");
-            return;
-        }
-        if (transformerModels == null || transformerModels.length == 0) {
-            System.out.println("No transformer model specified. ABORTING program.");
+        if(!isOk(transformerModels, tracks)){
             return;
         }
 
@@ -211,12 +252,12 @@ public class Main {
         SimpleStringMatcher ssm = new SimpleStringMatcher();
         ssm.setVerboseLoggingOutput(false);
 
+        // just adding some baseline matchers below:
         if(testCasesNoKG.size() > 0) {
             ers.addAll(Executor.run(testCasesNoKG, new RecallMatcherKgTrack()));
             ers.addAll(Executor.run(testCasesNoKG, new RecallMatcherAnatomy()));
             ers.addAll(Executor.run(testCasesNoKG, ssm));
         }
-
         if(testCasesKG.size() > 0){
             ers.addAll(Executor.run(testCasesKG, new RecallMatcherKgTrack()));
             ers.addAll(Executor.run(testCasesKG, new RecallMatcherAnatomy()));
@@ -242,5 +283,24 @@ public class Main {
         }
         EvaluatorCSV evaluator = new EvaluatorCSV(ers);
         evaluator.writeToDirectory();
+    }
+
+
+    /***
+     * Very quick parameter check.
+     * @param transformerModels Transformer models to be checked.
+     * @param tracks Tracks to be checked.
+     * @return True if OK, else false.
+     */
+    private static boolean isOk(String[] transformerModels, List<Track> tracks){
+        if (tracks == null || tracks.size() == 0) {
+            System.out.println("No tracks specified. ABORTING program.");
+            return false;
+        }
+        if (transformerModels == null || transformerModels.length == 0) {
+            System.out.println("No transformer model specified. ABORTING program.");
+            return false;
+        }
+        return true;
     }
 }
