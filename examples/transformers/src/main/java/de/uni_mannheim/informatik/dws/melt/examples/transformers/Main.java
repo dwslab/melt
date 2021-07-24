@@ -18,8 +18,10 @@ import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFineTuner;
 import org.apache.commons.cli.*;
@@ -35,6 +37,7 @@ public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
+
         //CLI setup:
         Options options = new Options();
 
@@ -81,6 +84,23 @@ public class Main {
                 .hasArgs()
                 .valueSeparator(' ')
                 .desc("The tracks to be used, separated by spaces.")
+                .build()
+        );
+
+        options.addOption(Option.builder("f")
+                .longOpt("fractions")
+                .hasArgs()
+                .valueSeparator(' ')
+                .desc("The training fraction to be used for training, space separated. Example:\n" +
+                        "--fractions 0.1 0.2 0.3")
+                .build()
+        );
+
+        options.addOption(Option.builder("m")
+        .longOpt("mode")
+                .hasArg()
+                .desc("Available modes: ZEROSHOT, TC_FINETUNE, TRACK_FINETUNE, GLOBAL_FINETUNE")
+                .required()
                 .build()
         );
 
@@ -145,77 +165,300 @@ public class Main {
         }
 
         if (tracks.size() == 0) {
-            System.out.println("No tracks specified. Using anatomy...");
-            tracks.add(TrackRepository.Anatomy.Default);
+            System.out.println("No tracks specified. Using conference...");
+            tracks.add(TrackRepository.Conference.V1_ALL_TESTCASES);
         }
 
-        zeroShotEvaluation(gpu, transformerModels, transformersCache, tracks);
+        String mode = cmd.getOptionValue("m").toLowerCase(Locale.ROOT).trim();
+
+        File targetDirForModels = new File("./models");
+
+        switch (mode){
+            case "zero":
+            case "zeroshot":
+            case "zeroShotEvaluation":
+                LOGGER.info("Mode: zeroShotEvaluation");
+                zeroShotEvaluation(gpu, transformerModels, transformersCache, tracks);
+                break;
+            case "tcfintune":
+            case "tcfinetuned":
+            case "tc_finetune":
+            case "tc_finetuned":
+            case "finetunedpertestcase":
+                LOGGER.info("Mode: fineTunedPerTestCase");
+                fineTunedPerTestCase(gpu, tracks, getFractions(cmd),transformerModels, transformersCache,
+                        targetDirForModels);
+                break;
+            case "track_finetune":
+            case "track_finetuned":
+            case "tracks_finetune":
+            case "tracks_finetuned":
+            case "finetunedpertrack":
+                LOGGER.info("Mode: fineTunedPerTrack");
+                fineTunedPerTrack(gpu, tracks, getFractions(cmd), transformerModels,
+                        transformersCache, targetDirForModels);
+                break;
+            case "global_finetune":
+            case "global_finetuned":
+            case "finetune_global":
+            case "finetuned_global":
+                globalFineTuning(gpu, tracks, getFractions(cmd), transformerModels, transformersCache, targetDirForModels);
+                break;
+            default:
+                LOGGER.info("Mode '" + mode + "' not found.");
+        }
+
     }
 
-    // just used for testing!
+    /**
+     * This helper method simply parses the provided training fractions as float array.
+     * @param cmd The command line.
+     * @return Float array. Will default to a value if no fractions parameter is provided.
+     */
+    static Float[] getFractions(CommandLine cmd) {
+        if(!cmd.hasOption("f")){
+            LOGGER.error("No fractions provided. Please provide them space-separated via the -f option, e.g.:\n" +
+                    "-f 0.2 0.4\n" +
+                    "Using default: 0.2.");
+            return new Float[]{0.2f};
+        }
+        String fractions[] = cmd.getOptionValues("f");
+        return Arrays.stream(fractions).map(Float::parseFloat).collect(Collectors.toList()).toArray(new Float[1]);
+    }
+
+    // external access required for used for unit-testing (therefore, not in main)
     static List<Track> tracks = new ArrayList<>();
     static String[] transformerModels;
 
 
-    static void fineTunedPerTestCase(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
-                                     File transformersCache, File targetDir) {
+    static void fineTunedPerTrack(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
+                                  File transformersCache, File targetDir){
         if(!isOk(transformerModels, tracks)){
             return;
         }
 
-        List<TestCase> trainingTrack =
-                TrackRepository.generateTrackWithSampledReferenceAlignment(TrackRepository.Knowledgegraph.V4, 0.5,
-                41, false);
-
-        TextExtractorFallback extractorFallback = new TextExtractorFallback(
-                new TextExtractorAllAnnotationProperties(),
-                new TextExtractorUrlFragment()
-        );
+        if(!targetDir.exists()){
+            targetDir.mkdirs();
+        }
 
         ExecutionResultSet ers = new ExecutionResultSet();
-        for (String model : transformerModels) {
-            for(TestCase tc : trainingTrack) {
-                // Step 1: Training
-                // ----------------
 
-                File finetunedModelFile = new File(targetDir, model + "_" + tc.getName());
+        for(float fraction : fractions) {
+            for (String model : transformerModels) {
+                for (Track track : tracks){
 
-                // Step 1.1.: Running the test case
+                    // Step 1 Training
+                    String configurationName = model + "_" + fraction + "_" + track;
+                    File finetunedModelFile = new File(targetDir,
+                            configurationName);
+
+                    TextExtractorFallback extractorFallback = new TextExtractorFallback(
+                            new TextExtractorAllAnnotationProperties(),
+                            new TextExtractorUrlFragment()
+                    );
+                    TransformersFineTuner fineTuner = new TransformersFineTuner(extractorFallback, model,
+                            finetunedModelFile);
+                    List<TestCase> trainingTestCases = TrackRepository.generateTrackWithSampledReferenceAlignment(track,
+                            fraction, 41, false);
+
+                    MatcherPipelineYAAAJena trainingPipelineMatcher = new MatcherPipelineYAAAJena() {
+                        @Override
+                        protected List<MatcherYAAAJena> initializeMatchers() {
+                            List<MatcherYAAAJena> result = new ArrayList<>();
+                            if (track.equals(TrackRepository.Knowledgegraph.V4)) {
+                                result.add(new RecallMatcherKgTrack());
+                            } else {
+                                result.add(new RecallMatcherAnatomy());
+                            }
+                            // TODO add AddNegatives
+                            result.add(fineTuner);
+                            return result;
+                        }
+                    };
+                    Executor.run(trainingTestCases, trainingPipelineMatcher, configurationName);
+                    try {
+                        fineTuner.finetuneModel();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    // Step 2: Apply Model
+                    if (track.equals(TrackRepository.Knowledgegraph.V4)) {
+                        ers.addAll(Executor.run(track,  new KnowledgeGraphMatchingPipeline(gpu,
+                                finetunedModelFile.getAbsolutePath(), transformersCache), configurationName));
+                    } else {
+                        ers.addAll(Executor.run(track,  new AnatomyMatchingPipeline(gpu,
+                                finetunedModelFile.getAbsolutePath(), transformersCache), configurationName));
+                    }
+                }
+            }
+        } // end of fractions loop
+
+        EvaluatorCSV evaluator = new EvaluatorCSV(ers);
+        evaluator.writeToDirectory();
+    }
+
+    /**
+     * One fine-tuned model for all data (all tracks).
+     * @param gpu The GPU to be used.
+     * @param tracks Tracks to be evaluated.
+     * @param fractions Fractions (training share in train-test split) that shall be evaluated as float array.
+     * @param transformerModels Models (Strings) to be used.
+     * @param transformersCache Cache for transformers.
+     * @param targetDir Where the models shall be written to.
+     */
+    static void globalFineTuning(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
+                                 File transformersCache, File targetDir){
+        if(!isOk(transformerModels, tracks)){
+            return;
+        }
+
+        if(!targetDir.exists()){
+            targetDir.mkdirs();
+        }
+
+        ExecutionResultSet ers = new ExecutionResultSet();
+
+        for(float fraction : fractions) {
+            for (String model : transformerModels) {
+
+                String configurationName = model + "_" + fraction + "_GLOBAL";
+                File finetunedModelFile = new File(targetDir,
+                        configurationName);
+                TextExtractorFallback extractorFallback = new TextExtractorFallback(
+                        new TextExtractorAllAnnotationProperties(),
+                        new TextExtractorUrlFragment()
+                );
                 TransformersFineTuner fineTuner = new TransformersFineTuner(extractorFallback, model,
                         finetunedModelFile);
-                MatcherPipelineYAAAJena trainingPipelineMatcher = new MatcherPipelineYAAAJena() {
-                    @Override
-                    protected List<MatcherYAAAJena> initializeMatchers() {
-                        List<MatcherYAAAJena> result = new ArrayList<>();
-                        if(tc.getTrack().equals(TrackRepository.Knowledgegraph.V4)){
-                            result.add(new RecallMatcherKgTrack());
-                        } else {
-                            result.add(new RecallMatcherAnatomy());
-                        }
-                        result.add(fineTuner);
-                        return result;
-                    }
-                };
-                Executor.run(tc, trainingPipelineMatcher);
 
-                // Step 1.2: Fine-Tuning the Model
+                for (Track track : tracks) {
+                    List<TestCase> trainingTestCases = TrackRepository.generateTrackWithSampledReferenceAlignment(track,
+                            fraction, 41, false);
+                    MatcherPipelineYAAAJena trainingPipelineMatcher = new MatcherPipelineYAAAJena() {
+                        @Override
+                        protected List<MatcherYAAAJena> initializeMatchers() {
+                            List<MatcherYAAAJena> result = new ArrayList<>();
+                            if (track.equals(TrackRepository.Knowledgegraph.V4)) {
+                                result.add(new RecallMatcherKgTrack());
+                            } else {
+                                result.add(new RecallMatcherAnatomy());
+                            }
+                            // TODO add AddNegatives
+                            result.add(fineTuner);
+                            return result;
+                        }
+                    };
+                    Executor.run(trainingTestCases, trainingPipelineMatcher, configurationName);
+                }
+
+                // train
                 try {
                     fineTuner.finetuneModel();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                // Step 2: Apply Model
-                // -------------------
-                MatcherYAAAJena matcher;
-                if(tc.getTrack().equals(TrackRepository.Knowledgegraph.V4)){
-                    matcher = new KnowledgeGraphMatchingPipeline(gpu,
-                        finetunedModelFile.getAbsolutePath(), transformersCache);
-                } else {
-                    matcher = new AnatomyMatchingPipeline(gpu,
-                            finetunedModelFile.getAbsolutePath(), transformersCache);
+                // evaluate
+                for (Track track : tracks) {
+                    if (track.equals(TrackRepository.Knowledgegraph.V4)) {
+                        ers.addAll(Executor.run(track,  new KnowledgeGraphMatchingPipeline(gpu,
+                                finetunedModelFile.getAbsolutePath(), transformersCache)));
+                    } else {
+                        ers.addAll(Executor.run(track,  new AnatomyMatchingPipeline(gpu,
+                                finetunedModelFile.getAbsolutePath(), transformersCache)));
+                    }
                 }
-                ers.addAll(Executor.run(tc, matcher, model + "(fine-tuned per TestCase)"));
+            }
+        } // end of fractions loop
+
+        EvaluatorCSV evaluator = new EvaluatorCSV(ers);
+        evaluator.writeToDirectory();
+    }
+
+    /**
+     * The model is fine-tuned per testcase.
+     * @param gpu The GPU to be used.
+     * @param tracks Tracks to be evaluated.
+     * @param transformerModels Models (Strings) to be used.
+     * @param transformersCache Cache for transformers.
+     * @param targetDir Where the models shall be written to.
+     */
+    static void fineTunedPerTestCase(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
+                                     File transformersCache, File targetDir) {
+        if(!isOk(transformerModels, tracks)){
+            return;
+        }
+
+        if(!targetDir.exists()){
+            targetDir.mkdirs();
+        }
+
+        ExecutionResultSet ers = new ExecutionResultSet();
+
+        outerLoop:
+        for(float fraction : fractions) {
+            for (Track track : tracks) {
+                for (TestCase testCase : track.getTestCases()) {
+
+                    TestCase trainingCase = TrackRepository.generateTestCaseWithSampledReferenceAlignment(testCase,
+                            fraction,
+                            41, false);
+
+                    TextExtractorFallback extractorFallback = new TextExtractorFallback(
+                            new TextExtractorAllAnnotationProperties(),
+                            new TextExtractorUrlFragment()
+                    );
+
+                    for (String model : transformerModels) {
+
+                        // Step 1: Training
+                        // ----------------
+
+                        File finetunedModelFile = new File(targetDir,
+                                model + "_" + fraction + "_" + testCase.getName());
+
+                        // Step 1.1.: Running the test case
+                        TransformersFineTuner fineTuner = new TransformersFineTuner(extractorFallback, model,
+                                finetunedModelFile);
+                        MatcherPipelineYAAAJena trainingPipelineMatcher = new MatcherPipelineYAAAJena() {
+                            @Override
+                            protected List<MatcherYAAAJena> initializeMatchers() {
+                                List<MatcherYAAAJena> result = new ArrayList<>();
+                                if (trainingCase.getTrack().equals(TrackRepository.Knowledgegraph.V4)) {
+                                    result.add(new RecallMatcherKgTrack());
+                                } else {
+                                    result.add(new RecallMatcherAnatomy());
+                                }
+                                // TODO add AddNegatives
+                                result.add(fineTuner);
+                                return result;
+                            }
+                        };
+                        Executor.run(trainingCase, trainingPipelineMatcher);
+
+                        // Step 1.2: Fine-Tuning the Model
+                        try {
+                            fineTuner.finetuneModel();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        // Step 2: Apply Model
+                        // -------------------
+                        MatcherYAAAJena matcher;
+                        if (testCase.getTrack().equals(TrackRepository.Knowledgegraph.V4)) {
+                            matcher = new KnowledgeGraphMatchingPipeline(gpu,
+                                    finetunedModelFile.getAbsolutePath(), transformersCache);
+                        } else {
+                            matcher = new AnatomyMatchingPipeline(gpu,
+                                    finetunedModelFile.getAbsolutePath(), transformersCache);
+                        }
+                        ers.addAll(Executor.run(testCase, matcher,
+                                model + " (fine-tuned with fraction " + fraction + ")"));
+                        //break outerLoop;
+                    }
+                }
             }
         }
         EvaluatorCSV evaluator = new EvaluatorCSV(ers);
