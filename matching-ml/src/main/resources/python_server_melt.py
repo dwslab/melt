@@ -1424,17 +1424,19 @@ def transformers_init(request):
     if "transformersCache" in request.headers:
         os.environ["TRANSFORMERS_CACHE"] = request.headers.get("transformersCache")
 
+# needs to be at the top level because only top level function can be pickled
+def multi_process_wrapper_function(queue, request):
+    queue.put(func(request))
+
 def run_function_multi_process(request, func):
     multi_processing = request.headers.get("multiProcessing")
     if multi_processing == 'no_multi_process':
         return func(request)
     else:
         import multiprocessing as mp 
-        def wrapper_func(queue, request):
-            queue.put(func(request))
         ctx = mp.get_context() if multi_processing == 'default_multi_process' else mp.get_context(multi_processing)
         queue = ctx.Queue()
-        process = ctx.Process(target=wrapper_func, args=(queue, request,))
+        process = ctx.Process(target=multi_process_wrapper_function, args=(queue, request,))
         process.start()
         process.join()
         return queue.get()
