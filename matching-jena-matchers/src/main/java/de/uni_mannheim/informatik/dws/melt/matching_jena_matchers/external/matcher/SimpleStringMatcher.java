@@ -219,7 +219,9 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
                 // DEBUG: just a test whether there is a collapse (can be deleted in high-performance scenario)
                 if (previousValue != null && !previousValue.equals(uri2labelEntry.getKey())) {
                     // -> there was already an entry for that particular BOW that was overwritten and was originally pointing to another entity
-                    LOGGER.warn("Critical Name Collapse: " + previousValue + " / " + uri2labelEntry.getKey() + "   on label: " + label);
+                    if(isVerboseLoggingOutput()) {
+                        LOGGER.warn("Critical Name Collapse: " + previousValue + " / " + uri2labelEntry.getKey() + "   on label: " + label);
+                    }
                     addClashedLabel(previousValue, uri2labelEntry.getKey());
                 }
             }

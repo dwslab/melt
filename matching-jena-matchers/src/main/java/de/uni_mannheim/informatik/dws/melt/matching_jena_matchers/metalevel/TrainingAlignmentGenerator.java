@@ -31,8 +31,8 @@ public class TrainingAlignmentGenerator implements IMatcherCaller, IMatcher<OntM
     }
     
     @Override
-    public AlignmentAndParameters match(Set<Object> sourceRespresentations, Set<Object> targetRespresentations, Object inputAlignment, Object parameters) throws Exception {
-        AlignmentAndParameters r = GenericMatcherCaller.runMatcherMultipleRepresentations(this.recallMatcher, sourceRespresentations, targetRespresentations, null, parameters);
+    public AlignmentAndParameters match(Set<Object> sourceRepresentations, Set<Object> targetRepresentations, Object inputAlignment, Object parameters) throws Exception {
+        AlignmentAndParameters r = GenericMatcherCaller.runMatcherMultipleRepresentations(this.recallMatcher, sourceRepresentations, targetRepresentations, null, parameters);
         
         Alignment recallAlignment = r.getAlignment(Alignment.class, TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters));        
         Alignment referenceAlignment = TypeTransformerRegistry.getTransformedObjectOrNewInstance(inputAlignment, Alignment.class, parameters);
