@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConceptType;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.jena.graph.Graph;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Sven Hertling
  * @author Jan Portisch
+ * @deprecated better use {@link ConceptType} which has the same functionality.
  */
 public enum ResourceType {
     CLASS,

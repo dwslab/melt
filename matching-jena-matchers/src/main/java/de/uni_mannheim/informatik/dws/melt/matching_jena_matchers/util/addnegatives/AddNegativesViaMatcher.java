@@ -1,12 +1,12 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.addnegatives;
 
 import com.googlecode.cqengine.query.QueryFactory;
-import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
+import de.uni_mannheim.informatik.dws.melt.matching_base.AddNegatives;
 import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcherCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.addnegatives.AddNegativesViaMatcher;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
@@ -15,18 +15,21 @@ import java.util.Set;
 import org.apache.jena.ontology.OntModel;
 
 /**
- * This matcher assumes that the input alignment is a kind of reference alignment.
+ * This component adds negative correspondences to the input alignment via a recall optimized matcher.
+ * This also means that the input alignment should contain positive correspondences.
  * After applying the recallMatcher given in the constructor, a new alignment is returned which
  * contains positive (equivalence relation) and negative(incompat relation) correspondences.
  * With the help of this alignment, supervised matchers can be trained. 
- * @deprecated replacement is to use {@link AddNegativesViaMatcher} which has the same functionality 
- * (but it really uses only correspondences with equivalence relation as positive correspondences) .
  */
-public class TrainingAlignmentGenerator implements IMatcherCaller, IMatcher<OntModel, Alignment, Properties>{
+public class AddNegativesViaMatcher extends MatcherYAAAJena implements IMatcherCaller, AddNegatives {
     
     private final Object recallMatcher;
     
-    public TrainingAlignmentGenerator(Object recallMatcher){
+    /**
+     * Constructor with requires the recall matcher
+     * @param recallMatcher this matcher should return many (even wrong) correspondences.
+     */
+    public AddNegativesViaMatcher(Object recallMatcher){
         this.recallMatcher = recallMatcher;
     }
     
@@ -37,7 +40,7 @@ public class TrainingAlignmentGenerator implements IMatcherCaller, IMatcher<OntM
         Alignment recallAlignment = r.getAlignment(Alignment.class, TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters));        
         Alignment referenceAlignment = TypeTransformerRegistry.getTransformedObjectOrNewInstance(inputAlignment, Alignment.class, parameters);
         
-        Alignment training = getTrainingAlignment(recallAlignment, referenceAlignment);
+        Alignment training = addNegatives(recallAlignment, referenceAlignment);
         
         return new AlignmentAndParameters(training, r.getParameters());
     }
@@ -47,7 +50,7 @@ public class TrainingAlignmentGenerator implements IMatcherCaller, IMatcher<OntM
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties parameters) throws Exception {
         AlignmentAndParameters r = GenericMatcherCaller.runMatcher(this.recallMatcher, source, target, null, parameters);
         Alignment recallAlignment = r.getAlignment(Alignment.class, TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters));         
-        return getTrainingAlignment(recallAlignment, inputAlignment);
+        return addNegatives(recallAlignment, inputAlignment);
     }
     
     
@@ -61,13 +64,18 @@ public class TrainingAlignmentGenerator implements IMatcherCaller, IMatcher<OntM
      * @param referenceAlignment reference alignment which does not need to really be the reference alignment of a track.
      * @return the correspondences from the recall alignment, where positive examples have the equivalence relation and negative examples have INCOMPAT relation
      */
-    public static Alignment getTrainingAlignment(Alignment recallAlignment, Alignment referenceAlignment){
+    public static Alignment addNegatives(Alignment recallAlignment, Alignment referenceAlignment){
         
         //generate the training examples
-        Iterable<Correspondence> alternatives = recallAlignment.retrieve(QueryFactory.or(
-            QueryFactory.in(Correspondence.SOURCE, referenceAlignment.getDistinctSourcesAsSet()),
-            QueryFactory.in(Correspondence.TARGET, referenceAlignment.getDistinctTargetsAsSet())
-        ));
+        Iterable<Correspondence> alternatives = recallAlignment.retrieve(
+                QueryFactory.and(
+                    QueryFactory.or(
+                        QueryFactory.in(Correspondence.SOURCE, referenceAlignment.getDistinctSourcesAsSet()),
+                        QueryFactory.in(Correspondence.TARGET, referenceAlignment.getDistinctTargetsAsSet())
+                    ),
+                    QueryFactory.equal(Correspondence.RELATION, CorrespondenceRelation.EQUIVALENCE)
+                )
+        );
         
         Alignment trainingAlignment = new Alignment();
         for(Correspondence c : alternatives) {

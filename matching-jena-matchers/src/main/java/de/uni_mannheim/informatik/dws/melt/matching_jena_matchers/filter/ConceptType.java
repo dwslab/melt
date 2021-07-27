@@ -6,8 +6,11 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntResource;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.OWL2;
@@ -154,6 +157,39 @@ public enum ConceptType {
         return false;
     }
     
+    /**
+     * Returns the most precise/specific resource type.
+     * This method implements the jena way of determmin the concept type.
+     * Without inference, it may yield not perfect result and is usually slower than
+     * {@link ConceptType#analyze(org.apache.jena.rdf.model.Model, java.lang.String) }.
+     * @param model any ont model
+     * @param resourceURI The URI for which the resource type shall be determined.
+     * @return The most specify resource type available (like ObjectProperty)
+     */
+    public static ConceptType analyzeWithJena(OntModel model, String resourceURI){
+        OntResource r = model.createOntResource(resourceURI);
+        
+        if(r.isClass())
+            return ConceptType.CLASS;
+        
+        if(r.isDatatypeProperty())
+            return ConceptType.DATATYPE_PROPERTY;
+        
+        if(r.isObjectProperty())
+            return ConceptType.OBJECT_PROPERTY;
+
+        if(r.isAnnotationProperty())
+            return ConceptType.ANNOTATION_PROPERTY;
+        
+        if(r.isProperty())
+            return ConceptType.RDF_PROPERTY;
+        
+        if(r.isIndividual())
+            return INSTANCE;
+        
+        return UNKNOWN;
+    }
+    
     
     /**
      * Anlyze the type of the resource.
@@ -164,6 +200,11 @@ public enum ConceptType {
      * @return The resource category of the URI in question.
      */
     public static ConceptType analyzeWithInference(InfModel model, String resourceURI){
+        if(model.getReasoner() == null){
+            LOGGER.warn("The concept type is analyzed with inference but themodel does not have any reasoner attached. "
+                    + "This means the results are not correct. Please attach a reasoner to use the analyzeWithInference method.");
+        }
+        
         Node n = NodeFactory.createURI( resourceURI );
         Graph g = model.getGraph();
         

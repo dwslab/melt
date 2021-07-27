@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena;
 
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
@@ -24,5 +25,9 @@ public interface TextExtractor {
     
     public static TextExtractor wrapLiteralExtractor(LiteralExtractor e){
         return (Resource r) -> e.extract(r).stream().map(Literal::getLexicalForm).filter(x -> !x.trim().equals("")).collect(Collectors.toSet());
+    }
+    
+    public static TextExtractor appendStringPostProcessing(TextExtractor e, Function<String, String> postprocessing){
+        return (Resource r) -> e.extract(r).stream().map(postprocessing).filter(x -> !x.trim().equals("")).collect(Collectors.toSet());
     }
 }
