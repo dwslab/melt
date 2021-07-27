@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -259,12 +259,20 @@ org.apache.jena.graph.Graph&nbsp;g)</code></th>
 </td>
 </tr>
 <tr class="row-color" id="i3">
+<td class="col-first"><code>static <a href="ConceptType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">ConceptType</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#analyzeWithJena(org.apache.jena.ontology.OntModel,java.lang.String)">analyzeWithJena</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;model,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceURI)</code></th>
+<td class="col-last">
+<div class="block">Returns the most precise/specific resource type.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i4">
 <td class="col-first"><code>private static boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#intersect(java.util.Set,org.apache.jena.graph.Node%5B%5D)">intersect</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;org.apache.jena.graph.Node&gt;&nbsp;prefetchedTypes,
 org.apache.jena.graph.Node[]&nbsp;requestedTypes)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i5">
 <td class="col-first"><code>static <a href="ConceptType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">ConceptType</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#subsumeProperties(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConceptType)">subsumeProperties</a></span>&#8203;(<a href="ConceptType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">ConceptType</a>&nbsp;resourceType)</code></th>
 <td class="col-last">
@@ -272,14 +280,14 @@ org.apache.jena.graph.Node[]&nbsp;requestedTypes)</code></th>
  DATATYPE_PROPERTY, OBJECT_PROPERTY, ANNOTATION_PROPERTY, and RDF_PROPERTY.</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>static <a href="ConceptType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">ConceptType</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#valueOf(java.lang.String)">valueOf</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></th>
 <td class="col-last">
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>static <a href="ConceptType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">ConceptType</a>[]</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#values()">values</a></span>()</code></th>
 <td class="col-last">
@@ -465,6 +473,24 @@ org.apache.jena.graph.Graph&nbsp;g)</span></div>
 <h3>intersect</h3>
 <div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">intersect</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;org.apache.jena.graph.Node&gt;&nbsp;prefetchedTypes,
 org.apache.jena.graph.Node[]&nbsp;requestedTypes)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="analyzeWithJena(org.apache.jena.ontology.OntModel,java.lang.String)">
+<h3>analyzeWithJena</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ConceptType.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">ConceptType</a></span>&nbsp;<span class="member-name">analyzeWithJena</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;model,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceURI)</span></div>
+<div class="block">Returns the most precise/specific resource type.
+ This method implements the jena way of determmin the concept type.
+ Without inference, it may yield not perfect result and is usually slower than
+ <a href="#analyze(org.apache.jena.rdf.model.Model,java.lang.String)"><code>analyze(org.apache.jena.rdf.model.Model, java.lang.String)</code></a>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>model</code> - any ont model</dd>
+<dd><code>resourceURI</code> - The URI for which the resource type shall be determined.</dd>
+<dt>Returns:</dt>
+<dd>The most specify resource type available (like ObjectProperty)</dd>
+</dl>
 </section>
 </li>
 <li>
