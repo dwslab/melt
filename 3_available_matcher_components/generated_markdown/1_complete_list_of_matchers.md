@@ -296,6 +296,16 @@ A relatively simple matcher that can be used before running BackgroundMatcher to
 
 *Keywords: Simple String Matcher*
 
+## AddNegativesViaMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesViaMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesViaMatcher.java)
+
+This component adds negative correspondences to the input alignment via a recall optimized matcher.
+ This also means that the input alignment should contain positive correspondences.
+ After applying the recallMatcher given in the constructor, a new alignment is returned which
+ contains positive (equivalence relation) and negative(incompat relation) correspondences.
+ With the help of this alignment, supervised matchers can be trained.
+
+*Keywords: Add Negatives Via Matcher*
+
 ## MatchPropBasedOnClass [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/structurelevel/MatchPropBasedOnClass.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/structurelevel/MatchPropBasedOnClass.java)
 
 Graph-based Matcher: Checks all matched classes and matches also properties
