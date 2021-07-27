@@ -22,8 +22,19 @@ jobs:
       with:
         path: |
           ~/.m2
-          ~/.cache/pip
         key: ${{ matrix.os }}-m2-${{ hashFiles('**/pom.xml') }}-1
+    - name: Cache Python packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/pip
+          key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}-1
+    - name: Cache Transformers models
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/huggingface
+          key: ${{ runner.os }}-transformers-models
     - name: Setup Python
       uses: actions/setup-python@v1
       with:
