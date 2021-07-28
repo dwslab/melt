@@ -138,13 +138,13 @@ public class PythonServer {
         HttpGet request = new HttpGet(serverUrl + "/transformers-finetuning-hp-search");
         transformersUpdateBaseRequest(hpsearch, request);
         
-        request.addHeader("resultingModelLocation", getCanonicalPath(hpsearch.getResultingModelLocation()));
-        request.addHeader("trainingFile", getCanonicalPath(trainingFile));
-        request.addHeader("numberOfTrials", Integer.toString(hpsearch.getNumberOfTrials()));
-        request.addHeader("testSize", Float.toString(hpsearch.getTestSize()));
-        request.addHeader("optimizingMetric", hpsearch.getOptimizingMetric().toString());        
-        request.addHeader("hpSpace", hpsearch.getHpSpace().toJsonString());
-        request.addHeader("hpMutations", hpsearch.getHpMutations().toJsonString());
+        request.addHeader("resulting-model-location", getCanonicalPath(hpsearch.getResultingModelLocation()));
+        request.addHeader("training-file", getCanonicalPath(trainingFile));
+        request.addHeader("number-of-trials", Integer.toString(hpsearch.getNumberOfTrials()));
+        request.addHeader("test-size", Float.toString(hpsearch.getTestSize()));
+        request.addHeader("optimizing-metric", hpsearch.getOptimizingMetric().toString());        
+        request.addHeader("hp-space", hpsearch.getHpSpace().toJsonString());
+        request.addHeader("hp-mutations", hpsearch.getHpMutations().toJsonString());
         
         runRequest(request);
     }
@@ -159,8 +159,8 @@ public class PythonServer {
         HttpGet request = new HttpGet(serverUrl + "/transformers-finetuning");
         transformersUpdateBaseRequest(fineTuner, request);
         
-        request.addHeader("resultingModelLocation", getCanonicalPath(fineTuner.getResultingModelLocation()));
-        request.addHeader("trainingFile", getCanonicalPath(trainingFile));
+        request.addHeader("resulting-model-location", getCanonicalPath(fineTuner.getResultingModelLocation()));
+        request.addHeader("training-file", getCanonicalPath(trainingFile));
         
         runRequest(request);
     }
@@ -179,8 +179,8 @@ public class PythonServer {
         HttpGet request = new HttpGet(serverUrl + "/transformers-prediction");
         transformersUpdateBaseRequest(filter, request);
         
-        request.addHeader("predictionFilePath", getCanonicalPath(predictionFilePath));
-        request.addHeader("changeClass", Boolean.toString(filter.isChangeClass()));
+        request.addHeader("prediction-file-path", getCanonicalPath(predictionFilePath));
+        request.addHeader("change-class", Boolean.toString(filter.isChangeClass()));
 
         String resultString = runRequest(request);
         try {
@@ -191,23 +191,23 @@ public class PythonServer {
     }
     
     private void transformersUpdateBaseRequest(TransformersBase base, HttpGet request){
-        request.addHeader("modelName", base.getModelName());
-        request.addHeader("usingTF", Boolean.toString(base.isUsingTensorflow()));
-        request.addHeader("trainingArguments", base.getTrainingArguments().toJsonString());
-        request.addHeader("tmpDir", getCanonicalPath(base.getTmpDir()));
-        request.addHeader("multiProcessing", base.getMultiProcessing().toString());
+        request.addHeader("model-name", base.getModelName());
+        request.addHeader("using-tf", Boolean.toString(base.isUsingTensorflow()));
+        request.addHeader("training-arguments", base.getTrainingArguments().toJsonString());
+        request.addHeader("tmp-dir", getCanonicalPath(base.getTmpDir()));
+        request.addHeader("multi-processing", base.getMultiProcessing().toString());
         
         String cudaVisibleDevices = base.getCudaVisibleDevices();
         if(cudaVisibleDevices != null){
             cudaVisibleDevices = cudaVisibleDevices.trim();
             if(cudaVisibleDevices.isEmpty() == false){
-                request.addHeader("cudaVisibleDevices", cudaVisibleDevices);
+                request.addHeader("cuda-visible-devices", cudaVisibleDevices);
             }
         }
         
         File transformersCache = base.getTransformersCache();
         if(transformersCache != null)
-            request.addHeader("transformersCache", getCanonicalPath(transformersCache));
+            request.addHeader("transformers-cache", getCanonicalPath(transformersCache));
     }
     
     

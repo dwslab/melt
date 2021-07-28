@@ -23,29 +23,21 @@ public class TransformersFilterTest {
     public void testFilterWithBert() throws Exception {
         //https://huggingface.co/sgugger/finetuned-bert-mrpc
         //https://huggingface.co/datasets/glue
-        File mrpcTestFile = new File(getClass().getClassLoader().getResource("mrpc-test.csv").getFile());
+        File mrpcTestFile = new File(getClass().getClassLoader().getResource("mrpc-test-subset.csv").getFile());
         TransformersFilter zeroShot = new TransformersFilter(null, "bert-base-cased-finetuned-mrpc");
+
         List<Double> confidences = zeroShot.predictConfidences(mrpcTestFile);
         List<Integer> gold = getGoldStandard(mrpcTestFile);
-        double acc = accuracy(gold, confidences);      
+        double acc = accuracy(gold, confidences);
+        LOGGER.info("accuracy in testFilterWithBert (should be higher than 0.8): " + Double.toString(acc));
         assertTrue(acc > 0.8);
         
         zeroShot.setChangeClass(true);
         confidences = zeroShot.predictConfidences(mrpcTestFile);
         acc = accuracy(gold, confidences);      
+        LOGGER.info("accuracy in testFilterWithBert (should be lower than 0.2: " + Double.toString(acc));
         assertTrue(acc < 0.2);
     }
-    
-    //@Test
-    public void testFilterWithGPT() throws Exception {
-        File mrpcTestFile = new File(getClass().getClassLoader().getResource("mrpc-test.csv").getFile());
-        TransformersFilter zeroShot = new TransformersFilter(null, "gpt2");
-        List<Double> confidences = zeroShot.predictConfidences(mrpcTestFile);
-        List<Integer> gold = getGoldStandard(mrpcTestFile);
-        assertTrue(accuracy(gold, confidences) > 0.8);
-    }
-    
-    
     
     private static double accuracy(List<Integer> gold, List<Double> confidences){
         int tp = 0;
