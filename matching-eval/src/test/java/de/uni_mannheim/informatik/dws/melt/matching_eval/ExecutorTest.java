@@ -5,7 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.SimpleStringMatcher;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
-import org.codehaus.plexus.util.FileUtils;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
@@ -14,9 +14,11 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExecutorTest {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorTest.class);
 
     @AfterAll
     static void tearDown(){
@@ -25,7 +27,7 @@ public class ExecutorTest {
 
     static void deleteDirectory(String directoryName){
         try {
-            FileUtils.deleteDirectory(directoryName);
+            FileUtils.deleteDirectory(new File(directoryName));
         } catch (IOException e) {
             // we do not fail here...
         }
@@ -79,6 +81,10 @@ public class ExecutorTest {
         }
         assertTrue(matcherNames.contains("M1"));
         assertTrue(matcherNames.contains("M2"));
+        if(ersLoaded.size() < 6){
+            LOGGER.info("execution results: {}", ersLoaded.toString());
+            LOGGER.info("files: {}", FileUtils.listFiles(resultsFolder, null, true));
+        }
         assertTrue(ersLoaded.size() >= 6, "the number of results loaded should be ewual or greater than 6 but was " + ersLoaded.size());
     }
 
