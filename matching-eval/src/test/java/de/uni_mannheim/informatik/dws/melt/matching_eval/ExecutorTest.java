@@ -79,7 +79,7 @@ public class ExecutorTest {
         }
         assertTrue(matcherNames.contains("M1"));
         assertTrue(matcherNames.contains("M2"));
-        assertTrue(ersLoaded.size() >= 6);
+        assertTrue(ersLoaded.size() >= 6, "the number of results loaded should be ewual or greater than 6 but was " + ersLoaded.size());
     }
 
 }
