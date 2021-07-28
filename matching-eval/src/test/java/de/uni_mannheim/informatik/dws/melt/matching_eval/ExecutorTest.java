@@ -65,9 +65,14 @@ public class ExecutorTest {
         testCaseList.add(TrackRepository.Conference.V1.getTestCase(1));
         testCaseList.add(TrackRepository.Conference.V1.getTestCase(2));
 
+        LOGGER.info("test case list: {}", testCaseList);
+        
         File resultsFolder = new File("melt_csv_loader_test");
         resultsFolder.deleteOnExit();
         ExecutionResultSet ers = Executor.run(testCaseList, matchers);
+        
+        assertTrue(ers.size() >= 6, "the number of results generated should be equal or greater than 6 but was " + ers.size());
+        
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(new ExecutionResultSet(ers));
         evaluatorCSV.writeResultsToDirectory(resultsFolder);
         assertTrue(resultsFolder.exists());
@@ -85,7 +90,7 @@ public class ExecutorTest {
             LOGGER.info("execution results: {}", ersLoaded.toString());
             LOGGER.info("files: {}", FileUtils.listFiles(resultsFolder, null, true));
         }
-        assertTrue(ersLoaded.size() >= 6, "the number of results loaded should be ewual or greater than 6 but was " + ersLoaded.size());
+        assertTrue(ersLoaded.size() >= 6, "the number of results loaded should be equal or greater than 6 but was " + ersLoaded.size());
     }
 
 }
