@@ -153,6 +153,7 @@ public abstract class Track {
         if(testCases == null){
             testCases = readFromCache();
             if (testCases.size() > 0) {
+                testCases.sort((TestCase o1, TestCase o2) -> o1.getName().compareTo(o2.getName()));
                 return testCases;
             }
             try {
@@ -161,8 +162,8 @@ public abstract class Track {
                 LOGGER.error("Couldn't download test cases and store them in cache folder", ex);
             }
             testCases = readFromCache();
+            testCases.sort((TestCase o1, TestCase o2) -> o1.getName().compareTo(o2.getName()));
         }
-        testCases.sort((TestCase o1, TestCase o2) -> o1.getName().compareTo(o2.getName()));
         return testCases;
     }
     
