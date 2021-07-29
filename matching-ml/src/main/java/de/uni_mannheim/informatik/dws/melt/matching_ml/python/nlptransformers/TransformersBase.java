@@ -43,7 +43,7 @@ public abstract class TransformersBase extends MatcherYAAAJena {
         this.usingTensorflow = false;
         this.cudaVisibleDevices = ""; //use all GPUs
         this.transformersCache = null; //use default
-        this.multiProcessing = TransformersMultiProcessing.DEFAULT_MULTI_PROCESS;
+        this.multiProcessing = TransformersMultiProcessing.SPAWN;
     }
     
     /**

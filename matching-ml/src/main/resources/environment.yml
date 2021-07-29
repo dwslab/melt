@@ -1,0 +1,10 @@
+# run: conda env create -f environment.yml
+name: melt
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - cudatoolkit
+  - pip
+  - pip:
+    - -r file:requirements.txt

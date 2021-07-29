@@ -1576,7 +1576,8 @@ def transformers_finetuning():
 def transformers_finetuning_hp_search():
     try:
         transformers_init(request.headers)
-        
+        os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
         initial_model_name = request.headers["model-name"]
         resulting_model_location = request.headers["resulting-model-location"]
         tmp_dir = request.headers["tmp-dir"]
@@ -1753,6 +1754,7 @@ def transformers_finetuning_hp_search():
 
             app.logger.info("Save model")
             trainer.save_model(resulting_model_location)
+        del os.environ["TOKENIZERS_PARALLELISM"]
         return "True"
     except Exception as e:
         import traceback
