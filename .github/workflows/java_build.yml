@@ -27,15 +27,15 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          ~/.cache/pip
-        key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}-1
+          ${{ env.pythonLocation }}
+        key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}-full-python
     - name: Cache Transformers models
       uses: actions/cache@v2
       with:
         path: |
           ~/.cache/huggingface
         key: ${{ runner.os }}-transformers-models
-    - name: Cache OAEI files
+    - name: Cache OAEI files # The check if the download server works as expected is in java_coverage where this cache is not enabled
       uses: actions/cache@v2
       with:
         path: |
