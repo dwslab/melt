@@ -9,6 +9,13 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
         java: ['8', '11', '15']
+        include:
+        - os: ubuntu-latest
+          pipcache: ~/.cache/pip
+        - os: macos-latest
+          pipcache: ~/Library/Caches/pip
+        - os: windows-latest
+          pipcache: ~\AppData\Local\pip\Cache
     name: Build on ${{ matrix.os }} with Java ${{ matrix.java }}
     steps:
     - uses: actions/checkout@v2
@@ -23,12 +30,13 @@ jobs:
         path: |
           ~/.m2
         key: ${{ matrix.os }}-m2-${{ hashFiles('**/pom.xml') }}-1
-    - name: Cache Python packages
+    # can be further improved: https://medium.com/ai2-blog/python-caching-in-github-actions-e9452698e98d
+    - name: Cache Python packages 
       uses: actions/cache@v2
       with:
         path: |
-          ${{ env.pythonLocation }}
-        key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}-full-python
+          ${{ matrix.pipcache }}
+        key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}-pipcache
     - name: Cache Transformers models
       uses: actions/cache@v2
       with:
