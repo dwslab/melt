@@ -35,6 +35,12 @@ jobs:
         path: |
           ~/.cache/huggingface
         key: ${{ runner.os }}-transformers-models
+    - name: Cache OAEI files
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/oaei_track_cache
+        key: ${{ runner.os }}-oaei
     - name: Setup Python
       uses: actions/setup-python@v1
       with:
