@@ -1461,11 +1461,11 @@ def inner_transformers_prediction(request_headers):
         
         with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
             initial_arguments = {
-                'report_to': 'none'
+                'report_to': 'none',
+                #'disable_tqdm' : True,
             }
             fixed_arguments = {
-                'output_dir': os.path.join(tmpdirname, "trainer_output_dir"),
-                'disable_tqdm' : True,
+                'output_dir': os.path.join(tmpdirname, "trainer_output_dir")
             }
             training_args = transformers_get_training_arguments(using_tensorflow, initial_arguments, training_arguments, fixed_arguments)
 
@@ -1489,6 +1489,7 @@ def inner_transformers_prediction(request_headers):
 
             app.logger.info("Run prediction")
             pred_out = trainer.predict(predict_dataset)
+            trainer.log(pred_out.metrics)
         class_index = 0 if change_class else 1
         # sigmoid: scores = 1 / (1 + np.exp(-pred_out.predictions, axis=1[:, class_index]))
         # compute softmax to get class probabilities (scores between 0 and 1)
@@ -1528,13 +1529,13 @@ def inner_transformers_finetuning(request_headers):
 
         with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
             initial_arguments = {
-                'report_to': 'none'
+                'report_to': 'none',
+                # 'disable_tqdm' : True,
             }
 
             fixed_arguments = {
                 'output_dir': os.path.join(tmpdirname, "trainer_output_dir"),
                 'save_strategy' : 'no',
-                'disable_tqdm' : True,
             }
         
             training_args = transformers_get_training_arguments(using_tensorflow, initial_arguments, training_arguments, fixed_arguments)
@@ -1613,17 +1614,16 @@ def transformers_finetuning_hp_search():
         
         with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
             initial_arguments = {
-                'report_to': 'none'
+                'report_to': 'none',
+                'disable_tqdm' : True,
             }
 
             fixed_arguments = {
                 'output_dir': os.path.join(tmpdirname, "trainer_output_dir"),
-                'disable_tqdm' : True,
                 'skip_memory_metrics' : True, # see https://github.com/huggingface/transformers/issues/11249
                 'save_strategy' : 'epoch',
                 'do_eval' : True,
                 'evaluation_strategy': 'epoch',
-                'report_to': 'none',
             }
             training_args = transformers_get_training_arguments(using_tensorflow, initial_arguments, training_arguments, fixed_arguments)
             
