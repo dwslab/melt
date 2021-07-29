@@ -46,7 +46,9 @@ public class ExecutorTest {
         testCaseList.add(TrackRepository.Conference.V1.getTestCase(0));
         testCaseList.add(TrackRepository.Conference.V1.getTestCase(1));
         testCaseList.add(TrackRepository.Conference.V1.getTestCase(2));
-
+        
+        LOGGER.info("test case list run: {}", testCaseList);
+        
         ExecutionResultSet ers = Executor.run(testCaseList, matchers);
         assertTrue(ers.size() == 6);
     }
@@ -65,7 +67,7 @@ public class ExecutorTest {
         testCaseList.add(TrackRepository.Conference.V1.getTestCase(1));
         testCaseList.add(TrackRepository.Conference.V1.getTestCase(2));
 
-        LOGGER.info("test case list: {}", testCaseList);
+        LOGGER.info("test case list loadFromMeltResultsFolder: {}", testCaseList);
         
         File resultsFolder = new File("melt_csv_loader_test");
         resultsFolder.deleteOnExit();
