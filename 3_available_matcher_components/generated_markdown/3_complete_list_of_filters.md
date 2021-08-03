@@ -194,16 +194,8 @@ This filter learns and applies a classifier given a training sample and an exist
 ## TransformersFineTuner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.java)
 
 This class is used to finetune a transformer model based on a generated dataset.
- It comes in two fashions. First, it can be used to generate a fine-tuned model with every call of the match method.
- The input alignment of the match method is used to generate a training dataset.
- Thus, the input alignment should contain positive correspondences (with an equivalence relation) and negative
- correspondences (with another relation than equivalence).
- 
- As a second fashion, this matcher can be used to only generate the training file (by possibly multiple calls to the match method).
- Thus, within the match method only the training file is written. After all calls to the match method, one can call
- the #finetuneModel()  function to train the model on the whole dataset.
- 
- In both cases, the fine-tuned model as well as the tokenizer is written to the specified directory.
+ In every call to the match method, the traning data will be generated and appended to a temporary file.
+ When you call the TransformersFineTuner#finetuneModel()  method, then a model is finetuned and the training file is deleted.
 
 *Keywords: Transformers Fine Tuner*
 

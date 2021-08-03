@@ -199,6 +199,13 @@ Just saves the ontologies in a specific format.
 
 *Keywords: File Save Matcher*
 
+## AddNegativesRandomlyShare [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomlyShare.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomlyShare.java)
+
+This component adds negative samples to the alignment.
+ Negatives are added as long as the share of negatives is not fullfilled.
+
+*Keywords: Add Negatives Randomly Share*
+
 ## AddNegativesViaMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesViaMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesViaMatcher.java)
 
 This component adds negative correspondences to the input alignment via a recall optimized matcher.
@@ -208,6 +215,26 @@ This component adds negative correspondences to the input alignment via a recall
  With the help of this alignment, supervised matchers can be trained.
 
 *Keywords: Add Negatives Via Matcher*
+
+## AddNegativesRandomlyAbsolute [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomlyAbsolute.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomlyAbsolute.java)
+
+This component adds negative samples to the alignment.
+ The number of negative samples is defined by an abolute number.
+
+*Keywords: Add Negatives Randomly Absolute*
+
+## AddNegativesRandomly [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomly.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomly.java)
+
+Abstract class which is the base class for all AddNegatives which are based on random sampling.
+
+*Keywords: Add Negatives Randomly*
+
+## AddNegativesRandomlyOneOneAssumption [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomlyOneOneAssumption.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomlyOneOneAssumption.java)
+
+This component adds negative samples to the alignment.
+ Foreach positive correspondences a configurable number of negative correspondences are added.
+
+*Keywords: Add Negatives Randomly One One Assumption*
 
 ## SynonymTextMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/SynonymTextMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/elementlevel/SynonymTextMatcher.java)
 
