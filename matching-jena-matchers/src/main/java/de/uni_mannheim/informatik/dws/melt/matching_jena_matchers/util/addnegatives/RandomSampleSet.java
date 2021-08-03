@@ -13,7 +13,8 @@ import java.util.Set;
  * @param <E> the type of element in the set
  */
 public class RandomSampleSet <E> {
-    
+
+
     private final Random rand;
     
     /**
@@ -163,6 +164,5 @@ public class RandomSampleSet <E> {
             return new ArrayList<>(generated);
         }        
     }
-    
-    
+
 }

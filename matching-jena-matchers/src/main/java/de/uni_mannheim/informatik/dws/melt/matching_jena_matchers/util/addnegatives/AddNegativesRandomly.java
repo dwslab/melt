@@ -10,7 +10,8 @@ import org.apache.jena.ontology.OntModel;
  * Abstract class which is the base class for all {@link AddNegatives} which are based on random sampling.
  */
 public abstract class AddNegativesRandomly extends MatcherYAAAJena implements AddNegatives {
-    
+
+
     /**
      * If true, then all negatives are of the same type e.g. class, property, instance.
      */
@@ -27,8 +28,7 @@ public abstract class AddNegativesRandomly extends MatcherYAAAJena implements Ad
         this.homogenousDraw = homogenousDraw;
         this.withRepetitions = withRepetitions;
     }
-    
-    
+
     /**
      * Returns the correct sampler for the given resource contained in given model.
      * In case homogenousDraw is set to true, it will sample from same same entity e.g. sample a class for a class.
@@ -60,9 +60,7 @@ public abstract class AddNegativesRandomly extends MatcherYAAAJena implements Ad
             return sampleModel.getGlobalSampler().getRandomElement();
         }
     }
-    
-    
-    
+
     /**
      * Sample a resource from {@code sampleModel} given the resource in model m.
      * In case homogenousDraw is set to true, it will sample from same same entity e.g. sample a class for a class.
@@ -70,7 +68,7 @@ public abstract class AddNegativesRandomly extends MatcherYAAAJena implements Ad
      * @param resource the resource to check which concept type should be sampled
      * @param m the model corresponding to resource
      * @param sampleModel the model to sample from.
-     * @param excludes the set contains elements which should not be choosen as a random sample.
+     * @param excludes the set contains elements which should not be chosen as a random sample.
      * @return the random element.
      */
     protected String sampleResource(String resource, OntModel m, RandomSampleOntModel sampleModel, Set<String> excludes){
