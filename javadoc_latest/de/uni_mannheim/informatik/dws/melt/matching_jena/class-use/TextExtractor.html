@@ -550,6 +550,21 @@ int&nbsp;maxLabelTokenLength)</code></th>
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/util/textExtractors/TextExtractorForTransformers.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorForTransformers</a></span></code></th>
+<td class="col-last">
+<div class="block">A text textractor which extracts texts from a resource which can be used by transformer 
+ based matchers like TransformersFilter or TransformersFilterFineTuner.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/util/textExtractors/TextExtractorMultipleProperties.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorMultipleProperties</a></span></code></th>
+<td class="col-last">
+<div class="block">Extracts all values from specific properties as long as it is a literal.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/util/textExtractors/TextExtractorProperty.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorProperty</a></span></code></th>
 <td class="col-last">
 <div class="block">Extracts all values from a specific property as long as it is a literal.</div>
@@ -567,6 +582,14 @@ int&nbsp;maxLabelTokenLength)</code></th>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/util/textExtractors/TextExtractorUrlLocalName.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUrlLocalName</a></span></code></th>
 <td class="col-last">
 <div class="block">Extracts the local name from the URI.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/util/textExtractors/TextExtractorUseLongestLiteralOrFragment.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUseLongestLiteralOrFragment</a></span></code></th>
+<td class="col-last">
+<div class="block">A text textractor which extracts texts from a resource which can be used by transformer 
+ based matchers like TransformersFilter or TransformersFilterFineTuner.</div>
 </td>
 </tr>
 </tbody>
@@ -753,6 +776,15 @@ int&nbsp;maxLabelTokenLength)</code></th>
 </td>
 </tr>
 <tr class="row-color">
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersFineTuner.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,java.io.File)">TransformersFineTuner</a></span>&#8203;(<a href="../TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;tmpDir)</code></th>
+<td class="col-last">
+<div class="block">Run the training of a NLP transformer.</div>
+</td>
+</tr>
+<tr class="alt-color">
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File)">TransformersFineTunerHpSearch</a></span>&#8203;(<a href="../TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation)</code></th>
