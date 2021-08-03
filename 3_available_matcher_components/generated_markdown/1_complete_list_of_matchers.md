@@ -219,7 +219,7 @@ This component adds negative correspondences to the input alignment via a recall
 ## AddNegativesRandomlyAbsolute [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomlyAbsolute.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomlyAbsolute.java)
 
 This component adds negative samples to the alignment.
- The number of negative samples is defined by an abolute number.
+ The number of negative samples is defined by an absolute number.
 
 *Keywords: Add Negatives Randomly Absolute*
 
@@ -232,7 +232,7 @@ Abstract class which is the base class for all AddNegatives which are based on r
 ## AddNegativesRandomlyOneOneAssumption [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomlyOneOneAssumption.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/addnegatives/AddNegativesRandomlyOneOneAssumption.java)
 
 This component adds negative samples to the alignment.
- Foreach positive correspondences a configurable number of negative correspondences are added.
+ For each positive correspondences a configurable number of negative correspondences are added.
 
 *Keywords: Add Negatives Randomly One One Assumption*
 
