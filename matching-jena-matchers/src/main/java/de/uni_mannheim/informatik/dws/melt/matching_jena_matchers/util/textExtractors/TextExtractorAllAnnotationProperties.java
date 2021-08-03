@@ -23,4 +23,20 @@ public class TextExtractorAllAnnotationProperties implements TextExtractor {
     public Set<String> extract(Resource resource) {
         return extractor.extract(resource).stream().map(Literal::getLexicalForm).filter(x -> !x.trim().equals("")).collect(Collectors.toSet());
     }
+    
+    @Override
+    public int hashCode() {
+        return 46546518;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        return getClass() == obj.getClass();
+    }
 }

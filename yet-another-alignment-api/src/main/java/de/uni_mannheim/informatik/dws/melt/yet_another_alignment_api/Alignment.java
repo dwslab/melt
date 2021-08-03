@@ -919,6 +919,29 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
         return list;
     }
+    
+    /**
+     * Returns the size of the iterator.
+     * @param i the iterator to use
+     * @return the size of the iterator.
+     */
+    public static long iteratorSize(Iterator<?> i) {
+        long count = 0;
+        while(i.hasNext()){
+            i.next();
+            count++;
+        }
+        return count;
+    }
+    
+    /**
+     * Returns the size of the iterable.
+     * @param i the iterable to use
+     * @return the size of the iterable.
+     */
+    public static long iterableSize(Iterable<?> i) {
+        return iteratorSize(i.iterator());
+    }
 
     /**
      * Obtain the value of an extension.

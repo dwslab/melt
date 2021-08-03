@@ -14,6 +14,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.vocabulary.RDFS;
 
 /**
  * All annotation properties are followed (recursively).
@@ -54,13 +58,14 @@ public class LiteralExtractorAllAnnotationProperties implements LiteralExtractor
             return result;
         }
         recursionDepth++;
-
-        if (resource instanceof OntResource) {
-            ExtendedIterator<AnnotationProperty> propertyIterator = ((OntResource) resource).getOntModel().listAnnotationProperties();
+        Model model = resource.getModel();
+        if (model instanceof OntModel) {
+            ExtendedIterator<AnnotationProperty> propertyIterator = ((OntModel) model).listAnnotationProperties();
             while (propertyIterator.hasNext()) {
                 AnnotationProperty property = propertyIterator.next();
-                RDFNode n = ((OntResource) resource).getPropertyValue(property);
-                if (n != null) {
+                Statement s =  resource.getProperty(property);
+                if(s != null){
+                    RDFNode n = s.getObject();
                     if (n.isURIResource()) {
                         if (recursionDepth < 10) {
                             result.addAll(getAnnotationPropertiesRecursionDeadLockSafe(n.asResource(), recursionDepth));
@@ -68,9 +73,9 @@ public class LiteralExtractorAllAnnotationProperties implements LiteralExtractor
                             LOGGER.warn("Potential Infinity Loop Detected - aborting annotation property retrieval.");
                             return result;
                         }
-                    } else {
+                    } else if(n.isLiteral()) {
                         result.add(n.asLiteral());
-                    }
+                    }                    
                 }
             }
         }
@@ -92,6 +97,7 @@ public class LiteralExtractorAllAnnotationProperties implements LiteralExtractor
             return null;
         }
 
+        /*
         if (resource instanceof OntResource) {
             ExtendedIterator<RDFNode> iterator = ((OntResource) resource).listLabels(null);
             while (iterator.hasNext()) {
@@ -99,8 +105,32 @@ public class LiteralExtractorAllAnnotationProperties implements LiteralExtractor
                 return node.asLiteral();
             }
         }
+        */
+        ExtendedIterator<RDFNode> iterator = resource.listProperties(RDFS.label).mapWith(s->s.getObject());
+        while (iterator.hasNext()) {
+            RDFNode node = iterator.next();
+            if(node.isLiteral())
+                return node.asLiteral();
+        }
 
         // no label found: return local name
         return ResourceFactory.createStringLiteral(resource.getLocalName());
+    }
+    
+    
+    @Override
+    public int hashCode() {
+        return 54574258;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        return getClass() == obj.getClass();
     }
 }

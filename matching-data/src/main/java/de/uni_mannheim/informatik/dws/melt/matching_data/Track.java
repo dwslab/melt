@@ -289,6 +289,33 @@ public abstract class Track {
         return distinctOntologies;
     }
     
+    public Map<String, URL> getDistinctOntologiesMap(){
+        return getDistinctOntologiesMap(getTestCases());
+    }
+    
+    public static Map<String, URL> getDistinctOntologiesMap(List<TestCase> testCases){
+        Map<String, URL> distinctOntologies = new HashMap<>();
+        for(TestCase testCase : testCases){
+            String[] sourceTargetNames = testCase.getName().split("-");
+            if(sourceTargetNames.length != 2){
+                LOGGER.warn("Test case name contains none or more than one '-' character which is not possible when requesting distinct ontologies."
+                        + " We just skip this test case. Name of the test case: {} Name of the track: {}", testCase.getName(), testCase.getTrack().getName());
+                continue;
+            }
+            try {
+                if(distinctOntologies.containsKey(sourceTargetNames[0])== false){
+                    distinctOntologies.put(sourceTargetNames[0], testCase.getSource().toURL());
+                }
+                if(distinctOntologies.containsKey(sourceTargetNames[1])== false){
+                    distinctOntologies.put(sourceTargetNames[1], testCase.getTarget().toURL());
+                }
+            } catch (MalformedURLException ex) {
+                LOGGER.warn("Cannot convert URI to URL at test case {}. Just skipping.", testCase.getName());
+            }
+        }
+        return distinctOntologies;
+    }
+    
     protected List<TestCase> readFromCache(){ return readFromDefaultLayout(); } // can be overwritten if download does not use default layout
 
     protected abstract void downloadToCache() throws Exception;

@@ -36,7 +36,7 @@ public class TextExtractorAllStringLiterals implements TextExtractor {
         return values;
     }
     
-    private static boolean isLiteralAString(Literal lit){        
+    public static boolean isLiteralAString(Literal lit){        
         //check datatype
         String dtStr = lit.getDatatypeURI() ;
         if (dtStr != null){
@@ -46,7 +46,7 @@ public class TextExtractorAllStringLiterals implements TextExtractor {
             if(dtStr.equals(RDF.dtLangString.getURI()))
                 return true;
         }
-        //datatype == null -> check for language tag
+        //datatype not string or langstring -> check for language tag
         String lang = lit.getLanguage();
         if ( lang != null  && ! lang.equals(""))
             return true;
