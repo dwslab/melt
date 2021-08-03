@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.examples.transformers;
 
 import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherAnatomy;
+import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherGeneric;
 import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherKgTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
@@ -69,7 +70,6 @@ public class Main {
         options.addOption(Option.builder("tm")
                 .longOpt("transformermodels")
                 .hasArgs()
-                .required()
                 .valueSeparator(' ')
                 .desc("The transformer models to be used, separated by space.")
                 .build());
@@ -159,13 +159,9 @@ public class Main {
             }
         }
 
-        //check parameters:
+        //check track parameter:
         if (tracks == null || tracks.isEmpty()) {
             LOGGER.warn("No tracks specified. ABORTING program.");
-            System.exit(1);
-        }
-        if (transformerModels == null || transformerModels.length == 0) {
-            LOGGER.warn("No transformer model specified. ABORTING program.");
             System.exit(1);
         }
 
@@ -177,6 +173,7 @@ public class Main {
             case "zero":
             case "zeroshot":
             case "zeroshotevaluation":
+                checkTransformerParameter();
                 LOGGER.info("Mode: ZEROSHOT");
                 zeroShotEvaluation(gpu, transformerModels, transformersCache, tracks);
                 break;
@@ -185,6 +182,7 @@ public class Main {
             case "tc_finetune":
             case "tc_finetuned":
             case "finetunedpertestcase":
+                checkTransformerParameter();
                 LOGGER.info("Mode: TC_FINETUNE");
                 fineTunedPerTestCase(gpu, tracks, getFractions(cmd), transformerModels, transformersCache,
                         targetDirForModels);
@@ -194,6 +192,7 @@ public class Main {
             case "tracks_finetune":
             case "tracks_finetuned":
             case "finetunedpertrack":
+                checkTransformerParameter();
                 LOGGER.info("Mode: TRACK_FINETUNE");
                 fineTunedPerTrack(gpu, tracks, getFractions(cmd), transformerModels,
                         transformersCache, targetDirForModels);
@@ -202,6 +201,7 @@ public class Main {
             case "global_finetuned":
             case "finetune_global":
             case "finetuned_global":
+                checkTransformerParameter();
                 LOGGER.info("Mode: GLOBAL_FINETUNE");
                 globalFineTuning(gpu, tracks, getFractions(cmd), transformerModels, transformersCache, targetDirForModels);
                 break;
@@ -213,7 +213,13 @@ public class Main {
             default:
                 LOGGER.warn("Mode '{}' not found.", mode);
         }
+    }
 
+    private static void checkTransformerParameter(){
+        if (transformerModels == null || transformerModels.length == 0) {
+            LOGGER.warn("No transformer model specified. ABORTING program.");
+            System.exit(1);
+        }
     }
 
     /**
@@ -399,10 +405,7 @@ public class Main {
                         // -------------------
                         ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(), transformersCache, recallMatcher), configurationName));
                         //break outerLoop;
-                        
-                        
-                        
-                        
+
                         /*
                         MatcherYAAAJena trainAndFineTune = new MatcherYAAAJena() {
                             @Override
@@ -465,9 +468,12 @@ public class Main {
         ExecutionResultSet ers = new ExecutionResultSet();
 
         // just adding some baseline matchers below:
+        SimpleStringMatcher smatch = new SimpleStringMatcher();
+        smatch.setVerboseLoggingOutput(false);
         ers.addAll(Executor.run(testCases, new RecallMatcherKgTrack()));
         ers.addAll(Executor.run(testCases, new RecallMatcherAnatomy()));
-        ers.addAll(Executor.run(testCases, ssm));
+        ers.addAll(Executor.run(testCases, new RecallMatcherGeneric(20, true)));
+        ers.addAll(Executor.run(testCases, smatch));
 
         EvaluatorCSV evaluator = new EvaluatorCSV(ers);
         evaluator.writeToDirectory();

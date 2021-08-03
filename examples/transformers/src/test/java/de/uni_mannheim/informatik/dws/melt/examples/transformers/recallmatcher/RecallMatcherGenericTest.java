@@ -6,6 +6,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.SimpleStringMatcher;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -21,7 +22,8 @@ class RecallMatcherGenericTest {
      * Calculates the recall of the KG Track Recall matcher.
      */
     @Test
-    void recallCalculationAntomy(){
+    @Disabled
+    void recallCalculationAnatomy(){
         List<TestCase> tracks = new ArrayList<>();
         tracks.addAll(TrackRepository.Anatomy.Default.getTestCases());
         //tracks.addAll(TrackRepository.Conference.V1.getTestCases());

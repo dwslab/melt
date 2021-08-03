@@ -43,6 +43,9 @@ public class RecallMatcherGeneric extends MatcherYAAAJena {
 
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
+        if(inputAlignment == null){
+            inputAlignment = new Alignment();
+        }
         LOGGER.debug("Match classes");
         matchResources(source.listClasses(), target.listClasses(), inputAlignment);
         LOGGER.debug("Match properties");
@@ -116,7 +119,7 @@ public class RecallMatcherGeneric extends MatcherYAAAJena {
     private Set<String> normalizedAndTokenize(Resource resource) {
         Set<String> set = new HashSet<>();
         for (String label : extractor.extract(resource)) {
-            set.addAll(StringProcessing.normalize(label));
+            set.addAll(StringProcessing.normalizeAndRemoveStopwords(label));
         }
 
         //check URI fragment

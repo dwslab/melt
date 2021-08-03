@@ -1,13 +1,15 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 public class StringProcessing {
+
+
     private static final Pattern CAMEL_CASE = Pattern.compile("(?<!^)(?<!\\s)(?=[A-Z][a-z])");
     private static final Pattern NON_ALPHA = Pattern.compile("[^a-zA-Z\\d\\s:_]");// regex: [^a-zA-Z\d\s:]
     private static final Pattern ENGLISH_GENITIVE_S = Pattern.compile("'s");
@@ -21,8 +23,22 @@ public class StringProcessing {
      * @return Bag of Words
      */
     public static List<String> normalize(String stringToBeNormalized) {
-        if (stringToBeNormalized == null) return new ArrayList<>();
-        
+        return new ArrayList<>(Arrays.asList(normalizeToStringArray(stringToBeNormalized)));
+    }
+
+    /**
+     * Normalizes a string and removes all (English) stopwords. Recognizes camelCase.
+     * @param stringToBeNormalized The String that shall be normalized.
+     * @return Bag of words.
+     */
+    public static List<String> normalizeAndRemoveStopwords(String stringToBeNormalized){
+        String[] tokenized = StringOperations.clearArrayFromStopwords(normalizeToStringArray(stringToBeNormalized));
+        return new ArrayList<>(Arrays.asList(tokenized));
+    }
+
+    private static String[] normalizeToStringArray(String stringToBeNormalized){
+        if (stringToBeNormalized == null) return new String[0];
+
         stringToBeNormalized = stringToBeNormalized.trim();
         stringToBeNormalized = CAMEL_CASE.matcher(stringToBeNormalized).replaceAll("_");// convert camelCase to under_score_case
         stringToBeNormalized = stringToBeNormalized.replace(' ', '_');
@@ -30,14 +46,14 @@ public class StringProcessing {
 
         // delete non alpha-numeric characters:
         stringToBeNormalized = NON_ALPHA.matcher(stringToBeNormalized).replaceAll("_");
-        
+
         stringToBeNormalized = ENGLISH_GENITIVE_S.matcher(stringToBeNormalized).replaceAll("");
-        
+
         //remove all multi whitespaces
         stringToBeNormalized = MULTIPLE_UNDERSCORES.matcher(stringToBeNormalized).replaceAll("_");
-        
+
         String[] tokenized = stringToBeNormalized.split("_");
-        return new ArrayList<>(Arrays.asList(tokenized));
+        return tokenized;
     }
     
     public static boolean containsMostlyNumbers(String term) {

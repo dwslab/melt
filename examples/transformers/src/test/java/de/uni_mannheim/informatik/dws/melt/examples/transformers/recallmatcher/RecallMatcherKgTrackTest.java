@@ -4,6 +4,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ class RecallMatcherKgTrackTest {
      * Calculates the recall of the KG Track Recall matcher.
      */
     @Test
+    @Disabled
     void recallCalculation(){
         List<TestCase> tracks = new ArrayList<>();
         //tracks.addAll(TrackRepository.Anatomy.Default.getTestCases());

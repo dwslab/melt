@@ -14,7 +14,6 @@ class MainTest {
     /**
      * Simple unit test for the parameters.
      * This is a real test which tests behavior.
-     */
     @Test
     void testTracks() {
         try {
@@ -24,11 +23,12 @@ class MainTest {
             Assertions.fail(e);
         }
     }
+     */
 
     /**
      * Simple unit test for the parameters.
      * This is a real test which tests behavior.
-     */
+
     @Test
     void testTransformerModels() {
         try {
@@ -38,6 +38,7 @@ class MainTest {
             Assertions.fail(e);
         }
     }
+     */
 
     /**
      * This is a simple test for debugging.
