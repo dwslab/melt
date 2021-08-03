@@ -481,12 +481,12 @@ public class Main {
             LOGGER.info("Processing transformer model: " + transformerModel);
             try {
                 if(testCasesNoKG.size() > 0) {
-                    ers.addAll(Executor.run(testCasesNoKG, new AnatomyMatchingPipeline(gpu,
-                            transformerModel, transformersCache), transformerModel));
+                    ers.addAll(Executor.run(testCasesNoKG, new ApplyModelPipeline(gpu,
+                            transformerModel, transformersCache, new RecallMatcherAnatomy()), transformerModel));
                 }
                 if(testCasesKG.size() > 0){
-                    ers.addAll(Executor.run(testCasesKG, new KnowledgeGraphMatchingPipeline(gpu,
-                            transformerModel, transformersCache), transformerModel));
+                    ers.addAll(Executor.run(testCasesKG, new ApplyModelPipeline(gpu,
+                            transformerModel, transformersCache,  new RecallMatcherKgTrack()), transformerModel));
                 }
             } catch (Exception e){
                 LOGGER.warn("A problem occurred with transformer: '{}'.\n" +
