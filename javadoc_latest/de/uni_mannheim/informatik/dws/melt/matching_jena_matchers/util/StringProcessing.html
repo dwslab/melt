@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -182,8 +182,20 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="alt-color" id="i2">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#normalizeAndRemoveStopwords(java.lang.String)">normalizeAndRemoveStopwords</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;stringToBeNormalized)</code></th>
+<td class="col-last">
+<div class="block">Normalizes a string and removes all (English) stopwords.</div>
+</td>
+</tr>
+<tr class="row-color" id="i3">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#normalizeOnlyCamelCaseAndUnderscore(java.lang.String)">normalizeOnlyCamelCaseAndUnderscore</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;stringToBeNormalized)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#normalizeToStringArray(java.lang.String)">normalizeToStringArray</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;stringToBeNormalized)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
@@ -267,6 +279,25 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <dt>Returns:</dt>
 <dd>Bag of Words</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="normalizeAndRemoveStopwords(java.lang.String)">
+<h3>normalizeAndRemoveStopwords</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">normalizeAndRemoveStopwords</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;stringToBeNormalized)</span></div>
+<div class="block">Normalizes a string and removes all (English) stopwords. Recognizes camelCase.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>stringToBeNormalized</code> - The String that shall be normalized.</dd>
+<dt>Returns:</dt>
+<dd>Bag of words.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="normalizeToStringArray(java.lang.String)">
+<h3>normalizeToStringArray</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="member-name">normalizeToStringArray</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;stringToBeNormalized)</span></div>
 </section>
 </li>
 <li>
