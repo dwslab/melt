@@ -53,7 +53,7 @@ public class SimpleStringMatcher extends MatcherYAAAJena {
         match(ontology1.listClasses(), ontology2.listClasses());
         match(ontology1.listDatatypeProperties(), ontology2.listDatatypeProperties());
         match(ontology1.listObjectProperties(), ontology2.listObjectProperties());
-        match(ontology1.listIndividuals(), ontology2.listDatatypeProperties());
+        match(ontology1.listIndividuals(), ontology2.listIndividuals());
         LOGGER.info("Mapping Completed");
         return this.mapping;
     }

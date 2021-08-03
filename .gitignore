@@ -34,7 +34,7 @@ melt-resources/
 oaeimatcher/
 serializationFolder/
 
-
+examples/transformers/models
 current_result.rdf
 result.rdf
 trackPerformanceCube.csv

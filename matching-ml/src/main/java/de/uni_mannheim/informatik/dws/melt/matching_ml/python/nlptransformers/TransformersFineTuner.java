@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -112,7 +113,7 @@ public class TransformersFineTuner extends TransformersBase implements Filter {
         int notUsed = 0;
         int positive = 0;
         int negative = 0;
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(trainFile, append), "UTF-8"))){
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(trainFile, append), StandardCharsets.UTF_8))){
             for(Correspondence c : trainingAlignment){
                 String left = getTextFromResource(source.getResource(c.getEntityOne()));
                 String right = getTextFromResource(target.getResource(c.getEntityTwo()));
