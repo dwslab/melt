@@ -30,8 +30,8 @@ Scales the additional correspondence confidence values (that were produced by ot
 
 ## ConfidenceCombiner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ConfidenceCombiner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/ConfidenceCombiner.java)
 
-Combines the additional confidences and set the overall correspondence confidence to be the mean of the selected confidences.
- Can also be used to set the
+Combines the additional confidences and set the overall correspondence confidence to be the mean of the selected
+ confidences.
 
 *Keywords: Confidence Combiner*
 
