@@ -9,10 +9,11 @@ import org.apache.jena.ontology.OntModel;
 
 /**
  * This component adds negative samples to the alignment.
- * The number of negative samples is defined by an abolute number.
+ * The number of negative samples is defined by an absolute number.
  */
-public class AddNegativesRandomlyAbsolute extends AddNegativesRandomly{
-    
+public class AddNegativesRandomlyAbsolute extends AddNegativesRandomly {
+
+
     private final int numberOfNegatives;
 
     /**
@@ -28,7 +29,6 @@ public class AddNegativesRandomlyAbsolute extends AddNegativesRandomly{
         super(homogenousDraw, withRepetitions);
         this.numberOfNegatives = numberOfNegatives;
     }
-    
     
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties parameters) throws Exception {

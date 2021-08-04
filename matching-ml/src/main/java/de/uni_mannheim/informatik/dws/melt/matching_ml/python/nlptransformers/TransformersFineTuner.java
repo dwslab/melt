@@ -121,7 +121,7 @@ public class TransformersFineTuner extends TransformersBase implements Filter {
         int notUsed = 0;
         int positive = 0;
         int negative = 0;
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(trainFile, append), "UTF-8"))){
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(trainFile, append), StandardCharsets.UTF_8))){
             for(Correspondence c : trainingAlignment){
                 String left = getTextFromResource(source.getResource(c.getEntityOne()));
                 String right = getTextFromResource(target.getResource(c.getEntityTwo()));

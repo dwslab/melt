@@ -12,13 +12,15 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This helper class is used to randomly sample resources from an {@link OntModel}.
- * When created, it will retrive all instances, classes and properties and keep them in memory.
+ * When created, it will retrieve all instances, classes and properties and keep them in memory.
  */
 public class RandomSampleOntModel {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RandomSampleOntModel.class);
     
     private final RandomSampleSet<String> individuals;
-    private final RandomSampleSet<String> allproperties;
+    private final RandomSampleSet<String> allProperties;
     private final RandomSampleSet<String> datatypeProperties;
     private final RandomSampleSet<String> objectProperties;
     private final RandomSampleSet<String> annotationProperties;
@@ -29,24 +31,24 @@ public class RandomSampleOntModel {
     public RandomSampleOntModel(OntModel m, Random rnd){
         
         Set<String> individualsString = getUriSet(m.listIndividuals());
-        Set<String> allpropertiesString = getUriSet(m.listOntProperties());
+        Set<String> allPropertiesString = getUriSet(m.listOntProperties());
         Set<String> datatypePropertiesString = getUriSet(m.listDatatypeProperties());
         Set<String> objectPropertiesString = getUriSet(m.listObjectProperties());
         Set<String> annotationPropertiesString = getUriSet(m.listAnnotationProperties());
         Set<String> classesString = getUriSet(m.listClasses());
         
         this.individuals = new RandomSampleSet<>(individualsString, rnd);
-        this.allproperties = new RandomSampleSet<>(allpropertiesString, rnd);
+        this.allProperties = new RandomSampleSet<>(allPropertiesString, rnd);
         this.datatypeProperties = new RandomSampleSet<>(datatypePropertiesString, rnd);
         this.objectProperties = new RandomSampleSet<>(objectPropertiesString, rnd);
         this.annotationProperties = new RandomSampleSet<>(annotationPropertiesString, rnd);
         this.classes = new RandomSampleSet<>(classesString, rnd);
         
-        Set<String> allString = new HashSet<>(individualsString.size() + allpropertiesString.size() +
+        Set<String> allString = new HashSet<>(individualsString.size() + allPropertiesString.size() +
                 datatypePropertiesString.size() + objectPropertiesString.size() + 
                 annotationPropertiesString.size() + classesString.size());
         allString.addAll(individualsString);
-        allString.addAll(allpropertiesString);
+        allString.addAll(allPropertiesString);
         allString.addAll(datatypePropertiesString);
         allString.addAll(objectPropertiesString);
         allString.addAll(annotationPropertiesString);
@@ -77,7 +79,7 @@ public class RandomSampleOntModel {
             case INSTANCE:
                 return this.individuals;
             case RDF_PROPERTY:
-                return this.allproperties;
+                return this.allProperties;
             case DATATYPE_PROPERTY:
                 return this.datatypeProperties;
             case OBJECT_PROPERTY:

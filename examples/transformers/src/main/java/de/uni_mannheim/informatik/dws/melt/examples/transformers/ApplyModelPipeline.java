@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
  * This pipeline matcher applies the given model.
  */
 public class ApplyModelPipeline extends MatcherYAAAJena {
+
+
     private static Logger LOGGER = LoggerFactory.getLogger(ApplyModelPipeline.class);
         
     private final MatcherYAAAJena recallMatcher;

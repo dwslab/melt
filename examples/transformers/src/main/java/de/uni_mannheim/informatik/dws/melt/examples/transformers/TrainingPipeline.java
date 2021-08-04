@@ -14,7 +14,8 @@ import org.apache.jena.ontology.OntModel;
 /**
  * This training pipeline writes the training file.
  */
-public class TrainingPipeline extends MatcherYAAAJena{
+public class TrainingPipeline extends MatcherYAAAJena {
+
 
     private MatcherYAAAJena recallMatcher;
     private final TransformersFineTuner fineTuner;
@@ -43,8 +44,7 @@ public class TrainingPipeline extends MatcherYAAAJena{
 
         //append to training file
         fineTuner.match(source, target, trainingAlignment, properties);
-        fineTuner.finetuneModel();
-        
+
         return inputAlignment;
     }
 

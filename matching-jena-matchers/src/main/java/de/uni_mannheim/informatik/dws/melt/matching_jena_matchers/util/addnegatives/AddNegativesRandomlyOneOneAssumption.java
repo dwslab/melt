@@ -9,10 +9,11 @@ import org.apache.jena.ontology.OntModel;
 
 /**
  * This component adds negative samples to the alignment.
- * Foreach positive correspondences a configurable number of negative correspondences are added.
+ * For each positive correspondences a configurable number of negative correspondences are added.
  */
-public class AddNegativesRandomlyOneOneAssumption extends AddNegativesRandomly{
-    
+public class AddNegativesRandomlyOneOneAssumption extends AddNegativesRandomly {
+
+
     private final int numberOfNegativesPerPositiveCorrespondence;
 
     public AddNegativesRandomlyOneOneAssumption(int numberOfNegativesPerPositiveCorrespondence) {
