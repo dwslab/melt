@@ -4,16 +4,25 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServerException;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+import java.util.logging.Level;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jena.ontology.OntModel;
@@ -208,5 +217,81 @@ public class TransformersFineTuner extends TransformersBase implements Filter {
      */
     public void setResultingModelLocation(File resultingModelLocation) {
         this.resultingModelLocation = resultingModelLocation;
+    }
+    
+    
+    
+    public int getMaximumPerDeviceTrainBatchSize(){
+        if(this.trainingFile == null || !this.trainingFile.exists() || this.trainingFile.length() == 0){
+            throw new IllegalArgumentException("Cannot get maximum per device train batch size because no training file is generated. Did you call the match method before (e.g. in a pipeline)?");
+        }
+        return getMaximumPerDeviceTrainBatchSize(this.trainingFile);
+    }
+    /**
+     * This functions tries to execute the training with one step to check which maximum {@code per_device_train_batch_size } is possible.It will start with 2 and checks only powers of 2.
+     * @param trainingFile the training file to use
+     * @return the maximum {@code per_device_train_batch_size } with the current configuration
+     */
+    public int getMaximumPerDeviceTrainBatchSize (File trainingFile){        
+        //save variables for restoring afterwards
+        TransformersTrainerArguments backupArguments = this.trainingArguments;
+        
+        
+        int batchSize = 2;
+        while(batchSize < 8193){
+            LOGGER.info("Try out batch size of {}", batchSize);
+            //generate a smaller training file -> faster tokenizer
+            
+            File tmpTrainingFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_find_max_batch_size", ".txt");
+            try{
+                copyCSVLines(trainingFile, tmpTrainingFile, batchSize + 2);
+                this.trainingArguments = new TransformersTrainerArguments(backupArguments);
+                this.trainingArguments.addParameter("per_device_train_batch_size", batchSize);
+                this.trainingArguments.addParameter("max_steps", 1);
+                this.finetuneModel(tmpTrainingFile);                
+            }catch (PythonServerException ex) {
+                //CUDA ERROR: RuntimeError: CUDA out of memory. Tried to allocate 192.00 MiB (GPU 0; 10.76 GiB total capacity; 9.54 GiB already allocated; 50.56 MiB free; 9.59 GiB reserved in total by PyTorch)
+                //CPU  ERROR: RuntimeError: [enforce fail at ..\c10\core\CPUAllocator.cpp:79] data. DefaultCPUAllocator: not enough memory: you tried to allocate 50878464 bytes.
+                if(ex.getMessage().contains("not enough memory") || ex.getMessage().contains("out of memory")){
+                    int batchSizeWhichWorks = batchSize / 2;
+                    LOGGER.info("Found memory error, thus returning batchsize of {}", batchSizeWhichWorks);
+                    this.trainingArguments = backupArguments;
+                    return batchSizeWhichWorks;
+                }else{
+                    LOGGER.warn("Something went wrong in python server during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
+                    this.trainingArguments = backupArguments;
+                    return 8;
+                }
+            }catch (IOException ex) {
+                LOGGER.warn("Something went wrong with io during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
+                this.trainingArguments = backupArguments;
+                return 8;
+            }catch (Exception ex) {
+                LOGGER.warn("Something went wrong during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
+                this.trainingArguments = backupArguments;
+                return 8;
+            }finally{
+                tmpTrainingFile.delete();
+            }
+            batchSize *= 2;
+        }
+        
+        LOGGER.info("It looks like that batch sizes up to 8192 works out which is unusual. If greater batch sizes are possible the code to search max batch size needs to be changed.");
+        this.trainingArguments = backupArguments;
+        return batchSize;
+    }
+    
+    private void copyCSVLines(File source, File target, int numberOfCSVLines) throws IOException{
+        try(CSVParser csvParser = CSVFormat.DEFAULT.parse(new InputStreamReader(new FileInputStream(source), StandardCharsets.UTF_8));
+            CSVPrinter csvPrinter = CSVFormat.DEFAULT.print(target, StandardCharsets.UTF_8)){
+            int i = 1;
+            for (CSVRecord record : csvParser) {
+                csvPrinter.printRecord(record);
+                if(i >= numberOfCSVLines){
+                    break;
+                }
+                i++;
+            }
+        }
     }
 }
