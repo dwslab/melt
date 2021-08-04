@@ -68,7 +68,7 @@ class ExecutionRunner implements Callable<ExecutionResult> {
         } else {
             try {
                 new File(resultingAlignment.toURI()).deleteOnExit();
-            }catch (URISyntaxException | IllegalArgumentException ex) {
+            } catch (URISyntaxException | IllegalArgumentException ex) {
                 LOGGER.error("Original system alignment does not point to a file and thus cannot be deleted on evaluation exit. " +
                         "Use Executor.deleteOriginalSystemResults", ex);
             }

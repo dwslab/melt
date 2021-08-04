@@ -1404,7 +1404,7 @@ def transformers_get_training_arguments(using_tensorflow, initial_parameters, us
     
     not_available = training_arguments.keys() - allowed_arguments
     if len(not_available) > 0:
-        app.logger.warning("The following attributes are not set as training arguments because" + 
+        app.logger.warning("The following attributes are not set as training arguments because " +
                         "they do not exist in the currently installed version of transformer: " + str(not_available))
         for key_not_avail in not_available:
             del training_arguments[key_not_avail]

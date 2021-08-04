@@ -128,7 +128,6 @@ public class RecallMatcherGeneric extends MatcherYAAAJena {
         if (StringProcessing.containsMostlyNumbers(fragment) == false) {
             set.addAll(StringProcessing.normalize(fragment));
         }
-
         return set;
     }
 

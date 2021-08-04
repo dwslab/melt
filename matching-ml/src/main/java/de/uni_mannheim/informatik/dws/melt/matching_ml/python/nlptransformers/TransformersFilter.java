@@ -53,11 +53,12 @@ public class TransformersFilter extends TransformersBase implements Filter {
     }
     
     @Override
-    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception{
+    public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         File inputFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_predict", ".txt");
         List<Correspondence> orderedCorrespondences = new ArrayList<>();
         LOGGER.info("Write text to prediction file {}", inputFile);
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputFile), StandardCharsets.UTF_8))){
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputFile),
+                StandardCharsets.UTF_8))) {
             for(Correspondence c : inputAlignment){
                 String left = getTextFromResource(source.getResource(c.getEntityOne()));
                 String right = getTextFromResource(target.getResource(c.getEntityTwo()));
