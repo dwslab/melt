@@ -1435,8 +1435,9 @@ def run_function_multi_process(request, func):
         queue = ctx.Queue()
         process = ctx.Process(target=multi_process_wrapper_function, args=(queue, func, dict(request.headers.items(lower=True)),))
         process.start()
+        my_result = queue.get()
         process.join()
-        return queue.get()
+        return my_result
 
 def inner_transformers_prediction(request_headers):
     try:
