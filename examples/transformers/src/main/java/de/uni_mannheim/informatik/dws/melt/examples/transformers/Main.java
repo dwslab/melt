@@ -472,7 +472,7 @@ public class Main {
         smatch.setVerboseLoggingOutput(false);
         ers.addAll(Executor.run(testCases, new RecallMatcherKgTrack()));
         ers.addAll(Executor.run(testCases, new RecallMatcherAnatomy()));
-        ers.addAll(Executor.run(testCases, new RecallMatcherGeneric(20, true)));
+        //ers.addAll(Executor.run(testCases, new RecallMatcherGeneric(20, true)));
         ers.addAll(Executor.run(testCases, smatch));
 
         EvaluatorCSV evaluator = new EvaluatorCSV(ers);

@@ -17,10 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Combines the additional confidences and set the overall correspondence confidence to be the mean of the selected confidences.
- * Can also be used to set the 
+ * Combines the additional confidences and set the overall correspondence confidence to be the mean of the selected
+ * confidences.
  */
 public class ConfidenceCombiner extends MatcherYAAAJena implements Filter {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfidenceCombiner.class);
     
     private UnivariateStatistic statistic;
@@ -28,7 +30,7 @@ public class ConfidenceCombiner extends MatcherYAAAJena implements Filter {
 
     /**
      * Constructor
-     * @param statistic choose any implementation from univariatestatistic listed 
+     * @param statistic choose any implementation from univariate statistic listed
      *      <a href="http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math4/stat/descriptive/UnivariateStatistic.html">here</a>.
      * @param additionalConfidenceNames confidence names to care about.
      */

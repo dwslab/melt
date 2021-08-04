@@ -54,4 +54,17 @@ class MainTest {
         }
     }
 
+    /**
+     * This is a simple test for debugging.
+     */
+    @Test
+    @Disabled
+    void testZeroshotOnConference(){
+        try {
+            Main.main(new String[]{"--tracks", "conference", "-tm", "bert-base-cased-finetuned-mrpc", "-m",
+                    "ZEROSHOT"});
+        } catch (Exception e){
+            Assertions.fail(e);
+        }
+    }
 }

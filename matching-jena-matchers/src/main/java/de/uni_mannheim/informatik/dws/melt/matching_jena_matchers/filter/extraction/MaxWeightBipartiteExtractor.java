@@ -45,8 +45,10 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
     
     /**
      * Filters the alignment by computing a maximal one to one alignment. 
-     * Unfortunately we need to convert the double confidences to integers (double are multiplied by multiplier). Default is to use 4 digits after decimal. 
-     * For further reference see page 6 Arithmetic Demand at <a href="http://www.mpi-inf.mpg.de/~mehlhorn/Optimization/bipartite_weighted.ps">http://www.mpi-inf.mpg.de/~mehlhorn/Optimization/bipartite_weighted.ps</a>.
+     * Unfortunately we need to convert the double confidences to integers (double are multiplied by multiplier).
+     * Default is to use 4 digits after decimal.
+     * For further reference see page 6 Arithmetic Demand at
+     * <a href="http://www.mpi-inf.mpg.de/~mehlhorn/Optimization/bipartite_weighted.ps">http://www.mpi-inf.mpg.de/~mehlhorn/Optimization/bipartite_weighted.ps</a>.
      * @param inputAlignment the alignment to filter.
      * @param heuristic the heuristic to use.
      * @param multiplier the multiplier to use (how many digits of confidence are used.
@@ -124,7 +126,8 @@ public class MaxWeightBipartiteExtractor extends MatcherYAAAJena implements Filt
         for(MwbNode b : targetNodeMapping.values()){
             Set<MwbEdge> selectedEdges = b.getSuccessor();
             if(selectedEdges.size() > 1){
-                LOGGER.warn("There is more than one match - this should not happen... (Correspondence: {})", selectedEdges.iterator().next().getCorrespondence());
+                LOGGER.warn("There is more than one match - this should not happen... (Correspondence: {})",
+                        selectedEdges.iterator().next().getCorrespondence());
             }
             for(MwbEdge e: selectedEdges){
                 result.add(e.getCorrespondence());
