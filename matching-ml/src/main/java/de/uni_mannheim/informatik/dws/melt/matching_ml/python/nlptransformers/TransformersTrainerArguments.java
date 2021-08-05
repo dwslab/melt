@@ -27,6 +27,10 @@ public class TransformersTrainerArguments {
         this.config = new HashMap<>();
     }
     
+    public TransformersTrainerArguments(TransformersTrainerArguments copyArguments){
+        this.config = new HashMap<>(copyArguments.config);
+    }
+    
     public TransformersTrainerArguments(Map<String, Object> config){
         this.config = config;
     }
@@ -51,6 +55,14 @@ public class TransformersTrainerArguments {
     public TransformersTrainerArguments addParameter(String key, Object value){
         this.config.put(key, value);
         return this;
+    }
+    
+    public Object getParameter(String key){
+        return this.config.get(key);
+    }
+    
+    public Object getParameterOrDefault(String key, Object defaultValue){
+        return this.config.getOrDefault(key, defaultValue);
     }
     
     public String toJsonString(){
