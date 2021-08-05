@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class represents the search space for hyperparameters.
+ * This class represents the search space for hyper parameters.
  * Each method represents the type of sampling and it need a parameter which appears as a <a href="https://huggingface.co/transformers/main_classes/trainer.html#transformers.TrainingArguments">training argument</a>.
  * <pre>
  * {@code
@@ -22,7 +22,8 @@ import org.slf4j.LoggerFactory;
  * </pre>
  */
 public class TransformersHpSearchSpace {
-    
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TransformersHpSearchSpace.class);
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     static{

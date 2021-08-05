@@ -40,12 +40,10 @@ public class ConfidenceFilter extends MatcherYAAAJena implements Filter {
         this.thresholdMixed = thresholdMixed;
     }
 
-
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         return filter(inputAlignment, source, target);
     }
-    
 
     public Alignment filter(Alignment inputAlignment, OntModel source, OntModel target) {
         if (areAllEqual(this.thresholdClass, this.thresholdObjectProperty, this.thresholdDatatypeProperty, this.thresholdIndividual, this.thresholdMixed)) {
