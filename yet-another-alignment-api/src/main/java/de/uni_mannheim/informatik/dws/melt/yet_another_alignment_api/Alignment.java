@@ -811,6 +811,24 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         list.sort(new CorrespondenceConfidenceComparator());
         return list;
     }
+
+    public double getMinimalConfidence(){
+        List<Correspondence> list = getConfidenceOrderedMapping();
+        if(list == null || list.isEmpty()){
+            LOGGER.error("There are no confidences. Returning 0.0 as minimum confidence.");
+            return 0.0;
+        }
+        return list.get(0).getConfidence();
+    }
+
+    public double getMaximalConfidence() {
+        List<Correspondence> list = getConfidenceOrderedMapping();
+        if(list == null || list.isEmpty()){
+            LOGGER.error("There are no confidences. Returning 1.0 as maximum confidence.");
+            return 1.0;
+        }
+        return list.get(list.size()).getConfidence();
+    }
     
     public void assertIndexOnSource(){
         if(this.indexSource == null){

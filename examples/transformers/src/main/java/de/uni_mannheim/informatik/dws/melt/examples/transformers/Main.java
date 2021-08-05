@@ -33,6 +33,8 @@ public class Main {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+    private static final String DEFAULT_THRESHOLD = "0.0";
+
 
     public static void main(String[] args) throws Exception {
         //CLI setup:
@@ -102,6 +104,11 @@ public class Main {
                 .build()
         );
 
+        options.addOption(Option.builder("mt")
+                .longOpt("multitext")
+                .build()
+        );
+
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         CommandLine cmd = null;
@@ -135,6 +142,8 @@ public class Main {
             transformersCache = new File(cmd.getOptionValue("tc"));
         }
 
+        boolean isMultipleTextsToMultipleExamples = cmd.hasOption("mt");
+
         transformerModels = cmd.getOptionValues("tm");
 
         String[] trackStrings;
@@ -167,6 +176,8 @@ public class Main {
             System.exit(1);
         }
 
+
+
         String mode = cmd.getOptionValue("m").toLowerCase(Locale.ROOT).trim();
 
         File targetDirForModels = new File("./models");
@@ -197,7 +208,7 @@ public class Main {
                 checkTransformerParameter();
                 LOGGER.info("Mode: TRACK_FINETUNE");
                 fineTunedPerTrack(gpu, tracks, getFractions(cmd), transformerModels,
-                        transformersCache, targetDirForModels);
+                        transformersCache, targetDirForModels, threshold);
                 break;
             case "global_finetune":
             case "global_finetuned":
@@ -224,7 +235,7 @@ public class Main {
         LOGGER.info("DONE");
     }
 
-    private static void checkTransformerParameter(){
+    private static void checkTransformerParameter() {
         if (transformerModels == null || transformerModels.length == 0) {
             LOGGER.warn("No transformer model specified. ABORTING program.");
             System.exit(1);
@@ -254,7 +265,7 @@ public class Main {
 
 
     static void fineTunedPerTrack(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
-                                  File transformersCache, File targetDir) {
+                                  File transformersCache, File targetDir, double threshold) {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -289,7 +300,8 @@ public class Main {
                     }
 
                     // Step 2: Apply Model
-                    ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(), transformersCache, recallMatcher), configurationName));
+                    ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
+                            transformersCache, recallMatcher, threshold), configurationName));
                 }
             }
         } // end of fractions loop
@@ -465,7 +477,8 @@ public class Main {
 
     /**
      * Simply evaluates the baseline and recall matchers on the provided tracks.
-     * @param tracks The tracks to be evaluated.
+     *
+     * @param tracks  The tracks to be evaluated.
      * @param isLight False if {@link EvaluatorCSV} shall be used.
      */
     static void baselineMatchers(List<Track> tracks, boolean isLight) {
@@ -473,7 +486,7 @@ public class Main {
         ssm.setVerboseLoggingOutput(false);
 
         List<TestCase> testCases = new ArrayList<>();
-        for(Track track : tracks){
+        for (Track track : tracks) {
             testCases.addAll(track.getTestCases());
         }
 
@@ -490,7 +503,7 @@ public class Main {
         LOGGER.info("All matchers run. Starting evaluation...");
 
         Evaluator evaluator;
-        if(isLight){
+        if (isLight) {
             LOGGER.info("Light evaluation mode...");
             evaluator = new EvaluatorBasic(ers);
         } else {
