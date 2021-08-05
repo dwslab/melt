@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
  * It just contains some variables and getter and setters.
  */
 public abstract class TransformersBase extends MatcherYAAAJena {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TransformersBase.class);
 
     protected TextExtractor extractor;
@@ -243,9 +245,8 @@ public abstract class TransformersBase extends MatcherYAAAJena {
         this.multiProcessing = multiProcessing;
     }
     
-    
     /**
-     * Enable or diable the mixed precision training.
+     * Enable or disable the mixed precision training.
      * This will optimize the runtime of training and 
      * @param mpt true to enable mixed precision training
      */
@@ -262,7 +263,7 @@ public abstract class TransformersBase extends MatcherYAAAJena {
         if(o instanceof Boolean){
             return (boolean) o;
         }else{
-            LOGGER.warn("parameter fp16 is not a booolean value");
+            LOGGER.warn("parameter fp16 is not a boolean value");
             return false;
         }
     }
@@ -286,7 +287,6 @@ public abstract class TransformersBase extends MatcherYAAAJena {
     public void setMultipleTextsToMultipleExamples(boolean multipleTextsToMultipleExamples) {
         this.multipleTextsToMultipleExamples = multipleTextsToMultipleExamples;
     }
-    
     
     /**
      * This function copies a part of a csv file to another file.This is used to find the best batch size.

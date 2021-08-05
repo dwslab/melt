@@ -327,7 +327,8 @@ public class Main {
                             fraction, 41, false);
 
                     // Step 1 Training
-                    String configurationName = model + "_" + fraction + "_" + track.getName();
+                    String configurationName =
+                            model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() + "_" + track.getName();
                     configurationName = configurationName.replaceAll(" ", "_");
                     File finetunedModelFile = new File(targetDir, configurationName);
 
@@ -382,7 +383,8 @@ public class Main {
         for (float fraction : fractions) {
             for (String model : transformerModels) {
 
-                String configurationName = model + "_" + fraction + "_GLOBAL";
+                String configurationName = model + "_" + fraction + textExtractor.getClass().getSimpleName() +"_" +
+                        "_GLOBAL";
                 File finetunedModelFile = new File(targetDir, configurationName);
 
                 TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
@@ -458,7 +460,8 @@ public class Main {
                     for (String model : transformerModels) {
                         // Step 1: Training
                         // ----------------
-                        String configurationName = model + "_" + fraction + "_" + testCase.getName();
+                        String configurationName = model + "_" + fraction + textExtractor.getClass().getSimpleName()
+                                + "_" + testCase.getName();
                         configurationName = configurationName.replaceAll(" ", "_");
                         File finetunedModelFile = new File(targetDir, configurationName);
 
