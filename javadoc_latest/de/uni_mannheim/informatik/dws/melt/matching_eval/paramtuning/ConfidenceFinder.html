@@ -259,7 +259,10 @@ double&nbsp;end)</span></div>
 <dt>Parameters:</dt>
 <dd><code>executionResult</code> - The execution result for which the optimal confidence threshold shall be determined.</dd>
 <dt>Returns:</dt>
-<dd>The optimal confidence threshold.</dd>
+<dd>The optimal confidence threshold for an optimal F1 measure. All correspondences with a confidence
+ LOWER than the result should be discarded. You can directly use
+ <a href="../../matching_jena_matchers/filter/ConfidenceFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter"><code>ConfidenceFilter</code></a>
+ to cut correspondences LESS than the optimal threshold determined by this method.</dd>
 </dl>
 </section>
 </li>
