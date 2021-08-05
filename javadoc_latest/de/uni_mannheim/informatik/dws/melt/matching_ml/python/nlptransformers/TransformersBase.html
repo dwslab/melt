@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -131,31 +131,36 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
+<td class="col-first"><code>private static org.slf4j.Logger</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>protected <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#modelName">modelName</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>protected <a href="TransformersMultiProcessing.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersMultiProcessing</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#multiProcessing">multiProcessing</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>protected <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#tmpDir">tmpDir</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>protected <a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#trainingArguments">trainingArguments</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>protected <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#transformersCache">transformersCache</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>protected boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#usingTensorflow">usingTensorflow</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -211,6 +216,15 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
+<td class="col-first"><code>protected boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#copyCSVLines(java.io.File,java.io.File,int)">copyCSVLines</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;source,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;target,
+int&nbsp;numberOfCSVLines)</code></th>
+<td class="col-last">
+<div class="block">This function copies a part of a csv file to another file.This is used to find the best batch size.</div>
+</td>
+</tr>
+<tr class="row-color" id="i1">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCudaVisibleDevices()">getCudaVisibleDevices</a></span>()</code></th>
 <td class="col-last">
@@ -218,14 +232,14 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
  which GPU the process should run.</div>
 </td>
 </tr>
-<tr class="row-color" id="i1">
+<tr class="alt-color" id="i2">
 <td class="col-first"><code><a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getExtractor()">getExtractor</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the text extractor which extracts text from a given resource.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i2">
+<tr class="row-color" id="i3">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getModelName()">getModelName</a></span>()</code></th>
 <td class="col-last">
@@ -235,42 +249,49 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
  function in huggingface library</a>)</div>
 </td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="alt-color" id="i4">
 <td class="col-first"><code><a href="TransformersMultiProcessing.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersMultiProcessing</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMultiProcessing()">getMultiProcessing</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the multiprocessing value of the transformer.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i5">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTmpDir()">getTmpDir</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the tmp directory used by the matcher.</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code><a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTrainingArguments()">getTrainingArguments</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the training arguments of the huggingface trainer.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="row-color" id="i7">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTransformersCache()">getTransformersCache</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the cache folder where the pretrained transformers models are stored.</div>
 </td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="alt-color" id="i8">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isOptimizeForMixedPrecisionTraining()">isOptimizeForMixedPrecisionTraining</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the value if mixed precision training is enabled or diabled.</div>
+</td>
+</tr>
+<tr class="row-color" id="i9">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isUsingTensorflow()">isUsingTensorflow</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns a boolean value if tensorflow is used to train the model.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCudaVisibleDevices(int...)">setCudaVisibleDevices</a></span>&#8203;(int...&nbsp;cudaVisibleDevices)</code></th>
 <td class="col-last">
@@ -278,7 +299,7 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
  which GPUs the process should run.</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="row-color" id="i11">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCudaVisibleDevices(java.lang.String)">setCudaVisibleDevices</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices)</code></th>
 <td class="col-last">
@@ -286,14 +307,14 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
  which GPUs the process should run.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">setExtractor</a></span>&#8203;(<a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor)</code></th>
 <td class="col-last">
 <div class="block">Sets the extractor which computes the text from a given resource.</div>
 </td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="row-color" id="i13">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setModelName(java.lang.String)">setModelName</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></th>
 <td class="col-last">
@@ -303,35 +324,42 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
  function in huggingface library</a>).</div>
 </td>
 </tr>
-<tr class="alt-color" id="i12">
+<tr class="alt-color" id="i14">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setMultiProcessing(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersMultiProcessing)">setMultiProcessing</a></span>&#8203;(<a href="TransformersMultiProcessing.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersMultiProcessing</a>&nbsp;multiProcessing)</code></th>
 <td class="col-last">
 <div class="block">Sets the multiprocessing value of the transformer.</div>
 </td>
 </tr>
-<tr class="row-color" id="i13">
+<tr class="row-color" id="i15">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setOptimizeForMixedPrecisionTraining(boolean)">setOptimizeForMixedPrecisionTraining</a></span>&#8203;(boolean&nbsp;mpt)</code></th>
+<td class="col-last">
+<div class="block">Enable or diable the mixed precision training.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i16">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTmpDir(java.io.File)">setTmpDir</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;tmpDir)</code></th>
 <td class="col-last">
 <div class="block">Sets the tmp directory used by the matcher.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i14">
+<tr class="row-color" id="i17">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a></span>&#8203;(<a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a>&nbsp;configuration)</code></th>
 <td class="col-last">
 <div class="block">Sets the training arguments of the huggingface trainer.</div>
 </td>
 </tr>
-<tr class="row-color" id="i15">
+<tr class="alt-color" id="i18">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTransformersCache(java.io.File)">setTransformersCache</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</code></th>
 <td class="col-last">
 <div class="block">Sets the cache folder where the pretrained transformers models are stored.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i16">
+<tr class="row-color" id="i19">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setUsingTensorflow(boolean)">setUsingTensorflow</a></span>&#8203;(boolean&nbsp;usingTensorflow)</code></th>
 <td class="col-last">
@@ -374,6 +402,12 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
 <section class="field-details" id="field.detail">
 <h2>Field Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="LOGGER">
+<h3>LOGGER</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">org.slf4j.Logger</span>&nbsp;<span class="member-name">LOGGER</span></div>
+</section>
+</li>
 <li>
 <section class="detail" id="extractor">
 <h3>extractor</h3>
@@ -678,6 +712,49 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>multiProcessing</code> - the enum which represent the multi process starting method.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setOptimizeForMixedPrecisionTraining(boolean)">
+<h3>setOptimizeForMixedPrecisionTraining</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setOptimizeForMixedPrecisionTraining</span>&#8203;(<span class="parameters">boolean&nbsp;mpt)</span></div>
+<div class="block">Enable or diable the mixed precision training.
+ This will optimize the runtime of training and</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>mpt</code> - true to enable mixed precision training</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isOptimizeForMixedPrecisionTraining()">
+<h3>isOptimizeForMixedPrecisionTraining</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isOptimizeForMixedPrecisionTraining</span>()</div>
+<div class="block">Returns the value if mixed precision training is enabled or diabled.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if mixed precision training is enabled.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="copyCSVLines(java.io.File,java.io.File,int)">
+<h3>copyCSVLines</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">copyCSVLines</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;source,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;target,
+int&nbsp;numberOfCSVLines)</span>
+                        throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">This function copies a part of a csv file to another file.This is used to find the best batch size.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>source</code> - the source file</dd>
+<dd><code>target</code> - the traget file</dd>
+<dd><code>numberOfCSVLines</code> - how many lines should be copied</dd>
+<dt>Returns:</dt>
+<dd>true if enough lines are found in the input file.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - in case of any io exception</dd>
 </dl>
 </section>
 </li>

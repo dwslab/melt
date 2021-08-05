@@ -604,6 +604,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_base/typetransformer/TypeTransformerRegistry.html#addTransformer(de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformer)">addTransformer(TypeTransformer&lt;?, ?&gt;)</a></span> - Static method in class de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.<a href="de/uni_mannheim/informatik/dws/melt/matching_base/typetransformer/TypeTransformerRegistry.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">TypeTransformerRegistry</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html#adjustMaxBatchSize">adjustMaxBatchSize</a></span> - Variable in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTunerHpSearch</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/DefaultExtensions.OmvMetadata.html#AGGREGATES_METHOD">AGGREGATES_METHOD</a></span> - de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.<a href="de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/DefaultExtensions.OmvMetadata.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">DefaultExtensions.OmvMetadata</a></dt>
 <dd>
 <div class="block">#Method denoting the aggregation of the result of several methods</div>
@@ -2171,8 +2173,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">If true: system alignments will be copied to the evaluation directories.</div>
 </dd>
-<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html#copyCSVLines(java.io.File,java.io.File,int)">copyCSVLines(File, File, int)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a></dt>
-<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.html#copyCSVLines(java.io.File,java.io.File,int)">copyCSVLines(File, File, int)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></dt>
+<dd>
+<div class="block">This function copies a part of a csv file to another file.This is used to find the best batch size.</div>
+</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html#copyDirectory(java.io.File,java.io.File)">copyDirectory(File, File)</a></span> - Static method in class de.uni_mannheim.informatik.dws.melt.matching_base.external.seals.<a href="de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.external.seals">MatcherSeals</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/HungarianAlgorithm.html#copyOf(double%5B%5D%5B%5D)">copyOf(double[][])</a></span> - Static method in class de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.<a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/extraction/HungarianAlgorithm.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction">HungarianAlgorithm</a></dt>
@@ -5693,6 +5697,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Get the maximum confidence score of the alignment</div>
 </dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html#getMaximumPerDeviceEvalBatchSize(java.io.File)">getMaximumPerDeviceEvalBatchSize(File)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></dt>
+<dd>
+<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.</div>
+</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html#getMaximumPerDeviceTrainBatchSize()">getMaximumPerDeviceTrainBatchSize()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html#getMaximumPerDeviceTrainBatchSize(java.io.File)">getMaximumPerDeviceTrainBatchSize(File)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a></dt>
@@ -6143,6 +6151,10 @@ loadScripts(document, 'script');</script>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/instancelevel/MatchClassBasedOnInstances.ClassMatchInfo.html#getOverlap()">getOverlap()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.instancelevel.<a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/instancelevel/MatchClassBasedOnInstances.ClassMatchInfo.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.instancelevel">MatchClassBasedOnInstances.ClassMatchInfo</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/structurelevel/MatchPropBasedOnClass.MatchObject.html#getP()">getP()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.<a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/structurelevel/MatchPropBasedOnClass.MatchObject.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel">MatchPropBasedOnClass.MatchObject</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersTrainerArguments.html#getParameter(java.lang.String)">getParameter(String)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersTrainerArguments.html#getParameterOrDefault(java.lang.String,java.lang.Object)">getParameterOrDefault(String, Object)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_base/typetransformer/AlignmentAndParameters.html#getParameters()">getParameters()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.<a href="de/uni_mannheim/informatik/dws/melt/matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></dt>
 <dd>&nbsp;</dd>
@@ -7686,6 +7698,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/SimilarNeighboursFilter.html#isAddNeighboursToCorrespondence()">isAddNeighboursToCorrespondence()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance.<a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/SimilarNeighboursFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance">SimilarNeighboursFilter</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html#isAdjustMaxBatchSize()">isAdjustMaxBatchSize()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTunerHpSearch</a></dt>
+<dd>
+<div class="block">Returns the value if max batch size is adjusted or not.</div>
+</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.html#isAllowForCumulativeMatches">isAllowForCumulativeMatches</a></span> - Variable in class de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.<a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/external/matcher/BackgroundMatcher.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher">BackgroundMatcher</a></dt>
 <dd>
 <div class="block">If something has been matched in an earlier step, allow for it to be matched again.</div>
@@ -7715,7 +7731,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Function which indicates whether a phrase is in camel case or not.</div>
 </dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html#isChangeClass()">isChangeClass()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Return true if the class is changed in the classification.</div>
+</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_validation/TestCaseValidationService.html#isClassesFullyMapped()">isClassesFullyMapped()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_validation.<a href="de/uni_mannheim/informatik/dws/melt/matching_validation/TestCaseValidationService.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_validation">TestCaseValidationService</a></dt>
 <dd>
 <div class="block">Indicates whether all source and all target elements appear in the mapping.</div>
@@ -8050,6 +8068,18 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_validation/OntologyValidationService.html#isOntologyParseable()">isOntologyParseable()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_validation.<a href="de/uni_mannheim/informatik/dws/melt/matching_validation/OntologyValidationService.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_validation">OntologyValidationService</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html#isOptimizeAll()">isOptimizeAll()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></dt>
+<dd>
+<div class="block">This will return the value if all optimization techiques are enabled or diabled.</div>
+</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html#isOptimizeBatchSize()">isOptimizeBatchSize()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></dt>
+<dd>
+<div class="block">Return true if batch size optimization is turned on.</div>
+</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.html#isOptimizeForMixedPrecisionTraining()">isOptimizeForMixedPrecisionTraining()</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></dt>
+<dd>
+<div class="block">Returns the value if mixed precision training is enabled or diabled.</div>
+</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/StringUtil.html#isPrefix(java.lang.String,java.lang.String)">isPrefix(String, String)</a></span> - Static method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/StringUtil.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">StringUtil</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorBasic.html#isPrintAlignmentExtensions">isPrintAlignmentExtensions</a></span> - Variable in class de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.<a href="de/uni_mannheim/informatik/dws/melt/matching_eval/evaluator/EvaluatorBasic.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator">EvaluatorBasic</a></dt>
@@ -9567,6 +9597,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Default logger.</div>
 </dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.html#LOGGER">LOGGER</a></span> - Static variable in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html#LOGGER">LOGGER</a></span> - Static variable in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html#LOGGER">LOGGER</a></span> - Static variable in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a></dt>
@@ -11690,6 +11722,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Constructor which sets all variables.</div>
 </dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html#optimizeBatchSize">optimizeBatchSize</a></span> - Variable in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html#optimizingMetric">optimizingMetric</a></span> - Variable in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTunerHpSearch</a></dt>
 <dd>
 <div class="block">The metric to optimize during hyperparameter search.</div>
@@ -13903,6 +13937,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/SimilarNeighboursFilter.html#setAddNeighboursToCorrespondence(boolean)">setAddNeighboursToCorrespondence(boolean)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance.<a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/instance/SimilarNeighboursFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance">SimilarNeighboursFilter</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html#setAdjustMaxBatchSize(boolean)">setAdjustMaxBatchSize(boolean)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTunerHpSearch</a></dt>
+<dd>
+<div class="block">If set to true, then it will set the max value of the search space for the training batch size to the maximum
+ which is possible with the current GPU/CPU.</div>
+</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_base/OaeiOptions.html#setAllowedInstanceTypes(java.util.Set)">setAllowedInstanceTypes(Set&lt;String&gt;)</a></span> - Static method in class de.uni_mannheim.informatik.dws.melt.matching_base.<a href="de/uni_mannheim/informatik/dws/melt/matching_base/OaeiOptions.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">OaeiOptions</a></dt>
 <dd>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
@@ -13932,7 +13971,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Folder where the tracks and the corresponding test cases shall be cached.</div>
 </dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html#setChangeClass(boolean)">setChangeClass(boolean)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">If set to true, the class is changed in the classification.</div>
+</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/structurelevel/hierarchical/agony/AgonyGraphEdge.html#setChild(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyGraphNode)">setChild(AgonyGraphNode)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.<a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/structurelevel/hierarchical/agony/AgonyGraphEdge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyGraphEdge</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/Clustering.html#setCluster(int,int)">setCluster(int, int)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.clustering.<a href="de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/multisource/clustering/Clustering.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.clustering">Clustering</a></dt>
@@ -14261,6 +14302,18 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/OntoInfo.html#setOntoLocation(java.lang.String)">setOntoLocation(String)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.<a href="de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/OntoInfo.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">OntoInfo</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html#setOptimizeAll(boolean)">setOptimizeAll(boolean)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></dt>
+<dd>
+<div class="block">This will enabled or disable all possible optimization to improve prediction speed.</div>
+</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html#setOptimizeBatchSize(boolean)">setOptimizeBatchSize(boolean)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></dt>
+<dd>
+<div class="block">Set the value if batch size should be optimized before running the prediction.</div>
+</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.html#setOptimizeForMixedPrecisionTraining(boolean)">setOptimizeForMixedPrecisionTraining(boolean)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></dt>
+<dd>
+<div class="block">Enable or diable the mixed precision training.</div>
+</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html#setOptimizingMetric(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersOptimizingMetric)">setOptimizingMetric(TransformersOptimizingMetric)</a></span> - Method in class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTunerHpSearch</a></dt>
 <dd>
 <div class="block">Sets the metric which is optimized during hyperparameter search.</div>
@@ -16187,6 +16240,8 @@ loadScripts(document, 'script');</script>
 <div class="block">This class represents the arguments for the huggingface trainer.</div>
 </dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersTrainerArguments.html#%3Cinit%3E()">TransformersTrainerArguments()</a></span> - Constructor for class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersTrainerArguments.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">TransformersTrainerArguments(TransformersTrainerArguments)</a></span> - Constructor for class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersTrainerArguments.html#%3Cinit%3E(java.lang.Object...)">TransformersTrainerArguments(Object...)</a></span> - Constructor for class de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a></dt>
 <dd>&nbsp;</dd>
