@@ -50,8 +50,11 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         Alignment recallAlignment = this.recallMatcher.match(source, target, new Alignment(), properties);
         LOGGER.info("Recall alignment with {} correspondences", recallAlignment.size());
+        if(recallAlignment.size() > 50_000)
+            this.transformersFilter.setOptimizeAll(true);
         Alignment alignmentWithConfidence = this.transformersFilter.match(source, target, recallAlignment, properties);
-
+        if(recallAlignment.size() > 50_000)
+            this.transformersFilter.setOptimizeAll(false);
         // now we need to set the transformer confidence as main confidence for the MWB extractor
         ConfidenceCombiner confidenceCombiner = new ConfidenceCombiner(TransformersFilter.class);
         Alignment alignmentWithOneConfidence = confidenceCombiner.combine(alignmentWithConfidence);
