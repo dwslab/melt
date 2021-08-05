@@ -13,7 +13,6 @@ public class ConfidenceCombinerTest {
     
     @Test
     void testConfidenceCombiner() {
-        
         Correspondence a = new Correspondence("a", "a'");
         a.addAdditionalConfidence("conf1", 0.7);
         a.addAdditionalConfidence("conf2", 0.8);
@@ -43,8 +42,6 @@ public class ConfidenceCombinerTest {
         combinedAlignment = combiner.combine(alignment);
         assertEquals(0.9, combinedAlignment.getCorrespondence("a", "a'", CorrespondenceRelation.EQUIVALENCE).getConfidence());
         assertEquals(1.2, combinedAlignment.getCorrespondence("b", "b'", CorrespondenceRelation.EQUIVALENCE).getConfidence());
-        
-        
     }
     
     @Test

@@ -23,11 +23,11 @@ public interface TextExtractor {
      */
     Set<String> extract(Resource r);
     
-    public static TextExtractor wrapLiteralExtractor(LiteralExtractor e){
+    static TextExtractor wrapLiteralExtractor(LiteralExtractor e){
         return (Resource r) -> e.extract(r).stream().map(Literal::getLexicalForm).filter(x -> !x.trim().equals("")).collect(Collectors.toSet());
     }
     
-    public static TextExtractor appendStringPostProcessing(TextExtractor e, Function<String, String> postprocessing){
+    static TextExtractor appendStringPostProcessing(TextExtractor e, Function<String, String> postprocessing){
         return (Resource r) -> e.extract(r).stream().map(postprocessing).filter(x -> !x.trim().equals("")).collect(Collectors.toSet());
     }
 }

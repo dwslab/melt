@@ -8,6 +8,8 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.Evaluator;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorBasic;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.SimpleStringMatcher;
@@ -33,7 +35,6 @@ public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
-
         //CLI setup:
         Options options = new Options();
 
@@ -95,7 +96,8 @@ public class Main {
         options.addOption(Option.builder("m")
                 .longOpt("mode")
                 .hasArg()
-                .desc("Available modes: BASELINE, ZEROSHOT, TC_FINETUNE, TRACK_FINETUNE, GLOBAL_FINETUNE")
+                .desc("Available modes: BASELINE, BASELINE_LIGHT, ZEROSHOT, TC_FINETUNE, TRACK_FINETUNE, " +
+                        "GLOBAL_FINETUNE")
                 .required()
                 .build()
         );
@@ -208,11 +210,18 @@ public class Main {
             case "baseline":
             case "baselines":
                 LOGGER.info("Mode: BASELINE");
-                baselineMatchers(tracks);
+                baselineMatchers(tracks, false);
+                break;
+            case "baseline_light":
+            case "light_baseline":
+                LOGGER.info("Mode: BASELINE_LIGHT");
+                baselineMatchers(tracks, true);
                 break;
             default:
                 LOGGER.warn("Mode '{}' not found.", mode);
         }
+
+        LOGGER.info("DONE");
     }
 
     private static void checkTransformerParameter(){
@@ -260,7 +269,8 @@ public class Main {
                             fraction, 41, false);
 
                     // Step 1 Training
-                    String configurationName = model + "_" + fraction + "_" + track;
+                    String configurationName = model + "_" + fraction + "_" + track.getName();
+                    configurationName = configurationName.replaceAll(" ", "_");
                     File finetunedModelFile = new File(targetDir, configurationName);
 
                     MatcherYAAAJena recallMatcher;
@@ -381,6 +391,7 @@ public class Main {
                         // Step 1: Training
                         // ----------------
                         String configurationName = model + "_" + fraction + "_" + testCase.getName();
+                        configurationName = configurationName.replaceAll(" ", "_");
                         File finetunedModelFile = new File(targetDir, configurationName);
 
                         // Step 1.1.: Running the test case
@@ -455,8 +466,9 @@ public class Main {
     /**
      * Simply evaluates the baseline and recall matchers on the provided tracks.
      * @param tracks The tracks to be evaluated.
+     * @param isLight False if {@link EvaluatorCSV} shall be used.
      */
-    static void baselineMatchers(List<Track> tracks) {
+    static void baselineMatchers(List<Track> tracks, boolean isLight) {
         SimpleStringMatcher ssm = new SimpleStringMatcher();
         ssm.setVerboseLoggingOutput(false);
 
@@ -472,10 +484,19 @@ public class Main {
         smatch.setVerboseLoggingOutput(false);
         ers.addAll(Executor.run(testCases, new RecallMatcherKgTrack()));
         ers.addAll(Executor.run(testCases, new RecallMatcherAnatomy()));
-        ers.addAll(Executor.run(testCases, new RecallMatcherGeneric(20, true)));
+        //ers.addAll(Executor.run(testCases, new RecallMatcherGeneric(20, true)));
         ers.addAll(Executor.run(testCases, smatch));
 
-        EvaluatorCSV evaluator = new EvaluatorCSV(ers);
+        LOGGER.info("All matchers run. Starting evaluation...");
+
+        Evaluator evaluator;
+        if(isLight){
+            LOGGER.info("Light evaluation mode...");
+            evaluator = new EvaluatorBasic(ers);
+        } else {
+            LOGGER.info("Full evaluation mode...");
+            evaluator = new EvaluatorCSV(ers);
+        }
         evaluator.writeToDirectory();
     }
 
@@ -521,6 +542,5 @@ public class Main {
         EvaluatorCSV evaluator = new EvaluatorCSV(ers);
         evaluator.writeToDirectory();
     }
-
 
 }

@@ -21,10 +21,12 @@ import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.RDFS;
 
 /**
- * A text textractor which extracts texts from a resource which can be used by transformer 
- * based matchers like TransformersFilter or TransformersFilterFineTuner.
+ * A {@link TextExtractor} which extracts texts from a resource which can be used by transformer
+ * based matchers like {@link de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFilter}
+ * or {@link de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFineTuner}.
  */
 public class TextExtractorForTransformers implements TextExtractor {
+
 
     private int minToken;
 
@@ -38,7 +40,6 @@ public class TextExtractorForTransformers implements TextExtractor {
     
     @Override
     public Set<String> extract(Resource r) {
-        
         List<ProcessedLiteral> literals = new ArrayList<>(getPossibleLiterals(r));
         updateContained(literals);
         
@@ -56,7 +57,6 @@ public class TextExtractorForTransformers implements TextExtractor {
             ProcessedLiteral literal = literals.get(0);
             extractedLiterals.add(literal.getLexical());
             countTokens += literal.getTokenCount();
-            
             literals.remove(0);
             literals.removeAll(literal.getContainedLiterals());
         }
@@ -107,15 +107,15 @@ public class TextExtractorForTransformers implements TextExtractor {
                         
                         if(p.equals(RDFS.label)){
                             literals.add(new ProcessedLiteral(ProperyTypeFineGrained.LABEL, text));
-                        }else if(p.equals(RDFS.comment)){
+                        } else if(p.equals(RDFS.comment)){
                             literals.add(new ProcessedLiteral(ProperyTypeFineGrained.COMMENT, text));
-                        }else if(PropertyVocabulary.LABEL_LIKE_PROPERTIES.contains(p)){
+                        } else if(PropertyVocabulary.LABEL_LIKE_PROPERTIES.contains(p)){
                             literals.add(new ProcessedLiteral(ProperyTypeFineGrained.LABEL_LIKE, text));
-                        }else if(PropertyVocabulary.COMMENT_LIKE_PROPERTIES.contains(p)){
+                        } else if(PropertyVocabulary.COMMENT_LIKE_PROPERTIES.contains(p)){
                             literals.add(new ProcessedLiteral(ProperyTypeFineGrained.COMMENT_LIKE, text));
-                        }else if(PropertyVocabulary.hasPropertyLabelFragment(p)){
+                        } else if(PropertyVocabulary.hasPropertyLabelFragment(p)){
                             literals.add(new ProcessedLiteral(ProperyTypeFineGrained.LABEL_NAME, text));
-                        }else if(PropertyVocabulary.hasPropertyCommentFragment(p)){
+                        } else if(PropertyVocabulary.hasPropertyCommentFragment(p)){
                             literals.add(new ProcessedLiteral(ProperyTypeFineGrained.COMMENT_NAME, text));
                         }
                         
