@@ -89,6 +89,27 @@ class TextExtractorForTransformersTest {
         assertTrue(set.contains("Risk, Part One"));
     }
     
+    @Test
+    void extractSix() {
+        String modelText = "@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .\n"
+                + "<http://example.com/T%27Paal_(city)> rdfs:label \"T'Paal (city)\".\n";
+
+        Set<String> set = extract(modelText, "http://example.com/T%27Paal_(city)");        
+        assertEquals(1, set.size());
+        assertTrue(set.contains("T'Paal (city)") || set.contains("T%27Paal_(city)"));
+    }
+    
+    @Test
+    void extractSeven() {
+        String modelText = "@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .\n"
+                + "<http://example.com/example> rdfs:label \"A label with % in it.\".\n";
+
+        Set<String> set = extract(modelText, "http://example.com/example");        
+        assertEquals(2, set.size());
+        assertTrue(set.contains("example"));
+        assertTrue(set.contains("A label with % in it."));
+    }
+    
     
     private static Set<String> extract(String modelText, String resourceURI){
         OntModel m = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);        

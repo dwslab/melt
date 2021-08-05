@@ -44,7 +44,7 @@ public class PropertyVocabulary {
     public static final Set<String> COMMENT_NAMES = new HashSet<>(Arrays.asList("comment", "description", "abstract"));
     
     
-    private static final Set<Property> DESCRIPTIVE_PROPERTIES = getDescriptiveProperties();
+    public static final Set<Property> DESCRIPTIVE_PROPERTIES = getDescriptiveProperties();
     private static Set<Property> getDescriptiveProperties(){
         HashSet<Property> set = new HashSet<>();
         set.addAll(LABEL_LIKE_PROPERTIES);

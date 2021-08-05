@@ -34,6 +34,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
 import org.apache.jena.util.iterator.ExtendedIterator;
@@ -154,6 +155,10 @@ public class ManualInspection {
     }
     
     public void describeResourcesWithExtractor(TestCase tc, int samples, File f, boolean useSource){
+        describeResourcesWithExtractor(tc, samples, f, useSource, false, false);
+    }
+    
+    public void describeResourcesWithExtractor(TestCase tc, int samples, File f, boolean useSource, boolean addInput, boolean nextJump){
         Alignment a = tc.getParsedReferenceAlignment();
         Set<String> referenceURIs = useSource ? a.getDistinctSourcesAsSet() : a.getDistinctTargetsAsSet();
         List<String> shuffeledReferenceURI = new ArrayList<>(referenceURIs);
@@ -163,11 +168,10 @@ public class ManualInspection {
         
         try(BufferedOutputStream bw = new BufferedOutputStream(new FileOutputStream(f))){
             for(String s : shuffeledReferenceURI.subList(0, Math.min(shuffeledReferenceURI.size(), samples))){
-                Model selectedResources = ModelFactory.createDefaultModel();
                 Resource r = model.createResource(s);
-                selectedResources.add(model.listStatements(r, null, (RDFNode)null));
-                selectedResources.setNsPrefixes(model);
+                Model selectedResources = getSubModel(model, r, addInput, nextJump);
                 bw.write("================\n".getBytes(StandardCharsets.UTF_8));
+                bw.write(("=>" + s + "\n").getBytes(StandardCharsets.UTF_8));
                 RDFDataMgr.write(bw, selectedResources, RDFFormat.TURTLE_PRETTY) ;
                 for(String extracted :  extractor.extract(r)){
                      bw.write(("----> " + extracted.trim() + "\n").getBytes(StandardCharsets.UTF_8));
@@ -176,6 +180,26 @@ public class ManualInspection {
         } catch (IOException ex) {
             LOGGER.warn("Could not write file", ex);
         }
+    }
+    
+    private Model getSubModel(OntModel model, Resource r, boolean addInput, boolean nextJump){
+        Model selectedResources = ModelFactory.createDefaultModel();
+        selectedResources.setNsPrefixes(model);        
+        selectedResources.add(model.listStatements(r, null, (RDFNode)null));
+        if(nextJump){
+            StmtIterator i = model.listStatements(r, null, (RDFNode)null);
+            while(i.hasNext()){
+                RDFNode n = i.next().getObject();
+                if(n.isResource()){
+                    selectedResources.add(n.asResource().listProperties());
+                }
+            }
+        }
+        
+        if(addInput){
+            selectedResources.add(model.listStatements(null, null, r));
+        }
+        return selectedResources;
     }
     
     

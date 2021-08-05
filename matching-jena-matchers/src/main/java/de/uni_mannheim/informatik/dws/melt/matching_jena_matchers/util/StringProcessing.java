@@ -1,10 +1,14 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class StringProcessing {
@@ -44,6 +48,10 @@ public class StringProcessing {
         stringToBeNormalized = stringToBeNormalized.replace(' ', '_');
         stringToBeNormalized = stringToBeNormalized.toLowerCase();
 
+        try {
+            stringToBeNormalized = URLDecoder.decode(stringToBeNormalized, "UTF-8");
+        } catch (Exception ex) { } // do nothing - just continue with processing
+        
         // delete non alpha-numeric characters:
         stringToBeNormalized = NON_ALPHA.matcher(stringToBeNormalized).replaceAll("_");
 
