@@ -20,14 +20,16 @@ public class TrainingPipeline extends MatcherYAAAJena {
     private MatcherYAAAJena recallMatcher;
     private final TransformersFineTuner fineTuner;
 
-    public TrainingPipeline(String gpu, String transformerModel, File finetunedModelFile, File transformersCache, MatcherYAAAJena recallMatcher) {
+    public TrainingPipeline(String gpu, String transformerModel, File finetunedModelFile, File transformersCache,
+                            MatcherYAAAJena recallMatcher,
+                            boolean isMultipleTextsToMultipleExamples) {
         TextExtractor textExtractor = new TextExtractorForTransformers();
         textExtractor = TextExtractor.appendStringPostProcessing(textExtractor, StringProcessing::normalizeOnlyCamelCaseAndUnderscore);
         
         this.fineTuner = new TransformersFineTuner(textExtractor, transformerModel, finetunedModelFile);
         this.fineTuner.setCudaVisibleDevices(gpu);
         this.fineTuner.setTransformersCache(transformersCache);
-        
+        this.fineTuner.setMultipleTextsToMultipleExamples(isMultipleTextsToMultipleExamples);
         this.recallMatcher = recallMatcher;
     }
     

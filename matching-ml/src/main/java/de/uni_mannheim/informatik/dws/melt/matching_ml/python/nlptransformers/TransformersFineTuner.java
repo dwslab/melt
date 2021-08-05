@@ -75,7 +75,7 @@ public class TransformersFineTuner extends TransformersBase implements Filter {
     
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        LOGGER.info("Append text to training file: ", this.trainingFile);
+        LOGGER.info("Append text to training file: {}", this.trainingFile);
         writeTrainingFile(source, target, inputAlignment, this.trainingFile, true);
         return inputAlignment;
     }

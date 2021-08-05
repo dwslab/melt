@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.ConfidenceRefiner;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
@@ -81,9 +82,20 @@ public class ConfidenceFinder {
      * to cut correspondences LESS than the optimal threshold determined by this method.
      */
     public static double getBestConfidenceForFmeasure(ExecutionResult executionResult){
-        ConfusionMatrix m = new ConfusionMatrixMetric().compute(executionResult);
+        return getBestConfidenceForFmeasure(executionResult.getReferenceAlignment(),
+                executionResult.getSystemAlignment(),
+                executionResult.getTestCase().getGoldStandardCompleteness());
+    }
 
-        List<Double> systemConfidences = new ArrayList<>(getOccurringConfidences(executionResult.getSystemAlignment(), 2));
+    public static double getBestConfidenceForFmeasure(Alignment reference, Alignment systemAlignment,
+                                                      GoldStandardCompleteness gsCompleteness){
+        if(reference.isEmpty()) {
+            return systemAlignment.getMinimalConfidence();
+        }
+
+        ConfusionMatrix m = new ConfusionMatrixMetric().compute(reference, systemAlignment, gsCompleteness);
+
+        List<Double> systemConfidences = new ArrayList<>(getOccurringConfidences(systemAlignment, 2));
         Collections.sort(systemConfidences);
         double bestConf = 1.0d;
         double bestValue = 0.0d;

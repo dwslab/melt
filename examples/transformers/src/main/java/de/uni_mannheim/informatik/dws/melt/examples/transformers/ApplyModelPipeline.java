@@ -1,7 +1,10 @@
 package de.uni_mannheim.informatik.dws.melt.examples.transformers;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning.ConfidenceFinder;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.MaxWeightBipartiteExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.ConfidenceCombiner;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.StringProcessing;
@@ -21,14 +24,17 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplyModelPipeline.class);
-        
+
     private final MatcherYAAAJena recallMatcher;
     private final TransformersFilter transformersFilter;
 
-    public ApplyModelPipeline(String gpu, String transformerModel, File transformersCache, MatcherYAAAJena recallMatcher) {
+
+    public ApplyModelPipeline(String gpu, String transformerModel, File transformersCache,
+                              MatcherYAAAJena recallMatcher, boolean isMultipleTextsToMultipleExamples) {
         TextExtractor textExtractor = new TextExtractorForTransformers();
         textExtractor = TextExtractor.appendStringPostProcessing(textExtractor, StringProcessing::normalizeOnlyCamelCaseAndUnderscore);
         this.transformersFilter = new TransformersFilter(textExtractor, transformerModel);
+        this.transformersFilter.setMultipleTextsToMultipleExamples(isMultipleTextsToMultipleExamples);
         this.transformersFilter.setCudaVisibleDevices(gpu);
         this.transformersFilter.setTransformersCache(transformersCache);
         this.recallMatcher = recallMatcher;
@@ -51,6 +57,13 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
 
         // run the extractor
         MaxWeightBipartiteExtractor extractorMatcher = new MaxWeightBipartiteExtractor();
-        return extractorMatcher.match(source, target, alignmentWithOneConfidence, properties);
+        Alignment extractedAlignment =  extractorMatcher.match(source, target, alignmentWithOneConfidence, properties);
+
+        double bestConfidence = ConfidenceFinder.getBestConfidenceForFmeasure(inputAlignment, extractedAlignment,
+                GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE);
+
+        LOGGER.info("Best confidence: " + bestConfidence);
+        ConfidenceFilter confidenceFilter = new ConfidenceFilter(bestConfidence);
+        return confidenceFilter.filter(extractedAlignment, source, target);
     }
 }
