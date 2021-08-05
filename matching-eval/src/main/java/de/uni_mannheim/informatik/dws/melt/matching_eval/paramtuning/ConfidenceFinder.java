@@ -20,8 +20,9 @@ import java.util.Set;
  * This class offers static functionality to analyze and optimize matchers in terms of their confidences (and
  * confidence thresholds).
  */
-public class ConfidenceFinder{
-    
+public class ConfidenceFinder {
+
+
     public static Set<Double> getSteps(double start, double end, double stepWidth){
         Set<Double> set = new HashSet<>();
         for(double d = start; d <= end; d += stepWidth){
@@ -74,7 +75,10 @@ public class ConfidenceFinder{
     /**
      * Given an ExecutionResult, this method determines the best cutting point in order to optimize the F1-score.
      * @param executionResult The execution result for which the optimal confidence threshold shall be determined.
-     * @return The optimal confidence threshold.
+     * @return The optimal confidence threshold for an optimal F1 measure. All correspondences with a confidence
+     * LOWER than the result should be discarded. You can directly use
+     * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}
+     * to cut correspondences LESS than the optimal threshold determined by this method.
      */
     public static double getBestConfidenceForFmeasure(ExecutionResult executionResult){
         ConfusionMatrix m = new ConfusionMatrixMetric().compute(executionResult);
@@ -86,12 +90,32 @@ public class ConfidenceFinder{
         for(Double conf : systemConfidences){
             int tpSize = m.getTruePositive().cut(conf).size();
             int fpSize = m.getFalsePositive().cut(conf).size();
-            int fnSize = m.getFalseNegative().cut(conf).size();
-            
+            int fnSize = m.getFalseNegativeSize() + (m.getTruePositiveSize() - tpSize);
+
+            /*
+            ExecutionResult er = new ExecutionResult(executionResult.getTestCase(),
+                    executionResult.getMatcherName(),
+                    executionResult.getSystemAlignment().cut(conf),
+                    executionResult.getReferenceAlignment());
+            ConfusionMatrix m2 = new ConfusionMatrixMetric().compute(er);
+
+            System.out.println("TP");
+            System.out.println(m2.getTruePositiveSize());
+            System.out.println(tpSize);
+
+            System.out.println("FP");
+            System.out.println(m2.getFalsePositiveSize());
+            System.out.println(fpSize);
+
+            System.out.println("FN");
+            System.out.println(m2.getFalseNegativeSize());
+            System.out.println(fnSize);
+             */
+
             double precision = divideWithTwoDenominators(tpSize, tpSize, fpSize);
             double recall = divideWithTwoDenominators(tpSize, tpSize, fnSize);
             double f1measure = divideWithTwoDenominators(2*precision*recall, precision, recall);
-            
+
             if(f1measure >= bestValue){
                 bestConf = conf;
                 bestValue = f1measure;

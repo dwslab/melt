@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CounterTest {
 
+
     @Test
     void testCounter(){        
         @SuppressWarnings("deprecation")
@@ -26,5 +27,4 @@ public class CounterTest {
         assertEquals(4, c.getCount("two"));
         //System.out.println(mostCommonTwo.toString());
     }
-    
 }

@@ -1,9 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.ontology.OntModel;
@@ -16,26 +14,40 @@ import org.junit.jupiter.api.Test;
 
 
 public class ConfidenceFilterTest {
-    
+
+
     @Test
-    void testFilter() throws IOException {
+    void testFilter() {
         Alignment m = new Alignment();        
-        for(double conf=0.1;conf<=1.0;conf+=0.1){
-            for(int i=0;i<10;i++){
+        for(double conf=0.1; conf<=1.0; conf+=0.1){
+            for(int i=0; i<10; i++){
                 m.add(
-                        "http://exampleLeftWithALongURI/" + Double.toString(conf) + "_" +  Integer.toString(i), 
-                        "http://exampleRightWithALongURI/" + Double.toString(conf) + "_" +  Integer.toString(i), 
+                        "http://exampleLeftWithALongURI/" + conf + "_" +  i,
+                        "http://exampleRightWithALongURI/" + conf + "_" +  i,
                         conf);
             }
         }
         Alignment filtered = new ConfidenceFilter().filter(m, null, null);
         assertEquals(10, filtered.size());
     }
-    
+
     @Test
-    void testFilterDifferentThresholds() throws IOException {
-        
-        
+    void testFilterDefaultConstructor() {
+        Alignment m = new Alignment();
+        for(double conf=0.1; conf<=1.0; conf+=0.1){
+            for(int i=0; i<10; i++){
+                m.add(
+                        "http://exampleLeftWithALongURI/" + conf + "_" +  i,
+                        "http://exampleRightWithALongURI/" + conf + "_" +  i,
+                        conf);
+            }
+        }
+        Alignment filtered = new ConfidenceFilter(0.85).filter(m, null, null);
+        assertEquals(20, filtered.size());
+    }
+
+    @Test
+    void testFilterDifferentThresholds() {
         OntModel source = ModelFactory.createOntologyModel();
         source.createIndividual("http://left.com/Individual", OWL.Thing);
         source.createDatatypeProperty("http://left.com/DatatypeProperty");
@@ -55,8 +67,7 @@ public class ConfidenceFilterTest {
         
         List<Correspondence> all = Arrays.asList(clazz, objectProperty, datatypeProperty, individual);
         Alignment a = new Alignment(all);
-        
-        
+
         Alignment filtered = new ConfidenceFilter(0.5, 0.6, 0.7, 0.8, 1.0).filter(a, source, target);
         assertEquals(4, filtered.size());
         assertTrue(a.containsAll(all));

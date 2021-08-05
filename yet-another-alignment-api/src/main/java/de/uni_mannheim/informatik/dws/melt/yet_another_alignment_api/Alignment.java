@@ -533,12 +533,6 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         assertIndexOnConfidence();
         Alignment m = new Alignment(this, false);
         ResultSet<Correspondence> result = this.retrieve(QueryFactory.greaterThanOrEqualTo(Correspondence.CONFIDENCE, threshold));
-        //m.addAll(result.stream().collect(Collectors.toList()));  //makes an arraylist 
-        //List<Correspondence> list = new ArrayList<>(result.size());
-        //for(Correspondence c : result){
-        //    list.add(c);
-        //}
-        //m.addAll(list);        
         for(Correspondence c : result){
             m.add(c);
         }
@@ -683,7 +677,8 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
 
 
     /**
-     * Create the subtraction between the two given alignments. Only copies the alignment and not further infos like onto or extensions.
+     * Create the subtraction between the two given alignments. Only copies the alignment and not further infos like
+     * onto or extensions.
      * @param alignment_1 Set 1.
      * @param alignment_2 Set 2.
      * @return Subtraction alignment.
@@ -697,7 +692,8 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
 
     
     /**
-     * Create the intersection between the two given alignments. Only copies the alignment and not further infos like onto or extensions.
+     * Create the intersection between the two given alignments. Only copies the alignment and not further infos like
+     * onto or extensions.
      * @param alignment_1 Set 1.
      * @param alignment_2 Set 2.
      * @return Intersection alignment.
@@ -712,7 +708,8 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
 
     /**
-     * Create the union between the two given alignments. Only copies the alignment and not further infos like onto or extensions.
+     * Create the union between the two given alignments. Only copies the alignment and not further infos like onto or
+     * extensions.
      * @param alignment_1 Set 1.
      * @param alignment_2 Set 2.
      * @return Union alignment.

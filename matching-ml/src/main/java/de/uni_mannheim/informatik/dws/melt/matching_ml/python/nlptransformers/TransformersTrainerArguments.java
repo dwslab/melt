@@ -39,7 +39,8 @@ public class TransformersTrainerArguments {
         Map<String, Object> map = new HashMap<>();
         for (int i = 0; i < arr.length; i+=2) {
             if(i+1 >= arr.length){
-                LOGGER.error("Uneven number of configuration arguments. Exepect are Key1, Value1, Key2, Value2, ....->Discard last extension");
+                LOGGER.error("Uneven number of configuration arguments. Expected are Key1, Value1, Key2, Value2, ..." +
+                        ".->Discard last extension");
                 break;
             }
             map.put(arr[i].toString(), arr[i + 1]);
