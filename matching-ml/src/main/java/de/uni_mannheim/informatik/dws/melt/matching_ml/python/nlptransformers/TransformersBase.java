@@ -33,6 +33,7 @@ public abstract class TransformersBase extends MatcherYAAAJena {
     protected String cudaVisibleDevices;
     protected File transformersCache;
     protected TransformersMultiProcessing multiProcessing;
+    protected boolean multipleTextsToMultipleExamples;
 
     /**
      * Constructor with all required parameters.
@@ -54,6 +55,7 @@ public abstract class TransformersBase extends MatcherYAAAJena {
         this.cudaVisibleDevices = ""; //use all GPUs
         this.transformersCache = null; //use default
         this.multiProcessing = TransformersMultiProcessing.SPAWN;
+        this.multipleTextsToMultipleExamples = false;
     }
     
     /**
@@ -263,6 +265,26 @@ public abstract class TransformersBase extends MatcherYAAAJena {
             LOGGER.warn("parameter fp16 is not a booolean value");
             return false;
         }
+    }
+
+    /**
+     * Returns the value if all texts returned by the text extractor are used separately to generate the examples.
+     * Otherwise it will concatenate all texts together to form one example(the default).
+     * This should be only enabled when the extractor does not return many texts because otherwise a lot of examples are produced.
+     * @return true, if generation of multiple examples is enabled
+     */
+    public boolean isMultipleTextsToMultipleExamples() {
+        return multipleTextsToMultipleExamples;
+    }
+
+    /**
+     * Is set to true, then all texts returned by the text extractor are used separately to generate the examples.
+     * Otherwise it will concatenate all texts together to form one example(the default).
+     * This should be only enabled when the extractor does not return many texts because otherwise a lot of examples are produced.
+     * @param multipleTextsToMultipleExamples true, to enable the generation of multiple examples.
+     */
+    public void setMultipleTextsToMultipleExamples(boolean multipleTextsToMultipleExamples) {
+        this.multipleTextsToMultipleExamples = multipleTextsToMultipleExamples;
     }
     
     
