@@ -1490,7 +1490,7 @@ def inner_transformers_prediction(request_headers):
 
             app.logger.info("Run prediction")
             pred_out = trainer.predict(predict_dataset)
-            trainer.log(pred_out.metrics)
+            app.logger.info(pred_out.metrics)
         class_index = 0 if change_class else 1
         # sigmoid: scores = 1 / (1 + np.exp(-pred_out.predictions, axis=1[:, class_index]))
         # compute softmax to get class probabilities (scores between 0 and 1)
@@ -1543,6 +1543,8 @@ def inner_transformers_finetuning(request_headers):
 
             app.logger.info("Loading transformers model")
             if using_tensorflow:
+                import tensorflow as tf
+                app.logger.info("Num gpu avail: " + str(len(tf.config.list_physical_devices('GPU'))))
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
                 with training_args.strategy.scope():
@@ -1550,6 +1552,8 @@ def inner_transformers_finetuning(request_headers):
 
                 trainer = TFTrainer(model=model, tokenizer=tokenizer, train_dataset=training_dataset, args=training_args)
             else:
+                import torch
+                app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
                 from transformers import Trainer, AutoModelForSequenceClassification
                 model = AutoModelForSequenceClassification.from_pretrained(initial_model_name, num_labels=2)
                 
@@ -1559,8 +1563,9 @@ def inner_transformers_finetuning(request_headers):
             app.logger.info("Run training")
             trainer.train()
 
-            app.logger.info("Save model")
-            trainer.save_model(resulting_model_location)
+            if training_arguments.get('save_at_end', True):
+                app.logger.info("Save model")
+                trainer.save_model(resulting_model_location)
         return "True"
     except Exception as e:
         import traceback
@@ -1646,6 +1651,8 @@ def transformers_finetuning_hp_search():
 
             app.logger.info("Loading transformers model")
             if using_tensorflow:
+                import tensorflow as tf
+                app.logger.info("Num gpu avail: " + str(len(tf.config.list_physical_devices('GPU'))))
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
                 
                 def model_init():
@@ -1661,6 +1668,8 @@ def transformers_finetuning_hp_search():
                     args=training_args
                 )
             else:
+                import torch
+                app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
                 from transformers import Trainer, AutoModelForSequenceClassification
                 def model_init():
                     return AutoModelForSequenceClassification.from_pretrained(initial_model_name, num_labels=2)

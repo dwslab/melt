@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServerException;
 import java.io.IOException;
 
 /**
@@ -35,6 +36,8 @@ public class TransformersFilter extends TransformersBase implements Filter {
     private static final String NEWLINE = System.getProperty("line.separator");
     
     private boolean changeClass;
+    private boolean optimizeBatchSize;
+    
 
     /**
      * Constructor with all required parameters and default values for optional parameters (can be changed by setters).
@@ -50,7 +53,9 @@ public class TransformersFilter extends TransformersBase implements Filter {
     public TransformersFilter(TextExtractor extractor, String modelName) {
         super(extractor, modelName);
         this.changeClass = false;
+        this.optimizeBatchSize = false;
     }
+
     
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception{
@@ -155,16 +160,123 @@ public class TransformersFilter extends TransformersBase implements Filter {
      * @return a list of confidences
      */
     public List<Double> predictConfidences(File predictionFilePath) throws Exception{
+        if(this.optimizeBatchSize){
+            this.trainingArguments.addParameter("per_device_eval_batch_size", getMaximumPerDeviceEvalBatchSize(predictionFilePath));
+        }
         return PythonServer.getInstance().transformersPrediction(this, predictionFilePath);
+    }
+    
+    /**
+     * This functions tries to execute the training with one step to check which maximum {@code per_device_train_batch_size } is possible.It will start with 2 and checks only powers of 2.
+     * @param trainingFile the training file to use
+     * @return the maximum {@code per_device_train_batch_size } with the current configuration
+     */
+    private int getMaximumPerDeviceEvalBatchSize(File trainingFile){        
+        //save variables for restoring afterwards
+        TransformersTrainerArguments backupArguments = this.trainingArguments;
+        
+        int batchSize = 4;
+        while(batchSize < 8193){
+            LOGGER.info("Try out batch size of {}", batchSize);
+            //generate a smaller training file -> faster tokenizer
+            
+            File tmpTrainingFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_predict_find_max_batch_size", ".txt");
+            try{
+                if(this.copyCSVLines(trainingFile, tmpTrainingFile, batchSize + 1) == false){
+                    int batchSizeWhichWorks = batchSize / 2;
+                    LOGGER.info("File contains too few lines to further increase batch size. Thus use now {}", batchSizeWhichWorks);
+                }
+                this.trainingArguments = new TransformersTrainerArguments(backupArguments);
+                this.trainingArguments.addParameter("per_device_eval_batch_size", batchSize);
+
+                PythonServer.getInstance().transformersPrediction(this, tmpTrainingFile);
+            }catch (PythonServerException ex) {
+                //CUDA ERROR: RuntimeError: CUDA out of memory. Tried to allocate 192.00 MiB (GPU 0; 10.76 GiB total capacity; 9.54 GiB already allocated; 50.56 MiB free; 9.59 GiB reserved in total by PyTorch)
+                //CPU  ERROR: RuntimeError: [enforce fail at ..\c10\core\CPUAllocator.cpp:79] data. DefaultCPUAllocator: not enough memory: you tried to allocate 50878464 bytes.
+                if(ex.getMessage().contains("not enough memory") || ex.getMessage().contains("out of memory")){
+                    int batchSizeWhichWorks = batchSize / 2;
+                    LOGGER.info("Found memory error, thus returning batchsize of {}", batchSizeWhichWorks);
+                    this.trainingArguments = backupArguments;
+                    return batchSizeWhichWorks;
+                }else{
+                    LOGGER.warn("Something went wrong in python server during getMaximumPerDeviceEvalBatchSize. Return default of 8", ex);
+                    this.trainingArguments = backupArguments;
+                    return 8;
+                }
+            }catch (IOException ex) {
+                LOGGER.warn("Something went wrong with io during getMaximumPerDeviceEvalBatchSize. Return default of 8", ex);
+                this.trainingArguments = backupArguments;
+                return 8;
+            }catch (Exception ex) {
+                LOGGER.warn("Something went wrong during getMaximumPerDeviceEvalBatchSize. Return default of 8", ex);
+                this.trainingArguments = backupArguments;
+                return 8;
+            }finally{
+                tmpTrainingFile.delete();
+            }
+            batchSize *= 2;
+        }
+        
+        LOGGER.info("It looks like that batch sizes up to 8192 works out which is unusual. If greater batch sizes are possible the code to search max batch size needs to be changed.");
+        this.trainingArguments = backupArguments;
+        return batchSize;
     }
 
     //setter and getter
 
+    /**
+     * Return true if the class is changed in the classification.
+     * This is useful if a pretrained model predict exactly the opposite class.
+     * @return true if the class is changed in the classification.
+     */
     public boolean isChangeClass() {
         return changeClass;
     }
 
+    /**
+     * If set to true, the class is changed in the classification.
+     * This is useful if a pretrained model predict exactly the opposite class.
+     * @param changeClass true if the class should be changed in the classification.
+     */
     public void setChangeClass(boolean changeClass) {
         this.changeClass = changeClass;
+    }
+    
+    /**
+     * Return true if batch size optimization is turned on.
+     * @return true if batch size optimization is turned on.
+     */
+    public boolean isOptimizeBatchSize() {
+        return optimizeBatchSize;
+    }
+
+    /**
+     * Set the value if batch size should be optimized before running the prediction.
+     * This should only be set to true, if the dataset is huge.
+     * Otherwise the algorithm to find the largest batch size needs too much time.
+     * @param optimizeBatchSize if true, optimize the batch size every time the match method is called.
+     */
+    public void setOptimizeBatchSize(boolean optimizeBatchSize) {
+        this.optimizeBatchSize = optimizeBatchSize;
+    }
+    
+    
+    
+    /**
+     * This will enabled or disable all possible optimization to improve prediction speed.
+     * Currently this includes mixed precision training and batch size optimization.
+     * @param optimize true to enable
+     */
+    public void setOptimizeAll(boolean optimize){
+        setOptimizeBatchSize(optimize);
+        setOptimizeForMixedPrecisionTraining(optimize);
+    }
+    
+    /**
+     * This will return the value if all optimization techiques are enabled or diabled.
+     * @return true if enabled.
+     */
+    public boolean isOptimizeAll(){
+        return isOptimizeBatchSize() && isOptimizeForMixedPrecisionTraining();
     }
 }

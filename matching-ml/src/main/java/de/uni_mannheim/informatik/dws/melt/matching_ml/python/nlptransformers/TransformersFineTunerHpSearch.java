@@ -4,6 +4,9 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +40,8 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
      */
     private TransformersHpSearchSpace hpMutations;
     
+    private boolean adjustMaxBatchSize;
+    
     
     public TransformersFineTunerHpSearch(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
         super(extractor, initialModelName, resultingModelLocation);
@@ -56,6 +61,19 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
      */
     @Override
     public File finetuneModel(File trainingFile) throws Exception{
+        if(this.adjustMaxBatchSize){
+            int maxBatchSize = getMaximumPerDeviceTrainBatchSize();
+            
+            List<Object> list = new ArrayList<>();
+            int i = 4;
+            while(i <= maxBatchSize){
+                list.add(i);
+                i *= 2;
+            }
+            
+            this.hpSpace.choice("per_device_train_batch_size", list);
+            this.hpMutations.choice("per_device_train_batch_size", list);
+        }
         PythonServer.getInstance().transformersFineTuningHpSearch(this, trainingFile);
         return this.resultingModelLocation;
     }
@@ -151,4 +169,22 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
             throw new IllegalArgumentException("HpMutations should not be null.");
         this.hpMutations = hpMutations;
     }
+
+    /**
+     * Returns the value if max batch size is adjusted or not.
+     * @return true if the batch size is modified.
+     */
+    public boolean isAdjustMaxBatchSize() {
+        return adjustMaxBatchSize;
+    }
+
+    /**
+     * If set to true, then it will set the max value of the search space for the training batch size to the maximum
+     * which is possible with the current GPU/CPU.
+     * @param adjustMaxBatchSize true to enable the adjustment
+     */
+    public void setAdjustMaxBatchSize(boolean adjustMaxBatchSize) {
+        this.adjustMaxBatchSize = adjustMaxBatchSize;
+    }
+    
 }
