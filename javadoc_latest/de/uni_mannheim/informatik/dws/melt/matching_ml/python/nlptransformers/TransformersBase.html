@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -141,26 +141,31 @@ extends <a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
+<td class="col-first"><code>protected boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#multipleTextsToMultipleExamples">multipleTextsToMultipleExamples</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>protected <a href="TransformersMultiProcessing.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersMultiProcessing</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#multiProcessing">multiProcessing</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>protected <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#tmpDir">tmpDir</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>protected <a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#trainingArguments">trainingArguments</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>protected <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#transformersCache">transformersCache</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>protected boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#usingTensorflow">usingTensorflow</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -279,19 +284,26 @@ int&nbsp;numberOfCSVLines)</code></th>
 </tr>
 <tr class="alt-color" id="i8">
 <td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isMultipleTextsToMultipleExamples()">isMultipleTextsToMultipleExamples</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the value if all texts returned by the text extractor are used separately to generate the examples.</div>
+</td>
+</tr>
+<tr class="row-color" id="i9">
+<td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isOptimizeForMixedPrecisionTraining()">isOptimizeForMixedPrecisionTraining</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the value if mixed precision training is enabled or diabled.</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isUsingTensorflow()">isUsingTensorflow</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns a boolean value if tensorflow is used to train the model.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="row-color" id="i11">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCudaVisibleDevices(int...)">setCudaVisibleDevices</a></span>&#8203;(int...&nbsp;cudaVisibleDevices)</code></th>
 <td class="col-last">
@@ -299,7 +311,7 @@ int&nbsp;numberOfCSVLines)</code></th>
  which GPUs the process should run.</div>
 </td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCudaVisibleDevices(java.lang.String)">setCudaVisibleDevices</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cudaVisibleDevices)</code></th>
 <td class="col-last">
@@ -307,14 +319,14 @@ int&nbsp;numberOfCSVLines)</code></th>
  which GPUs the process should run.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i12">
+<tr class="row-color" id="i13">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">setExtractor</a></span>&#8203;(<a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor)</code></th>
 <td class="col-last">
 <div class="block">Sets the extractor which computes the text from a given resource.</div>
 </td>
 </tr>
-<tr class="row-color" id="i13">
+<tr class="alt-color" id="i14">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setModelName(java.lang.String)">setModelName</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></th>
 <td class="col-last">
@@ -324,42 +336,49 @@ int&nbsp;numberOfCSVLines)</code></th>
  function in huggingface library</a>).</div>
 </td>
 </tr>
-<tr class="alt-color" id="i14">
+<tr class="row-color" id="i15">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setMultipleTextsToMultipleExamples(boolean)">setMultipleTextsToMultipleExamples</a></span>&#8203;(boolean&nbsp;multipleTextsToMultipleExamples)</code></th>
+<td class="col-last">
+<div class="block">Is set to true, then all texts returned by the text extractor are used separately to generate the examples.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i16">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setMultiProcessing(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersMultiProcessing)">setMultiProcessing</a></span>&#8203;(<a href="TransformersMultiProcessing.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersMultiProcessing</a>&nbsp;multiProcessing)</code></th>
 <td class="col-last">
 <div class="block">Sets the multiprocessing value of the transformer.</div>
 </td>
 </tr>
-<tr class="row-color" id="i15">
+<tr class="row-color" id="i17">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setOptimizeForMixedPrecisionTraining(boolean)">setOptimizeForMixedPrecisionTraining</a></span>&#8203;(boolean&nbsp;mpt)</code></th>
 <td class="col-last">
 <div class="block">Enable or diable the mixed precision training.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i16">
+<tr class="alt-color" id="i18">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTmpDir(java.io.File)">setTmpDir</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;tmpDir)</code></th>
 <td class="col-last">
 <div class="block">Sets the tmp directory used by the matcher.</div>
 </td>
 </tr>
-<tr class="row-color" id="i17">
+<tr class="row-color" id="i19">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a></span>&#8203;(<a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a>&nbsp;configuration)</code></th>
 <td class="col-last">
 <div class="block">Sets the training arguments of the huggingface trainer.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i18">
+<tr class="alt-color" id="i20">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTransformersCache(java.io.File)">setTransformersCache</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;transformersCache)</code></th>
 <td class="col-last">
 <div class="block">Sets the cache folder where the pretrained transformers models are stored.</div>
 </td>
 </tr>
-<tr class="row-color" id="i19">
+<tr class="row-color" id="i21">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setUsingTensorflow(boolean)">setUsingTensorflow</a></span>&#8203;(boolean&nbsp;usingTensorflow)</code></th>
 <td class="col-last">
@@ -454,6 +473,12 @@ int&nbsp;numberOfCSVLines)</code></th>
 <section class="detail" id="multiProcessing">
 <h3>multiProcessing</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="TransformersMultiProcessing.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersMultiProcessing</a></span>&nbsp;<span class="member-name">multiProcessing</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="multipleTextsToMultipleExamples">
+<h3>multipleTextsToMultipleExamples</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">multipleTextsToMultipleExamples</span></div>
 </section>
 </li>
 </ul>
@@ -735,6 +760,32 @@ int&nbsp;numberOfCSVLines)</code></th>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>true if mixed precision training is enabled.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isMultipleTextsToMultipleExamples()">
+<h3>isMultipleTextsToMultipleExamples</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isMultipleTextsToMultipleExamples</span>()</div>
+<div class="block">Returns the value if all texts returned by the text extractor are used separately to generate the examples.
+ Otherwise it will concatenate all texts together to form one example(the default).
+ This should be only enabled when the extractor does not return many texts because otherwise a lot of examples are produced.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true, if generation of multiple examples is enabled</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setMultipleTextsToMultipleExamples(boolean)">
+<h3>setMultipleTextsToMultipleExamples</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setMultipleTextsToMultipleExamples</span>&#8203;(<span class="parameters">boolean&nbsp;multipleTextsToMultipleExamples)</span></div>
+<div class="block">Is set to true, then all texts returned by the text extractor are used separately to generate the examples.
+ Otherwise it will concatenate all texts together to form one example(the default).
+ This should be only enabled when the extractor does not return many texts because otherwise a lot of examples are produced.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>multipleTextsToMultipleExamples</code> - true, to enable the generation of multiple examples.</dd>
 </dl>
 </section>
 </li>
