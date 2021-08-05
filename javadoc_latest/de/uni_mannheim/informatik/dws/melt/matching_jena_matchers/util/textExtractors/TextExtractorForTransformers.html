@@ -175,7 +175,7 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#extract(org.apache.jena.rdf.model.Resource)">extract</a></span>&#8203;(org.apache.jena.rdf.model.Resource&nbsp;r)</code></th>
 <td class="col-last">
-<div class="block">Given a Jena resource this method extracts textual/string representations from it.</div>
+<div class="block">Returns a set of descriptions.</div>
 </td>
 </tr>
 <tr class="alt-color" id="i2">
@@ -255,15 +255,17 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <section class="detail" id="extract(org.apache.jena.rdf.model.Resource)">
 <h3>extract</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">extract</span>&#8203;(<span class="parameters">org.apache.jena.rdf.model.Resource&nbsp;r)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../matching_jena/TextExtractor.html#extract(org.apache.jena.rdf.model.Resource)">TextExtractor</a></code></span></div>
-<div class="block">Given a Jena resource this method extracts textual/string representations from it.</div>
+<div class="block">Returns a set of descriptions.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../../../matching_jena/TextExtractor.html#extract(org.apache.jena.rdf.model.Resource)">extract</a></code>&nbsp;in interface&nbsp;<code><a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>r</code> - the jena resource which also allows to traverse the whole rdf graph</dd>
 <dt>Returns:</dt>
-<dd>a set of textual representations of the given resource.</dd>
+<dd>Potentially multiple strings. If there are multiple strings but one string is a subset of another string,
+ the subset will not be included. For example:
+ Found strings: <code>[(label) "heart", (comment) "The heart is..."]</code> -&gt; only <code>"The heart is..."</code> will
+ be returned.</dd>
 </dl>
 </section>
 </li>
