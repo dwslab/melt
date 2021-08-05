@@ -30,8 +30,9 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
 
 
     public ApplyModelPipeline(String gpu, String transformerModel, File transformersCache,
-                              MatcherYAAAJena recallMatcher, boolean isMultipleTextsToMultipleExamples) {
-        TextExtractor textExtractor = new TextExtractorForTransformers();
+                              MatcherYAAAJena recallMatcher, boolean isMultipleTextsToMultipleExamples,
+                              TextExtractor te) {
+        TextExtractor textExtractor = te;
         textExtractor = TextExtractor.appendStringPostProcessing(textExtractor, StringProcessing::normalizeOnlyCamelCaseAndUnderscore);
         this.transformersFilter = new TransformersFilter(textExtractor, transformerModel);
         this.transformersFilter.setMultipleTextsToMultipleExamples(isMultipleTextsToMultipleExamples);

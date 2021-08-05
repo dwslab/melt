@@ -11,7 +11,11 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.Evaluator;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorBasic;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.matcher.SimpleStringMatcher;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorForTransformers;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorSet;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorShortAndLongTexts;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 
 import java.io.File;
@@ -24,6 +28,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Text;
 
 /**
  * This class is also the main class that will be run when executing the JAR.
@@ -104,8 +109,33 @@ public class Main {
 
         options.addOption(Option.builder("mt")
                 .longOpt("multitext")
+                .desc("Switch, no arguments. If added, multiple text parts for one element will lead " +
+                        "to multiple examples.")
                 .build()
         );
+
+        // configure the extractor options here...
+        List<TextExtractor> extractorList = new ArrayList<>();
+        extractorList.add(new TextExtractorSet());
+        extractorList.add(new TextExtractorShortAndLongTexts());
+        extractorList.add(new TextExtractorForTransformers());
+
+        StringBuilder extractorDescription = new StringBuilder();
+        extractorDescription.append("The extractor to be used. Reference by number. Options:\n");
+        int i = 0;
+        for (TextExtractor te : extractorList) {
+            extractorDescription.append("(")
+                    .append(i++)
+                    .append(") ")
+                    .append(te.getClass().getSimpleName())
+                    .append("\n");
+        }
+
+        options.addOption(Option.builder("te")
+                .longOpt("textextractor")
+                .desc(extractorDescription.toString())
+                .hasArg()
+                .build());
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -144,6 +174,22 @@ public class Main {
 
         transformerModels = cmd.getOptionValues("tm");
 
+        TextExtractor textExtractor;
+        if (cmd.hasOption("te")) {
+            try {
+                textExtractor = extractorList.get(Integer.parseInt(cmd.getOptionValue("te")));
+                LOGGER.info("Using text extractor: " + textExtractor.getClass().getSimpleName());
+            } catch (Exception e) {
+                textExtractor = extractorList.get(0);
+                LOGGER.error("Something went wrong while trying to pick the text extractor. Using default: " +
+                        textExtractor.getClass().getSimpleName());
+            }
+        } else {
+            textExtractor = extractorList.get(0);
+            LOGGER.info("Text extractor (Option -te) not specified. Using default: " +
+                    textExtractor.getClass().getSimpleName());
+        }
+
         String[] trackStrings;
         if (cmd.hasOption("tracks")) {
             trackStrings = cmd.getOptionValues("tracks");
@@ -174,8 +220,6 @@ public class Main {
             System.exit(1);
         }
 
-
-
         String mode = cmd.getOptionValue("m").toLowerCase(Locale.ROOT).trim();
 
         File targetDirForModels = new File("./models");
@@ -186,7 +230,8 @@ public class Main {
             case "zeroshotevaluation":
                 checkTransformerParameter();
                 LOGGER.info("Mode: ZEROSHOT");
-                zeroShotEvaluation(gpu, transformerModels, transformersCache, tracks, isMultipleTextsToMultipleExamples);
+                zeroShotEvaluation(gpu, transformerModels, transformersCache, tracks,
+                        isMultipleTextsToMultipleExamples, textExtractor);
                 break;
             case "tcfintune":
             case "tcfinetuned":
@@ -196,7 +241,7 @@ public class Main {
                 checkTransformerParameter();
                 LOGGER.info("Mode: TC_FINETUNE");
                 fineTunedPerTestCase(gpu, tracks, getFractions(cmd), transformerModels, transformersCache,
-                        targetDirForModels, isMultipleTextsToMultipleExamples);
+                        targetDirForModels, isMultipleTextsToMultipleExamples, textExtractor);
                 break;
             case "track_finetune":
             case "track_finetuned":
@@ -206,7 +251,8 @@ public class Main {
                 checkTransformerParameter();
                 LOGGER.info("Mode: TRACK_FINETUNE");
                 fineTunedPerTrack(gpu, tracks, getFractions(cmd), transformerModels,
-                        transformersCache, targetDirForModels, isMultipleTextsToMultipleExamples);
+                        transformersCache, targetDirForModels, isMultipleTextsToMultipleExamples,
+                        textExtractor);
                 break;
             case "global_finetune":
             case "global_finetuned":
@@ -215,7 +261,7 @@ public class Main {
                 checkTransformerParameter();
                 LOGGER.info("Mode: GLOBAL_FINETUNE");
                 globalFineTuning(gpu, tracks, getFractions(cmd), transformerModels, transformersCache,
-                        targetDirForModels, isMultipleTextsToMultipleExamples);
+                        targetDirForModels, isMultipleTextsToMultipleExamples, textExtractor);
                 break;
             case "baseline":
             case "baselines":
@@ -233,6 +279,7 @@ public class Main {
 
         LOGGER.info("DONE");
     }
+
 
     private static void checkTransformerParameter() {
         if (transformerModels == null || transformerModels.length == 0) {
@@ -264,7 +311,8 @@ public class Main {
 
 
     static void fineTunedPerTrack(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
-                                  File transformersCache, File targetDir, boolean isMultipleTextsToMultipleExamples) {
+                                  File transformersCache, File targetDir, boolean isMultipleTextsToMultipleExamples,
+                                  TextExtractor textExtractor) {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -290,7 +338,8 @@ public class Main {
                         recallMatcher = (new RecallMatcherAnatomy());
                     }
                     TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
-                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples);
+                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
+                            textExtractor);
 
                     Executor.run(trainingTestCases, trainingPipeline, configurationName);
                     try {
@@ -301,7 +350,8 @@ public class Main {
 
                     // Step 2: Apply Model
                     ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
-                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples), configurationName));
+                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
+                            textExtractor), configurationName));
                 }
             }
         } // end of fractions loop
@@ -321,7 +371,8 @@ public class Main {
      * @param targetDir         Where the models shall be written to.
      */
     static void globalFineTuning(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
-                                 File transformersCache, File targetDir, boolean isMultipleTextsToMultipleExamples) {
+                                 File transformersCache, File targetDir, boolean isMultipleTextsToMultipleExamples,
+                                 TextExtractor textExtractor) {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -335,7 +386,8 @@ public class Main {
                 File finetunedModelFile = new File(targetDir, configurationName);
 
                 TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
-                        transformersCache, new RecallMatcherAnatomy(), isMultipleTextsToMultipleExamples);
+                        transformersCache, new RecallMatcherAnatomy(), isMultipleTextsToMultipleExamples,
+                        textExtractor);
 
                 for (Track track : tracks) {
                     List<TestCase> trainingTestCases = TrackRepository.generateTrackWithSampledReferenceAlignment(track,
@@ -366,7 +418,7 @@ public class Main {
                         recallMatcher = (new RecallMatcherAnatomy());
                     }
                     ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
-                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples), configurationName));
+                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples, textExtractor), configurationName));
                 }
             }
         } // end of fractions loop
@@ -386,7 +438,8 @@ public class Main {
      */
     static void fineTunedPerTestCase(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
                                      File transformersCache, File targetDir,
-                                     boolean isMultipleTextsToMultipleExamples) {
+                                     boolean isMultipleTextsToMultipleExamples,
+                                     TextExtractor textExtractor) {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -417,7 +470,8 @@ public class Main {
                             recallMatcher = (new RecallMatcherAnatomy());
                         }
                         TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
-                                transformersCache, recallMatcher, isMultipleTextsToMultipleExamples);
+                                transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
+                                textExtractor);
 
                         Executor.run(trainingCase, trainingPipeline, configurationName);
 
@@ -431,7 +485,9 @@ public class Main {
                         // Step 2: Apply Model
                         // -------------------
                         ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
-                                transformersCache, recallMatcher, isMultipleTextsToMultipleExamples), configurationName));
+                                transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
+                                        textExtractor),
+                                configurationName));
                         //break outerLoop;
 
                         /*
@@ -528,7 +584,8 @@ public class Main {
      * @throws Exception General exception.
      */
     static void zeroShotEvaluation(String gpu, String[] transformerModels, File transformersCache,
-                                   List<Track> tracks, boolean isMultipleTextsToMultipleExamples) {
+                                   List<Track> tracks, boolean isMultipleTextsToMultipleExamples,
+                                   TextExtractor textExtractor) {
         List<TestCase> testCasesNoKG = new ArrayList<>();
         List<TestCase> testCasesKG = new ArrayList<>();
         for (Track track : tracks) {
@@ -547,12 +604,12 @@ public class Main {
                 if (testCasesNoKG.size() > 0) {
                     ers.addAll(Executor.run(testCasesNoKG, new ApplyModelPipeline(gpu,
                             transformerModel, transformersCache, new RecallMatcherAnatomy(),
-                            isMultipleTextsToMultipleExamples), transformerModel));
+                            isMultipleTextsToMultipleExamples, textExtractor), transformerModel));
                 }
                 if (testCasesKG.size() > 0) {
                     ers.addAll(Executor.run(testCasesKG, new ApplyModelPipeline(gpu,
                             transformerModel, transformersCache, new RecallMatcherKgTrack(),
-                            isMultipleTextsToMultipleExamples), transformerModel));
+                            isMultipleTextsToMultipleExamples, textExtractor), transformerModel));
                 }
             } catch (Exception e) {
                 LOGGER.warn("A problem occurred with transformer: '{}'.\n" +

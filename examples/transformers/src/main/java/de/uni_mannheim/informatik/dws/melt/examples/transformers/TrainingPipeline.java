@@ -22,8 +22,8 @@ public class TrainingPipeline extends MatcherYAAAJena {
 
     public TrainingPipeline(String gpu, String transformerModel, File finetunedModelFile, File transformersCache,
                             MatcherYAAAJena recallMatcher,
-                            boolean isMultipleTextsToMultipleExamples) {
-        TextExtractor textExtractor = new TextExtractorForTransformers();
+                            boolean isMultipleTextsToMultipleExamples,
+                            TextExtractor textExtractor) {
         textExtractor = TextExtractor.appendStringPostProcessing(textExtractor, StringProcessing::normalizeOnlyCamelCaseAndUnderscore);
         
         this.fineTuner = new TransformersFineTuner(textExtractor, transformerModel, finetunedModelFile);
@@ -40,7 +40,6 @@ public class TrainingPipeline extends MatcherYAAAJena {
     
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        
         Alignment recallAlignment = this.recallMatcher.match(source, target, new Alignment(), properties);
         Alignment trainingAlignment = AddNegativesViaMatcher.addNegatives(recallAlignment, inputAlignment);
 

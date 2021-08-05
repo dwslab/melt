@@ -230,7 +230,6 @@ public class AlignmentTest {
         assertTrue(a.getDistinctConfidencesAsSet().contains(0.5)); //check if index is up to date
     }
     
-    
     @Test
     void getCorrespondencesRelationTest(){
         //run once with indices and once without indices.
@@ -258,7 +257,6 @@ public class AlignmentTest {
             assertEquals(0, s.size());
             assertFalse(a.isRelationContained(CorrespondenceRelation.SUBSUMED));
         }
-        
     }
     
     @Test
