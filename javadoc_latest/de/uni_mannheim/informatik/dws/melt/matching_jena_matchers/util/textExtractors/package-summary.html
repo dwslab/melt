@@ -66,34 +66,38 @@ loadScripts(document, 'script');</script>
 </thead>
 <tbody>
 <tr class="alt-color">
-<th class="col-first" scope="row"><a href="ProcessedLiteral.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">ProcessedLiteral</a></th>
+<th class="col-first" scope="row"><a href="NormalizedLiteral.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">NormalizedLiteral</a></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
+<th class="col-first" scope="row"><a href="ProcessedLiteral.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">ProcessedLiteral</a></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
 <th class="col-first" scope="row"><a href="TextExtractorAllAnnotationProperties.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorAllAnnotationProperties</a></th>
 <td class="col-last">
 <div class="block">All annotation properties are followed (recursively).</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <th class="col-first" scope="row"><a href="TextExtractorAllLiterals.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorAllLiterals</a></th>
 <td class="col-last">
 <div class="block">This extractor uses all literals of the resource.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <th class="col-first" scope="row"><a href="TextExtractorAllStringLiterals.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorAllStringLiterals</a></th>
 <td class="col-last">
 <div class="block">This extractor uses all literals which are also strings e.g.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <th class="col-first" scope="row"><a href="TextExtractorFallback.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorFallback</a></th>
 <td class="col-last">
 <div class="block">This extractor is a composer and uses the given extractor in the given order as long as an extractor will yield an result.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <th class="col-first" scope="row"><a href="TextExtractorForTransformers.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorForTransformers</a></th>
 <td class="col-last">
 <div class="block">A <a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena"><code>TextExtractor</code></a> which extracts texts from a resource which can be used by transformer
@@ -101,31 +105,47 @@ loadScripts(document, 'script');</script>
  or <a href="../../../matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFineTuner</code></a>.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <th class="col-first" scope="row"><a href="TextExtractorMultipleProperties.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorMultipleProperties</a></th>
 <td class="col-last">
 <div class="block">Extracts all values from specific properties as long as it is a literal.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <th class="col-first" scope="row"><a href="TextExtractorProperty.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorProperty</a></th>
 <td class="col-last">
 <div class="block">Extracts all values from a specific property as long as it is a literal.</div>
 </td>
 </tr>
+<tr class="row-color">
+<th class="col-first" scope="row"><a href="TextExtractorSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorSet</a></th>
+<td class="col-last">
+<div class="block">A <a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena"><code>TextExtractor</code></a> which extracts texts from a resource which can be used by transformer
+ based matchers like <a href="../../../matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFilter</code></a>
+ or <a href="../../../matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFineTuner</code></a>.</div>
+</td>
+</tr>
 <tr class="alt-color">
+<th class="col-first" scope="row"><a href="TextExtractorShortAndLongTexts.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorShortAndLongTexts</a></th>
+<td class="col-last">
+<div class="block">A <a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena"><code>TextExtractor</code></a> which extracts texts from a resource which can be used by transformer
+ based matchers like <a href="../../../matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFilter</code></a>
+ or <a href="../../../matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFineTuner</code></a>.</div>
+</td>
+</tr>
+<tr class="row-color">
 <th class="col-first" scope="row"><a href="TextExtractorUrlFragment.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUrlFragment</a></th>
 <td class="col-last">
 <div class="block">Extracts the fragment of the URL, e.g.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <th class="col-first" scope="row"><a href="TextExtractorUrlLocalName.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUrlLocalName</a></th>
 <td class="col-last">
 <div class="block">Extracts the local name from the URI.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <th class="col-first" scope="row"><a href="TextExtractorUseLongestLiteralOrFragment.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUseLongestLiteralOrFragment</a></th>
 <td class="col-last">
 <div class="block">A text textractor which extracts texts from a resource which can be used by transformer 
