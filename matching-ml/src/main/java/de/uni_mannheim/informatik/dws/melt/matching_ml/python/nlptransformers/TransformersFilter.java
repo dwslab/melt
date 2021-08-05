@@ -40,7 +40,6 @@ public class TransformersFilter extends TransformersBase implements Filter {
     
     private boolean changeClass;
     private boolean optimizeBatchSize;
-    
 
     /**
      * Constructor with all required parameters and default values for optional parameters (can be changed by setters).

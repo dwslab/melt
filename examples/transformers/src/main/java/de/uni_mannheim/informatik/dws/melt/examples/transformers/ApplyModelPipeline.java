@@ -34,13 +34,10 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
         TextExtractor textExtractor = new TextExtractorForTransformers();
         textExtractor = TextExtractor.appendStringPostProcessing(textExtractor, StringProcessing::normalizeOnlyCamelCaseAndUnderscore);
         this.transformersFilter = new TransformersFilter(textExtractor, transformerModel);
-
-        // TODO setMultiText...
-        //this.transformersFilter.;
+        this.transformersFilter.setMultipleTextsToMultipleExamples(isMultipleTextsToMultipleExamples);
         this.transformersFilter.setCudaVisibleDevices(gpu);
         this.transformersFilter.setTransformersCache(transformersCache);
         this.recallMatcher = recallMatcher;
-
     }
     
     public ApplyModelPipeline( MatcherYAAAJena recallMatcher, TransformersFilter transformersFilter) {

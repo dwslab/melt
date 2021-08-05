@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.examples.transformers;
 
 import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherAnatomy;
-import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherGeneric;
 import de.uni_mannheim.informatik.dws.melt.examples.transformers.recallmatcher.RecallMatcherKgTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
@@ -33,7 +32,6 @@ public class Main {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
-    private static final String DEFAULT_THRESHOLD = "0.0";
 
 
     public static void main(String[] args) throws Exception {
@@ -188,7 +186,7 @@ public class Main {
             case "zeroshotevaluation":
                 checkTransformerParameter();
                 LOGGER.info("Mode: ZEROSHOT");
-                zeroShotEvaluation(gpu, transformerModels, transformersCache, tracks);
+                zeroShotEvaluation(gpu, transformerModels, transformersCache, tracks, isMultipleTextsToMultipleExamples);
                 break;
             case "tcfintune":
             case "tcfinetuned":
@@ -198,7 +196,7 @@ public class Main {
                 checkTransformerParameter();
                 LOGGER.info("Mode: TC_FINETUNE");
                 fineTunedPerTestCase(gpu, tracks, getFractions(cmd), transformerModels, transformersCache,
-                        targetDirForModels);
+                        targetDirForModels, isMultipleTextsToMultipleExamples);
                 break;
             case "track_finetune":
             case "track_finetuned":
@@ -208,7 +206,7 @@ public class Main {
                 checkTransformerParameter();
                 LOGGER.info("Mode: TRACK_FINETUNE");
                 fineTunedPerTrack(gpu, tracks, getFractions(cmd), transformerModels,
-                        transformersCache, targetDirForModels, threshold);
+                        transformersCache, targetDirForModels, isMultipleTextsToMultipleExamples);
                 break;
             case "global_finetune":
             case "global_finetuned":
@@ -216,7 +214,8 @@ public class Main {
             case "finetuned_global":
                 checkTransformerParameter();
                 LOGGER.info("Mode: GLOBAL_FINETUNE");
-                globalFineTuning(gpu, tracks, getFractions(cmd), transformerModels, transformersCache, targetDirForModels);
+                globalFineTuning(gpu, tracks, getFractions(cmd), transformerModels, transformersCache,
+                        targetDirForModels, isMultipleTextsToMultipleExamples);
                 break;
             case "baseline":
             case "baselines":
@@ -265,7 +264,7 @@ public class Main {
 
 
     static void fineTunedPerTrack(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
-                                  File transformersCache, File targetDir, double threshold) {
+                                  File transformersCache, File targetDir, boolean isMultipleTextsToMultipleExamples) {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -290,7 +289,8 @@ public class Main {
                     } else {
                         recallMatcher = (new RecallMatcherAnatomy());
                     }
-                    TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile, transformersCache, recallMatcher);
+                    TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
+                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples);
 
                     Executor.run(trainingTestCases, trainingPipeline, configurationName);
                     try {
@@ -301,7 +301,7 @@ public class Main {
 
                     // Step 2: Apply Model
                     ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
-                            transformersCache, recallMatcher, threshold), configurationName));
+                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples), configurationName));
                 }
             }
         } // end of fractions loop
@@ -321,7 +321,7 @@ public class Main {
      * @param targetDir         Where the models shall be written to.
      */
     static void globalFineTuning(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
-                                 File transformersCache, File targetDir) {
+                                 File transformersCache, File targetDir, boolean isMultipleTextsToMultipleExamples) {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -334,7 +334,8 @@ public class Main {
                 String configurationName = model + "_" + fraction + "_GLOBAL";
                 File finetunedModelFile = new File(targetDir, configurationName);
 
-                TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile, transformersCache, new RecallMatcherAnatomy());
+                TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
+                        transformersCache, new RecallMatcherAnatomy(), isMultipleTextsToMultipleExamples);
 
                 for (Track track : tracks) {
                     List<TestCase> trainingTestCases = TrackRepository.generateTrackWithSampledReferenceAlignment(track,
@@ -364,7 +365,8 @@ public class Main {
                     } else {
                         recallMatcher = (new RecallMatcherAnatomy());
                     }
-                    ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(), transformersCache, recallMatcher), configurationName));
+                    ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
+                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples), configurationName));
                 }
             }
         } // end of fractions loop
@@ -383,7 +385,8 @@ public class Main {
      * @param targetDir         Where the models shall be written to.
      */
     static void fineTunedPerTestCase(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
-                                     File transformersCache, File targetDir) {
+                                     File transformersCache, File targetDir,
+                                     boolean isMultipleTextsToMultipleExamples) {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -413,7 +416,8 @@ public class Main {
                         } else {
                             recallMatcher = (new RecallMatcherAnatomy());
                         }
-                        TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile, transformersCache, recallMatcher);
+                        TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
+                                transformersCache, recallMatcher, isMultipleTextsToMultipleExamples);
 
                         Executor.run(trainingCase, trainingPipeline, configurationName);
 
@@ -426,7 +430,8 @@ public class Main {
 
                         // Step 2: Apply Model
                         // -------------------
-                        ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(), transformersCache, recallMatcher), configurationName));
+                        ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
+                                transformersCache, recallMatcher, isMultipleTextsToMultipleExamples), configurationName));
                         //break outerLoop;
 
                         /*
@@ -523,7 +528,7 @@ public class Main {
      * @throws Exception General exception.
      */
     static void zeroShotEvaluation(String gpu, String[] transformerModels, File transformersCache,
-                                   List<Track> tracks) throws Exception {
+                                   List<Track> tracks, boolean isMultipleTextsToMultipleExamples) {
         List<TestCase> testCasesNoKG = new ArrayList<>();
         List<TestCase> testCasesKG = new ArrayList<>();
         for (Track track : tracks) {
@@ -541,11 +546,13 @@ public class Main {
             try {
                 if (testCasesNoKG.size() > 0) {
                     ers.addAll(Executor.run(testCasesNoKG, new ApplyModelPipeline(gpu,
-                            transformerModel, transformersCache, new RecallMatcherAnatomy()), transformerModel));
+                            transformerModel, transformersCache, new RecallMatcherAnatomy(),
+                            isMultipleTextsToMultipleExamples), transformerModel));
                 }
                 if (testCasesKG.size() > 0) {
                     ers.addAll(Executor.run(testCasesKG, new ApplyModelPipeline(gpu,
-                            transformerModel, transformersCache, new RecallMatcherKgTrack()), transformerModel));
+                            transformerModel, transformersCache, new RecallMatcherKgTrack(),
+                            isMultipleTextsToMultipleExamples), transformerModel));
                 }
             } catch (Exception e) {
                 LOGGER.warn("A problem occurred with transformer: '{}'.\n" +

@@ -43,7 +43,8 @@ public class TextExtractorForTransformers implements TextExtractor {
      * @param r the jena resource which also allows to traverse the whole rdf graph
      * @return Potentially multiple strings. If there are multiple strings but one string is a subset of another string,
      * the subset will not be included. For example:
-     * Found strings: [(label) "heart", (comment) "The heart is..."] -> only "The heart is..." will be returned.
+     * Found strings: {@code [(label) "heart", (comment) "The heart is..."]} -&gt; only {@code "The heart is..."} will
+     * be returned.
      */
     @Override
     public Set<String> extract(Resource r) {
