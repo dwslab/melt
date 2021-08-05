@@ -1,8 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.junit.jupiter.api.Test;
@@ -13,6 +11,25 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AlignmentTest {
+
+
+    @Test
+    public void getMaximalConfidence(){
+        Alignment a = new Alignment();
+        a.add("A", "B", 0.5);
+        a.add("A", "C", 0.6);
+        a.add("A", "D", 0.7);
+        assertEquals(0.7, a.getMaximalConfidence());
+    }
+
+    @Test
+    public void getMinimalConfidence(){
+        Alignment a = new Alignment();
+        a.add("A", "B", 0.5);
+        a.add("A", "C", 0.6);
+        a.add("A", "D", 0.7);
+        assertEquals(0.5, a.getMinimalConfidence());
+    }
 
     @Test
     public void testEmpty(){

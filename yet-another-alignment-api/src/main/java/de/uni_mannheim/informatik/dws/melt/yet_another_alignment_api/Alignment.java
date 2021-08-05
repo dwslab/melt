@@ -345,8 +345,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     public Correspondence addOrUseHighestConfidence(String entityOne, String entityTwo, double confidence) {
         return addOrUseHighestConfidence(new Correspondence(entityOne, entityTwo, confidence));
     }
-    
-    
+
     /**
      * Returns the specified correspondence (source, target, relation). If not available it returns null.
      * @param source Source URI.
@@ -367,7 +366,8 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
         Correspondence result = iterator.next();
         if (iterator.hasNext()) {
-            LOGGER.error("Alignment contains more than one correspondence with source, target, relation. Maybe equals and/or hashcode of Correspondence are overridden. " +
+            LOGGER.error("Alignment contains more than one correspondence with source, target, relation. Maybe equals " +
+                    "and/or hashcode of Correspondence are overridden. " +
                     "A mapping correspondence is equal when source, target and relation are equal.");
         }
         return result;
@@ -675,7 +675,6 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         return result;
     }
 
-
     /**
      * Create the subtraction between the two given alignments. Only copies the alignment and not further infos like
      * onto or extensions.
@@ -689,7 +688,6 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         result.removeAll(alignment_2);
         return result;
     }
-
     
     /**
      * Create the intersection between the two given alignments. Only copies the alignment and not further infos like
@@ -720,8 +718,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         result.addAll(alignment_2);
         return result;
     }
-    
-    
+
     /**
      * Switches sources with targets. Does not change the relation.
      * This method is only for erroneous alignments where a matcher switched the source with the target ontology.
@@ -827,7 +824,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
             LOGGER.error("There are no confidences. Returning 1.0 as maximum confidence.");
             return 1.0;
         }
-        return list.get(list.size()).getConfidence();
+        return list.get(list.size() - 1).getConfidence();
     }
     
     public void assertIndexOnSource(){

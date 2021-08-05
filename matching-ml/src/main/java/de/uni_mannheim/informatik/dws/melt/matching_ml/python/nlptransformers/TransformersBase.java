@@ -291,7 +291,7 @@ public abstract class TransformersBase extends MatcherYAAAJena {
     /**
      * This function copies a part of a csv file to another file.This is used to find the best batch size.
      * @param source the source file
-     * @param target the traget file
+     * @param target the target file
      * @param numberOfCSVLines how many lines should be copied
      * @return true if enough lines are found in the input file.
      * @throws IOException in case of any io exception
