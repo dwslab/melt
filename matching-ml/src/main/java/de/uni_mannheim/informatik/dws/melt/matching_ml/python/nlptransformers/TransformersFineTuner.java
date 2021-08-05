@@ -115,25 +115,51 @@ public class TransformersFineTuner extends TransformersBase implements Filter {
         int positive = 0;
         int negative = 0;
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(trainFile, append), StandardCharsets.UTF_8))){
-            for(Correspondence c : trainingAlignment){
-                String left = getTextFromResource(source.getResource(c.getEntityOne()));
-                String right = getTextFromResource(target.getResource(c.getEntityTwo()));
-                if(StringUtils.isBlank(left) || StringUtils.isBlank(right)){
-                    notUsed++;
-                    continue; // do not use examples where one or the other text is zero
+            if(this.multipleTextsToMultipleExamples){
+                for(Correspondence c : trainingAlignment){
+                    for(String textLeft : this.extractor.extract(source.getResource(c.getEntityOne()))){
+                        if(StringUtils.isBlank(textLeft)){
+                            continue;
+                        }
+                        for(String textRight : this.extractor.extract(target.getResource(c.getEntityTwo()))){
+                            if(StringUtils.isBlank(textRight)){
+                                continue;
+                            }
+                            String clazz;
+                            if(c.getRelation() == CorrespondenceRelation.EQUIVALENCE){
+                                clazz = "1";
+                                positive++;
+                            }else{
+                                clazz = "0";
+                                negative++;
+                            }
+                            writer.write(StringEscapeUtils.escapeCsv(textLeft) + "," + StringEscapeUtils.escapeCsv(textRight) +  "," + clazz + NEWLINE);
+                        }
+                    }
                 }
-                String clazz;
-                if(c.getRelation() == CorrespondenceRelation.EQUIVALENCE){
-                    clazz = "1";
-                    positive++;
-                }else{
-                    clazz = "0";
-                    negative++;
+                LOGGER.info("Wrote {} training examples. {} positive, {} negative (number of unused is to determined).", positive+negative, positive, negative);
+            }else{
+                for(Correspondence c : trainingAlignment){
+                    String left = getTextFromResource(source.getResource(c.getEntityOne()));
+                    String right = getTextFromResource(target.getResource(c.getEntityTwo()));
+                    if(StringUtils.isBlank(left) || StringUtils.isBlank(right)){
+                        notUsed++;
+                        continue; // do not use examples where one or the other text is zero
+                    }
+                    String clazz;
+                    if(c.getRelation() == CorrespondenceRelation.EQUIVALENCE){
+                        clazz = "1";
+                        positive++;
+                    }else{
+                        clazz = "0";
+                        negative++;
+                    }
+                    writer.write(StringEscapeUtils.escapeCsv(left) + "," + StringEscapeUtils.escapeCsv(right)+  "," + clazz + NEWLINE);
                 }
-                writer.write(StringEscapeUtils.escapeCsv(left) + "," + StringEscapeUtils.escapeCsv(right)+  "," + clazz + NEWLINE);
+                LOGGER.info("Wrote {} training examples. {} positive, {} negative, {} not used due to insufficient textual data.", positive+negative, positive, negative, notUsed);
             }
         }
-        LOGGER.info("Wrote {} training examples. {} positive, {} negative, {} not used due to insufficient textual data.", positive+negative, positive, negative, notUsed);
+        
         return positive+negative;
     }
     

@@ -23,6 +23,9 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServerException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * This filter extracts the corresponding text for a resource (with the specified and customizable extractor) given all correspondences in the input alignment.
@@ -60,46 +63,36 @@ public class TransformersFilter extends TransformersBase implements Filter {
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         File inputFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_predict", ".txt");
-        List<Correspondence> orderedCorrespondences = new ArrayList<>();
-        LOGGER.info("Write text to prediction file {}", inputFile);
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputFile),
-                StandardCharsets.UTF_8))) {
-            for(Correspondence c : inputAlignment){
-                String left = getTextFromResource(source.getResource(c.getEntityOne()));
-                String right = getTextFromResource(target.getResource(c.getEntityTwo()));
-                if(StringUtils.isBlank(left) || StringUtils.isBlank(right)){
-                    //setting to 0 if not existing
-                    c.addAdditionalConfidence(this.getClass(), 0.0);
-                    continue;
-                }
-                orderedCorrespondences.add(c);
-                writer.write(StringEscapeUtils.escapeCsv(left) + "," + StringEscapeUtils.escapeCsv(right) + NEWLINE);
-            }
-        } catch (IOException ex) {
+        Map<Correspondence, List<Integer>> map;
+        try{
+            map = createPredictionFile(source, target, inputAlignment, inputFile, false);
+        }catch (IOException ex) {
             LOGGER.warn("Could not write text to prediction file. Return unmodified input alignment.", ex);
             inputFile.delete();
             return inputAlignment;
         }
-        
-        if(orderedCorrespondences.isEmpty()){
-            LOGGER.warn("No correspondences have enough text to be processed (the input alignment has {} " +
-                    "correspondences) - the input alignment is returned unchanged.", inputAlignment.size());
-            inputFile.delete();
-            return inputAlignment;
-        }
-
         try {
-            LOGGER.info("Run prediction for {} examples ({} correspondences do not have enough text to be processed).",
-                    orderedCorrespondences.size(), inputAlignment.size() - orderedCorrespondences.size());
+            if(map.isEmpty()){
+                LOGGER.warn("No correspondences have enough text to be processed (the input alignment has {} " +
+                        "correspondences) - the input alignment is returned unchanged.", inputAlignment.size());
+                return inputAlignment;
+            }
+            
+            LOGGER.info("Run prediction");
             List<Double> confidenceList = predictConfidences(inputFile);
             LOGGER.info("Finished prediction");
 
-            if(orderedCorrespondences.size() != confidenceList.size()){
-                LOGGER.warn("Size of correspondences and predictions do not have the same size. Return input alignment.");
-                return inputAlignment;
-            }
-            for(int i=0; i < orderedCorrespondences.size(); i++){
-                orderedCorrespondences.get(i).addAdditionalConfidence(this.getClass(), confidenceList.get(i));
+            for(Entry<Correspondence, List<Integer>> correspondenceToLineNumber : map.entrySet()){
+                double max = 0.0;
+                for(Integer lineNumber : correspondenceToLineNumber.getValue()){
+                    Double conf = confidenceList.get(lineNumber);
+                    if(conf == null){
+                        throw new IllegalArgumentException("Could not find a confidence for a given correspondence.");
+                    }
+                    if(conf > max)
+                        max = conf;
+                }
+                correspondenceToLineNumber.getKey().addAdditionalConfidence(this.getClass(), max);
             }
         } finally {
             inputFile.delete();
@@ -107,43 +100,56 @@ public class TransformersFilter extends TransformersBase implements Filter {
         return inputAlignment;
     }
     
-    /**
-     * Create the prediction file which is a CSV file with two columns.
-     * The first column is the text from the left resource and the second column is the text from the right resource.
-     * @param source The source model
-     * @param target The target model
-     * @param trainingAlignment the alignment to process. All correspondences are used.
-     * @return the prediction file (CSV formatted)
-     * @throws IOException in case the writing fails.
-     */
-    public File createPredictionFile(OntModel source, OntModel target, Alignment trainingAlignment) throws IOException {
-        File file = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_predict", ".txt");
-        createPredictionFile(source, target, trainingAlignment, file, false);
-        return file;
-    }
+
 
     /**
-     * Create the prediction file which is a CSV file with two columns.
-     * The first column is the text from the left resource and the second column is the text from the right resource.
+     * Create the prediction file which is a CSV file with two columns.The first column is the text from the left resource and the second column is the text from the right resource.
      * @param source The source model
      * @param target The target model
-     * @param trainingAlignment the alignment to process. All correspondences are used.
+     * @param predictionAlignment the alignment to process. All correspondences which have enough text are used.
      * @param outputFile the csv file to which the output should be written to.
      * @param append if true, then the training alignment is append to the given file.
+     * @return the map which maps the row number to the correspondence.
+     * In case of multipleTextsToMultipleExamples is set to true, multiple rows can correspond to one correspondence.
      * @throws IOException in case the writing fails.
      */
-    public void createPredictionFile(OntModel source, OntModel target, Alignment trainingAlignment, File outputFile, boolean append) throws IOException {
-        LOGGER.info("Write text to prediction file {}", outputFile);
+    public Map<Correspondence, List<Integer>> createPredictionFile(OntModel source, OntModel target, Alignment predictionAlignment, File outputFile, boolean append) throws IOException {
+        Map<Correspondence, List<Integer>> map = new HashMap<>();
+        int i = 0;
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile, append), StandardCharsets.UTF_8))){
-            for(Correspondence c : trainingAlignment){
-                String left = getTextFromResource(source.getResource(c.getEntityOne()));
-                String right = getTextFromResource(target.getResource(c.getEntityTwo()));
-                if(StringUtils.isBlank(left) || StringUtils.isBlank(right)){
-                    continue;
+            if(this.multipleTextsToMultipleExamples){
+                for(Correspondence c : predictionAlignment){
+                    c.addAdditionalConfidence(this.getClass(), 0.0d); // initialize it
+                    for(String textLeft : this.extractor.extract(source.getResource(c.getEntityOne()))){
+                        if(StringUtils.isBlank(textLeft)){
+                            continue;
+                        }
+                        for(String textRight : this.extractor.extract(target.getResource(c.getEntityTwo()))){
+                            if(StringUtils.isBlank(textRight)){
+                                continue;
+                            }                            
+                            writer.write(StringEscapeUtils.escapeCsv(textLeft) + "," + StringEscapeUtils.escapeCsv(textRight) + NEWLINE);
+                            map.computeIfAbsent(c, __-> new ArrayList<>()).add(i);
+                            i++;
+                        }
+                    }
                 }
-                writer.write(StringEscapeUtils.escapeCsv(left) + "," + StringEscapeUtils.escapeCsv(right) + NEWLINE);
+            }else{
+                for(Correspondence c : predictionAlignment){
+                    c.addAdditionalConfidence(this.getClass(), 0.0d); // initialize it
+                    String left = getTextFromResource(source.getResource(c.getEntityOne()));
+                    String right = getTextFromResource(target.getResource(c.getEntityTwo()));
+                    if(StringUtils.isBlank(left) || StringUtils.isBlank(right)){
+                        continue;
+                    }
+                    writer.write(StringEscapeUtils.escapeCsv(left) + "," + StringEscapeUtils.escapeCsv(right) + NEWLINE);
+                    map.computeIfAbsent(c, __-> new ArrayList<>()).add(i);
+                    i++;
+                }
             }
         }
+        LOGGER.info("Wrote {} examples to prediction file {}", i, outputFile);
+        return map;
     }
     
     private String getTextFromResource(Resource r){
