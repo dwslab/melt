@@ -2,7 +2,7 @@
 layout: default
 title: MELT Evaluation Client
 parent: Matcher Evaluation
-nav_order: 5
+nav_order: 6
 permalink: /matcher-evaluation/client
 ---
 
