@@ -113,6 +113,12 @@ public class Main {
                         "to multiple examples.")
                 .build()
         );
+        
+        options.addOption(Option.builder("sp")
+                .longOpt("serverport")
+                .desc("The port of the python server.")
+                .build()
+        );
 
         // configure the extractor options here...
         List<TextExtractor> extractorList = new ArrayList<>();
@@ -157,6 +163,17 @@ public class Main {
             String p = cmd.getOptionValue("p");
             LOGGER.info("Setting python command to {}", p);
             PythonServer.setPythonCommandBackup(p);
+        }
+        
+        if (cmd.hasOption("sp")) {
+            String p = cmd.getOptionValue("sp");
+            try{
+                int port = Integer.parseInt(p);
+                LOGGER.info("Setting python port to {}", port);
+                PythonServer.setPort(port);
+            }catch(NumberFormatException ex){
+                LOGGER.warn("Python port is not a number. The port is not set and the default is used.");
+            }
         }
 
         if (cmd.hasOption("c")) {

@@ -57,7 +57,10 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
         }
 
         Alignment alignmentWithConfidence = this.transformersFilter.match(source, target, recallAlignment, properties);
-
+        if(recallAlignment.size() > 50_000) {
+            // set to false for next time
+            this.transformersFilter.setOptimizeAll(false);
+        }
         // now we need to set the transformer confidence as main confidence for the MWB extractor
         ConfidenceCombiner confidenceCombiner = new ConfidenceCombiner(TransformersFilter.class);
         Alignment alignmentWithOneConfidence = confidenceCombiner.combine(alignmentWithConfidence);
