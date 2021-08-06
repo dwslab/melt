@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -23,6 +25,7 @@ import java.util.Set;
  */
 public class ConfidenceFinder {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfidenceFinder.class);
 
     public static Set<Double> getSteps(double start, double end, double stepWidth){
         Set<Double> set = new HashSet<>();
@@ -86,7 +89,18 @@ public class ConfidenceFinder {
                 executionResult.getSystemAlignment(),
                 executionResult.getTestCase().getGoldStandardCompleteness());
     }
-
+    
+    /**
+     * Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the F1-score.
+     * @param reference the reference alignment to use
+     * @param systemAlignment the system alignment
+     * @param gsCompleteness what gold standard completeness is given - 
+     * if reference alignment is a subset of the overall reference alignment, use {@link GoldStandardCompleteness#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE}.
+     * @return The optimal confidence threshold for an optimal F1 measure. All correspondences with a confidence
+     * LOWER than the result should be discarded. You can directly use
+     * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}
+     * to cut correspondences LESS than the optimal threshold determined by this method.
+     */
     public static double getBestConfidenceForFmeasure(Alignment reference, Alignment systemAlignment,
                                                       GoldStandardCompleteness gsCompleteness){
         if(reference.isEmpty()) {
@@ -94,7 +108,8 @@ public class ConfidenceFinder {
         }
 
         ConfusionMatrix m = new ConfusionMatrixMetric().compute(reference, systemAlignment, gsCompleteness);
-
+        LOGGER.info("Search for best confidence (optimizing F-Measure) given {} reference and {} system correspondences. Without thresholding: tp: {} fp: {} fn: {}",
+                reference.size(), systemAlignment.size(), m.getTruePositiveSize(), m.getFalsePositiveSize(), m.getFalseNegativeSize());
         List<Double> systemConfidences = new ArrayList<>(getOccurringConfidences(systemAlignment, 2));
         Collections.sort(systemConfidences);
         double bestConf = 1.0d;
@@ -133,6 +148,67 @@ public class ConfidenceFinder {
                 bestValue = f1measure;
             }
         }
+        int tpSize = m.getTruePositive().cut(bestConf).size();
+        int fpSize = m.getFalsePositive().cut(bestConf).size();
+        int fnSize = m.getFalseNegativeSize() + (m.getTruePositiveSize() - tpSize);
+        LOGGER.info("Found best confidence of {} which leads to F-Measure of {} (tp: {} fp: {} fn: {})",
+            bestConf, bestValue, tpSize, fpSize, fnSize);
+        
+        return bestConf;
+    }
+    
+    /**
+     * Given an ExecutionResult, this method determines the best cutting point in order to optimize the precision.
+     * @param executionResult The execution result for which the optimal confidence threshold shall be determined.
+     * @return The optimal confidence threshold for an optimal precision. All correspondences with a confidence
+     * LOWER than the result should be discarded. You can directly use
+     * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}
+     * to cut correspondences LESS than the optimal threshold determined by this method.
+     */
+    public static double getBestConfidenceForPrecision(ExecutionResult executionResult){
+        return getBestConfidenceForPrecision(executionResult.getReferenceAlignment(),
+                executionResult.getSystemAlignment(),
+                executionResult.getTestCase().getGoldStandardCompleteness());
+    }
+    
+    /**
+     * Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the precision.
+     * @param reference the reference alignment to use
+     * @param systemAlignment the system alignment
+     * @param gsCompleteness what gold standard completeness is given - 
+     * if reference alignment is a subset of the overall reference alignment, use {@link GoldStandardCompleteness#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE}.
+     * @return The optimal confidence threshold for an optimal precision. All correspondences with a confidence
+     * LOWER than the result should be discarded. You can directly use
+     * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}
+     * to cut correspondences LESS than the optimal threshold determined by this method.
+     */
+    public static double getBestConfidenceForPrecision(Alignment reference, Alignment systemAlignment,
+                                                      GoldStandardCompleteness gsCompleteness){
+        if(reference.isEmpty()) {
+            return systemAlignment.getMinimalConfidence();
+        }
+
+        ConfusionMatrix m = new ConfusionMatrixMetric().compute(reference, systemAlignment, gsCompleteness);
+        LOGGER.info("Search for best confidence (optimizing precision) given {} reference and {} system correspondences. Without thresholding: tp: {} fp: {} fn: {}",
+                reference.size(), systemAlignment.size(), m.getTruePositiveSize(), m.getFalsePositiveSize(), m.getFalseNegativeSize());
+        List<Double> systemConfidences = new ArrayList<>(getOccurringConfidences(systemAlignment, 2));
+        Collections.sort(systemConfidences);
+        double bestConf = 1.0d;
+        double bestValue = 0.0d;
+        for(Double conf : systemConfidences){
+            int tpSize = m.getTruePositive().cut(conf).size();
+            int fpSize = m.getFalsePositive().cut(conf).size();
+            double precision = divideWithTwoDenominators(tpSize, tpSize, fpSize);
+
+            if(precision >= bestValue){
+                bestConf = conf;
+                bestValue = precision;
+            }
+        }
+        int tpSize = m.getTruePositive().cut(bestConf).size();
+        int fpSize = m.getFalsePositive().cut(bestConf).size();
+        LOGGER.info("Found best confidence of {} which leads to precision of {} (tp: {} fp: {})",
+                bestConf, bestValue, tpSize, fpSize);
         return bestConf;
     }
     
