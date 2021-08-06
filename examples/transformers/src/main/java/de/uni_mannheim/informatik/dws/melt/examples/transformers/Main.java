@@ -369,7 +369,7 @@ public class Main {
 
                     // Step 1 Training
                     String configurationName =
-                            "ftTrack_" + "_" + track.getName() + model + "_" + fraction + "_" +
+                            "ftTrack_" + track.getName() + model + "_" + fraction + "_" +
                                     textExtractor.getClass().getSimpleName() +
                                     "_isMulti_" + isMultipleTextsToMultipleExamples +
                                     "_isAutoThreshold_" + isAutoThresholding;

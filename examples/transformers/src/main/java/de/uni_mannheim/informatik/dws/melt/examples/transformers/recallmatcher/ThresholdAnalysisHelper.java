@@ -17,10 +17,9 @@ public class ThresholdAnalysisHelper {
 
 
     public static void main(String[] args) {
-        String path = "/Users/janportisch/IdeaProjects/melt/examples/transformers/results/tests/results_2021-08-06_10" +
-                "-28-16";
+        String path = "/Users/janportisch/IdeaProjects/melt/examples/transformers/target/results_2021-08-06_17-08-40";
         optimize(path);
-        apply(0.97, path);
+        apply(0.02, path);
         System.out.println("DONE");
     }
 
