@@ -189,7 +189,8 @@ double&nbsp;denominatorTwo)</code></th>
 <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
 <a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness)</code></th>
 <td class="col-last">
-<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the precision.</div>
+<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences) in
+ order to optimize the precision.</div>
 </td>
 </tr>
 <tr class="row-color" id="i5">
@@ -373,13 +374,15 @@ double&nbsp;end)</span></div>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">getBestConfidenceForPrecision</span>&#8203;(<span class="parameters"><a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
 <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
 <a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness)</span></div>
-<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the precision.</div>
+<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences) in
+ order to optimize the precision.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>reference</code> - the reference alignment to use</dd>
 <dd><code>systemAlignment</code> - the system alignment</dd>
 <dd><code>gsCompleteness</code> - what gold standard completeness is given - 
- if reference alignment is a subset of the overall reference alignment, use <a href="../../matching_data/GoldStandardCompleteness.html#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE"><code>GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE</code></a>.</dd>
+ if reference alignment is a subset of the overall reference alignment, use
+ <a href="../../matching_data/GoldStandardCompleteness.html#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE"><code>GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>The optimal confidence threshold for an optimal precision. All correspondences with a confidence
  LOWER than the result should be discarded. You can directly use
