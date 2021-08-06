@@ -177,7 +177,7 @@ public class Main {
                 LOGGER.info("Setting python port to {}", port);
                 PythonServer.setPort(port);
             } catch (NumberFormatException ex) {
-                LOGGER.warn("Python port is not a number. The port is not set and the default is used.");
+                LOGGER.warn("Python port \"{}\"is not a number. The port is not set and the default is used.", p);
             }
         }
 
