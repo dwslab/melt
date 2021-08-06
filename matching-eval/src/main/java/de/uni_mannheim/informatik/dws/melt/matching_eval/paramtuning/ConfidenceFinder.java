@@ -158,6 +158,72 @@ public class ConfidenceFinder {
     }
     
     /**
+     * Given an ExecutionResult, this method determines the best cutting point in order 
+     * to optimize the F_beta-score (beta is given as a parameter).
+     * @param executionResult The execution result for which the optimal confidence threshold shall be determined.
+     * @param beta the beta value for F-beta measure
+     * @return The optimal confidence threshold for an optimal F_beta measure. All correspondences with a confidence
+     * LOWER than the result should be discarded. You can directly use
+     * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}
+     * to cut correspondences LESS than the optimal threshold determined by this method.
+     */
+    public static double getBestConfidenceForFmeasureBeta(ExecutionResult executionResult, double beta){
+        return getBestConfidenceForFmeasureBeta(executionResult.getReferenceAlignment(),
+                executionResult.getSystemAlignment(),
+                executionResult.getTestCase().getGoldStandardCompleteness(),
+                beta);
+    }
+    
+    /**
+     * Given two alignments, this method determines the best cutting point (main confidence in correspondences)
+     * in order to optimize the F_beta-score (beta is given as a parameter).
+     * @param reference the reference alignment to use
+     * @param systemAlignment the system alignment
+     * @param gsCompleteness what gold standard completeness is given - 
+     * if reference alignment is a subset of the overall reference alignment, use {@link GoldStandardCompleteness#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE}.
+     * @param beta the beta value for F-beta measure
+     * @return The optimal confidence threshold for an optimal F_beta measure. All correspondences with a confidence
+     * LOWER than the result should be discarded. You can directly use
+     * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}
+     * to cut correspondences LESS than the optimal threshold determined by this method.
+     */
+    public static double getBestConfidenceForFmeasureBeta(Alignment reference, Alignment systemAlignment,
+                                                      GoldStandardCompleteness gsCompleteness, double beta){
+        if(reference.isEmpty()) {
+            return systemAlignment.getMinimalConfidence();
+        }
+
+        ConfusionMatrix m = new ConfusionMatrixMetric().compute(reference, systemAlignment, gsCompleteness);
+        LOGGER.info("Search for best confidence (optimizing F_{}) given {} reference and {} system correspondences. Without thresholding: tp: {} fp: {} fn: {}",
+                beta, reference.size(), systemAlignment.size(), m.getTruePositiveSize(), m.getFalsePositiveSize(), m.getFalseNegativeSize());
+        List<Double> systemConfidences = new ArrayList<>(getOccurringConfidences(systemAlignment, 2));
+        Collections.sort(systemConfidences);
+        double bestConf = 1.0d;
+        double bestValue = 0.0d;
+        for(Double conf : systemConfidences){
+            int tpSize = m.getTruePositive().cut(conf).size();
+            int fpSize = m.getFalsePositive().cut(conf).size();
+            int fnSize = m.getFalseNegativeSize() + (m.getTruePositiveSize() - tpSize);
+            
+            double precision = divideWithTwoDenominators(tpSize, tpSize, fpSize);
+            double recall = divideWithTwoDenominators(tpSize, tpSize, fnSize);
+            double fbeta = getFbetaMeasure(precision, recall, beta);
+
+            if(fbeta >= bestValue){
+                bestConf = conf;
+                bestValue = fbeta;
+            }
+        }
+        int tpSize = m.getTruePositive().cut(bestConf).size();
+        int fpSize = m.getFalsePositive().cut(bestConf).size();
+        int fnSize = m.getFalseNegativeSize() + (m.getTruePositiveSize() - tpSize);
+        LOGGER.info("Found best confidence of {} which leads to F_{} of {} (tp: {} fp: {} fn: {})",
+            bestConf, beta, bestValue, tpSize, fpSize, fnSize);
+        
+        return bestConf;
+    }
+    
+    /**
      * Given an ExecutionResult, this method determines the best cutting point in order to optimize the precision.
      * @param executionResult The execution result for which the optimal confidence threshold shall be determined.
      * @return The optimal confidence threshold for an optimal precision. All correspondences with a confidence
@@ -236,6 +302,17 @@ public class ConfidenceFinder {
             return numerator / (denominatorOne + denominatorTwo);
         } else {
             return 0.0;
+        }
+    }
+    
+    private static double getFbetaMeasure(double precision, double recall, double beta){
+        double betaSquared = Math.pow(beta, 2);
+        double numerator = (1 + betaSquared) * (precision * recall);
+        double denominator = ((betaSquared * precision) + recall);
+        if(denominator == 0){
+            return 0;
+        }else{
+            return numerator / denominator;
         }
     }
     
