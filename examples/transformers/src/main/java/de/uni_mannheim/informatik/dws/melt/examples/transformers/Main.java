@@ -116,6 +116,7 @@ public class Main {
 
         options.addOption(Option.builder("sp")
                 .longOpt("serverport")
+                .hasArg()
                 .desc("The port of the python server.")
                 .build()
         );
@@ -177,7 +178,8 @@ public class Main {
                 LOGGER.info("Setting python port to {}", port);
                 PythonServer.setPort(port);
             } catch (NumberFormatException ex) {
-                LOGGER.warn("Python port \"{}\"is not a number. The port is not set and the default is used.", p);
+                LOGGER.warn("Argument serverport (sp) which is set to \"{}\" is not a number.", p);
+                System.exit(1);
             }
         }
 
@@ -199,13 +201,27 @@ public class Main {
 
         TextExtractor textExtractor;
         if (cmd.hasOption("te")) {
+            String teOption = cmd.getOptionValue("te");
+            int parseTeOption = 0;
             try {
-                textExtractor = extractorList.get(Integer.parseInt(cmd.getOptionValue("te")));
+                parseTeOption = Integer.parseInt(teOption);
+            } catch (NumberFormatException ex) {
+                LOGGER.warn("Argument textextractor (-te) which is set to \"{}\" is not a number.", teOption);
+                System.exit(1);
+            }
+            //range check
+            if(parseTeOption < 0 || parseTeOption >= extractorList.size()){
+                LOGGER.warn("Argument textextractor (-te) which is set to \"{}\" is not in the range 0-{}.", teOption, extractorList.size()-1);
+                System.exit(1);
+            }
+            
+            try {
+                textExtractor = extractorList.get(parseTeOption);
                 LOGGER.info("Using text extractor: " + textExtractor.getClass().getSimpleName());
-            } catch (Exception e) {
-                textExtractor = extractorList.get(0);
-                LOGGER.error("Something went wrong while trying to pick the text extractor. Using default: " +
-                        textExtractor.getClass().getSimpleName());
+            } catch (IndexOutOfBoundsException e) {
+                LOGGER.error("Argument textextractor (-te) is set to {} but the index does not correspong to a text extractor.",teOption);
+                System.exit(1);
+                return; //needed because otherwise it will not compile (variable textExtractor may not be initialized)
             }
         } else {
             textExtractor = extractorList.get(0);
@@ -233,6 +249,7 @@ public class Main {
                         break;
                     default:
                         LOGGER.warn("Could not map track: " + trackString);
+                        System.exit(1);
                 }
             }
         }
@@ -298,6 +315,7 @@ public class Main {
                 break;
             default:
                 LOGGER.warn("Mode '{}' not found.", mode);
+                System.exit(1);
         }
 
         LOGGER.info("DONE");
