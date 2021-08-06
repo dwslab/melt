@@ -193,8 +193,8 @@ This filter learns and applies a classifier given a training sample and an exist
 
 ## TransformersFineTuner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.java)
 
-This class is used to finetune a transformer model based on a generated dataset.
- In every call to the match method, the traning data will be generated and appended to a temporary file.
+This class is used to fine-tune a transformer model based on a generated dataset.
+ In every call to the match method, the training data will be generated and appended to a temporary file.
  When you call the TransformersFineTuner#finetuneModel()  method, then a model is finetuned and the training file is deleted.
 
 *Keywords: Transformers Fine Tuner*
