@@ -70,11 +70,17 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
         MaxWeightBipartiteExtractor extractorMatcher = new MaxWeightBipartiteExtractor();
         Alignment extractedAlignment =  extractorMatcher.match(source, target, alignmentWithOneConfidence, properties);
 
-        double bestConfidence = ConfidenceFinder.getBestConfidenceForFmeasure(inputAlignment, extractedAlignment,
+        // just for logging
+        double bestConfidenceF1 = ConfidenceFinder.getBestConfidenceForFmeasure(inputAlignment, extractedAlignment,
+                GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE);
+
+        // just for logging
+        double bestConfidencePrecision = ConfidenceFinder.getBestConfidenceForPrecision(inputAlignment,
+                extractedAlignment,
                 GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE);
 
         if(isAutoThresholding) {
-            ConfidenceFilter confidenceFilter = new ConfidenceFilter(bestConfidence);
+            ConfidenceFilter confidenceFilter = new ConfidenceFilter(bestConfidenceF1);
             return confidenceFilter.filter(extractedAlignment, source, target);
         } else {
             return extractedAlignment;

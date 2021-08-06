@@ -350,8 +350,11 @@ public class Main {
                             fraction, 41, false);
 
                     // Step 1 Training
-                    String configurationName = "ftTrack_" + model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() +
-                            "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples) + "_" + track.getName();
+                    String configurationName =
+                            "ftTrack_" + "_" + track.getName() + model + "_" + fraction + "_" +
+                                    textExtractor.getClass().getSimpleName() +
+                                    "_isMulti_" + isMultipleTextsToMultipleExamples +
+                                    "_isAutoThreshold_" + isAutoThresholding;
                     configurationName = configurationName.replaceAll(" ", "_");
                     File finetunedModelFile = new File(targetDir, configurationName);
 
@@ -408,7 +411,8 @@ public class Main {
 
                 String configurationName =
                         "ftGlobal_" + model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() +
-                                "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples);
+                                "_ismulti" + isMultipleTextsToMultipleExamples +
+                                "_isAutoThreshold_" + isAutoThresholding;
                 File finetunedModelFile = new File(targetDir, configurationName);
 
                 TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
@@ -444,7 +448,7 @@ public class Main {
                         recallMatcher = (new RecallMatcherAnatomy());
                     }
                     ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
-                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples, textExtractor,
+                                    transformersCache, recallMatcher, isMultipleTextsToMultipleExamples, textExtractor,
                                     isAutoThresholding),
                             configurationName));
                 }
@@ -486,10 +490,13 @@ public class Main {
                     for (String model : transformerModels) {
                         // Step 1: Training
                         // ----------------
+
                         String configurationName = "ftTestCase_" + model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() +
-                                "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples) + "_" + testCase.getName();
+                                "_isMulti_" + isMultipleTextsToMultipleExamples + "_" + testCase.getName() +
+                                "_isAutoThreshold_" + isAutoThresholding;
                         configurationName = configurationName.replaceAll(" ", "_");
                         File finetunedModelFile = new File(targetDir, configurationName);
+
 
                         // Step 1.1.: Running the test case
                         MatcherYAAAJena recallMatcher;
@@ -629,8 +636,10 @@ public class Main {
 
         for (String transformerModel : transformerModels) {
             LOGGER.info("Processing transformer model: " + transformerModel);
-            String configurationName = "zero_" + transformerModel + "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples) +
-                    "_" + textExtractor.getClass().getSimpleName();
+            String configurationName =
+                    "zero_" + transformerModel + "_isMulti_" + isMultipleTextsToMultipleExamples +
+                            "_isAutoThreshold_" + isAutoThresholding +
+                            "_" + textExtractor.getClass().getSimpleName();
             try {
                 if (testCasesNoKG.size() > 0) {
                     ers.addAll(Executor.run(testCasesNoKG, new ApplyModelPipeline(gpu,
