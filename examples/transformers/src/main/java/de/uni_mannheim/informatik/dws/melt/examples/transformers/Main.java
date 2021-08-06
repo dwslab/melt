@@ -113,12 +113,17 @@ public class Main {
                         "to multiple examples.")
                 .build()
         );
-        
+
         options.addOption(Option.builder("sp")
                 .longOpt("serverport")
                 .desc("The port of the python server.")
                 .build()
         );
+
+        options.addOption(Option.builder("at")
+                .longOpt("autothresholding")
+                .desc("Switch, no arguments. If added, an automated threshold will be set.")
+                .build());
 
         // configure the extractor options here...
         List<TextExtractor> extractorList = new ArrayList<>();
@@ -164,14 +169,14 @@ public class Main {
             LOGGER.info("Setting python command to {}", p);
             PythonServer.setPythonCommandBackup(p);
         }
-        
+
         if (cmd.hasOption("sp")) {
             String p = cmd.getOptionValue("sp");
-            try{
+            try {
                 int port = Integer.parseInt(p);
                 LOGGER.info("Setting python port to {}", port);
                 PythonServer.setPort(port);
-            }catch(NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 LOGGER.warn("Python port is not a number. The port is not set and the default is used.");
             }
         }
@@ -188,6 +193,7 @@ public class Main {
         }
 
         boolean isMultipleTextsToMultipleExamples = cmd.hasOption("mt");
+        boolean isAutoThresholding = cmd.hasOption("at");
 
         transformerModels = cmd.getOptionValues("tm");
 
@@ -248,7 +254,7 @@ public class Main {
                 checkTransformerParameter();
                 LOGGER.info("Mode: ZEROSHOT");
                 zeroShotEvaluation(gpu, transformerModels, transformersCache, tracks,
-                        isMultipleTextsToMultipleExamples, textExtractor);
+                        isMultipleTextsToMultipleExamples, textExtractor, isAutoThresholding);
                 break;
             case "tcfintune":
             case "tcfinetuned":
@@ -258,7 +264,7 @@ public class Main {
                 checkTransformerParameter();
                 LOGGER.info("Mode: TC_FINETUNE");
                 fineTunedPerTestCase(gpu, tracks, getFractions(cmd), transformerModels, transformersCache,
-                        targetDirForModels, isMultipleTextsToMultipleExamples, textExtractor);
+                        targetDirForModels, isMultipleTextsToMultipleExamples, textExtractor, isAutoThresholding);
                 break;
             case "track_finetune":
             case "track_finetuned":
@@ -269,7 +275,7 @@ public class Main {
                 LOGGER.info("Mode: TRACK_FINETUNE");
                 fineTunedPerTrack(gpu, tracks, getFractions(cmd), transformerModels,
                         transformersCache, targetDirForModels, isMultipleTextsToMultipleExamples,
-                        textExtractor);
+                        textExtractor, isAutoThresholding);
                 break;
             case "global_finetune":
             case "global_finetuned":
@@ -278,7 +284,7 @@ public class Main {
                 checkTransformerParameter();
                 LOGGER.info("Mode: GLOBAL_FINETUNE");
                 globalFineTuning(gpu, tracks, getFractions(cmd), transformerModels, transformersCache,
-                        targetDirForModels, isMultipleTextsToMultipleExamples, textExtractor);
+                        targetDirForModels, isMultipleTextsToMultipleExamples, textExtractor, isAutoThresholding);
                 break;
             case "baseline":
             case "baselines":
@@ -329,7 +335,7 @@ public class Main {
 
     static void fineTunedPerTrack(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
                                   File transformersCache, File targetDir, boolean isMultipleTextsToMultipleExamples,
-                                  TextExtractor textExtractor) {
+                                  TextExtractor textExtractor, boolean isAutoThresholding) {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -344,11 +350,8 @@ public class Main {
                             fraction, 41, false);
 
                     // Step 1 Training
-
-                    String mtString = isMultipleTextsToMultipleExamples ? "_mt" : "";
-                    String configurationName =
-                            model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() + mtString
-                                    + "_" + track.getName();
+                    String configurationName = "ftTrack_" + model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() +
+                            "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples) + "_" + track.getName();
                     configurationName = configurationName.replaceAll(" ", "_");
                     File finetunedModelFile = new File(targetDir, configurationName);
 
@@ -372,7 +375,7 @@ public class Main {
                     // Step 2: Apply Model
                     ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
                             transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
-                            textExtractor), configurationName));
+                            textExtractor, isAutoThresholding), configurationName));
                 }
             }
         } // end of fractions loop
@@ -393,7 +396,7 @@ public class Main {
      */
     static void globalFineTuning(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
                                  File transformersCache, File targetDir, boolean isMultipleTextsToMultipleExamples,
-                                 TextExtractor textExtractor) {
+                                 TextExtractor textExtractor, boolean isAutoThresholding) {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -403,10 +406,9 @@ public class Main {
         for (float fraction : fractions) {
             for (String model : transformerModels) {
 
-                String mtString = isMultipleTextsToMultipleExamples ? "_mt" : "";
-                String configurationName = model + "_" + fraction + textExtractor.getClass().getSimpleName() +"_" +
-                        mtString +
-                        "_GLOBAL";
+                String configurationName =
+                        "ftGlobal_" + model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() +
+                                "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples);
                 File finetunedModelFile = new File(targetDir, configurationName);
 
                 TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
@@ -442,7 +444,9 @@ public class Main {
                         recallMatcher = (new RecallMatcherAnatomy());
                     }
                     ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
-                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples, textExtractor), configurationName));
+                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples, textExtractor,
+                                    isAutoThresholding),
+                            configurationName));
                 }
             }
         } // end of fractions loop
@@ -463,7 +467,7 @@ public class Main {
     static void fineTunedPerTestCase(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
                                      File transformersCache, File targetDir,
                                      boolean isMultipleTextsToMultipleExamples,
-                                     TextExtractor textExtractor) {
+                                     TextExtractor textExtractor, boolean isAutoThresholding) {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -482,11 +486,8 @@ public class Main {
                     for (String model : transformerModels) {
                         // Step 1: Training
                         // ----------------
-
-                        String mtString = isMultipleTextsToMultipleExamples ? "_mt" : "";
-                        String configurationName = model + "_" + fraction + textExtractor.getClass().getSimpleName()
-                                + mtString
-                                + "_" + testCase.getName();
+                        String configurationName = "ftTestCase_" + model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() +
+                                "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples) + "_" + testCase.getName();
                         configurationName = configurationName.replaceAll(" ", "_");
                         File finetunedModelFile = new File(targetDir, configurationName);
 
@@ -513,8 +514,8 @@ public class Main {
                         // Step 2: Apply Model
                         // -------------------
                         ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
-                                transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
-                                        textExtractor),
+                                        transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
+                                        textExtractor, isAutoThresholding),
                                 configurationName));
                         //break outerLoop;
 
@@ -613,7 +614,7 @@ public class Main {
      */
     static void zeroShotEvaluation(String gpu, String[] transformerModels, File transformersCache,
                                    List<Track> tracks, boolean isMultipleTextsToMultipleExamples,
-                                   TextExtractor textExtractor) {
+                                   TextExtractor textExtractor, boolean isAutoThresholding) {
         List<TestCase> testCasesNoKG = new ArrayList<>();
         List<TestCase> testCasesKG = new ArrayList<>();
         for (Track track : tracks) {
@@ -628,16 +629,18 @@ public class Main {
 
         for (String transformerModel : transformerModels) {
             LOGGER.info("Processing transformer model: " + transformerModel);
+            String configurationName = "zero_" + transformerModel + "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples) +
+                    "_" + textExtractor.getClass().getSimpleName();
             try {
                 if (testCasesNoKG.size() > 0) {
                     ers.addAll(Executor.run(testCasesNoKG, new ApplyModelPipeline(gpu,
                             transformerModel, transformersCache, new RecallMatcherAnatomy(),
-                            isMultipleTextsToMultipleExamples, textExtractor), transformerModel));
+                            isMultipleTextsToMultipleExamples, textExtractor, isAutoThresholding), configurationName));
                 }
                 if (testCasesKG.size() > 0) {
                     ers.addAll(Executor.run(testCasesKG, new ApplyModelPipeline(gpu,
                             transformerModel, transformersCache, new RecallMatcherKgTrack(),
-                            isMultipleTextsToMultipleExamples, textExtractor), transformerModel));
+                            isMultipleTextsToMultipleExamples, textExtractor, isAutoThresholding), configurationName));
                 }
             } catch (Exception e) {
                 LOGGER.warn("A problem occurred with transformer: '{}'.\n" +

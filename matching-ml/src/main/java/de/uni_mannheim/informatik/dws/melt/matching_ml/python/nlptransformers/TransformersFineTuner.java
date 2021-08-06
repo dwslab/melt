@@ -24,8 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class is used to finetune a transformer model based on a generated dataset.
- * In every call to the match method, the traning data will be generated and appended to a temporary file.
+ * This class is used to fine-tune a transformer model based on a generated dataset.
+ * In every call to the match method, the training data will be generated and appended to a temporary file.
  * When you call the {@link TransformersFineTuner#finetuneModel() } method, then a model is finetuned and the training file is deleted.
  */
 public class TransformersFineTuner extends TransformersBase implements Filter {

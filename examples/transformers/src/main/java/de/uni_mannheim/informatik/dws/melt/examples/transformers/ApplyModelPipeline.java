@@ -27,11 +27,11 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
 
     private final MatcherYAAAJena recallMatcher;
     private final TransformersFilter transformersFilter;
-
+    private boolean isAutoThresholding;
 
     public ApplyModelPipeline(String gpu, String transformerModel, File transformersCache,
                               MatcherYAAAJena recallMatcher, boolean isMultipleTextsToMultipleExamples,
-                              TextExtractor te) {
+                              TextExtractor te, boolean isAutoThresholding) {
         TextExtractor textExtractor = te;
         textExtractor = TextExtractor.appendStringPostProcessing(textExtractor, StringProcessing::normalizeOnlyCamelCaseAndUnderscore);
         this.transformersFilter = new TransformersFilter(textExtractor, transformerModel);
@@ -39,6 +39,7 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
         this.transformersFilter.setCudaVisibleDevices(gpu);
         this.transformersFilter.setTransformersCache(transformersCache);
         this.recallMatcher = recallMatcher;
+        this.isAutoThresholding = isAutoThresholding;
     }
     
     public ApplyModelPipeline( MatcherYAAAJena recallMatcher, TransformersFilter transformersFilter) {
@@ -73,7 +74,12 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
                 GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE);
 
         LOGGER.info("Best confidence: " + bestConfidence);
-        ConfidenceFilter confidenceFilter = new ConfidenceFilter(bestConfidence);
-        return confidenceFilter.filter(extractedAlignment, source, target);
+
+        if(isAutoThresholding) {
+            ConfidenceFilter confidenceFilter = new ConfidenceFilter(bestConfidence);
+            return confidenceFilter.filter(extractedAlignment, source, target);
+        } else {
+            return extractedAlignment;
+        }
     }
 }
