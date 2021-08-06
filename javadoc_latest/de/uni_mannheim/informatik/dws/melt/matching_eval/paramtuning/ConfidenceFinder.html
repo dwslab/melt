@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -47,13 +47,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -87,6 +87,31 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field.summary">
+<h2>Field Summary</h2>
+<div class="member-summary">
+<table class="summary-table">
+<caption><span>Fields</span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Modifier and Type</th>
+<th class="col-second" scope="col">Field</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<td class="col-first"><code>private static org.slf4j.Logger</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor.summary">
@@ -147,32 +172,50 @@ double&nbsp;denominatorTwo)</code></th>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getBestConfidenceForFmeasure(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)">getBestConfidenceForFmeasure</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
 <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
 <a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the F1-score.</div>
+</td>
 </tr>
 <tr class="row-color" id="i3">
+<td class="col-first"><code>static double</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getBestConfidenceForPrecision(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)">getBestConfidenceForPrecision</a></span>&#8203;(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult)</code></th>
+<td class="col-last">
+<div class="block">Given an ExecutionResult, this method determines the best cutting point in order to optimize the precision.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>static double</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getBestConfidenceForPrecision(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)">getBestConfidenceForPrecision</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
+<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
+<a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness)</code></th>
+<td class="col-last">
+<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the precision.</div>
+</td>
+</tr>
+<tr class="row-color" id="i5">
 <td class="col-first"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getConfidenceResultSet(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)">getConfidenceResultSet</a></span>&#8203;(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">getOccurringConfidences</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,double,double)">getOccurringConfidences</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
 double&nbsp;begin,
 double&nbsp;end)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="alt-color" id="i8">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,int)">getOccurringConfidences</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
 int&nbsp;decimalPrecision)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="row-color" id="i9">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,int,double,double)">getOccurringConfidences</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
 int&nbsp;decimalPrecision,
@@ -180,7 +223,7 @@ double&nbsp;begin,
 double&nbsp;end)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getSteps(double,double,double)">getSteps</a></span>&#8203;(double&nbsp;start,
 double&nbsp;end,
@@ -200,6 +243,20 @@ double&nbsp;stepWidth)</code></th>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field.detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="LOGGER">
+<h3>LOGGER</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">org.slf4j.Logger</span>&nbsp;<span class="member-name">LOGGER</span></div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor.detail">
@@ -279,6 +336,56 @@ double&nbsp;end)</span></div>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">getBestConfidenceForFmeasure</span>&#8203;(<span class="parameters"><a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
 <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
 <a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness)</span></div>
+<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the F1-score.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>reference</code> - the reference alignment to use</dd>
+<dd><code>systemAlignment</code> - the system alignment</dd>
+<dd><code>gsCompleteness</code> - what gold standard completeness is given - 
+ if reference alignment is a subset of the overall reference alignment, use <a href="../../matching_data/GoldStandardCompleteness.html#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE"><code>GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE</code></a>.</dd>
+<dt>Returns:</dt>
+<dd>The optimal confidence threshold for an optimal F1 measure. All correspondences with a confidence
+ LOWER than the result should be discarded. You can directly use
+ <a href="../../matching_jena_matchers/filter/ConfidenceFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter"><code>ConfidenceFilter</code></a>
+ to cut correspondences LESS than the optimal threshold determined by this method.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getBestConfidenceForPrecision(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)">
+<h3>getBestConfidenceForPrecision</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">getBestConfidenceForPrecision</span>&#8203;(<span class="parameters"><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult)</span></div>
+<div class="block">Given an ExecutionResult, this method determines the best cutting point in order to optimize the precision.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>executionResult</code> - The execution result for which the optimal confidence threshold shall be determined.</dd>
+<dt>Returns:</dt>
+<dd>The optimal confidence threshold for an optimal precision. All correspondences with a confidence
+ LOWER than the result should be discarded. You can directly use
+ <a href="../../matching_jena_matchers/filter/ConfidenceFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter"><code>ConfidenceFilter</code></a>
+ to cut correspondences LESS than the optimal threshold determined by this method.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getBestConfidenceForPrecision(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)">
+<h3>getBestConfidenceForPrecision</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">getBestConfidenceForPrecision</span>&#8203;(<span class="parameters"><a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
+<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
+<a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness)</span></div>
+<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the precision.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>reference</code> - the reference alignment to use</dd>
+<dd><code>systemAlignment</code> - the system alignment</dd>
+<dd><code>gsCompleteness</code> - what gold standard completeness is given - 
+ if reference alignment is a subset of the overall reference alignment, use <a href="../../matching_data/GoldStandardCompleteness.html#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE"><code>GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE</code></a>.</dd>
+<dt>Returns:</dt>
+<dd>The optimal confidence threshold for an optimal precision. All correspondences with a confidence
+ LOWER than the result should be discarded. You can directly use
+ <a href="../../matching_jena_matchers/filter/ConfidenceFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter"><code>ConfidenceFilter</code></a>
+ to cut correspondences LESS than the optimal threshold determined by this method.</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -331,13 +438,13 @@ double&nbsp;denominatorTwo)</span></div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
