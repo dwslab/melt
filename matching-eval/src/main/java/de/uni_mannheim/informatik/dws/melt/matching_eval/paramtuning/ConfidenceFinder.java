@@ -104,6 +104,7 @@ public class ConfidenceFinder {
     public static double getBestConfidenceForFmeasure(Alignment reference, Alignment systemAlignment,
                                                       GoldStandardCompleteness gsCompleteness){
         if(reference.isEmpty()) {
+            LOGGER.error("The reference is empty.");
             return systemAlignment.getMinimalConfidence();
         }
 
