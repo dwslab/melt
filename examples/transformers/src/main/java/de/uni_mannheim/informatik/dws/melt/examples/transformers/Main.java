@@ -102,7 +102,7 @@ public class Main {
                 .longOpt("mode")
                 .hasArg()
                 .desc("Available modes: BASELINE, BASELINE_LIGHT, ZEROSHOT, TC_FINETUNE, TRACK_FINETUNE, " +
-                        "GLOBAL_FINETUNE")
+                        "TRACK_FINETUNE_HP, GLOBAL_FINETUNE")
                 .required()
                 .build()
         );
@@ -294,6 +294,17 @@ public class Main {
                         transformersCache, targetDirForModels, isMultipleTextsToMultipleExamples,
                         textExtractor, isAutoThresholding);
                 break;
+            case "track_finetune_hp":
+            case "track_finetuned_hp":
+            case "tracks_finetune_hp":
+            case "tracks_finetuned_hp":
+            case "finetunedpertrackhp":
+                checkTransformerParameter();
+                LOGGER.info("Mode: TRACK_FINETUNE_HP");
+                fineTunedPerTrackWithHyperparameter(gpu, tracks, getFractions(cmd), transformerModels,
+                        transformersCache, targetDirForModels, isMultipleTextsToMultipleExamples,
+                        textExtractor, isAutoThresholding);
+                break;
             case "global_finetune":
             case "global_finetuned":
             case "finetune_global":
@@ -383,6 +394,61 @@ public class Main {
                         recallMatcher = (new RecallMatcherAnatomy());
                     }
                     TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
+                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
+                            textExtractor);
+
+                    Executor.run(trainingTestCases, trainingPipeline, configurationName);
+                    try {
+                        trainingPipeline.getFineTuner().finetuneModel();
+                    } catch (Exception e) {
+                        LOGGER.warn("Exception during training:", e);
+                    }
+
+                    // Step 2: Apply Model
+                    ers.addAll(Executor.run(trainingTestCases, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
+                            transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
+                            textExtractor, isAutoThresholding), configurationName));
+                }
+            }
+        } // end of fractions loop
+
+        EvaluatorCSV evaluator = new EvaluatorCSV(ers);
+        evaluator.writeToDirectory();
+    }
+    
+    static void fineTunedPerTrackWithHyperparameter(String gpu, List<Track> tracks, Float[] fractions, String[] transformerModels,
+                                  File transformersCache, File targetDir, boolean isMultipleTextsToMultipleExamples,
+                                  TextExtractor textExtractor, boolean isAutoThresholding) {
+        if (!targetDir.exists()) {
+            targetDir.mkdirs();
+        }
+
+        ExecutionResultSet ers = new ExecutionResultSet();
+
+        for (float fraction : fractions) {
+            for (String model : transformerModels) {
+                for (Track track : tracks) {
+
+                    List<TestCase> trainingTestCases = TrackRepository.generateTrackWithSampledReferenceAlignment(track,
+                            fraction, 41, false);
+
+                    // Step 1 Training
+                    String configurationName =
+                            "fthpTrack_" + track.getName() + model + "_" + fraction + "_" +
+                                    textExtractor.getClass().getSimpleName() +
+                                    "_isMulti_" + isMultipleTextsToMultipleExamples +
+                                    "_isAutoThreshold_" + isAutoThresholding;
+                    configurationName = configurationName.replaceAll(" ", "_");
+                    File finetunedModelFile = new File(targetDir, configurationName);
+
+                    MatcherYAAAJena recallMatcher;
+                    if (track.equals(TrackRepository.Knowledgegraph.V4)) {
+                        recallMatcher = new RecallMatcherKgTrack();
+                    } else {
+                        recallMatcher = (new RecallMatcherAnatomy());
+                    }
+                    TrainingPipelineHyperparameterTuning trainingPipeline = new TrainingPipelineHyperparameterTuning(
+                            gpu, model, finetunedModelFile,
                             transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
                             textExtractor);
 
