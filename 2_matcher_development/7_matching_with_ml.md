@@ -31,6 +31,12 @@ C:\Users\myUser\Anaconda3\envs\matching\python.exe
 ```
 Here, an Anaconda environment, named `matching` will be used.
 
+## Obtaining Training Data
+Machine learning requires data for training. For positive examples, a share from the reference can be sampled or a high-precision matcher can be used. Multiple strategies exist to generate negative samples:
+
+For example, negatives can be generated randomly using a absolute number of negatives to be generated (class `AddNegativesRandomlyAbsolute`) or a relative share of negatives (class `AddNegativesRandomlyShare`). If the gold standard is not known, is also possible to exploit the one-to-one assumption and add random correspondences involving elements that already appear in the positive set of correspondences (class `AddNegativesRandomlyOneOneAssumption`). MELT contains multiple out-of-the box strategies that are already implemented as matching components which can be used within a matching pipeline. All of them implement interface `AddNegatives`. Since multiple flavors can be thought of (e.g. generating type homogeneous or type heterogeneous correspondences), a negatives generator can be easily written from scratch or customized for specific purposes. MELT offers some helper classes to do so such as `RandomSampleOntModel` which can be used to sample elements from ontologies.
+
+
 
 # Matching with Transformer Models
 
@@ -44,4 +50,12 @@ In a first step, the filter will write a (temporary) CSV file to disk with the s
 <img src="https://raw.githubusercontent.com/dwslab/melt/gh-pages/media/transformer_pipeline.png" alt="MELT TransformersFilter pipeline">
 
 
+
+## Fine-Tuning a Transformer
+The default transformer training objectives are not suitable for the task of ontology matching. Therefore, a pre-trained model needs to be fine-tuned. Once a training alignment is available, class [`TransformersFineTuner`](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.java) can be used to train and persist a model (which then can be applied in a matching pipeline using `TransformerFilter` as shown in the figure above).
+
+
+Like the TransformersFilter, the TransformersFineTuner is a matching component that can be used in a matching  pipeline. Note that this pipeline can only be used for training and model serialization. An example for such a pipeline is visualized below:
+
+<img src="https://raw.githubusercontent.com/dwslab/melt/gh-pages/media/transformer_pipeline_finetuning.png" alt="MELT transformer pipeline for fine-tuning.">
 
