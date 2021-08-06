@@ -108,8 +108,10 @@ public class ConfidenceFinder {
         }
 
         ConfusionMatrix m = new ConfusionMatrixMetric().compute(reference, systemAlignment, gsCompleteness);
-        LOGGER.info("Search for best confidence (optimizing F-Measure) given {} reference and {} system correspondences. Without thresholding: tp: {} fp: {} fn: {}",
-                reference.size(), systemAlignment.size(), m.getTruePositiveSize(), m.getFalsePositiveSize(), m.getFalseNegativeSize());
+        LOGGER.info("Search for best confidence (optimizing F-Measure) given {} reference and {} system " +
+                        "correspondences. Without thresholding: tp: {} fp: {} fn: {}",
+                reference.size(), systemAlignment.size(), m.getTruePositiveSize(), m.getFalsePositiveSize(),
+                m.getFalseNegativeSize());
         List<Double> systemConfidences = new ArrayList<>(getOccurringConfidences(systemAlignment, 2));
         Collections.sort(systemConfidences);
         double bestConf = 1.0d;
@@ -172,11 +174,13 @@ public class ConfidenceFinder {
     }
     
     /**
-     * Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the precision.
+     * Given two alignments, this method determines the best cutting point (main confidence in correspondences) in
+     * order to optimize the precision.
      * @param reference the reference alignment to use
      * @param systemAlignment the system alignment
      * @param gsCompleteness what gold standard completeness is given - 
-     * if reference alignment is a subset of the overall reference alignment, use {@link GoldStandardCompleteness#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE}.
+     * if reference alignment is a subset of the overall reference alignment, use
+     * {@link GoldStandardCompleteness#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE}.
      * @return The optimal confidence threshold for an optimal precision. All correspondences with a confidence
      * LOWER than the result should be discarded. You can directly use
      * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}
