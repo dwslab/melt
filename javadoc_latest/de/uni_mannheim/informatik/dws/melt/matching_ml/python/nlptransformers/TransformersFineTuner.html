@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -240,30 +240,18 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </td>
 </tr>
 <tr class="alt-color" id="i4">
-<td class="col-first"><code>int</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMaximumPerDeviceTrainBatchSize()">getMaximumPerDeviceTrainBatchSize</a></span>()</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="row-color" id="i5">
-<td class="col-first"><code>int</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMaximumPerDeviceTrainBatchSize(java.io.File)">getMaximumPerDeviceTrainBatchSize</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</code></th>
-<td class="col-last">
-<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.</div>
-</td>
-</tr>
-<tr class="alt-color" id="i6">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getResultingModelLocation()">getResultingModelLocation</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the final location where the finetuned model should be stored</div>
 </td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="row-color" id="i5">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTextFromResource(org.apache.jena.rdf.model.Resource)">getTextFromResource</a></span>&#8203;(org.apache.jena.rdf.model.Resource&nbsp;r)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -274,14 +262,14 @@ org.apache.jena.ontology.OntModel&nbsp;target,
  as Alignment object, and returns the mapping of the resulting alignment.</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setResultingModelLocation(java.io.File)">setResultingModelLocation</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation)</code></th>
 <td class="col-last">
 <div class="block">Sets the final location where the finetuned model should be stored.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="alt-color" id="i8">
 <td class="col-first"><code>int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">writeTrainingFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -559,25 +547,6 @@ boolean&nbsp;append)</span>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>resultingModelLocation</code> - the model location as a file.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getMaximumPerDeviceTrainBatchSize()">
-<h3>getMaximumPerDeviceTrainBatchSize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">getMaximumPerDeviceTrainBatchSize</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="getMaximumPerDeviceTrainBatchSize(java.io.File)">
-<h3>getMaximumPerDeviceTrainBatchSize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">getMaximumPerDeviceTrainBatchSize</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</span></div>
-<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>trainingFile</code> - the training file to use</dd>
-<dt>Returns:</dt>
-<dd>the maximum <code>per_device_train_batch_size </code> with the current configuration</dd>
 </dl>
 </section>
 </li>

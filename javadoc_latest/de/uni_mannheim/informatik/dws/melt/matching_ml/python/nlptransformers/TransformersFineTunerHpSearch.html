@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -242,33 +242,45 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 </tr>
 <tr class="row-color" id="i3">
 <td class="col-first"><code>int</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMaximumPerDeviceTrainBatchSize()">getMaximumPerDeviceTrainBatchSize</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>int</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMaximumPerDeviceTrainBatchSize(java.io.File)">getMaximumPerDeviceTrainBatchSize</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</code></th>
+<td class="col-last">
+<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.</div>
+</td>
+</tr>
+<tr class="row-color" id="i5">
+<td class="col-first"><code>int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getNumberOfTrials()">getNumberOfTrials</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the number of trials which should be executed during hyperparameter search.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code><a href="TransformersOptimizingMetric.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersOptimizingMetric</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getOptimizingMetric()">getOptimizingMetric</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the metric which is optimized during hyperparameter search.</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>float</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTestSize()">getTestSize</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns a number between zero and one which represents the  proportion of the data to include in the test split.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="alt-color" id="i8">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isAdjustMaxBatchSize()">isAdjustMaxBatchSize</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the value if max batch size is adjusted or not.</div>
 </td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="row-color" id="i9">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setAdjustMaxBatchSize(boolean)">setAdjustMaxBatchSize</a></span>&#8203;(boolean&nbsp;adjustMaxBatchSize)</code></th>
 <td class="col-last">
@@ -276,35 +288,35 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
  which is possible with the current GPU/CPU.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setHpMutations(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersHpSearchSpace)">setHpMutations</a></span>&#8203;(<a href="TransformersHpSearchSpace.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersHpSearchSpace</a>&nbsp;hpMutations)</code></th>
 <td class="col-last">
 <div class="block">Sets the mutations for the hyperparameter - only applicable for PBT (population based training).</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="row-color" id="i11">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setHpSpace(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersHpSearchSpace)">setHpSpace</a></span>&#8203;(<a href="TransformersHpSearchSpace.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersHpSearchSpace</a>&nbsp;hpSpace)</code></th>
 <td class="col-last">
 <div class="block">Sets the initial hyper parameter search space.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setNumberOfTrials(int)">setNumberOfTrials</a></span>&#8203;(int&nbsp;numberOfTrials)</code></th>
 <td class="col-last">
 <div class="block">Sets the number of trials which should be executed during hyperparameter search.</div>
 </td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="row-color" id="i13">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setOptimizingMetric(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersOptimizingMetric)">setOptimizingMetric</a></span>&#8203;(<a href="TransformersOptimizingMetric.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersOptimizingMetric</a>&nbsp;optimizingMetric)</code></th>
 <td class="col-last">
 <div class="block">Sets the metric which is optimized during hyperparameter search.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i12">
+<tr class="alt-color" id="i14">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTestSize(float)">setTestSize</a></span>&#8203;(float&nbsp;testSize)</code></th>
 <td class="col-last">
@@ -317,7 +329,7 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 </div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFineTuner">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a></h3>
-<code><a href="TransformersFineTuner.html#addTrainingParameterToMakeTrainingFaster()">addTrainingParameterToMakeTrainingFaster</a>, <a href="TransformersFineTuner.html#createTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">createTrainingFile</a>, <a href="TransformersFineTuner.html#finetuneModel()">finetuneModel</a>, <a href="TransformersFineTuner.html#getMaximumPerDeviceTrainBatchSize()">getMaximumPerDeviceTrainBatchSize</a>, <a href="TransformersFineTuner.html#getMaximumPerDeviceTrainBatchSize(java.io.File)">getMaximumPerDeviceTrainBatchSize</a>, <a href="TransformersFineTuner.html#getResultingModelLocation()">getResultingModelLocation</a>, <a href="TransformersFineTuner.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a>, <a href="TransformersFineTuner.html#setResultingModelLocation(java.io.File)">setResultingModelLocation</a>, <a href="TransformersFineTuner.html#writeTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">writeTrainingFile</a></code></div>
+<code><a href="TransformersFineTuner.html#addTrainingParameterToMakeTrainingFaster()">addTrainingParameterToMakeTrainingFaster</a>, <a href="TransformersFineTuner.html#createTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">createTrainingFile</a>, <a href="TransformersFineTuner.html#finetuneModel()">finetuneModel</a>, <a href="TransformersFineTuner.html#getResultingModelLocation()">getResultingModelLocation</a>, <a href="TransformersFineTuner.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a>, <a href="TransformersFineTuner.html#setResultingModelLocation(java.io.File)">setResultingModelLocation</a>, <a href="TransformersFineTuner.html#writeTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">writeTrainingFile</a></code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBase">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></h3>
 <code><a href="TransformersBase.html#copyCSVLines(java.io.File,java.io.File,int)">copyCSVLines</a>, <a href="TransformersBase.html#getCudaVisibleDevices()">getCudaVisibleDevices</a>, <a href="TransformersBase.html#getExtractor()">getExtractor</a>, <a href="TransformersBase.html#getModelName()">getModelName</a>, <a href="TransformersBase.html#getMultiProcessing()">getMultiProcessing</a>, <a href="TransformersBase.html#getTmpDir()">getTmpDir</a>, <a href="TransformersBase.html#getTrainingArguments()">getTrainingArguments</a>, <a href="TransformersBase.html#getTransformersCache()">getTransformersCache</a>, <a href="TransformersBase.html#isMultipleTextsToMultipleExamples()">isMultipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#isOptimizeForMixedPrecisionTraining()">isOptimizeForMixedPrecisionTraining</a>, <a href="TransformersBase.html#isUsingTensorflow()">isUsingTensorflow</a>, <a href="TransformersBase.html#setCudaVisibleDevices(int...)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setCudaVisibleDevices(java.lang.String)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">setExtractor</a>, <a href="TransformersBase.html#setModelName(java.lang.String)">setModelName</a>, <a href="TransformersBase.html#setMultipleTextsToMultipleExamples(boolean)">setMultipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#setMultiProcessing(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersMultiProcessing)">setMultiProcessing</a>, <a href="TransformersBase.html#setOptimizeForMixedPrecisionTraining(boolean)">setOptimizeForMixedPrecisionTraining</a>, <a href="TransformersBase.html#setTmpDir(java.io.File)">setTmpDir</a>, <a href="TransformersBase.html#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a>, <a href="TransformersBase.html#setTransformersCache(java.io.File)">setTransformersCache</a>, <a href="TransformersBase.html#setUsingTensorflow(boolean)">setUsingTensorflow</a></code></div>
@@ -440,6 +452,25 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 <dd>the final location (directory) of the finetuned model (which is also given in the constructor)</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - in case of any error</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getMaximumPerDeviceTrainBatchSize()">
+<h3>getMaximumPerDeviceTrainBatchSize</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">getMaximumPerDeviceTrainBatchSize</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getMaximumPerDeviceTrainBatchSize(java.io.File)">
+<h3>getMaximumPerDeviceTrainBatchSize</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">getMaximumPerDeviceTrainBatchSize</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</span></div>
+<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>trainingFile</code> - the training file to use</dd>
+<dt>Returns:</dt>
+<dd>the maximum <code>per_device_train_batch_size </code> with the current configuration</dd>
 </dl>
 </section>
 </li>
