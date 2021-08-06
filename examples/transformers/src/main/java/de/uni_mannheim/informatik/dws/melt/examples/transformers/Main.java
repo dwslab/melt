@@ -344,8 +344,8 @@ public class Main {
                             fraction, 41, false);
 
                     // Step 1 Training
-                    String configurationName =
-                            model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() + "_" + track.getName();
+                    String configurationName = "ftTrack_" + model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() +
+                            "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples) + "_" + track.getName();
                     configurationName = configurationName.replaceAll(" ", "_");
                     File finetunedModelFile = new File(targetDir, configurationName);
 
@@ -400,8 +400,9 @@ public class Main {
         for (float fraction : fractions) {
             for (String model : transformerModels) {
 
-                String configurationName = model + "_" + fraction + textExtractor.getClass().getSimpleName() +"_" +
-                        "_GLOBAL";
+                String configurationName = 
+                        "ftGlobal_" + model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() +
+                        "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples);
                 File finetunedModelFile = new File(targetDir, configurationName);
 
                 TrainingPipeline trainingPipeline = new TrainingPipeline(gpu, model, finetunedModelFile,
@@ -477,8 +478,8 @@ public class Main {
                     for (String model : transformerModels) {
                         // Step 1: Training
                         // ----------------
-                        String configurationName = model + "_" + fraction + textExtractor.getClass().getSimpleName()
-                                + "_" + testCase.getName();
+                        String configurationName = "ftTestCase_" + model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() +
+                                "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples) + "_" + testCase.getName();
                         configurationName = configurationName.replaceAll(" ", "_");
                         File finetunedModelFile = new File(targetDir, configurationName);
 
@@ -620,16 +621,18 @@ public class Main {
 
         for (String transformerModel : transformerModels) {
             LOGGER.info("Processing transformer model: " + transformerModel);
+            String configurationName = "zero_" + transformerModel + "_ismulti" + Boolean.toString(isMultipleTextsToMultipleExamples) + 
+                    "_" + textExtractor.getClass().getSimpleName();
             try {
                 if (testCasesNoKG.size() > 0) {
                     ers.addAll(Executor.run(testCasesNoKG, new ApplyModelPipeline(gpu,
                             transformerModel, transformersCache, new RecallMatcherAnatomy(),
-                            isMultipleTextsToMultipleExamples, textExtractor), transformerModel));
+                            isMultipleTextsToMultipleExamples, textExtractor), configurationName));
                 }
                 if (testCasesKG.size() > 0) {
                     ers.addAll(Executor.run(testCasesKG, new ApplyModelPipeline(gpu,
                             transformerModel, transformersCache, new RecallMatcherKgTrack(),
-                            isMultipleTextsToMultipleExamples, textExtractor), transformerModel));
+                            isMultipleTextsToMultipleExamples, textExtractor), configurationName));
                 }
             } catch (Exception e) {
                 LOGGER.warn("A problem occurred with transformer: '{}'.\n" +
