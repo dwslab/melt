@@ -89,7 +89,9 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
                 extractedAlignment,
                 GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE, 1.5);
 
-        LOGGER.info("Best confidence F1: {}\nBest confidence precision: {}", bestConfidenceF1, bestConfidencePrecision);
+        LOGGER.info("Best confidence F1: {}\nBest confidence precision: {}\nBest confidence F05: {}\nBest confidence " +
+                        "F15: {}", bestConfidenceF1,
+                bestConfidencePrecision, bestConfidenceF05, bestConfidenceF15);
 
         if(isAutoThresholding) {
             ConfidenceFilter confidenceFilter = new ConfidenceFilter(bestConfidenceF1);

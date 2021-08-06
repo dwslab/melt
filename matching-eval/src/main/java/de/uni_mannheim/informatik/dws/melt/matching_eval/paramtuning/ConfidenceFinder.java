@@ -104,7 +104,7 @@ public class ConfidenceFinder {
     public static double getBestConfidenceForFmeasure(Alignment reference, Alignment systemAlignment,
                                                       GoldStandardCompleteness gsCompleteness){
         if(reference.isEmpty()) {
-            LOGGER.error("The reference is empty.");
+            LOGGER.error("The provided reference is empty, returning minimal confidence.");
             return systemAlignment.getMinimalConfidence();
         }
 
@@ -193,6 +193,7 @@ public class ConfidenceFinder {
     public static double getBestConfidenceForFmeasureBeta(Alignment reference, Alignment systemAlignment,
                                                       GoldStandardCompleteness gsCompleteness, double beta){
         if(reference.isEmpty()) {
+            LOGGER.error("The provided reference is empty, returning minimal confidence.");
             return systemAlignment.getMinimalConfidence();
         }
 
@@ -256,6 +257,7 @@ public class ConfidenceFinder {
     public static double getBestConfidenceForPrecision(Alignment reference, Alignment systemAlignment,
                                                       GoldStandardCompleteness gsCompleteness){
         if(reference.isEmpty()) {
+            LOGGER.error("The provided reference is empty, returning minimal confidence.");
             return systemAlignment.getMinimalConfidence();
         }
 

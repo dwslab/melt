@@ -376,7 +376,7 @@ public class Main {
                     }
 
                     // Step 2: Apply Model
-                    ers.addAll(Executor.run(track, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
+                    ers.addAll(Executor.run(trainingTestCases, new ApplyModelPipeline(gpu, finetunedModelFile.getAbsolutePath(),
                             transformersCache, recallMatcher, isMultipleTextsToMultipleExamples,
                             textExtractor, isAutoThresholding), configurationName));
                 }
