@@ -66,38 +66,38 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
         ConfidenceCombiner confidenceCombiner = new ConfidenceCombiner(TransformersFilter.class);
         Alignment alignmentWithOneConfidence = confidenceCombiner.combine(alignmentWithConfidence);
 
-        // run the extractor
-        MaxWeightBipartiteExtractor extractorMatcher = new MaxWeightBipartiteExtractor();
-        Alignment extractedAlignment =  extractorMatcher.match(source, target, alignmentWithOneConfidence, properties);
-
         // just for logging
-        double bestConfidenceF1 = ConfidenceFinder.getBestConfidenceForFmeasure(inputAlignment, extractedAlignment,
-                GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE);
+        double bestConfidenceF1 = ConfidenceFinder.getBestConfidenceForFmeasure(inputAlignment,
+                alignmentWithOneConfidence,
+                GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
 
         // just for logging
         double bestConfidencePrecision = ConfidenceFinder.getBestConfidenceForPrecision(inputAlignment,
-                extractedAlignment,
-                GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE);
-        
+                alignmentWithOneConfidence,
+                GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+
         // just for logging
         double bestConfidenceF05 = ConfidenceFinder.getBestConfidenceForFmeasureBeta(inputAlignment,
-                extractedAlignment,
-                GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE, 0.5);
-        
+                alignmentWithOneConfidence,
+                GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE, 0.5);
+
         // just for logging
         double bestConfidenceF15 = ConfidenceFinder.getBestConfidenceForFmeasureBeta(inputAlignment,
-                extractedAlignment,
-                GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE, 1.5);
+                alignmentWithOneConfidence,
+                GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE, 1.5);
 
         LOGGER.info("Best confidence F1: {}\nBest confidence precision: {}\nBest confidence F05: {}\nBest confidence " +
                         "F15: {}", bestConfidenceF1,
                 bestConfidencePrecision, bestConfidenceF05, bestConfidenceF15);
 
+        Alignment potentiallyThresholded = alignmentWithOneConfidence;
         if(isAutoThresholding) {
             ConfidenceFilter confidenceFilter = new ConfidenceFilter(bestConfidenceF1);
-            return confidenceFilter.filter(extractedAlignment, source, target);
-        } else {
-            return extractedAlignment;
+            potentiallyThresholded = confidenceFilter.filter(alignmentWithOneConfidence, source, target);
         }
+
+        // run the extractor
+        MaxWeightBipartiteExtractor extractorMatcher = new MaxWeightBipartiteExtractor();
+        return extractorMatcher.match(source, target, potentiallyThresholded, properties);
     }
 }

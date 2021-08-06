@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
@@ -15,6 +16,62 @@ import org.junit.jupiter.api.Test;
 
 public class ConfidenceFinderTest {
 
+
+    @Test
+    public void getBestConfidenceForFMeasureIncomplete() {
+        Alignment reference = new Alignment();
+        reference.add("A", "A");
+        reference.add("B", "B");
+        reference.add("C", "C");
+
+        Alignment system = new Alignment();
+
+        // correct
+        system.add("A", "A", 1.0);
+        system.add("B", "B", 0.8);
+
+        // cannot be judged
+        system.add("D", "D", 0.9);
+        system.add("E", "E", 0.9);
+
+        // wrong
+        system.add("A", "B", 0.7);
+
+        double result = ConfidenceFinder.getBestConfidenceForFmeasure(reference, system,
+                GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+        Assertions.assertEquals(0.8, result);
+    }
+
+    @Test
+    public void getBestConfidenceForFMeasureIncomplete2() {
+        Alignment reference = new Alignment();
+        reference.add("A", "A");
+        reference.add("B", "B");
+        reference.add("C", "C");
+
+        Alignment system = new Alignment();
+
+        // correct
+        system.add("A", "A", 1.0);
+        system.add("B", "B", 0.5);
+
+        // cannot be judged
+        system.add("D", "D", 0.9);
+        system.add("E", "E", 0.9);
+
+        // wrong
+        system.add("A", "B", 0.7);
+        system.add("B", "C", 0.7);
+        system.add("A", "C", 0.7);
+
+        double result = ConfidenceFinder.getBestConfidenceForFmeasure(reference, system,
+                GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE);
+        Assertions.assertEquals(0.5, result);
+
+        result = ConfidenceFinder.getBestConfidenceForFmeasure(reference, system,
+                GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+        Assertions.assertEquals(1.0, result);
+    }
 
     @Test
     public void getBestConfidenceForFMeasure() {

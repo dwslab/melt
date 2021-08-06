@@ -94,8 +94,9 @@ public class ConfidenceFinder {
      * Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the F1-score.
      * @param reference the reference alignment to use
      * @param systemAlignment the system alignment
-     * @param gsCompleteness what gold standard completeness is given - 
-     * if reference alignment is a subset of the overall reference alignment, use {@link GoldStandardCompleteness#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE}.
+     * @param gsCompleteness What gold standard completeness is given -
+     * If reference alignment is a subset of the overall reference alignment AND we have a one-to-one alignment, use
+     * {@link GoldStandardCompleteness#PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE}.
      * @return The optimal confidence threshold for an optimal F1 measure. All correspondences with a confidence
      * LOWER than the result should be discarded. You can directly use
      * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}
@@ -183,7 +184,8 @@ public class ConfidenceFinder {
      * @param reference the reference alignment to use
      * @param systemAlignment the system alignment
      * @param gsCompleteness what gold standard completeness is given - 
-     * if reference alignment is a subset of the overall reference alignment, use {@link GoldStandardCompleteness#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE}.
+     * If reference alignment is a subset of the overall reference alignment AND we have a one-to-one alignment, use
+     * {@link GoldStandardCompleteness#PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE}.
      * @param beta the beta value for F-beta measure
      * @return The optimal confidence threshold for an optimal F_beta measure. All correspondences with a confidence
      * LOWER than the result should be discarded. You can directly use
@@ -247,8 +249,8 @@ public class ConfidenceFinder {
      * @param reference the reference alignment to use
      * @param systemAlignment the system alignment
      * @param gsCompleteness what gold standard completeness is given - 
-     * if reference alignment is a subset of the overall reference alignment, use
-     * {@link GoldStandardCompleteness#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE}.
+     * If reference alignment is a subset of the overall reference alignment AND we have a one-to-one alignment, use
+     * {@link GoldStandardCompleteness#PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE}.
      * @return The optimal confidence threshold for an optimal precision. All correspondences with a confidence
      * LOWER than the result should be discarded. You can directly use
      * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}
