@@ -344,8 +344,11 @@ public class Main {
                             fraction, 41, false);
 
                     // Step 1 Training
+
+                    String mtString = isMultipleTextsToMultipleExamples ? "_mt" : "";
                     String configurationName =
-                            model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() + "_" + track.getName();
+                            model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() + mtString
+                                    + "_" + track.getName();
                     configurationName = configurationName.replaceAll(" ", "_");
                     File finetunedModelFile = new File(targetDir, configurationName);
 
@@ -400,7 +403,9 @@ public class Main {
         for (float fraction : fractions) {
             for (String model : transformerModels) {
 
+                String mtString = isMultipleTextsToMultipleExamples ? "_mt" : "";
                 String configurationName = model + "_" + fraction + textExtractor.getClass().getSimpleName() +"_" +
+                        mtString +
                         "_GLOBAL";
                 File finetunedModelFile = new File(targetDir, configurationName);
 
@@ -477,7 +482,10 @@ public class Main {
                     for (String model : transformerModels) {
                         // Step 1: Training
                         // ----------------
+
+                        String mtString = isMultipleTextsToMultipleExamples ? "_mt" : "";
                         String configurationName = model + "_" + fraction + textExtractor.getClass().getSimpleName()
+                                + mtString
                                 + "_" + testCase.getName();
                         configurationName = configurationName.replaceAll(" ", "_");
                         File finetunedModelFile = new File(targetDir, configurationName);
