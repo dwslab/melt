@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -178,12 +178,32 @@ double&nbsp;denominatorTwo)</code></th>
 </tr>
 <tr class="row-color" id="i3">
 <td class="col-first"><code>static double</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getBestConfidenceForFmeasureBeta(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,double)">getBestConfidenceForFmeasureBeta</a></span>&#8203;(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult,
+double&nbsp;beta)</code></th>
+<td class="col-last">
+<div class="block">Given an ExecutionResult, this method determines the best cutting point in order 
+ to optimize the F_beta-score (beta is given as a parameter).</div>
+</td>
+</tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>static double</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getBestConfidenceForFmeasureBeta(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,double)">getBestConfidenceForFmeasureBeta</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
+<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
+<a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness,
+double&nbsp;beta)</code></th>
+<td class="col-last">
+<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences)
+ in order to optimize the F_beta-score (beta is given as a parameter).</div>
+</td>
+</tr>
+<tr class="row-color" id="i5">
+<td class="col-first"><code>static double</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getBestConfidenceForPrecision(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)">getBestConfidenceForPrecision</a></span>&#8203;(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult)</code></th>
 <td class="col-last">
 <div class="block">Given an ExecutionResult, this method determines the best cutting point in order to optimize the precision.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>static double</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getBestConfidenceForPrecision(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)">getBestConfidenceForPrecision</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
 <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
@@ -193,30 +213,37 @@ double&nbsp;denominatorTwo)</code></th>
  order to optimize the precision.</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getConfidenceResultSet(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)">getConfidenceResultSet</a></span>&#8203;(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="alt-color" id="i8">
+<td class="col-first"><code>private static double</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getFbetaMeasure(double,double,double)">getFbetaMeasure</a></span>&#8203;(double&nbsp;precision,
+double&nbsp;recall,
+double&nbsp;beta)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i9">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">getOccurringConfidences</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,double,double)">getOccurringConfidences</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
 double&nbsp;begin,
 double&nbsp;end)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="row-color" id="i11">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,int)">getOccurringConfidences</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
 int&nbsp;decimalPrecision)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,int,double,double)">getOccurringConfidences</a></span>&#8203;(<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
 int&nbsp;decimalPrecision,
@@ -224,7 +251,7 @@ double&nbsp;begin,
 double&nbsp;end)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="row-color" id="i13">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getSteps(double,double,double)">getSteps</a></span>&#8203;(double&nbsp;start,
 double&nbsp;end,
@@ -353,6 +380,49 @@ double&nbsp;end)</span></div>
 </section>
 </li>
 <li>
+<section class="detail" id="getBestConfidenceForFmeasureBeta(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,double)">
+<h3>getBestConfidenceForFmeasureBeta</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">getBestConfidenceForFmeasureBeta</span>&#8203;(<span class="parameters"><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult,
+double&nbsp;beta)</span></div>
+<div class="block">Given an ExecutionResult, this method determines the best cutting point in order 
+ to optimize the F_beta-score (beta is given as a parameter).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>executionResult</code> - The execution result for which the optimal confidence threshold shall be determined.</dd>
+<dd><code>beta</code> - the beta value for F-beta measure</dd>
+<dt>Returns:</dt>
+<dd>The optimal confidence threshold for an optimal F_beta measure. All correspondences with a confidence
+ LOWER than the result should be discarded. You can directly use
+ <a href="../../matching_jena_matchers/filter/ConfidenceFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter"><code>ConfidenceFilter</code></a>
+ to cut correspondences LESS than the optimal threshold determined by this method.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getBestConfidenceForFmeasureBeta(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,double)">
+<h3>getBestConfidenceForFmeasureBeta</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">getBestConfidenceForFmeasureBeta</span>&#8203;(<span class="parameters"><a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
+<a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
+<a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness,
+double&nbsp;beta)</span></div>
+<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences)
+ in order to optimize the F_beta-score (beta is given as a parameter).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>reference</code> - the reference alignment to use</dd>
+<dd><code>systemAlignment</code> - the system alignment</dd>
+<dd><code>gsCompleteness</code> - what gold standard completeness is given - 
+ if reference alignment is a subset of the overall reference alignment, use <a href="../../matching_data/GoldStandardCompleteness.html#PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE"><code>GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE</code></a>.</dd>
+<dd><code>beta</code> - the beta value for F-beta measure</dd>
+<dt>Returns:</dt>
+<dd>The optimal confidence threshold for an optimal F_beta measure. All correspondences with a confidence
+ LOWER than the result should be discarded. You can directly use
+ <a href="../../matching_jena_matchers/filter/ConfidenceFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter"><code>ConfidenceFilter</code></a>
+ to cut correspondences LESS than the optimal threshold determined by this method.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getBestConfidenceForPrecision(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)">
 <h3>getBestConfidenceForPrecision</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">getBestConfidenceForPrecision</span>&#8203;(<span class="parameters"><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult)</span></div>
@@ -412,6 +482,14 @@ double&nbsp;denominatorTwo)</span></div>
 <dt>Returns:</dt>
 <dd>Result as double.</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getFbetaMeasure(double,double,double)">
+<h3>getFbetaMeasure</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">getFbetaMeasure</span>&#8203;(<span class="parameters">double&nbsp;precision,
+double&nbsp;recall,
+double&nbsp;beta)</span></div>
 </section>
 </li>
 </ul>

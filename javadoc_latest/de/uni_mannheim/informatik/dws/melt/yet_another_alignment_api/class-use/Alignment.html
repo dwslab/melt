@@ -694,6 +694,17 @@ boolean&nbsp;computeTransitiveClosure,
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>static double</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">ConfidenceFinder.</span><code><span class="member-name-link"><a href="../../matching_eval/paramtuning/ConfidenceFinder.html#getBestConfidenceForFmeasureBeta(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,double)">getBestConfidenceForFmeasureBeta</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
+<a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness,
+double&nbsp;beta)</code></th>
+<td class="col-last">
+<div class="block">Given two alignments, this method determines the best cutting point (main confidence in correspondences)
+ in order to optimize the F_beta-score (beta is given as a parameter).</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>static double</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ConfidenceFinder.</span><code><span class="member-name-link"><a href="../../matching_eval/paramtuning/ConfidenceFinder.html#getBestConfidenceForPrecision(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)">getBestConfidenceForPrecision</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
 <a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness)</code></th>
@@ -702,25 +713,25 @@ boolean&nbsp;computeTransitiveClosure,
  order to optimize the precision.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ConfidenceFinder.</span><code><span class="member-name-link"><a href="../../matching_eval/paramtuning/ConfidenceFinder.html#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">getOccurringConfidences</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ConfidenceFinder.</span><code><span class="member-name-link"><a href="../../matching_eval/paramtuning/ConfidenceFinder.html#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,double,double)">getOccurringConfidences</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
 double&nbsp;begin,
 double&nbsp;end)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ConfidenceFinder.</span><code><span class="member-name-link"><a href="../../matching_eval/paramtuning/ConfidenceFinder.html#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,int)">getOccurringConfidences</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
 int&nbsp;decimalPrecision)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ConfidenceFinder.</span><code><span class="member-name-link"><a href="../../matching_eval/paramtuning/ConfidenceFinder.html#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,int,double,double)">getOccurringConfidences</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
 int&nbsp;decimalPrecision,
