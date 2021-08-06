@@ -73,8 +73,6 @@ public class ApplyModelPipeline extends MatcherYAAAJena {
         double bestConfidence = ConfidenceFinder.getBestConfidenceForFmeasure(inputAlignment, extractedAlignment,
                 GoldStandardCompleteness.PARTIAL_SOURCE_INCOMPLETE_TARGET_INCOMPLETE);
 
-        LOGGER.info("Best confidence: " + bestConfidence);
-
         if(isAutoThresholding) {
             ConfidenceFilter confidenceFilter = new ConfidenceFilter(bestConfidence);
             return confidenceFilter.filter(extractedAlignment, source, target);
