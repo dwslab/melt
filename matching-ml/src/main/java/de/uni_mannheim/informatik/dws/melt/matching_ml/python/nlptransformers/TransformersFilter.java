@@ -188,7 +188,7 @@ public class TransformersFilter extends TransformersBase implements Filter {
             
             File tmpTrainingFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_predict_find_max_batch_size", ".txt");
             try{
-                if(this.copyCSVLines(trainingFile, tmpTrainingFile, batchSize + 1) == false){
+                if(this.copyCSVLines(trainingFile, tmpTrainingFile, batchSize) == false){
                     int batchSizeWhichWorks = batchSize / 2;
                     LOGGER.info("File contains too few lines to further increase batch size. Thus use now {}", batchSizeWhichWorks);
                 }

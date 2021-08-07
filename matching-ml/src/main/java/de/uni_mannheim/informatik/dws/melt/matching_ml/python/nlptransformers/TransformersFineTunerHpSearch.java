@@ -66,15 +66,27 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
     public File finetuneModel(File trainingFile) throws Exception{
         if(this.adjustMaxBatchSize){
             int maxBatchSize = getMaximumPerDeviceTrainBatchSize();
-            
             List<Object> list = new ArrayList<>();
-            int i = 4;
-            while(i <= maxBatchSize){
-                list.add(i);
-                i *= 2;
+            if(maxBatchSize < 4){
+                int i = 1;
+                while(i <= maxBatchSize){
+                    list.add(i);
+                    i *= 2;
+                }
+            }else if(maxBatchSize < 8){
+                int i = 2;
+                while(i <= maxBatchSize){
+                    list.add(i);
+                    i *= 2;
+                }
+            }else{
+                int i = 4;
+                while(i <= maxBatchSize){
+                    list.add(i);
+                    i *= 2;
+                }
             }
-            
-            LOGGER.info("Set the hyper parameter search space for batch size to: {}", list);
+            LOGGER.info("Set the hyper parameter search space for \"per_device_train_batch_size\" to: {}", list);
             
             this.hpSpace.choice("per_device_train_batch_size", list);
             this.hpMutations.choice("per_device_train_batch_size", list);
@@ -97,7 +109,9 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
     public int getMaximumPerDeviceTrainBatchSize (File trainingFile){        
         //save variables for restoring afterwards
         TransformersTrainerArguments backupArguments = this.trainingArguments;
-
+        String backupCudaString = this.cudaVisibleDevices;
+                
+        this.cudaVisibleDevices = getCudaVisibleDevicesButOnlyOneGPU();
         int batchSize = 4;
         while(batchSize < 8193){
             LOGGER.info("Try out batch size of {}", batchSize);
@@ -105,7 +119,7 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
             
             File tmpTrainingFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_find_max_batch_size", ".txt");
             try{
-                if(this.copyCSVLines(trainingFile, tmpTrainingFile, batchSize + 1) == false){
+                if(this.copyCSVLines(trainingFile, tmpTrainingFile, batchSize) == false){
                     int batchSizeWhichWorks = batchSize / 2;
                     LOGGER.info("File contains too few lines to further increase batch size. Thus use now {}", batchSizeWhichWorks);
                 }
@@ -121,19 +135,23 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
                     int batchSizeWhichWorks = batchSize / 2;
                     LOGGER.info("Found memory error, thus returning batchsize of {}", batchSizeWhichWorks);
                     this.trainingArguments = backupArguments;
+                    this.cudaVisibleDevices = backupCudaString;
                     return batchSizeWhichWorks;
                 }else{
                     LOGGER.warn("Something went wrong in python server during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
                     this.trainingArguments = backupArguments;
+                    this.cudaVisibleDevices = backupCudaString;
                     return 8;
                 }
             }catch (IOException ex) {
                 LOGGER.warn("Something went wrong with io during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
                 this.trainingArguments = backupArguments;
+                this.cudaVisibleDevices = backupCudaString;
                 return 8;
             }catch (Exception ex) {
                 LOGGER.warn("Something went wrong during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
                 this.trainingArguments = backupArguments;
+                this.cudaVisibleDevices = backupCudaString;
                 return 8;
             }finally{
                 tmpTrainingFile.delete();
@@ -143,7 +161,19 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
         
         LOGGER.info("It looks like that batch sizes up to 8192 works out which is unusual. If greater batch sizes are possible the code to search max batch size needs to be changed.");
         this.trainingArguments = backupArguments;
+        this.cudaVisibleDevices = backupCudaString;
         return batchSize;
+    }
+    
+    public String getCudaVisibleDevicesButOnlyOneGPU(){
+        String gpus = this.getCudaVisibleDevices();
+        if(gpus == null) // this means use all available.
+            return "0"; //then we select only the first one
+        gpus = gpus.trim();
+        if(gpus.isEmpty())
+            return "0"; // same as above
+        String[] array = gpus.split(",");
+        return array[0]; // one element is always contained
     }
 
     /**

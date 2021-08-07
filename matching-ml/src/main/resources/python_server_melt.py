@@ -1518,6 +1518,9 @@ def inner_transformers_finetuning(request_headers):
         training_file = request_headers["training-file"]
         using_tensorflow = request_headers["using-tf"].lower() == "true"
         training_arguments = json.loads(request_headers["training-arguments"])
+        
+        save_at_end = training_arguments.get('save_at_end', True)
+        training_arguments.pop('save_at_end', None) # delete if existent
 
         from transformers import AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(initial_model_name)
@@ -1563,7 +1566,7 @@ def inner_transformers_finetuning(request_headers):
             app.logger.info("Run training")
             trainer.train()
 
-            if training_arguments.get('save_at_end', True):
+            if save_at_end:
                 app.logger.info("Save model")
                 trainer.save_model(resulting_model_location)
         return "True"
