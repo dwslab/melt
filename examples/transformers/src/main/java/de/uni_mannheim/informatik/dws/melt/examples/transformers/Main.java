@@ -196,7 +196,9 @@ public class Main {
 
         boolean isMultipleTextsToMultipleExamples = cmd.hasOption("mt");
         boolean isAutoThresholding = cmd.hasOption("at");
-
+        
+        LOGGER.info("isMultipleTextsToMultipleExamples: {}", isMultipleTextsToMultipleExamples);
+        LOGGER.info("isAutoThresholding: {}", isAutoThresholding);
         transformerModels = cmd.getOptionValues("tm");
 
         TextExtractor textExtractor;
