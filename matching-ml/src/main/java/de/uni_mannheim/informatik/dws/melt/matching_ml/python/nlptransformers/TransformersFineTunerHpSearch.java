@@ -65,7 +65,7 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
     @Override
     public File finetuneModel(File trainingFile) throws Exception{
         if(this.adjustMaxBatchSize){
-            int maxBatchSize = getMaximumPerDeviceTrainBatchSize();
+            int maxBatchSize = getMaximumPerDeviceTrainBatchSize(trainingFile);
             List<Object> list = new ArrayList<>();
             if(maxBatchSize < 4){
                 int i = 1;

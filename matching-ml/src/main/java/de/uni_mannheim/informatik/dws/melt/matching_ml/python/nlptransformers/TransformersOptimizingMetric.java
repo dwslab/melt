@@ -38,7 +38,12 @@ public enum TransformersOptimizingMetric {
      * The area under curve (AUC)will be optimized.
      * This means the "confindence" value will be optimized.
      */
-    AUC;
+    AUC,
+    
+    /**
+     * The sum of AUC and F1 will be optimized.
+     */
+    AUCF1;
     
     @Override
     public String toString() {
