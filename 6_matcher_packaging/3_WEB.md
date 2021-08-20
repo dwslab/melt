@@ -37,7 +37,7 @@ MELT will generate a (Jetty) server for your matching system and will package ev
 ### Package Your First Matcher with MELT
 **Prerequisites**: Maven, Java, and Docker must be installed. Docker must be running during the build process.
 
-1. Copy the project in [examples/simpleHobbitMatcher/](https://github.com/dwslab/melt/tree/master/examples/simpleWebMatcher) to your workspace.
+1. Copy the project in [examples/simpleWebMatcher/](https://github.com/dwslab/melt/tree/master/examples/simpleWebMatcher) to your workspace.
 2. Execute `mvn clean package` or `mvn clean install`.
 3. Search in the `/target` directory for the tar.gz file. The file name represents the docker image name.
 
