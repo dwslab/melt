@@ -61,8 +61,8 @@ jobs:
       run: mvn clean install
     - name: Check simple seals packaging
       working-directory: examples/simpleSealsMatcher
-      #shell: bash
+      shell: bash
       if: matrix.java == '8'
       run: |
         mvn clean package
-        mvn '-Dexec.mainClass="de.uni_mannheim.informatik.dws.melt.demomatcher.TestPackage"' '-Dexec.classpathScope=test' test-compile exec:java
+        mvn -Dexec.mainClass=de.uni_mannheim.informatik.dws.melt.demomatcher.TestPackage -Dexec.classpathScope=test test-compile exec:java
