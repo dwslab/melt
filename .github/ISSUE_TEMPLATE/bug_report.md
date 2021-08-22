@@ -12,7 +12,8 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-In the best case add a minimal working example which shows the bug
+In the best case add a minimal working example which shows the bug.
+Please also [attach the log file](https://docs.github.com/en/github/writing-on-github/working-with-advanced-formatting/attaching-files) which is generated during your run.
 
 - Version of MELT?
 - Java version?
