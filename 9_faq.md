@@ -7,7 +7,7 @@ permalink: /faq
 
 # Frequently Asked Questions (FAQs)
 
-### I have a multiple SEALS packages and I want to use MELT's group evaluation functionalities. What is the simplest way to do so?
+## I have a multiple SEALS packages and I want to use MELT's group evaluation functionalities. What is the simplest way to do so?
 SEALS packages were wrapped for the SEALS platform. If the matchers were not developed using MELT or you are not sure 
 whether they were developed with MELT, one option is to create the alignment files by executing the matchers 
 using the SEALS client. Afterwards, you can read the alignment files (e.g. method `loadFromFolder` of class 
@@ -21,20 +21,20 @@ a later point in time. You can also set the maximum time you want MELT to alloca
 does not finish within the given time limit, MELT will stop the process and proceed with the next test case or matcher.
 `ExecutorSeals` can read zipped, unzipped (or a mix of both) SEALS packages.<br/>
 
-### I am running a SEALS matcher that was packaged with MELT and uses some python component. On my system, the default python command does not refer to Python 3. How can this situation be resolved?
+## I am running a SEALS matcher that was packaged with MELT and uses some python component. On my system, the default python command does not refer to Python 3. How can this situation be resolved?
 A folder `melt-resouces` in the working directory (perhaps `$SEALS_HOME`) has to be created. In there a file `python_command.txt` containing your full 
 python path should be placed. This applies to all MELT packaged matchers that use the ML module. 
 In other cases, you can also try to create a directory `oaei-resources` rather than `melt-resources`
 and place the python_command.txt` there.
 
-### Is there more documentation?
+## Is there more documentation?
 MELT is far more powerful than documented here. This user guide is intended to give an overview of the framework. We extend this guide over time. However, if you have any feedback or want to contribute, feel free to do so.
 For specific code snippets, have a look at the examples. Note that classes, interfaces, and methods are extensively documented using [JavaDoc](/javadoc_latest/index.html).
 
 
 # Common Errors
 
-### Building a combined jar with jena dependencies
+## Building a combined jar with jena dependencies
 
 If you build a combined jar ("uber-jar" or "fat-jar", jar with dependencies) to try out your matchers especially with jena,
 then make sure you do not override the service initializers of jena.
@@ -103,7 +103,7 @@ An example could look like the following
 ```
 
 
-### Using largebio dataset without unlimiting entity expansion
+## Using largebio dataset without unlimiting entity expansion
 
 If you encounter the following error:
 ```
@@ -126,7 +126,7 @@ which sets the property for the current JVM execution (but not for child process
 
 
 
-### ToolException when using SEALS Matcher
+## ToolException when using SEALS Matcher
 
 In case you get a `ToolException` in SEALS Matcher which somehow talks about:
 ```the functionality of called method is not supported```
@@ -134,3 +134,33 @@ then this is a hint that the provided SEALS package is not able to use an input 
 Within the MatcherSeals in MELT you can set an attribute `doNotUseInputAlignment` to `true`. 
 This will not pass an input alignment to the SEALS client even when one is available.
 This applies for example to LogMap.
+
+
+## Evaluation of a docker based matcher
+
+In case you evaluate a web/docker based matcher and you get a warning like:
+```
+Caused by: java.lang.ClassNotFoundException: com.github.dockerjava.core.DockerClientConfig
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:382)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:418)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:355)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:351)
+```
+Then you should include the following dependencies in your evaluation script:
+```
+<dependency>
+    <groupId>com.github.docker-java</groupId>
+    <artifactId>docker-java-core</artifactId>
+    <version>3.2.7</version>
+</dependency>
+<dependency>
+    <groupId>com.github.docker-java</groupId>
+    <artifactId>docker-java-transport-httpclient5</artifactId>
+    <version>3.2.7</version>
+</dependency>
+```
+This can also help if other classes from the same namespace are missing:
+- `com.github.dockerjava.core.DockerClientConfig`
+- `com.github.dockerjava.api.async.ResultCallback`
+
+

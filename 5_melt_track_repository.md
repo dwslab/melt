@@ -40,7 +40,7 @@ Name | Repository | Suite-ID | Version-ID
 [multifarm](http://oaei.ontologymatching.org/2018/multifarm/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `<language_pair>`<br> `multifarm`  |  `<language_pair>-v2` <br> `all-v2`
 [largebio](http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/) | `http://oaei.webdatacommons.org/tdrs/` | `largebio` |  -`largebio-all_tasks_2016`<br>- `largebio-fma_nci_small_2016`<br>- `largebio-fma_nci_whole_2016`<br>- `largebio-fma_snomed_small_2016`<br>- `largebio-fma_snomed_whole_2016`<br>- `largebio-snomed_nci_small_2016`<br>- `largebio-snomed_nci_whole_2016`
 [complex](http://oaei.ontologymatching.org/2019/complex/index.html) | `http://oaei.webdatacommons.org/tdrs/` | - `geolink`<br>- `hydrography`<br>- `popgeolink`<br>- `popenslaved`<br>- `popconference`|  - `geolink-v1`<br>- `hydrography-v1`<br>- `popgeolink-v1`<br>- `popenslaved-v1`<br>- `popconference-[0-20-40-60-80-100]-v1`
-[GeoLinkCruise](http://oaei.ontologymatching.org/2020/geolinkcruise/index.html) | `http://oaei.webdatacommons.org/tdrs/` | `geolinkcruise`| `geolinkcruise-v1`
+GeoLinkCruise | `http://oaei.webdatacommons.org/tdrs/` | `geolinkcruise`| `geolinkcruise-v1`
 Laboratory | `http://oaei.webdatacommons.org/tdrs/` | `laboratory`| `laboratory-v1`
 
 Available multifarm language pairs:<br/>
