@@ -90,6 +90,18 @@ public class ExecutionResult {
     }
 
     /**
+     * Constructor used by tests to check if metrics compute correctly.
+     * The reference alignment of the test case will be used.
+     *
+     * @param testCase Test case on which the matcher was run which produced this particular result.
+     * @param matcherName Name of the matcher
+     * @param systemAlignment Alignment to the alignment output produced by the matcher
+     */
+    public ExecutionResult(TestCase testCase, String matcherName, Alignment systemAlignment) {
+        this(testCase, matcherName, null, 0, systemAlignment, testCase.getParsedReferenceAlignment(), null, new HashSet<>());
+    }
+
+    /**
      * Constructor used by ExecutionRunner for initializing a execution result from a matcher run
      * @param testCase Test case on which the matcher was run which produced this particular result.
      * @param matcherName Name of the matcher.
