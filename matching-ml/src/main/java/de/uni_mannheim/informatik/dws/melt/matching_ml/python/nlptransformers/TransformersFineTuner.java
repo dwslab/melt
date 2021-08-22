@@ -66,7 +66,7 @@ public class TransformersFineTuner extends TransformersBase implements Filter {
      *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
      *   see first parameter pretrained_model_name_or_path of the from_pretrained
      *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
-     * @param resultingModelLocation the final location where the finetuned model should be stored.
+     * @param resultingModelLocation the final location where the fine-tuned model should be stored.
      */
     public TransformersFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
         this(extractor, initialModelName, resultingModelLocation, FileUtil.SYSTEM_TMP_FOLDER);

@@ -101,6 +101,7 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
         }
         return getMaximumPerDeviceTrainBatchSize(this.trainingFile);
     }
+
     /**
      * This functions tries to execute the training with one step to check which maximum {@code per_device_train_batch_size } is possible.It will start with 2 and checks only powers of 2.
      * @param trainingFile the training file to use
