@@ -30,7 +30,7 @@ public class ConfidenceFilterTest {
         Alignment filtered = new ConfidenceFilter().filter(m, null, null);
         assertEquals(10, filtered.size());
     }
-
+    
     @Test
     void testFilterDefaultConstructor() {
         Alignment m = new Alignment();

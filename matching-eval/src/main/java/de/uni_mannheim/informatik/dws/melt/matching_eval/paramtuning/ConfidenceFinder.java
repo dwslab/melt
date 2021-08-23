@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ConfidenceFinder {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfidenceFinder.class);
 
     public static Set<Double> getSteps(double start, double end, double stepWidth){

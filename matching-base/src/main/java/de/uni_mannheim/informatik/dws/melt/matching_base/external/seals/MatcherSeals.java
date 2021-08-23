@@ -22,12 +22,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.cli.process.ProcessOutputConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -228,10 +230,58 @@ public class MatcherSeals extends MatcherFile {
     //https://stackoverflow.com/questions/29001162/how-to-get-the-value-which-i-sent-via-system-out-println
     //to store the log output of a matcher
 
+    private boolean isJava8(){
+        ExternalProcess p = new ExternalProcess();
+        p.addArgument(this.javaCommand);
+        p.addArgument("-version");
+        CheckJavaVersionConsumer consumer = new CheckJavaVersionConsumer();
+        p.addStdErrConsumer(consumer);
+        try {
+            p.run();
+        } catch (TimeoutException e){
+            LOGGER.error("TimeoutException occurred while checking the java version. Being confident and assuming " +
+                    "Java is version 8 (may fail later).", e);
+            return true;
+        }
+        if(consumer.isJava8()){
+            return true;
+        } else {
+            LOGGER.error("Java 8 is strictly required by SEALS. However, you used:\n" + consumer.getVersionLine() +
+                    "\nYou can set the java 8 version easily using method setJavaCommand() of class MatcherSeals.");
+            return false;
+        }
+    }
+
+    private class CheckJavaVersionConsumer implements ProcessOutputConsumer {
+        private boolean isJava8 = false;
+        private String versionLine = "";
+        private boolean isFirstLine = true;
+        @Override
+        public void processOutput(String line) {
+            if(isFirstLine){
+                if(line.contains("1.8")){
+                    isJava8 = true;
+                }
+                versionLine = line;
+                isFirstLine = false;
+            }
+        }
+        public String getVersionLine(){
+            return versionLine;
+        }
+        public boolean isJava8(){
+            return isJava8;
+        }
+    }
+
     @Override
     public void match(URL source, URL target, URL inputAlignment, File alignmentResult) throws Exception {
         if (this.matcherFolder == null) {
             throw new Exception("Matcher folder is null. See error messages above.");
+        }
+        if(!isJava8()){
+            throw new Exception("Java 8 is strictly required by SEALS.\nYou can set the java 8 version easily using " +
+                    "method setJavaCommand() of class MatcherSeals.");
         }
         File currentInstance;
         if (this.freshMatcherInstance) {

@@ -43,6 +43,27 @@ public class ConfidenceFinderTest {
     }
 
     @Test
+    public void getBestconfidenceAllSame(){
+        Alignment reference = new Alignment();
+        reference.add("A", "A");
+        reference.add("B", "B");
+        reference.add("C", "C");
+
+        Alignment system = new Alignment();
+
+        // correct
+        system.add("A", "A", 0.8192879);
+        system.add("B", "C", 0.8192879);
+        system.add("D", "C", 0.8192879);
+
+        double result = ConfidenceFinder.getBestConfidenceForFmeasure(reference, system,
+                GoldStandardCompleteness.COMPLETE);
+
+        // note that we have rounding behavior here...
+        Assertions.assertEquals(0.82, result);
+    }
+
+    @Test
     public void getBestConfidenceForFMeasureIncomplete2() {
         Alignment reference = new Alignment();
         reference.add("A", "A");
