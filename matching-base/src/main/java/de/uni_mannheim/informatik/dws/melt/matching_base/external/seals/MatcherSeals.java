@@ -252,16 +252,19 @@ public class MatcherSeals extends MatcherFile {
             sealsProcess.addArgument(this.javaCommand);
             if (this.javaRuntimeParameters != null) sealsProcess.addArguments(this.javaRuntimeParameters);
 
-            sealsProcess.addArguments("-jar", this.sealsClientJar.getAbsolutePath(), currentInstance.getAbsolutePath());
+            sealsProcess.addArguments("-jar", FileUtil.getCanonicalPathIfPossible(this.sealsClientJar), FileUtil.getCanonicalPathIfPossible(currentInstance));
             if (inputAlignment == null || this.doNotUseInputAlignment) {
                 sealsProcess.addArguments("-o", source.toString(), target.toString());
             } else {
                 sealsProcess.addArguments("-oi", source.toString(), target.toString(), inputAlignment.toString());
             }
-            sealsProcess.addArguments("-f", alignmentResult.getAbsolutePath(), "-z");
-
-            sealsProcess.setWorkingDirectory(sealsHome);
-            sealsProcess.addEnvironmentVariable("SEALS_HOME", FileUtil.getCanonicalPathIfPossible(sealsHome));
+            sealsProcess.addArguments("-f", FileUtil.getCanonicalPathIfPossible(alignmentResult), "-z");
+            
+            //SEALS compares the current working directory with the environment variable and this has to match extract.
+            //Windows shorten the path from time to time: C:\Users\runneradmin\ -> C:\Users\RUNNER~1\ therefore we initialse a new file objetc here:
+            String canonicalSealsHomePath = FileUtil.getCanonicalPathIfPossible(sealsHome);
+            sealsProcess.setWorkingDirectory(new File(canonicalSealsHomePath));
+            sealsProcess.addEnvironmentVariable("SEALS_HOME", canonicalSealsHomePath);
             sealsProcess.setTimeout(this.timeout, this.timeoutTimeUnit);
             sealsProcess.run();
 
