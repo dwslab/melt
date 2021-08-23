@@ -62,10 +62,7 @@ jobs:
     # https://github.com/actions/virtual-environments/issues/712
     - name: Workaround 8.3 on windows
       if: matrix.os == 'windows-latest'
-      run: |
-        set TMP=%USERPROFILE%\AppData\Local\Temp
-        set TEMP=%USERPROFILE%\AppData\Local\Temp
-      shell: cmd
+      run: echo "TMP=$env:USERPROFILE\AppData\Local\Temp" >> $env:GITHUB_ENV
     - name: Check simple seals packaging
       working-directory: examples/simpleSealsMatcher
       shell: bash
