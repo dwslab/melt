@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval_client;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
+import de.uni_mannheim.informatik.dws.melt.matching_base.MeltUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.docker.MatcherDockerFile;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.http.MatcherHTTPCall;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.seals.MatcherSeals;
@@ -15,6 +16,8 @@ import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import org.apache.commons.cli.*;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URI;
@@ -26,9 +29,13 @@ import java.util.Map;
 public class Main {
 
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
+        MeltUtil.logWelcomeMessage();
+
         if (args == null || args.length == 0) {
-            System.out.println("Missing arguments. You can use option -h for help.");
+            LOGGER.info("Missing arguments. You can use option -h for help.");
         }
 
         // initialize the command line
@@ -38,7 +45,7 @@ public class Main {
         try {
             cmd = cliParser.parse(options, args);
         } catch (ParseException e) {
-            System.out.println("An exception occurred while trying to parse the arguments.\n" +
+            LOGGER.info("An exception occurred while trying to parse the arguments.\n" +
                     "You can use option -h for help.\n");
             e.printStackTrace();
         }
@@ -60,11 +67,11 @@ public class Main {
         if (cmd.hasOption(SYSTEMS_OPTION)) {
             systems = cmd.getOptionValues(SYSTEMS_OPTION);
         } else {
-            System.out.println(missingSystemString);
+            LOGGER.info(missingSystemString);
             return;
         }
         if (systems == null || systems.length == 0) {
-            System.out.println(missingSystemString);
+            LOGGER.info(missingSystemString);
             return;
         }
 
@@ -125,14 +132,14 @@ public class Main {
             if (system.toLowerCase().endsWith(".tar.gz")) {
                 // we assume it is in MELT WEB DOCKER format:
                 System.out.printf("Recognized MELT WEB DOCKER package:\n%s\n", system);
-                System.out.println("Please make sure that docker is running on your system.");
+                LOGGER.info("Please make sure that docker is running on your system.");
                 File dockerFile = new File(system);
                 if (dockerFile.isDirectory()) {
-                    System.out.println("The provided file is a directory: " + system);
+                    LOGGER.info("The provided file is a directory: " + system);
                     continue;
                 }
                 if (!dockerFile.exists()) {
-                    System.out.println("The provided docker file does not exist: " + system);
+                    LOGGER.info("The provided docker file does not exist: " + system);
                     continue;
                 }
                 MatcherDockerFile matcherDockerFile = new MatcherDockerFile(new File(system));
@@ -158,20 +165,20 @@ public class Main {
         }
 
         if (matchers.size() == 0) {
-            System.out.println("No runnable matchers given. ABORTING PROGRAM...");
+            LOGGER.info("No runnable matchers given. ABORTING PROGRAM...");
             return;
         }
 
         // run track or test case
         ExecutionResultSet ers;
-        System.out.println("Running matching systems...");
+        LOGGER.info("Running matching systems...");
         if (track != null) {
             ers = Executor.run(track, matchers);
         } else {
             ers = Executor.run(testCase, matchers);
         }
 
-        System.out.println("Evaluating matching system results...");
+        LOGGER.info("Evaluating matching system results...");
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(ers);
 
         // decide on results directory
@@ -207,7 +214,7 @@ public class Main {
             for (CSVRecord record : parser.getRecords()) {
                 Map<String, String> recordMap = record.toMap();
                 if (recordMap.get("Type").equalsIgnoreCase("ALL")) {
-                    System.out.println("\n");
+                    LOGGER.info("\n");
                     System.out.printf("Matcher: %s\n", recordMap.get("Matcher"));
                     System.out.printf("Macro Precision: %s\n", recordMap.get("Macro Precision (P)"));
                     System.out.printf("Macro Recall: %s\n", recordMap.get("Macro Recall (R)"));
@@ -223,16 +230,16 @@ public class Main {
                         ) {
                             System.out.printf("Since F1 is 0, you can find the full log of %s below:\n", recordMap.get(
                                     "Matcher"));
-                            System.out.println(((MatcherDockerFile) matchers.get(recordMap.get("Matcher")))
+                            LOGGER.info(((MatcherDockerFile) matchers.get(recordMap.get("Matcher")))
                                     .getAllLogLinesFromContainer());
                         }
                     } catch (Exception e) {
-                        System.out.println("Tried to print the log since the F1 is 0 but failed to do so.");
+                        LOGGER.info("Tried to print the log since the F1 is 0 but failed to do so.");
                     }
                 }
             }
         } catch (Exception e) {
-            System.out.println("An error occurred while trying to read the result file.");
+            LOGGER.info("An error occurred while trying to read the result file.");
             e.printStackTrace();
         }
     }
