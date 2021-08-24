@@ -468,6 +468,13 @@ public class MatcherSeals extends MatcherFile {
         return matcherFolder;
     }
 
+    @Override
+    public String toString() {
+        return getName() + "(MatcherSeals)";
+    }
+    
+    
+
     /**
      * Regex pattern to get the matcher name from the SEALS {@code descriptor.xml} file.
      */

@@ -607,7 +607,16 @@ public class Executor {
      * @return The name as String.
      */
     public static String getMatcherName(Object matcherInstance) {
-        return getMatcherName(matcherInstance.getClass());
+        //https://stackoverflow.com/questions/22866925/detect-if-object-has-overriden-tostring
+        Class<?> matcherClass = matcherInstance.getClass();
+        try {
+            if (matcherClass.getMethod("toString").getDeclaringClass() != Object.class) {
+                return matcherInstance.toString();
+            }
+        } catch (NoSuchMethodException | SecurityException ex) {
+            LOGGER.debug("No access to toString method of matcher.", ex);
+        }
+        return getMatcherName(matcherClass);
     }
     
     /**
@@ -619,14 +628,6 @@ public class Executor {
      * @return The name as String.
      */
     public static String getMatcherName(Class<?> matcherClass) {
-        //https://stackoverflow.com/questions/22866925/detect-if-object-has-overriden-tostring
-        try {
-            if (matcherClass.getMethod("toString").getDeclaringClass() != Object.class) {
-                return matcherClass.toString();
-            }
-        } catch (NoSuchMethodException | SecurityException ex) {
-            LOGGER.debug("No access to toString method of matcher.", ex);
-        }
         String name = matcherClass.getSimpleName();
         if (name == null)
             return FALLBACK_MATCHER_NAME;

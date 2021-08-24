@@ -126,7 +126,7 @@ public class MatcherSealsBuilder {
      * @param matcher the directoroy or file which represents a matcher or a directory of matchers.
      * @return a map of the matcher directory and corresponding matcher name(file name)
      */
-    protected Map<String, MatcherSeals> buildFromFolder(File matcher){
+    public Map<String, MatcherSeals> buildFromFolder(File matcher){
         Map<String, MatcherSeals> map = new HashMap<>();
         if (!matcher.exists()) {
             LOGGER.error("The given matcher path does not exist. Returning no matchers.");

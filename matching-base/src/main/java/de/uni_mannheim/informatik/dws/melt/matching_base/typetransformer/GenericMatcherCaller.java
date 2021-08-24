@@ -189,11 +189,15 @@ public class GenericMatcherCaller {
         Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
         Object transformedSource = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(sourceOntology, URL.class, p);
-        if(transformedSource == null)
+        if(transformedSource == null){
+            LOGGER.error("Could not transform source ontology into correct type. The matcher is not called.");
             return null;
+        }
         Object transformedTarget = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(targetOntology, URL.class, p);
-        if(transformedTarget == null)
+        if(transformedTarget == null){
+            LOGGER.error("Could not transform target ontology into correct type. The matcher is not called.");
             return null;
+        }
         
         URL result;
         if(inputAlignment == null || inputAlignment.getClass() == Object.class){
@@ -238,11 +242,15 @@ public class GenericMatcherCaller {
         Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
         Object transformedSource = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(sourceOntology, paramTypes[0], p);
-        if(transformedSource == null)
+        if(transformedSource == null){
+            LOGGER.error("Could not transform source ontology into correct type. The matcher is not called.");
             return null;
+        }
         Object transformedTarget = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(targetOntology, paramTypes[1], p);
-        if(transformedTarget == null)
+        if(transformedTarget == null){
+            LOGGER.error("Could not transform target ontology into correct type. The matcher is not called.");
             return null;
+        }
         
         //optional params
         Object transformedInputAlignment;
@@ -256,8 +264,10 @@ public class GenericMatcherCaller {
             }
         }else{
             transformedInputAlignment = TypeTransformerRegistry.getTransformedObject(inputAlignment, paramTypes[2], p);
-            if(transformedInputAlignment == null)
+            if(transformedInputAlignment == null){
+                LOGGER.error("Could not transform input alignment into correct type. The matcher is not called.");
                 return null;
+            }
         }
         
         Object transformedParameter;
@@ -272,11 +282,13 @@ public class GenericMatcherCaller {
             }
         }else{
             transformedParameter = TypeTransformerRegistry.getTransformedObject(parameters, paramTypes[3], p);
-            if(transformedParameter == null)
+            if(transformedParameter == null){
+                LOGGER.error("Could not transform parameters into correct type. The matcher is not called.");
                 return null;
+            }
         }
         Object resultingAlignment = matcher.match(transformedSource, transformedTarget, transformedInputAlignment, transformedParameter);
-        return new AlignmentAndParameters(resultingAlignment, transformedParameter);        
+        return new AlignmentAndParameters(resultingAlignment, transformedParameter);
     }
     
     /**
