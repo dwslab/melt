@@ -470,7 +470,7 @@ public class MatcherSeals extends MatcherFile {
 
     @Override
     public String toString() {
-        return getName() + "(MatcherSeals)";
+        return getName() + "-MatcherSeals";
     }
     
     
