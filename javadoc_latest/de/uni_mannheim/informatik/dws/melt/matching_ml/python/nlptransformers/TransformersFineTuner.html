@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -103,10 +103,17 @@ loadScripts(document, 'script');</script>
 <pre>public class <span class="type-name-label">TransformersFineTuner</span>
 extends <a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a>
 implements <a href="../../../matching_base/Filter.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">Filter</a></pre>
-<div class="block">This class is used to fine-tune a transformer model based on a generated dataset.
- In every call to the match method, the training data will be generated and appended to a temporary file.
- When you call the <a href="#finetuneModel()"><code>finetuneModel()</code></a> method, then a model is fine-tuned and the
- training file is deleted.</div>
+<div class="block">This class is used to finetune a transformer model based on a generated dataset.
+ It comes in two fashions. First, it can be used to generate a fine-tuned model with every call of the match method.
+ The input alignment of the match method is used to generate a training dataset.
+ Thus, the input alignment should contain positive correspondences (with an equivalence relation) and negative
+ correspondences (with another relation than equivalence).
+ 
+ As a second fashion, this matcher can be used to only generate the training file (by possibly multiple calls to the match method).
+ Thus, within the match method only the training file is written. After all calls to the match method, one can call
+ the <a href="#finetuneModel()"><code>finetuneModel()</code></a> function to train the model on the whole dataset.
+ 
+ In both cases, the fine-tuned model as well as the tokenizer is written to the specified directory.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -150,7 +157,7 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 </div>
 <div class="inherited-list">
 <h3 id="fields.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBase">Fields inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></h3>
-<code><a href="TransformersBase.html#cudaVisibleDevices">cudaVisibleDevices</a>, <a href="TransformersBase.html#extractor">extractor</a>, <a href="TransformersBase.html#modelName">modelName</a>, <a href="TransformersBase.html#multipleTextsToMultipleExamples">multipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#multiProcessing">multiProcessing</a>, <a href="TransformersBase.html#tmpDir">tmpDir</a>, <a href="TransformersBase.html#trainingArguments">trainingArguments</a>, <a href="TransformersBase.html#transformersCache">transformersCache</a>, <a href="TransformersBase.html#usingTensorflow">usingTensorflow</a></code></div>
+<code><a href="TransformersBase.html#cudaVisibleDevices">cudaVisibleDevices</a>, <a href="TransformersBase.html#extractor">extractor</a>, <a href="TransformersBase.html#modelName">modelName</a>, <a href="TransformersBase.html#multiProcessing">multiProcessing</a>, <a href="TransformersBase.html#tmpDir">tmpDir</a>, <a href="TransformersBase.html#trainingArguments">trainingArguments</a>, <a href="TransformersBase.html#transformersCache">transformersCache</a>, <a href="TransformersBase.html#usingTensorflow">usingTensorflow</a></code></div>
 <div class="inherited-list">
 <h3 id="fields.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_base.MatcherFile">Fields inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_base.<a href="../../../matching_base/MatcherFile.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">MatcherFile</a></h3>
 <code><a href="../../../matching_base/MatcherFile.html#FILE_PREFIX">FILE_PREFIX</a>, <a href="../../../matching_base/MatcherFile.html#FILE_SUFFIX">FILE_SUFFIX</a></code></div>
@@ -178,15 +185,6 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 <div class="block">Run the training of a NLP transformer.</div>
 </td>
 </tr>
-<tr class="row-color">
-<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,java.io.File)">TransformersFineTuner</a></span>&#8203;(<a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;tmpDir)</code></th>
-<td class="col-last">
-<div class="block">Run the training of a NLP transformer.</div>
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -209,14 +207,6 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
-<td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addTrainingParameterToMakeTrainingFaster()">addTrainingParameterToMakeTrainingFaster</a></span>()</code></th>
-<td class="col-last">
-<div class="block">This will add (potencially multiple) training parameters to the current <a href="TransformersBase.html#trainingArguments"><code>trainingArguments</code></a>
- to make the training faster.</div>
-</td>
-</tr>
-<tr class="row-color" id="i1">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">createTrainingFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -225,31 +215,38 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <div class="block">Creates a new file and writes all correspondences as textual data to it.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i2">
+<tr class="row-color" id="i1">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#finetuneModel()">finetuneModel</a></span>()</code></th>
 <td class="col-last">
 <div class="block">This method should only be used when appendOnlyToFile is set to true.</div>
 </td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="alt-color" id="i2">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#finetuneModel(java.io.File)">finetuneModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</code></th>
 <td class="col-last">
 <div class="block">Finetune a given model with the provided text in the csv file (three columns: first text, second text, label(0/1))</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i3">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getResultingModelLocation()">getResultingModelLocation</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the final location where the finetuned model should be stored</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="alt-color" id="i4">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTextFromResource(org.apache.jena.rdf.model.Resource)">getTextFromResource</a></span>&#8203;(org.apache.jena.rdf.model.Resource&nbsp;r)</code></th>
 <td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i5">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isAppendOnlyToFile()">isAppendOnlyToFile</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns true, if this matcher only appends the training data to a file and do not train any transformer model.</div>
+</td>
 </tr>
 <tr class="alt-color" id="i6">
 <td class="col-first"><code><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
@@ -264,12 +261,19 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </tr>
 <tr class="row-color" id="i7">
 <td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setAppendOnlyToFile(boolean)">setAppendOnlyToFile</a></span>&#8203;(boolean&nbsp;appendOnlyToFile)</code></th>
+<td class="col-last">
+<div class="block">Sets the value if this matcher should only append the training data to a file and do not train any transformer model.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i8">
+<td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setResultingModelLocation(java.io.File)">setResultingModelLocation</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation)</code></th>
 <td class="col-last">
 <div class="block">Sets the final location where the finetuned model should be stored.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="row-color" id="i9">
 <td class="col-first"><code>int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">writeTrainingFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -286,7 +290,7 @@ boolean&nbsp;append)</code></th>
 </div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBase">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></h3>
-<code><a href="TransformersBase.html#copyCSVLines(java.io.File,java.io.File,int)">copyCSVLines</a>, <a href="TransformersBase.html#getCudaVisibleDevices()">getCudaVisibleDevices</a>, <a href="TransformersBase.html#getExtractor()">getExtractor</a>, <a href="TransformersBase.html#getModelName()">getModelName</a>, <a href="TransformersBase.html#getMultiProcessing()">getMultiProcessing</a>, <a href="TransformersBase.html#getTmpDir()">getTmpDir</a>, <a href="TransformersBase.html#getTrainingArguments()">getTrainingArguments</a>, <a href="TransformersBase.html#getTransformersCache()">getTransformersCache</a>, <a href="TransformersBase.html#isMultipleTextsToMultipleExamples()">isMultipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#isOptimizeForMixedPrecisionTraining()">isOptimizeForMixedPrecisionTraining</a>, <a href="TransformersBase.html#isUsingTensorflow()">isUsingTensorflow</a>, <a href="TransformersBase.html#setCudaVisibleDevices(int...)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setCudaVisibleDevices(java.lang.String)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">setExtractor</a>, <a href="TransformersBase.html#setModelName(java.lang.String)">setModelName</a>, <a href="TransformersBase.html#setMultipleTextsToMultipleExamples(boolean)">setMultipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#setMultiProcessing(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersMultiProcessing)">setMultiProcessing</a>, <a href="TransformersBase.html#setOptimizeForMixedPrecisionTraining(boolean)">setOptimizeForMixedPrecisionTraining</a>, <a href="TransformersBase.html#setTmpDir(java.io.File)">setTmpDir</a>, <a href="TransformersBase.html#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a>, <a href="TransformersBase.html#setTransformersCache(java.io.File)">setTransformersCache</a>, <a href="TransformersBase.html#setUsingTensorflow(boolean)">setUsingTensorflow</a></code></div>
+<code><a href="TransformersBase.html#getCudaVisibleDevices()">getCudaVisibleDevices</a>, <a href="TransformersBase.html#getExtractor()">getExtractor</a>, <a href="TransformersBase.html#getModelName()">getModelName</a>, <a href="TransformersBase.html#getMultiProcessing()">getMultiProcessing</a>, <a href="TransformersBase.html#getTmpDir()">getTmpDir</a>, <a href="TransformersBase.html#getTrainingArguments()">getTrainingArguments</a>, <a href="TransformersBase.html#getTransformersCache()">getTransformersCache</a>, <a href="TransformersBase.html#isUsingTensorflow()">isUsingTensorflow</a>, <a href="TransformersBase.html#setCudaVisibleDevices(int...)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setCudaVisibleDevices(java.lang.String)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">setExtractor</a>, <a href="TransformersBase.html#setModelName(java.lang.String)">setModelName</a>, <a href="TransformersBase.html#setMultiProcessing(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersMultiProcessing)">setMultiProcessing</a>, <a href="TransformersBase.html#setTmpDir(java.io.File)">setTmpDir</a>, <a href="TransformersBase.html#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a>, <a href="TransformersBase.html#setTransformersCache(java.io.File)">setTransformersCache</a>, <a href="TransformersBase.html#setUsingTensorflow(boolean)">setUsingTensorflow</a></code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_jena.<a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena">MatcherYAAAJena</a></h3>
 <code><a href="../../../matching_jena/MatcherYAAAJena.html#getModelSpec()">getModelSpec</a>, <a href="../../../matching_jena/MatcherYAAAJena.html#match(java.net.URL,java.net.URL,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a>, <a href="../../../matching_jena/MatcherYAAAJena.html#readOntology(java.net.URL,org.apache.jena.ontology.OntModelSpec)">readOntology</a></code></div>
@@ -352,26 +356,6 @@ boolean&nbsp;append)</code></th>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File,java.io.File)">
-<h3>TransformersFineTuner</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">TransformersFineTuner</span>&#8203;(<span class="parameters"><a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;tmpDir)</span></div>
-<div class="block">Run the training of a NLP transformer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>extractor</code> - used to extract text from a given resource. This is the text which represents a resource.</dd>
-<dd><code>initialModelName</code> - the initial model name for fine tuning which can be downloaded or a path to a directory containing model weights
-   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
-   see first parameter pretrained_model_name_or_path of the from_pretrained
-   function in huggingface library</a>). This value can be also changed by <a href="TransformersBase.html#setModelName(java.lang.String)"><code>TransformersBase.setModelName(java.lang.String)</code></a>.</dd>
-<dd><code>resultingModelLocation</code> - the final location where the fine-tuned model should be stored.</dd>
-<dd><code>tmpDir</code> - Sets the tmp directory used by the matcher. In this folder the file with all texts from the knowledge graph are stored.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="&lt;init&gt;(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor,java.lang.String,java.io.File)">
 <h3>TransformersFineTuner</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">TransformersFineTuner</span>&#8203;(<span class="parameters"><a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a>&nbsp;extractor,
@@ -385,7 +369,7 @@ boolean&nbsp;append)</code></th>
    (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
    see first parameter pretrained_model_name_or_path of the from_pretrained
    function in huggingface library</a>). This value can be also changed by <a href="TransformersBase.html#setModelName(java.lang.String)"><code>TransformersBase.setModelName(java.lang.String)</code></a>.</dd>
-<dd><code>resultingModelLocation</code> - the final location where the fine-tuned model should be stored.</dd>
+<dd><code>resultingModelLocation</code> - the final location where the finetuned model should be stored.</dd>
 </dl>
 </section>
 </li>
@@ -504,27 +488,9 @@ boolean&nbsp;append)</span>
  This will train a transformers model on the file generated by the match method during possibley multiple calls.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the final location (directory) of the fine-tuned model (which is also given in the constructor)</dd>
+<dd>the final location (directory) of the finetuned model (which is also given in the constructor)</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - in case of any error</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="addTrainingParameterToMakeTrainingFaster()">
-<h3>addTrainingParameterToMakeTrainingFaster</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">addTrainingParameterToMakeTrainingFaster</span>()</div>
-<div class="block">This will add (potencially multiple) training parameters to the current <a href="TransformersBase.html#trainingArguments"><code>trainingArguments</code></a>
- to make the training faster. Thus do not change the trainingArguments object afterwards 
- (with <a href="TransformersBase.html#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)"><code>setTrainingArguments</code></a> ).
- What you can do is to add more training arguments via getTrainingArguments.addParameter (as long as you do not modify any parameters added by this method).
- The following parameters are set:
- <ul>
-  <li>fp16</li>   
- </ul></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd><a href="https://huggingface.co/transformers/performance.html">Transformers performance page on huggingface</a></dd>
 </dl>
 </section>
 </li>
@@ -547,6 +513,35 @@ boolean&nbsp;append)</span>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>resultingModelLocation</code> - the model location as a file.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isAppendOnlyToFile()">
+<h3>isAppendOnlyToFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isAppendOnlyToFile</span>()</div>
+<div class="block">Returns true, if this matcher only appends the training data to a file and do not train any transformer model.
+ This is useful if the training data should be generated by multiple runs of the match method.
+ In the match method, only the training data is generated.
+ After all calls of the match method, call the <a href="#finetuneModel()"><code>finetuneModel()</code></a> method to finally train the model.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if during matching only the training data is generated and no model is trained.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setAppendOnlyToFile(boolean)">
+<h3>setAppendOnlyToFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setAppendOnlyToFile</span>&#8203;(<span class="parameters">boolean&nbsp;appendOnlyToFile)</span></div>
+<div class="block">Sets the value if this matcher should only append the training data to a file and do not train any transformer model.
+ This is useful if the training data should be generated by multiple runs of the match method.
+ In the match method, only the training data is generated.
+ After all calls of the match method, call the <a href="#finetuneModel()"><code>finetuneModel()</code></a> method to finally train the model.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>appendOnlyToFile</code> - true if during matching only the training data is generated and no model is trained.
+       If a model should be trained with every call to the match method set it to false (which is the default).</dd>
 </dl>
 </section>
 </li>

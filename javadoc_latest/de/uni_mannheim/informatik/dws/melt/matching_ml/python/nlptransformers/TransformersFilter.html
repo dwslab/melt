@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -135,17 +135,12 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#NEWLINE">NEWLINE</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
-<td class="col-first"><code>private boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#optimizeBatchSize">optimizeBatchSize</a></span></code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
 </tbody>
 </table>
 </div>
 <div class="inherited-list">
 <h3 id="fields.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBase">Fields inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></h3>
-<code><a href="TransformersBase.html#cudaVisibleDevices">cudaVisibleDevices</a>, <a href="TransformersBase.html#extractor">extractor</a>, <a href="TransformersBase.html#modelName">modelName</a>, <a href="TransformersBase.html#multipleTextsToMultipleExamples">multipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#multiProcessing">multiProcessing</a>, <a href="TransformersBase.html#tmpDir">tmpDir</a>, <a href="TransformersBase.html#trainingArguments">trainingArguments</a>, <a href="TransformersBase.html#transformersCache">transformersCache</a>, <a href="TransformersBase.html#usingTensorflow">usingTensorflow</a></code></div>
+<code><a href="TransformersBase.html#cudaVisibleDevices">cudaVisibleDevices</a>, <a href="TransformersBase.html#extractor">extractor</a>, <a href="TransformersBase.html#modelName">modelName</a>, <a href="TransformersBase.html#multiProcessing">multiProcessing</a>, <a href="TransformersBase.html#tmpDir">tmpDir</a>, <a href="TransformersBase.html#trainingArguments">trainingArguments</a>, <a href="TransformersBase.html#transformersCache">transformersCache</a>, <a href="TransformersBase.html#usingTensorflow">usingTensorflow</a></code></div>
 <div class="inherited-list">
 <h3 id="fields.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_base.MatcherFile">Fields inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_base.<a href="../../../matching_base/MatcherFile.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">MatcherFile</a></h3>
 <code><a href="../../../matching_base/MatcherFile.html#FILE_PREFIX">FILE_PREFIX</a>, <a href="../../../matching_base/MatcherFile.html#FILE_SUFFIX">FILE_SUFFIX</a></code></div>
@@ -194,21 +189,23 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
-<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../../../yet_another_alignment_api/Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">createPredictionFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">createPredictionFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
-<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;predictionAlignment,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputFile,
-boolean&nbsp;append)</code></th>
+<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment)</code></th>
 <td class="col-last">
-<div class="block">Create the prediction file which is a CSV file with two columns.The first column is the text from the left resource and the second column is the text from the right resource.</div>
+<div class="block">Create the prediction file which is a CSV file with two columns.</div>
 </td>
 </tr>
 <tr class="row-color" id="i1">
-<td class="col-first"><code>private int</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMaximumPerDeviceEvalBatchSize(java.io.File)">getMaximumPerDeviceEvalBatchSize</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</code></th>
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">createPredictionFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+org.apache.jena.ontology.OntModel&nbsp;target,
+<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputFile,
+boolean&nbsp;append)</code></th>
 <td class="col-last">
-<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.</div>
+<div class="block">Create the prediction file which is a CSV file with two columns.</div>
 </td>
 </tr>
 <tr class="alt-color" id="i2">
@@ -219,25 +216,9 @@ boolean&nbsp;append)</code></th>
 <tr class="row-color" id="i3">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isChangeClass()">isChangeClass</a></span>()</code></th>
-<td class="col-last">
-<div class="block">Return true if the class is changed in the classification.</div>
-</td>
+<td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i4">
-<td class="col-first"><code>boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isOptimizeAll()">isOptimizeAll</a></span>()</code></th>
-<td class="col-last">
-<div class="block">This will return the value if all optimization techiques are enabled or diabled.</div>
-</td>
-</tr>
-<tr class="row-color" id="i5">
-<td class="col-first"><code>boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isOptimizeBatchSize()">isOptimizeBatchSize</a></span>()</code></th>
-<td class="col-last">
-<div class="block">Return true if batch size optimization is turned on.</div>
-</td>
-</tr>
-<tr class="alt-color" id="i6">
 <td class="col-first"><code><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -248,33 +229,17 @@ org.apache.jena.ontology.OntModel&nbsp;target,
  as Alignment object, and returns the mapping of the resulting alignment.</div>
 </td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="row-color" id="i5">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#predictConfidences(java.io.File)">predictConfidences</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;predictionFilePath)</code></th>
 <td class="col-last">
 <div class="block">Run huggingface transformers library.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setChangeClass(boolean)">setChangeClass</a></span>&#8203;(boolean&nbsp;changeClass)</code></th>
-<td class="col-last">
-<div class="block">If set to true, the class is changed in the classification.</div>
-</td>
-</tr>
-<tr class="row-color" id="i9">
-<td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setOptimizeAll(boolean)">setOptimizeAll</a></span>&#8203;(boolean&nbsp;optimize)</code></th>
-<td class="col-last">
-<div class="block">This will enabled or disable all possible optimization to improve prediction speed.</div>
-</td>
-</tr>
-<tr class="alt-color" id="i10">
-<td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setOptimizeBatchSize(boolean)">setOptimizeBatchSize</a></span>&#8203;(boolean&nbsp;optimizeBatchSize)</code></th>
-<td class="col-last">
-<div class="block">Set the value if batch size should be optimized before running the prediction.</div>
-</td>
+<td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -282,7 +247,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBase">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></h3>
-<code><a href="TransformersBase.html#copyCSVLines(java.io.File,java.io.File,int)">copyCSVLines</a>, <a href="TransformersBase.html#getCudaVisibleDevices()">getCudaVisibleDevices</a>, <a href="TransformersBase.html#getExtractor()">getExtractor</a>, <a href="TransformersBase.html#getModelName()">getModelName</a>, <a href="TransformersBase.html#getMultiProcessing()">getMultiProcessing</a>, <a href="TransformersBase.html#getTmpDir()">getTmpDir</a>, <a href="TransformersBase.html#getTrainingArguments()">getTrainingArguments</a>, <a href="TransformersBase.html#getTransformersCache()">getTransformersCache</a>, <a href="TransformersBase.html#isMultipleTextsToMultipleExamples()">isMultipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#isOptimizeForMixedPrecisionTraining()">isOptimizeForMixedPrecisionTraining</a>, <a href="TransformersBase.html#isUsingTensorflow()">isUsingTensorflow</a>, <a href="TransformersBase.html#setCudaVisibleDevices(int...)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setCudaVisibleDevices(java.lang.String)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">setExtractor</a>, <a href="TransformersBase.html#setModelName(java.lang.String)">setModelName</a>, <a href="TransformersBase.html#setMultipleTextsToMultipleExamples(boolean)">setMultipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#setMultiProcessing(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersMultiProcessing)">setMultiProcessing</a>, <a href="TransformersBase.html#setOptimizeForMixedPrecisionTraining(boolean)">setOptimizeForMixedPrecisionTraining</a>, <a href="TransformersBase.html#setTmpDir(java.io.File)">setTmpDir</a>, <a href="TransformersBase.html#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a>, <a href="TransformersBase.html#setTransformersCache(java.io.File)">setTransformersCache</a>, <a href="TransformersBase.html#setUsingTensorflow(boolean)">setUsingTensorflow</a></code></div>
+<code><a href="TransformersBase.html#getCudaVisibleDevices()">getCudaVisibleDevices</a>, <a href="TransformersBase.html#getExtractor()">getExtractor</a>, <a href="TransformersBase.html#getModelName()">getModelName</a>, <a href="TransformersBase.html#getMultiProcessing()">getMultiProcessing</a>, <a href="TransformersBase.html#getTmpDir()">getTmpDir</a>, <a href="TransformersBase.html#getTrainingArguments()">getTrainingArguments</a>, <a href="TransformersBase.html#getTransformersCache()">getTransformersCache</a>, <a href="TransformersBase.html#isUsingTensorflow()">isUsingTensorflow</a>, <a href="TransformersBase.html#setCudaVisibleDevices(int...)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setCudaVisibleDevices(java.lang.String)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">setExtractor</a>, <a href="TransformersBase.html#setModelName(java.lang.String)">setModelName</a>, <a href="TransformersBase.html#setMultiProcessing(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersMultiProcessing)">setMultiProcessing</a>, <a href="TransformersBase.html#setTmpDir(java.io.File)">setTmpDir</a>, <a href="TransformersBase.html#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a>, <a href="TransformersBase.html#setTransformersCache(java.io.File)">setTransformersCache</a>, <a href="TransformersBase.html#setUsingTensorflow(boolean)">setUsingTensorflow</a></code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_jena.<a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena">MatcherYAAAJena</a></h3>
 <code><a href="../../../matching_jena/MatcherYAAAJena.html#getModelSpec()">getModelSpec</a>, <a href="../../../matching_jena/MatcherYAAAJena.html#match(java.net.URL,java.net.URL,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a>, <a href="../../../matching_jena/MatcherYAAAJena.html#readOntology(java.net.URL,org.apache.jena.ontology.OntModelSpec)">readOntology</a></code></div>
@@ -331,12 +296,6 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <section class="detail" id="changeClass">
 <h3>changeClass</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">changeClass</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="optimizeBatchSize">
-<h3>optimizeBatchSize</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">optimizeBatchSize</span></div>
 </section>
 </li>
 </ul>
@@ -406,25 +365,44 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </section>
 </li>
 <li>
-<section class="detail" id="createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">
+<section class="detail" id="createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">
 <h3>createPredictionFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../../../yet_another_alignment_api/Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&gt;</span>&nbsp;<span class="member-name">createPredictionFile</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;source,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">createPredictionFile</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
-<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;predictionAlignment,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputFile,
-boolean&nbsp;append)</span>
-                                                       throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Create the prediction file which is a CSV file with two columns.The first column is the text from the left resource and the second column is the text from the right resource.</div>
+<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment)</span>
+                          throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Create the prediction file which is a CSV file with two columns.
+ The first column is the text from the left resource and the second column is the text from the right resource.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>source</code> - The source model</dd>
 <dd><code>target</code> - The target model</dd>
-<dd><code>predictionAlignment</code> - the alignment to process. All correspondences which have enough text are used.</dd>
+<dd><code>trainingAlignment</code> - the alignment to process. All correspondences are used.</dd>
+<dt>Returns:</dt>
+<dd>the prediction file (CSV formatted)</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - in case the writing fails.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">
+<h3>createPredictionFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">createPredictionFile</span>&#8203;(<span class="parameters">org.apache.jena.ontology.OntModel&nbsp;source,
+org.apache.jena.ontology.OntModel&nbsp;target,
+<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputFile,
+boolean&nbsp;append)</span>
+                          throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Create the prediction file which is a CSV file with two columns.
+ The first column is the text from the left resource and the second column is the text from the right resource.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>source</code> - The source model</dd>
+<dd><code>target</code> - The target model</dd>
+<dd><code>trainingAlignment</code> - the alignment to process. All correspondences are used.</dd>
 <dd><code>outputFile</code> - the csv file to which the output should be written to.</dd>
 <dd><code>append</code> - if true, then the training alignment is append to the given file.</dd>
-<dt>Returns:</dt>
-<dd>the map which maps the row number to the correspondence.
- In case of multipleTextsToMultipleExamples is set to true, multiple rows can correspond to one correspondence.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - in case the writing fails.</dd>
 </dl>
@@ -453,87 +431,15 @@ boolean&nbsp;append)</span>
 </section>
 </li>
 <li>
-<section class="detail" id="getMaximumPerDeviceEvalBatchSize(java.io.File)">
-<h3>getMaximumPerDeviceEvalBatchSize</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">getMaximumPerDeviceEvalBatchSize</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</span></div>
-<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>trainingFile</code> - the training file to use</dd>
-<dt>Returns:</dt>
-<dd>the maximum <code>per_device_train_batch_size </code> with the current configuration</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="isChangeClass()">
 <h3>isChangeClass</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isChangeClass</span>()</div>
-<div class="block">Return true if the class is changed in the classification.
- This is useful if a pretrained model predict exactly the opposite class.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>true if the class is changed in the classification.</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="setChangeClass(boolean)">
 <h3>setChangeClass</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setChangeClass</span>&#8203;(<span class="parameters">boolean&nbsp;changeClass)</span></div>
-<div class="block">If set to true, the class is changed in the classification.
- This is useful if a pretrained model predict exactly the opposite class.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>changeClass</code> - true if the class should be changed in the classification.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isOptimizeBatchSize()">
-<h3>isOptimizeBatchSize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isOptimizeBatchSize</span>()</div>
-<div class="block">Return true if batch size optimization is turned on.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>true if batch size optimization is turned on.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setOptimizeBatchSize(boolean)">
-<h3>setOptimizeBatchSize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setOptimizeBatchSize</span>&#8203;(<span class="parameters">boolean&nbsp;optimizeBatchSize)</span></div>
-<div class="block">Set the value if batch size should be optimized before running the prediction.
- This should only be set to true, if the dataset is huge.
- Otherwise the algorithm to find the largest batch size needs too much time.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>optimizeBatchSize</code> - if true, optimize the batch size every time the match method is called.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setOptimizeAll(boolean)">
-<h3>setOptimizeAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setOptimizeAll</span>&#8203;(<span class="parameters">boolean&nbsp;optimize)</span></div>
-<div class="block">This will enabled or disable all possible optimization to improve prediction speed.
- Currently this includes mixed precision training and batch size optimization.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>optimize</code> - true to enable</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isOptimizeAll()">
-<h3>isOptimizeAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isOptimizeAll</span>()</div>
-<div class="block">This will return the value if all optimization techiques are enabled or diabled.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>true if enabled.</dd>
-</dl>
 </section>
 </li>
 </ul>
