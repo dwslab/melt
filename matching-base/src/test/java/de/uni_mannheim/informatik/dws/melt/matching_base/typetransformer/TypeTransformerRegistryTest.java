@@ -190,14 +190,17 @@ public class TypeTransformerRegistryTest {
      * This is a non repeatable test because it creates random graphs.But it checks if the implementation find the correct path.
      * @throws TypeTransformationException in case no route is found
      */
-    @Disabled
-    @Test
+
+
+    /*
     public void testDijkstraSearch() throws TypeTransformationException{        
         for(int k=0; k < 10; k++){
             DirectedWeightedMultigraph<Class<?>, DefaultWeightedEdge> graph = generateRandomGraph(200,500);
             compareImplementationsRandomSourceTarget(graph);
         }
     }
+    */
+
     
     //@Test
     //public void testClassSupplier(){
