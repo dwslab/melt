@@ -311,7 +311,7 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-queryparser</artifactId>
-            <version>8.9.0</version>
+            <version>7.2.0</version>
         </dependency>
 
         <!-- BabelNet Lib Dependency -->
@@ -325,7 +325,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>20.1.0</version>
+            <version>22.0.0</version>
         </dependency>
 
         <!-- main library dependency -->
