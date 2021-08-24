@@ -102,6 +102,9 @@ public class SealsMatcherBuilderPlayground {
 `MatcherSeals` (and similarly `MatcherSealsBuilder`) offer a multitude of configuration options.
 Have a look at the [API documentation](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html) for details.
 
+**IMPORTANT**: `MatcherSeals` internally executes the SEALS client which only work with Java 8. Thus it is necessary to have a Java 8 installation on your device.
+If Java 8 is not the default java version (you can check by executing `java -version` in a console), you can set the command via [`matcherSeals.setJavaCommand("/your/path/java1.8/bin/java")`](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_base/external/seals/MatcherSeals.html#setJavaCommand(java.lang.String)).
+Starting from MELT version 3.1 the Java version is checked automatically before the the SEALS client is started (it throws an exception if another version than Java 8 is used).
 
 ### Evaluation Using `ExecutorSeals` (not recommended, but supported)
 **Prerequisites**: Java 8 (not necessarily as system Java distribution), successful installation of SEALS, maven project with dependency [`matching-eval`](https://mvnrepository.com/artifact/de.uni-mannheim.informatik.dws.melt/matching-eval).
