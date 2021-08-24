@@ -17,13 +17,16 @@ import org.jgrapht.generate.GnmRandomGraphGenerator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.jgrapht.util.SupplierUtil;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class TypeTransformerRegistryTest {    
+public class TypeTransformerRegistryTest {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TypeTransformerRegistryTest.class);
         
     @Test
@@ -43,8 +46,7 @@ public class TypeTransformerRegistryTest {
         assertEquals(5, map.getOrDefault(SourceSuperClass.class, -1));
         assertEquals(5, map.getOrDefault(SourceInterface.class, -1));
     }
-    
-    
+
     @Test
     public void transformClassTest() throws Exception, Exception, Exception{
         TypeTransformerRegistry.clear();
@@ -188,7 +190,8 @@ public class TypeTransformerRegistryTest {
      * This is a non repeatable test because it creates random graphs.But it checks if the implementation find the correct path.
      * @throws TypeTransformationException in case no route is found
      */
-    //@Test
+    @Disabled
+    @Test
     public void testDijkstraSearch() throws TypeTransformationException{        
         for(int k=0; k < 10; k++){
             DirectedWeightedMultigraph<Class<?>, DefaultWeightedEdge> graph = generateRandomGraph(200,500);
