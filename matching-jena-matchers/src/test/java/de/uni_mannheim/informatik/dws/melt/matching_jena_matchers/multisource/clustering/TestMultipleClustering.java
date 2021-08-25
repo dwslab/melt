@@ -3,14 +3,13 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.c
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractorUrlPattern;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@Disabled // TODO TEMPORARY FOR RELEASE
 public class TestMultipleClustering {
-    
+
+
     @Test
     public void testFamer(){
 

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.flink.api.java.ExecutionEnvironment;
 import static org.gradoop.famer.clustering.common.PropertyNames.GRAPH_LABEL;
 import static org.gradoop.famer.clustering.common.PropertyNames.SIM_VALUE;
@@ -23,12 +24,10 @@ import org.gradoop.famer.clustering.parallelClustering.star.Star;
 import org.gradoop.flink.model.impl.epgm.LogicalGraph;
 import org.gradoop.flink.util.FlinkAsciiGraphLoader;
 import org.gradoop.flink.util.GradoopFlinkConfig;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@Disabled // TODO TEMPORARY FOR RELEASE
 public class TestFamerClustering {
    
     
@@ -100,9 +99,7 @@ public class TestFamerClustering {
         assertEquals(one, two);
         assertEquals(two, three);
     }
-    
-    
-    
+
     private Alignment getTestAlignment(){
         Alignment a = new Alignment();
         
