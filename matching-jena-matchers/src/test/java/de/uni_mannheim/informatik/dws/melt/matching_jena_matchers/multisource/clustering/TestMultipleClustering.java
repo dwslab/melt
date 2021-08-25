@@ -3,25 +3,13 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.c
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractorUrlPattern;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import org.apache.flink.api.java.ExecutionEnvironment;
-import static org.gradoop.famer.clustering.common.PropertyNames.GRAPH_LABEL;
-import static org.gradoop.famer.clustering.common.PropertyNames.SIM_VALUE;
-import org.gradoop.famer.clustering.parallelClustering.center.Center;
-import org.gradoop.famer.clustering.parallelClustering.common.dataStructures.ClusteringOutputType;
-import org.gradoop.famer.clustering.parallelClustering.common.dataStructures.PrioritySelection;
-import org.gradoop.flink.model.impl.epgm.LogicalGraph;
-import org.gradoop.flink.util.FlinkAsciiGraphLoader;
-import org.gradoop.flink.util.GradoopFlinkConfig;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class TestMutlipleClustering {
+@Disabled // TODO TEMPORARY FOR RELEASE
+public class TestMultipleClustering {
     
     @Test
     public void testFamer(){
