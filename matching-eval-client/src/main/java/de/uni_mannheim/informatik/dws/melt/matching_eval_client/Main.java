@@ -5,10 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.MeltUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.docker.MatcherDockerFile;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.http.MatcherHTTPCall;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.seals.MatcherSeals;
-import de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack;
-import de.uni_mannheim.informatik.dws.melt.matching_data.SealsTrack;
-import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
+import de.uni_mannheim.informatik.dws.melt.matching_data.*;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
@@ -110,7 +107,7 @@ public class Main {
                     onto1.toURI(),
                     onto2.toURI(),
                     reference.toURI(),
-                    null);
+                    new LocalTrack("LocalTrack", "1.0", (File) null, GoldStandardCompleteness.COMPLETE));
         } else {
             System.out.printf("Please provide a track, local track, or local testcase.\n" +
                     "Call --%s for help.", HELP_OPTION_STRING);

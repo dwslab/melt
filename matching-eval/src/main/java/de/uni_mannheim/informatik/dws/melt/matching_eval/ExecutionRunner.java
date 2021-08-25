@@ -45,7 +45,11 @@ class ExecutionRunner implements Callable<ExecutionResult> {
      * @return ExecutionResult Object
      */
     public static ExecutionResult runMatcher(TestCase testCase, IOntologyMatchingToolBridge matcher, String matcherName){
-        LOGGER.info("Running matcher {} on testcase {} (track {}).",matcherName, testCase.getName(), testCase.getTrack().getName());
+        String trackName = "<null>";
+        if(testCase.getTrack() != null){
+            trackName = testCase.getTrack().getName();
+        }
+        LOGGER.info("Running matcher {} on testcase {} (track {}).",matcherName, testCase.getName(),trackName);
         long runTime;
         URL resultingAlignment = null;
         long startTime = System.nanoTime();
@@ -61,10 +65,13 @@ class ExecutionRunner implements Callable<ExecutionResult> {
         finally
         {
             runTime = System.nanoTime() - startTime;  
-            LOGGER.info("Running matcher {} on testcase {} (track {}) completed in {}.", matcherName, testCase.getName(), testCase.getTrack().getName(), DurationFormatUtils.formatDurationWords((long)(runTime/1_000_000), true, true));
+            LOGGER.info("Running matcher {} on testcase {} (track {}) completed in {}.", matcherName,
+                    testCase.getName(), trackName, DurationFormatUtils.formatDurationWords((long)(runTime/1_000_000), true,
+                            true));
         }
         if(resultingAlignment == null) {
-            LOGGER.error("Matching task unsuccessful: output alignment equals null. (matcher: {} testcase: {} track: {})", matcherName, testCase.getName(), testCase.getTrack().getName());
+            LOGGER.error("Matching task unsuccessful: output alignment equals null. (matcher: {} testcase: {} track: " +
+                    "{})", matcherName, testCase.getName(), trackName);
         } else {
             try {
                 new File(resultingAlignment.toURI()).deleteOnExit();
