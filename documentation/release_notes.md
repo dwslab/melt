@@ -1,6 +1,15 @@
 # Release Notes
 
 
+## Changes in 3.2
+
+**New**
+
+**Fixed**
+
+**Improvements**
+
+
 ## Changes in 3.1
 
 **New**

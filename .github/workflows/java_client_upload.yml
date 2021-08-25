@@ -27,7 +27,7 @@ jobs:
       - name: Move jar to new folder
         run: |
           mkdir jar
-          mv ./matching-eval-client/target/matching-eval-client-3.1-SNAPSHOT.jar ./jar/matching-eval-client-3.1-SNAPSHOT.jar
+          mv ./matching-eval-client/target/matching-eval-client-3.2-SNAPSHOT.jar ./jar/matching-eval-client-3.2-SNAPSHOT.jar
       - name: Deploy Jar 🚀
         uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
