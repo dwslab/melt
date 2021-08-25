@@ -4,7 +4,7 @@
     <parent>
         <artifactId>matching-parent</artifactId>
         <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-        <version>3.1</version>
+        <version>3.2-SNAPSHOT</version>
     </parent>
     <artifactId>matching-data</artifactId>
     <name>MELT - Matching EvaLuation Toolkit | Data Module</name>
