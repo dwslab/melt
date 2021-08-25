@@ -3,7 +3,7 @@
     <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
     <artifactId>matching-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.1</version>
+    <version>3.2-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -64,7 +64,7 @@
         <connection>scm:git:git://github.com/dwslab/melt.git</connection>
         <developerConnection>scm:git:git@github.com:dwslab/melt.git</developerConnection>
         <url>https://github.com/dwslab/melt</url>
-        <tag>melt-3.1</tag>
+        <tag>matching-parent-2.6</tag>
     </scm>
 
     <distributionManagement>
