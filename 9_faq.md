@@ -164,3 +164,38 @@ This can also help if other classes from the same namespace are missing:
 - `com.github.dockerjava.api.async.ResultCallback`
 
 
+## Find dependencies in maven central with full class name
+
+In case your previous project was not build with maven or the like, you need to find out which dependencies you need.
+If you require a specific class, you can use the advanced search functionality of maven central localted at [https://search.maven.org](https://search.maven.org).
+Just click on advanced options, and you see that you can enter `fc:` followed by the full class name.
+E.g. search for [`fc:de.uni_mannheim.informatik.dws.melt.matching_owlapi.MatcherYAAAOwlApi`](https://search.maven.org/search?q=fc:de.uni_mannheim.informatik.dws.melt.matching_owlapi.MatcherYAAAOwlApi). Then you get all artifacts which contains this class.
+
+## Install jar file locally which is not in maven central
+
+In case you have a specific jar file which is not available in maven central but is necessary for your matcher to run,
+then you need to install it in your local repository.
+You need to 'invent' a group id, artifact id, and version which is later used in your project.
+To install such a jar file, execute:
+``` 
+mvn install:install-file -Dfile=<path-to-file> -DgroupId=<group-id> -DartifactId=<artifact-id> -Dversion=<version> -Dpackaging=jar`
+```
+For more information see [Guide to installing 3rd party JARs](https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html).
+
+As an example:
+You have a jar file named `mycustomjarfile.jar`. Now invent some group and artifact id for it and install it by running the following command in the folder where the jar file is located:
+``` 
+mvn install:install-file -Dfile=mycustomjarfile.jar -DgroupId=com.example.ownjarfile -DartifactId=mycustomjarfile -Dversion=1.0 -Dpackaging=jar`
+```
+
+You can then depend on that jar file within your project with:
+
+```
+<dependency>
+    <groupId>com.example.ownjarfile</groupId>
+    <artifactId>mycustomjarfile</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+
