@@ -24,7 +24,7 @@ class WebIsAlodClassicLinkerTest {
     static void deleteBuffers(){
         WebIsAlodSPARQLservice.closeAllServices();
         PersistenceService.getService().closePersistenceService();
-        File buffer = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        File buffer = new File(PersistenceService.DEFAULT_PERSISTENCE_DIRECTORY);
         if(buffer.exists() && buffer.isDirectory()) {
             Files.deleteDirectory(buffer);
         }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +34,7 @@ public class WiktionaryKnowledgeSourceTest {
      */
     private static void deletePersistenceDirectory() {
         PersistenceService.getService().closePersistenceService();
-        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        File result = new File(PersistenceService.DEFAULT_PERSISTENCE_DIRECTORY);
         try {
             FileUtils.deleteDirectory(result);
         } catch (IOException e) {
@@ -99,7 +100,7 @@ public class WiktionaryKnowledgeSourceTest {
         assertTrue(wiktionary.getSynonymsLexical("cat").size() > 0);
 
         // checking for one specific synonym
-        //assertTrue(wiktionary.getSynonymsLexical("temporal muscle").contains("temporalis"));//TODO: jan: check whats wrong here...
+        assertTrue(wiktionary.getSynonymsLexical("dog").contains("hound"));
 
         // checking for non-existing synonym
         assertNull(wiktionary.getSynonymsLexical("asdfasdfasdf"));
@@ -143,6 +144,177 @@ public class WiktionaryKnowledgeSourceTest {
         // assert linking process compatibility
         assertTrue(wiktionary.getHypernyms(wiktionary.getLinker().linkToSingleConcept("cat")).contains("feline"));
         assertFalse(wiktionary.getHypernyms(wiktionary.getLinker().linkToSingleConcept("cat")).contains("dog"));
+    }
+
+    @Test
+    void isTranslation(){
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+
+        // English/German
+        assertTrue(wiktionary.isTranslationLinked("bed", Language.ENGLISH, "Bett", Language.GERMAN));
+        assertTrue(wiktionary.isTranslationLinked("conference", Language.ENGLISH, "Tagung", Language.GERMAN));
+        assertTrue(wiktionary.isTranslationLinked("conference", Language.ENGLISH, "Konferenz", Language.GERMAN));
+        assertFalse(wiktionary.isTranslationLinked("conference", Language.ENGLISH, "Bett", Language.GERMAN));
+
+        assertTrue(wiktionary.isTranslationLinked("Bett", Language.GERMAN, "bed", Language.ENGLISH));
+        assertTrue(wiktionary.isTranslationLinked("Tagung", Language.GERMAN, "conference", Language.ENGLISH));
+        assertTrue(wiktionary.isTranslationLinked("Konferenz", Language.GERMAN, "conference", Language.ENGLISH));
+        assertFalse(wiktionary.isTranslationLinked("Bett", Language.GERMAN, "conference", Language.ENGLISH));
+
+        // Russian/French
+        assertTrue(wiktionary.isTranslationLinked("критика", Language.RUSSIAN, "critique", Language.FRENCH));
+    }
+
+    /**
+     * Note that for this test, all dbnary core dumps have to be added to the TDB data set.
+     */
+    @Test
+    void getTranslation(){
+
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+
+        //---------------------
+        // From Russian
+        //---------------------
+
+        // to French
+        HashSet<String> russianFrenchTranslation = wiktionary.getTranslation("рецензия", Language.RUSSIAN, Language.FRENCH);
+        assertTrue(russianFrenchTranslation.contains("critique"));
+
+        // to French (again to test buffer)
+        russianFrenchTranslation = wiktionary.getTranslation("рецензия", Language.RUSSIAN, Language.FRENCH);
+        assertTrue(russianFrenchTranslation.contains("critique"));
+
+        //---------------------
+        // From Dutch
+        //---------------------
+
+        // to English
+        HashSet<String> dutchSpanishTranslation = wiktionary.getTranslation("topconferentie", Language.DUTCH, Language.ENGLISH);
+        assertTrue(dutchSpanishTranslation.contains("summit conference"));
+
+
+        //---------------------
+        // From German
+        //---------------------
+
+        // to Italian
+        HashSet<String> germanItalianTranslation = wiktionary.getTranslation("Konferenz", Language.GERMAN, Language.ITALIAN);
+        assertTrue(germanItalianTranslation.contains("conferenza"));
+
+
+        //---------------------
+        // From French
+        //---------------------
+
+        // to Italian
+        HashSet<String> frenchItalianTranslation = wiktionary.getTranslation("conférence", Language.FRENCH, Language.ITALIAN);
+        assertTrue(frenchItalianTranslation.contains("conferenza"));
+
+
+        //---------------------
+        // From Portugese
+        //---------------------
+
+        // to Italian
+        HashSet<String> portugeseItalianTranslation = wiktionary.getTranslation("banco", Language.PORTUGUESE,
+                Language.ITALIAN);
+        assertTrue(portugeseItalianTranslation.contains("banca"));
+
+
+        //---------------------
+        // From Spanish
+        //---------------------
+
+        // to German
+        HashSet<String> spanishGermanTranslation = wiktionary.getTranslation("banco", Language.SPANISH, Language.GERMAN);
+        assertTrue(spanishGermanTranslation.contains("Bank"));
+
+
+        //---------------------
+        // From Italian
+        //---------------------
+
+        // to German
+        HashSet<String> italianGermanTranslation = wiktionary.getTranslation("banca", Language.ITALIAN, Language.FRENCH);
+        assertTrue(italianGermanTranslation.contains("banque"));
+
+
+        //---------------------
+        // From English
+        //---------------------
+
+        // to German
+        HashSet<String> germanTranslation = wiktionary.getTranslation("conference", Language.ENGLISH, Language.GERMAN);
+        assertTrue(germanTranslation.contains("Konferenz"));
+
+        // to Dutch
+        HashSet<String> dutchTranslation = wiktionary.getTranslation("conference", Language.ENGLISH, Language.DUTCH);
+        assertTrue(dutchTranslation.contains("conferentie"));
+
+        // to Arabic
+        HashSet<String> arabicTranslation = wiktionary.getTranslation("conference", Language.ENGLISH, Language.ARABIC);
+        assertTrue(arabicTranslation.contains("مُؤْتَمَر"));
+
+        // to Chinese
+        HashSet<String> chineseTranslation = wiktionary.getTranslation("conference", Language.ENGLISH, Language.CHINESE);
+        assertTrue(chineseTranslation.contains("會議"));
+
+        // to French
+        HashSet<String> frenchTranslation = wiktionary.getTranslation("conference", Language.ENGLISH, Language.FRENCH);
+        assertTrue(frenchTranslation.contains("conférence"));
+
+        // to Italian
+        HashSet<String> italianTranslation = wiktionary.getTranslation("conference", Language.ENGLISH, Language.ITALIAN);
+        assertTrue(italianTranslation.contains("conferenza"));
+
+        // to Portugese
+        HashSet<String> portugeseTranslation = wiktionary.getTranslation("conference", Language.ENGLISH, Language.PORTUGUESE);
+        assertTrue(portugeseTranslation.contains("conferência"));
+
+        // to Russian
+        HashSet<String> russianTranslation = wiktionary.getTranslation("conference", Language.ENGLISH, Language.RUSSIAN);
+        assertTrue(russianTranslation.contains("конфере́нция"));
+
+        // to Spanish
+        HashSet<String> spanishTranslation = wiktionary.getTranslation("conference", Language.ENGLISH, Language.SPANISH);
+        assertTrue(spanishTranslation.contains("conferencia"));
+    }
+
+    @Test
+    void isTranslationOf(){
+
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+
+        // German Word
+        HashSet<String> translationPartnerForGermanBank = wiktionary.getTranslationOf("Bank", Language.GERMAN);
+        boolean engTranslationForGermanBankAppears = false;
+        assertNotNull(translationPartnerForGermanBank);
+        for(String uris : translationPartnerForGermanBank){
+            if(uris.equals("http://kaiko.getalp.org/dbnary/eng/bank")) engTranslationForGermanBankAppears = true;
+        }
+        assertTrue(engTranslationForGermanBankAppears);
+
+
+        // Czech Word
+        HashSet<String> translationPartnerForCzechBank = wiktionary.getTranslationOf("banka", Language.CZECH);
+        boolean engTranslationForCzechankAppears = false;
+        assertNotNull(translationPartnerForCzechBank);
+        for(String uris : translationPartnerForCzechBank){
+            if(uris.equals("http://kaiko.getalp.org/dbnary/eng/bank")) engTranslationForCzechankAppears = true;
+        }
+        assertTrue(engTranslationForCzechankAppears);
+
+        /*
+        // Chinese Word
+        HashSet<String> translationPartnerForChineseFather = wiktionary.getTranslationOf("爸爸", Language.CHINESE);
+        boolean engTranslationForChineseFatherAppears = false;
+        assertNotNull(translationPartnerForChineseFather);
+        for(String uris : translationPartnerForChineseFather){
+            if(uris.equals("http://kaiko.getalp.org/dbnary/eng/father")) engTranslationForChineseFatherAppears = true;
+        }
+        assertTrue(engTranslationForChineseFatherAppears);
+*/
     }
 
     @Test

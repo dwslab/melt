@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
  * @deprecated better use {@link ConceptType} which has the same functionality.
  */
 public enum ResourceType {
+
+
     CLASS,
     RDF_PROPERTY,
     DATATYPE_PROPERTY,

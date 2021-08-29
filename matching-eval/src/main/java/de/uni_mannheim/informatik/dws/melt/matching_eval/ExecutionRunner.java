@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
  * @author Jan Portisch
  */
 class ExecutionRunner implements Callable<ExecutionResult> {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionRunner.class);
     
     private TestCase testCase;

@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webI
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.WebIsAlodSPARQLservice;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.xl.WebIsAlodXLKnowledgeSource;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,7 +36,7 @@ class WebIsAlodClassicKnowledgeSourceTest {
     private static void deletePersistenceDirectory() {
         WebIsAlodSPARQLservice.closeAllServices();
         PersistenceService.getService().closePersistenceService();
-        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        File result = new File(PersistenceService.DEFAULT_PERSISTENCE_DIRECTORY);
         if (result != null && result.exists() && result.isDirectory()) {
             try {
                 FileUtils.deleteDirectory(result);

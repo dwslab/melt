@@ -49,7 +49,7 @@ class LinksToFileTest {
      */
     public static void deletePersistenceDirectory() {
         PersistenceService.getService().closePersistenceService();
-        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        File result = new File(PersistenceService.DEFAULT_PERSISTENCE_DIRECTORY);
         if (result.exists() && result.isDirectory()) {
             try {
                 FileUtils.deleteDirectory(result);

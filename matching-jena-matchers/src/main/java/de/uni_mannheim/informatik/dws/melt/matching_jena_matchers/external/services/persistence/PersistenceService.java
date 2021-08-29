@@ -23,7 +23,9 @@ public class PersistenceService {
     /**
      * Directory where all persistence database files will be saved.
      */
-    public final static String PERSISTENCE_DIRECTORY = "." + File.separator + "persistences";
+    public final static String DEFAULT_PERSISTENCE_DIRECTORY = "." + File.separator + "persistences";
+
+    public static String persistenceDirectory;
 
     /**
      * Logger.
@@ -43,8 +45,43 @@ public class PersistenceService {
     /**
      * Private constructor, singleton pattern.
      */
-    private PersistenceService() {
+    private PersistenceService(String persistenceDirectory) {
         activeDatabases = new HashMap<>();
+        if (persistenceDirectory != null) {
+            PersistenceService.persistenceDirectory = persistenceDirectory;
+        } else PersistenceService.persistenceDirectory = DEFAULT_PERSISTENCE_DIRECTORY;
+
+    }
+
+    /**
+     * Singleton pattern: Get persistence service instance.
+     * Warning: Only use this getter, if you really need another persistence directory.
+     * In all other cases, use {@link PersistenceService}. You cannot request multiple persistence services
+     * using different persistenceDirectories at the same time.
+     *
+     * @param persistenceDirectory The directory where persistence files shall be saved to.
+     * @return The service instance.
+     */
+    public static PersistenceService getService(String persistenceDirectory) {
+        if (persistenceDirectory == null) {
+            persistenceDirectory = DEFAULT_PERSISTENCE_DIRECTORY;
+        }
+        if (persistenceDirectory.endsWith("/")) {
+            persistenceDirectory = persistenceDirectory.substring(0, persistenceDirectory.length() - 1);
+        }
+        if (!persistenceDirectory.equals(DEFAULT_PERSISTENCE_DIRECTORY) &&
+                PersistenceService.persistenceDirectory != null &&
+                PersistenceService.persistenceDirectory.equals(persistenceDirectory)) {
+            LOGGER.info("Request for new persistence (" + persistenceDirectory + ").\n" +
+                    "However, new persistence is equal to current persistence, doing nothing.");
+        } else {
+            if (service != null) {
+                LOGGER.info("Closing persistence service to open new one using new persistence directory.");
+                service.closePersistenceService();
+            }
+            service = new PersistenceService(persistenceDirectory);
+        }
+        return service;
     }
 
     /**
@@ -53,10 +90,10 @@ public class PersistenceService {
      * @return Persistence service instance.
      */
     public static PersistenceService getService() {
-        if (service == null) {
-            service = new PersistenceService();
+        if(service != null){
+            return service;
         }
-        return service;
+        return getService(DEFAULT_PERSISTENCE_DIRECTORY);
     }
 
     /**
@@ -66,7 +103,7 @@ public class PersistenceService {
      * @return Database
      */
     public ConcurrentMap getMapDatabase(PreconfiguredPersistences desiredPersistence) {
-        if(activeDatabases.containsKey(desiredPersistence)){
+        if (activeDatabases.containsKey(desiredPersistence)) {
             return activeDatabases.get(desiredPersistence)
                     .hashMap("map", desiredPersistence.getKeySerializer(), desiredPersistence.getValueSerializer())
                     .open();
@@ -90,25 +127,30 @@ public class PersistenceService {
                 .createOrOpen();
     }
 
-    public void commit(PreconfiguredPersistences persistence){
-        if(!activeDatabases.containsKey(persistence)){
+    public void commit(PreconfiguredPersistences persistence) {
+        if (!activeDatabases.containsKey(persistence)) {
             LOGGER.warn("Cannot commit for " + persistence + " - DB not active.");
             return;
         }
         activeDatabases.get(persistence).commit();
     }
 
+    public String getPersistenceDirectory() {
+        return persistenceDirectory;
+    }
+
     /**
      * Close a single persistence.
+     *
      * @param persistence The persistence to be closed.
      */
-    public void closeDatabase(PreconfiguredPersistences persistence){
+    public void closeDatabase(PreconfiguredPersistences persistence) {
 
-        if(!activeDatabases.containsKey(persistence)){
+        if (!activeDatabases.containsKey(persistence)) {
             LOGGER.warn("Cannot close persistence " + persistence + " - not active.");
             return;
         }
-        if(!activeDatabases.get(persistence).isClosed()){
+        if (!activeDatabases.get(persistence).isClosed()) {
             activeDatabases.get(persistence).commit();
         }
         activeDatabases.get(persistence).close();
@@ -122,7 +164,7 @@ public class PersistenceService {
     public void closePersistenceService() {
         // close all databases
         for (DB db : activeDatabases.values()) {
-            if(!db.isClosed()){
+            if (!db.isClosed()) {
                 db.commit();
                 db.close();
             }
@@ -158,6 +200,8 @@ public class PersistenceService {
         WIKTIONARY_SYNONYMY_BUFFER,
         WIKTIONARY_HYPERNYMY_BUFFER,
         WIKTIONARY_ASK_BUFFER,
+        WIKTIONARY_TRANSLATION_BUFFER,
+        WIKTIONARY_TRANSLATION_OF_BUFFER,
 
         /**
          * Stores existing and non-existing concepts.
@@ -208,6 +252,8 @@ public class PersistenceService {
                 case WIKTIONARY_HYPERNYMY_BUFFER:
                 case WIKTIONARY_SYNONYMY_BUFFER:
                 case WIKTIONARY_ASK_BUFFER:
+                case WIKTIONARY_TRANSLATION_BUFFER:
+                case WIKTIONARY_TRANSLATION_OF_BUFFER:
                     return String.class;
             }
             return null;
@@ -238,6 +284,8 @@ public class PersistenceService {
                 case WIKTIONARY_HYPERNYMY_BUFFER:
                 case WIKTIONARY_SYNONYMY_BUFFER:
                 case WIKTIONARY_ASK_BUFFER:
+                case WIKTIONARY_TRANSLATION_BUFFER:
+                case WIKTIONARY_TRANSLATION_OF_BUFFER:
                     return Serializer.STRING;
             }
             return null;
@@ -265,6 +313,8 @@ public class PersistenceService {
                 case DBPEDIA_HYPERNYMY_BUFFER:
                 case WIKTIONARY_HYPERNYMY_BUFFER:
                 case WIKTIONARY_SYNONYMY_BUFFER:
+                case WIKTIONARY_TRANSLATION_BUFFER:
+                case WIKTIONARY_TRANSLATION_OF_BUFFER:
                     return Serializer.JAVA;
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
@@ -282,49 +332,53 @@ public class PersistenceService {
         public String getFilePath() {
             switch (this) {
                 case ALOD_CLASSIC_SYONYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_classic_synonymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "webisalod_classic_synonymy_buffer.mapdb";
                 case ALOD_XL_SYONYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_xl_synonymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "webisalod_xl_synonymy_buffer.mapdb";
                 case ALOD_CLASSIC_LABEL_URI_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_classic_label_uri_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "webisalod_classic_label_uri_buffer.mapdb";
                 case ALOD_XL_LABEL_URI_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_xl_label_uri_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "webisalod_xl_label_uri_buffer.mapdb";
                 case ALOD_CLASSIC_HYPERNYMY_ASK_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_classic_hypernymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "webisalod_classic_hypernymy_buffer.mapdb";
                 case ALOD_XL_HYPERNYMY_ASK_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_xl_hypernymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "webisalod_xl_hypernymy_buffer.mapdb";
                 case BABELNET_SYNONYM_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "babelnet_synonym_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "babelnet_synonym_buffer.mapdb";
                 case BABELNET_HYPERNYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "babelnet_hypernymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "babelnet_hypernymy_buffer.mapdb";
                 case BABELNET_SINGLE_CONCEPT_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "babelnet_single_concept_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "babelnet_single_concept_buffer.mapdb";
                 case BABELNET_MULTI_CONCEPT_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "babelnet_multi_concept_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "babelnet_multi_concept_buffer.mapdb";
                 case WIKIDATA_SYNONYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "wikidata_synonymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "wikidata_synonymy_buffer.mapdb";
                 case WIKIDATA_HYPERNYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "wikidata_hypernymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "wikidata_hypernymy_buffer.mapdb";
                 case WIKIDATA_LABEL_LINK_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "wikidata_label_link_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "wikidata_label_link_buffer.mapdb";
                 case WIKIDATA_ASK_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "wikidata_ask_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "wikidata_ask_buffer.mapdb";
                 case ALOD_CLASSIC_HYPERNYM_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_classic_hypernym_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "webisalod_classic_hypernym_buffer.mapdb";
                 case ALOD_XL_HYPERNYM_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "webisalod_xl_hypernym_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "webisalod_xl_hypernym_buffer.mapdb";
                 case DBPEDIA_LABEL_LINK_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "dbpedia_label_link_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "dbpedia_label_link_buffer.mapdb";
                 case DBPEDIA_SYNONYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "dbpedia_synonymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "dbpedia_synonymy_buffer.mapdb";
                 case DBPEDIA_HYPERNYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "dbpedia_hypernymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "dbpedia_hypernymy_buffer.mapdb";
                 case WIKTIONARY_HYPERNYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "wiktionary_hypernymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "wiktionary_hypernymy_buffer.mapdb";
                 case WIKTIONARY_SYNONYMY_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "wiktionary_synonymy_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "wiktionary_synonymy_buffer.mapdb";
                 case WIKTIONARY_ASK_BUFFER:
-                    return PERSISTENCE_DIRECTORY + File.separator + "wiktionary_ask_buffer.mapdb";
+                    return persistenceDirectory + File.separator + "wiktionary_ask_buffer.mapdb";
+                case WIKTIONARY_TRANSLATION_BUFFER:
+                    return persistenceDirectory + File.separator + "wiktionary_translation_buffer.mapdb";
+                case WIKTIONARY_TRANSLATION_OF_BUFFER:
+                    return persistenceDirectory + File.separator + "wiktionary_translation_of_buffer.mapdb";
             }
             return null;
         }

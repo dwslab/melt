@@ -8,6 +8,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.sparql.SparqlServices;
 import org.apache.jena.query.*;
 import org.apache.jena.tdb.TDBFactory;
+import org.mapdb.BTreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +52,10 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
      * Buffer for ask queries.
      */
     private ConcurrentMap<String, Boolean> askBuffer;
+
+    private ConcurrentMap<String, HashSet<String>> translationBuffer;
+
+    private ConcurrentMap<String, HashSet<String>> translationOfBuffer;
 
     /**
      * The TDB dataset into which the dbnary data set was loaded.
@@ -135,10 +140,14 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             this.synonymyBuffer = persistenceService.getMapDatabase(WIKTIONARY_SYNONYMY_BUFFER);
             this.hypernymyBuffer = persistenceService.getMapDatabase(WIKTIONARY_HYPERNYMY_BUFFER);
             this.askBuffer = persistenceService.getMapDatabase(WIKTIONARY_ASK_BUFFER);
+            this.translationBuffer = persistenceService.getMapDatabase(WIKTIONARY_TRANSLATION_BUFFER);
+            this.translationOfBuffer = persistenceService.getMapDatabase(WIKTIONARY_TRANSLATION_OF_BUFFER);
         } else {
             this.synonymyBuffer = new ConcurrentHashMap<>();
             this.hypernymyBuffer = new ConcurrentHashMap<>();
             this.askBuffer = new ConcurrentHashMap<>();
+            this.translationBuffer = new ConcurrentHashMap<>();
+            this.translationOfBuffer = new ConcurrentHashMap<>();
         }
         linker = new WiktionaryLinker(this);
     }
@@ -235,9 +244,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
         synonyms2.remove("");
 
         if(synonyms1.contains(link2)) return true;
-        if(synonyms2.contains(link1)) return true;
-
-        return false;
+        return synonyms2.contains(link1);
     }
 
     public Set<String> getSynonymsEncoded(String linkedConcept){
@@ -408,6 +415,267 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
         }
         hypernymyBuffer.put(key, result);
         commit(WIKTIONARY_HYPERNYMY_BUFFER);
+        return result;
+    }
+
+    /**
+     * Obtain the translations for the linked concept.
+     * @param linkedConcept The concept that was linked.
+     * @param sourceLanguage Language of the linked concept.
+     * @param targetLanguage Language to which the concept shall be translated.
+     * @return The result is not a linked concept but instead a word.
+     */
+    public HashSet<String> getTranslation(String linkedConcept, Language sourceLanguage, Language targetLanguage) {
+        String key = linkedConcept + "_" + sourceLanguage + "_" + targetLanguage;
+        if(translationBuffer.containsKey(key)){
+            return translationBuffer.get(key);
+        }
+        HashSet<String> result = new HashSet<>();
+        String queryString = "PREFIX dbnary: <http://kaiko.getalp.org/dbnary#>\n" +
+                "select distinct ?tp where\n" +
+                "{\n" +
+                "<http://kaiko.getalp.org/dbnary/" + sourceLanguage.toWiktionaryChar3() + "/" + linkedConcept + "> dbnary:describes ?le .\n" +
+                "?t dbnary:isTranslationOf ?le .\n" +
+                "?t dbnary:targetLanguage <http://lexvo.org/id/iso639-3/" + targetLanguage.toWiktionaryChar3() + "> .\n" +
+                "?t dbnary:writtenForm ?tp .\n" +
+                "}";
+        try {
+            //System.out.println(queryString);
+            Query query = QueryFactory.create(queryString);
+            QueryExecution queryExecution;
+            if(isUseTdb) {
+                queryExecution = QueryExecutionFactory.create(query, tdbDataset);
+            } else {
+                queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, queryString);
+            }
+            ResultSet queryResult = queryExecution.execSelect();
+            while (queryResult.hasNext()) {
+                result.add(queryResult.next().getLiteral("tp").getString());
+            }
+
+            queryExecution.close();
+            translationBuffer.put(key, result);
+            return result;
+        } catch (Exception e){
+            LOGGER.error("Could not execute getTranslation query for concept " + linkedConcept + " (" + sourceLanguage + " to " + targetLanguage + ")");
+            LOGGER.error("Problematic Query:\n" + queryString);
+            translationBuffer.put(key, new HashSet<>());
+            return null;
+        }
+    }
+
+    /**
+     * Given a translation, find concepts which state that the given translation is their translation.
+     * @param translation The translation.
+     * @return A set of concepts of which {@code translation} is the given translation.
+     */
+    public HashSet<String> getTranslationOf(String translation, Language languageOfTranslation){
+
+        // buffer lookup
+        String key = translation + "_" + languageOfTranslation;
+        if(translationOfBuffer.containsKey(key)){
+            return translationOfBuffer.get(key);
+        }
+
+        HashSet<String> result = new HashSet<>();
+        String queryString = "";
+        if(languageOfTranslation != Language.CHINESE) {
+            queryString = "PREFIX dbnary: <http://kaiko.getalp.org/dbnary#>\n" +
+                    "select distinct ?c where\n" +
+                    "{\n" +
+                    "?c dbnary:describes ?le .\n" +
+                    "?t dbnary:isTranslationOf ?le .\n" +
+                    "?t dbnary:targetLanguage <http://lexvo.org/id/iso639-3/" + languageOfTranslation.toWiktionaryChar3() + "> .\n" +
+                    "?t dbnary:writtenForm \"" + translation + "\"@" + languageOfTranslation.toWiktionaryLanguageTag() + " .\n" +
+                    "}";
+        } else {
+            // special case: Chinese
+            queryString = "PREFIX dbnary: <http://kaiko.getalp.org/dbnary#>\n" +
+                    "select distinct ?c where\n" +
+                    "{\n" +
+                    "{\n" +
+                    "select distinct ?c where\n" +
+                    "{\n" +
+                    "?c dbnary:describes ?le .\n" +
+                    "?t dbnary:isTranslationOf ?le .\n" +
+                    "?t dbnary:targetLanguage <http://lexvo.org/id/iso639-3/yue> .\n" +
+                    "?t dbnary:writtenForm \"" + translation + "\"@yue .\n" +
+                    "}\n" +
+                    "}\n" +
+                    "UNION\n"+
+                    "{\n" +
+                    "select ?c where\n" +
+                    "{\n" +
+                    "?c dbnary:describes ?le .\n" +
+                    "?t dbnary:isTranslationOf ?le .\n" +
+                    "?t dbnary:targetLanguage <http://lexvo.org/id/iso639-3/cmn> .\n" +
+                    "?t dbnary:writtenForm \"" + translation + "\"@cmn .\n" +
+                    "}\n" +
+                    "}\n" +
+                    "}\n";
+        }
+        try {
+            //System.out.println(queryString);
+            Query query = QueryFactory.create(queryString);
+            QueryExecution queryExecution;
+            if(isUseTdb) {
+                queryExecution = QueryExecutionFactory.create(query, tdbDataset);
+            } else {
+                queryExecution = QueryExecutionFactory.sparqlService(ENDPOINT_URL, queryString);
+            }
+            ResultSet queryResult = queryExecution.execSelect();
+            while (queryResult.hasNext()) {
+                result.add(queryResult.next().getResource("c").getURI());
+            }
+            translationOfBuffer.put(key, result);
+            return result;
+        } catch (Exception e){
+            LOGGER.error("Could not execute getTranslationOf query for concept " + translation + " (" + languageOfTranslation + ")", e);
+            LOGGER.error("Problematic Query:\n" + queryString);
+            translationOfBuffer.put(key, new HashSet<>());
+            return null;
+        }
+    }
+
+    /**
+     * Checks whether the two words are translation of the same word (this mechanism uses another language as common
+     * denominator).
+     * @param word_1 Word 1 (does not have to be linked).
+     * @param language_1 Language 1.
+     * @param word_2 Word 2 (does not have to be linked).
+     * @param language_2 Language 2.
+     * @return True, if a translation can be derived; else false.
+     */
+    public boolean isTranslationDerived(String word_1, Language language_1, String word_2, Language language_2){
+        if(word_1 == null || word_2 == null || language_1 == null || language_2 == null) return false;
+        Set<String> concepts_1 = getTranslationOf(word_1, language_1);
+        Set<String> concepts_2 = getTranslationOf(word_2, language_2);
+        if(concepts_1 == null || concepts_2 == null) return false;
+        if(concepts_1.size() == 0 || concepts_2.size() == 0) return false;
+        int expected = concepts_1.size() + concepts_2.size();
+        Set<String> merge = new HashSet<>();
+        merge.addAll(concepts_1);
+        merge.addAll(concepts_2);
+        return !(expected == merge.size());
+    }
+
+    /**
+     * Checks whether linkedConceptToBeTranslated can be translated to linkedConcept_2.
+     * Note that BOTH concepts have to be linked.
+     *
+     * @param linkedConceptToBeTranslated Linked concept
+     * @param language_1                  Language of linkedConceptToBeTranslated.
+     * @param linkedConcept_2             Linked concept
+     * @param language_2                  Language of linkedConcept_2.
+     * @return True if translation from linkedConceptToBeTranslated to linkedConcept_2 possible, else false.
+     */
+    public boolean isTranslationLinked(String linkedConceptToBeTranslated, Language language_1, String linkedConcept_2, Language language_2) {
+
+        // developer note: the only way that works offline is ENG -> ANY_LANGUAGE - else more needs to be downloaded
+        /*
+        if (!language_1.toWiktionaryChar3().equals("eng") && !language_2.toWiktionaryChar3().equals("eng")) {
+            LOGGER.error("Currently only English translations are supported.");
+            return false;
+        }
+        */
+
+        HashSet<String> translations_1 = getTranslation(linkedConceptToBeTranslated, language_1, language_2);
+        for (String translated : translations_1) {
+            translated = normalizeForTranslations(translated);
+            linkedConcept_2 = normalizeForTranslations(linkedConcept_2);
+            if (translated.equals(linkedConcept_2)) return true;
+        }
+
+        // try reverse lookup
+        HashSet<String> translations_2 = getTranslation(linkedConcept_2, language_2, language_1);
+        for (String translated : translations_2) {
+            translated = normalizeForTranslations(translated);
+            linkedConceptToBeTranslated = normalizeForTranslations(linkedConceptToBeTranslated);
+            if (translated.equals(linkedConceptToBeTranslated)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether linkedConceptToBeTranslated can be translated to non linked concept 2.
+     * Note that the first concept has to be linked.
+     *
+     * @param linkedConceptToBeTranslated The linked concept.
+     * @param language_1                  Language of linkedConceptToBeTranslated.
+     * @param nonlinkedConcept_2          Concept not linked (just a string).
+     * @param language_2                  Language of linkedConcept_2.
+     * @return True if translation from linkedConceptToBeTranslated to linkedConcept_2 possible, else false.
+     */
+    public boolean isTranslationNonLinked(String linkedConceptToBeTranslated, Language language_1, String nonlinkedConcept_2, Language language_2) {
+
+        // developer note: the only way that works offline is ENG -> ANY_LANGUAGE - else more needs to be downloaded
+        if (!language_1.toWiktionaryChar3().equals("eng") && !language_2.toWiktionaryChar3().equals("eng")) {
+            LOGGER.error("Currently only English translations are supported.");
+            return false;
+        }
+
+        HashSet<String> translations_1 = getTranslation(linkedConceptToBeTranslated, language_1, language_2);
+        for (String translated : translations_1) {
+            translated = normalizeForTranslations(translated);
+            nonlinkedConcept_2 = normalizeForTranslations(nonlinkedConcept_2);
+            if (translated.equals(nonlinkedConcept_2)) return true;
+        }
+
+        // try reverse lookup
+        String linkedConcept_2 = linker.linkToSingleConcept(nonlinkedConcept_2, language_2);
+        if(linkedConcept_2 != null) {
+            HashSet<String> translations_2 = getTranslation(linkedConcept_2, language_2, language_1);
+            for (String translated : translations_2) {
+                translated = normalizeForTranslations(translated);
+                linkedConceptToBeTranslated = normalizeForTranslations(linkedConceptToBeTranslated);
+                if (translated.equals(linkedConceptToBeTranslated)) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Looks for translations of the given string. The translations are non-aggressively normalized (lower-case etc.)
+     * and returned.
+     *
+     * @param linkedConcept The linked concept for which translations shall be obtained.
+     * @param sourceLanguage Source language.
+     * @param targetLanguage Target language.
+     * @return The result is not a linked concept but instead a word that was normalized.
+     */
+    public HashSet<String> getNormalizedTranslations(String linkedConcept, Language sourceLanguage, Language targetLanguage){
+        HashSet<String> result = new HashSet<>();
+        HashSet<String> nonNormalized = getTranslation(linkedConcept, sourceLanguage, targetLanguage);
+        if(nonNormalized == null) return null;
+        for(String s : nonNormalized){
+            result.add(normalizeForTranslations(s));
+        }
+        return result;
+    }
+
+    public boolean isUseTdb() {
+        return isUseTdb;
+    }
+
+    /**
+     * Normalization Function for translations.
+     *
+     * @param setToBeNormalized Set whose strings shall be normalized.
+     * @return HashSet with Normalized Strings.
+     */
+    public static HashSet<String> normalizeForTranslations(HashSet<String> setToBeNormalized) {
+        HashSet<String> result = new HashSet<>();
+        for (String s : setToBeNormalized) {
+            result.add(normalizeForTranslations(s));
+        }
+        return result;
+    }
+
+    public static String normalizeForTranslations(String stringToBeNormalized) {
+        String result = stringToBeNormalized.toLowerCase();
+        result = result.trim();
+        result = result.replace(" ", "_");
+        result = result.replace("-", "_");
         return result;
     }
 

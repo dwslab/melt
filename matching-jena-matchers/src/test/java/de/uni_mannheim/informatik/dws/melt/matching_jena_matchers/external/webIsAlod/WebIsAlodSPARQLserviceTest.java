@@ -45,7 +45,7 @@ class WebIsAlodSPARQLserviceTest {
      * Delete the persistence directory.
      */
     private static void deletePersistenceDirectory() {
-        File result = new File(PersistenceService.PERSISTENCE_DIRECTORY);
+        File result = new File(PersistenceService.DEFAULT_PERSISTENCE_DIRECTORY);
         if (result.exists() && result.isDirectory()) {
             try {
                 FileUtils.deleteDirectory(result);

@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.wiktionary;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.LeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.nGramTokenizers.MaxGramLeftToRightTokenizer;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.labelToConcept.stringModifiers.StringModifier;
@@ -53,6 +54,23 @@ public class WiktionaryLinker implements LabelToConceptLinker {
 		for(StringModifier modifier : stringModificationSequence) {
 			modifiedConcept = modifier.modifyString(labelToBeLinked);
 			if(dictionary.isInDictionary(modifiedConcept)) {
+				return modifiedConcept;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * The language can be specified.
+	 * @param labelToBeLinked Label that shall be linked.
+	 * @param language The language of the label.
+	 * @return Linked concept or null.
+	 */
+	public String linkToSingleConcept(String labelToBeLinked, Language language){
+		String modifiedConcept;
+		for(StringModifier modifier : stringModificationSequence) {
+			modifiedConcept = modifier.modifyString(labelToBeLinked);
+			if(dictionary.isInDictionary(modifiedConcept, language)) {
 				return modifiedConcept;
 			}
 		}
