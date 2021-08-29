@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -136,20 +136,25 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#DEFAULT_PERSISTENCE_DIRECTORY">DEFAULT_PERSISTENCE_DIRECTORY</a></span></code></th>
+<td class="col-last">
+<div class="block">Directory where all persistence database files will be saved.</div>
+</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>private static org.slf4j.Logger</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
 <td class="col-last">
 <div class="block">Logger.</div>
 </td>
 </tr>
-<tr class="alt-color">
-<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#PERSISTENCE_DIRECTORY">PERSISTENCE_DIRECTORY</a></span></code></th>
-<td class="col-last">
-<div class="block">Directory where all persistence database files will be saved.</div>
-</td>
-</tr>
 <tr class="row-color">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#persistenceDirectory">persistenceDirectory</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>private static <a href="PersistenceService.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence">PersistenceService</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#service">service</a></span></code></th>
 <td class="col-last">
@@ -178,7 +183,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <tbody>
 <tr class="alt-color">
 <td class="col-first"><code>private </code></td>
-<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E()">PersistenceService</a></span>()</code></th>
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String)">PersistenceService</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;persistenceDirectory)</code></th>
 <td class="col-last">
 <div class="block">Private constructor, singleton pattern.</div>
 </td>
@@ -231,8 +236,20 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="alt-color" id="i4">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getPersistenceDirectory()">getPersistenceDirectory</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i5">
 <td class="col-first"><code>static <a href="PersistenceService.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence">PersistenceService</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getService()">getService</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Singleton pattern: Get persistence service instance.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i6">
+<td class="col-first"><code>static <a href="PersistenceService.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence">PersistenceService</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getService(java.lang.String)">getService</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;persistenceDirectory)</code></th>
 <td class="col-last">
 <div class="block">Singleton pattern: Get persistence service instance.</div>
 </td>
@@ -256,10 +273,16 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="PERSISTENCE_DIRECTORY">
-<h3>PERSISTENCE_DIRECTORY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">PERSISTENCE_DIRECTORY</span></div>
+<section class="detail" id="DEFAULT_PERSISTENCE_DIRECTORY">
+<h3>DEFAULT_PERSISTENCE_DIRECTORY</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">DEFAULT_PERSISTENCE_DIRECTORY</span></div>
 <div class="block">Directory where all persistence database files will be saved.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="persistenceDirectory">
+<h3>persistenceDirectory</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">persistenceDirectory</span></div>
 </section>
 </li>
 <li>
@@ -292,9 +315,9 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>PersistenceService</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="member-name">PersistenceService</span>()</div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="member-name">PersistenceService</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;persistenceDirectory)</span></div>
 <div class="block">Private constructor, singleton pattern.</div>
 </section>
 </li>
@@ -306,6 +329,22 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="method-details" id="method.detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="getService(java.lang.String)">
+<h3>getService</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PersistenceService.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence">PersistenceService</a></span>&nbsp;<span class="member-name">getService</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;persistenceDirectory)</span></div>
+<div class="block">Singleton pattern: Get persistence service instance.
+ Warning: Only use this getter, if you really need another persistence directory.
+ In all other cases, use <a href="PersistenceService.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence"><code>PersistenceService</code></a>. You cannot request multiple persistence services
+ using different persistenceDirectories at the same time.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>persistenceDirectory</code> - The directory where persistence files shall be saved to.</dd>
+<dt>Returns:</dt>
+<dd>The service instance.</dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="getService()">
 <h3>getService</h3>
@@ -334,6 +373,12 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="detail" id="commit(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence.PersistenceService.PreconfiguredPersistences)">
 <h3>commit</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">commit</span>&#8203;(<span class="parameters"><a href="PersistenceService.PreconfiguredPersistences.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.persistence">PersistenceService.PreconfiguredPersistences</a>&nbsp;persistence)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getPersistenceDirectory()">
+<h3>getPersistenceDirectory</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getPersistenceDirectory</span>()</div>
 </section>
 </li>
 <li>

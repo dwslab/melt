@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":9,"i24":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -178,6 +178,16 @@ extends <a href="../SemanticWordRelationDictionary.html" title="class in de.uni_
 <div class="block">The TDB dataset into which the dbnary data set was loaded.</div>
 </td>
 </tr>
+<tr class="alt-color">
+<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentMap.html" title="class or interface in java.util.concurrent" class="external-link">ConcurrentMap</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#translationBuffer">translationBuffer</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentMap.html" title="class or interface in java.util.concurrent" class="external-link">ConcurrentMap</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#translationOfBuffer">translationOfBuffer</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -302,37 +312,63 @@ extends <a href="../SemanticWordRelationDictionary.html" title="class in de.uni_
 </tr>
 <tr class="row-color" id="i9">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getNormalizedTranslations(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">getNormalizedTranslations</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConcept,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;sourceLanguage,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;targetLanguage)</code></th>
+<td class="col-last">
+<div class="block">Looks for translations of the given string.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i10">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getSynonyms(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">getSynonyms</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;word,
 <a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language)</code></th>
 <td class="col-last">
 <div class="block">Retrieves the synonyms of a particular word in a particular language.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="row-color" id="i11">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getSynonymsEncoded(java.lang.String)">getSynonymsEncoded</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConcept)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getSynonymsLexical(java.lang.String)">getSynonymsLexical</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConcept)</code></th>
 <td class="col-last">
 <div class="block">Retrieves a list of synonyms independently of the word sense.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i12">
+<tr class="row-color" id="i13">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTranslation(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">getTranslation</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConcept,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;sourceLanguage,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;targetLanguage)</code></th>
+<td class="col-last">
+<div class="block">Obtain the translations for the linked concept.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i14">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTranslationOf(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">getTranslationOf</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translation,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;languageOfTranslation)</code></th>
+<td class="col-last">
+<div class="block">Given a translation, find concepts which state that the given translation is their translation.</div>
+</td>
+</tr>
+<tr class="row-color" id="i15">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#initialize()">initialize</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Helper functions for constructor-independent actions.</div>
 </td>
 </tr>
-<tr class="row-color" id="i13">
+<tr class="alt-color" id="i16">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isInDictionary(java.lang.String)">isInDictionary</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;word)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i14">
+<tr class="row-color" id="i17">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isInDictionary(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">isInDictionary</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;word,
 <a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language)</code></th>
@@ -340,13 +376,61 @@ extends <a href="../SemanticWordRelationDictionary.html" title="class in de.uni_
 <div class="block">Language dependent query for existence in the dbnary dictionary.</div>
 </td>
 </tr>
-<tr class="row-color" id="i15">
+<tr class="alt-color" id="i18">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isStrongFormSynonymous(java.lang.String,java.lang.String)">isStrongFormSynonymous</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;link1,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;link2)</code></th>
 <td class="col-last">
 <div class="block">Checks for synonymy by determining whether link1 is contained in the set of synonymous words of link2 or
  vice versa.</div>
+</td>
+</tr>
+<tr class="row-color" id="i19">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isTranslationDerived(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language,java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">isTranslationDerived</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;word_1,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_1,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;word_2,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_2)</code></th>
+<td class="col-last">
+<div class="block">Checks whether the two words are translation of the same word (this mechanism uses another language as common
+ denominator).</div>
+</td>
+</tr>
+<tr class="alt-color" id="i20">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isTranslationLinked(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language,java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">isTranslationLinked</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConceptToBeTranslated,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_1,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConcept_2,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_2)</code></th>
+<td class="col-last">
+<div class="block">Checks whether linkedConceptToBeTranslated can be translated to linkedConcept_2.</div>
+</td>
+</tr>
+<tr class="row-color" id="i21">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isTranslationNonLinked(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language,java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">isTranslationNonLinked</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConceptToBeTranslated,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_1,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nonlinkedConcept_2,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_2)</code></th>
+<td class="col-last">
+<div class="block">Checks whether linkedConceptToBeTranslated can be translated to non linked concept 2.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i22">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isUseTdb()">isUseTdb</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i23">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#normalizeForTranslations(java.lang.String)">normalizeForTranslations</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;stringToBeNormalized)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i24">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#normalizeForTranslations(java.util.HashSet)">normalizeForTranslations</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;setToBeNormalized)</code></th>
+<td class="col-last">
+<div class="block">Normalization Function for translations.</div>
 </td>
 </tr>
 </tbody>
@@ -403,6 +487,18 @@ extends <a href="../SemanticWordRelationDictionary.html" title="class in de.uni_
 <h3>askBuffer</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentMap.html" title="class or interface in java.util.concurrent" class="external-link">ConcurrentMap</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</span>&nbsp;<span class="member-name">askBuffer</span></div>
 <div class="block">Buffer for ask queries.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="translationBuffer">
+<h3>translationBuffer</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentMap.html" title="class or interface in java.util.concurrent" class="external-link">ConcurrentMap</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="member-name">translationBuffer</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="translationOfBuffer">
+<h3>translationOfBuffer</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentMap.html" title="class or interface in java.util.concurrent" class="external-link">ConcurrentMap</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="member-name">translationOfBuffer</span></div>
 </section>
 </li>
 <li>
@@ -645,6 +741,140 @@ extends <a href="../SemanticWordRelationDictionary.html" title="class in de.uni_
 <dt>Returns:</dt>
 <dd>A set of hypernyms.</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getTranslation(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">
+<h3>getTranslation</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">getTranslation</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConcept,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;sourceLanguage,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;targetLanguage)</span></div>
+<div class="block">Obtain the translations for the linked concept.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>linkedConcept</code> - The concept that was linked.</dd>
+<dd><code>sourceLanguage</code> - Language of the linked concept.</dd>
+<dd><code>targetLanguage</code> - Language to which the concept shall be translated.</dd>
+<dt>Returns:</dt>
+<dd>The result is not a linked concept but instead a word.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getTranslationOf(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">
+<h3>getTranslationOf</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">getTranslationOf</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translation,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;languageOfTranslation)</span></div>
+<div class="block">Given a translation, find concepts which state that the given translation is their translation.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>translation</code> - The translation.</dd>
+<dt>Returns:</dt>
+<dd>A set of concepts of which <code>translation</code> is the given translation.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isTranslationDerived(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language,java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">
+<h3>isTranslationDerived</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isTranslationDerived</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;word_1,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_1,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;word_2,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_2)</span></div>
+<div class="block">Checks whether the two words are translation of the same word (this mechanism uses another language as common
+ denominator).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>word_1</code> - Word 1 (does not have to be linked).</dd>
+<dd><code>language_1</code> - Language 1.</dd>
+<dd><code>word_2</code> - Word 2 (does not have to be linked).</dd>
+<dd><code>language_2</code> - Language 2.</dd>
+<dt>Returns:</dt>
+<dd>True, if a translation can be derived; else false.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isTranslationLinked(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language,java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">
+<h3>isTranslationLinked</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isTranslationLinked</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConceptToBeTranslated,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_1,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConcept_2,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_2)</span></div>
+<div class="block">Checks whether linkedConceptToBeTranslated can be translated to linkedConcept_2.
+ Note that BOTH concepts have to be linked.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>linkedConceptToBeTranslated</code> - Linked concept</dd>
+<dd><code>language_1</code> - Language of linkedConceptToBeTranslated.</dd>
+<dd><code>linkedConcept_2</code> - Linked concept</dd>
+<dd><code>language_2</code> - Language of linkedConcept_2.</dd>
+<dt>Returns:</dt>
+<dd>True if translation from linkedConceptToBeTranslated to linkedConcept_2 possible, else false.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isTranslationNonLinked(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language,java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">
+<h3>isTranslationNonLinked</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isTranslationNonLinked</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConceptToBeTranslated,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_1,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nonlinkedConcept_2,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;language_2)</span></div>
+<div class="block">Checks whether linkedConceptToBeTranslated can be translated to non linked concept 2.
+ Note that the first concept has to be linked.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>linkedConceptToBeTranslated</code> - The linked concept.</dd>
+<dd><code>language_1</code> - Language of linkedConceptToBeTranslated.</dd>
+<dd><code>nonlinkedConcept_2</code> - Concept not linked (just a string).</dd>
+<dd><code>language_2</code> - Language of linkedConcept_2.</dd>
+<dt>Returns:</dt>
+<dd>True if translation from linkedConceptToBeTranslated to linkedConcept_2 possible, else false.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getNormalizedTranslations(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">
+<h3>getNormalizedTranslations</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">getNormalizedTranslations</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;linkedConcept,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;sourceLanguage,
+<a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;targetLanguage)</span></div>
+<div class="block">Looks for translations of the given string. The translations are non-aggressively normalized (lower-case etc.)
+ and returned.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>linkedConcept</code> - The linked concept for which translations shall be obtained.</dd>
+<dd><code>sourceLanguage</code> - Source language.</dd>
+<dd><code>targetLanguage</code> - Target language.</dd>
+<dt>Returns:</dt>
+<dd>The result is not a linked concept but instead a word that was normalized.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isUseTdb()">
+<h3>isUseTdb</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isUseTdb</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="normalizeForTranslations(java.util.HashSet)">
+<h3>normalizeForTranslations</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">normalizeForTranslations</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;setToBeNormalized)</span></div>
+<div class="block">Normalization Function for translations.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>setToBeNormalized</code> - Set whose strings shall be normalized.</dd>
+<dt>Returns:</dt>
+<dd>HashSet with Normalized Strings.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="normalizeForTranslations(java.lang.String)">
+<h3>normalizeForTranslations</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">normalizeForTranslations</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;stringToBeNormalized)</span></div>
 </section>
 </li>
 <li>
