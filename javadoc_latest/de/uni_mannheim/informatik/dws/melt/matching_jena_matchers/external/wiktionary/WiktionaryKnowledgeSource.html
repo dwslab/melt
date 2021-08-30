@@ -350,7 +350,7 @@ extends <a href="../SemanticWordRelationDictionary.html" title="class in de.uni_
 </tr>
 <tr class="alt-color" id="i14">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTranslationOf(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">getTranslationOf</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translation,
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTranslationOf(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">getTranslationOf</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translationString,
 <a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;languageOfTranslation)</code></th>
 <td class="col-last">
 <div class="block">Given a translation, find concepts which state that the given translation is their translation.</div>
@@ -763,12 +763,13 @@ extends <a href="../SemanticWordRelationDictionary.html" title="class in de.uni_
 <li>
 <section class="detail" id="getTranslationOf(java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.Language)">
 <h3>getTranslationOf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">getTranslationOf</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translation,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">getTranslationOf</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translationString,
 <a href="../Language.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external">Language</a>&nbsp;languageOfTranslation)</span></div>
 <div class="block">Given a translation, find concepts which state that the given translation is their translation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>translation</code> - The translation.</dd>
+<dd><code>translationString</code> - The translation (textual string).</dd>
+<dd><code>languageOfTranslation</code> - The language of the translationString.</dd>
 <dt>Returns:</dt>
 <dd>A set of concepts of which <code>translation</code> is the given translation.</dd>
 </dl>
