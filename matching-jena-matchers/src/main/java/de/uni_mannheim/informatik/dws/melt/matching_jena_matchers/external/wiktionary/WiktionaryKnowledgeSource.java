@@ -455,11 +455,13 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
 
             queryExecution.close();
             translationBuffer.put(key, result);
+            commit(WIKTIONARY_TRANSLATION_BUFFER);
             return result;
         } catch (Exception e){
             LOGGER.error("Could not execute getTranslation query for concept " + linkedConcept + " (" + sourceLanguage + " to " + targetLanguage + ")");
             LOGGER.error("Problematic Query:\n" + queryString);
             translationBuffer.put(key, new HashSet<>());
+            commit(WIKTIONARY_TRANSLATION_BUFFER);
             return null;
         }
     }
@@ -530,11 +532,13 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             }
             queryExecution.close();
             translationOfBuffer.put(key, result);
+            commit(WIKTIONARY_TRANSLATION_OF_BUFFER);
             return result;
         } catch (Exception e){
             LOGGER.error("Could not execute getTranslationOf query for concept " + translationString + " (" + languageOfTranslation + ")", e);
             LOGGER.error("Problematic Query:\n" + queryString);
             translationOfBuffer.put(key, new HashSet<>());
+            commit(WIKTIONARY_TRANSLATION_OF_BUFFER);
             return null;
         }
     }
@@ -683,7 +687,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
 
     /**
      * Commit persistence.
-     * @param persistence The persistence that is to be commited.
+     * @param persistence The persistence that is to be committed.
      */
     private void commit(PersistenceService.PreconfiguredPersistences persistence){
         if(persistence == null || persistenceService == null){
@@ -698,6 +702,12 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                 return;
             case WIKTIONARY_ASK_BUFFER:
                 persistenceService.commit(WIKTIONARY_ASK_BUFFER);
+                return;
+            case WIKTIONARY_TRANSLATION_BUFFER:
+                persistenceService.commit(WIKTIONARY_TRANSLATION_BUFFER);
+                return;
+            case WIKTIONARY_TRANSLATION_OF_BUFFER:
+                persistenceService.commit(WIKTIONARY_TRANSLATION_OF_BUFFER);
         }
     }
 
