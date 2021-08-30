@@ -119,10 +119,20 @@ public class WiktionaryKnowledgeSourceTest {
     @Test
     void getTranslationOf(){
         WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+
+        // run 1
         HashSet<String> result = wiktionary.getTranslationOf("bed", Language.ENGLISH);
         assertNotNull(result);
         assertTrue(result.size() > 0);
         assertTrue(result.contains("http://kaiko.getalp.org/dbnary/fra/lit"));
+
+        // run 2 to test buffer
+        result = wiktionary.getTranslationOf("bed", Language.ENGLISH);
+        assertNotNull(result);
+        assertTrue(result.size() > 0);
+        assertTrue(result.contains("http://kaiko.getalp.org/dbnary/fra/lit"));
+
+        // trying a french translation
         result = wiktionary.getTranslationOf("lit", Language.FRENCH);
         assertNotNull(result);
         assertTrue(result.size() > 0);
@@ -206,6 +216,9 @@ public class WiktionaryKnowledgeSourceTest {
         HashSet<String> dutchSpanishTranslation = wiktionary.getTranslation("topconferentie", Language.DUTCH, Language.ENGLISH);
         assertTrue(dutchSpanishTranslation.contains("summit conference"));
 
+        // running again to check buffer
+        dutchSpanishTranslation = wiktionary.getTranslation("topconferentie", Language.DUTCH, Language.ENGLISH);
+        assertTrue(dutchSpanishTranslation.contains("summit conference"));
 
         //---------------------
         // From German
