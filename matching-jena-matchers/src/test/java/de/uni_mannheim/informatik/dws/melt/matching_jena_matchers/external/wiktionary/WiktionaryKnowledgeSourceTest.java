@@ -107,7 +107,7 @@ public class WiktionaryKnowledgeSourceTest {
     }
 
     @Test
-    public void testGetSynonymsStringDBNaryLanguage() {
+    void testGetSynonymsStringDBNaryLanguage() {
         WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
 
         // buffer check
@@ -117,7 +117,20 @@ public class WiktionaryKnowledgeSourceTest {
     }
 
     @Test
-    public void testIsSynonymous() {
+    void getTranslationOf(){
+        WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
+        HashSet<String> result = wiktionary.getTranslationOf("bed", Language.ENGLISH);
+        assertNotNull(result);
+        assertTrue(result.size() > 0);
+        assertTrue(result.contains("http://kaiko.getalp.org/dbnary/fra/lit"));
+        result = wiktionary.getTranslationOf("lit", Language.FRENCH);
+        assertNotNull(result);
+        assertTrue(result.size() > 0);
+        assertTrue(result.contains("http://kaiko.getalp.org/dbnary/deu/Bett"));
+    }
+
+    @Test
+    void testIsSynonymous() {
         WiktionaryKnowledgeSource wiktionary = new WiktionaryKnowledgeSource();
         assertTrue(wiktionary.isSynonymous("dog", "hound"));
         assertTrue(wiktionary.isSynonymous("dog", "dog"));

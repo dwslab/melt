@@ -466,13 +466,14 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
 
     /**
      * Given a translation, find concepts which state that the given translation is their translation.
-     * @param translation The translation.
+     * @param translationString The translation (textual string).
+     * @param languageOfTranslation The language of the translationString.
      * @return A set of concepts of which {@code translation} is the given translation.
      */
-    public HashSet<String> getTranslationOf(String translation, Language languageOfTranslation){
+    public HashSet<String> getTranslationOf(String translationString, Language languageOfTranslation){
 
         // buffer lookup
-        String key = translation + "_" + languageOfTranslation;
+        String key = translationString + "_" + languageOfTranslation;
         if(translationOfBuffer.containsKey(key)){
             return translationOfBuffer.get(key);
         }
@@ -486,7 +487,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                     "?c dbnary:describes ?le .\n" +
                     "?t dbnary:isTranslationOf ?le .\n" +
                     "?t dbnary:targetLanguage <http://lexvo.org/id/iso639-3/" + languageOfTranslation.toWiktionaryChar3() + "> .\n" +
-                    "?t dbnary:writtenForm \"" + translation + "\"@" + languageOfTranslation.toWiktionaryLanguageTag() + " .\n" +
+                    "?t dbnary:writtenForm \"" + translationString + "\"@" + languageOfTranslation.toWiktionaryLanguageTag() + " .\n" +
                     "}";
         } else {
             // special case: Chinese
@@ -499,7 +500,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                     "?c dbnary:describes ?le .\n" +
                     "?t dbnary:isTranslationOf ?le .\n" +
                     "?t dbnary:targetLanguage <http://lexvo.org/id/iso639-3/yue> .\n" +
-                    "?t dbnary:writtenForm \"" + translation + "\"@yue .\n" +
+                    "?t dbnary:writtenForm \"" + translationString + "\"@yue .\n" +
                     "}\n" +
                     "}\n" +
                     "UNION\n"+
@@ -509,7 +510,7 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
                     "?c dbnary:describes ?le .\n" +
                     "?t dbnary:isTranslationOf ?le .\n" +
                     "?t dbnary:targetLanguage <http://lexvo.org/id/iso639-3/cmn> .\n" +
-                    "?t dbnary:writtenForm \"" + translation + "\"@cmn .\n" +
+                    "?t dbnary:writtenForm \"" + translationString + "\"@cmn .\n" +
                     "}\n" +
                     "}\n" +
                     "}\n";
@@ -527,10 +528,11 @@ public class WiktionaryKnowledgeSource extends SemanticWordRelationDictionary {
             while (queryResult.hasNext()) {
                 result.add(queryResult.next().getResource("c").getURI());
             }
+            queryExecution.close();
             translationOfBuffer.put(key, result);
             return result;
         } catch (Exception e){
-            LOGGER.error("Could not execute getTranslationOf query for concept " + translation + " (" + languageOfTranslation + ")", e);
+            LOGGER.error("Could not execute getTranslationOf query for concept " + translationString + " (" + languageOfTranslation + ")", e);
             LOGGER.error("Problematic Query:\n" + queryString);
             translationOfBuffer.put(key, new HashSet<>());
             return null;
