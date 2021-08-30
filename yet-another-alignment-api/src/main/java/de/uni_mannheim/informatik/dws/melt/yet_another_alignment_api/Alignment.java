@@ -372,7 +372,13 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
         return result;
     }
-    
+
+    /**
+     * Returns correspondences involving the specified source AND target.
+     * @param source Source (URI)
+     * @param target Target (URI)
+     * @return Iterable of correspondences involving source AND target (at the same time).
+     */
     public Iterable<Correspondence> getCorrespondencesSourceTarget(String source, String target) {
         return this.retrieve(QueryFactory.and(QueryFactory.equal(Correspondence.SOURCE, source), QueryFactory.equal(Correspondence.TARGET, target)));
     }
@@ -475,8 +481,13 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      public boolean isRelationContained(CorrespondenceRelation relation) {
         return getCorrespondencesRelation(relation).iterator().hasNext();
     }
-    
-    
+
+    /**
+     * Removes correspondences where source AND target appear (at the same time), i.e.
+     * {@code <source, target, someConfidence>}.
+     * @param source Source concept (typically URI)
+     * @param target Target concept (typically URI)
+     */
     public void removeCorrespondencesSourceTarget(String source, String target) {
         for(Correspondence c : getCorrespondencesSourceTarget(source, target)){
             this.remove(c);

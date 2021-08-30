@@ -127,3 +127,6 @@ matching-eval-client/dependency-reduced-pom.xml
 
 #text extractor with manual inspection
 /matching-jena-matchers/textExtractorManualInspection
+
+# mapdb files
+*.wal.0

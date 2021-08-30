@@ -14,6 +14,17 @@ public class AlignmentTest {
 
 
     @Test
+    public void getCorrespondencesSourceTarget(){
+        Alignment a = new Alignment();
+        a.add("A", "B", 0.5);
+        a.add("A", "C", 0.6);
+        a.add("A", "D", 0.7);
+        a.add("E", "B", 0.7);
+        a.removeCorrespondencesSourceTarget("A", "B");
+        assertEquals(3, a.size());
+    }
+
+    @Test
     public void getMaximalConfidence(){
         Alignment a = new Alignment();
         a.add("A", "B", 0.5);
