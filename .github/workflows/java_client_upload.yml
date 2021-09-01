@@ -23,15 +23,9 @@ jobs:
       - name: Build with Maven 📦
         run: |
           mvn clean install -Pjava8-tests
-          cd ./matching-eval-client
-      - name: Move jar to new folder
-        run: |
-          mkdir jar
-          mv ./matching-eval-client/target/matching-eval-client-3.2-SNAPSHOT.jar ./jar/matching-eval-client-3.2-SNAPSHOT.jar
-      - name: Deploy Jar 🚀
-        uses: JamesIves/github-pages-deploy-action@4.0.0
+          mv ./matching-eval-client/target/matching-eval-client-*-SNAPSHOT.jar ./matching-eval-client-latest.jar
+      - name: Upload evaluation client 🚀
+        uses: actions/upload-artifact@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: evaluation-client
-          folder: jar
-          target-folder: /jar
+          name: evaluation-client
+          path: matching-eval-client-latest.jar
