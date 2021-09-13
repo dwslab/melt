@@ -338,13 +338,7 @@
 
         <!-- GPG Signature on release -->
         <profile>
-            <id>release-profile</id> <!-- mvn ... -P release-profile -->
-            <activation>
-                <property> <!-- mvn ... -DperformRelease=true -->
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
+            <id>melt-release</id> <!-- mvn ... -P melt-release,default -->
             <build>
                 <plugins>
                     <plugin>
