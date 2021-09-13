@@ -38,4 +38,4 @@ ontology multiple times, when multiple matchers work together in a pipeline, or 
 The different levels at which a matcher can be developed as well as how the classes presented in this section work together, 
 are displayed in the figure below.
 
-![image](media/matcher_hierarchy.png)
+![image](/melt/media/matcher_hierarchy.png)

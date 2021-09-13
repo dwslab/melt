@@ -121,7 +121,7 @@ In addition to the already discussed `LiteralExtractors`, some special predefine
   even more because labels which appear in a comment are also not returned. 
 
 Following a small example:
-![image](/media/textExtractorExample.png)
+![image](/melt/media/textExtractorExample.png)
 
 In this example the `TextExtractorSet` extracts all literals except `endocrine glands` because the property `hypernym` is not used.
 Also note that `mynamespace:hasRelatedTerms`is of type `owl:AnnotationProperty` because otherwise `suprarenal glands` would be also not extracted.
