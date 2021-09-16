@@ -18,9 +18,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This matcher caller expects some matcher object and all other paramters as objects as well
- * and call it with apropiate type transformers such that the call can actually happen.
+ * and call it with appropriate type transformers such that the call can actually happen.
  */
 public class GenericMatcherCaller {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericMatcherCaller.class);
     
     /**
@@ -75,7 +77,7 @@ public class GenericMatcherCaller {
     }
     
     /**
-     * Calls a matcher objetc with the provided arguments.
+     * Calls a matcher object with the provided arguments.
      * @param matcher the matcher can be: <ul>
      *  <li>an object / instance which implements/extends {@link IMatcher}, {@link IMatcherCaller}, or {@link IOntologyMatchingToolBridge}</li>
      *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
@@ -91,7 +93,7 @@ public class GenericMatcherCaller {
     }
     
     /**
-     * Calls a matcher objetc with the provided arguments.
+     * Calls a matcher object with the provided arguments.
      * @param matcher the matcher can be: <ul>
      *  <li>an object / instance which implements/extends {@link IMatcher}, {@link IMatcherCaller}, or {@link IOntologyMatchingToolBridge}</li>
      *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
@@ -108,7 +110,7 @@ public class GenericMatcherCaller {
     }
     
     /**
-     * Calls a matcher objetc with the provided arguments.
+     * Calls a matcher object with the provided arguments.
      * @param matcher the matcher can be: <ul>
      *  <li>an object / instance which implements/extends {@link IMatcher}, {@link IMatcherCaller}, or {@link IOntologyMatchingToolBridge}</li>
      *  <li>a class object: a class which implements one of the above interfaces/classes - a new instance of this class will be created.</li>
@@ -212,12 +214,10 @@ public class GenericMatcherCaller {
         
         return new AlignmentAndParameters(result, parameters); // just return the same input parameters
     }
-    
-    
+
     /*****************************************
      * IMatcher and IMatcherCaller section
      *****************************************/
-    
     
     /**
      * Runs a matcher which implements the {@link IMatcher} interface.
@@ -259,7 +259,7 @@ public class GenericMatcherCaller {
             try{
                 transformedInputAlignment = paramTypes[2].newInstance();
             }catch(IllegalAccessException | InstantiationException | ExceptionInInitializerError | SecurityException ex){
-                LOGGER.warn("The optional inputAlignment parameter is null or object and thus a new instance of type {} was created which did not worked out (if you own the class, then you can add an empty constructor). Try to call the matcher with null value.", paramTypes[2], ex);
+                LOGGER.warn("The optional inputAlignment parameter is null or object and thus a new instance of type {} was created which did not work out (if you own the class, then you can add an empty constructor). Try to call the matcher with null value.", paramTypes[2], ex);
                 transformedInputAlignment = null;
             }
         }else{
@@ -277,7 +277,7 @@ public class GenericMatcherCaller {
             try{
                 transformedParameter = paramTypes[3].newInstance();
             }catch(IllegalAccessException | InstantiationException | ExceptionInInitializerError | SecurityException ex){
-                LOGGER.warn("The optional params parameter is null or object and thus a new instance of type {} was created which did not worked out (if you own the class, then you can add an empty constructor). Try to call the matcher with null value.", paramTypes[2], ex);
+                LOGGER.warn("The optional params parameter is null or object and thus a new instance of type {} was created which did not work out (if you own the class, then you can add an empty constructor). Try to call the matcher with null value.", paramTypes[2], ex);
                 transformedParameter = null;
             }
         }else{
@@ -333,8 +333,7 @@ public class GenericMatcherCaller {
         }
         return null;
     }
-    
-    
+
     /**
      * Runs a matcher which implements the {@link IMatcherCaller} interface.
      * @param matcher the matcher object

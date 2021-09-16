@@ -244,6 +244,7 @@ public class Main {
     private static final String SYSTEMS_OPTION = "systems";
     private static final String TRACK_OPTION = "track";
     private static final String LOCAL_TRACK_OPTION = "local-track";
+    private static final String SIMPLE_TRACK_OPTION = "simple-track"; // TODO
     private static final String LOCAL_TEST_CASE_OPTION = "local-testcase";
     private static final String HELP_OPTION_STRING = "help";
     private static final String RESULTS_DIRECTORY_OPTION = "results";
@@ -265,6 +266,7 @@ public class Main {
         // Track option
         Option trackOption = new Option("t", TRACK_OPTION, true, "The track to execute.\n" +
                 "Three arguments are required: -t <location_uri> <collection_name> <version>"
+                //+ "\nFor OAEI tracks, see https://dwslab.github.io/melt/track-repository#available-tracks"
         );
         trackOption.setArgs(3);
         options.addOption(trackOption);

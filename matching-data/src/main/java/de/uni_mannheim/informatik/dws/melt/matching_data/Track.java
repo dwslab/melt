@@ -37,7 +37,8 @@ import org.slf4j.LoggerFactory;
  * @author Sven Hertling
  * @author Jan Portisch
  */
-public abstract class Track {
+public abstract class Track implements Comparable<Track> {
+
 
     /**
      * Default Logger
@@ -594,5 +595,10 @@ public abstract class Track {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(Track otherTrack){
+        return (this.getName() + this.getVersion()).compareTo(otherTrack.getName() + otherTrack.getVersion());
     }
 }
