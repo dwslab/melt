@@ -1,9 +1,6 @@
 name: JavaDoc
 
-on:
-  push:
-    branches:
-      - gh-pages
+on: [push]
 
 jobs:
   build-and-deploy:
