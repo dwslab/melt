@@ -77,7 +77,13 @@ public class Main {
         TestCase testCase = null;
         if (cmd.hasOption(TRACK_OPTION)) {
             String[] trackData = cmd.getOptionValues(TRACK_OPTION);
-            if (trackData.length != 3) {
+            if (trackData.length == 1){
+                System.out.println("L1");
+            } else if (trackData.length == 2){
+                System.out.println("L1");
+            } else if (trackData.length == 3){
+                System.out.println("L1");
+            } else {
                 System.out.printf("Please state the track data as follows:\n" +
                         "--%s <location_uri> <collection_name> <version>\n", TRACK_OPTION);
                 return;
