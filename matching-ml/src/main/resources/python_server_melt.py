@@ -14,6 +14,7 @@ import pathlib
 import tempfile
 import re
 from datetime import datetime
+from collections import defaultdict
 
 logging.basicConfig(
     handlers=[logging.FileHandler(__file__ + ".log", "a+", "utf-8"), logging.StreamHandler(sys.stdout)],
@@ -1825,6 +1826,100 @@ def transformers_finetuning_hp_search():
     except Exception as e:
         import traceback
         return "ERROR " + traceback.format_exc()
+
+def inner_sentencetransformers_prediction(request_headers):
+    try:
+        transformers_init(request_headers)
+        
+        model_name = request_headers["model-name"]
+        using_tensorflow = request_headers["using-tf"].lower() == "true"
+        #training_arguments = json.loads(request_headers["training-arguments"])
+        tmp_dir = request_headers["tmp-dir"]
+        
+        corpus_file_name = request_headers["corpus-file-name"]
+        queries_file_name = request_headers["queries-file-name"]
+        
+        query_chunk_size = int(request_headers["query-chunk-size"])
+        corpus_chunk_size = int(request_headers["corpus-chunk-size"])
+        top_k = int(request_headers["topk"])
+        both_directions = request_headers["both-directions"].lower() == "true"
+        
+        from sentence_transformers import SentenceTransformer, util
+        import torch
+        
+        embedder = SentenceTransformer(model_name)
+
+        def load_file(file_path):
+            mapping_pos_to_id = dict()
+            corpus = []
+            with open(file_path, encoding="utf-8") as csvfile:
+                for i, row in enumerate(csv.reader(csvfile, delimiter=",")):
+                    mapping_pos_to_id[i] = row[0]
+                    corpus.append(row[1])
+            return corpus, mapping_pos_to_id
+
+        corpus, corpus_pos_to_id = load_file(corpus_file_name)
+        queries, queries_pos_to_id = load_file(queries_file_name)
+
+        app.logger.info('loaded corpora with %s corpus documents and %s query documents. Compute now embedding.', len(corpus), len(queries))
+
+        app.logger.info('Compute corpus embedding.')
+        corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
+        app.logger.info('Compute query embedding.')
+        query_embeddings = embedder.encode(queries, convert_to_tensor=True)
+
+        app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
+        if torch.cuda.is_available():
+            corpus_embeddings = corpus_embeddings.to('cuda')
+            query_embeddings = query_embeddings.to('cuda')
+
+        corpus_embeddings = util.normalize_embeddings(corpus_embeddings)
+        query_embeddings = util.normalize_embeddings(query_embeddings)
+
+        app.logger.info('Run semantic search with topk=%s', top_k)
+
+        hits = util.semantic_search(query_embeddings, corpus_embeddings, 
+            query_chunk_size, corpus_chunk_size, top_k, util.dot_score)
+
+        app.logger.info('Preparing results')
+        result_dict = defaultdict(set)
+        for query_pos, query_hits in enumerate(hits):
+            query_id = queries_pos_to_id[query_pos]
+            for hit in query_hits:
+                corpus_pos = hit['corpus_id']
+                corpus_id = corpus_pos_to_id[corpus_pos]
+                result_dict[(corpus_id, query_id)].add(hit['score'])
+
+        if both_directions:
+            app.logger.info('Run semantic search with topk=%s in other direction', top_k)
+            hits = util.semantic_search(corpus_embeddings, query_embeddings,
+                query_chunk_size, corpus_chunk_size, top_k, util.dot_score)
+            
+            for corpus_pos, corpus_hits in enumerate(hits):
+                corpus_id = corpus_pos_to_id[corpus_pos]
+                for hit in corpus_hits:
+                    query_pos = hit['corpus_id']
+                    query_id = queries_pos_to_id[query_pos]
+                    result_dict[(corpus_id, query_id)].add(hit['score'])
+        results = []
+        for (left, right), scores in result_dict.items():
+            results.append((left, right, max(scores)))
+
+        return results
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
+
+@app.route("/sentencetransformers-prediction", methods=["GET"])
+def sentencetransformers_prediction():
+    result = run_function_multi_process(request, inner_sentencetransformers_prediction)
+    if isinstance(result, str):
+        return result
+    else:
+        return jsonify(result)
+
+
+
 
 @app.route("/hello", methods=["GET"])
 def hello_demo() -> str:

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import org.apache.commons.io.FileUtils;
@@ -186,6 +187,37 @@ public class PythonServer {
         try {
             return JSON_MAPPER.readValue(resultString, JSON_MAPPER.getTypeFactory().constructCollectionType(List.class, Double.class));
         } catch (JsonProcessingException ex) {
+            throw new PythonServerException("Could not parse JSON", ex);
+        }
+    }
+    
+    /**
+     * Run a hyperparameter fine tuning.
+     * @param matcher the matcher
+     * @param corpusFile path to csv file with two columns (url, text representation).
+     * @param queriesFile path to csv file with two columns (url, text representation).
+     * @return the newly generated alignment
+     * @throws PythonServerException in case something goes wrong.
+     */
+    public Alignment sentenceTransformersPrediction(SentenceTransformersMatcher matcher, File corpusFile, File queriesFile) throws PythonServerException{
+        
+        HttpGet request = new HttpGet(serverUrl + "/sentencetransformers-prediction");
+        transformersUpdateBaseRequest(matcher, request);
+        
+        request.addHeader("corpus-file-name", getCanonicalPath(corpusFile));
+        request.addHeader("queries-file-name", getCanonicalPath(queriesFile));
+        
+        request.addHeader("query-chunk-size", Integer.toString(matcher.getQueryChunkSize()));
+        request.addHeader("corpus-chunk-size", Integer.toString(matcher.getCorpusChunkSize()));
+        request.addHeader("topk", Integer.toString(matcher.getTopK()));
+        request.addHeader("both-directions", Boolean.toString(matcher.isBothDirections()));
+        
+        
+        
+        String resultString = runRequest(request);
+        try {
+            return parseJSON(resultString);
+        } catch (Exception ex) {
             throw new PythonServerException("Could not parse JSON", ex);
         }
     }
