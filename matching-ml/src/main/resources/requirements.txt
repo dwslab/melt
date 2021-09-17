@@ -7,3 +7,4 @@ torch>=1.8.0
 transformers>=4.8.0
 ray[default]>=1.4.0
 ray[tune]>=1.4.0
+sentence-transformers>=2.0.0
