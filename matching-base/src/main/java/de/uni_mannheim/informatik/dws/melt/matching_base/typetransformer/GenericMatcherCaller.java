@@ -277,7 +277,7 @@ public class GenericMatcherCaller {
             try{
                 transformedParameter = paramTypes[3].newInstance();
             }catch(IllegalAccessException | InstantiationException | ExceptionInInitializerError | SecurityException ex){
-                LOGGER.warn("The optional params parameter is null or object and thus a new instance of type {} was created which did not worked out (if you own the class, then you can add an empty constructor). Try to call the matcher with null value.", paramTypes[2], ex);
+                LOGGER.warn("The optional params parameter is null or object and thus a new instance of type {} was created which did not worked out (if you own the class, then you can add an empty constructor). Try to call the matcher with null value.", paramTypes[3], ex);
                 transformedParameter = null;
             }
         }else{
