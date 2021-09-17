@@ -55,6 +55,17 @@ public class Main {
             return;
         }
 
+        // show tracks option
+        if (cmd.hasOption(SHOW_BUILTIN_TRACK)){
+            System.out.println("The following built-in tracks are available in MELT.");
+            System.out.println("You can directly use them with the track option -t <built-in track>");
+            System.out.println("(You do not need to specify further information.)\n");
+            for(String s : BuiltInTracks.getTrackOptions()){
+                System.out.println(s);
+            }
+            return;
+        }
+
         // default evaluation option
 
         // get systems
@@ -78,17 +89,20 @@ public class Main {
         if (cmd.hasOption(TRACK_OPTION)) {
             String[] trackData = cmd.getOptionValues(TRACK_OPTION);
             if (trackData.length == 1){
-                System.out.println("L1");
+                track = BuiltInTracks.getTrackByString(trackData[0]);
+                if(track == null){
+                    System.out.println("Could not find track '" + trackData[0] + "'.");
+                }
             } else if (trackData.length == 2){
-                System.out.println("L1");
+                track = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", trackData[0], trackData[1]);
             } else if (trackData.length == 3){
-                System.out.println("L1");
+                track = new SealsTrack(trackData[0], trackData[1], trackData[2]);
             } else {
                 System.out.printf("Please state the track data as follows:\n" +
                         "--%s <location_uri> <collection_name> <version>\n", TRACK_OPTION);
                 return;
             }
-            track = new SealsTrack(trackData[0], trackData[1], trackData[2]);
+
         } else if (cmd.hasOption(LOCAL_TRACK_OPTION)) {
             String[] trackData = cmd.getOptionValues(LOCAL_TRACK_OPTION);
             if (trackData.length != 3) {
@@ -250,7 +264,7 @@ public class Main {
     private static final String SYSTEMS_OPTION = "systems";
     private static final String TRACK_OPTION = "track";
     private static final String LOCAL_TRACK_OPTION = "local-track";
-    private static final String SIMPLE_TRACK_OPTION = "simple-track"; // TODO
+    private static final String SHOW_BUILTIN_TRACK = "show-tracks";
     private static final String LOCAL_TEST_CASE_OPTION = "local-testcase";
     private static final String HELP_OPTION_STRING = "help";
     private static final String RESULTS_DIRECTORY_OPTION = "results";
@@ -269,18 +283,24 @@ public class Main {
         systemOption.setArgs(Option.UNLIMITED_VALUES);
         options.addOption(systemOption);
 
+        // Show tracks option
+        Option showTracksOption = new Option("st", SHOW_BUILTIN_TRACK, false, "Show all built-in tracks.\n" +
+                "Those can be used with the -t option without specifying further information.");
+        options.addOption(showTracksOption);
+
         // Track option
         Option trackOption = new Option("t", TRACK_OPTION, true, "The track to execute.\n" +
-                "Three arguments are required: -t <location_uri> <collection_name> <version>"
-                //+ "\nFor OAEI tracks, see https://dwslab.github.io/melt/track-repository#available-tracks"
+                "Three arguments are required: -t <location_uri> <collection_name> <version>\n" +
+                "If you use a built-in track (list using -st), you can also provide one argument:\n" +
+                "-t <built-in-track> e.g. -t conference"
         );
-        trackOption.setArgs(3);
+        trackOption.setArgs(Option.UNLIMITED_VALUES); // allow for multiple arguments
         options.addOption(trackOption);
 
         // Local track option
         Option localTrackOption = new Option("lt", LOCAL_TRACK_OPTION, true, "The local track to execute.\n" +
                 "Three arguments are required: -lt <folder-to-testcases> <name> <version>");
-        trackOption.setArgs(3);
+        localTrackOption.setArgs(3);
         options.addOption(localTrackOption);
 
         // local test case option

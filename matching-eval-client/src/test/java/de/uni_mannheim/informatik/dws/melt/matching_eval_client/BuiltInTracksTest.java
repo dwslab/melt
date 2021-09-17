@@ -23,7 +23,7 @@ class BuiltInTracksTest {
         assertTrue(result.size() > 3);
 
         for(String s : result){
-            System.out.println(s + "\n");
+            System.out.println(s);
         }
     }
 

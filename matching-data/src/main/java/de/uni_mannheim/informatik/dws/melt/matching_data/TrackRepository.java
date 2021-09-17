@@ -24,71 +24,6 @@ public class TrackRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrackRepository.class);
 
     /**
-     * A map linking from each track to the allowed string representations to identify the track.
-     * The List order matters: The first string will be the preferred string which will show up in the command line
-     * client.
-     *
-     * The map is not complete. It contains only the latest version of the most-used tracks.
-     */
-    private static TreeMap<Track, List<String>> simpleNameToTrackMap;
-
-    static {
-        simpleNameToTrackMap = new TreeMap<>();
-
-        // anatomy
-        simpleNameToTrackMap.put(Anatomy.Default, new ArrayList<String>() {
-            {
-                add("anatomy");
-            }
-        });
-
-        // conference
-        simpleNameToTrackMap.put(Conference.V1, new ArrayList<String>() {
-            {
-                add("conference");
-            }
-        });
-
-        // knowledge graph
-        simpleNameToTrackMap.put(Knowledgegraph.V4, new ArrayList<String>(){
-            {
-                add("knowledgegraph");
-                add("kg");
-            }
-        });
-
-        // largebio
-        simpleNameToTrackMap.put(Largebio.V2016.ALL, new ArrayList<String>(){
-            {
-                add("largebio");
-            }
-        });
-
-        simpleNameToTrackMap.put(Multifarm.ALL_IN_ONE_TRACK, new ArrayList<String>(){
-            {
-                add("multifarm");
-            }
-        });
-    }
-
-    public static Track getTrackByString(String trackString){
-        if(trackString == null){
-            return null;
-        }
-        trackString = trackString.toLowerCase(Locale.ROOT).trim();
-
-        for(Map.Entry<Track, List<String>> entry : simpleNameToTrackMap.entrySet()){
-            for(String entryTrackString : entry.getValue()){
-                if(entryTrackString.equals(trackString)){
-                    return entry.getKey();
-                }
-            }
-        }
-        return null;
-    }
-
-
-    /**
      * Folder where the tracks and the corresponding test cases shall be cached.
      * This is just a forward call to Track.setCacheFolder but in TrackRepository, this function also makes sense.
      *
@@ -150,7 +85,7 @@ public class TrackRepository {
          */
         public static Track ALL_IN_ONE_TRACK = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "multifarm", "all-v2");
 
-        private static Set<String> languagePairs = new HashSet<String>(Arrays.asList( //all in all: 45
+        public static final Set<String> LANGUAGE_PAIRS = new HashSet<String>(Arrays.asList( //all in all: 45
                 "ar-cn", "ar-cz", "ar-de", "ar-en", "ar-es", "ar-fr", "ar-nl", "ar-pt", "ar-ru",
                 "cn-cz", "cn-de", "cn-en", "cn-es", "cn-fr", "cn-nl", "cn-pt", "cn-ru",
                 "cz-de", "cz-en", "cz-es", "cz-fr", "cz-nl", "cz-pt", "cz-ru",
@@ -170,7 +105,7 @@ public class TrackRepository {
 
         private static List<Track> calculateAllMultifarmTracks() {
             List<Track> benchmarks = new LinkedList<>();
-            for (String languagePair : languagePairs) {
+            for (String languagePair : LANGUAGE_PAIRS) {
                 benchmarks.add(getTrackByLanguagePair(languagePair));
             }
             return benchmarks;
@@ -187,7 +122,7 @@ public class TrackRepository {
         public static Track getSpecificMultifarmTrack(String languagePair) {
             if (languagePair == null) return null;
             languagePair = languagePair.trim().toLowerCase();
-            if (languagePairs.contains(languagePair))
+            if (LANGUAGE_PAIRS.contains(languagePair))
                 return getTrackByLanguagePair(languagePair);
             LOGGER.warn("Language pair " + languagePair + " could not found - returning null.");
             return null;
@@ -205,7 +140,7 @@ public class TrackRepository {
             language = language.trim().toLowerCase();
             ArrayList<String> resultTrackNames = new ArrayList<>();
             ArrayList<Track> result = new ArrayList<>();
-            for (String languagePair : languagePairs) {
+            for (String languagePair : LANGUAGE_PAIRS) {
                 if (languagePair.contains(language)) {
                     resultTrackNames.add(languagePair);
                 }
