@@ -29,6 +29,11 @@ class MainTest {
         Main.main(new String[]{"-h"});
     }
 
+    @Test
+    void showTracks(){
+        Main.main(new String[]{"-st"});
+    }
+    
     /**
      * Make sure not exceptions are thrown.
      */
@@ -60,9 +65,58 @@ class MainTest {
         assertTrue(trackPerformanceCubeFile.exists());
     }
 
+    /**
+     * Simple SEALS evaluation.
+     * This requires that the JRE is Java 8.
+     */
+    @Test
+    @Tag("Java8")
+    void evaluateSingleSealsFileOnJava8withTwoTrackParameters() {
+        String resultsDirectoryPath = "./cli_results2";
+        File resultsDirectory = new File(resultsDirectoryPath);
+        Main.main(new String[]{"-s",
+                loadFile("simpleSealsMatcher-1.0-seals_external.zip").getAbsolutePath(),
+                "-t", "conference", "conference-v1",
+                "-r", resultsDirectoryPath,
+        });
+
+        // check directory
+        assertTrue(resultsDirectory.exists());
+
+        // check single file in directory
+        File trackPerformanceCubeFile = new File(resultsDirectory, "trackPerformanceCube.csv");
+        assertTrue(trackPerformanceCubeFile.exists());
+    }
+
+    /**
+     * Simple SEALS evaluation.
+     * This requires that the JRE is Java 8.
+     */
+    @Test
+    @Tag("Java8")
+    void evaluateSingleSealsFileOnJava8withOneTrackParameter() {
+        String resultsDirectoryPath = "./cli_results3";
+        File resultsDirectory = new File(resultsDirectoryPath);
+        Main.main(new String[]{"-s",
+                loadFile("simpleSealsMatcher-1.0-seals_external.zip").getAbsolutePath(),
+                "-t", "conference",
+                "-r", resultsDirectoryPath,
+        });
+
+        // check directory
+        assertTrue(resultsDirectory.exists());
+
+        // check single file in directory
+        File trackPerformanceCubeFile = new File(resultsDirectory, "trackPerformanceCube.csv");
+        assertTrue(trackPerformanceCubeFile.exists());
+    }
+
+
     @AfterAll
     static void cleanUp(){
         deleteDirectory("./cli_results");
+        deleteDirectory("./cli_results2");
+        deleteDirectory("./cli_results3");
     }
 
     static void deleteDirectory(String dirPath){

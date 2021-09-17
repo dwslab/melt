@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
  */
 class TrackRepositoryTest {
 
-    
+
     @Test
     public void testAllDifferentIdAndVersion(){
         Set<String> alreadySeen = new HashSet<>();

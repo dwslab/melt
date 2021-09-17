@@ -646,7 +646,7 @@ public class TypeTransformerRegistry {
         try{
             return clazz.newInstance();
         }catch(InstantiationException | IllegalAccessException ex){
-            LOGGER.warn("Could not create a new instance of {} as a default value. Check if there is an empty constructor. Return null for now.");
+            LOGGER.warn("Could not create a new instance of {} as a default value. Check if there is an empty constructor. Return null for now.", clazz);
             return null;
         }
     }
