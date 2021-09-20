@@ -29,7 +29,7 @@ jobs:
           cd ./documentation/melt_doclet
           mvn clean install
       - name: Generate MarkDown Documentation 📚
-        run: mvn site -P ci-run
+        run: mvn site -P ci-run,default
       - name: Deploy MarkDown 🚀
         uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
