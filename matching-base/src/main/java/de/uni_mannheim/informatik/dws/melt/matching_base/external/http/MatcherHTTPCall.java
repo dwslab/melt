@@ -194,8 +194,8 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
                 }
                 currentTrials++;
                 if (currentTrials < maxTrials) {
-                    LOGGER.info("Endpoint is not ready / an exception occurred. Sleep for " + sleepTimeInSeconds + " " +
-                            "seconds and retry...");
+                    LOGGER.info("Endpoint is not ready / an exception occurred. Waiting {} seconds. Trial {}/{}", 
+                            sleepTimeInSeconds, currentTrials, maxTrials);
                     try {
                         Thread.sleep(sleepTimeInSeconds * 1000);
                     } catch (InterruptedException ie) {

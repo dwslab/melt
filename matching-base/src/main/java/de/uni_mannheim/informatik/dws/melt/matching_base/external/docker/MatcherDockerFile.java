@@ -1,5 +1,8 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.external.docker;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -26,7 +29,15 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.compressors.CompressorException;
+import org.apache.commons.compress.compressors.CompressorStreamFactory;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,11 +67,17 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
     private static final String OS_NAME = System.getProperty("os.name");
     private static final boolean IS_WINDOWS = OS_NAME.startsWith("Windows");
     
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     private static final int DEFAULT_EXPOSED_PORT = 8080;
     //other ports can be: OAEI  15159 (position alphabet)  or 6234 ( cellphone )
     
     private DockerClient dockerClient;
+    /**
+     * The callback for log entries.
+     * This is an attribute of the class because it should be closed.
+     */
+    private DockerLogCallback logCallback = null; 
     
     private String imageName;
     
@@ -151,7 +168,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
      *                       succeeded by a '-latest' postfix.
      */
     public MatcherDockerFile(File dockerImageFile){
-        this(getImageNameFromFile(dockerImageFile), dockerImageFile);
+        this(getImageNameFromFileContent(dockerImageFile), dockerImageFile);
     }
 
     public void loadDockerFile(File dockerImageFile){
@@ -168,7 +185,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
     }
      
     private void loadDockerFileInternal(File dockerImageFile){
-        LOGGER.info("Load docker image from file {} to docker registry.", dockerImageFile);
+        LOGGER.info("Load docker image from file {} to docker local registry. If image is already there, use constructor MatcherDockerFile(String imageName).", dockerImageFile);
         try (InputStream imagePayload = new BufferedInputStream(new FileInputStream(dockerImageFile))) {
             this.dockerClient.loadImageCmd(imagePayload).exec();
         } catch (IOException ex) {
@@ -201,13 +218,20 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
             LOGGER.warn("Could not create container and start it because the container id is null.");
             return;
         }            
+        this.logCallback = dockerClient.attachContainerCmd(r.getId())
+                .withStdErr(true)
+                .withStdOut(true)                
+                .withFollowStream(true)
+                .withLogs(true)
+                .exec(new DockerLogCallback());
+        
         dockerClient.startContainerCmd(this.containerId).exec();
         LOGGER.info("Container started with id {}", this.containerId);
-        if(this.containerId.length() > 12){
-            LOGGER.info("To see log output of container during execution, run: docker container logs {}", this.containerId.substring(0, 12));
-        }else{
-            LOGGER.info("To see log output of container during execution, run: docker container logs {}", this.containerId);
-        }
+        //if(this.containerId.length() > 12){
+        //    LOGGER.info("To see log output of container during execution, run: docker container logs {}", this.containerId.substring(0, 12));
+        //}else{
+        //    LOGGER.info("To see log output of container during execution, run: docker container logs {}", this.containerId);
+        //}
         /*
         this.dockerClient.attachContainerCmd(this.containerId)
                 .withStdErr(true)
@@ -220,6 +244,13 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
     private void stopContainer(){
         if(this.containerId == null)
             return;
+        if(this.logCallback != null){
+            try {
+                this.logCallback.close();
+            } catch (IOException ex) {
+                LOGGER.warn("Could not close stream of docker callback for standard out and standard error.", ex);
+            }
+        }
         
         dockerClient.stopContainerCmd(this.containerId).exec();        
         dockerClient.removeContainerCmd(this.containerId).exec();
@@ -347,15 +378,6 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
         }
     }
 
-    /**
-     * The naming convention of the MELT Web Docker files is such that the files carry the name of the image
-     * with an optional postfix of '-latest' such as 'my_image-latest.tar.gz'
-     * @param dockerFilePath The docker file path of which the image name shall be retrieved.
-     * @return The image name as String.
-     */
-    public static String getImageNameFromFile(String dockerFilePath){
-        return getImageNameFromFile(new File(dockerFilePath));
-    }
 
     /**
      * The naming convention of the MELT Web Docker files is such that the files carry the name of the image
@@ -363,7 +385,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
      * @param dockerFile The docker file of which the image name shall be retrieved.
      * @return The image name as String.
      */
-    public static String getImageNameFromFile(File dockerFile){
+    public static String getImageNameFromFileName(File dockerFile){
         String fileName = dockerFile.getName();
 
         // step 1: remove '.tar.gz'
@@ -375,7 +397,70 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
         }
         return imageName;
     }
-
+    
+    
+    /**
+     * Extracts the image name from the docker file content.
+     * In more detail, it analyzes the 'repositories' file and returns the key of the corresponding json.
+     * If something goes wrong, null is returned.
+     * If multiple images are contained in the file, only the first one is returned.
+     * @param dockerFile the docker file to extract the image name from. This file is usally created from a docker save command.
+     * @return the image name contained in the docker file.
+     */
+    public static String getImageNameFromFileContent(File dockerFile){
+        try(ArchiveInputStream archiveStream  = getUncompressedStream(new BufferedInputStream(new FileInputStream(dockerFile)))){
+            ArchiveEntry archiveEntry;
+            while ((archiveEntry = archiveStream.getNextEntry()) != null) {
+                if(archiveEntry.getName().equals("repositories")){
+                    JsonNode rootNode = mapper.readTree(archiveStream);
+                    if(rootNode == null){
+                        LOGGER.warn("File 'repositories' within docker file {} could not be parsed because it is empty.", dockerFile);
+                        return null;
+                    }
+                    Iterator<String> fields = rootNode.fieldNames();
+                    if(fields.hasNext() == false){
+                        LOGGER.warn("Could not extract image name from file. Repositories file has no elements.");
+                        return null;
+                    }
+                    String imageName = fields.next();
+                    if(StringUtils.isBlank(imageName)){
+                        LOGGER.warn("Extracted image name is blank.");
+                        return null;
+                    }
+                    
+                    if(fields.hasNext()){
+                        LOGGER.warn("Multiple images names exists in 'repositories' file within docker file {}. Choosing the first one.", dockerFile);
+                    }
+                    return imageName;
+                }
+            }
+            LOGGER.warn("Did not find the 'repositories' file within docker file {}.", dockerFile);
+            return null;
+        } catch(JsonParseException ex){
+            LOGGER.info("Could not parse json file 'repositories' within docker file " + dockerFile.getPath(), ex);
+            return null;
+        }
+        catch (IOException ex) {
+            LOGGER.warn("IOException occured during extraction of docker image name. Return null.", ex);
+            return null;
+        } catch (ArchiveException ex) {
+            LOGGER.warn("Docker file is not a archive (e.g. tar etc)", ex);
+            return null;
+        }
+    }
+    
+    private static ArchiveInputStream getUncompressedStream(InputStream inputStream) throws ArchiveException{
+        try{
+            inputStream = new CompressorStreamFactory().createCompressorInputStream(inputStream);
+        }catch(CompressorException ex){
+            // Stream not compressed (or unknown compression scheme)
+        }
+        if (!inputStream.markSupported()) {
+          inputStream = new BufferedInputStream(inputStream);
+        }
+        return new ArchiveStreamFactory().createArchiveInputStream(inputStream);
+    }
+    
     public String getAllLogLinesFromContainer(){
         if(this.containerId == null || this.containerId.isEmpty()){
             LOGGER.warn("Would like to log last lines of container but container is not started or already stopped. " +

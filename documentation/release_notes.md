@@ -4,10 +4,12 @@
 ## Changes in 3.2
 
 **New**
+- introduced a new matcher: [`SentenceTransformersMatcher`](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/SentenceTransformersMatcher.java)
 
 **Fixed**
 
 **Improvements**
+- documentation about jena interfaces like `LiteralExtractor` and ` TextExtractor`
 
 
 ## Changes in 3.1
