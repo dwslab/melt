@@ -4,6 +4,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * This test uses the SPARQL endpoint of DBnary and requires a working internet connection.
  */
+@Disabled
 class WiktionaryLinkerTest {
 
     
