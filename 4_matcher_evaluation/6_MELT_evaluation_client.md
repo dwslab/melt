@@ -10,7 +10,7 @@ permalink: /matcher-evaluation/client
 
 If you have one or more packaged matching systems ([SEALS](https://dwslab.github.io/melt/matcher-packaging/seals), [Docker Web](https://dwslab.github.io/melt/matcher-packaging/web#melt-web-packaging)) or simply a URL pointing to a matching service and want to evaluate those, you can [write a Java program to evaluate those](https://dwslab.github.io/melt/matcher-evaluation#more-complex-evaluation-example).
 
-Alternatively, you can use the **MELT Evaluation Client** which is discussed in this section. The client is a simple java command line tool that is executed in a terminal and does not require any coding skills or deep understanding of MELT, SEALS, or the Docker Web format. The client requires as input IDs of the available [built-in tracks](https://dwslab.github.io/melt/track-repository). Alternatively, [local tracks/ontologies](https://github.com/dwslab/melt/blob/gh-pages/4_matcher_evaluation/5_MELT_evaluation_client.md#evaluating-a-local-test-case) can alo be given as input.
+Alternatively, you can use the **MELT Evaluation Client** which is discussed in this section. The client is a simple java command line tool that is executed in a terminal and does not require any coding skills or deep understanding of MELT, SEALS, or the Docker Web format. The client requires as input IDs of the available [built-in tracks](https://dwslab.github.io/melt/track-repository). Alternatively, [local tracks/ontologies](https://dwslab.github.io/melt/matcher-evaluation/client#evaluating-a-local-test-case) can alo be given as input.
 
 
 You can download the [latest version of the command line tool on GitHub](https://nightly.link/dwslab/melt/workflows/java_client_upload/master/evaluation-client.zip).

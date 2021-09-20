@@ -34,7 +34,7 @@ The swagger documentation is displayed below /
 Any matcher which extends a MELT matcher class can be packaged using the Web format. 
 MELT will generate a (Jetty) server for your matching system and will package everything in a docker tarball that you can share together with the image name. 
 
-### Package Your First Matcher with MELT
+## Package Your First Matcher with MELT
 **Prerequisites**: Maven, Java, and Docker must be installed. Docker must be running during the build process.
 
 1. Copy the project in [examples/simpleWebMatcher/](https://github.com/dwslab/melt/tree/master/examples/simpleWebMatcher) to your workspace.
@@ -48,9 +48,9 @@ Make sure that docker is running.
 
 # Evaluate and Re-Use a Web Interface Matcher in MELT
 
-### Evaluate and Re-Use the Docker File
+## Evaluate and Re-Use the Docker File
 If you have a docker tar.gz together with the image name, you can use class `MatcherDockerFile` to wrap the docker tar as matcher.
-You can then re-use the instance in any matching pipeline or evaluate the instance as shown in the following code exmaple:
+You can then re-use the instance in any matching pipeline or evaluate the instance as shown in the following code example:
 
 ```java
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.docker.MatcherDockerFile;
@@ -82,13 +82,31 @@ public class EvaluationDockerMatcher {
 }
 ```
 
+**Debugging possibilities**
+To see what is happening within the docker and get the log of the matcher running inside the container,
+you can add the following lines after calling `Executor.run`:
+```
+ExecutionResultSet ers = Executor.run(TrackRepository.Conference.V1.getFirstTestCase(), dockerMatcher);
+
+Thread.sleep(20000); // just to be sure that all logs are written.
+dockerMatcher.logAllLinesFromContainer();  // this will output the log of the container
+
+// evaluating our system ...
+```
+
 **Common Errors and Problems**
 -  I have the docker tar.gz but I am not sure about the image name.<br/>
-Unfortunately, the MELT framework cannot extract the image name from the tar.gz automatically. However, you can load the docker image and the image name will be printed on the console (`docker load -i <file>`). Note that
-that MELT names the tar.gz file according to the image name.
+If you package the matcher with MELT and the file name is e.g. `simplewebmatcher-1.0-web-latest.tar.gz` then the image name
+is `simplewebmatcher-1.0-web` (thus without the tag `latest` and file ending `tar.gz`).
+Note here that the matcher name (`simplewebmatcher`) and version (`1.0`) is different for your matcher.
+In case you call the [constructor `MatcherDockerFile(File dockerImageFile)`](https://github.com/dwslab/melt/blob/6fe6d924a7bfe8c06a244fcaa2363572adb382e1/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/external/docker/MatcherDockerFile.java#L153), the image name is extracted automatically for you.
+Another option to find out the image name is to call `docker load -i <file>`  which will print the image name on the console.
+If you already know parts of the name and the image is build locally (when packaging a matcher on the same device) you can also call `docker images` which will list all images with their names.
 
+- In case of a `ClassNotFoundException: com.github.dockerjava.core.DockerClientConfig` <br/>
+Please have a look at [FAQ](https://dwslab.github.io/melt/faq#evaluation-of-a-docker-based-matcher)
 
-### Evaluate and Re-Use a Running Web Service
+## Evaluate and Re-Use a Running Web Service
 If you do not have a docker tar.gz but instead you want to use a running Web service, you can use class `MatcherHTTPCall` to wrap the Web service as a matcher. In the constructor, you have to specify the endpoint URL on which the service runs.
 The service must implement the [Web Interface](#web-interface-(http-matching-interface)).
 You can then re-use the instance in any matching pipeline or evaluate the instance as shown in the following code exmaple:
