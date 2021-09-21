@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 public class MeltUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(MeltUtil.class);
     private static final String NEWLINE = System.getProperty("line.separator");
-    private static final String VERSION_NOT_FOUND = "version not detected";
-    private static final String HASH_NOT_FOUND = "git hash not found";
     
     private static final String WELCOME = createWelcomeMessage();
    
@@ -28,16 +26,22 @@ public class MeltUtil {
         "|_|  |_|______|______|_|    "
         ));
         String meltversion = getMeltVersion();
-        if(!meltversion.equals(VERSION_NOT_FOUND)){
+        if(!meltversion.isEmpty()){
             welcomeMessage += meltversion;
         }
-        String melthash = getMeltHash();
-        if(!meltversion.equals(HASH_NOT_FOUND)){
-            welcomeMessage += " (" + melthash + ")";
+        String melthash = getMeltShortHash();
+        if(!melthash.isEmpty()){
+            welcomeMessage += " (git commit " + melthash + ")";
         }
         return welcomeMessage;
     }
-            
+    
+    /**
+     * ASCII welcome text logged to INFO (also includes the version).
+     */
+    public static String getWelcomeMessage(){
+        return WELCOME;
+    }
             
     /**
      * ASCII welcome text logged to INFO (also includes the version).
@@ -48,18 +52,36 @@ public class MeltUtil {
     
     /**
      * Get the melt version.
+     * If version can not be detected or found, return the empty string.
      * @return the melt version as a string.
      */
     public static String getMeltVersion(){
-        return getMeltPropertyOrDefault("melt.version", VERSION_NOT_FOUND);
+        return getMeltPropertyOrDefault("melt.version", "", "${project.version}");
     }
     
     /**
      * Returns the git commit hash of the MELT build.
+     * If hash can not be detected or found, return the empty string.
      * @return the git commit hash of the MELT build
      */
     public static String getMeltHash(){
-        return getMeltPropertyOrDefault("melt.build.hash", HASH_NOT_FOUND);
+        return getMeltPropertyOrDefault("melt.build.hash", "", "${env.GITHUB_SHA}");
+    }
+    
+    /**
+     * Returns the short git commit hash of the MELT build.
+     * If hash can not be detected or found, return the empty string.
+     * @return the short git commit hash of the MELT build
+     */
+    public static String getMeltShortHash(){
+        String longHash = getMeltHash();
+        if(longHash.isEmpty())
+            return "";
+        
+        if(longHash.length() < 7){
+            return "";
+        }
+        return longHash.substring(0, 7);
     }
     
     private static Properties MELT_PROPERTIES;
@@ -82,6 +104,20 @@ public class MeltUtil {
             return defaultValue;
         val = val.trim();
         if(val.isEmpty())
+            return defaultValue;
+        return val;
+    }
+    
+    public static String getMeltPropertyOrDefault(String key, String defaultValue, String initialValue){
+        if(MELT_PROPERTIES == null)
+            MELT_PROPERTIES = loadMeltProperties();
+        String val = MELT_PROPERTIES.getProperty(key);
+        if(val == null)
+            return defaultValue;
+        val = val.trim();
+        if(val.isEmpty())
+            return defaultValue;
+        if(val.equals(initialValue))
             return defaultValue;
         return val;
     }
