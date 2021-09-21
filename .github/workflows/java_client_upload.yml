@@ -22,7 +22,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-1
       - name: Build with Maven 📦
         run: |
-          mvn clean install -Pjava8-tests -Dbuildhash="$GITHUB_SHA"
+          mvn clean install -Pjava8-tests
           mv ./matching-eval-client/target/matching-eval-client-*-SNAPSHOT.jar ./matching-eval-client-latest.jar
       - name: Upload evaluation client 🚀
         uses: actions/upload-artifact@v2
