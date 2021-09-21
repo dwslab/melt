@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -102,28 +102,18 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </thead>
 <tbody>
 <tr class="alt-color">
-<td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#HASH_NOT_FOUND">HASH_NOT_FOUND</a></span></code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="row-color">
 <td class="col-first"><code>private static org.slf4j.Logger</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#MELT_PROPERTIES">MELT_PROPERTIES</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
-<td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#NEWLINE">NEWLINE</a></span></code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
 <tr class="alt-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#VERSION_NOT_FOUND">VERSION_NOT_FOUND</a></span></code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#NEWLINE">NEWLINE</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
@@ -195,17 +185,38 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr class="row-color" id="i3">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMeltPropertyOrDefault(java.lang.String,java.lang.String,java.lang.String)">getMeltPropertyOrDefault</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;defaultValue,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialValue)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMeltShortHash()">getMeltShortHash</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the short git commit hash of the MELT build.</div>
+</td>
+</tr>
+<tr class="row-color" id="i5">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMeltVersion()">getMeltVersion</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Get the melt version.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="alt-color" id="i6">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getWelcomeMessage()">getWelcomeMessage</a></span>()</code></th>
+<td class="col-last">
+<div class="block">ASCII welcome text logged to INFO (also includes the version).</div>
+</td>
+</tr>
+<tr class="row-color" id="i7">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#loadMeltProperties()">loadMeltProperties</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="alt-color" id="i8">
 <td class="col-first"><code>static void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#logWelcomeMessage()">logWelcomeMessage</a></span>()</code></th>
 <td class="col-last">
@@ -240,26 +251,6 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="detail" id="NEWLINE">
 <h3>NEWLINE</h3>
 <div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">NEWLINE</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="VERSION_NOT_FOUND">
-<h3>VERSION_NOT_FOUND</h3>
-<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">VERSION_NOT_FOUND</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_base.MeltUtil.VERSION_NOT_FOUND">Constant Field Values</a></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="HASH_NOT_FOUND">
-<h3>HASH_NOT_FOUND</h3>
-<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">HASH_NOT_FOUND</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_base.MeltUtil.HASH_NOT_FOUND">Constant Field Values</a></dd>
-</dl>
 </section>
 </li>
 <li>
@@ -303,6 +294,13 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </section>
 </li>
 <li>
+<section class="detail" id="getWelcomeMessage()">
+<h3>getWelcomeMessage</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getWelcomeMessage</span>()</div>
+<div class="block">ASCII welcome text logged to INFO (also includes the version).</div>
+</section>
+</li>
+<li>
 <section class="detail" id="logWelcomeMessage()">
 <h3>logWelcomeMessage</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">logWelcomeMessage</span>()</div>
@@ -313,7 +311,8 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="detail" id="getMeltVersion()">
 <h3>getMeltVersion</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getMeltVersion</span>()</div>
-<div class="block">Get the melt version.</div>
+<div class="block">Get the melt version.
+ If version can not be detected or found, return the empty string.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the melt version as a string.</dd>
@@ -324,10 +323,23 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="detail" id="getMeltHash()">
 <h3>getMeltHash</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getMeltHash</span>()</div>
-<div class="block">Returns the git commit hash of the MELT build.</div>
+<div class="block">Returns the git commit hash of the MELT build.
+ If hash can not be detected or found, return the empty string.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the git commit hash of the MELT build</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getMeltShortHash()">
+<h3>getMeltShortHash</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getMeltShortHash</span>()</div>
+<div class="block">Returns the short git commit hash of the MELT build.
+ If hash can not be detected or found, return the empty string.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the short git commit hash of the MELT build</dd>
 </dl>
 </section>
 </li>
@@ -342,6 +354,14 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <h3>getMeltPropertyOrDefault</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getMeltPropertyOrDefault</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;defaultValue)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getMeltPropertyOrDefault(java.lang.String,java.lang.String,java.lang.String)">
+<h3>getMeltPropertyOrDefault</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getMeltPropertyOrDefault</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;defaultValue,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialValue)</span></div>
 </section>
 </li>
 </ul>
