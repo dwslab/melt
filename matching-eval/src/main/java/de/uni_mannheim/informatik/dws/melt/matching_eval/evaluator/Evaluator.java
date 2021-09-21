@@ -146,8 +146,29 @@ public abstract class Evaluator {
     protected File getResultsDirectoryTrackMatcher(File baseDirectory, Track track){
         try {
             return Paths.get(baseDirectory.getAbsolutePath(),
-                    URLEncoder.encode(track.getName(), "UTF-8") + "_" + URLEncoder.encode(track.getVersion(), "UTF-8") + "/aggregated")
-                    .toFile();
+                    URLEncoder.encode(track.getName(), "UTF-8") + "_" + URLEncoder.encode(track.getVersion(), "UTF-8"),
+                    "aggregated"
+                    ).toFile();
+        } catch (UnsupportedEncodingException ex) {
+            LOGGER.error("Could not crreate results folder", ex);
+            return Paths.get(baseDirectory.getAbsolutePath()).toFile();
+        }
+    }
+    
+    /**
+     * Given a base directory and a test case, the target directory will be returned for aggregated results.
+     * @param baseDirectory Base directory for evaluation results.
+     * @param track Track
+     * @param matcherName the name of ther matcher
+     * @return Directory where aggregated evaluation results can be persisted.
+     */
+    protected File getResultsDirectoryTrackMatcher(File baseDirectory, Track track, String matcherName){
+        try {
+            return Paths.get(baseDirectory.getAbsolutePath(),
+                    URLEncoder.encode(track.getName(), "UTF-8") + "_" + URLEncoder.encode(track.getVersion(), "UTF-8"),
+                    "aggregated",
+                    URLEncoder.encode(matcherName, "UTF-8")
+                    ).toFile();
         } catch (UnsupportedEncodingException ex) {
             LOGGER.error("Could not crreate results folder", ex);
             return Paths.get(baseDirectory.getAbsolutePath()).toFile();

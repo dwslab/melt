@@ -316,7 +316,7 @@ public class EvaluatorCSV extends Evaluator {
         ConfusionMatrix macroPropertiesResidualCm = confusionMatrixMetric.getMacroAveragesForResults(this.results.getGroup(track, matcher, propertyRefiner, residualRefiner));
         ConfusionMatrix macroInstancesResidualCm = confusionMatrixMetric.getMacroAveragesForResults(this.results.getGroup(track, matcher, instanceRefiner, residualRefiner));
 
-        File fileToBeWritten = new File(getResultsDirectoryTrackMatcher(baseDirectory, track), "/" + matcher + "/aggregatedPerformance.csv");
+        File fileToBeWritten = new File(getResultsDirectoryTrackMatcher(baseDirectory, track, matcher), "aggregatedPerformance.csv");
         fileToBeWritten.getParentFile().mkdirs();
         //    LOGGER.info("Results directory created because it did not exist.");
 
