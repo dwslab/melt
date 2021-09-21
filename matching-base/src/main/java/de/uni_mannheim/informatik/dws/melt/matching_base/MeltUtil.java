@@ -12,19 +12,30 @@ import org.slf4j.LoggerFactory;
 public class MeltUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(MeltUtil.class);
     private static final String NEWLINE = System.getProperty("line.separator");
+    private static final String VERSION_NOT_FOUND = "version not detected";
+    private static final String HASH_NOT_FOUND = "git hash not found";
     
     private static final String WELCOME = createWelcomeMessage();
    
     private static String createWelcomeMessage(){
-        return String.join(NEWLINE, Arrays.asList(
+        String welcomeMessage = String.join(NEWLINE, Arrays.asList(
         "Welcome to",
         " __  __ ______ _   _______ ",
         "|  \\/  |  ____| | |__   __|",
         "| \\  / | |__  | |    | |   ",
         "| |\\/| |  __| | |    | |   ",
         "| |  | | |____| |____| |   ",
-        "|_|  |_|______|______|_|    " + getMeltVersion()
+        "|_|  |_|______|______|_|    "
         ));
+        String meltversion = getMeltVersion();
+        if(!meltversion.equals(VERSION_NOT_FOUND)){
+            welcomeMessage += meltversion;
+        }
+        String melthash = getMeltHash();
+        if(!meltversion.equals(HASH_NOT_FOUND)){
+            welcomeMessage += " (" + melthash + ")";
+        }
+        return welcomeMessage;
     }
             
             
@@ -40,7 +51,15 @@ public class MeltUtil {
      * @return the melt version as a string.
      */
     public static String getMeltVersion(){
-        return getMeltPropertyOrDefault("melt.version", "version not detected");
+        return getMeltPropertyOrDefault("melt.version", VERSION_NOT_FOUND);
+    }
+    
+    /**
+     * Returns the git commit hash of the MELT build.
+     * @return the git commit hash of the MELT build
+     */
+    public static String getMeltHash(){
+        return getMeltPropertyOrDefault("melt.build.hash", HASH_NOT_FOUND);
     }
     
     private static Properties MELT_PROPERTIES;
@@ -58,6 +77,12 @@ public class MeltUtil {
     public static String getMeltPropertyOrDefault(String key, String defaultValue){
         if(MELT_PROPERTIES == null)
             MELT_PROPERTIES = loadMeltProperties();
-        return MELT_PROPERTIES.getProperty(key, defaultValue);
+        String val = MELT_PROPERTIES.getProperty(key);
+        if(val == null)
+            return defaultValue;
+        val = val.trim();
+        if(val.isEmpty())
+            return defaultValue;
+        return val;
     }
 }
