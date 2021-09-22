@@ -24,7 +24,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.di
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MultiSourceDispatcherTransitivePairsOrderBased;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MultiSourceDispatcherTransitivePairsTextBased;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.wrapper.ParisMatcher;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.wrapper.UriInterfaceWrapper;
 import static de.uni_mannheim.informatik.dws.melt.multisourceexperiment.Main.BASE_MATCHER;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.DefaultExtensions;
