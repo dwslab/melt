@@ -45,3 +45,8 @@ Finally you can create the final result overview with:
 ```
 java -jar multisourceexperiment-1.0-jar-with-dependencies.jar -w {your results folder}
 ```
+e.g.
+```
+java -jar multisourceexperiment-1.0-jar-with-dependencies.jar -w results/results_2021-08-01_14-39-50
+```
+this generates a new results folder which contains a Latex file. 
