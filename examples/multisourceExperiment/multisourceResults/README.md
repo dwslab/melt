@@ -1,3 +1,5 @@
+# Explanation of results files
+
 File knowledge_graph.csv and knowledge_graph_extended.csv corresponding to table 1 in the paper.
 For the conference track, only the extended version (conference_extended.csv) is shown in table 2 whereas
 conference.csv is only executed but not shown in the paper due to space reasons.
@@ -13,8 +15,8 @@ Matcher - the name of the matching system (this also includes the base matcher a
 Type    - All results are divided into ALL, CLASSES, PROPERTIES, and INSTANCES (not that the runtimes are only given for the ALL case)
 Macro/Micro Precision, Recall and F1 - usual measures
 Residual Macro/Micro Recall          - this measure shows the recall in comparison to a simple matcher (string comparisons)
-# of TP/ Residual TP/ FP / FN        - the absolute numbers of true positives, true positives (without the ones from the simple matcher), false positives, and false negatives
-# of Correspondences                 - number of correspondences returned by the system under test
+\# of TP/ Residual TP/ FP / FN        - the absolute numbers of true positives, true positives (without the ones from the simple matcher), false positives, and false negatives
+\# of Correspondences                 - number of correspondences returned by the system under test
 Total Runtime                        - the total runtime in nano seconds (for reference)
 Total Runtime(HH:MM:SS)              - the total runtime formatted as HH:MM:SS
 BaseMatcher                          - the base matcher used by the multi source strategy
