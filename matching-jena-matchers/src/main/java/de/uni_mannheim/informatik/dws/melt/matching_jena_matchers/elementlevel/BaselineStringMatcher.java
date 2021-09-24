@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.URIUtil;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import org.apache.jena.ontology.OntModel;
@@ -83,15 +84,18 @@ public class BaselineStringMatcher extends MatcherYAAAJena {
      * @return Label or local name. Null if resource is anonymous.
      */
     public static String getLabelOrFragment(OntResource resource) {
-        if (resource.isAnon()) {
+        if (resource == null){
             return null;
         }
         ExtendedIterator<RDFNode> iterator = resource.listLabels(null);
         while (iterator.hasNext()) {
             RDFNode node = iterator.next();
-            return node.asLiteral().toString();
+            return node.asLiteral().getLexicalForm();
         }
         // no label found: return local name
-        return resource.getLocalName();
+        if(resource.isURIResource()) {
+            return URIUtil.getUriFragment(resource.getURI());
+        }
+        return null;
     }
 }
