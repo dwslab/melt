@@ -22,6 +22,7 @@ import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherURL;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.http.MatcherHTTPCall;
 import java.io.BufferedInputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -60,7 +61,7 @@ import org.slf4j.LoggerFactory;
  * }</pre>
 With this in place everything should work.
 */
-public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
+public class MatcherDockerFile extends MatcherURL implements Closeable {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherDockerFile.class);
@@ -334,7 +335,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         stopContainer();
         this.dockerClient.close();
     }
@@ -353,32 +354,57 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
         this.connectTimeout = connectTimeout;
         this.connectionRequestTimeout = connectionRequestTimeout;
     }
-    
-    /**
-     * Calling this function will log the last x lines from the container.
-     * @param numberOfLastLines the number of last lines to log.
-     */
-    public void logLastLinesFromContainer(int numberOfLastLines){
-        if(this.containerId == null || this.containerId.isEmpty()){
-            LOGGER.warn("Would like to log last lines of container but container is not started or already stopped. " +
-                    "Maybe the close method was already called?");
-            return;
-        }
-        
-        DockerLogCallback callback = dockerClient.logContainerCmd(this.containerId)
-                .withStdOut(true)
-                .withStdErr(true)
-                .withTail(numberOfLastLines)
-                .exec(new DockerLogCallback());
-        try {
-            callback.awaitCompletion(5, TimeUnit.SECONDS);
 
-        } catch (InterruptedException ex) {
-            LOGGER.warn("Interrupted during wait", ex);
-        }
+    /**
+     * Retunrs the image name which is used by this matcher.
+     * @return the docker image name
+     */
+    public String getImageName() {
+        return imageName;
     }
 
+    /**
+     * Return true if the docker container should only listen on localhost.
+     * This means the matcher service can only be called from the same maschine.
+     * If access to the service is required also from outside, then change the parameter in the constructor.
+     * @return true if the docker container should only listen on localhost
+     */
+    public boolean isRunOnlyLocalhost() {
+        return runOnlyLocalhost;
+    }
 
+    /**
+     * The container id which used. It returns null if the container is not running (eg. not started or already stopped).
+     * @return containter id or null if container is not running.
+     */
+    public String getContainerId() {
+        return containerId;
+    }
+
+    /**
+     * The port on which the matching service is avilable.
+     * Usually http://localhost:{hostPort}/match
+     * @return the port to which the matcher service whithin the container is mapped to the host.
+     */
+    public int getHostPort() {
+        return hostPort;
+    }
+
+    /**
+     * Returns true, if for each call to the match function, a new docker container should be created.
+     * If false, the docker container is created when instantiating the MatcherDockerFile (e.g. in the constuctor).
+     * Then the close method should be also called to stop the container.
+     * @return true, if for each call to the match function, a new docker container should be created. False otherwise.
+     */
+    public boolean isFreshInstance() {
+        return freshInstance;
+    }
+
+    @Override
+    public String toString() {
+        return getImageName() + "-MatcherDockerFile";
+    }
+    
     /**
      * The naming convention of the MELT Web Docker files is such that the files carry the name of the image
      * with an optional postfix of '-latest' such as 'my_image-latest.tar.gz'
@@ -461,6 +487,11 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
         return new ArchiveStreamFactory().createArchiveInputStream(inputStream);
     }
     
+    /**
+     * Returns the all lines of the log from the container.
+     * @deprecated this function should not be useful anymore because the output is directly (and automatically) logged.
+     * @return all lines of the log from the container
+     */
     public String getAllLogLinesFromContainer(){
         if(this.containerId == null || this.containerId.isEmpty()){
             LOGGER.warn("Would like to log last lines of container but container is not started or already stopped. " +
@@ -485,6 +516,7 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
 
     /**
      * Calling this function will log all lines from the container using SLF4J.
+     * @deprecated this function should not be useful anymore because the output is directly (and automatically) logged.
      */
     public void logAllLinesFromContainer(){
         if(this.containerId == null || this.containerId.isEmpty()){
@@ -500,6 +532,31 @@ public class MatcherDockerFile extends MatcherURL implements AutoCloseable {
                 .exec(new DockerLogCallback());
         try {
             callback.awaitCompletion(5, TimeUnit.SECONDS);
+        } catch (InterruptedException ex) {
+            LOGGER.warn("Interrupted during wait", ex);
+        }
+    }
+    
+    /**
+     * Calling this function will log the last x lines from the container.
+     * @param numberOfLastLines the number of last lines to log.
+     * @deprecated this function should not be useful anymore because the output is directly (and automatically) logged.
+     */
+    public void logLastLinesFromContainer(int numberOfLastLines){
+        if(this.containerId == null || this.containerId.isEmpty()){
+            LOGGER.warn("Would like to log last lines of container but container is not started or already stopped. " +
+                    "Maybe the close method was already called?");
+            return;
+        }
+        
+        DockerLogCallback callback = dockerClient.logContainerCmd(this.containerId)
+                .withStdOut(true)
+                .withStdErr(true)
+                .withTail(numberOfLastLines)
+                .exec(new DockerLogCallback());
+        try {
+            callback.awaitCompletion(5, TimeUnit.SECONDS);
+
         } catch (InterruptedException ex) {
             LOGGER.warn("Interrupted during wait", ex);
         }
