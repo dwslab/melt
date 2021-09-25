@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * This test requires a working internet connection.
  */
-@Disabled // SPARQL endpoint currently down
 public class WiktionaryKnowledgeSourceTest {
 
 

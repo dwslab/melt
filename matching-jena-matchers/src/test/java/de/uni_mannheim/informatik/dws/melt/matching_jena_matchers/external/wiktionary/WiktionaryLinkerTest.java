@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * This test uses the SPARQL endpoint of DBnary and requires a working internet connection.
  */
-@Disabled
 class WiktionaryLinkerTest {
 
     
