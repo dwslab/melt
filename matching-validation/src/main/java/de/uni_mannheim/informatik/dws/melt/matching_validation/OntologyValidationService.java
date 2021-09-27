@@ -49,7 +49,8 @@ public abstract class OntologyValidationService<T> {
             if(this.ontology == null)
                 throw new Exception("Ontology is null");
             this.ontologyParseable = true;
-            setVersion(getClassForVersionSpecification());
+            this.libName = retriveLibName();
+            this.libVersion = retriveLibVersion();
             computeStatistics(this.ontology);            
         } catch (Exception ex) {
             this.ontology = null;
@@ -69,7 +70,8 @@ public abstract class OntologyValidationService<T> {
             if(this.ontology == null)
                 throw new Exception("Ontology is null");
             this.ontologyParseable = true;
-            setVersion(getClassForVersionSpecification());
+            this.libName = retriveLibName();
+            this.libVersion = retriveLibVersion();
             computeStatistics(this.ontology);            
         } catch (Exception ex) {
             this.ontology = null;
@@ -113,12 +115,13 @@ public abstract class OntologyValidationService<T> {
     protected abstract Set<String> retrieveInstances(T ontology);
     protected abstract int computeNumberOfRestrictions(T ontology);
     protected abstract int computeNumberOfStatements(T ontology);
-    protected abstract boolean computeHasOntologyDefinition(T ontology);    
-    protected abstract Class getClassForVersionSpecification();
+    protected abstract boolean computeHasOntologyDefinition(T ontology);
+    protected abstract String retriveLibName();
+    protected abstract String retriveLibVersion();
     
     public abstract boolean isConceptDefined(String concept);
     
-    protected void setVersion(Class clazz){
+    protected String getVersionFromJarFile(Class clazz){
         String classPath = clazz.getResource(clazz.getSimpleName() + ".class").toString(); 
         String libPath = classPath.substring(0, classPath.lastIndexOf("!")); 
         String libFileName = libPath.substring(libPath.lastIndexOf("/") + 1, libPath.lastIndexOf("."));
@@ -126,18 +129,11 @@ public abstract class OntologyValidationService<T> {
         try {
             Manifest manifest = new Manifest(new URL(filePath).openStream());
             Attributes attr = manifest.getMainAttributes();
-            this.libName = attr.getValue("Implementation-Title");
-            this.libVersion = attr.getValue("Implementation-Version");
+            return attr.getValue("Implementation-Version");
         } catch (IOException ex) {
             LOGGER.info("Could not create manifest for version extraction of parsing library.", ex);
-        }
-        
-        if(this.libName == null || this.libName.length() == 0){
-            this.libName = libFileName;
-        }
-        if(this.libVersion == null || this.libVersion.length() == 0){
-            this.libVersion = libFileName;
-        }        
+            return libFileName;
+        }   
     }
 
     /**

@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.uni_mannheim.informatik.dws.ontmatching</groupId>
+    <artifactId>testCaseValidation</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0</version>
+    
+    <name>MELT - Matching EvaLuation Toolkit | Test Case Validation</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>matching-validation</artifactId>
+            <version>3.2-SNAPSHOT</version>
+            <!--version>3.1</version-->
+            
+            <!-- Add exclusions related to matching-jena-matchers to slim down the JAR file -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.haifengl</groupId>
+                    <artifactId>smile-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.haifengl</groupId>
+                    <artifactId>smile-nlp</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.gradoop.famer</groupId>
+                    <artifactId>famer-clustering</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.universal-automata</groupId>
+                    <artifactId>liblevenshtein</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>nz.ac.waikato.cms.weka</groupId>
+                    <artifactId>weka-dev</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mapdb</groupId>
+                    <artifactId>mapdb</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.mpkorstanje</groupId>
+                    <artifactId>simmetrics-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>edu.mit</groupId>
+                    <artifactId>jwi</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.babelscape</groupId>
+                    <artifactId>babelscape-data-commons</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.sf.extjwnl</groupId>
+                    <artifactId>extjwnl-data-wn31</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.lucene</groupId>
+                    <artifactId>lucene-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.lucene</groupId>
+                    <artifactId>lucene-queries</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.lucene</groupId>
+                    <artifactId>lucene-queryparser</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.4</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <configuration>
+                  <shadedArtifactAttached>true</shadedArtifactAttached>
+                  <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
+                  <transformers>
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                      <mainClass>de.uni_mannheim.informatik.dws.melt.testcasevalidation.Main</mainClass>
+                    </transformer>
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                  </transformers>
+                  <filters>
+                    <filter>
+                      <artifact>*:*</artifact>
+                      <excludes>
+                        <!-- Some jars are signed but shading breaks that. Don't include signing files. 
+                        Otherwise you get: java.lang.SecurityException: Invalid signature file digest for Manifest main attributes.-->
+                        <exclude>META-INF/*.SF</exclude>
+                        <exclude>META-INF/*.DSA</exclude>
+                        <exclude>META-INF/*.RSA</exclude>
+                      </excludes>
+                    </filter>
+                  </filters>
+                </configuration>
+                <executions>
+                  <execution>
+                    <phase>package</phase>
+                    <goals>
+                      <goal>shade</goal>
+                    </goals>
+                  </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

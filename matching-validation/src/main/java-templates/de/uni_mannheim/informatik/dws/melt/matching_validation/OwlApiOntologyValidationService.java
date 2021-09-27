@@ -16,6 +16,7 @@ import org.semanticweb.owlapi.model.OWLOntologyID;
 import org.semanticweb.owlapi.model.OWLNamedObject;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLRestriction;
+import org.semanticweb.owlapi.util.VersionInfo;
 
 /**
  * OWL API implementation of OntologyValidationService.
@@ -147,8 +148,17 @@ public class OwlApiOntologyValidationService extends OntologyValidationService<O
     }
 
     @Override
-    protected Class<?> getClassForVersionSpecification() {
-        return OWLOntology.class;
+    protected String retriveLibName() {
+        return "OwlApi";
+    }
+    
+    @Override
+    protected String retriveLibVersion() {
+        String version = VersionInfo.getVersionInfo().getVersion();
+        if(version == null || version.trim().isEmpty()){
+            return getVersionFromJarFile(OWLOntology.class);
+        }
+        return version;
     }
 
     @Override

@@ -13,6 +13,8 @@ import ${jenaPrefix}ontology.OntResource;
 import ${jenaPrefix}rdf.model.ModelFactory;
 import ${jenaPrefix}vocabulary.OWL;
 import ${jenaPrefix}vocabulary.RDF;
+import ${jenaPrefix}Jena;
+
 
 /**
  * Jena implementation of OntologyValidationService.
@@ -110,8 +112,17 @@ public class JenaOntologyValidationService extends OntologyValidationService<Ont
     }
 
     @Override
-    protected Class getClassForVersionSpecification() {
-        return OntModel.class;
+    protected String retriveLibName() {
+        return "Jena";
+    }
+    
+    @Override
+    protected String retriveLibVersion() {
+        String version = Jena.VERSION;
+        if(version == null || version.trim().isEmpty()){
+            return getVersionFromJarFile(OntModel.class);
+        }
+        return version;
     }
 
     @Override
