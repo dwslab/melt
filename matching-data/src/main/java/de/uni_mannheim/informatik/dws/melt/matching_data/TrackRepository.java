@@ -545,6 +545,11 @@ public class TrackRepository {
          * Default Testsuite which is used all the time.
          */
         public static Track Default = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "biodiv", "2018");//new BioDivTrack("http://oaei.ontologymatching.org/2018/biodiv/data/biodiv.zip", "biodiv", "2018");
+    
+        /**
+         * The new Biodiv track used in OAEI 2021. 
+         */
+        public static Track V2021 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "biodiv", "2021");
     }
 
     /**

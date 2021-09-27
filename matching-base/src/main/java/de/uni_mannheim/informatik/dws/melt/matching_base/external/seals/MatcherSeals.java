@@ -193,7 +193,7 @@ public class MatcherSeals extends MatcherFile {
 
     private static File prepareMatcherFolder(File tmpDirectory, File matcherFileOrFolder) {
         if (matcherFileOrFolder.exists() == false) {
-            LOGGER.error("matcherFileOrFolder does not exist. MatcherSeals is not usable.");
+            LOGGER.error("The path to the matcher file/folder does not exist. Please use a full path (/home/oaei/matcher.zip) or relative path (./oaei/matcher.zip). MatcherSeals will not be usable.");
             return null;
         }
         File matcherFolderTmp = matcherFileOrFolder;
