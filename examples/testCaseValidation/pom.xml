@@ -10,9 +10,24 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <jenaVersion>3.17.0</jenaVersion>
+        <owlapiVersion>5.1.14</owlapiVersion>
     </properties>
     
     <dependencies>
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-arq</artifactId>
+            <version>${jenaVersion}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-distribution</artifactId>
+            <version>${owlapiVersion}</version>
+        </dependency>        
+        
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-validation</artifactId>
@@ -130,5 +145,79 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <profiles>
+        <profile>
+            <id>4</id>
+            <properties>
+                <jenaVersion>3.0.1</jenaVersion>
+                <owlapiVersion>4.0.2</owlapiVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>5</id>
+            <properties>
+                <jenaVersion>3.2.0</jenaVersion>
+                <owlapiVersion>4.1.4</owlapiVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>6</id>
+            <properties>
+                <jenaVersion>3.4.0</jenaVersion>
+                <owlapiVersion>4.2.9</owlapiVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>7</id>
+            <properties>
+                <jenaVersion>3.6.0</jenaVersion>
+                <owlapiVersion>4.3.2</owlapiVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>8</id>
+            <properties>
+                <jenaVersion>3.8.0</jenaVersion>
+                <owlapiVersion>4.5.13</owlapiVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>9</id>
+            <properties>
+                <jenaVersion>3.10.0</jenaVersion>
+                <owlapiVersion>5.0.5</owlapiVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>10</id>
+            <properties>
+                <jenaVersion>3.12.0</jenaVersion>
+                <owlapiVersion>5.1.11</owlapiVersion>
+            </properties>
+        </profile>        
+        <profile>
+            <id>11</id>
+            <properties>
+                <jenaVersion>3.17.0</jenaVersion>
+                <owlapiVersion>5.1.14</owlapiVersion>
+            </properties>
+        </profile>        
+        <profile>
+            <id>12</id>
+            <properties>
+                <jenaVersion>4.0.0</jenaVersion>
+                <owlapiVersion>5.1.17</owlapiVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>13</id>
+            <properties>
+                <jenaVersion>4.2.0</jenaVersion>
+                <owlapiVersion>5.1.19</owlapiVersion>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

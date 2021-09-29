@@ -4,11 +4,17 @@ package de.uni_mannheim.informatik.dws.melt.matching_validation;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
-
-
-
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class analyzes a test case.
@@ -16,6 +22,8 @@ import java.util.Set;
  * @author Jan Portisch
  */
 public class TestCaseValidationService {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(OntologyValidationService.class);
 
 
     /**
@@ -108,6 +116,16 @@ public class TestCaseValidationService {
                         (nSourceMappings.size() > 0 && nTargetMappings.size() == 0)
         ) return true;
         else return false;
+    }
+    
+    public String getMappingType(){
+        if(isOneToOneMapping()){
+            return "1:1";
+        } else if(isOneToNMapping()) {
+            return "1:n";
+        } else {
+            return "n:n";
+        }
     }
 
     /**
@@ -241,6 +259,61 @@ public class TestCaseValidationService {
     public boolean isFullyMapped(){
         return isSourceFullyMapped() && isTargetFullyMapped();
     }
+    
+    public void toCSV(File csvFile){
+        try(CSVPrinter csvPrinter = CSVFormat.DEFAULT.print(csvFile, StandardCharsets.UTF_8)){
+            csvPrinter.printRecord("Analysis for test case:", testCase.getName());
+            csvPrinter.printRecord();
+            csvPrinter.printRecord("Ontologies");
+            csvPrinter.printRecord("Type", "LibName", "LibVersion", "Parsable", "Classes", "Properties", "Datatype Properties", "Object Properties", "Instances", "Restrictions", "Statements");
+            csvPrinter.printRecord("Source",  this.sourceOntologyValidationService.getLibName(), this.sourceOntologyValidationService.getLibVersion(),
+                    this.sourceOntologyValidationService.isOntologyParseable(),
+                    this.sourceOntologyValidationService.getNumberOfClasses(), this.sourceOntologyValidationService.getNumberOfProperties(),
+                    this.sourceOntologyValidationService.getNumberOfDatatypeProperties(), this.sourceOntologyValidationService.getNumberOfObjectProperties(),
+                    this.sourceOntologyValidationService.getNumberOfInstances(), this.sourceOntologyValidationService.getNumberOfRestrictions(),
+                    this.sourceOntologyValidationService.getNumberOfStatements());
+            csvPrinter.printRecord("Target", this.targetOntologyValidationService.getLibName(), this.targetOntologyValidationService.getLibVersion(),
+                    this.targetOntologyValidationService.isOntologyParseable(),
+                    this.targetOntologyValidationService.getNumberOfClasses(), this.targetOntologyValidationService.getNumberOfProperties(),
+                    this.targetOntologyValidationService.getNumberOfDatatypeProperties(), this.targetOntologyValidationService.getNumberOfObjectProperties(),
+                    this.targetOntologyValidationService.getNumberOfInstances(), this.targetOntologyValidationService.getNumberOfRestrictions(),
+                    this.targetOntologyValidationService.getNumberOfStatements());
+            if(this.sourceOntologyValidationService.isOntologyParseable() == false){
+                csvPrinter.printRecord("Source ontology not parseable because", this.sourceOntologyValidationService.getOntologyParseError());
+            }
+            if(this.targetOntologyValidationService.isOntologyParseable() == false){
+                csvPrinter.printRecord("Target ontology not parseable because", this.targetOntologyValidationService.getOntologyParseError());
+            }
+            csvPrinter.printRecord();
+            csvPrinter.printRecord("Reference alignment");
+            csvPrinter.printRecord("Parseable:", isReferenceAlignmentParseable);
+            csvPrinter.printRecord("Number of mappings:", testCase.getParsedReferenceAlignment().size());
+            csvPrinter.printRecord("Mapping Type:", getMappingType());
+            csvPrinter.printRecord("All source reference entries found:", isAllSourceReferenceEntitiesFound());
+            csvPrinter.printRecord("All target reference entries found:", isAllTargetReferenceEntitiesFound());
+            
+            
+            if(isAllSourceReferenceEntitiesFound() == false || isAllTargetReferenceEntitiesFound() == false){
+                csvPrinter.printRecord();
+                csvPrinter.printRecord("Not found in source", "Not found in target");
+                List<String> leftNotFound = new ArrayList<>(notFoundInSourceOntology);
+                List<String> rightNotFound = new ArrayList<>(notFoundInTargetOntology);
+                for(int i=0; i < Math.max(leftNotFound.size(), rightNotFound.size()); i++){
+                    String source = "";
+                    if(i < leftNotFound.size()){
+                        source = leftNotFound.get(i);
+                    }
+                    String target = "";
+                    if(i < rightNotFound.size()){
+                        target = rightNotFound.get(i);
+                    }
+                    csvPrinter.printRecord(source, target);
+                }
+            }
+        } catch (IOException ex) {
+            LOGGER.warn("Could not write TestCaseValidation CSV file.", ex);
+        }
+    }
 
     @Override
     public String toString(){
@@ -306,13 +379,21 @@ public class TestCaseValidationService {
 
         result = result + "Source Ontology (" + this.sourceOntologyValidationService.getLibName() + ", " + sourceOntologyValidationService.getLibVersion() + ")" +  "\n";
         result = result + "# of Classes: " + this.sourceOntologyValidationService.getNumberOfClasses() + "\n";
+        result = result + "# of Properties: " + this.sourceOntologyValidationService.getNumberOfProperties() + "\n";
         result = result + "# of Datatype Properties: " + this.sourceOntologyValidationService.getNumberOfDatatypeProperties() + "\n";
-        result = result + "# of Object Properties: " + this.sourceOntologyValidationService.getNumberOfObjectProperties() + "\n\n";
+        result = result + "# of Object Properties: " + this.sourceOntologyValidationService.getNumberOfObjectProperties() + "\n";
+        result = result + "# of Instances: " + this.sourceOntologyValidationService.getNumberOfInstances() + "\n";
+        result = result + "# of Restrictions: " + this.sourceOntologyValidationService.getNumberOfRestrictions() + "\n";
+        result = result + "# of Statements: " + this.sourceOntologyValidationService.getNumberOfStatements() + "\n\n";
 
         result = result + "Target Ontology (" + this.targetOntologyValidationService.getLibName() + ", " + targetOntologyValidationService.getLibVersion() + ")" +  "\n";
         result = result + "# of Classes: " + this.targetOntologyValidationService.getNumberOfClasses() + "\n";
+        result = result + "# of Properties: " + this.targetOntologyValidationService.getNumberOfProperties() + "\n";
         result = result + "# of Datatype Properties: " + this.targetOntologyValidationService.getNumberOfDatatypeProperties() + "\n";
-        result = result + "# of Object Properties: " + this.targetOntologyValidationService.getNumberOfObjectProperties() + "\n\n";
+        result = result + "# of Object Properties: " + this.targetOntologyValidationService.getNumberOfObjectProperties() + "\n";
+        result = result + "# of Instances: " + this.targetOntologyValidationService.getNumberOfInstances() + "\n";
+        result = result + "# of Restrictions: " + this.targetOntologyValidationService.getNumberOfRestrictions() + "\n";
+        result = result + "# of Statements: " + this.targetOntologyValidationService.getNumberOfStatements() + "\n\n";
 
         return result;
     }

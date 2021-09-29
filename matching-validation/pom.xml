@@ -163,6 +163,32 @@
                 <owlapiAdd>.orElse(null)</owlapiAdd>
             </properties>
         </profile>        
-        
+        <profile>
+            <id>11</id>
+            <properties>
+                <jenaVersion>3.17.0</jenaVersion>
+                <owlapiVersion>5.1.14</owlapiVersion>
+                <jenaPrefix>org.apache.jena.</jenaPrefix>
+                <owlapiAdd>.orElse(null)</owlapiAdd>
+            </properties>
+        </profile>        
+        <profile>
+            <id>12</id>
+            <properties>
+                <jenaVersion>4.0.0</jenaVersion>
+                <owlapiVersion>5.1.17</owlapiVersion>
+                <jenaPrefix>org.apache.jena.</jenaPrefix>
+                <owlapiAdd>.orElse(null)</owlapiAdd>
+            </properties>
+        </profile>
+        <profile>
+            <id>13</id>
+            <properties>
+                <jenaVersion>4.2.0</jenaVersion>
+                <owlapiVersion>5.1.19</owlapiVersion>
+                <jenaPrefix>org.apache.jena.</jenaPrefix>
+                <owlapiAdd>.orElse(null)</owlapiAdd>
+            </properties>
+        </profile>
     </profiles>
 </project>

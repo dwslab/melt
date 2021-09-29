@@ -32,6 +32,7 @@ public abstract class OntologyValidationService<T> {
     private int numberOfStatements = 0;
     private boolean ontologyDefined = false;
     private boolean ontologyParseable = false;
+    private String ontologyParseError = "";
     private String libName = "";
     private String libVersion = "";
     protected T ontology = null;
@@ -44,17 +45,18 @@ public abstract class OntologyValidationService<T> {
      */
     public OntologyValidationService(URI ontologyUri){
         this.ontologyUri = ontologyUri;
+        this.libName = retriveLibName();
+        this.libVersion = retriveLibVersion();
         try {
             this.ontology = parseOntology(ontologyUri);
             if(this.ontology == null)
                 throw new Exception("Ontology is null");
             this.ontologyParseable = true;
-            this.libName = retriveLibName();
-            this.libVersion = retriveLibVersion();
             computeStatistics(this.ontology);            
         } catch (Exception ex) {
             this.ontology = null;
             this.ontologyParseable = false;
+            this.ontologyParseError = ex.getMessage();
             LOGGER.warn("Ontology not parsable", ex);
         }
     }
@@ -65,17 +67,18 @@ public abstract class OntologyValidationService<T> {
      */
     public OntologyValidationService(String fileContent){
         this.ontologyUri = null;
+        this.libName = retriveLibName();
+        this.libVersion = retriveLibVersion();
         try {
             this.ontology = parseOntology(fileContent);
             if(this.ontology == null)
                 throw new Exception("Ontology is null");
             this.ontologyParseable = true;
-            this.libName = retriveLibName();
-            this.libVersion = retriveLibVersion();
             computeStatistics(this.ontology);            
         } catch (Exception ex) {
             this.ontology = null;
             this.ontologyParseable = false;
+            this.ontologyParseError = ex.getMessage();
             LOGGER.warn("Ontology not parsable", ex);
         }
     }
@@ -215,6 +218,10 @@ public abstract class OntologyValidationService<T> {
 
     public URI getOntologyUri() {
         return ontologyUri;
+    }
+
+    public String getOntologyParseError() {
+        return ontologyParseError;
     }
 
     @Override

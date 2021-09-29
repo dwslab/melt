@@ -5,10 +5,20 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.SealsTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.Evaluator;
+import de.uni_mannheim.informatik.dws.melt.matching_validation.OntologyValidationService;
 import de.uni_mannheim.informatik.dws.melt.matching_validation.SemanticWebLibrary;
 import de.uni_mannheim.informatik.dws.melt.matching_validation.TestCaseValidationService;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -17,6 +27,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +43,7 @@ public class Main {
     private static final String HELP_OPTION_STRING = "help";
     
     
-    public static void main(String[] args){
+    public static void main(String[] args) throws UnsupportedEncodingException{
         Options options = new Options();
         
         // Track option
@@ -86,6 +98,7 @@ public class Main {
         
         // get track
         List<TestCase> testCases = new ArrayList<>();
+        
         if (cmd.hasOption(TRACK_OPTION)) {
             String[] trackData = cmd.getOptionValues(TRACK_OPTION);
             if (trackData.length == 2){
@@ -127,17 +140,78 @@ public class Main {
                     "Call --{} for help.", HELP_OPTION_STRING);
             return;
         }
+
         
+        File baseDirectory = new File(Evaluator.getDefaultResultsDirectory(), "Validation");
+        baseDirectory.mkdirs();
         LOGGER.info("RUN Jena");
-        for(TestCase tc : testCases){
+        for(TestCase tc : testCases){            
             TestCaseValidationService validationService = new TestCaseValidationService(tc, SemanticWebLibrary.JENA);
-            LOGGER.info("Analysis for test case {}: {}", tc.getName(), validationService.toString());
+            String encodedVersion = URLEncoder.encode(validationService.getSourceOntologyValidationService().getLibVersion(), "UTF-8");
+            File testCaseFolder = getResultsFolderTrackTestcase(baseDirectory, tc);
+            testCaseFolder.mkdirs();
+            //LOGGER.info("Analysis for test case {}: {}", tc.getName(), validationService.toString());
+            validationService.toCSV(new File(testCaseFolder, "ValidationReportJena_" + encodedVersion + ".csv"));
+            
+            File aggregationFile = new File(getResultsFolderTrack(baseDirectory, tc), "aggregated.csv");
+            appendToOverviewFile(validationService, aggregationFile);
         }
         
         LOGGER.info("RUN OWLAPI");
         for(TestCase tc : testCases){
             TestCaseValidationService validationService = new TestCaseValidationService(tc, SemanticWebLibrary.OWLAPI);
-            LOGGER.info("Analysis for test case {}: {}", tc.getName(), validationService.toString());
+            String encodedVersion = URLEncoder.encode(validationService.getSourceOntologyValidationService().getLibVersion(), "UTF-8");
+            File testCaseFolder = getResultsFolderTrackTestcase(baseDirectory, tc);
+            testCaseFolder.mkdirs();
+            //LOGGER.info("Analysis for test case {}: {}", tc.getName(), validationService.toString());
+            validationService.toCSV(new File(testCaseFolder, "ValidationReportOwlApi_" + encodedVersion + ".csv"));
+            
+            File aggregationFile = new File(getResultsFolderTrack(baseDirectory, tc), "aggregated.csv");
+            appendToOverviewFile(validationService, aggregationFile);
+        }
+    }
+    
+    private static File getResultsFolderTrackTestcase(File baseDirectory, TestCase tc){
+        try {
+            return Paths.get(baseDirectory.getAbsolutePath(),
+                            URLEncoder.encode(tc.getTrack().getName(), "UTF-8") + "_" + URLEncoder.encode(tc.getTrack().getVersion(), "UTF-8"),
+                            URLEncoder.encode(tc.getName(), "UTF-8")).toFile();
+        } catch (UnsupportedEncodingException ex) {
+            LOGGER.error("Could not create results folder", ex);
+            return Paths.get(baseDirectory.getAbsolutePath()).toFile();
+        }
+    }
+    
+    private static File getResultsFolderTrack(File baseDirectory, TestCase tc){
+        try {
+            return Paths.get(baseDirectory.getAbsolutePath(),
+                            URLEncoder.encode(tc.getTrack().getName(), "UTF-8") + "_" + URLEncoder.encode(tc.getTrack().getVersion(), "UTF-8")).toFile();
+        } catch (UnsupportedEncodingException ex) {
+            LOGGER.error("Could not create results folder", ex);
+            return Paths.get(baseDirectory.getAbsolutePath()).toFile();
+        }
+    }
+    
+    private static void appendToOverviewFile(TestCaseValidationService tcvs, File aggregatedFile){
+        for(boolean useSource : Arrays.asList(true, false)){
+            boolean writeHeader = aggregatedFile.exists() == false;            
+            OntologyValidationService<?> ovs = useSource ? tcvs.getSourceOntologyValidationService() : tcvs.getTargetOntologyValidationService();
+            String type = useSource ? "Source" : "Target";
+            int notFound = useSource ? tcvs.getNotFoundInSourceOntology().size() : tcvs.getNotFoundInTargetOntology().size();
+            try(CSVPrinter csvPrinter = CSVFormat.DEFAULT.print(new OutputStreamWriter(new FileOutputStream(aggregatedFile, true), StandardCharsets.UTF_8))){            
+                if(writeHeader){
+                    csvPrinter.printRecord("Track", "TestCase", "Type", "LibName", "LibVersion", 
+                            "Reference parsable", "#Reference", "Entities not found", 
+                            "Ontolgy Parsable", "Classes", "Properties", "Datatype Properties", "Object Properties", 
+                            "Instances", "Restrictions", "Statements");
+                }
+                csvPrinter.printRecord(tcvs.getTestCase().getTrack().getName(), tcvs.getTestCase().getName(), type, ovs.getLibName(), ovs.getLibVersion(), 
+                        tcvs.isReferenceAlignmentParseable(), tcvs.getTestCase().getParsedReferenceAlignment().size(), notFound,
+                        ovs.isOntologyParseable(), ovs.getNumberOfClasses(), ovs.getNumberOfProperties(), ovs.getNumberOfDatatypeProperties(), ovs.getNumberOfObjectProperties(),
+                        ovs.getNumberOfInstances(), ovs.getNumberOfRestrictions(), ovs.getNumberOfStatements());
+            } catch (IOException ex) {
+                LOGGER.warn("Could not write TestCaseValidation CSV file.", ex);
+            }
         }
     }
 }
