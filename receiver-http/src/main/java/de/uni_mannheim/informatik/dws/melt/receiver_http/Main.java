@@ -5,19 +5,22 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.Alignme
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.rmi.ServerException;
 import java.security.SecureRandom;
+import java.util.Collection;
 import java.util.EnumSet;
-import java.util.logging.Level;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
@@ -31,7 +34,6 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.QoSFilter;
-import org.eclipse.jetty.util.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,50 +60,29 @@ public class Main {
         context.addFilter(getQoSFilter(maxParallelRequests), "/match", EnumSet.of(DispatcherType.REQUEST));
         server.setHandler(context);
         
-        
-        //TODO: make the index page show up
-        //URI rootURI = getRootDir();
-        //if(rootURI != null){
-        //    LOGGER.info("Set root dir to: {}", rootURI);
-        //    context.setBaseResource(Resource.newResource(rootURI));
-        //    context.setWelcomeFiles(new String[]{"index.html"});
-        //}
-        //https://stackoverflow.com/questions/20207477/serving-static-files-from-alternate-path-in-embedded-jetty
-        //https://stackoverflow.com/questions/39011587/jetty-default-servlet-context-path
-        
         //first servlet which takes care about the match method and run the actual matcher
         ServletHolder uploadHolder = context.addServlet(MatcherServlet.class, "/match");
         //the last number which is one means that all files are written on disk and that no in memory caching applies
         uploadHolder.getRegistration().setMultipartConfig(new MultipartConfigElement(LOCATION.getAbsolutePath(), -1, -1, 1));
-
-        //default servlet for mapping the index / welcome page
-        ServletHolder holderPwd = new ServletHolder("default", DefaultServlet.class);
-        holderPwd.setInitParameter("dirAllowed","false");
-        context.addServlet(holderPwd,"/");
         
         LOGGER.info("Matching service runs at: http://localhost:{}/match", port);
         
         server.start();
         server.join();
     }
-    
-    private static URI getRootDir(){
-        URL indexURL = Main.class.getClassLoader().getResource("static/index.html");
-        if (indexURL == null){
-            return null;
-        }
-        LOGGER.info("indexURL: {}", indexURL);
-        try {
-            return indexURL.toURI().resolve("./").normalize();
-        } catch (URISyntaxException ex) {
-            return null;
-        }
-    }
 
     public static class MatcherServlet extends HttpServlet {
-
+        private static final String HTML_CODE = getHtmlCode();
         private static final long serialVersionUID = 1L;
 
+        @Override
+        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType("text/html");
+            response.setCharacterEncoding("utf-8");
+            response.getWriter().println(HTML_CODE);
+        }
+        
         @Override
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             // we expect a source and a target
@@ -109,17 +90,23 @@ public class Main {
                 LOGGER.info("Got multipart request - start matching");
                 Part source = request.getPart("source");            
                 if(source == null){
-                    throw new ServerException("No multipart parameter source");
+                    throw new ServletException("No multipart parameter source");
                 }
                 Part target = request.getPart("target");
                 if(target == null){
-                    throw new ServerException("No multipart parameter target");
+                    throw new ServletException("No multipart parameter target");
                 }
                 Part inputAlignment = request.getPart("inputAlignment");
                 Part parameters = request.getPart("parameters");
                 
                 File sourceFile = getFile(source, "source");
                 File targetFile = getFile(target, "target");
+                if(sourceFile.length() == 0){
+                    throw new ServletException("Source file is empty");
+                }
+                if(targetFile.length() == 0){
+                    throw new ServletException("Target file is empty");
+                }
                 File inputAlignmentFile = getFile(inputAlignment, "inputAlignment");
                 File parametersFile = getFile(parameters, "parameters");
                 
@@ -168,6 +155,7 @@ public class Main {
                 if(resultURL != null)
                     response.getWriter().write(resultURL.toString());
             }
+            LOGGER.info("Finished matching");
         }
     }
     
@@ -199,11 +187,13 @@ public class Main {
             }
         } catch (IOException ex) {
             LOGGER.error("Could not send the mapping file.", ex);
-        }    
+        }finally{
+            mappingFile.delete();
+        }
     }
     
     
-    private static URL runTool(URL source, URL target, URL inputAlignment, URL parameters){
+    private static URL runTool(URL source, URL target, URL inputAlignment, URL parameters) throws ServletException{
         String mainClass;
         try {
             mainClass = MainMatcherClassExtractor.extractMainClass();
@@ -221,17 +211,17 @@ public class Main {
             result = GenericMatcherCaller.runMatcher(mainClass, source, target, inputAlignment, parameters);
         } catch (Exception ex) {
             LOGGER.error("Exception during matching.", ex);
-            return null;
+            throw new ServletException(ex);
         }
         if(result.getAlignment() == null){
             LOGGER.error("The resulting alignment of the matcher is null.");
-            return null;
+            throw new ServletException("The resulting alignment of the matcher is null.");
         }
         try {
             return TypeTransformerRegistry.getTransformedObject(result.getAlignment(), URL.class);
         } catch (TypeTransformationException ex) {
             LOGGER.error("Cannot transform the alignment to a URL and then to a file.", ex);
-            return null;
+            throw new ServletException("Cannot transform the alignment to a URL and then to a file.");
         }
     }
     
@@ -264,6 +254,19 @@ public class Main {
         return false;
     }
     
+    private static String getHtmlCode(){
+        try(InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("static/index.html")){
+            ByteArrayOutputStream result = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            for (int length; (length = inputStream.read(buffer)) != -1; ) {
+                result.write(buffer, 0, length);
+            }
+            return result.toString(StandardCharsets.UTF_8.name());
+        } catch (IOException ex) {
+            LOGGER.warn("Could not load index.html page. The server will not respond to a get request with a nice output.");
+            return "";
+        }
+    }
     
     private static final SecureRandom random = new SecureRandom();
 

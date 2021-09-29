@@ -4,22 +4,81 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js" integrity="sha512-NsDQfBXe4PQn8FUJztT36NXQiXQim8UFYB3eKmei+z/Ev2mMaNgElhcxSQWorYn3wycB2z4l7U8BV/kOKSDjYg==" crossorigin="anonymous"></script>
+
     <script type="text/javascript">
     $(function() {
-         $("btn-file-match#submit").click(function(){
-                 $.ajax({
-                     type: "POST",
-                     url: "PastSurgicalCustomItem",
-                     data: $('form.form-horizontal').serialize(),
-                             success: function(msg){
-                                      alert(msg);
-                             },
-                     error: function(){
-                     alert("failure");
-                 }
-               });
-         });
+        $("#runViaFile").submit(function(event) {
+            event.preventDefault();
+
+            var opts = {
+                  lines: 15, // The number of lines to draw
+                  length: 10, // The length of each line
+                  radius: 10, // The radius of the inner circle
+                  speed: 1, // Rounds per second
+                  left: '65%',
+                };
+            var spinner = new Spinner(opts).spin(document.getElementById('spinner'));
+            $("#oaei-progress").removeClass('d-none');
+            $("#btn-file-match").addClass('disabled');
+            $('#matching-progress').addClass('d-none');
+            $('#oaei-result').addClass('d-none');
+            $('#oaei-error').addClass('d-none');
+            
+            $.ajax({
+                url: 'match',
+                method: 'POST',
+                type: 'POST',
+                data: new FormData(this),
+                cache: false,
+                contentType: false,
+                processData: false,
+                headers: { 
+                    Accept : "text/plain"
+                },
+                success: function(data){
+                    //https://www.aspsnippets.com/Articles/Download-File-in-AJAX-Response-Success-using-jQuery.aspx
+                    var url = window.URL || window.webkitURL;
+                    const link = url.createObjectURL(new Blob([data], { type: "application/octetstream" }));
+                    var a = $("#btn-download-result");
+                    a.attr("download", "alignment.rdf");
+                    a.attr("href", link);
+                    
+                    $("#oaei-progress").addClass('d-none');
+                    $("#btn-file-match").removeClass('disabled');
+                    $("#oaei-result").removeClass('d-none');
+                    spinner.stop();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $("#oaei-progress").addClass('d-none');
+                    $("#btn-file-match").removeClass('disabled');
+                    
+                    $("#oaei-error").removeClass('d-none');
+                    $('#errorText').val(jqXHR.responseText);
+                    spinner.stop();
+                },
+                ////https://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously-with-jquery
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        //console.log(evt.loaded);
+                        if(evt.loaded==evt.total){
+                            $('#matching-progress').removeClass("d-none");
+                        }
+                        $('progress').attr({
+                          value: evt.loaded,
+                          max: evt.total,
+                        });
+                      }
+                    }, false);
+
+                    return xhr;
+                }
+            });
+        });
     });
     </script>
     
@@ -30,34 +89,34 @@
       <div class="py-5 text-center">
         <img class="d-block mx-auto mb-4" src="http://oaei.ontologymatching.org/oaeismall.jpg" alt="" width="150">
         <h2>Run the matcher</h2>
-        <p class="lead">Below you can either upload two ontologies as a file or directly paste the ontologies in a textbox and run the matcher.</p>
+        <p class="lead">Below you can upload two ontologies as a file and run the matcher.</p>
       </div>
 
         <div class="row">
             <div class="col-md-12">
-                <h4>Upload via file</h4>
+                <h4>Upload</h4>
             </div>
         </div>
-        <form id="runViaFile" method="post" action="match">
+        <form id="runViaFile" enctype="multipart/form-data" method="post" action="match">
             <div class="row">
                 <div class="col-md-5">
                   <label for="sourceFile" class="form-label">Select source ontology / KG file</label>
-                  <input class="form-control" type="file" id="sourceFile">
+                  <input class="form-control" type="file" id="source" name="source">
                 </div>
                 
                 <div class="col-md-5">
                   <label for="targetFile" class="form-label">Select target ontology / KG file</label>
-                  <input class="form-control" type="file" id="targetFile">
+                  <input class="form-control" type="file" id="target" name="target">
                 </div>
                 
                 <div class="col-md-2 d-flex"><!--offset-md-1-->
-                    <button id="btn-file-match" class="btn btn-primary form-control align-self-end" type="button">Run Matcher</button>
+                    <button id="btn-file-match" class="btn btn-primary form-control align-self-end" type="submit">Run Matcher</button>
                 </div>
             </div>
         </form>
         
         
-        <div class="row mt-5">
+        <!--div class="row mt-5">
             <div class="col-md-12">
                 <h4>Upload via textbox</h4>
             </div>
@@ -75,19 +134,42 @@
                 </div>
                 
                 
-                <div class="col-md-2 d-flex"><!--offset-md-1-->
+                <div class="col-md-2 d-flex">
                     <button class="btn btn-primary form-control align-self-end" type="button">Run Matcher</button>
 
                 </div>
                 
             </div>
-        </form>
+        </form-->
         
-      <div class="row mt-5">
-        <div class="col-md-10">
-            <h4>Result</h4>
-            <textarea class="form-control" id="resultText" rows="10"></textarea>
+      <div class="row mt-5 d-none" id="oaei-progress"><!---->
+        <h4>Progress:</h4>
+        <div class="col-md-5" id="upload-progress">
+            File upload: <progress style="width:100%;" value="0" max="100"></progress>
         </div>
+        
+        <div class="col-md-5 d-none" id="matching-progress">
+            Matching in progress (could take time...): <div id="spinner" style="position: relative"></div>
+        </div>
+        <div class="col-md-2 ">
+            
+        </div>
+      </div>
+      
+      <div class="row mt-5 d-none" id="oaei-result">
+            <h4>Result</h4>
+            
+            <div class="col-md-3">
+                <a class="btn btn-success" id="btn-download-result"><i class="fa fa-download"></i> Download resulting alignment file</a>
+            </div>
+      </div>
+      
+      <div class="row mt-5 d-none" id="oaei-error">
+            <h4>Error</h4>
+            
+            <div class="col-md-10">
+                <textarea class="form-control" id="errorText" rows="20"></textarea>
+            </div>
       </div>
 
       <footer class="my-5 pt-5 text-muted text-center text-small">
