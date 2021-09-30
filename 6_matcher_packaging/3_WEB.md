@@ -97,7 +97,7 @@ dockerMatcher.logAllLinesFromContainer();  // this will output the log of the co
 **Debugging possibilities without MELT**
 If you want to run the docker image totally without MELT to check if it is working, you can run the following commands.
 1. Change to a folder with the saved matcher file (in the example the name of the image file is `simplewebmatcher-1.0-web-latest.tar.gz`)
-1. Execute `docker load -i ./simplewebmatcher-1.0-web-latest.tar.gz` and replacing the last path with the actual file name. This will load the image from the file into the local docker registry.
+1. Execute `docker load -i ./simplewebmatcher-1.0-web-latest.tar.gz` and replace the last path with the actual file name. This will load the image from the file into the local docker registry.
    - in case the image is already loaded in the local registry, you do not need to run this step
 1. Run the container by executing `docker run --rm --publish 8080:8080 simplewebmatcher-1.0-web` (replace the image name by the name which appeared during the previous step)
    - this will start the container in an attached mode such that you see all log output 
