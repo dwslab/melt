@@ -94,6 +94,21 @@ dockerMatcher.logAllLinesFromContainer();  // this will output the log of the co
 // evaluating our system ...
 ```
 
+**Debugging possibilities without MELT**
+If you want to run the docker image totally without MELT to check if it is working, you can run the following commands.
+1. Change to a folder with the saved matcher file (in the example the name of the image file is `simplewebmatcher-1.0-web-latest.tar.gz`)
+1. Execute `docker load -i ./simplewebmatcher-1.0-web-latest.tar.gz ` and replacing the last path with the actual file name. This will load the image from the file into the local docker registry.
+   - in case the image is already loaded in the local registry, you do not need to run this step
+1. Run the container by executing `docker run --rm --publish 8080:8080 simplewebmatcher-1.0-web` (replace the image name by the name which appeared during the previous step)
+   - this will start the container in an attached mode such that you see all log output 
+   - you cannot execute further commands in this terminal because all input and output is redirect to the running docker container
+1. Open a new terminal and change to a folder with two ontologies (which will be the input for the matcher) and execute `curl -F 'source=@cmt.rdf' -F 'target=@conference.rdf' http://127.0.0.1:8080/match > alignment.rdf`
+   - replace `cmt.rdf` with the source file name and `conference.rdf` with the target file name
+   - the result will be written to the generated `alignment.rdf` file
+1. The matcher should now run and you should see some log output.
+   -  to stop the matcher press `Ctrl+C` in the terminal where you executed the `docker run` command
+
+
 **Common Errors and Problems**
 -  I have the docker tar.gz but I am not sure about the image name.<br/>
 If you package the matcher with MELT and the file name is e.g. `simplewebmatcher-1.0-web-latest.tar.gz` then the image name
