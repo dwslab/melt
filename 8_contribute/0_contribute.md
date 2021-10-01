@@ -21,7 +21,7 @@ In case you experience any (potential) bugs, [open an issue on GitHub](https://g
 For specific questions, feel free to contact the authors of the [main paper](https://dwslab.github.io/melt/cite-melt) (or the paper addressing the component you have a question about).
 
 ## Improve the Documentation
-You do not have to be a programmer to help MELT. You can easily help us by improving the documentation (this user guide). The contents of the guide are managed through GitHub; just go to the [MELT gh-pages branch](https://github.com/dwslab/melt/tree/gh-pages). There, you will find a [markdown](https://en.wikipedia.org/wiki/Markdown) file for every page in this user guide. The markdown file for this page, for instance can be found here: [https://github.com/dwslab/melt/blob/gh-pages/8_contribute/0_contribute.md](ttps://github.com/dwslab/melt/blob/gh-pages/8_contribute/0_contribute.md)
+You do not have to be a programmer to help MELT. You can easily help us by improving the documentation (this user guide). The contents of the guide are managed through GitHub; just go to the [MELT gh-pages branch](https://github.com/dwslab/melt/tree/gh-pages). There, you will find a [markdown](https://en.wikipedia.org/wiki/Markdown) file for every page in this user guide. The markdown file for this page, for instance can be found here: [https://github.com/dwslab/melt/blob/gh-pages/8_contribute/0_contribute.md](https://github.com/dwslab/melt/blob/gh-pages/8_contribute/0_contribute.md)
 
 You can easily change files directly in your Web browser by clicking on the edit pencil as shown in the following screen shot:
 
