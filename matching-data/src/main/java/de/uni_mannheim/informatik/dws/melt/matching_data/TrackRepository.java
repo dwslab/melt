@@ -550,6 +550,11 @@ public class TrackRepository {
          * The new Biodiv track used in OAEI 2021. 
          */
         public static Track V2021 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "biodiv", "2021");
+        
+        /**
+         * The new Biodiv track used in OAEI 2021. 
+         */
+        public static Track V2021OWL = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "biodiv", "2021owl");
     }
 
     /**
