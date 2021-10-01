@@ -18,6 +18,7 @@ public class CounterTest {
         List<Entry<String, Integer>> mostCommon = c.mostCommon();
         assertEquals(3, mostCommon.get(0).getValue());
         assertEquals("two", mostCommon.get(0).getKey());
+
         
         assertEquals("two", c.mostCommonElement());
         assertEquals(Arrays.asList("two"), c.mostCommonElements(1));
