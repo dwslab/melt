@@ -5,12 +5,27 @@
 
 **New**
 - introduced a new matcher: [`SentenceTransformersMatcher`](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/SentenceTransformersMatcher.java)
+- example for track validation (used to analyze biodiv track)
+- example for multi source matching called [`multisource experiment`](https://github.com/dwslab/melt/tree/master/examples/multisourceExperiment)
+- eval client is build with every commit and the final jar is uploaded as a build artifact
+  - a nightly link is generated which always point to the latest version
 
 **Fixed**
-
+- normalization of literals in `BaselineStringMatcher` (fixes issue #44)
+- matcher name was not always encoded (because it was used in as file name) (see issue #128)
+- use a new local track for a local test case (fiyes issue #121)
+ 
 **Improvements**
+- Web frontend for Web/Docker packaged matchers works now with javascript and provides better UX
+- Server for Web/Docker based images now more stable
+- `MatcherDockerFile` automatically logs the text which is logged in container - this helps to debug errors
+  - the function `logAllLinesFromContainer` is thus deprecated
+- `MatcherDockerFile` extracts the name for the image from the file content. Thus the file which contains the image can be named arbitrarily. The file compression is also automatically detected. See issue #123
 - documentation about jena interfaces like `LiteralExtractor` and ` TextExtractor`
+- welcome message also shows the git commit hash which is used to build the eval client
 
+**New tracks**
+- new biodiv track (version `2021`)
 
 ## Changes in 3.1
 
