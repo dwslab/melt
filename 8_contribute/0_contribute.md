@@ -24,11 +24,11 @@ You do not have to be a programmer to help MELT. You can easily help us by impro
 
 You can easily change files directly in your Web browser by clicking on the edit pencil as shown in the following screen shot:
 
-![image](/media/contribute_via_browser.png)
+![image](../media/contribute_via_browser.png)
 
 Note that when you commit a documentation change, you have to set the pull request for branch `gh-pages` (not `master`):
 
-![image](/media/branch_selection.png)
+![image](../media/branch_selection.png)
 
 Alternatively to changes in the Web UI, you can also [fork the project](https://docs.github.com/en/get-started/quickstart/fork-a-repo) (remember to `git checkout gh-pages`), apply your changes locally, and perform a [pull request]((https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)).
 
