@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -117,6 +117,11 @@ extends javax.servlet.http.HttpServlet</pre>
 </thead>
 <tbody>
 <tr class="alt-color">
+<td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#HTML_CODE">HTML_CODE</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>private static long</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#serialVersionUID">serialVersionUID</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -167,6 +172,12 @@ extends javax.servlet.http.HttpServlet</pre>
 <tbody>
 <tr class="alt-color" id="i0">
 <td class="col-first"><code>protected void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#doGet(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)">doGet</a></span>&#8203;(javax.servlet.http.HttpServletRequest&nbsp;request,
+javax.servlet.http.HttpServletResponse&nbsp;response)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i1">
+<td class="col-first"><code>protected void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#doPost(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)">doPost</a></span>&#8203;(javax.servlet.http.HttpServletRequest&nbsp;request,
 javax.servlet.http.HttpServletResponse&nbsp;response)</code></th>
 <td class="col-last">&nbsp;</td>
@@ -177,7 +188,7 @@ javax.servlet.http.HttpServletResponse&nbsp;response)</code></th>
 </div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.javax.servlet.http.HttpServlet">Methods inherited from class&nbsp;javax.servlet.http.HttpServlet</h3>
-<code>doDelete, doGet, doHead, doOptions, doPut, doTrace, getLastModified, service, service</code></div>
+<code>doDelete, doHead, doOptions, doPut, doTrace, getLastModified, service, service</code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.javax.servlet.GenericServlet">Methods inherited from class&nbsp;javax.servlet.GenericServlet</h3>
 <code>destroy, getInitParameter, getInitParameterNames, getServletConfig, getServletContext, getServletInfo, getServletName, init, init, log, log</code></div>
@@ -195,6 +206,12 @@ javax.servlet.http.HttpServletResponse&nbsp;response)</code></th>
 <section class="field-details" id="field.detail">
 <h2>Field Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="HTML_CODE">
+<h3>HTML_CODE</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">HTML_CODE</span></div>
+</section>
+</li>
 <li>
 <section class="detail" id="serialVersionUID">
 <h3>serialVersionUID</h3>
@@ -227,6 +244,22 @@ javax.servlet.http.HttpServletResponse&nbsp;response)</code></th>
 <section class="method-details" id="method.detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="doGet(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)">
+<h3>doGet</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">doGet</span>&#8203;(<span class="parameters">javax.servlet.http.HttpServletRequest&nbsp;request,
+javax.servlet.http.HttpServletResponse&nbsp;response)</span>
+              throws <span class="exceptions">javax.servlet.ServletException,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code>doGet</code>&nbsp;in class&nbsp;<code>javax.servlet.http.HttpServlet</code></dd>
+<dt>Throws:</dt>
+<dd><code>javax.servlet.ServletException</code></dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="doPost(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)">
 <h3>doPost</h3>
