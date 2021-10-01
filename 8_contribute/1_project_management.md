@@ -1,7 +1,7 @@
 ---
 layout: default
-title: SEALS
-parent: MELT Project Management
+title: MELT Project Management
+parent: Contribute
 nav_order: 1
 permalink: /contribute/project-management
 ---
