@@ -17,7 +17,7 @@ public class TestBioDiv {
     */
     
     
-    @TestFactory //should not be executed every time someone pushes to the github repro
+    //@TestFactory //should not be executed every time someone pushes to the github repro
     Stream<DynamicTest> analyze() {
         return AssertHelper.assertDynamicTrack(TrackRepository.Biodiv.V2021);
     }
