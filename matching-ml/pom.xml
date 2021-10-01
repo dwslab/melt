@@ -3,7 +3,7 @@
     <parent>
         <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
         <artifactId>matching-parent</artifactId>
-        <version>3.2</version>
+        <version>3.3-SNAPSHOT</version>
     </parent>
     <artifactId>matching-ml</artifactId>
     <name>MELT - Matching EvaLuation Toolkit | Machine Learning Module</name>
