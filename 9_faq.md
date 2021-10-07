@@ -176,18 +176,14 @@ This can be achieved as follows:
 # first we load the image; the image name will be printed in the console
 docker load -i {.tar.gz file}  
 
-# then we remove the problematic dependency
-# the container ID will be printed in the console
-docker run -d {image name} rm /maven/lib/servlet-api-2.5.jar
-
-# let's commit and overwrite the old image
-docker commit {container id} {image name}
+# let's create an updated image
+docker build -t {image name} - <<END            
+FROM {image name}
+RUN rm /maven/lib/servlet-api-2.5.jar
+END
 
 # let's write a new .tar.gz file
 docker save {image name} | gzip > {.tar.gz file}
-
-# let's delete the old container
-docker rm {container id}
 ```
 
 *Concrete Example*
@@ -195,18 +191,14 @@ docker rm {container id}
 # first we load the image (the printed image name is 'alod2vecmatcher-1.0-web')
 docker load -i ./alod2vecmatcher-1.0-web-latest.tar.gz
 
-# then we remove the problematic dependency
-# printed container id: '5edd13191513660dc5e8e9fe1a087d9c42f77403076b29e0f11f2455ce6673eb'
-docker run -d alod2vecmatcher-1.0-web rm /maven/lib/servlet-api-2.5.jar
-
-# let's commit and overwrite the old image
-docker commit 5edd13191513660dc5e8e9fe1a087d9c42f77403076b29e0f11f2455ce6673eb alod2vecmatcher-1.0-web
+# let's create a new image
+docker build -t alod2vecmatcher-1.0-web - <<END            
+FROM alod2vecmatcher-1.0-web
+RUN rm /maven/lib/servlet-api-2.5.jar
+END
 
 # let's write a new .tar.gz file
 docker save alod2vecmatcher-1.0-web | gzip > alod2vecmatcher-1.0-web-latest.tar.gz
-
-# let's delete the old container
-docker rm 5edd13191513660dc5e8e9fe1a087d9c42f77403076b29e0f11f2455ce6673eb
 ```
 
 
