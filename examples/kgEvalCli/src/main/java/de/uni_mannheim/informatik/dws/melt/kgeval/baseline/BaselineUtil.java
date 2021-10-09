@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.kgbaseline;
+package de.uni_mannheim.informatik.dws.melt.kgeval.baseline;
 
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.util.ArrayList;

@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,11 +73,11 @@ public class ResultsPageUtil {
         return formatTime(results.stream().mapToLong(ExecutionResult::getRuntime).sum());
     }
     public String getRuntime(ExecutionResult result){
-        long seconds = result == null ? 0 : result.getRuntime();
-        return formatTime(seconds);
+        long nanoseconds = result == null ? 0 : result.getRuntime();
+        return formatTime(nanoseconds);
     }
-    public String formatTime(long seconds){
-        return String.format("%d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)); 
+    public String formatTime(long nanoseconds){
+        return DurationFormatUtils.formatDuration(nanoseconds/1_000_000, "HH:mm:ss");
     }
     
     public String getAvgSystemSize(Set<ExecutionResult> results){

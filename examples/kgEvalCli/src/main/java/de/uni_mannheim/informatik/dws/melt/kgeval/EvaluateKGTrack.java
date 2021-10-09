@@ -1,8 +1,15 @@
 package de.uni_mannheim.informatik.dws.melt.kgeval;
 
+import de.uni_mannheim.informatik.dws.melt.kgeval.baseline.BaselineLabel;
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.docker.MatcherDockerFile;
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.http.MatcherHTTPCall;
+import de.uni_mannheim.informatik.dws.melt.matching_base.external.seals.MatcherSealsBuilder;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutorSeals;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.Evaluator;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorAlignmentAnalyzer;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer.ExplainerResourceProperty;
@@ -10,16 +17,22 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer.Exp
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.dashboard.DashboardBuilder;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.resultspage.ResultsPageHTML;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.resultspage.ResultsPageLatex;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentXmlRepair;
+import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
+import java.io.Closeable;
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -35,35 +48,54 @@ import org.slf4j.LoggerFactory;
 public class EvaluateKGTrack {
     private static final Logger LOGGER = LoggerFactory.getLogger(EvaluateKGTrack.class);
 
+    private static final String SYSTEMS_OPTION = "systems";
+    private static final String JAVA8_OPTION = "java8";
+    private static final String TIMEOUT_OPTION = "timeoutHours";
+    private static final String TMP_FOLDER_OPTION = "tmp";
+    private static final String TESTCASES_OPTION = "testcases";
+    private static final String TRACK_OPTION = "track";
+    private static final String METHOD_OPTION = "method";
+    private static final String INFOLDER_OPTION = "inFolder";
+    private static final String OUTFOLDER_OPTION = "outFolder";
+    
     public static void main(String[] args){
         Options options = new Options();
         
-        //seals options
-        options.addOption("sealsClient", true, "The path to seals client (defaults to ./seals-omt-client.jar)");
-        options.addOption("sealsHome", true, "The path to seals home (defaults to ./SEALS_HOME/)");
-        options.addOption("sealsResults", true, "The path to seals results (defaults to ./SEALS_RESULTS/)");
-        options.addOption("sealsMatcher", true, "The path to seals matchers (defaults to ./SEALS_MATCHER/)");
+        options.addOption(Option.builder("s")
+                .longOpt(SYSTEMS_OPTION)
+                .hasArg()
+                .numberOfArgs(Option.UNLIMITED_VALUES)
+                .desc("The matching systems to run. Runs autodetect for the type of system.")
+                .build());
         
-        options.addOption("inFolder", true, "The path to a folder where the files should be processed.");
-        options.addOption("outFolder", true, "The path to a folder where the processed files should be stored in the end.");
+        options.addOption(Option.builder("j")
+                .longOpt(JAVA8_OPTION)
+                .hasArg()
+                .desc("If your system Java is not Java 8, you can set the path using this variable.")
+                .build());
         
-        options.addOption("timeoutHours", true, "the number of hours for the timeout (default is 24 hours).");      
-        options.addOption("testcases", true, "name of the testcases to execute(separated by comma) e.g. starwars-swg,memoryalpha-stexpanded");                
-        options.addOption("track", true, "The name of the track. Possible values: small-test,v1,v2,v3,v4,v3-nonmatch-small,v3-nonmatch-large");
+        options.addOption(Option.builder("t")
+                .longOpt(TMP_FOLDER_OPTION)
+                .hasArg()
+                .argName("path")
+                .desc("The path to a folder where temporary files can be written. This also includes the cache of OAEI files.")
+                .build());
         
-        options.addOption(Option.builder("method")
+        options.addOption(Option.builder("m")
+                .longOpt(METHOD_OPTION)
                 .hasArg()
                 .required()
                 .desc("method to call. one of: run,repair,check,resultspage")
                 .build());
-        options.addOption(Option.builder("cache")
-                .hasArg()
-                .argName("path")                
-                .desc("The path to the cache folder for ontologies")
-                .build());
+        
+        options.addOption(TIMEOUT_OPTION, true, "the number of hours for the timeout (default is 24 hours).");
+        options.addOption(TESTCASES_OPTION, true, "name of the testcases to execute(separated by comma) e.g. starwars-swg,memoryalpha-stexpanded");                
+        options.addOption(TRACK_OPTION, true, "The name of the track. Possible values: small-test,v1,v2,v3,v4,v3-nonmatch-small,v3-nonmatch-large");
+        options.addOption(INFOLDER_OPTION, true, "The path to a folder where the files should be processed.");
+        options.addOption(OUTFOLDER_OPTION, true, "The path to a folder where the processed files should be stored in the end.");
         
         options.addOption("help", "print this message");
-                
+        
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         CommandLine cmd = null;
@@ -80,13 +112,38 @@ public class EvaluateKGTrack {
             System.exit(1);
         }
         
-        if(cmd.hasOption("cache")){
-            File cacheFile = new File(cmd.getOptionValue("cache"));
+        //arguments verification
+        String tmpFolderString = cmd.getOptionValue(TMP_FOLDER_OPTION);
+        File tmp = null;
+        if(tmpFolderString != null){
+            try {
+                tmp = Paths.get(tmpFolderString).toFile();
+            } catch (InvalidPathException | NullPointerException ex) {
+                LOGGER.error("Option {} does not point to a valid directory.", TMP_FOLDER_OPTION);
+                System.exit(1);
+            }
+            if(tmp.exists()){
+                if(tmp.isDirectory() == false){
+                    LOGGER.error("Option {} does not point to a  directory.", TMP_FOLDER_OPTION);
+                    System.exit(1);
+                }
+            }else{
+                tmp.mkdirs();
+                if(tmp.isDirectory() == false){ // also checks if it exists
+                    LOGGER.error("Option {} does not point to a directory or does not exist.", TMP_FOLDER_OPTION);
+                    System.exit(1);
+                }
+            }
+        }
+        
+        if(tmp != null){
+            File cacheFile = new File(tmp, "oaei_track_cache");
+            cacheFile.mkdirs();
             LOGGER.info("Setting cache to {}", cacheFile);
             Track.setCacheFolder(cacheFile);
         }
         
-        switch(cmd.getOptionValue("method").toLowerCase()){
+        switch(cmd.getOptionValue(METHOD_OPTION).toLowerCase()){
             case "run":{
                 runMatchers(cmd);
                 break;
@@ -110,58 +167,64 @@ public class EvaluateKGTrack {
         }
     }
     
-    private static void runMatchers(CommandLine cmd){
-        File sealsClientJar = new File(cmd.getOptionValue("sealsClient", "./seals-omt-client.jar"));
-        File sealsHome = new File(cmd.getOptionValue("sealsHome", "./SEALS_HOME/"));
-        File sealsResults = new File(cmd.getOptionValue("sealsResults", "./SEALS_RESULTS/"));
-        File sealsMatcher = new File(cmd.getOptionValue("sealsMatcher", "./SEALS_MATCHER/"));
-        
-        List<String> javaRuntimeParameters = Arrays.asList("-Xmx25g", "-Xms15g");
-        long timeout = Long.parseLong(cmd.getOptionValue("timeoutHours", "24"));
-        TimeUnit timeoutUnit = TimeUnit.HOURS;
-        
+    private static void runMatchers(CommandLine cmd){        
+        Set<Supplier<IOntologyMatchingToolBridge>> matchers = getMatchers(cmd);
+        if(matchers == null || matchers.isEmpty())
+            return;        
         List<TestCase> testCases = getTestCases(cmd);
         
-        LOGGER.info("Run seals with the following settings:");
-        LOGGER.info("testCases: {}", testCases.stream().map(tc->tc.getName()).collect(Collectors.joining(",")));
-        LOGGER.info("sealsClientJar: {}", sealsClientJar);
-        LOGGER.info("sealsHome: {}", sealsHome);
-        LOGGER.info("sealsResults: {}", sealsResults);
-        LOGGER.info("sealsMatcher: {}", sealsMatcher);
-        LOGGER.info("javaRuntimeParameters: {}", javaRuntimeParameters);
-        LOGGER.info("for {} {}", timeout, timeoutUnit);
+        //LOGGER.info("Run the following matchers: {}", matchers.keySet().stream().collect(Collectors.joining(",")));
+        //LOGGER.info("On following testcases: {}", testCases.stream().map(tc -> tc.getName()).collect(Collectors.joining(",")));        
+        ExecutionResultSet results = new ExecutionResultSet();
+        for(Supplier<IOntologyMatchingToolBridge> matcherSupplier : matchers){
+            for(TestCase tc : testCases){
+                IOntologyMatchingToolBridge matcher = matcherSupplier.get();
+            
+                results.addAll(Executor.run(tc, matcher));
+
+                try {
+                    if(matcher instanceof AutoCloseable){
+                        ((AutoCloseable)matcher).close();
+                    }else if(matcher instanceof Closeable){
+                        ((Closeable)matcher).close();
+                    }
+                } catch (Exception ex) {
+                    LOGGER.warn("Could not close the matcher.", ex);
+                }
+            }
+        }
         
-        ExecutorSeals e = new ExecutorSeals(sealsClientJar, sealsHome, sealsResults, javaRuntimeParameters, timeout, timeoutUnit, true);
+        CopyResultsAndTime copyResults = new CopyResultsAndTime(results);
+        copyResults.writeToDirectory();
         
-        e.run(testCases, sealsMatcher);
+        //EvaluatorBasic basic = new EvaluatorBasic(results);
+        //basic.writeToDirectory();
     }
     
-    private static void repairAlignmentFiles(CommandLine cmd){        
-        File in = new File(cmd.getOptionValue("inFolder", "./SEALS_RESULTS/"));
-        File out = new File(cmd.getOptionValue("outFolder", "./SEALS_RESULTS_REPAIRED/"));    
+    private static void repairAlignmentFiles(CommandLine cmd){
+        File in = getFileOrThrowException(cmd, INFOLDER_OPTION);
+        File out = getFileOrThrowException(cmd, OUTFOLDER_OPTION);
         
         LOGGER.info("Repair alignment xml from folder {} and copies the results to {}", in, out);
         AlignmentXmlRepair.repairAlignmentFolder(in, out);
     }
     
     private static void checkAlignments(CommandLine cmd){
-        File in = new File(cmd.getOptionValue("inFolder", "./SEALS_RESULTS_REPAIRED/"));
-        File out = new File(cmd.getOptionValue("outFolder", "./MELT_RESULTS/"));
-        Track track = getTrack(cmd);
+        File in = getFileOrThrowException(cmd, INFOLDER_OPTION);
+        File out = getFileOrUseDefault(cmd, OUTFOLDER_OPTION);
         
-        LOGGER.info("Check the alignments in folder {} for track {} {} and writes the results to {}", in, track.getName(), track.getVersion(), out);        
-        ExecutionResultSet resultSet = Executor.loadFromFolder(in, track);        
+        LOGGER.info("Check the alignments in folder {} and writes results to {}", in, out);        
+        ExecutionResultSet resultSet = CopyResultsAndTime.loadFromFolder(in);    
         new EvaluatorAlignmentAnalyzer(resultSet).writeToDirectory(out);
     }
     
     private static void generateResultsPage(CommandLine cmd){
-        File in = new File(cmd.getOptionValue("inFolder", "./SEALS_RESULTS_REPAIRED/"));
-        File out = new File(cmd.getOptionValue("outFolder", "./MELT_RESULTS/"));
-        Track track = getTrack(cmd);
+        File in = getFileOrThrowException(cmd, INFOLDER_OPTION);
+        File out = getFileOrUseDefault(cmd, OUTFOLDER_OPTION);
         
-        LOGGER.info("Generates a results page from folder {} for track {} {} and writes the results to {}", in, track.getName(),track.getVersion(), out);    
+        LOGGER.info("Generates a results page from folder {} and writes the results to {}", in, out);    
         
-        ExecutionResultSet results = Executor.loadFromFolder(in, track);
+        ExecutionResultSet results = CopyResultsAndTime.loadFromFolder(in);
         
         //results page
         new ResultsPageHTML(results, false, false).writeToDirectory(out);
@@ -169,11 +232,14 @@ public class EvaluateKGTrack {
         
         
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(results);
-
+        
+        evaluatorCSV.setBaselineMatcher(new BaselineLabel());
+        
         evaluatorCSV.setResourceExplainers(Arrays.asList(
                 new ExplainerResourceProperty(RDFS.label),
                 new ExplainerResourceType()));
         
+                
         evaluatorCSV.writeToDirectory(out);
                 
         DashboardBuilder db = new DashboardBuilder(evaluatorCSV);
@@ -205,7 +271,7 @@ public class EvaluateKGTrack {
     
     private static Map<String, Track> MAP_VERSION_TO_TRACK = generateMapVersionToTrack();
     private static Map<String, Track> generateMapVersionToTrack(){
-        Map<String, Track> map = new HashMap();
+        Map<String, Track> map = new HashMap<>();
         for(Track t : TrackRepository.retrieveDefinedTracks(TrackRepository.Knowledgegraph.class)){
             map.put(t.getVersion().toLowerCase(), t);
         }
@@ -213,7 +279,7 @@ public class EvaluateKGTrack {
     }
     
     private static Track getTrack(CommandLine cmd){        
-        Track track = MAP_VERSION_TO_TRACK.get(cmd.getOptionValue("track", "V4").toLowerCase());
+        Track track = MAP_VERSION_TO_TRACK.get(cmd.getOptionValue(TRACK_OPTION, "V4").toLowerCase());
         if(track == null){
             LOGGER.error("Could not find knowledge track track version. Abort.");
             throw new IllegalArgumentException("Could not find knowledge track track version.");
@@ -223,7 +289,7 @@ public class EvaluateKGTrack {
     
     private static List<TestCase> getTestCases(CommandLine cmd){
         Track track = getTrack(cmd);
-        String testCases = cmd.getOptionValue("testcases", "");
+        String testCases = cmd.getOptionValue(TESTCASES_OPTION, "");
         testCases = testCases.trim();
         if(testCases.isEmpty())
             return track.getTestCases();
@@ -231,4 +297,96 @@ public class EvaluateKGTrack {
         return track.getTestCases(testCaseNames);
     }
     
+    private static Set<Supplier<IOntologyMatchingToolBridge>> getMatchers(CommandLine cmd){
+        Set<Supplier<IOntologyMatchingToolBridge>> matchers = new HashSet<>();
+        
+        String[] systems = cmd.getOptionValues(SYSTEMS_OPTION);
+        if (systems == null || systems.length == 0) {
+            LOGGER.warn("Please specify systems to evaluate using the --systems option.\n" +
+                "You can call --help for documentation/help. ABORTING PROGRAM...");
+            return null;
+        }
+        
+        MatcherSealsBuilder sealsBuilder = getSealsBuilder(cmd);
+        
+        for (String system : systems) {
+            if (system == null || system.trim().equals("")) {
+                continue;
+            }
+            if (system.toLowerCase().endsWith(".tar.gz")) {
+                // we assume it is in MELT WEB DOCKER format:
+                LOGGER.info("Recognized MELT WEB DOCKER package: {}", system);
+                File dockerFile = new File(system);
+                if (dockerFile.isDirectory()) {
+                    LOGGER.warn("The provided file is a directory: {} . Skipping this matcher.", system);
+                    continue;
+                }
+                if (!dockerFile.exists()) {
+                    LOGGER.warn("The provided docker file does not exist {} . Skipping this matcher.", system);
+                    continue;
+                }
+                matchers.add(()-> new MatcherDockerFile(new File(system)));
+            } else if (system.toLowerCase().endsWith(".zip")) {
+                // we assume it is a SEALS package:
+                LOGGER.info("Recognized SEALS package: {}", system);
+                matchers.add(()-> sealsBuilder.build(new File(system)));
+            } else {
+                // we assume it is a URL...
+                LOGGER.info("Recognized HTTP URL matcher endpoint:\n{}\n", system);
+                try {
+                    URI uri = new URI(system);
+                    matchers.add(()-> new MatcherHTTPCall(uri));
+                } catch (URISyntaxException e) {
+                    LOGGER.warn("Failed to create URI with system: {}\nSkipping matcher...\n", system);
+                }
+            }
+        }
+        
+        if (matchers.isEmpty()) {
+            LOGGER.warn("No systems are detected. ABORTING PROGRAM...");
+            return null;
+        }
+        return matchers;
+    }
+    
+    private static MatcherSealsBuilder getSealsBuilder(CommandLine cmd){
+        List<String> javaRuntimeParameters = Arrays.asList("-Xmx25g", "-Xms15g");
+        long timeout = Long.parseLong(cmd.getOptionValue(TIMEOUT_OPTION, "24"));
+        TimeUnit timeUnit = TimeUnit.HOURS;
+        MatcherSealsBuilder builder = new MatcherSealsBuilder()
+                .setJavaRuntimeParameters(javaRuntimeParameters)                
+                // KG track has no input alignment and some of the matchers throws an error if an input alignment is provided
+                .setDoNotUseInputAlignment(true)
+                .setFreshMatcherInstance(false)
+                .setTimeout(timeout)
+                .setTimeoutTimeUnit(timeUnit);
+        
+        String java8 = cmd.getOptionValue(JAVA8_OPTION);
+        if(java8 != null)
+            builder.setJavaCommand(java8);
+        
+        String tmpFolder = cmd.getOptionValue(TMP_FOLDER_OPTION);
+        if(tmpFolder != null){
+            LOGGER.info("Set the tmp folder of sealsbuilder to {}", tmpFolder);
+            builder.setTmpFolder(new File(tmpFolder));
+        }
+        return builder;
+    }
+    
+    private static File getFileOrThrowException(CommandLine cmd, String option){
+        String value = cmd.getOptionValue(option);
+        if(value == null){
+            throw new IllegalArgumentException("Option " + option + " is not specified but required.");
+        }
+        return new File(value);
+    }
+    
+    private static File getFileOrUseDefault(CommandLine cmd, String option){
+        String value = cmd.getOptionValue(option);
+        if(value == null){
+            return Evaluator.getDirectoryWithCurrentTime();
+        }else{
+            return new File(value);
+        }
+    }
 }

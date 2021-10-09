@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-    <artifactId>kgbaselinematchers</artifactId>
+    <artifactId>kgbaseline_label</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
     
@@ -10,9 +10,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <matching.version>2.6</matching.version> <!-- version for all matching related packages -->
-        <!-- possible values: "BaselineLabel", "BaselineAltLabel", "BaselineAnchorLabel" -->
-        <oaei.mainClass>de.uni_mannheim.informatik.dws.melt.kgbaseline.BaselineAnchorLabel</oaei.mainClass>
+        <matching.version>3.2</matching.version> <!-- version for all matching related packages -->
+        <!-- possible values: "BaselineLabel", "BaselineAltLabel" -->
+        <oaei.mainClass>de.uni_mannheim.informatik.dws.melt.kgbaseline.BaselineLabel</oaei.mainClass>
     </properties>
     
     <dependencies>
@@ -20,6 +20,25 @@
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-jena</artifactId>
             <version>${matching.version}</version>
+        </dependency>
+        
+        <!-- This dependency is necessary for seals_external. It contains the cli wrapper. -->
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>receiver-cli</artifactId>
+            <version>${matching.version}</version>
+        </dependency>
+        
+        <!--dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>matching-eval</artifactId>
+            <version>${matching.version}</version>
+        </dependency-->
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.32</version>
         </dependency>
     </dependencies>
 
@@ -33,7 +52,7 @@
                 <dependencies>
                     <dependency>
                         <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-                        <artifactId>seals-assembly</artifactId>
+                        <artifactId>matching-assembly</artifactId>
                         <version>${matching.version}</version>
                     </dependency>
                 </dependencies>
@@ -41,11 +60,10 @@
                     <execution>
                         <phase>package</phase>
                         <goals><goal>single</goal></goals>
-                        <configuration><descriptorRefs><descriptorRef>seals</descriptorRef></descriptorRefs></configuration>
+                        <configuration><descriptorRefs><descriptorRef>seals_external</descriptorRef></descriptorRefs></configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-
 </project>
