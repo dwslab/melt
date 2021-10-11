@@ -73,7 +73,15 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
+
+        <!-- This dependency cannot be in test scope because this leads to a failure of the markdown generation
+             in the CI pipeline. -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+
         <!--for multisource clustering (detect which links are correct) -->
         <dependency>
             <groupId>org.gradoop.famer</groupId>
