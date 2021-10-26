@@ -1,6 +1,11 @@
 # Release Notes
 
 
+## Changes in 3.3
+
+**New**
+- MELT user guide allows for downloading track data directly via the documentation page.
+
 ## Changes in 3.2
 
 **New**
@@ -28,7 +33,7 @@
 - documentation about jena interfaces like `LiteralExtractor` and ` TextExtractor`
 - welcome message also shows the git commit hash which is used to build the eval client
 
-**New tracks**
+**New Tracks**
 - new biodiv track (version `2021`)
 
 ## Changes in 3.1
