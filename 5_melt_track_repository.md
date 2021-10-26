@@ -26,14 +26,14 @@ test cases.
 ## Available Tracks
 MELT also provides a server with default datasets used by the OAEI. 
 They are identified by three components: 
-1. `Repository` (location-URI): http://oaei.webdatacommons.org/tdrs/	 
-2. `Track/Suite - ID` (collection-name): \<see table\>
-3. `Version ID`: \<see table below\>
+1. `Repository` (location-URI): `http://oaei.webdatacommons.org/tdrs/`	 
+2. `Track/Suite - ID` (collection-name): *\<see table\>*
+3. `Version ID`: *\<see table below\>*
 
 The [MELT evaluation client](https://dwslab.github.io/melt/matcher-evaluation/client) uses these track identifiers.
 The MELT repository is built so that it is fully compatible with the former SEALS client. For example, you can still use the SEALS client JAR to fetch the data from the MELT repository.
 
-You can also download a ZIP file of the data by clicking on the download icon (<i class="fa fa-arrow-circle-down"></i>) next to the Version ID.
+You can also download a ZIP file of the data by clicking on the download icon (<i class="fa fa-arrow-circle-down"></i>) next to the Version ID in the table below.
 
 Name | Suite-ID | Version-ID 
 ---- | -------- | ---------- 
