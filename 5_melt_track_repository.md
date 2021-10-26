@@ -27,7 +27,7 @@ test cases.
 MELT also provides a server with default datasets used by the OAEI. 
 They are identified by three components: 
 1. `Repository` (location-URI): `http://oaei.webdatacommons.org/tdrs/`	 
-2. `Track/Suite - ID` (collection-name): *\<see table\>*
+2. `Track/Suite - ID` (collection-name): *\<see table below\>*
 3. `Version ID`: *\<see table below\>*
 
 The [MELT evaluation client](https://dwslab.github.io/melt/matcher-evaluation/client) uses these track identifiers.
