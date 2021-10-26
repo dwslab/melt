@@ -33,22 +33,22 @@ They are identified by three components:
 The [MELT evaluation client](https://dwslab.github.io/melt/matcher-evaluation/client) uses these track identifiers.
 The MELT repository is built so that it is fully compatible with the former SEALS client. For example, you can still use the SEALS client JAR to fetch the data from the MELT repository.
 
-You can also download a ZIP file of the data using the links provided in the table below.
+You can also download a ZIP file of the data by clicking on the download icon (📥) next to the Version ID.
 
-Name | Suite-ID | Version-ID | Download |
----- | -------- | ---------- | -------- |
-[anatomy](http://oaei.ontologymatching.org/2019/anatomy/index.html) | `anatomy_track` | `anatomy_track-default` | [📥]()
-[conference](http://oaei.ontologymatching.org/2019/conference/index.html) | `conference` | - `conference-v1` <br> - `conference-v1-all` (also testcases without reference) <br> - `conference-dbpedia` | [📥]()
-[knowledgegraph](http://oaei.ontologymatching.org/2019/knowledgegraph/index.html) | `knowledgegraph` | - `v3` <br/> - `commonkg` ([paper](https://github.com/OmaimaFallatah/KG_GoldeStandard)) | [📥]()
-[iimb](http://islab.di.unimi.it/content/im_oaei/2018/) | `iimb` | `v1` | [📥]()
-[biodiv](http://oaei.ontologymatching.org/2018/biodiv/index.html) | `biodiv` | - `2018` <br/> - `2021` <br/> - `2021owl` | [📥]()
-[link](https://project-hobbit.eu/challenges/om2019/) | `link` | `2017` | [📥]()
-[phenotype](https://sws.ifi.uio.no/oaei/phenotype/) | `phenotype` | - `phenotype-hp-mp-2017-bioportal`<br/>- `phenotype-doid-ordo-2017-bioportal` | [📥]()
-[multifarm](http://oaei.ontologymatching.org/2018/multifarm/index.html) | `<language_pair>`<br> `multifarm`  |  `<language_pair>-v2` <br> `all-v2` | [📥]()
-[largebio](http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/) | `largebio` |  -`largebio-all_tasks_2016`<br>- `largebio-fma_nci_small_2016`<br>- `largebio-fma_nci_whole_2016`<br>- `largebio-fma_snomed_small_2016`<br>- `largebio-fma_snomed_whole_2016`<br>- `largebio-snomed_nci_small_2016`<br>- `largebio-snomed_nci_whole_2016` | [📥]()
-[complex](http://oaei.ontologymatching.org/2019/complex/index.html) | - `geolink`<br>- `hydrography`<br>- `popgeolink`<br>- `popenslaved`<br>- `popconference`|  - `geolink-v1`<br>- `hydrography-v1`<br>- `popgeolink-v1`<br>- `popenslaved-v1`<br>- `popconference-[0-20-40-60-80-100]-v1` | [📥]()
-GeoLinkCruise | `geolinkcruise`| `geolinkcruise-v1` | [📥]()
-Laboratory | `laboratory`| `laboratory-v1` | [📥]()
+Name | Suite-ID | Version-ID 
+---- | -------- | ---------- 
+[anatomy](http://oaei.ontologymatching.org/2019/anatomy/index.html) | `anatomy_track` | `anatomy_track-default` [📥]()
+[conference](http://oaei.ontologymatching.org/2019/conference/index.html) | `conference` | - `conference-v1` [📥]()<br> - `conference-v1-all` [📥]() (also testcases without reference) <br> - `conference-dbpedia` [📥]()
+[knowledgegraph](http://oaei.ontologymatching.org/2019/knowledgegraph/index.html) | `knowledgegraph` | - `v3` [📥]()<br/> - `commonkg` [📥]() ([paper](https://github.com/OmaimaFallatah/KG_GoldeStandard)) 
+[iimb](http://islab.di.unimi.it/content/im_oaei/2018/) | `iimb` | `v1` [📥]() | 
+[biodiv](http://oaei.ontologymatching.org/2018/biodiv/index.html) | `biodiv` | - `2018` <br/> - `2021` <br/> - `2021owl`
+[link](https://project-hobbit.eu/challenges/om2019/) | `link` | `2017`
+[phenotype](https://sws.ifi.uio.no/oaei/phenotype/) | `phenotype` | - `phenotype-hp-mp-2017-bioportal`<br/>- `phenotype-doid-ordo-2017-bioportal`
+[multifarm](http://oaei.ontologymatching.org/2018/multifarm/index.html) | `<language_pair>`<br> `multifarm`  |  `<language_pair>-v2` <br> `all-v2`
+[largebio](http://www.cs.ox.ac.uk/isg/projects/SEALS/oaei/) | `largebio` |  -`largebio-all_tasks_2016`<br>- `largebio-fma_nci_small_2016`<br>- `largebio-fma_nci_whole_2016`<br>- `largebio-fma_snomed_small_2016`<br>- `largebio-fma_snomed_whole_2016`<br>- `largebio-snomed_nci_small_2016`<br>- `largebio-snomed_nci_whole_2016`
+[complex](http://oaei.ontologymatching.org/2019/complex/index.html) | - `geolink`<br>- `hydrography`<br>- `popgeolink`<br>- `popenslaved`<br>- `popconference`|  - `geolink-v1`<br>- `hydrography-v1`<br>- `popgeolink-v1`<br>- `popenslaved-v1`<br>- `popconference-[0-20-40-60-80-100]-v1`
+GeoLinkCruise | `geolinkcruise`| `geolinkcruise-v1`
+Laboratory | `laboratory`| `laboratory-v1`
 
 Available multifarm language pairs:<br/>
 `ar-cn`, `ar-cz`, `ar-de`, `ar-en`, `ar-es`, `ar-fr`, `ar-nl`, `ar-pt`, `ar-ru`, `cn-cz`, `cn-de`, `cn-en`, `cn-es`, 
