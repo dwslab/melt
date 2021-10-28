@@ -37,7 +37,8 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
-          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          # TODO: the latest pytorch version is only available for 3.9 and not yet in 3.10 - replace it with 3.x if it is available
+          python-version: '3.9' 
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
       - name: Install python dependencies
         run: pip install -r ./matching-ml/src/main/resources/requirements.txt
