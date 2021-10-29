@@ -284,7 +284,7 @@
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
-            <version>56.1</version>
+            <version>70.1</version>
         </dependency>
 
         <!-- BabelNet Lib Dependency -->
