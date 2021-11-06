@@ -7,18 +7,35 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+### Describe the bug
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+
+### To Reproduce
 Steps to reproduce the behavior:
+
+- Version of MELT: `{YOUR MELT VERSION HERE}`
+- Java version: `{YOUR JAVA VERSION HERE}`
+- Python version: `{YOUR PYTHON VERSION HERE}`
+- Operating system: `{YOUR OS HERE}`
+
+#### Full log output
+
+Please paste the FULL log output (which is generated during your run) below:
+
+
+<details>
+
+```
+PASTE FULL LOG OUTPUT HERE:
+
+```
+
+</details>
+
+You can also [attach the FULL log output](https://docs.github.com/en/github/writing-on-github/working-with-advanced-formatting/attaching-files)
+
 In the best case add a minimal working example which shows the bug.
-Please also [attach the log file](https://docs.github.com/en/github/writing-on-github/working-with-advanced-formatting/attaching-files) which is generated during your run.
 
-- Version of MELT?
-- Java version?
-- Python version?
-- Operating system?
-
-**Expected behavior**
+### Expected behavior
 A clear and concise description of what you expected to happen.
