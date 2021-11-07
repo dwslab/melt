@@ -126,11 +126,13 @@ public class AlignmentParser {
         try(CSVParser csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))){
             for (CSVRecord record : csvParser) {
                 Correspondence correspondence = new Correspondence(record.get("source").trim(), record.get("target").trim());
-                if(record.isSet("confidence")){
-                    correspondence.setConfidence(Double.parseDouble(record.get("confidence")));
+                String confidence = getRecordEntry(record, "confidence");
+                if(!confidence.isEmpty()){
+                    correspondence.setConfidence(Double.parseDouble(confidence));
                 }
-                if(record.isSet("relation")){
-                    correspondence.setRelation(CorrespondenceRelation.parse(record.get("relation").trim()));
+                String relation = getRecordEntry(record, "relation");
+                if(!relation.isEmpty()){
+                    correspondence.setRelation(CorrespondenceRelation.parse(relation));
                 }
                 a.add(correspondence);
             }
@@ -138,6 +140,19 @@ public class AlignmentParser {
         return a;
     }
     
+    private static String getRecordEntry(CSVRecord record, String name){
+        if(record.isSet(name)){
+            return record.get(name).trim();
+        }
+        return "";
+    }
+    
+    private static String getRecordEntry(CSVRecord record, int index){
+        if(record.isSet(index)){
+            return record.get(index).trim();
+        }
+        return "";
+    }
     
     /**
      * Parse alignment from CSV (comma separated file) without header. The order is: (source, target, confidence, relation).
@@ -163,11 +178,13 @@ public class AlignmentParser {
         try(CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(delimiter).parse(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))){
             for (CSVRecord record : csvParser) {
                 Correspondence correspondence = new Correspondence(record.get(0).trim(), record.get(1).trim());
-                if(record.isSet(2)){
-                    correspondence.setConfidence(Double.parseDouble(record.get(2)));
+                String confidence = getRecordEntry(record, 2);
+                if(!confidence.isEmpty()){
+                    correspondence.setConfidence(Double.parseDouble(confidence));
                 }
-                if(record.isSet(3)){
-                    correspondence.setRelation(CorrespondenceRelation.parse(record.get(3).trim()));
+                String relation = getRecordEntry(record, 3);
+                if(!relation.isEmpty()){
+                    correspondence.setRelation(CorrespondenceRelation.parse(relation));
                 }
                 a.add(correspondence);
             }
@@ -184,20 +201,8 @@ public class AlignmentParser {
      * @throws java.io.IOException thrown if some io error occurs.
      */
     public static Alignment parseTSV(File file) throws IOException{
-        Alignment a = new Alignment();
-        try(CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter('\t').parse(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))){
-            for (CSVRecord record : csvParser) {
-                Correspondence correspondence = new Correspondence(record.get(0).trim(), record.get(1).trim());
-                if(record.isSet(2)){
-                    correspondence.setConfidence(Double.parseDouble(record.get(2)));
-                }
-                if(record.isSet(3)){
-                    correspondence.setRelation(CorrespondenceRelation.parse(record.get(3).trim()));
-                }
-                a.add(correspondence);
-            }
-        }
-        return a;
+        return parseCSVWithoutHeader(file, '\t');
     }
+    
 }
     

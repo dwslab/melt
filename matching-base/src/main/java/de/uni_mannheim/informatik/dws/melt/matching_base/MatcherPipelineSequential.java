@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
  * Executes all matchers one after the other.
  */
 public class MatcherPipelineSequential implements IMatcherCaller {
-
-
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherPipelineSequential.class);
     
     protected List<Object> matchers;
@@ -34,20 +32,17 @@ public class MatcherPipelineSequential implements IMatcherCaller {
     
     @Override
     public AlignmentAndParameters match(Set<Object> sourceRepresentations, Set<Object> targetRepresentations, Object inputAlignment, Object parameters) throws Exception {
-        Object tmpAlignment = inputAlignment;
-        Object tmpParameters = parameters;
         for(Object matcher : this.matchers){
-            AlignmentAndParameters matcherResult = GenericMatcherCaller.runMatcherMultipleRepresentations(matcher, sourceRepresentations, targetRepresentations, tmpAlignment, tmpParameters);
+            AlignmentAndParameters matcherResult = GenericMatcherCaller.runMatcherMultipleRepresentations(matcher, sourceRepresentations, targetRepresentations, inputAlignment, parameters);
             if(matcherResult.getAlignment() == null){
-                LOGGER.warn("Matcher could not be called or returned null object. The matcher sequence will stop here and return null.");
-                return null;
+                throw new IllegalArgumentException("A matcher returned null from the match method. No matcher should do this. Please repair the matcher " + matcher.getClass());
             }
             if(matcherResult.getParameters() == null){
-                LOGGER.warn("Parameters is null. Use old parameters as fallback.");
-            }else{
-                tmpParameters = matcherResult.getParameters();
+                throw new IllegalArgumentException("A matcher set the parameters object to null. No matcher should do this. Please repair the matcher " + matcher.getClass());
             }
+            inputAlignment = matcherResult.getAlignment();
+            parameters = matcherResult.getParameters();
         }
-        return new AlignmentAndParameters(tmpAlignment, tmpParameters);
+        return new AlignmentAndParameters(inputAlignment, parameters);
     }
 }

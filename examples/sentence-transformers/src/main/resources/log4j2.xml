@@ -2,11 +2,10 @@
 <Configuration status="OFF">
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
-      <!--PatternLayout pattern="[%p{WARN=WARNING, TRACE=DEBUG}] %d %-25.25c{1} - %m%n" /-->  <!-- for netbeans - trace does not exist - thus switch to debug -->
       <PatternLayout pattern="%d %highlight{%-5p}{noConsoleNoAnsi=true,WARN=yellow bright} %-25.-25c{1} - %m%n" />
     </Console>
     
-    <File name="File" fileName="file.log" append="False">
+    <File name="File" fileName="log.txt" append="False">
       <PatternLayout>
         <Pattern>%p %d %t %c - %m%n</Pattern>
       </PatternLayout>

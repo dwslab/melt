@@ -13,36 +13,43 @@ public enum CorrespondenceRelation {
     
     /**
      * Equivalence relation, when two concepts are exactly the same (has the same intension/semantic).
-     * Represents an OWL equivalence relation.
+     * Represents an OWL equivalence relation. Use the following symbol for textual representation: =
      */
     EQUIVALENCE("=", "fr.inrialpes.exmo.align.impl.rel.EquivRelation"),  
     /**
      * Represents a subsumption relation. Entity one (source/left) is "greater" than entity two (target/right).
+     * Use the following symbol for textual representation: &gt;
      */
     SUBSUME(">", "fr.inrialpes.exmo.align.impl.rel.SubsumeRelation"),
     /**
      * Represents a subsumption relation. Entity one (source/left) is "smaller" than entity two (target/right).
+     * Use the following symbol for textual representation: &lt;
      */
     SUBSUMED("<", "fr.inrialpes.exmo.align.impl.rel.SubsumedRelation"),
     /**
      * Non transitive implication relation (see work of C-OWL and others).
+     * Use the following symbol for textual representation: ~&gt;
      */
     NON_TRANSITIVE_IMPLICATION("~>", "fr.inrialpes.exmo.align.impl.rel.NonTransitiveImplicationRelation"),
     /**
      * The relation between an instance and class.
      * Entity one (source/left) is the instance than entity two (target/right) is the class.
+     * Use the following symbol for textual representation: InstanceOf
      */
     INSTANCE_OF("InstanceOf", "fr.inrialpes.exmo.align.impl.rel.InstanceOfRelation"),
     /**
      * Has instance relation which connects a class (source/left) to its instances (target/right)
+     * Use the following symbol for textual representation: HasInstance
      */
     HAS_INSTANCE("HasInstance", "fr.inrialpes.exmo.align.impl.rel.HasInstanceRelation"),
     /**
      * Incompatiple relation mening that two concepts should not be matched.
+     * Use the following symbol for textual representation: %
      */
     INCOMPAT("%", "fr.inrialpes.exmo.align.impl.rel.IncompatRelation"),
     /**
      * Unkown relation which is used when something goes wrong or a reverse relation is not available.
+     * Use the following symbol for textual representation: ?
      */
     UNKNOWN("?", "fr.inrialpes.exmo.align.impl.rel.Unknown"); //artificial class name
 

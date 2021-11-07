@@ -119,21 +119,20 @@ public class SentenceTransformersMatcherTest {
         
         return new PearsonsCorrelation().correlation(arrayExpected, arrayActual);
     }
-    
-    class LabelExtractor implements TextExtractor{
-        @Override
-        public Set<String> extract(Resource r) {
-            Set<String> values = new HashSet<>();
-            StmtIterator i = r.listProperties(RDFS.label);
-            while(i.hasNext()){
-                RDFNode n = i.next().getObject();
-                if(n.isLiteral()){
-                    String text = n.asLiteral().getLexicalForm().trim();
-                    if(!text.isEmpty())
-                        values.add(text);
-                }
+}
+class LabelExtractor implements TextExtractor{
+    @Override
+    public Set<String> extract(Resource r) {
+        Set<String> values = new HashSet<>();
+        StmtIterator i = r.listProperties(RDFS.label);
+        while(i.hasNext()){
+            RDFNode n = i.next().getObject();
+            if(n.isLiteral()){
+                String text = n.asLiteral().getLexicalForm().trim();
+                if(!text.isEmpty())
+                    values.add(text);
             }
-            return values;
         }
+        return values;
     }
 }

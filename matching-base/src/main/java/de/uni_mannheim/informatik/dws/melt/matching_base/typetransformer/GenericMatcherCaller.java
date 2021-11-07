@@ -259,7 +259,15 @@ public class GenericMatcherCaller {
             try{
                 transformedInputAlignment = paramTypes[2].newInstance();
             }catch(IllegalAccessException | InstantiationException | ExceptionInInitializerError | SecurityException ex){
-                LOGGER.warn("The optional inputAlignment parameter is null or object and thus a new instance of type {} was created which did not work out (if you own the class, then you can add an empty constructor). Try to call the matcher with null value.", paramTypes[2], ex);
+                if(paramTypes[2] != URL.class){ // log only if not URL
+                    String exMessage = ex.toString();
+                    if(ex.getCause() != null){
+                        exMessage += " (" + ex.getCause().toString() + ")";
+                    }
+                    LOGGER.warn("The optional inputAlignment parameter is null or object and thus a new instance of type {} was created which did not work out "
+                            + "(if you own the class, then you can add an empty constructor). "
+                            + "Try to call the matcher with null value. Original error message: {}", paramTypes[2], exMessage);
+                }
                 transformedInputAlignment = null;
             }
         }else{
@@ -277,7 +285,15 @@ public class GenericMatcherCaller {
             try{
                 transformedParameter = paramTypes[3].newInstance();
             }catch(IllegalAccessException | InstantiationException | ExceptionInInitializerError | SecurityException ex){
-                LOGGER.warn("The optional params parameter is null or object and thus a new instance of type {} was created which did not work out (if you own the class, then you can add an empty constructor). Try to call the matcher with null value.", paramTypes[3], ex);
+                if(paramTypes[3] != URL.class){ // log only if not URL
+                    String exMessage = ex.toString();
+                    if(ex.getCause() != null){
+                        exMessage += " (" + ex.getCause().toString() + ")";
+                    }
+                    LOGGER.warn("The optional params parameter is null or object and thus a new instance of type {} was created which did not work out "
+                            + "(if you own the class, then you can add an empty constructor). "
+                            + "Try to call the matcher with null value. Original error message: {}", paramTypes[3], exMessage);
+                }
                 transformedParameter = null;
             }
         }else{

@@ -15,11 +15,39 @@ class AlignmentParserTest {
     private static final String newline = System.getProperty("line.separator");
     
     @Test
-    public void testTSVParsing() throws IOException{
-        File f = new File(AlignmentParserTest.class.getResource("/tsv_parsing.tsv").getFile());
-        Alignment a = AlignmentParser.parseCSVWithoutHeader(f, '\t');
+    public void testParseCSVWithoutHeader() throws IOException{
+        File tsv = new File(AlignmentParserTest.class.getResource("/tsv_parsing.tsv").getFile());
+        Alignment alignment = AlignmentParser.parseCSVWithoutHeader(tsv, '\t');
+        checkAlignmentTSV(alignment);
+    }
+    
+    @Test
+    public void testParseTSV() throws IOException{
+        File tsv = new File(AlignmentParserTest.class.getResource("/tsv_parsing.tsv").getFile());
+        Alignment alignment = AlignmentParser.parseTSV(tsv);
+        checkAlignmentTSV(alignment);
+    }
+    
+    @Test
+    public void testParseCSV() throws IOException{
+        File csv = new File(AlignmentParserTest.class.getResource("/csv_parsing.csv").getFile());
+        Alignment alignment = AlignmentParser.parseCSV(csv);
+        checkAlignmentTSV(alignment);
+    }
+    
+    @Test
+    public void testParseCSVHeaderChanged() throws IOException{
+        File csvheaderSwitch = new File(AlignmentParserTest.class.getResource("/csv_parsing_different_header.csv").getFile());
+        Alignment alignment = AlignmentParser.parseCSV(csvheaderSwitch);
+        checkAlignmentTSV(alignment);
+    }
+    
+    private void checkAlignmentTSV(Alignment a){
         assertEquals(5, a.size());
         for(Correspondence c : a){
+            if(c.getEntityOne().equals("http://dbpedia.org/resource/E491310")){
+                assertEquals(CorrespondenceRelation.INCOMPAT, c.getRelation());
+            }
             if(c.getEntityOne().equals("http://dbpedia.org/resource/E491311")){
                 assertEquals(1.0, c.getConfidence());
             }else{

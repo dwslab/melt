@@ -1,0 +1,7 @@
+source,target,confidence,relation
+http://dbpedia.org/resource/E419181,http://www.wikidata.org/entity/Q4657043,0.33035153
+http://dbpedia.org/resource/E702109,http://www.wikidata.org/entity/Q1130264,0.31543857
+http://dbpedia.org/resource/E239557,http://www.wikidata.org/entity/Q427337,0.3239635
+http://dbpedia.org/resource/E491310,http://www.wikidata.org/entity/Q615795,0.3328134,%
+http://dbpedia.org/resource/E491311,http://www.wikidata.org/entity/Q615797
+

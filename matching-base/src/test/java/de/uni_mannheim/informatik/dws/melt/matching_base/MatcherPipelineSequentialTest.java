@@ -1,26 +1,21 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base;
 
-
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.*;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-/*
+
 public class MatcherPipelineSequentialTest {
     @Test
-    public void testRunMatcherMultipleRepresentations() throws MalformedURLException, Exception{
-        
+    public void testMatcherPipelineSequentialWithInputAlignment() throws MalformedURLException, Exception{
         TypeTransformerRegistry.clear();
-        TypeTransformerRegistry.addTransformer(new URLtoURI());
-        
+        TypeTransformerRegistry.addTransformer(new URLtoMyAlignment());
         
         Set<Object> sources = new HashSet<>();
         Set<Object> targets = new HashSet<>();
@@ -28,90 +23,40 @@ public class MatcherPipelineSequentialTest {
         sources.add(new URL("http://source.com"));
         targets.add(new URL("http://target.com"));
         
-        Object x = GenericMatcherCaller.runMatcherMultipleRepresentations(
-                new MatcherPipelineSequential(new myTestMatcher()), sources, targets);
         
-        assertEquals(2, sources.size());
-        assertEquals(2, targets.size());
+        AlignmentAndParameters result = GenericMatcherCaller.runMatcherMultipleRepresentations(
+                new MatcherPipelineSequential(
+                    new IMatcher<URL, MyAlignment, Object>() {
+                        @Override
+                        public MyAlignment match(URL source, URL target, MyAlignment inputAlignment, Object parameters) throws Exception {
+                            inputAlignment.add("one");
+                            inputAlignment.add("two");
+                            return inputAlignment;
+                        }
+                    },
+                    new IMatcher<URL, MyAlignment, Object>() {
+                        @Override
+                        public MyAlignment match(URL source, URL target, MyAlignment inputAlignment, Object parameters) throws Exception {
+                            inputAlignment.remove("two");
+                            return inputAlignment;
+                        }
+                    }
+                ), sources, targets);
         
-        x = GenericMatcherCaller.runMatcherMultipleRepresentations(
-                new MatcherPipelineSequential(new myTestMatcher()), sources, targets);
+        MyAlignment alignment = result.getAlignment(MyAlignment.class);
         
-        assertEquals(2, sources.size());
-        assertEquals(2, targets.size());
-    }
-    
-    @Test
-    public void getAllSuperClassesAndIterfacesTest() throws MalformedURLException, Exception{
-        
-        TypeTransformerRegistry.clear();
-        TypeTransformerRegistry.addTransformer(new URLtoURI());
-        
-        
-        Set<Object> sources = new HashSet<>();
-        Set<Object> targets = new HashSet<>();
-        
-        sources.add(new URL("http://source.com"));
-        targets.add(new URL("http://target.com"));
-        
-        Object x = GenericMatcherCaller.runMatcherMultipleRepresentations(
-                new MatcherPipelineSequential(new myTestMatcher()), sources, targets);
-        
-        assertEquals(2, sources.size());
-        assertEquals(2, targets.size());
-        
-        x = GenericMatcherCaller.runMatcherMultipleRepresentations(
-                new MatcherPipelineSequential(new myTestMatcher()), sources, targets);
-        
-        assertEquals(2, sources.size());
-        assertEquals(2, targets.size());
+        assertEquals(1, alignment.size(), "Alignment size is not one");
+        assertTrue(alignment.contains("one"));        
     }
 }
 
-
-class addParameterOne implements IMatcher<Object, Object, Properties>{
-    @Override
-    public Object match(Object source, Object target, Object inputAlignment, Properties parameter) throws Exception {
-        parameter.put("one", 1);
-        return inputAlignment;
-    }
-}
-
-class addParameterTwo implements IMatcher<Object, Object, Map<String,Object>>{
-    @Override
-    public Object match(Object source, Object target, Object inputAlignment, Map<String,Object> parameter) throws Exception {
-        parameter.put("two", 2);
-        return inputAlignment;
-    }
-}
-
-
-class myTestMatcher implements IMatcher<URI, Object, Object>{
-    @Override
-    public Object match(URI source, URI target, Object inputAlignment, Object parameter) throws Exception {
-        return inputAlignment;
-    }
-}
-
-class URLtoURI extends AbstractTypeTransformer<URL, URI>{
-    public URLtoURI() {
-        super(URL.class, URI.class);
+class URLtoMyAlignment extends AbstractTypeTransformer<URL, MyAlignment>{
+    public URLtoMyAlignment() {
+        super(URL.class, MyAlignment.class);
     }
 
     @Override
-    public URI transform(URL value, Properties parameters) throws Exception {
-        return value.toURI();
+    public MyAlignment transform(URL value, Properties parameters) throws TypeTransformationException{
+        return new MyAlignment();
     }
 }
-
-class ParameterTransform extends AbstractTypeTransformer<Properties, Map<String, Object>>{
-    public ParameterTransform() {
-        super(Properties.class, Map<String, Object>.class);
-    }
-
-    @Override
-    public Map<String, Object> transform(Properties value, Properties parameters) throws Exception {
-        return value.toURI();
-    }
-}
-*/

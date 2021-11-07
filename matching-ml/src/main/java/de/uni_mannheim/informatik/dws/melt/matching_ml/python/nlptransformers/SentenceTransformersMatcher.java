@@ -54,7 +54,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
         
         if(inputAlignment == null)
             inputAlignment = new Alignment();
-        for(ResourcesExtractor resExtractor : resourcesExtractor){            
+        for(ResourcesExtractor resExtractor : resourcesExtractor){
             File corpus = FileUtil.createFileWithRandomNumber(this.tmpDir, "corpus", ".txt");
             File queries = FileUtil.createFileWithRandomNumber(this.tmpDir, "queries", ".txt");
             try{
@@ -226,11 +226,19 @@ public class SentenceTransformersMatcher extends TransformersBase {
     
     //override setters which are not needed
 
+    /**
+     * No training arguments can be used for SentenceTransformersMatcher - do NOT call this method.
+     * @param trainingArguments training arguments
+     */
     @Override
     public void setTrainingArguments(TransformersTrainerArguments trainingArguments) {
         throw new IllegalArgumentException("Training arguments are not used in SentenceTransformersMatcher.");
     }
 
+    /**
+     * SentenceTransformersMatcher only supports PyTorch - thus setting tensorflow to true, will result in an error.
+     * @param usingTensorflow can only be set to false
+     */
     @Override
     public void setUsingTensorflow(boolean usingTensorflow) {
         if(usingTensorflow){

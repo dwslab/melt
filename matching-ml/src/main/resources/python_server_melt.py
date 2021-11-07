@@ -18,9 +18,12 @@ from collections import defaultdict
 
 logging.basicConfig(
     handlers=[logging.FileHandler(__file__ + ".log", "a+", "utf-8"), logging.StreamHandler(sys.stdout)],
-    format="PythonServer: %(asctime)s %(levelname)s:%(message)s",
+    # format="PythonServer: %(asctime)s %(levelname)s:%(message)s",
+    format="%(asctime)s %(levelname)-5s ExternalPythonProcess     - %(message)s",
     level=logging.INFO,
 )
+logging.addLevelName(logging.WARNING, "WARN")
+logging.addLevelName(logging.CRITICAL, "FATAL")
 
 # default boilerplate code
 app = Flask(__name__)
@@ -1832,7 +1835,7 @@ def inner_sentencetransformers_prediction(request_headers):
         transformers_init(request_headers)
         
         model_name = request_headers["model-name"]
-        using_tensorflow = request_headers["using-tf"].lower() == "true"
+        #using_tensorflow = request_headers["using-tf"].lower() == "true"
         #training_arguments = json.loads(request_headers["training-arguments"])
         tmp_dir = request_headers["tmp-dir"]
         
@@ -1847,7 +1850,9 @@ def inner_sentencetransformers_prediction(request_headers):
         from sentence_transformers import SentenceTransformer, util
         import torch
         
-        embedder = SentenceTransformer(model_name)
+        cache_folder_path = request_headers["transformers-cache"] if "transformers-cache" in request_headers else None
+        
+        embedder = SentenceTransformer(model_name, cache_folder=cache_folder_path)
 
         def load_file(file_path):
             mapping_pos_to_id = dict()
@@ -1919,6 +1924,84 @@ def sentencetransformers_prediction():
         return jsonify(result)
 
 
+def inner_sentencetransformers_finetuning(request_headers):
+    try:
+        # https://github.com/UKPLab/sentence-transformers/issues/791#issuecomment-790402913
+        transformers_init(request_headers)
+        
+        model_name = request_headers["model-name"]
+        tmp_dir = request_headers["tmp-dir"]
+        resulting_model_location = request_headers["resulting-model-location"]
+        training_file = request_headers["training-file"]
+        
+        sentence_loss = request_headers["loss"]
+        train_batch_size = int(request_headers["train-batch-size"])
+        test_batch_size = int(request_headers["test-batch-size"])
+        num_epochs = int(request_headers["num-epochs"])
+        cache_folder_path = request_headers["transformers-cache"] if "transformers-cache" in request_headers else None
+        
+        from sentence_transformers import SentenceTransformer, InputExample, losses
+        model = SentenceTransformer(model_name, cache_folder=cache_folder_path)
+
+        if sentence_loss == 'CosineSimilarityLoss':
+            parser = lambda row : InputExample(texts=[row[0], row[1]], label=float(row[2]))
+            train_loss = losses.CosineSimilarityLoss(model)
+        elif sentence_loss == 'MultipleNegativesRankingLoss':
+            parser = lambda row : InputExample(texts=[row[0], row[1]])
+            train_loss = losses.MultipleNegativesRankingLoss(model)
+        elif sentence_loss == 'MultipleNegativesRankingLossWithHardNegatives':
+            parser = lambda row : InputExample(texts=row)
+            train_loss = losses.MultipleNegativesRankingLoss(model)
+        else:
+            raise ValueError('the selected loss is not available')
+        
+        def read_input_examples(file_path, input_example_generator):
+            input_examples = []
+            with open(file_path, encoding="utf-8") as csvfile:
+                for row in csv.reader(csvfile, delimiter=","):
+                    input_examples.append(input_example_generator(row))
+            return input_examples
+        
+        all_input_examples = read_input_examples(training_file, parser)
+        if "validation-file" in request_headers:
+            train_examples = all_input_examples
+            validation_examples = read_input_examples(request_headers["validation-file"], parser)
+            app.logger.info('Use separate train and validation file: %s train and %s validation.', len(train_examples), len(validation_examples))
+        else:
+            test_size = float(request_headers["test-size"])
+            from sklearn.model_selection import train_test_split
+            train_examples, validation_examples = train_test_split(all_input_examples, 
+                                                           stratify=[i.label for i in all_input_examples],
+                                                           test_size=test_size)
+            app.logger.info('Loaded %s examples. Do a split(validation percentage: %s): %s are training and %s are validation', len(all_input_examples), test_size, len(train_examples), len(validation_examples))
+        
+        
+        from sentence_transformers.evaluation import EmbeddingSimilarityEvaluator
+        from torch.utils.data import DataLoader
+        import math
+        
+        train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=train_batch_size)        
+        evaluator = EmbeddingSimilarityEvaluator.from_input_examples(validation_examples, write_csv=True, batch_size=test_batch_size)
+        warmup_steps = math.ceil(len(train_dataloader) * num_epochs  * 0.1) # 10% of train data for warm-up
+        
+        app.logger.info('Run the training now')
+        model.fit(train_objectives=[(train_dataloader, train_loss)], 
+                  epochs=num_epochs, warmup_steps=warmup_steps,
+                  save_best_model=True, output_path=resulting_model_location,
+                  evaluator=evaluator)
+
+        return model.best_score # this will return a float value with the best score
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
+
+@app.route("/sentencetransformers-finetuning", methods=["GET"])
+def sentencetransformers_finetuning():
+    result = run_function_multi_process(request, inner_sentencetransformers_finetuning)
+    if isinstance(result, str):
+        return result
+    else:
+        return jsonify(result)
 
 
 @app.route("/hello", methods=["GET"])

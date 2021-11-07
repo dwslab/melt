@@ -5,6 +5,8 @@
 
 **New**
 - MELT user guide allows for downloading track data directly via the documentation page.
+- TrainTestSplit (with stratification) for any Java object and specialized for alignments (TrainTestSplitAlignment)
+
 
 ## Changes in 3.2
 

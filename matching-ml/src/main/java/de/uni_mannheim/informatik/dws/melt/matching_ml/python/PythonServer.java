@@ -9,7 +9,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersFineTuner;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBaseFineTuner;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import org.apache.commons.io.FileUtils;
@@ -138,9 +140,8 @@ public class PythonServer {
     public void transformersFineTuningHpSearch(TransformersFineTunerHpSearch hpsearch, File trainingFile) throws PythonServerException{
         HttpGet request = new HttpGet(serverUrl + "/transformers-finetuning-hp-search");
         transformersUpdateBaseRequest(hpsearch, request);
-        
-        request.addHeader("resulting-model-location", getCanonicalPath(hpsearch.getResultingModelLocation()));
-        request.addHeader("training-file", getCanonicalPath(trainingFile));
+        transformersFineTunerUpdateBaseRequest(hpsearch, trainingFile, request);
+
         request.addHeader("number-of-trials", Integer.toString(hpsearch.getNumberOfTrials()));
         request.addHeader("test-size", Float.toString(hpsearch.getTestSize()));
         request.addHeader("optimizing-metric", hpsearch.getOptimizingMetric().toString());        
@@ -159,10 +160,7 @@ public class PythonServer {
     public void transformersFineTuning(TransformersFineTuner fineTuner, File trainingFile) throws PythonServerException{
         HttpGet request = new HttpGet(serverUrl + "/transformers-finetuning");
         transformersUpdateBaseRequest(fineTuner, request);
-        
-        request.addHeader("resulting-model-location", getCanonicalPath(fineTuner.getResultingModelLocation()));
-        request.addHeader("training-file", getCanonicalPath(trainingFile));
-        
+        transformersFineTunerUpdateBaseRequest(fineTuner, trainingFile, request);
         runRequest(request);
     }
 
@@ -192,7 +190,7 @@ public class PythonServer {
     }
     
     /**
-     * Run a hyperparameter fine tuning.
+     * Run sentence transformers prediction.
      * @param matcher the matcher
      * @param corpusFile path to csv file with two columns (url, text representation).
      * @param queriesFile path to csv file with two columns (url, text representation).
@@ -211,15 +209,48 @@ public class PythonServer {
         request.addHeader("corpus-chunk-size", Integer.toString(matcher.getCorpusChunkSize()));
         request.addHeader("topk", Integer.toString(matcher.getTopK()));
         request.addHeader("both-directions", Boolean.toString(matcher.isBothDirections()));
-        
-        
-        
+
         String resultString = runRequest(request);
         try {
             return parseJSON(resultString);
         } catch (Exception ex) {
             throw new PythonServerException("Could not parse JSON", ex);
         }
+    }
+    
+    /**
+     * Run fine tuning for sentence transformers.
+     * @param fineTuner the matcher
+     * @param trainingFile path to csv file with three columns (text left, text right, label 1/0).
+     * @param validationFile the path to the validation file - can also be null to use train test split of trainings file.
+     * @throws PythonServerException in case something goes wrong.
+     * @return the best score of the validation (using the file or train test split).
+     */
+    public float sentenceTransformersFineTuning(SentenceTransformersFineTuner fineTuner, File trainingFile, File validationFile) throws PythonServerException{
+        
+        HttpGet request = new HttpGet(serverUrl + "/sentencetransformers-finetuning");
+        transformersUpdateBaseRequest(fineTuner, request);
+        transformersFineTunerUpdateBaseRequest(fineTuner, trainingFile, request);
+        
+        request.addHeader("loss", fineTuner.getLoss().name());
+        request.addHeader("test-size", Float.toString(fineTuner.getTestSize()));
+        request.addHeader("train-batch-size", Integer.toString(fineTuner.getTrainBatchSize()));
+        request.addHeader("test-batch-size", Integer.toString(fineTuner.getTestBatchSize()));
+        request.addHeader("num-epochs", Integer.toString(fineTuner.getNumberOfEpochs()));
+        if(validationFile != null)
+            request.addHeader("validation-file", getCanonicalPath(validationFile));
+        
+        String resultString = runRequest(request);
+        try {
+            return JSON_MAPPER.readValue(resultString, Float.class);
+        } catch (JsonProcessingException ex) {
+            throw new PythonServerException("Could not parse JSON", ex);
+        }
+    }
+    
+    private void transformersFineTunerUpdateBaseRequest(TransformersBaseFineTuner fineTuner, File trainingFile,  HttpGet request){
+        request.addHeader("resulting-model-location", getCanonicalPath(fineTuner.getResultingModelLocation()));
+        request.addHeader("training-file", getCanonicalPath(trainingFile));
     }
     
     private void transformersUpdateBaseRequest(TransformersBase base, HttpGet request){

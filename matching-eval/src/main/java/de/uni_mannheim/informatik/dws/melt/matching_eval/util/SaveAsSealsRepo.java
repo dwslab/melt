@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.velocity.Template;
@@ -79,5 +80,9 @@ public class SaveAsSealsRepo {
         } catch (IOException ex) {
             LOGGER.error("Could not write to file.", ex);
         }
+    }
+    
+    public static void main(String[] args){
+        save(TrackRepository.Biodiv.V2021OWL, "./upload");
     }
 }
