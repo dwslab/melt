@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class SentenceTransformersFineTunerTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(SentenceTransformersFineTunerTest.class);
     
-    @Test
+    //@Test
     public void testValidationFile() throws Exception {
         
         TestCaseOntModel testcase = getStsTestCase();
