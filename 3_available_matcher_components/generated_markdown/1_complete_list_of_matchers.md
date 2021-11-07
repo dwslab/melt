@@ -410,6 +410,20 @@ This matcher uses the <a href="https://github.com/UKPLab/sentence-transformers">
 
 *Keywords: Sentence Transformers Matcher*
 
+## SentenceTransformersFineTuner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/SentenceTransformersFineTuner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/SentenceTransformersFineTuner.java)
+
+This matcher uses the <a href="https://github.com/UKPLab/sentence-transformers">Sentence Transformers library</a> to build an embedding space for each resource given a textual representation of it.
+ Thus this matcher does not filter anything but generates matching candidates based on the text.
+
+*Keywords: Sentence Transformers Fine Tuner*
+
+## TransformersBaseFineTuner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBaseFineTuner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBaseFineTuner.java)
+
+This is a base class for all Transformers fine tuners.
+ It just contains some variables and getter and setters.
+
+*Keywords: Transformers Base Fine Tuner*
+
 ## TransformersBase [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersBase.java)
 
 This is a base class for all Transformers.
