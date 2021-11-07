@@ -66,6 +66,10 @@ loadScripts(document, 'script');</script>
 <th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.matching_ml.python">de.uni_mannheim.informatik.dws.melt.matching_ml.python</a></th>
 <td class="col-last">&nbsp;</td>
 </tr>
+<tr class="row-color">
+<th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers</a></th>
+<td class="col-last">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -91,15 +95,24 @@ loadScripts(document, 'script');</script>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>float</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">PythonServer.</span><code><span class="member-name-link"><a href="../PythonServer.html#sentenceTransformersFineTuning(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersFineTuner,java.io.File,java.io.File)">sentenceTransformersFineTuning</a></span>&#8203;(<a href="../nlptransformers/SentenceTransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersFineTuner</a>&nbsp;fineTuner,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;validationFile)</code></th>
+<td class="col-last">
+<div class="block">Run fine tuning for sentence transformers.</div>
+</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">PythonServer.</span><code><span class="member-name-link"><a href="../PythonServer.html#sentenceTransformersPrediction(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher,java.io.File,java.io.File)">sentenceTransformersPrediction</a></span>&#8203;(<a href="../nlptransformers/SentenceTransformersMatcher.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersMatcher</a>&nbsp;matcher,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;corpusFile,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;queriesFile)</code></th>
 <td class="col-last">
-<div class="block">Run a hyperparameter fine tuning.</div>
+<div class="block">Run sentence transformers prediction.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">PythonServer.</span><code><span class="member-name-link"><a href="../PythonServer.html#transformersFineTuning(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFineTuner,java.io.File)">transformersFineTuning</a></span>&#8203;(<a href="../nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a>&nbsp;fineTuner,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</code></th>
@@ -107,7 +120,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Finetune a transformers model with the given parameters and write this model to a given folder.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">PythonServer.</span><code><span class="member-name-link"><a href="../PythonServer.html#transformersFineTuningHpSearch(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFineTunerHpSearch,java.io.File)">transformersFineTuningHpSearch</a></span>&#8203;(<a href="../nlptransformers/TransformersFineTunerHpSearch.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTunerHpSearch</a>&nbsp;hpsearch,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</code></th>
@@ -115,12 +128,44 @@ loadScripts(document, 'script');</script>
 <div class="block">Run a hyperparameter fine tuning.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">PythonServer.</span><code><span class="member-name-link"><a href="../PythonServer.html#transformersPrediction(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFilter,java.io.File)">transformersPrediction</a></span>&#8203;(<a href="../nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a>&nbsp;filter,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;predictionFilePath)</code></th>
 <td class="col-last">
 <div class="block">Run a transformers model on a CSV file with two columns (text left and text right) to predict if they describe the same concept.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">
+<h2>Uses of <a href="../PythonServerException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">PythonServerException</a> in <a href="../nlptransformers/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers</a></h2>
+<div class="use-summary">
+<table class="summary-table">
+<caption><span>Methods in <a href="../nlptransformers/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers</a> that throw <a href="../PythonServerException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python">PythonServerException</a></span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Modifier and Type</th>
+<th class="col-second" scope="col">Method</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">SentenceTransformersFineTuner.</span><code><span class="member-name-link"><a href="../nlptransformers/SentenceTransformersFineTuner.html#finetuneModel(java.io.File)">finetuneModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>float</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">SentenceTransformersFineTuner.</span><code><span class="member-name-link"><a href="../nlptransformers/SentenceTransformersFineTuner.html#finetuneModel(java.io.File,java.io.File)">finetuneModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;validationFile)</code></th>
+<td class="col-last">
+<div class="block">Run the training on the training file, but evaluate the best model on the validationFile.</div>
 </td>
 </tr>
 </tbody>

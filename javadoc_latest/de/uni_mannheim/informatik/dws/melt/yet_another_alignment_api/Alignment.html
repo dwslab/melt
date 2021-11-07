@@ -1637,7 +1637,8 @@ double&nbsp;confidence)</span></div>
 <h3>sample</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="member-name">sample</span>&#8203;(<span class="parameters">int&nbsp;n)</span></div>
 <div class="block">Returns a random sample of correspondences.
- If the parameter n is greater than the alignment size, an IllegalArgumentException is thrown.</div>
+ If the parameter n is greater than the alignment size, an IllegalArgumentException is thrown.
+ The alignment itself (where this method is called on) will not be modified.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>n</code> - the number of correspondences to be returned. Should be smaller than the size of this alignment.</dd>
@@ -1655,7 +1656,8 @@ double&nbsp;confidence)</span></div>
  If the parameter n is greater than the alignment size, an IllegalArgumentException is thrown.
  If the random parameter is always in the same state e.g. always providing a fresh instance with the same seed like new Random(1234)
  or setting the seed of one random instance always to the same value,  then a smaller subset (sample with 10 percent) will 
- be contained in the larger subset (sample with 20 percent).</div>
+ be contained in the larger subset (sample with 20 percent).
+ The alignment itself (where this method is called on) will not be modified.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>n</code> - the number of correspondences to be returned. Should be smaller than the size of this alignment.</dd>
@@ -1673,7 +1675,8 @@ long&nbsp;seed)</span></div>
 <div class="block">Returns a random sample of correspondences.
  If the parameter n is greater than the alignment size, an IllegalArgumentException is thrown.
  If the random parameter is always in the same, then a smaller subset (sample with 10 percent) will 
- be contained in the larger subset (sample with 20 percent).</div>
+ be contained in the larger subset (sample with 20 percent).
+ The alignment itself (where this method is called on) will not be modified.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>n</code> - the number of correspondences to be returned. Should be smaller than the size of this alignment.</dd>
@@ -1688,7 +1691,8 @@ long&nbsp;seed)</span></div>
 <h3>sampleByFraction</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="member-name">sampleByFraction</span>&#8203;(<span class="parameters">double&nbsp;fraction)</span></div>
 <div class="block">Returns a random sample of correspondences.
- If the parameter n is greater than the alignment size, the full alignment (copy of this alignment) is returned.</div>
+ If the parameter n is greater than the alignment size, the full alignment (copy of this alignment) is returned.
+ The alignment itself (where this method is called on) will not be modified.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>fraction</code> - the number of correspondences to be returned. Should be smaller than the size of this alignment.</dd>
@@ -1706,7 +1710,8 @@ long&nbsp;seed)</span></div>
  If the parameter n is greater than the alignment size, the full alignment (copy of this alignment) is returned.
  If the random parameter is always in the same state e.g. always providing a fresh instance with the same seed like new Random(1234)
  or setting the seed of one random instance always to the same value,  then a smaller subset (sample with 10 percent) will 
- be contained in the larger subset (sample with 20 percent).</div>
+ be contained in the larger subset (sample with 20 percent).
+ The alignment itself (where this method is called on) will not be modified.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>fraction</code> - the number of correspondences to be returned. Should be smaller than the size of this alignment.</dd>
@@ -1724,7 +1729,8 @@ long&nbsp;seed)</span></div>
 <div class="block">Returns a random sample of correspondences.
  If the parameter n is greater than the alignment size, the full alignment (copy of this alignment) is returned.
  If the random parameter is always the same, then a smaller subset (sample with 10 percent) will 
- be contained in the larger subset (sample with 20 percent).</div>
+ be contained in the larger subset (sample with 20 percent).
+ The alignment itself (where this method is called on) will not be modified.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>fraction</code> - the number of correspondences to be returned. Should be smaller than the size of this alignment.</dd>

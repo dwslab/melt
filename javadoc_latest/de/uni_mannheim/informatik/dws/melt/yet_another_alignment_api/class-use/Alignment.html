@@ -180,14 +180,18 @@ loadScripts(document, 'script');</script>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
-<th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.matching_owlapi">de.uni_mannheim.informatik.dws.melt.matching_owlapi</a></th>
+<th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.matching_ml.util">de.uni_mannheim.informatik.dws.melt.matching_ml.util</a></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
-<th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api</a></th>
+<th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.matching_owlapi">de.uni_mannheim.informatik.dws.melt.matching_owlapi</a></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
+<th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api</a></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
 <th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.typetransformation">de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.typetransformation</a></th>
 <td class="col-last">&nbsp;</td>
 </tr>
@@ -3074,7 +3078,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;corpusFile,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;queriesFile)</code></th>
 <td class="col-last">
-<div class="block">Run a hyperparameter fine tuning.</div>
+<div class="block">Run sentence transformers prediction.</div>
 </td>
 </tr>
 <tr class="row-color">
@@ -3248,7 +3252,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </tr>
 <tr class="row-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
-<th class="col-second" scope="row"><span class="type-name-label">TransformersFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersFilter.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+<th class="col-second" scope="row"><span class="type-name-label">TransformersBaseFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersBaseFineTuner.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</code></th>
@@ -3256,7 +3260,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
-<th class="col-second" scope="row"><span class="type-name-label">TransformersFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersFineTuner.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+<th class="col-second" scope="row"><span class="type-name-label">TransformersFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersFilter.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</code></th>
@@ -3297,7 +3301,7 @@ boolean&nbsp;append)</code></th>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
-<th class="col-second" scope="row"><span class="type-name-label">TransformersFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersFineTuner.html#createTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">createTrainingFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+<th class="col-second" scope="row"><span class="type-name-label">TransformersBaseFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersBaseFineTuner.html#createTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">createTrainingFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment)</code></th>
 <td class="col-last">
@@ -3314,7 +3318,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </tr>
 <tr class="row-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
-<th class="col-second" scope="row"><span class="type-name-label">TransformersFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersFilter.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+<th class="col-second" scope="row"><span class="type-name-label">TransformersBaseFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersBaseFineTuner.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</code></th>
@@ -3322,7 +3326,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
-<th class="col-second" scope="row"><span class="type-name-label">TransformersFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersFineTuner.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+<th class="col-second" scope="row"><span class="type-name-label">TransformersFilter.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersFilter.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</code></th>
@@ -3337,8 +3341,17 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
+<td class="col-first"><code>protected int</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">TransformersBaseFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersBaseFineTuner.html#writeClassificationFormat(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">writeClassificationFormat</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+org.apache.jena.ontology.OntModel&nbsp;target,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainFile,
+boolean&nbsp;append)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>int</code></td>
-<th class="col-second" scope="row"><span class="type-name-label">TransformersFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersFineTuner.html#writeTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">writeTrainingFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+<th class="col-second" scope="row"><span class="type-name-label">SentenceTransformersFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/SentenceTransformersFineTuner.html#writeTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">writeTrainingFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainFile,
@@ -3346,6 +3359,26 @@ boolean&nbsp;append)</code></th>
 <td class="col-last">
 <div class="block">Writes the correspondences to a file (append or not can be chosen by a parameter).</div>
 </td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>int</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">TransformersBaseFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/TransformersBaseFineTuner.html#writeTrainingFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">writeTrainingFile</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+org.apache.jena.ontology.OntModel&nbsp;target,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainFile,
+boolean&nbsp;append)</code></th>
+<td class="col-last">
+<div class="block">Writes the correspondences to a file (append or not can be chosen by a parameter).</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>private int</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">SentenceTransformersFineTuner.</span><code><span class="member-name-link"><a href="../../matching_ml/python/nlptransformers/SentenceTransformersFineTuner.html#writeTripletFormat(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)">writeTripletFormat</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
+org.apache.jena.ontology.OntModel&nbsp;target,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;trainingAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainFile,
+boolean&nbsp;append)</code></th>
+<td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -3400,6 +3433,133 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <td class="col-first"><code>protected void</code></td>
 <th class="col-second" scope="row"><span class="type-name-label">OpenEAMatcher.</span><code><span class="member-name-link"><a href="../../matching_ml/python/openea/OpenEAMatcher.html#writeTrainValAlignments(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File)">writeTrainValAlignments</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;alignmentFolder)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="de.uni_mannheim.informatik.dws.melt.matching_ml.util">
+<h2>Uses of <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a> in <a href="../../matching_ml/util/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_ml.util</a></h2>
+<div class="use-summary">
+<table class="summary-table">
+<caption><span>Fields in <a href="../../matching_ml/util/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_ml.util</a> declared as <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Modifier and Type</th>
+<th class="col-second" scope="col">Field</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<td class="col-first"><code>private <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">TrainTestSplitAlignment.</span><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#test">test</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>private <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">TrainTestSplitAlignment.</span><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#train">train</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="use-summary">
+<table class="summary-table">
+<caption><span>Methods in <a href="../../matching_ml/util/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_ml.util</a> that return <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Modifier and Type</th>
+<th class="col-second" scope="col">Method</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">TrainTestSplitAlignment.</span><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#getTest()">getTest</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the test alignment.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">TrainTestSplitAlignment.</span><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#getTrain()">getTrain</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the training alignment.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="use-summary">
+<table class="summary-table">
+<caption><span>Methods in <a href="../../matching_ml/util/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_ml.util</a> with parameters of type <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Modifier and Type</th>
+<th class="col-second" scope="col">Method</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<td class="col-first"><code>private void</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">TrainTestSplitAlignment.</span><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#initializeTrainTest(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_ml.util.TrainTestSplit)">initializeTrainTest</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+<a href="../../matching_ml/util/TrainTestSplit.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.util">TrainTestSplit</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;split)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="use-summary">
+<table class="summary-table">
+<caption><span>Constructors in <a href="../../matching_ml/util/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_ml.util</a> with parameters of type <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Constructor</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,double)">TrainTestSplitAlignment</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+double&nbsp;train_ratio)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,double,long)">TrainTestSplitAlignment</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+double&nbsp;train_ratio,
+long&nbsp;seed)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,double,long,java.util.function.Function)">TrainTestSplitAlignment</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+double&nbsp;train_ratio,
+long&nbsp;seed,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>,&#8203;?&gt;&nbsp;stratify)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,double,java.util.function.Function)">TrainTestSplitAlignment</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+double&nbsp;train_ratio,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>,&#8203;?&gt;&nbsp;stratify)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,double,java.util.Random)">TrainTestSplitAlignment</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+double&nbsp;train_ratio,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Random.html" title="class or interface in java.util" class="external-link">Random</a>&nbsp;rnd)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_ml/util/TrainTestSplitAlignment.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,double,java.util.Random,java.util.function.Function)">TrainTestSplitAlignment</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+double&nbsp;train_ratio,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Random.html" title="class or interface in java.util" class="external-link">Random</a>&nbsp;rnd,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>,&#8203;?&gt;&nbsp;stratify)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 </tbody>

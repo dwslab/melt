@@ -301,14 +301,14 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a></span>&#8203;(<a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a>&nbsp;trainingArguments)</code></th>
 <td class="col-last">
-<div class="block">Sets the training arguments of the huggingface trainer.</div>
+<div class="block">No training arguments can be used for SentenceTransformersMatcher - do NOT call this method.</div>
 </td>
 </tr>
 <tr class="alt-color" id="i14">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setUsingTensorflow(boolean)">setUsingTensorflow</a></span>&#8203;(boolean&nbsp;usingTensorflow)</code></th>
 <td class="col-last">
-<div class="block">Sets the boolean value if tensorflow is used.</div>
+<div class="block">SentenceTransformersMatcher only supports PyTorch - thus setting tensorflow to true, will result in an error.</div>
 </td>
 </tr>
 </tbody>
@@ -583,14 +583,12 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <section class="detail" id="setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">
 <h3>setTrainingArguments</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setTrainingArguments</span>&#8203;(<span class="parameters"><a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a>&nbsp;trainingArguments)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="TransformersBase.html#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">TransformersBase</a></code></span></div>
-<div class="block">Sets the training arguments of the huggingface trainer.
- Any of the training arguments can be used. For further documentation, see<a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersTrainerArguments</code></a></div>
+<div class="block">No training arguments can be used for SentenceTransformersMatcher - do NOT call this method.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="TransformersBase.html#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a></code>&nbsp;in class&nbsp;<code><a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>trainingArguments</code> - the trainer configuration</dd>
+<dd><code>trainingArguments</code> - training arguments</dd>
 </dl>
 </section>
 </li>
@@ -598,14 +596,12 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <section class="detail" id="setUsingTensorflow(boolean)">
 <h3>setUsingTensorflow</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setUsingTensorflow</span>&#8203;(<span class="parameters">boolean&nbsp;usingTensorflow)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="TransformersBase.html#setUsingTensorflow(boolean)">TransformersBase</a></code></span></div>
-<div class="block">Sets the boolean value if tensorflow is used.
- If set to false, true, pytorch is used.</div>
+<div class="block">SentenceTransformersMatcher only supports PyTorch - thus setting tensorflow to true, will result in an error.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="TransformersBase.html#setUsingTensorflow(boolean)">setUsingTensorflow</a></code>&nbsp;in class&nbsp;<code><a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>usingTensorflow</code> - true to use tensorflow and false to use pytorch.</dd>
+<dd><code>usingTensorflow</code> - can only be set to false</dd>
 </dl>
 </section>
 </li>
