@@ -15,8 +15,8 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":6,"i5":9,"i6":9,"i7":10,"i8":10,"i9":10,"i10":9,"i11":9,"i12":9,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":6,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
 var tableTab = "table-tab";
@@ -116,7 +116,7 @@ implements <a href="../../../matching_base/multisource/MultiSourceDispatcher.htm
 <tbody>
 <tr class="alt-color">
 <td class="col-first"><code>private boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addInformationToUnion">addInformationToUnion</a></span></code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addingInformationToUnion">addingInformationToUnion</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
@@ -135,23 +135,13 @@ implements <a href="../../../matching_base/multisource/MultiSourceDispatcher.htm
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
-<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;,&#8203;int[][]&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mergeTreeCache">mergeTreeCache</a></span></code></th>
+<td class="col-first"><code>private int</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#numberOfThreads">numberOfThreads</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
-<td class="col-first"><code>private static com.fasterxml.jackson.databind.ObjectMapper</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#objectMapper">objectMapper</a></span></code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="alt-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#oneToOneMatcher">oneToOneMatcher</a></span></code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="row-color">
-<td class="col-first"><code>private boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#useCacheForMergeTree">useCacheForMergeTree</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
@@ -181,7 +171,7 @@ implements <a href="../../../matching_base/multisource/MultiSourceDispatcher.htm
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.Object,boolean)">MultiSourceDispatcherIncrementalMerge</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;oneToOneMatcher,
 boolean&nbsp;addInformationToUnion)</code></th>
 <td class="col-last">
-<div class="block">Constructor which expects the actual one to one matcher and a boolean if the cache should be used.</div>
+<div class="block">Constructor which expects the actual one to one matcher and a boolean if information should be added to the union.</div>
 </td>
 </tr>
 </tbody>
@@ -194,7 +184,7 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <section class="method-summary" id="method.summary">
 <h2>Method Summary</h2>
 <div class="member-summary" id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="active-table-tab">All Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t1" class="table-tab" onclick="show(1);">Static Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="table-tab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t3" class="table-tab" onclick="show(4);">Abstract Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="table-tab" onclick="show(8);">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="active-table-tab">All Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="table-tab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t3" class="table-tab" onclick="show(4);">Abstract Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="table-tab" onclick="show(8);">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <table class="summary-table" aria-labelledby="t0">
 <thead>
@@ -211,24 +201,19 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color" id="i1">
-<td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#clearAndStartSavingIntermediateAlignments()">clearAndStartSavingIntermediateAlignments</a></span>()</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="alt-color" id="i2">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCopiedModel(java.util.Set,java.util.Properties)">getCopiedModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;modelRepresentations,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;parameters)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="alt-color" id="i2">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getIntermediateAlignments()">getIntermediateAlignments</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the intermediate alignments.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i3">
 <td class="col-first"><code>abstract int[][]</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMergeTree(java.util.List,java.lang.Object)">getMergeTree</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;parameters)</code></th>
@@ -236,26 +221,42 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <div class="block">Returns the merging tree (which ontologies are merged in which order).</div>
 </td>
 </tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>int</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getNumberOfThreads()">getNumberOfThreads</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the number of thread which are used during merge.</div>
+</td>
+</tr>
 <tr class="row-color" id="i5">
-<td class="col-first"><code>private static org.apache.jena.graph.Node</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getNode(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,org.apache.jena.graph.Node)">getNode</a></span>&#8203;(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
-org.apache.jena.graph.Node&nbsp;node)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isAddingInformationToUnion()">isAddingInformationToUnion</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Return true if all information / triples are added to the union.</div>
+</td>
 </tr>
 <tr class="alt-color" id="i6">
-<td class="col-first"><code>private static <a href="NodeAndReplaced.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">NodeAndReplaced</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getNodeAndReplaced(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,org.apache.jena.graph.Node)">getNodeAndReplaced</a></span>&#8203;(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
-org.apache.jena.graph.Node&nbsp;node)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="row-color" id="i7">
 <td class="col-first"><code>protected boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isLeftModelGreater(java.util.Set,java.util.Set,java.util.Properties)">isLeftModelGreater</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;leftOntology,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;rightOntology,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
+<tr class="row-color" id="i7">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isLowMemoryOverhead()">isLowMemoryOverhead</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Return true if memory overhead is reduced.</div>
+</td>
+</tr>
 <tr class="alt-color" id="i8">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isSavingIntermediateAlignments()">isSavingIntermediateAlignments</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns true if intermediate alignments are stored.</div>
+</td>
+</tr>
+<tr class="row-color" id="i9">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.util.List,java.net.URL,java.net.URL)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;inputAlignment,
@@ -264,7 +265,7 @@ org.apache.jena.graph.Node&nbsp;node)</code></th>
 <div class="block">Matches multiple ontologies/knowledge graphs together.</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code><a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.util.List,java.lang.Object,java.lang.Object)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
@@ -273,46 +274,40 @@ org.apache.jena.graph.Node&nbsp;node)</code></th>
 <div class="block">Matches multiple ontologies / knowledge graphs together.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
-<td class="col-first"><code>static void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mergeSourceIntoTarget(org.apache.jena.rdf.model.Model,org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,boolean)">mergeSourceIntoTarget</a></span>&#8203;(org.apache.jena.rdf.model.Model&nbsp;source,
-org.apache.jena.rdf.model.Model&nbsp;target,
-<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
-boolean&nbsp;addInformationToUnion)</code></th>
-<td class="col-last">
-<div class="block">Merges all triples from the source model into the target model.</div>
-</td>
-</tr>
 <tr class="row-color" id="i11">
-<td class="col-first"><code>private static void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mergeSourceIntoTargetFullInformation(org.apache.jena.rdf.model.Model,org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">mergeSourceIntoTargetFullInformation</a></span>&#8203;(org.apache.jena.rdf.model.Model&nbsp;source,
-org.apache.jena.rdf.model.Model&nbsp;target,
-<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="alt-color" id="i12">
-<td class="col-first"><code>private static void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mergeSourceIntoTargetPartialInformation(org.apache.jena.rdf.model.Model,org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">mergeSourceIntoTargetPartialInformation</a></span>&#8203;(org.apache.jena.rdf.model.Model&nbsp;source,
-org.apache.jena.rdf.model.Model&nbsp;target,
-<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="row-color" id="i13">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#needsTransitiveClosureForEvaluation()">needsTransitiveClosureForEvaluation</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns a boolean value if the matcher needs a transitive closure for evaluation.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i14">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#removeOntModelFromSet(java.util.Set)">removeOntModelFromSet</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;set)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
+<tr class="row-color" id="i13">
+<td class="col-first"><code>private <a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#runParallel(int%5B%5D%5B%5D,java.util.List,java.lang.Object,java.util.Properties)">runParallel</a></span>&#8203;(int[][]&nbsp;mergeTree,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i14">
+<td class="col-first"><code>private <a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#runSequential(int%5B%5D%5B%5D,java.util.List,java.lang.Object,java.util.Properties)">runSequential</a></span>&#8203;(int[][]&nbsp;mergeTree,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
 <tr class="row-color" id="i15">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setAddInformationToUnion(boolean)">setAddInformationToUnion</a></span>&#8203;(boolean&nbsp;addInformationToUnion)</code></th>
-<td class="col-last">&nbsp;</td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setAddingInformationToUnion(boolean)">setAddingInformationToUnion</a></span>&#8203;(boolean&nbsp;addInformationToUnion)</code></th>
+<td class="col-last">
+<div class="block">Sets the value if all information / triples are added to the union.</div>
+</td>
 </tr>
 <tr class="alt-color" id="i16">
 <td class="col-first"><code>void</code></td>
@@ -324,8 +319,24 @@ org.apache.jena.rdf.model.Model&nbsp;target,
 </tr>
 <tr class="row-color" id="i17">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setUseCacheForMergeTree(boolean)">setUseCacheForMergeTree</a></span>&#8203;(boolean&nbsp;useCache)</code></th>
-<td class="col-last">&nbsp;</td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setNumberOfThreads(int)">setNumberOfThreads</a></span>&#8203;(int&nbsp;numberOfThreads)</code></th>
+<td class="col-last">
+<div class="block">Sets the number of threads which are used during merge.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i18">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setNumberOfThreadsToCpuCores()">setNumberOfThreadsToCpuCores</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Sets the number of threads which are used during merge to the number of available CPU cores.</div>
+</td>
+</tr>
+<tr class="row-color" id="i19">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setSavingIntermediateAlignments(boolean)">setSavingIntermediateAlignments</a></span>&#8203;(boolean&nbsp;intermediateAlignmentsNew)</code></th>
+<td class="col-last">
+<div class="block">Set to true if the intermediate alignments should be stored.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -352,33 +363,21 @@ org.apache.jena.rdf.model.Model&nbsp;target,
 </section>
 </li>
 <li>
-<section class="detail" id="objectMapper">
-<h3>objectMapper</h3>
-<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">com.fasterxml.jackson.databind.ObjectMapper</span>&nbsp;<span class="member-name">objectMapper</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="oneToOneMatcher">
 <h3>oneToOneMatcher</h3>
 <div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="member-name">oneToOneMatcher</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="mergeTreeCache">
-<h3>mergeTreeCache</h3>
-<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;,&#8203;int[][]&gt;</span>&nbsp;<span class="member-name">mergeTreeCache</span></div>
+<section class="detail" id="numberOfThreads">
+<h3>numberOfThreads</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">numberOfThreads</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="useCacheForMergeTree">
-<h3>useCacheForMergeTree</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">useCacheForMergeTree</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="addInformationToUnion">
-<h3>addInformationToUnion</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">addInformationToUnion</span></div>
+<section class="detail" id="addingInformationToUnion">
+<h3>addingInformationToUnion</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">addingInformationToUnion</span></div>
 </section>
 </li>
 <li>
@@ -406,8 +405,7 @@ org.apache.jena.rdf.model.Model&nbsp;target,
 <h3>MultiSourceDispatcherIncrementalMerge</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">MultiSourceDispatcherIncrementalMerge</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;oneToOneMatcher,
 boolean&nbsp;addInformationToUnion)</span></div>
-<div class="block">Constructor which expects the actual one to one matcher and a boolean if the cache should be used.
- If true, then check that the subclasses do not change a parameter (make them final) which would change the result of getMergeTree.</div>
+<div class="block">Constructor which expects the actual one to one matcher and a boolean if information should be added to the union.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>oneToOneMatcher</code> - ont to one matcher</dd>
@@ -498,51 +496,39 @@ boolean&nbsp;addInformationToUnion)</span></div>
 </section>
 </li>
 <li>
+<section class="detail" id="runSequential(int[][],java.util.List,java.lang.Object,java.util.Properties)">
+<h3>runSequential</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></span>&nbsp;<span class="member-name">runSequential</span>&#8203;(<span class="parameters">int[][]&nbsp;mergeTree,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</span>
+                                      throws <span class="exceptions"><a href="../../../matching_base/MatchingException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">MatchingException</a>,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="../../../matching_base/MatchingException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">MatchingException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="runParallel(int[][],java.util.List,java.lang.Object,java.util.Properties)">
+<h3>runParallel</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></span>&nbsp;<span class="member-name">runParallel</span>&#8203;(<span class="parameters">int[][]&nbsp;mergeTree,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</span>
+                                    throws <span class="exceptions"><a href="../../../matching_base/MatchingException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">MatchingException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="../../../matching_base/MatchingException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">MatchingException</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="removeOntModelFromSet(java.util.Set)">
 <h3>removeOntModelFromSet</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">removeOntModelFromSet</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;set)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="clearAndStartSavingIntermediateAlignments()">
-<h3>clearAndStartSavingIntermediateAlignments</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">clearAndStartSavingIntermediateAlignments</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="getIntermediateAlignments()">
-<h3>getIntermediateAlignments</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&gt;</span>&nbsp;<span class="member-name">getIntermediateAlignments</span>()</div>
-<div class="block">Returns the intermediate alignments. This only works if clearAndStartSavingIntermediateAlignments is called before the match method.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>a list of intermediate alignments or null if clearAndStartSavingIntermediateAlignments is not called.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setUseCacheForMergeTree(boolean)">
-<h3>setUseCacheForMergeTree</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setUseCacheForMergeTree</span>&#8203;(<span class="parameters">boolean&nbsp;useCache)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="setAddInformationToUnion(boolean)">
-<h3>setAddInformationToUnion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setAddInformationToUnion</span>&#8203;(<span class="parameters">boolean&nbsp;addInformationToUnion)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="setLowMemoryOverhead(boolean)">
-<h3>setLowMemoryOverhead</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setLowMemoryOverhead</span>&#8203;(<span class="parameters">boolean&nbsp;lowMemoryOverhead)</span></div>
-<div class="block">If set to true, the memory overhead is reduced by two facts:
- 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
- Thus the matcher needs to deal with TDB folder as input. This is not the case for most matchers.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>lowMemoryOverhead</code> - if true, the matching will be memory performant.</dd>
-</dl>
 </section>
 </li>
 <li>
@@ -595,50 +581,120 @@ boolean&nbsp;addInformationToUnion)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="mergeSourceIntoTarget(org.apache.jena.rdf.model.Model,org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,boolean)">
-<h3>mergeSourceIntoTarget</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">mergeSourceIntoTarget</span>&#8203;(<span class="parameters">org.apache.jena.rdf.model.Model&nbsp;source,
-org.apache.jena.rdf.model.Model&nbsp;target,
-<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
-boolean&nbsp;addInformationToUnion)</span></div>
-<div class="block">Merges all triples from the source model into the target model.</div>
+<section class="detail" id="getNumberOfThreads()">
+<h3>getNumberOfThreads</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">getNumberOfThreads</span>()</div>
+<div class="block">Returns the number of thread which are used during merge.
+ A number equal to one means sequential processing and greater than one means parallel processing.</div>
 <dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>source</code> - the source where all triples originates</dd>
-<dd><code>target</code> - the target model where all triples should end up</dd>
-<dd><code>alignment</code> - the alignment which is used.</dd>
-<dd><code>addInformationToUnion</code> - if true, all information will be added to the merged ontology</dd>
+<dt>Returns:</dt>
+<dd>the number of thread used.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="mergeSourceIntoTargetFullInformation(org.apache.jena.rdf.model.Model,org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">
-<h3>mergeSourceIntoTargetFullInformation</h3>
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">mergeSourceIntoTargetFullInformation</span>&#8203;(<span class="parameters">org.apache.jena.rdf.model.Model&nbsp;source,
-org.apache.jena.rdf.model.Model&nbsp;target,
-<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment)</span></div>
+<section class="detail" id="setNumberOfThreads(int)">
+<h3>setNumberOfThreads</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setNumberOfThreads</span>&#8203;(<span class="parameters">int&nbsp;numberOfThreads)</span></div>
+<div class="block">Sets the number of threads which are used during merge.
+ A number equal to one means sequential processing and greater than one means parallel processing with the specified number of threads.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>numberOfThreads</code> - the number of threads to use. Values greater or equal to one are allowed.</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="mergeSourceIntoTargetPartialInformation(org.apache.jena.rdf.model.Model,org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">
-<h3>mergeSourceIntoTargetPartialInformation</h3>
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">mergeSourceIntoTargetPartialInformation</span>&#8203;(<span class="parameters">org.apache.jena.rdf.model.Model&nbsp;source,
-org.apache.jena.rdf.model.Model&nbsp;target,
-<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment)</span></div>
+<section class="detail" id="setNumberOfThreadsToCpuCores()">
+<h3>setNumberOfThreadsToCpuCores</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setNumberOfThreadsToCpuCores</span>()</div>
+<div class="block">Sets the number of threads which are used during merge to the number of available CPU cores.
+ 
+ A number equal to one means sequential processing and greater than one means parallel processing with the specified number of threads.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getNode(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,org.apache.jena.graph.Node)">
-<h3>getNode</h3>
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">org.apache.jena.graph.Node</span>&nbsp;<span class="member-name">getNode</span>&#8203;(<span class="parameters"><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
-org.apache.jena.graph.Node&nbsp;node)</span></div>
+<section class="detail" id="isAddingInformationToUnion()">
+<h3>isAddingInformationToUnion</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isAddingInformationToUnion</span>()</div>
+<div class="block">Return true if all information / triples are added to the union.
+ If set to false, only the information of non matched entities is added to the union.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if all information / triples are added to the union</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="getNodeAndReplaced(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,org.apache.jena.graph.Node)">
-<h3>getNodeAndReplaced</h3>
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="NodeAndReplaced.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">NodeAndReplaced</a></span>&nbsp;<span class="member-name">getNodeAndReplaced</span>&#8203;(<span class="parameters"><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
-org.apache.jena.graph.Node&nbsp;node)</span></div>
+<section class="detail" id="setAddingInformationToUnion(boolean)">
+<h3>setAddingInformationToUnion</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setAddingInformationToUnion</span>&#8203;(<span class="parameters">boolean&nbsp;addInformationToUnion)</span></div>
+<div class="block">Sets the value if all information / triples are added to the union.
+ If set to false, only the information of non matched entities is added to the union.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>addInformationToUnion</code> - true if all information / triples are added to the union</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isLowMemoryOverhead()">
+<h3>isLowMemoryOverhead</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isLowMemoryOverhead</span>()</div>
+<div class="block">Return true if memory overhead is reduced.
+ This is done by 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
+ The default is false - meaning everything is stored in memory.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if memory overhead is reduced</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setLowMemoryOverhead(boolean)">
+<h3>setLowMemoryOverhead</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setLowMemoryOverhead</span>&#8203;(<span class="parameters">boolean&nbsp;lowMemoryOverhead)</span></div>
+<div class="block">If set to true, the memory overhead is reduced by two facts:
+ 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
+ Thus the matcher needs to deal with TDB folder as input. This is not the case for most matchers.
+ The default is false - meaning everything is stored in memory.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>lowMemoryOverhead</code> - if true, the matching will be memory performant.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getIntermediateAlignments()">
+<h3>getIntermediateAlignments</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&gt;</span>&nbsp;<span class="member-name">getIntermediateAlignments</span>()</div>
+<div class="block">Returns the intermediate alignments. This only works if <a href="#setSavingIntermediateAlignments(boolean)"><code>setSavingIntermediateAlignments(boolean)</code></a> is set to true before the match method is called.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a list of intermediate alignments or null if <a href="#setSavingIntermediateAlignments(boolean)"><code>setSavingIntermediateAlignments(boolean)</code></a> was set to false (the default).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isSavingIntermediateAlignments()">
+<h3>isSavingIntermediateAlignments</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isSavingIntermediateAlignments</span>()</div>
+<div class="block">Returns true if intermediate alignments are stored.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if intermediate alignments are stored</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setSavingIntermediateAlignments(boolean)">
+<h3>setSavingIntermediateAlignments</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setSavingIntermediateAlignments</span>&#8203;(<span class="parameters">boolean&nbsp;intermediateAlignmentsNew)</span></div>
+<div class="block">Set to true if the intermediate alignments should be stored.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>intermediateAlignmentsNew</code> - true if the intermediate alignments should be stored</dd>
+</dl>
 </section>
 </li>
 </ul>

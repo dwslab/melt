@@ -118,31 +118,45 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html" 
 <tbody>
 <tr class="alt-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#AVERAGE">AVERAGE</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Average linkage (also called  <code>UPGMALinkage</code>).</div>
+</td>
 </tr>
 <tr class="row-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#CENTROID">CENTROID</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Centroid linkage (also called  <code>UPGMCLinkage</code>).</div>
+</td>
 </tr>
 <tr class="alt-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#COMPLETE">COMPLETE</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Complete linkage.</div>
+</td>
 </tr>
 <tr class="row-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#MEDIAN">MEDIAN</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Median linkage (also called  <code>WPGMCLinkage</code> - Weighted Pair Group Method using Centroids).</div>
+</td>
 </tr>
 <tr class="alt-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#SINGLE">SINGLE</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Single linkage.</div>
+</td>
 </tr>
 <tr class="row-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#WARD">WARD</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Ward's linkage.</div>
+</td>
 </tr>
 <tr class="alt-color">
 <th class="col-first" scope="row"><code><span class="member-name-link"><a href="#WPGMA">WPGMA</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">WPGMA linkage (Weighted Pair Group Method with Arithmetic mean).</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -230,42 +244,53 @@ the order they are declared.</div>
 <section class="detail" id="COMPLETE">
 <h3>COMPLETE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ClusterLinkage</a></span>&nbsp;<span class="member-name">COMPLETE</span></div>
+<div class="block">Complete linkage. Distance between clusters is defined as the distance between the most distant pair of examples.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="SINGLE">
 <h3>SINGLE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ClusterLinkage</a></span>&nbsp;<span class="member-name">SINGLE</span></div>
+<div class="block">Single linkage. The distance between clusters is defined as the distance between the closest pair of examples.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="AVERAGE">
 <h3>AVERAGE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ClusterLinkage</a></span>&nbsp;<span class="member-name">AVERAGE</span></div>
+<div class="block">Average linkage (also called  <code>UPGMALinkage</code>).
+ The distance between two clusters is the mean distance of all possible pairs of examples.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="WARD">
 <h3>WARD</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ClusterLinkage</a></span>&nbsp;<span class="member-name">WARD</span></div>
+<div class="block">Ward's linkage. <code>WardLinkage</code></div>
 </section>
 </li>
 <li>
 <section class="detail" id="CENTROID">
 <h3>CENTROID</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ClusterLinkage</a></span>&nbsp;<span class="member-name">CENTROID</span></div>
+<div class="block">Centroid linkage (also called  <code>UPGMCLinkage</code>).
+ The distance between two clusters is the Euclidean distance between their centroids.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="MEDIAN">
 <h3>MEDIAN</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ClusterLinkage</a></span>&nbsp;<span class="member-name">MEDIAN</span></div>
+<div class="block">Median linkage (also called  <code>WPGMCLinkage</code> - Weighted Pair Group Method using Centroids).
+ The distance between two clusters is the Euclidean distance between their weighted centroids.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="WPGMA">
 <h3>WPGMA</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">ClusterLinkage</a></span>&nbsp;<span class="member-name">WPGMA</span></div>
+<div class="block">WPGMA linkage (Weighted Pair Group Method with Arithmetic mean).
+ <code>WPGMALinkage</code>).</div>
 </section>
 </li>
 </ul>
