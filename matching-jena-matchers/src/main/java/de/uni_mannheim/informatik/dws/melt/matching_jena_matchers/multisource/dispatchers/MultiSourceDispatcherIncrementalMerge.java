@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.d
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
+import de.uni_mannheim.informatik.dws.melt.matching_base.MatchingException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.IMatcherMultiSourceCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MatcherMultiSourceURL;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MultiSourceDispatcher;
@@ -9,6 +10,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.Alignme
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.JenaHelper;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TdbUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.multisource.IndexBasedJenaMatcher;
@@ -28,6 +30,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
@@ -46,29 +52,25 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMultiSourceURL implements MultiSourceDispatcher, IMatcherMultiSourceCaller{
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherIncrementalMerge.class);
-    private static final ObjectMapper objectMapper = new ObjectMapper();    
     
     private final Object oneToOneMatcher;
-    private final Map<List<Set<Object>>, int[][]> mergeTreeCache;
     
-    private boolean useCacheForMergeTree;
-    private boolean addInformationToUnion;
+    private int numberOfThreads;
+    private boolean addingInformationToUnion;
     private boolean lowMemoryOverhead;
     private List<Alignment> intermediateAlignments;
 
     /**
-     * Constructor which expects the actual one to one matcher and a boolean if the cache should be used.
-     * If true, then check that the subclasses do not change a parameter (make them final) which would change the result of getMergeTree.
+     * Constructor which expects the actual one to one matcher and a boolean if information should be added to the union.
      * @param oneToOneMatcher ont to one matcher
      * @param addInformationToUnion if true all information from matched entities are in the union.
      */
     public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher, boolean addInformationToUnion) {
         this.oneToOneMatcher = oneToOneMatcher;
-        this.useCacheForMergeTree = true;// default is to cache merge tree
-        this.mergeTreeCache = new HashMap<>();
-        this.addInformationToUnion = addInformationToUnion;
+        this.addingInformationToUnion = addInformationToUnion;
         this.intermediateAlignments = null; // default is not to save intermediate alignments
         this.lowMemoryOverhead = false;
+        this.numberOfThreads = 1;
     }
     
     public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher) {
@@ -90,52 +92,45 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     
     @Override
     public AlignmentAndParameters match(List<Set<Object>> models, Object inputAlignment, Object parameters) throws Exception {
-        int[][] mergingTree;
-        if(useCacheForMergeTree){
-            mergingTree = mergeTreeCache.get(models);
-            if(mergingTree == null){
-                LOGGER.debug("Compute mergeTree");
-                mergingTree = getMergeTree(models, parameters);
-                if(mergingTree == null){
-                    LOGGER.warn("Merging tree is null. Please check subclasses, expecially what they return at method getMergeTree. Returning input alignment.");
-                    return new AlignmentAndParameters(inputAlignment, parameters);
-                }else{
-                    LOGGER.debug("Put mergeTree into cache.");
-                    mergeTreeCache.put(models, mergingTree);
-                }
-            }else{
-                LOGGER.debug("Use cached mergedTree.");
-            }
-        }else{
-            mergingTree = getMergeTree(models, parameters);
-            if(mergingTree == null){
-                LOGGER.warn("Merging tree is null. Please check subclasses, expecially what they return at method getMergeTree. Returning input alignment.");
-                return new AlignmentAndParameters(inputAlignment, parameters);
-            }
+        int[][] mergeTree = getMergeTree(models, parameters);
+        
+        if(mergeTree == null){
+            LOGGER.warn("Merging tree is null. Please check subclasses, expecially what they return at method getMergeTree. Returning input alignment.");
+            return new AlignmentAndParameters(inputAlignment, parameters);
         }
         
-        List<Set<Object>> mergedOntologies = new ArrayList<>();
+        if(mergeTree.length != models.size()-1){
+            throw new IllegalArgumentException("Merging tree has not enough entries. There are " + models.size() + "model but only " + mergeTree.length + " entries in tree (expected " + (models.size()-1) + " ). Stopping merging.");
+        }
+        
+        if(this.intermediateAlignments != null)
+            this.intermediateAlignments.clear();
+        callClearIndex(); // clear index if some index already exists.
         
         Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
-        int n = models.size();
-        if(mergingTree.length != n-1){
-            throw new IllegalArgumentException("Merging tree has not enough entries. There are " + n + "model but only " + mergingTree.length + " entries in tree (expected " + (n-1) + " ). Stopping merging.");
+        if(this.numberOfThreads > 1){
+            return runParallel(mergeTree, models, inputAlignment, p);
+        }else{
+            return runSequential(mergeTree, models, inputAlignment, p);
         }
-        callClearIndex(); // clear index if some index already exists.
-        int mergeCount = mergingTree.length;
+    }
+    
+    private AlignmentAndParameters runSequential(int[][] mergeTree, List<Set<Object>> models, Object inputAlignment, Properties p) throws MatchingException, Exception{
+        List<Set<Object>> mergedOntologies = new ArrayList<>();
+        
+        int n = models.size();
+        int mergeCount = mergeTree.length;
         LOGGER.info("Now performing {} merges.", mergeCount);
         Alignment finalAlignment = new Alignment();
         for (int i = 0; i < mergeCount; i++) {
             LOGGER.info("Prepare merge {} / {}", i + 1, mergeCount);
-            int[] merges = mergingTree[i];
-            if(merges.length != 2){
-                LOGGER.warn("mergingTree contains less or more than 2 entries. Returning input alignment.");
-                return new AlignmentAndParameters(inputAlignment, parameters);
+            int[] mergePair = mergeTree[i];
+            if(mergePair.length < 2){
+                throw new IllegalArgumentException("Merge tree is not valid. In row " + i + " less than two elements appear: " + Arrays.toString(mergePair));
             }
-            int left = merges[0];
-            int right = merges[1];
-            
+            int left = mergePair[0];
+            int right = mergePair[1];
             
             Set<Object> source;
             Set<Object> target;
@@ -204,36 +199,105 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                 }
             }
             
-            LOGGER.info("Run one to one match");
-            AlignmentAndParameters alignmentAndPrameters = GenericMatcherCaller.runMatcherMultipleRepresentations(this.oneToOneMatcher, source, target, 
-                    DispatcherHelper.deepCopy(inputAlignment), DispatcherHelper.deepCopy(parameters));
-            Alignment alignment = TypeTransformerRegistry.getTransformedObject(alignmentAndPrameters.getAlignment(), Alignment.class);
-            if(alignment == null){
-                LOGGER.error("Could not transform result of matcher to alignment. Return input alignment.");
-                return new AlignmentAndParameters(inputAlignment, parameters);
+            MergeResult mergeResult = MergeExecutor.merge(oneToOneMatcher, source, target, inputAlignment, p, addingInformationToUnion, -1);
+            mergedOntologies.add(mergeResult.getResult());
+            
+            Alignment resultingAlignment = mergeResult.getAlignment();
+            if(resultingAlignment == null){
+                LOGGER.error("The resulting alignment is null. Maybe a transformetrion error. The whole merge will be canceled.");
+                throw new MatchingException("The resulting alignment is null. Maybe a transformetrion error. The whole merge will be canceled.");
             }
-            finalAlignment.addAll(alignment);
+            finalAlignment.addAll(resultingAlignment);
             if(this.intermediateAlignments != null)
-                this.intermediateAlignments.add(alignment);
+                this.intermediateAlignments.add(resultingAlignment);
             
-            LOGGER.info("Merge source ontology with alignment into target ontology.");
-            //need to transform the model in something known like jena model.
-            Model sourceModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(source, Model.class, p);
-            Model targetModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(target, Model.class, p);
-            if(sourceModel == null || targetModel == null){
-                LOGGER.error("Could not transform source or target to Model");
-                return new AlignmentAndParameters(inputAlignment, parameters);
-            }
-            mergeSourceIntoTarget(sourceModel, targetModel, alignment, addInformationToUnion);
-            
-            if(this.lowMemoryOverhead){
+            if(this.lowMemoryOverhead == false){
                 //in low memory overhead the target is tdb and doesn't need to be removed.
                 removeOntModelFromSet(source);
             }
-            mergedOntologies.add(new HashSet<>(Arrays.asList(targetModel)));
         }
         
-        return new AlignmentAndParameters(finalAlignment, parameters);
+        return new AlignmentAndParameters(finalAlignment, p);
+        
+    }
+    
+    private AlignmentAndParameters runParallel(int[][] mergeTree, List<Set<Object>> models, Object inputAlignment, Properties p) throws MatchingException{
+        int mergeCount = mergeTree.length;
+        int n = models.size();
+        
+        LOGGER.info("Now performing {} merges.", mergeCount);
+        Alignment finalAlignment = new Alignment();
+        
+        List<Set<Object>> mergedModels = new ArrayList<>();
+        mergedModels.addAll(models);
+        
+        for(int i = 0; i < n; i++){
+            mergedModels.add(null);
+        }
+        
+        List<MergeTaskPos> merges = new ArrayList<>();
+        for(int i=0; i < mergeTree.length; i++){
+            int[] mergePair = mergeTree[i];
+            if(mergePair.length < 2)
+                throw new IllegalArgumentException("Merge tree is not valid. In row " + i + " less than two elements appear: " + Arrays.toString(mergePair));
+            merges.add(new MergeTaskPos(mergePair[0], mergePair[1], n + i));
+        }
+        
+        ExecutorService exec = Executors.newFixedThreadPool(this.numberOfThreads);
+        List<Integer> parallelMergesPossible = MergeTreeUtil.getCountOfParallelExecutions(mergeTree);
+        LOGGER.info("Run parallel merge with {} threads.", this.numberOfThreads);
+        LOGGER.info("Following the list of counts which show how many matching tasks could be processed in parallel for each stage: {}", parallelMergesPossible);
+        try{
+            int stage = 1;
+            while(!merges.isEmpty()){
+                List<Future<MergeResult>> futures = new ArrayList<>();
+                List<MergeTaskPos> runnable = new ArrayList<>();
+                for(MergeTaskPos task : merges){
+                    Set<Object> one = mergedModels.get(task.getClusterOnePos());
+                    Set<Object> two = mergedModels.get(task.getClusterTwoPos());
+                    if(one != null && two != null){
+                        //decide what is source what is target - the target is the bigger one
+                        Set<Object> source = one;
+                        Set<Object> target = two;
+                        try {
+                            if(isLeftModelGreater(one, two, p)){
+                                source = two;
+                                target = one;
+                            }
+                        } catch (TypeTransformationException ex) {
+                            LOGGER.warn("Could not transform model to jena model and cannot compare the size. Thus stick to default order."
+                                    + "Should not make any change unless the matcher is not symmetric.");
+                        }
+                        runnable.add(task);                            
+                        futures.add(exec.submit(new MergeExecutor(this.oneToOneMatcher, source, target, 
+                                DispatcherHelper.deepCopy(inputAlignment), DispatcherHelper.deepCopy(p), 
+                                addingInformationToUnion, task.getClusterResultPos())));
+                    }
+                }
+                LOGGER.info("Run matching stage {}/{} with possibly {} tasks in parallel (actual parallelization depend on threads which is {})", stage++, parallelMergesPossible.size(), runnable.size(), this.numberOfThreads);
+                merges.removeAll(runnable);
+
+                for (Future<MergeResult> f : futures) {
+                    try {
+                        MergeResult result = f.get();// get is the blocking call here
+                        mergedModels.set(result.getNewPos(), result.getResult());
+                        Alignment resultingAlignment = result.getAlignment();
+                        if(resultingAlignment == null){
+                            LOGGER.error("The resulting alignment is null. Maybe a transformetrion error. The whole merge will be canceled.");
+                            throw new MatchingException("The resulting alignment is null. Maybe a transformetrion error. The whole merge will be canceled.");
+                        }
+                        finalAlignment.addAll(resultingAlignment);
+                        if(this.intermediateAlignments != null)
+                            this.intermediateAlignments.add(resultingAlignment);
+                    } catch (InterruptedException | ExecutionException ex) {
+                        LOGGER.warn("Error when waiting for parallel results of matcher execution.", ex);
+                    }
+                }
+            }
+        }finally{
+            exec.shutdown();
+        }
+        return new AlignmentAndParameters(finalAlignment, p);
     }
     
     private void removeOntModelFromSet(Set<Object> set){
@@ -243,39 +307,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                 i.remove();
             }
         }
-    }
-    
-    public void clearAndStartSavingIntermediateAlignments(){
-        this.intermediateAlignments = new ArrayList<>();
-    }
-
-    /**
-     * Returns the intermediate alignments. This only works if clearAndStartSavingIntermediateAlignments is called before the match method.
-     * @return a list of intermediate alignments or null if clearAndStartSavingIntermediateAlignments is not called.
-     */
-    public List<Alignment> getIntermediateAlignments() {
-        return intermediateAlignments;
-    }
-    
-    
-    public void setUseCacheForMergeTree(boolean useCache){
-        this.useCacheForMergeTree = useCache;
-    }
-    
-    public void setAddInformationToUnion(boolean addInformationToUnion){
-        this.addInformationToUnion = addInformationToUnion;
-    }
-
-    /**
-     * If set to true, the memory overhead is reduced by two facts:
-     * 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
-     * Thus the matcher needs to deal with TDB folder as input. This is not the case for most matchers.
-     * @param lowMemoryOverhead if true, the matching will be memory performant.
-     */
-    public void setLowMemoryOverhead(boolean lowMemoryOverhead) {
-        this.lowMemoryOverhead = lowMemoryOverhead;
-    }
-    
+    }    
              
     /**
      * Returns the merging tree (which ontologies are merged in which order).
@@ -332,121 +364,101 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         }
     }
     
-    
-        
+    //getter and setter:
+
     /**
-     * Merges all triples from the source model into the target model.
-     * @param source the source where all triples originates
-     * @param target the target model where all triples should end up
-     * @param alignment the alignment which is used.
-     * @param addInformationToUnion if true, all information will be added to the merged ontology
+     * Returns the number of thread which are used during merge.
+     * A number equal to one means sequential processing and greater than one means parallel processing.
+     * @return the number of thread used.
      */
-    public static void mergeSourceIntoTarget(Model source, Model target, Alignment alignment, boolean addInformationToUnion){
-        if(addInformationToUnion){
-            mergeSourceIntoTargetFullInformation(source, target, alignment);
+    public int getNumberOfThreads() {
+        return numberOfThreads;
+    }
+
+    /**
+     * Sets the number of threads which are used during merge.
+     * A number equal to one means sequential processing and greater than one means parallel processing with the specified number of threads.
+     * @param numberOfThreads the number of threads to use. Values greater or equal to one are allowed.
+     */
+    public void setNumberOfThreads(int numberOfThreads) {
+        if(numberOfThreads < 1)
+            throw new IllegalArgumentException("Number of threads are smaller than one: " + numberOfThreads);
+        this.numberOfThreads = numberOfThreads;
+    }
+    
+    /**
+     * Sets the number of threads which are used during merge to the number of available CPU cores.
+     * 
+     * A number equal to one means sequential processing and greater than one means parallel processing with the specified number of threads.
+     */
+    public void setNumberOfThreadsToCpuCores() {
+        setNumberOfThreads(Runtime.getRuntime().availableProcessors());
+    }
+
+    /**
+     * Return true if all information / triples are added to the union.
+     * If set to false, only the information of non matched entities is added to the union.
+     * @return true if all information / triples are added to the union
+     */
+    public boolean isAddingInformationToUnion() {
+        return addingInformationToUnion;
+    }
+
+    /**
+     * Sets the value if all information / triples are added to the union.
+     * If set to false, only the information of non matched entities is added to the union.
+     * @param addInformationToUnion true if all information / triples are added to the union
+     */
+    public void setAddingInformationToUnion(boolean addInformationToUnion) {
+        this.addingInformationToUnion = addInformationToUnion;
+    }
+
+    /**
+     * Return true if memory overhead is reduced.
+     * This is done by 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
+     * The default is false - meaning everything is stored in memory.
+     * @return true if memory overhead is reduced
+     */
+    public boolean isLowMemoryOverhead() {
+        return lowMemoryOverhead;
+    }
+    
+    /**
+     * If set to true, the memory overhead is reduced by two facts:
+     * 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
+     * Thus the matcher needs to deal with TDB folder as input. This is not the case for most matchers.
+     * The default is false - meaning everything is stored in memory.
+     * @param lowMemoryOverhead if true, the matching will be memory performant.
+     */
+    public void setLowMemoryOverhead(boolean lowMemoryOverhead) {
+        this.lowMemoryOverhead = lowMemoryOverhead;
+    }
+    
+    /**
+     * Returns the intermediate alignments. This only works if {@link #setSavingIntermediateAlignments(boolean) } is set to true before the match method is called.
+     * @return a list of intermediate alignments or null if {@link #setSavingIntermediateAlignments(boolean) } was set to false (the default).
+     */
+    public List<Alignment> getIntermediateAlignments() {
+        return this.intermediateAlignments;
+    }
+    
+    /**
+     * Returns true if intermediate alignments are stored.
+     * @return true if intermediate alignments are stored
+     */
+    public boolean isSavingIntermediateAlignments() {
+        return this.intermediateAlignments != null;
+    }
+    
+    /**
+     * Set to true if the intermediate alignments should be stored.
+     * @param intermediateAlignmentsNew true if the intermediate alignments should be stored
+     */
+    public void setSavingIntermediateAlignments(boolean intermediateAlignmentsNew) {
+        if(intermediateAlignmentsNew){
+            this.intermediateAlignments = new ArrayList<>();
         }else{
-            mergeSourceIntoTargetPartialInformation(source, target, alignment);
+            this.intermediateAlignments = null;
         }
-        /*
-        Graph targetGraph = target.getGraph();
-        ExtendedIterator<Triple> it = source.getGraph().find();
-        while(it.hasNext()){
-            Triple t = it.next();
-            
-            NodeAndReplaced newSubject = getNodeAndReplaced(alignment, t.getSubject());
-            NodeAndReplaced newPredicate = getMatchedNode(alignment, t.getPredicate());
-            NodeAndReplaced newObject = getMatchedNode(alignment, t.getObject());
-            
-            if(addInformationToUnion){
-                targetGraph.add(new Triple(newSubject.getNode(),newPredicate.getNode(),newObject.getNode()));
-            }else{
-                //we do not add it if subject or objetc is already matched.
-                if(newSubject.isReplaced() == false && newObject.isReplaced() == false){
-                    targetGraph.add(new Triple(newSubject.getNode(),newPredicate.getNode(),newObject.getNode()));
-                }
-            }
-        }
-        it.close();
-        */
-    }
-    
-    
-    private static void mergeSourceIntoTargetFullInformation(Model source, Model target, Alignment alignment){
-        Graph targetGraph = target.getGraph();
-        ExtendedIterator<Triple> it = source.getGraph().find();
-        while(it.hasNext()){
-            Triple t = it.next();
-            targetGraph.add(new Triple(
-                    getNode(alignment, t.getSubject()),
-                    getNode(alignment, t.getPredicate()),
-                    getNode(alignment, t.getObject())
-            ));
-        }
-        it.close();
-    }
-    
-    private static void mergeSourceIntoTargetPartialInformation(Model source, Model target, Alignment alignment){
-        Graph targetGraph = target.getGraph();
-        ExtendedIterator<Triple> it = source.getGraph().find();
-        while(it.hasNext()){
-            Triple t = it.next();
-            NodeAndReplaced newSubject = getNodeAndReplaced(alignment, t.getSubject());
-            NodeAndReplaced newPredicate = getNodeAndReplaced(alignment, t.getPredicate());
-            NodeAndReplaced newObject = getNodeAndReplaced(alignment, t.getObject());
-
-            //we do not add it if subject or objetc is already matched.
-            if(newSubject.isReplaced() == false && newObject.isReplaced() == false){
-                targetGraph.add(new Triple(newSubject.getNode(),newPredicate.getNode(),newObject.getNode()));
-            }
-        }
-        it.close();
-    }
-    
-    private static Node getNode(Alignment alignment, Node node){
-        if(node.isURI()){
-            Iterator<Correspondence> correspondences = alignment.getCorrespondencesTargetRelation(node.getURI(), CorrespondenceRelation.EQUIVALENCE).iterator();
-            if(correspondences.hasNext()){
-                Node replace = NodeFactory.createURI(correspondences.next().getEntityOne());
-                if(correspondences.hasNext()){
-                    LOGGER.info("The alignment matches one entity from the target to multiple from the source. "
-                            + "Currently uing the canonical one. Better filter the alignment in the base matcher to select the correct one.");
-                }
-                return replace;
-            }
-        }
-        return node;
-    }
-    
-    private static NodeAndReplaced getNodeAndReplaced(Alignment alignment, Node node){
-        if(node.isURI()){
-            Iterator<Correspondence> correspondences = alignment.getCorrespondencesTargetRelation(node.getURI(), CorrespondenceRelation.EQUIVALENCE).iterator();
-            if(correspondences.hasNext()){
-                Node replace = NodeFactory.createURI(correspondences.next().getEntityOne());
-                if(correspondences.hasNext()){
-                    LOGGER.info("The alignment matches one entity from the target to multiple from the source. "
-                            + "Currently uing the canonical one. Better filter the alignment in the base matcher to select the correct one.");
-                }
-                return new NodeAndReplaced(replace, true);
-            }
-        }
-        return new NodeAndReplaced(node, false);   
-    }    
-}
-
-class NodeAndReplaced {
-    private final Node node;
-    private final boolean replaced;
-
-    public NodeAndReplaced(Node node, boolean replaced) {
-        this.node = node;
-        this.replaced = replaced;
-    }
-
-    public Node getNode() {
-        return node;
-    }
-
-    public boolean isReplaced() {
-        return replaced;
     }
 }

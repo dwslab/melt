@@ -65,23 +65,26 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
     public double[][] getClusterFeatures(List<Set<Object>> models, Object parameters){
         Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
+        LOGGER.info("Compute BOW for each KG.");
         Counter<String> documentFrequency = new Counter<>();
         List<Counter<String>> documents = new ArrayList<>(models.size());
         for(int i=0; i < models.size(); i++){
             try{
-            Model m = (Model)TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(models.get(i), OntModel.class, p);
-            if(m == null){
-                LOGGER.warn("Initial model is null. Can't compute the similarities between the ontologies/knowledge graphs.");
-                return new double[0][0];
-            }
-            Counter<String> bow = getBagOfWords(m);
-            
-            documents.add(bow);
-            documentFrequency.addAll(bow.getDistinctElements());
+                Model m = (Model)TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(models.get(i), OntModel.class, p);
+                if(m == null){
+                    LOGGER.warn("Initial model is null. Can't compute the similarities between the ontologies/knowledge graphs.");
+                    return new double[0][0];
+                }
+                Counter<String> bow = getBagOfWords(m);
+
+                documents.add(bow);
+                documentFrequency.addAll(bow.getDistinctElements());
             }catch(TypeTransformationException ex){
                 LOGGER.warn("Conversion to OntModel/Model did not work. Can't compute the similarities between the ontologies/knowledge graphs.", ex);
                 return new double[0][0];
             }
+            if(i % 500 == 0)
+                LOGGER.info("Computing BOW {}/{}", i, models.size());
         }
         //create features
         
@@ -89,15 +92,19 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
         if(this.mindf == 0.0 && this.maxdf == 1.0){
             //use all
             selectedWords = documentFrequency.getDistinctElements();
+            LOGGER.info("Select all {} words as feature", selectedWords.size());
         }else{
             selectedWords = documentFrequency.betweenFrequencyReturningElements(this.mindf, this.maxdf);
+            LOGGER.info("Select words between frequency {} and {} which are: {} words as feature", this.mindf, this.maxdf, selectedWords.size());
         }
         if(selectedWords.isEmpty()){
             selectedWords = documentFrequency.getDistinctElements();
+            LOGGER.info("The selection of words results in no features. Use all words as features (backup version). This results in {} words/features.", selectedWords.size());
         }
         
         String[] features = selectedWords.toArray(new String[0]);
         //tf-idf
+        LOGGER.info("Compute TF-IDF vectore for each KG.");
         long n = documents.size();
         int[] featuresDocumentFrequency = Arrays.stream(features).mapToInt(f->documentFrequency.getCount(f)).toArray();
         double[][] data = documents.stream().map(bag -> {
@@ -114,6 +121,7 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
                 }
                 return x;
         }).toArray(double[][]::new);
+        LOGGER.info("Finished computing TF-IDF vector for each KG.");
         return data;
     }
     

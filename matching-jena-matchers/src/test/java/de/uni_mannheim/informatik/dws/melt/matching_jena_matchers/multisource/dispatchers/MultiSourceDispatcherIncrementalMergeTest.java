@@ -1,14 +1,15 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers;
 
-import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BaselineStringMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.Counter;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.TransitiveClosure;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
-import java.util.AbstractMap;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -16,22 +17,25 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
-import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 
 public class MultiSourceDispatcherIncrementalMergeTest {
+    
     @Test
     public void noSourceIsModifiedTest() throws Exception{
-        MultiSourceDispatcherIncrementalMerge merger = new matcherTest();
-        
+        MultiSourceDispatcherIncrementalMerge merger = new MatcherFixedMergeTree();
+        merger.setLowMemoryOverhead(false);
         List<Set<Object>> models = new ArrayList<>();
         for(int i = 0; i < 3; i++){
             models.add(new HashSet<>(Arrays.asList(getModel("domain" + Integer.toString(i)))));
@@ -55,6 +59,47 @@ public class MultiSourceDispatcherIncrementalMergeTest {
         return m;
     }
     
+    @ParameterizedTest
+    @ValueSource(ints  = {1,2})
+    public void checkEverthingIsMerged(int threads) throws Exception{
+
+        List<Set<Object>> models = new ArrayList<>();
+        List<String> sameEntities = new ArrayList<>();
+        for(int i=0; i < 7; i++){            
+            OntModel m = ModelFactory.createOntologyModel();
+            Resource r = m.createResource("http://example.com/" + i + "#individual");
+            sameEntities.add("http://example.com/" + i + "#individual");
+            r.addProperty(RDF.type, OWL.Thing);
+            r.addProperty(RDFS.label, "Hello");
+            models.add(new HashSet<>(Arrays.asList(m)));
+        }
+
+        MultiSourceDispatcherIncrementalMerge merger = new MatcherFixedMergeTree(new BaselineStringMatcher(), MergeTreeUtilTest.getLeftSkewed(7, true));
+        merger.setNumberOfThreads(threads);
+        AlignmentAndParameters result = merger.match(models, null, null);
+        Alignment a = result.getAlignment(Alignment.class);
+
+        //due to the fact that model 0 is merged into model 1 and then all others are merged to it,
+        //everthing will be mapped to model 1 
+        assertContainsAnyDirection(a, "http://example.com/1#individual", "http://example.com/0#individual");
+        assertContainsAnyDirection(a, "http://example.com/1#individual", "http://example.com/2#individual");
+        assertContainsAnyDirection(a, "http://example.com/1#individual", "http://example.com/3#individual");
+        assertContainsAnyDirection(a, "http://example.com/1#individual", "http://example.com/4#individual");
+        assertContainsAnyDirection(a, "http://example.com/1#individual", "http://example.com/5#individual");
+        assertContainsAnyDirection(a, "http://example.com/1#individual", "http://example.com/6#individual");
+
+        TransitiveClosure<String> closure = new TransitiveClosure<>();
+        for(Correspondence c : a){
+            closure.add(c.getEntityOne(), c.getEntityTwo());
+        }
+
+        assertTrue(closure.belongToTheSameCluster(sameEntities));
+        
+    }
+    private static void assertContainsAnyDirection(Alignment a, String one, String two){
+        assertTrue(a.contains(new Correspondence(one, two)) || 
+                a.contains(new Correspondence(two, one)));
+    }
     
     
     @Test
@@ -134,27 +179,4 @@ public class MultiSourceDispatcherIncrementalMergeTest {
         return m;
     }
     
-}
-
-class matcherTest extends MultiSourceDispatcherIncrementalMerge{
-
-    public matcherTest() {
-        super(new NoOp());
-    }
-
-    @Override
-    public int[][] getMergeTree(List<Set<Object>> models, Object parameters) {
-        int[][] array = {
-            {0,1},
-            {3,2}
-        };
-        return array;
-    }
-}
-
-class NoOp implements IMatcher<Object, Object, Object> {
-    @Override
-    public Object match(Object source, Object target, Object inputAlignment, Object parameters) throws Exception {
-        return new Alignment();
-    }
 }
