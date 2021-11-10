@@ -62,4 +62,24 @@ public class TypeTransformerHelper {
             return true;
         }
     }
+    
+    public static boolean shouldMatchClasses(Properties parameters){
+        return getOrDefault(parameters, ParameterConfigKeys.MATCHING_CLASSES, Boolean.class, true);
+    }
+    
+    public static boolean shouldMatchDatatypeProperties(Properties parameters){
+        return getOrDefault(parameters, ParameterConfigKeys.MATCHING_DATA_PROPERTIES, Boolean.class, true);
+    }
+    
+    public static boolean shouldMatchObjectProperties(Properties parameters){
+        return getOrDefault(parameters, ParameterConfigKeys.MATCHING_OBJECT_PROPERTIES, Boolean.class, true);
+    }
+    
+    public static boolean shouldMatchRDFProperties(Properties parameters){
+        return getOrDefault(parameters, ParameterConfigKeys.MATCHING_RDF_PROPERTIES, Boolean.class, true);
+    }
+    
+    public static boolean shouldMatchInstances(Properties parameters){
+        return getOrDefault(parameters, ParameterConfigKeys.MATCHING_INSTANCES, Boolean.class, true);
+    }
 }

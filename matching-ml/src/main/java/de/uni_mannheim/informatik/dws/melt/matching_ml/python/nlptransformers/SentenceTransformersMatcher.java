@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers.TypeTransformerHelper;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.ResourcesExtractor;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.io.BufferedWriter;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 import org.apache.jena.ontology.OntProperty;
@@ -128,17 +130,44 @@ public class SentenceTransformersMatcher extends TransformersBase {
      */
     public void initialiseResourceExtractor() {
         this.resourcesExtractor = new ArrayList<>();
-        //TODO: use parameters to determine if classes whould be matched etc
-        this.resourcesExtractor.add((model, parameters) -> model.listClasses());
-        this.resourcesExtractor.add((model, parameters) -> model.listDatatypeProperties());
-        this.resourcesExtractor.add((model, parameters) -> model.listObjectProperties());
         this.resourcesExtractor.add((model, parameters) -> {
-            Set<OntProperty> allProperties = model.listAllOntProperties().toSet();
-            allProperties.removeAll(model.listObjectProperties().toSet());
-            allProperties.removeAll(model.listDatatypeProperties().toSet());
-            return allProperties.iterator();
-       });
-       this.resourcesExtractor.add((model, parameters) -> model.listIndividuals());
+                if(TypeTransformerHelper.shouldMatchClasses(parameters)){
+                    return model.listClasses() ;
+                }else{
+                    return Collections.emptyIterator();
+                }
+        });
+        this.resourcesExtractor.add((model, parameters) -> {
+                if(TypeTransformerHelper.shouldMatchDatatypeProperties(parameters)){
+                    return model.listDatatypeProperties() ;
+                }else{
+                    return Collections.emptyIterator();
+                }
+        });
+        this.resourcesExtractor.add((model, parameters) -> {
+                if(TypeTransformerHelper.shouldMatchObjectProperties(parameters)){
+                    return model.listObjectProperties() ;
+                }else{
+                    return Collections.emptyIterator();
+                }
+        });
+        this.resourcesExtractor.add((model, parameters) -> {
+                if(TypeTransformerHelper.shouldMatchRDFProperties(parameters)){
+                    Set<OntProperty> allProperties = model.listAllOntProperties().toSet();
+                    allProperties.removeAll(model.listObjectProperties().toSet());
+                    allProperties.removeAll(model.listDatatypeProperties().toSet());
+                    return allProperties.iterator();
+                }else{
+                    return Collections.emptyIterator();
+                }
+        });
+        this.resourcesExtractor.add((model, parameters) -> {
+                if(TypeTransformerHelper.shouldMatchInstances(parameters)){
+                    return model.listIndividuals() ;
+                }else{
+                    return Collections.emptyIterator();
+                }
+        });
     }
 
     public List<ResourcesExtractor> getResourcesExtractor() {
