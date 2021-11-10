@@ -1,5 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
+import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcherCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
@@ -31,8 +33,6 @@ import org.slf4j.LoggerFactory;
  * @author Jan Portisch
  */
 public class Executor {
-
-
     /**
      * Default logger.
       */
@@ -41,243 +41,7 @@ public class Executor {
     private static final String FALLBACK_MATCHER_NAME = "default_matcher";
 
     private static final Pattern TIME_RUNNING = Pattern.compile("MELT: Matcher finished within\\s*(\\d+)\\s*seconds");
-
-    /**
-     * This method runs the specified matcher on the specified track.
-     * @param track Track on which the matcher shall be run.
-     * @param matcher The matcher to be run.
-     * @return An {@link ExecutionResultSet} instance.
-     */
-    public static ExecutionResultSet run(Track track, IOntologyMatchingToolBridge matcher) {
-        return run(track, matcher, getMatcherName(matcher));
-    }
-
-    /**
-     * This method runs the specified matcher on the specified track.
-     * @param track Track on which the matcher shall be run.
-     * @param matcher The matcher to be run.
-     * @param matcherName The name of the matcher that will be associated with an individual execution result.
-     * @return An {@link ExecutionResultSet} instance.
-     */
-    public static ExecutionResultSet run(Track track, IOntologyMatchingToolBridge matcher, String matcherName) {
-        if(track == null){
-            LOGGER.error("The track specified is null. Cannot execute the given matcher. " +
-                    "Resolution: Will return empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        return run(track.getTestCases(), matcher, matcherName);
-    }
-
-    /**
-     * Evaluate multiple matchers on the given track with this static method.
-     * @param track The track to be evaluated.
-     * @param matchers The matchers to be run on the given track.
-     * @return ExecutionResultSet instance.
-     */
-    public static ExecutionResultSet run(Track track, Map<String, IOntologyMatchingToolBridge> matchers) {
-        if(track == null){
-            LOGGER.error("The track specified is null. Cannot execute the given matchers. " +
-                    "Resolution: Will return empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        if(matchers == null){
-            LOGGER.error("The matchers are not specified (map is null). Cannot execute the given matchers. " +
-                    "Resolution: Will return empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        return run(track.getTestCases(), matchers);
-    }
-
-    /**
-     * Run a matchers on multiple tracks.
-     *
-     * @param tracks The tracks on which the matchers shall be run.
-     * @param matcher The matcher that shall be run.
-     * @param matcherName The name of the matcher.
-     * @return The matching result as {@link ExecutionResultSet} instance.
-     */
-    public static ExecutionResultSet runTracks(List<Track> tracks, IOntologyMatchingToolBridge matcher, String matcherName) {
-        if(tracks == null){
-            LOGGER.error("The tracks list is null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        if(matcher == null){
-            LOGGER.error("The specified matcher is null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        ExecutionResultSet r = new ExecutionResultSet();
-        for(Track track : tracks){
-            for (TestCase tc : track.getTestCases()) {
-                ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher, matcherName);
-                if(er != null)
-                    r.add(er);
-            }
-        }
-        return r;
-    }
-
-    /**
-     * Run multiple matchers on multiple tracks.
-     *
-     * @param tracks The tracks on which the matchers shall be run.
-     * @param matchers The matchers that shall be run.
-     * @return The matching result as {@link ExecutionResultSet} instance.
-     */
-    public static ExecutionResultSet runTracks(List<Track> tracks, Map<String, IOntologyMatchingToolBridge> matchers) {
-        if(tracks == null){
-            LOGGER.error("The tracks list is null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        if(matchers == null){
-            LOGGER.error("The matchers are null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        ExecutionResultSet r = new ExecutionResultSet();
-        for(Track track : tracks){
-            for (TestCase tc : track.getTestCases()) {
-                for(Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()){
-                    ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher.getValue(), matcher.getKey());
-                    if(er != null)
-                        r.add(er);
-                }
-            }
-        }        
-        return r;
-    }
-
-    /**
-     * Run a set of matchers on a set of test cases.
-     *
-     * @param testCases The test cases on which all the specified matchers shall be run.
-     * @param matchers  A map of matchers from unique_name to matcher instance.
-     * @return The matching result as {@link ExecutionResultSet} instance.
-     */
-    public static ExecutionResultSet run(List<TestCase> testCases, Map<String, IOntologyMatchingToolBridge> matchers) {
-        if(testCases == null){
-            LOGGER.error("The testCases list is null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        if(matchers == null){
-            LOGGER.error("The matchers are null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        ExecutionResultSet r = new ExecutionResultSet();
-        for (TestCase tc : testCases) {
-            for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
-                ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher.getValue(), matcher.getKey());
-                if(er != null)
-                    r.add(er);
-            }
-        }
-        return r;
-    }
     
-    /**
-     * Run a set of matchers on a specific test cases.
-     *
-     * @param testCase One specific testcase on which all the specified matchers shall be run.
-     * @param matchers  A map of matchers from unique_name to matcher instance.
-     * @return The result as {@link ExecutionResultSet} instance.
-     */
-    public static ExecutionResultSet run(TestCase testCase, Map<String, IOntologyMatchingToolBridge> matchers) {
-        if(matchers == null){
-            LOGGER.error("The matchers are null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        if(testCase == null){
-            LOGGER.error("The testCase is null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        ExecutionResultSet r = new ExecutionResultSet();
-        for (Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
-            ExecutionResult er = ExecutionRunner.runMatcher(testCase, matcher.getValue(), matcher.getKey());
-            if(er != null)
-                r.add(er);
-        }
-        return r;
-    }
-
-    /**
-     * Run a matcher on a set of test cases.
-     *
-     * @param testCases The test cases on which all the specified matcher shall be run.
-     * @param matcher   The matcher to be run.
-     * @return The result as {@link ExecutionResultSet} instance.
-     */
-    public static ExecutionResultSet run(List<TestCase> testCases, IOntologyMatchingToolBridge matcher) {
-        if(testCases == null){
-            LOGGER.error("The testCase list is null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        if(matcher == null){
-            LOGGER.error("The matcher is null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        return run(testCases, matcher, getMatcherName(matcher));
-    }
-
-    /**
-     * Run a matcher on a set of test cases.
-     *
-     * @param testCases The set of test cases on which the specified matcher shall be run.
-     * @param matcher The matcher to be run.
-     * @param matcherName The name of the matcher that will be associated with an individual execution result of the specified matcher.
-     * @return An ExecutionResultSet instance.
-     */
-    public static ExecutionResultSet run(List<TestCase> testCases, IOntologyMatchingToolBridge matcher, String matcherName) {
-        if(testCases == null){
-            LOGGER.error("testCases list is null. Cannot execute matcher " + matcherName + " on the specified list of test cases." +
-                    "Resolution: Return empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        ExecutionResultSet r = new ExecutionResultSet();
-        for (TestCase tc : testCases) { // no parallelism possible because each matcher possibly writes to the same temp file.
-            if(tc != null) {
-                ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher, matcherName);
-                if(er != null)
-                    r.add(er);
-            } else {
-                LOGGER.error("The testCases list contains a null object. Resolution: skipping...");
-            }
-        }
-        return r;
-    }
-
-    /**
-     * Run the specified matcher on the specified test case.
-     *
-     * @param testCase The test case on which the matcher shall be executed.
-     * @param matcher  The matcher to be executed.
-     * @return Result in the form of an {@link ExecutionResultSet}.
-     */
-    public static ExecutionResultSet run(TestCase testCase, IOntologyMatchingToolBridge matcher) {
-        return run(testCase, matcher, getMatcherName(matcher));
-    }
-
-    /**
-     * Run a matcher on a test case.
-     *
-     * @param testCase The test case on which the matcher shall be executed.
-     * @param matcher The matcher to be executed.
-     * @param matcherName The name of the matcher that will be associated with an individual execution result of the specified matcher.
-     * @return Result in the form of an {@link ExecutionResultSet}.
-     */
-    public static ExecutionResultSet run(TestCase testCase, IOntologyMatchingToolBridge matcher, String matcherName) {
-        if(testCase == null){
-            LOGGER.error("The testCase is null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        if(matcher == null){
-            LOGGER.error("The matcher is null. Resolution: Returning empty resultSet.");
-            return new ExecutionResultSet();
-        }
-        ExecutionResultSet r = new ExecutionResultSet();
-        ExecutionResult er = ExecutionRunner.runMatcher(testCase, matcher, matcherName);
-        if(er != null)
-            r.add(er);
-        return r;
-    }
-
     /**
      * Run a single test case with one matcher.
      *
@@ -286,7 +50,11 @@ public class Executor {
      * @param matcherName The name of the matcher.
      * @return Single Execution Result
      */
-    public static ExecutionResult runSingle(TestCase testCase, IOntologyMatchingToolBridge matcher, String matcherName) {
+    public static ExecutionResult runSingle(TestCase testCase, Object matcher, String matcherName) {
+        if(isMatcher(matcher) == false){
+            LOGGER.warn("Matcher does not implement IMatcher or IOntologyMatchingToolBridge. Returning a null Execution result.");
+            return null;
+        }
         return ExecutionRunner.runMatcher(testCase, matcher, matcherName);
     }
 
@@ -297,9 +65,145 @@ public class Executor {
      * @param matcher  Matcher to be evaluated.
      * @return Single Execution Result
      */
-    public static ExecutionResult runSingle(TestCase testCase, IOntologyMatchingToolBridge matcher) {
-        return ExecutionRunner.runMatcher(testCase, matcher, getMatcherName(matcher));
+    public static ExecutionResult runSingle(TestCase testCase, Object matcher) {
+        return runSingle(testCase, matcher, getMatcherName(matcher));
     }
+    
+    /**
+     * Run matchers on multiple tracks.
+     *
+     * @param tracks The tracks on which the matchers shall be run.
+     * @param matchers The matcher to be run. This class should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @return The matching result as {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet runTracks(List<Track> tracks, Object... matchers) {
+        return runTracks(tracks, getMatcherMap(matchers));
+    }
+    
+    /**
+     * Run multiple matchers on multiple tracks.
+     *
+     * @param tracks The tracks on which the matchers shall be run.
+     * @param matchers The matchers that shall be run. The values in the map (matchers) should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @return The matching result as {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet runTracks(List<Track> tracks, Map<String, Object> matchers) {
+        if(tracks == null){
+            LOGGER.error("The tracks list is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
+        }
+        List<TestCase> testCases = new ArrayList<>();
+        for(Track track : tracks){
+            if(track == null){
+                LOGGER.warn("A track is null. It will be skipped.");
+                continue;
+            }
+            testCases.addAll(track.getTestCases());
+        }
+        return run(testCases, matchers);
+    }
+    
+    /**
+     * This method runs the specified matcher on the specified track.
+     * @param track Track on which the matcher shall be run.
+     * @param matchers The matchers to be run. The classes should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @return An {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet run(Track track, Object... matchers) {
+        return run(track, getMatcherMap(matchers));
+    }
+    
+    /**
+     * Run matchers on one track.
+     * @param track The track to be evaluated.
+     * @param matchers The matchers to be run on the given track. The values of the map should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @return ExecutionResultSet instance.
+     */
+    public static ExecutionResultSet run(Track track, Map<String, Object> matchers) {
+        if(track == null){
+            LOGGER.error("The track specified is null. Cannot execute the given matchers. " +
+                    "Resolution: Will return empty resultSet.");
+            return new ExecutionResultSet();
+        }
+        return run(track.getTestCases(), matchers);
+    }
+    
+    /**
+     * Run matchers on one test cases.
+     *
+     * @param testCase One specific testcase on which all the specified matchers shall be run.
+     * @param matchers  A map of matchers from unique_name to matcher instance.The value of the map should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @return The result as {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet run(TestCase testCase, Object... matchers) {
+        return run(Arrays.asList(testCase), getMatcherMap(matchers));
+    }
+    
+    /**
+     * Run matchers on one test cases.
+     *
+     * @param testCase One specific testcase on which all the specified matchers shall be run.
+     * @param matchers  A map of matchers from unique_name to matcher instance.The value of the map should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @return The result as {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet run(TestCase testCase, Map<String, Object> matchers) {
+        return run(Arrays.asList(testCase), matchers);
+    }
+    
+    /**
+     * Run matchers on a set of test cases.
+     *
+     * @param testCases The test cases on which all the specified matcher shall be run.
+     * @param matchers   The matchers to be run. This class should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @return The result as {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet run(List<TestCase> testCases, Object... matchers) {
+        return run(testCases, getMatcherMap(matchers));
+    }
+    
+    /**
+     * Run matchers on a set of test cases.
+     *
+     * @param testCases The test cases on which all the specified matchers shall be run.
+     * @param matchers  A map of matchers from unique_name to matcher instance. The matcher class should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @return The matching result as {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet run(List<TestCase> testCases, Map<String, Object> matchers) {
+        if(testCases == null){
+            LOGGER.error("The testCases list is null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
+        }
+        if(matchers == null){
+            LOGGER.error("The matchers are null. Resolution: Returning empty resultSet.");
+            return new ExecutionResultSet();
+        }
+        ExecutionResultSet r = new ExecutionResultSet();
+        for (TestCase tc : testCases) {
+            for (Entry<String, Object> matcher : matchers.entrySet()) {
+                if(isMatcher(matcher.getValue()) == false){
+                    LOGGER.warn("A matcher of class {} does not implement IMatcher or IOntologyMatchingToolBridge. "
+                            + "This matcher will be skipped.");
+                    continue;
+                }
+                ExecutionResult er = ExecutionRunner.runMatcher(tc, matcher.getValue(), matcher.getKey());
+                if(er != null)
+                    r.add(er);
+            }
+        }
+        return r;
+    }
+    
+    /*
+    public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet results, Map<String, Object> matchers) {
+        
+    }
+    
+    public static ExecutionResultSet runMatcherOnTop(ExecutionResult result, Object matcher, String name) {
+        result
+        ExecutionRunner.runMatcher(result.getTestCase(), matcher, name)
+        
+    }
+    */
 
     /**
      * Load raw results from folder structure like:
@@ -596,6 +500,79 @@ public class Executor {
             LOGGER.warn("Could not extract runtime from file {}", performanceCSV.getPath(), ex);
         }
         return 0;
+    }
+    
+    private static Map<String, Object> getMatcherMap(Object... matchers){
+        Map<String, Object> resultingMatchers = new HashMap<>();
+        for(Object matcher : matchers){
+            if(isMatcher(matcher)){
+                String matcherName = getNonExistentName(getMatcherName(matcher), resultingMatchers.keySet());
+                resultingMatchers.put(matcherName, matcher);
+            }else if(matcher instanceof Map){
+                Map<?,?> matcherMap = (Map) matcher;
+                //keys:
+                boolean keyStringValueMatcherForAll = true;
+                for(Entry<?,?> entry : matcherMap.entrySet()){
+                    if(entry.getKey() instanceof String == false || isMatcher(entry.getValue()) == false){
+                        keyStringValueMatcherForAll = false;
+                        break;
+                    }
+                }
+                if(keyStringValueMatcherForAll == false){
+                    LOGGER.warn("MELT detected that a Map is provided as a matcher but not all keys are strings or not all values implements "
+                            + "the interfaces IMatcher or IOntologyMatchingToolBridge. The whole Map is skipped.");
+                    continue;
+                }
+                for(Entry<?,?> entry : matcherMap.entrySet()){
+                    String matcherName = getNonExistentName((String)entry.getKey(), resultingMatchers.keySet());
+                    resultingMatchers.put(matcherName, entry.getValue());
+                }
+            }else if(matcher instanceof Iterable){
+                Iterable<?> matcherIterable = (Iterable) matcher;
+                //check that all elements are matchers:
+                boolean allMatchers = true;
+                for(Object o : matcherIterable){
+                    if(isMatcher(o) == false){
+                        allMatchers = false;
+                        break;
+                    }
+                }
+                if(allMatchers == false){
+                    LOGGER.warn("MELT detected that a list is provided as a matcher but not all elements implements "
+                            + "the interfaces IMatcher or IOntologyMatchingToolBridge. The whole list is skipped.");
+                    continue;
+                }
+                for(Object o : matcherIterable){
+                    String matcherName = getNonExistentName(getMatcherName(o), resultingMatchers.keySet());
+                    resultingMatchers.put(matcherName, matcher);
+                }
+            }else{
+                LOGGER.warn("A matcher of class {} does not implement the interfaces IMatcher or IOntologyMatchingToolBridge. "
+                        + "This matcher will be skipped.", matcher.getClass());
+            }
+        }
+        return resultingMatchers;
+    }
+    
+    private static boolean isMatcher(Object o){
+        return o instanceof IMatcherCaller || 
+                o instanceof IMatcher ||
+                o instanceof IOntologyMatchingToolBridge;
+    }
+    
+    private static String getNonExistentName(String matcherName, Set<String> alreadyUsedMatcherNames){
+        if(alreadyUsedMatcherNames.contains(matcherName) == false){
+            return matcherName;
+        }
+        for(int i = 1; i < 200; i++){
+            String newMatcherName = matcherName + "_" + i;
+            if(alreadyUsedMatcherNames.contains(newMatcherName) == false){
+                return newMatcherName;
+            }
+        }
+        LOGGER.error("Cannot create new matcher name because suffix number is greater than 200. This is not usual. "
+                + "The initial name is returned. This means that not all matcher will be executed.");
+        return matcherName;
     }
     
     /**

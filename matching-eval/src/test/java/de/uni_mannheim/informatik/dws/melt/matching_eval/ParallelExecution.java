@@ -40,7 +40,7 @@ public class ParallelExecution {
         URL one = new URL("http", "one", "");
         URL two = new URL("http", "two", "");
         
-        Map<String, IOntologyMatchingToolBridge> matchers = new HashMap<>();
+        Map<String, Object> matchers = new HashMap<>();
         matchers.put("Test", new LongTimeMatcher(one));
         matchers.put("Test2", new LongTimeMatcher(two));
         ExecutionResultSet er = new ExecutorParallel().run(TrackRepository.Anatomy.Default.getTestCases(), matchers);

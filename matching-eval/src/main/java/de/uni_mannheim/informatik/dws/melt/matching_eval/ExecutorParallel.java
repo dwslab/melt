@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_eval;
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
-import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,12 +37,12 @@ public class ExecutorParallel {
      *                 matcher instance.
      * @return ExecutionResultSet
      */
-    public ExecutionResultSet run(List<TestCase> testCases, Map<String, IOntologyMatchingToolBridge> matchers) {
+    public ExecutionResultSet run(List<TestCase> testCases, Map<String, Object> matchers) {
         ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
 
         List<Future<ExecutionResult>> futures = new ArrayList<>(testCases.size() * matchers.size());
         for (TestCase tc : testCases) {
-            for (Map.Entry<String, IOntologyMatchingToolBridge> matcher : matchers.entrySet()) {
+            for (Map.Entry<String, Object> matcher : matchers.entrySet()) {
                 futures.add(exec.submit(new ExecutionRunner(tc, matcher.getValue(), matcher.getKey())));
             }
         }
@@ -60,11 +59,11 @@ public class ExecutorParallel {
         return results;
     }
     
-    public ExecutionResultSet run(Track track, Map<String, IOntologyMatchingToolBridge> matchers) {
+    public ExecutionResultSet run(Track track, Map<String, Object> matchers) {
         return run(track.getTestCases(), matchers);
     }
     
-    public ExecutionResultSet runTracks(List<Track> tracks, Map<String, IOntologyMatchingToolBridge> matchers) {
+    public ExecutionResultSet runTracks(List<Track> tracks, Map<String, Object> matchers) {
         List<TestCase> testCases = new ArrayList<>();
         for(Track t : tracks){
             testCases.addAll(t.getTestCases());

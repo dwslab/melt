@@ -47,7 +47,7 @@ public class GridSearch {
     /**
      * The matcher under evaluation.
      */
-    private Class<? extends IOntologyMatchingToolBridge> matcher;
+    private Class<?> matcher;
     private String matcherName;
     private List<String> paramName;
     private List<List<Object>> paramValues;
@@ -59,7 +59,7 @@ public class GridSearch {
      * @param matcher The matcher for which the grid search shall be performed.
      * @param matcherName Name of the matcher.
      */
-    public GridSearch(Class<? extends IOntologyMatchingToolBridge> matcher, String matcherName){
+    public GridSearch(Class<?> matcher, String matcherName){
         this.matcher = matcher;
         this.matcherName = matcherName;
         this.paramName = new ArrayList<>();
@@ -71,7 +71,7 @@ public class GridSearch {
      * Constructor
      * @param matcher The matcher for which the grid search shall be performed.
      */
-    public GridSearch(Class<? extends IOntologyMatchingToolBridge> matcher){
+    public GridSearch(Class<?> matcher){
         this(matcher, Executor.getMatcherName(matcher));
     }
     
@@ -374,8 +374,8 @@ public class GridSearch {
     }
     
     
-    public Map<String, IOntologyMatchingToolBridge> getMatcherConfigurations(){
-        Map<String, IOntologyMatchingToolBridge> matchers = new HashMap<>();
+    public Map<String, Object> getMatcherConfigurations(){
+        Map<String, Object> matchers = new HashMap<>();
         List<List<Object>> paramCombinations = cartesianProduct(0, this.paramValues);
         for(List<Object> paramSetting : paramCombinations){
             Collections.reverse(paramSetting); //TODO: optimze
@@ -403,7 +403,7 @@ public class GridSearch {
         return String.format("%s (%s)", this.matcherName, setting.toString());
     }
     
-    private IOntologyMatchingToolBridge getInstantiatedMatcher(List<Object> paramValue) throws ReflectiveOperationException {        
+    private Object getInstantiatedMatcher(List<Object> paramValue) throws ReflectiveOperationException {        
         List<Object> constructorValues = new ArrayList<>();
         List<Class<?>> constructorTypes = new ArrayList<>();
         for(int i=0; i < this.paramName.size(); i++){
@@ -414,14 +414,14 @@ public class GridSearch {
             }
         }
         
-        IOntologyMatchingToolBridge matcherInstance = null;
+        Object matcherInstance = null;
         if(constructorValues.isEmpty()){
             matcherInstance = this.matcher.newInstance();
         } else {
             Constructor<?> constructor = this.matcher.getConstructor(constructorTypes.toArray(new Class<?>[constructorTypes.size()]));
             if(constructor == null)
                 throw new NoSuchMethodException("Constructor with param types" + constructorTypes.toString() + " not found.");
-            matcherInstance = (IOntologyMatchingToolBridge)constructor.newInstance(constructorValues.toArray(new Object[constructorValues.size()]));
+            matcherInstance = constructor.newInstance(constructorValues.toArray(new Object[constructorValues.size()]));
         }
         
         if(matcherInstance == null)

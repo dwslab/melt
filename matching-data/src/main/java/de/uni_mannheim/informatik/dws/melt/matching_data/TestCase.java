@@ -91,6 +91,7 @@ public class TestCase {
         this.reference = reference;
         this.inputAlignment = inputAlignment;
         this.goldStandardCompleteness = goldStandardCompleteness;
+        this.parameters = parameters;
     }
 
     /**

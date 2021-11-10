@@ -11,9 +11,14 @@ import java.util.List;
 import java.util.Properties;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class GenericMatcherCallerTest {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenericMatcherCallerTest.class);
+    
     @Test
     public void testGenericMatcherCaller() throws MalformedURLException, Exception{
         TypeTransformerRegistry.clear();
@@ -35,6 +40,18 @@ public class GenericMatcherCallerTest {
             assertTrue(o.getAlignment() instanceof MyAlignment);
         }
     }
+    
+    @Test
+    public void testIsCalled() throws MalformedURLException, Exception{
+        TypeTransformerRegistry.addTransformer(new TypeTransformerForTest<>(URL.class, MyModel.class));
+        myURLMatcher matcher = new myURLMatcher();
+        AlignmentAndParameters o = GenericMatcherCaller.runMatcher(matcher, 
+                URI.create("http://source.com").toURL(), 
+                URI.create("http://target.com").toURL(),
+                null, 
+                null);
+        assertTrue(matcher.isMatchMethodCalled());
+    }
 }
 
 
@@ -49,4 +66,19 @@ class myTestMatcher implements IMatcher<MyModel, MyAlignment, Properties>{
         }
         throw new Exception("Does not work");
     }    
+}
+
+class myURLMatcher implements IMatcher<MyModel, URL, URL>{
+    private boolean matchMethodCalled = false;
+    @Override
+    public URL match(MyModel source, MyModel target, URL inputAlignment, URL parameter) throws Exception {
+        this.matchMethodCalled = true;
+        if(source != null && target != null && inputAlignment == null && parameter == null){
+            return new URL("http://example.com");
+        }
+        throw new Exception("Does not work");
+    }
+    public boolean isMatchMethodCalled() {
+        return matchMethodCalled;
+    }
 }

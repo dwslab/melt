@@ -8,9 +8,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.Refiner;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
-
-import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
-
 import java.io.*;
 import java.net.URL;
 import java.util.Comparator;
@@ -42,7 +39,7 @@ public class ExecutionResult {
     private long runtime;
     private Alignment systemAlignment;
     private Alignment referenceAlignment;
-    private IOntologyMatchingToolBridge matcher;
+    private Object matcher;
     private Set<Refiner> refinements;
 
     /**
@@ -66,7 +63,7 @@ public class ExecutionResult {
      * @param matcher Reference to the mather which was used
      * @param refinements Refinements which were executed on this executionResult
      */
-    public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, Alignment systemAlignment, Alignment referenceAlignment, IOntologyMatchingToolBridge matcher, Set<Refiner> refinements) {
+    public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, Alignment systemAlignment, Alignment referenceAlignment, Object matcher, Set<Refiner> refinements) {
         this.testCase = testCase;
         this.matcherName = matcherName;
         this.runtime = runtime;
@@ -109,7 +106,7 @@ public class ExecutionResult {
      * @param runtime Runtime by the matcher.
      * @param matcher Matcher that was used for the testCase.
      */
-    public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, IOntologyMatchingToolBridge matcher) {
+    public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, Object matcher) {
         this(testCase, matcherName, originalSystemAlignment, runtime, null, testCase.getParsedReferenceAlignment(), matcher, new HashSet<>());
     }
 
@@ -175,7 +172,7 @@ public class ExecutionResult {
         return runtime;
     }
 
-    public IOntologyMatchingToolBridge getMatcher() {
+    public Object getMatcher() {
         return matcher;
     }    
 

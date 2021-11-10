@@ -26,7 +26,7 @@ public class ResidualRefiner implements Refiner {
     /**
      * Baseline Matcher that is used to calculate the {@link ResidualRefiner#baselineExecutionResult}.
      */
-    private IOntologyMatchingToolBridge baselineMatcher;
+    private Object baselineMatcher;
 
     /**
      * An optional variable for lookups to improve the performance.
