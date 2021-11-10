@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":6,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":6,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -120,18 +120,18 @@ implements <a href="../../../matching_base/multisource/MultiSourceDispatcher.htm
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>private <a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#copyMode">copyMode</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#intermediateAlignments">intermediateAlignments</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private static org.slf4j.Logger</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="row-color">
-<td class="col-first"><code>private boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#lowMemoryOverhead">lowMemoryOverhead</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
@@ -142,6 +142,11 @@ implements <a href="../../../matching_base/multisource/MultiSourceDispatcher.htm
 <tr class="row-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#oneToOneMatcher">oneToOneMatcher</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>private boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#removeUnusedJenaModels">removeUnusedJenaModels</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
@@ -207,13 +212,20 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i2">
+<td class="col-first"><code><a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCopyMode()">getCopyMode</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the used copy mode.</div>
+</td>
+</tr>
+<tr class="row-color" id="i3">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getIntermediateAlignments()">getIntermediateAlignments</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the intermediate alignments.</div>
 </td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="alt-color" id="i4">
 <td class="col-first"><code>abstract int[][]</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMergeTree(java.util.List,java.lang.Object)">getMergeTree</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;parameters)</code></th>
@@ -221,42 +233,42 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <div class="block">Returns the merging tree (which ontologies are merged in which order).</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i5">
 <td class="col-first"><code>int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getNumberOfThreads()">getNumberOfThreads</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the number of thread which are used during merge.</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isAddingInformationToUnion()">isAddingInformationToUnion</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Return true if all information / triples are added to the union.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>protected boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isLeftModelGreater(java.util.Set,java.util.Set,java.util.Properties)">isLeftModelGreater</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;leftOntology,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;rightOntology,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="alt-color" id="i8">
 <td class="col-first"><code>boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isLowMemoryOverhead()">isLowMemoryOverhead</a></span>()</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isRemoveUnusedJenaModels()">isRemoveUnusedJenaModels</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Return true if memory overhead is reduced.</div>
+<div class="block">Returns true if OntModels are removed.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="row-color" id="i9">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isSavingIntermediateAlignments()">isSavingIntermediateAlignments</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns true if intermediate alignments are stored.</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.util.List,java.net.URL,java.net.URL)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;inputAlignment,
@@ -265,7 +277,7 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <div class="block">Matches multiple ontologies/knowledge graphs together.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="row-color" id="i11">
 <td class="col-first"><code><a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.util.List,java.lang.Object,java.lang.Object)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
@@ -274,19 +286,19 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <div class="block">Matches multiple ontologies / knowledge graphs together.</div>
 </td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#needsTransitiveClosureForEvaluation()">needsTransitiveClosureForEvaluation</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns a boolean value if the matcher needs a transitive closure for evaluation.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i12">
-<td class="col-first"><code>private void</code></td>
+<tr class="row-color" id="i13">
+<td class="col-first"><code>protected void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#removeOntModelFromSet(java.util.Set)">removeOntModelFromSet</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;set)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i13">
+<tr class="alt-color" id="i14">
 <td class="col-first"><code>private <a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#runParallel(int%5B%5D%5B%5D,java.util.List,java.lang.Object,java.util.Properties)">runParallel</a></span>&#8203;(int[][]&nbsp;mergeTree,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
@@ -294,7 +306,7 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i14">
+<tr class="row-color" id="i15">
 <td class="col-first"><code>private <a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#runSequential(int%5B%5D%5B%5D,java.util.List,java.lang.Object,java.util.Properties)">runSequential</a></span>&#8203;(int[][]&nbsp;mergeTree,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
@@ -302,36 +314,42 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i15">
+<tr class="alt-color" id="i16">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setAddingInformationToUnion(boolean)">setAddingInformationToUnion</a></span>&#8203;(boolean&nbsp;addInformationToUnion)</code></th>
 <td class="col-last">
 <div class="block">Sets the value if all information / triples are added to the union.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i16">
+<tr class="row-color" id="i17">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setLowMemoryOverhead(boolean)">setLowMemoryOverhead</a></span>&#8203;(boolean&nbsp;lowMemoryOverhead)</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCopyMode(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.CopyMode)">setCopyMode</a></span>&#8203;(<a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a>&nbsp;copyMode)</code></th>
 <td class="col-last">
-<div class="block">If set to true, the memory overhead is reduced by two facts:
- 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.</div>
+<div class="block">Sets the copy mode which is used during the merging.</div>
 </td>
 </tr>
-<tr class="row-color" id="i17">
+<tr class="alt-color" id="i18">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setNumberOfThreads(int)">setNumberOfThreads</a></span>&#8203;(int&nbsp;numberOfThreads)</code></th>
 <td class="col-last">
 <div class="block">Sets the number of threads which are used during merge.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i18">
+<tr class="row-color" id="i19">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setNumberOfThreadsToCpuCores()">setNumberOfThreadsToCpuCores</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Sets the number of threads which are used during merge to the number of available CPU cores.</div>
 </td>
 </tr>
-<tr class="row-color" id="i19">
+<tr class="alt-color" id="i20">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setRemoveUnusedJenaModels(boolean)">setRemoveUnusedJenaModels</a></span>&#8203;(boolean&nbsp;removeUnusedJenaModels)</code></th>
+<td class="col-last">
+<div class="block">If set to true, this removes OntModel/Model which are not needed anymore.</div>
+</td>
+</tr>
+<tr class="row-color" id="i21">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setSavingIntermediateAlignments(boolean)">setSavingIntermediateAlignments</a></span>&#8203;(boolean&nbsp;intermediateAlignmentsNew)</code></th>
 <td class="col-last">
@@ -381,9 +399,15 @@ boolean&nbsp;addInformationToUnion)</code></th>
 </section>
 </li>
 <li>
-<section class="detail" id="lowMemoryOverhead">
-<h3>lowMemoryOverhead</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">lowMemoryOverhead</span></div>
+<section class="detail" id="removeUnusedJenaModels">
+<h3>removeUnusedJenaModels</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">removeUnusedJenaModels</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="copyMode">
+<h3>copyMode</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></span>&nbsp;<span class="member-name">copyMode</span></div>
 </section>
 </li>
 <li>
@@ -528,7 +552,7 @@ boolean&nbsp;addInformationToUnion)</span></div>
 <li>
 <section class="detail" id="removeOntModelFromSet(java.util.Set)">
 <h3>removeOntModelFromSet</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">removeOntModelFromSet</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;set)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">removeOntModelFromSet</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;set)</span></div>
 </section>
 </li>
 <li>
@@ -638,29 +662,25 @@ boolean&nbsp;addInformationToUnion)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="isLowMemoryOverhead()">
-<h3>isLowMemoryOverhead</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isLowMemoryOverhead</span>()</div>
-<div class="block">Return true if memory overhead is reduced.
- This is done by 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
- The default is false - meaning everything is stored in memory.</div>
+<section class="detail" id="isRemoveUnusedJenaModels()">
+<h3>isRemoveUnusedJenaModels</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isRemoveUnusedJenaModels</span>()</div>
+<div class="block">Returns true if OntModels are removed.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>true if memory overhead is reduced</dd>
+<dd>true if unused OntModels are removed</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="setLowMemoryOverhead(boolean)">
-<h3>setLowMemoryOverhead</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setLowMemoryOverhead</span>&#8203;(<span class="parameters">boolean&nbsp;lowMemoryOverhead)</span></div>
-<div class="block">If set to true, the memory overhead is reduced by two facts:
- 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
- Thus the matcher needs to deal with TDB folder as input. This is not the case for most matchers.
- The default is false - meaning everything is stored in memory.</div>
+<section class="detail" id="setRemoveUnusedJenaModels(boolean)">
+<h3>setRemoveUnusedJenaModels</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setRemoveUnusedJenaModels</span>&#8203;(<span class="parameters">boolean&nbsp;removeUnusedJenaModels)</span></div>
+<div class="block">If set to true, this removes OntModel/Model which are not needed anymore.
+ This helps to match a large number of KGs in a memory friendly way.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>lowMemoryOverhead</code> - if true, the matching will be memory performant.</dd>
+<dd><code>removeUnusedJenaModels</code> - if true, unused OntModels will be removed</dd>
 </dl>
 </section>
 </li>
@@ -694,6 +714,29 @@ boolean&nbsp;addInformationToUnion)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>intermediateAlignmentsNew</code> - true if the intermediate alignments should be stored</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getCopyMode()">
+<h3>getCopyMode</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></span>&nbsp;<span class="member-name">getCopyMode</span>()</div>
+<div class="block">Returns the used copy mode.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the used copy mode</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setCopyMode(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.CopyMode)">
+<h3>setCopyMode</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setCopyMode</span>&#8203;(<span class="parameters"><a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a>&nbsp;copyMode)</span></div>
+<div class="block">Sets the copy mode which is used during the merging.
+ Defaults to None.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>copyMode</code> - new copy mode to use</dd>
 </dl>
 </section>
 </li>
