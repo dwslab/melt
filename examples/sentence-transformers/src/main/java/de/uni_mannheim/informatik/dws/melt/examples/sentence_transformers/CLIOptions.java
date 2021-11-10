@@ -106,6 +106,16 @@ public class CLIOptions {
                 .desc("The tracks to be used, separated by spaces.")
                 .build()
         );
+        
+        options.addOption(Option.builder("testcases")
+                .longOpt("testcases")
+                .required()
+                .hasArgs()
+                .valueSeparator(' ')
+                .desc("The testcases to use (only those which are mentioned in this option are used"
+                        + " even if other tracks are provided.")
+                .build()
+        );
 
         options.addOption(Option.builder("f")
                 .longOpt("fractions")
@@ -365,10 +375,36 @@ public class CLIOptions {
         if (testcases.isEmpty()) {
             LOGGER.warn("No testcase can be retrived for all specified tracks. ABORTING program.");
             System.exit(1);
-        }  
-        return testcases;
+        }
+        if(this.cmd.hasOption("testcases")){
+            List<TestCase> selectedTestcases = new ArrayList<>();
+            for(String tc : this.cmd.getOptionValues("testcases")){
+                TestCase testcase = getTestCaseFromList(testcases, tc);
+                if(testcase == null){
+                    LOGGER.warn("Did not find test case specified by \"{}\". Skipping this testcase.", tc);
+                }else{
+                    selectedTestcases.add(testcase);
+                }                
+            }
+            if (selectedTestcases.isEmpty()) {
+                LOGGER.warn("No testcase can be retrived for all specified tracks and testcase. ABORTING program.");
+                System.exit(1);
+            }
+            return selectedTestcases;
+        }else{
+            return testcases;
+        }
+        
     }
     
+    private TestCase getTestCaseFromList(List<TestCase> testcases, String name){
+        for(TestCase tc : testcases){
+            if(tc.getName().equals(name)){
+                return tc;
+            }
+        }
+        return null;
+    }
     
     public List<String> getTransformerModels(){
         String[] transformerModels = cmd.getOptionValues("tm");

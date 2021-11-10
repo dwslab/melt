@@ -13,8 +13,10 @@ import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.Se
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
@@ -102,7 +104,7 @@ public class Main {
 
                                     TrainingPipeline trainingPipeline = new TrainingPipeline(fineTuner);
 
-                                    Executor.run(trainingCase, trainingPipeline, configurationName);
+                                    Executor.run(trainingCase, trainingPipeline);
 
                                     // Step 1.2: Fine-Tuning the Model
                                     try {
@@ -117,8 +119,11 @@ public class Main {
                                     matcher.setMultipleTextsToMultipleExamples(isMultipleTextsToMultipleExamples);
                                     matcher.setCudaVisibleDevices(gpu);
                                     matcher.setTransformersCache(transformersCache);
-
-                                    ers.addAll(Executor.run(trainingCase, matcher,configurationName));
+                                    
+                                    Map<String, Object> matchers = new HashMap<>();
+                                    matchers.put(configurationName, matcher);
+                                    
+                                    ers.addAll(Executor.run(trainingCase, matchers));
                                 }
                             }
                         }
@@ -158,8 +163,10 @@ public class Main {
                     matcher.setCudaVisibleDevices(gpu);
                     matcher.setTopK(5);
                     matcher.setTransformersCache(transformersCache);
-
-                    ers.addAll(Executor.run(testCases, matcher, configurationName));
+                    
+                    Map<String, Object> matchers = new HashMap<>();
+                    matchers.put(configurationName, matcher);
+                    ers.addAll(Executor.run(testCases, matchers));
                 }
             }
         }
