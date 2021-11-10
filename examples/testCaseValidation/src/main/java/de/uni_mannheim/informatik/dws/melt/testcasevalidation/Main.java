@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -36,6 +37,7 @@ import org.slf4j.LoggerFactory;
 public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
+    private static final String LIBRARY_OPTION = "library";
     private static final String CACHE_OPTION = "cache";
     private static final String TRACK_OPTION = "track";
     private static final String LOCAL_TRACK_OPTION = "local-track";
@@ -67,7 +69,9 @@ public class Main {
         options.addOption(localTestcaseOption);
         
         options.addOption("c", CACHE_OPTION, true, "The path to the cache folder for ontologies");
-
+        
+        options.addOption("l", LIBRARY_OPTION, true, "The semantic web library to use: JENA, OWLAPI, BOTH. Default is BOTH");
+        
         // Help option
         Option helpOption = new Option("h", HELP_OPTION_STRING, false,
                 "Print the documentation / Show help.");
@@ -140,34 +144,57 @@ public class Main {
                     "Call --{} for help.", HELP_OPTION_STRING);
             return;
         }
-
+        
+        //default is to use both
+        boolean useJena = true;
+        boolean useOwlApi = true;
+        if (cmd.hasOption(LIBRARY_OPTION)) {
+            String libOption = cmd.getOptionValue(LIBRARY_OPTION);
+            libOption = libOption.trim().toLowerCase(Locale.ROOT);
+            if(libOption.equals("jena")){
+                useOwlApi = false;
+            }else if(libOption.equals("owlapi")){
+                useJena = false;
+            }else if(libOption.equals("both")){
+                //the default
+            }else{
+                LOGGER.error("The library option is not one of JENA, OWLAPI, BOTH. Call --h for help.");
+                return;
+            }
+        }
+        
         
         File baseDirectory = new File(Evaluator.getDefaultResultsDirectory(), "Validation");
         baseDirectory.mkdirs();
-        LOGGER.info("RUN Jena");
-        for(TestCase tc : testCases){            
-            TestCaseValidationService validationService = new TestCaseValidationService(tc, SemanticWebLibrary.JENA);
-            String encodedVersion = URLEncoder.encode(validationService.getSourceOntologyValidationService().getLibVersion(), "UTF-8");
-            File testCaseFolder = getResultsFolderTrackTestcase(baseDirectory, tc);
-            testCaseFolder.mkdirs();
-            //LOGGER.info("Analysis for test case {}: {}", tc.getName(), validationService.toString());
-            validationService.toCSV(new File(testCaseFolder, "ValidationReportJena_" + encodedVersion + ".csv"));
-            
-            File aggregationFile = new File(getResultsFolderTrack(baseDirectory, tc), "aggregated.csv");
-            appendToOverviewFile(validationService, aggregationFile);
+        
+        if(useJena){
+            LOGGER.info("RUN Jena");
+            for(TestCase tc : testCases){
+                TestCaseValidationService validationService = new TestCaseValidationService(tc, SemanticWebLibrary.JENA);
+                String encodedVersion = URLEncoder.encode(validationService.getSourceOntologyValidationService().getLibVersion(), "UTF-8");
+                File testCaseFolder = getResultsFolderTrackTestcase(baseDirectory, tc);
+                testCaseFolder.mkdirs();
+                //LOGGER.info("Analysis for test case {}: {}", tc.getName(), validationService.toString());
+                validationService.toCSV(new File(testCaseFolder, "ValidationReportJena_" + encodedVersion + ".csv"));
+
+                File aggregationFile = new File(getResultsFolderTrack(baseDirectory, tc), "aggregated.csv");
+                appendToOverviewFile(validationService, aggregationFile);
+            }
         }
         
-        LOGGER.info("RUN OWLAPI");
-        for(TestCase tc : testCases){
-            TestCaseValidationService validationService = new TestCaseValidationService(tc, SemanticWebLibrary.OWLAPI);
-            String encodedVersion = URLEncoder.encode(validationService.getSourceOntologyValidationService().getLibVersion(), "UTF-8");
-            File testCaseFolder = getResultsFolderTrackTestcase(baseDirectory, tc);
-            testCaseFolder.mkdirs();
-            //LOGGER.info("Analysis for test case {}: {}", tc.getName(), validationService.toString());
-            validationService.toCSV(new File(testCaseFolder, "ValidationReportOwlApi_" + encodedVersion + ".csv"));
-            
-            File aggregationFile = new File(getResultsFolderTrack(baseDirectory, tc), "aggregated.csv");
-            appendToOverviewFile(validationService, aggregationFile);
+        if(useOwlApi){
+            LOGGER.info("RUN OWLAPI");
+            for(TestCase tc : testCases){
+                TestCaseValidationService validationService = new TestCaseValidationService(tc, SemanticWebLibrary.OWLAPI);
+                String encodedVersion = URLEncoder.encode(validationService.getSourceOntologyValidationService().getLibVersion(), "UTF-8");
+                File testCaseFolder = getResultsFolderTrackTestcase(baseDirectory, tc);
+                testCaseFolder.mkdirs();
+                //LOGGER.info("Analysis for test case {}: {}", tc.getName(), validationService.toString());
+                validationService.toCSV(new File(testCaseFolder, "ValidationReportOwlApi_" + encodedVersion + ".csv"));
+
+                File aggregationFile = new File(getResultsFolderTrack(baseDirectory, tc), "aggregated.csv");
+                appendToOverviewFile(validationService, aggregationFile);
+            }
         }
     }
     

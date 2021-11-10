@@ -29,31 +29,10 @@ public class Main {
     
     
     public static void main(String[] args) throws Exception {
+        CLIOptions cliOptions = new CLIOptions(args);
         MeltUtil.logWelcomeMessage();
-        
-        //CLI setup:
-        Options options = CLIOptions.createOptions();
-        CommandLineParser parser = new DefaultParser();
-        HelpFormatter formatter = new HelpFormatter();
-        CommandLine cmd = null;
-        try {
-            cmd = parser.parse(options, args);
-        } catch (ParseException e) {
-            System.out.println(e.getMessage());
-            formatter.printHelp("java -jar ", options);
-            System.exit(1);
-        }
-
-        if (cmd.hasOption("h")) {
-            formatter.printHelp("java -jar ", options);
-            System.exit(1);
-        }
-        
-        CLIOptions cliOptions = new CLIOptions(cmd);        
-        CLIOptions.initializeStaticCmdParameters(cmd);
-
-        String mode = cmd.getOptionValue("m").toLowerCase(Locale.ROOT).trim();
-
+        cliOptions.initializeStaticCmdParameters();
+        String mode = cliOptions.getMode();
         switch (mode) {
             case "zero":
             case "zeroshot":
@@ -73,7 +52,6 @@ public class Main {
                 LOGGER.warn("Mode '{}' not found.", mode);
                 System.exit(1);
         }
-
         LOGGER.info("DONE");
     }
     
@@ -178,6 +156,7 @@ public class Main {
                     SentenceTransformersMatcher matcher = new SentenceTransformersMatcher(modifiedTextExtractor, transformerModel);
                     matcher.setMultipleTextsToMultipleExamples(isMultipleTextsToMultipleExamples);
                     matcher.setCudaVisibleDevices(gpu);
+                    matcher.setTopK(5);
                     matcher.setTransformersCache(transformersCache);
 
                     ers.addAll(Executor.run(testCases, matcher, configurationName));

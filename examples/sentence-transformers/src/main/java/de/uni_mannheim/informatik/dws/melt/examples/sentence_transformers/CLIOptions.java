@@ -15,8 +15,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,12 +37,28 @@ public class CLIOptions {
     );
     
     private CommandLine cmd;
+    private Options options;
 
-    public CLIOptions(CommandLine cmd) {
-        this.cmd = cmd;
+    public CLIOptions(String[] args) {
+        this.options = createOptions();
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.setWidth(150);
+        try {
+            this.cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            formatter.printHelp("java -jar ", options);
+            System.exit(1);
+        }
+
+        if (this.cmd.hasOption("h")) {
+            formatter.printHelp("java -jar ", options);
+            System.exit(1);
+        }
     }
         
-    public static Options createOptions(){
+    private Options createOptions(){
         Options options = new Options();
 
         options.addOption(Option.builder("g")
@@ -174,7 +194,7 @@ public class CLIOptions {
         return options;
     }
     
-    public static void initializeStaticCmdParameters(CommandLine cmd){
+    public void initializeStaticCmdParameters(){
         if (cmd.hasOption("p")) {
             String p = cmd.getOptionValue("p");
             LOGGER.info("Setting python command to {}", p);
@@ -196,6 +216,10 @@ public class CLIOptions {
             LOGGER.info("Setting OAEI cache to {}", cacheFile);
             Track.setCacheFolder(cacheFile);
         }
+    }
+    
+    public String getMode() {
+        return this.cmd.getOptionValue("m").toLowerCase(Locale.ROOT).trim();
     }
     
      /**
@@ -302,7 +326,7 @@ public class CLIOptions {
         return losses;
     }
     
-    public List<Track> getTracks(){
+    private List<Track> getTracks(){
         List<Track> tracks = new ArrayList<>();        
         if (cmd.hasOption("tracks")) {
             for (String trackString : cmd.getOptionValues("tracks")) {
