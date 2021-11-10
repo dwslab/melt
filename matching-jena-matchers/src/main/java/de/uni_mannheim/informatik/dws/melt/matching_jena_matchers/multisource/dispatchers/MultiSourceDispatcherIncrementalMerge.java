@@ -1,47 +1,34 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatchingException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.IMatcherMultiSourceCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MatcherMultiSourceURL;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MultiSourceDispatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
-import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
-import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.JenaHelper;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TdbUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.multisource.IndexBasedJenaMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.JenaTransformerHelper;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
-import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import org.apache.jena.graph.Graph;
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Triple;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.util.iterator.ExtendedIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +44,8 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     
     private int numberOfThreads;
     private boolean addingInformationToUnion;
-    private boolean lowMemoryOverhead;
+    private boolean removeUnusedJenaModels;
+    private CopyMode copyMode;
     private List<Alignment> intermediateAlignments;
 
     /**
@@ -69,7 +57,8 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         this.oneToOneMatcher = oneToOneMatcher;
         this.addingInformationToUnion = addInformationToUnion;
         this.intermediateAlignments = null; // default is not to save intermediate alignments
-        this.lowMemoryOverhead = false;
+        this.removeUnusedJenaModels = false;
+        this.copyMode = CopyMode.NONE;
         this.numberOfThreads = 1;
     }
     
@@ -211,8 +200,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
             if(this.intermediateAlignments != null)
                 this.intermediateAlignments.add(resultingAlignment);
             
-            if(this.lowMemoryOverhead == false){
-                //in low memory overhead the target is tdb and doesn't need to be removed.
+            if(this.removeUnusedJenaModels){
                 removeOntModelFromSet(source);
             }
         }
@@ -283,7 +271,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                         mergedModels.set(result.getNewPos(), result.getResult());
                         Alignment resultingAlignment = result.getAlignment();
                         if(resultingAlignment == null){
-                            LOGGER.error("The resulting alignment is null. Maybe a transformetrion error. The whole merge will be canceled.");
+                            LOGGER.error("The resulting alignment is null. Maybe a transformation error. The whole merge will be canceled.");
                             throw new MatchingException("The resulting alignment is null. Maybe a transformetrion error. The whole merge will be canceled.");
                         }
                         finalAlignment.addAll(resultingAlignment);
@@ -300,9 +288,10 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         return new AlignmentAndParameters(finalAlignment, p);
     }
     
-    private void removeOntModelFromSet(Set<Object> set){
+    protected void removeOntModelFromSet(Set<Object> set){
         for (Iterator<Object> i = set.iterator(); i.hasNext();) {
             Object element = i.next();
+            // this selects Jena Model and OntModel
             if (element instanceof Model) {
                 i.remove();
             }
@@ -340,27 +329,36 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     }
     
     private Set<Object> getCopiedModel(Set<Object> modelRepresentations, Properties parameters) throws TypeTransformationException{
-        if(this.lowMemoryOverhead){
-            URL modelURL = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, URL.class, parameters);
-            //File tdbLocation = new File("incrementalMergeintermediateKG");
-            File tdbLocation = FileUtil.createFolderWithRandomNumberInDirectory(new File("./"), "incrementalMergeintermediateKG");
-            tdbLocation.mkdirs();
-            OntModel copiedModel = TdbUtil.bulkLoadToTdbOntModel(tdbLocation.getAbsolutePath(), modelURL.toString(), JenaTransformerHelper.getSpec(parameters));
-            Set<Object> models = new HashSet<>();
-            models.add(copiedModel);
-            try {
-                models.add(tdbLocation.toURI().toURL());
-            } catch (MalformedURLException ex) {} //Do nothing
-            return models;
-        }else{
-            Model model = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, Model.class, parameters);
-            if(model == null){
-                throw new IllegalArgumentException("Could not transform model during copying.");
+        switch(this.copyMode){
+            case NONE:{
+                return modelRepresentations;
             }
-            OntModel copiedModel = JenaHelper.createNewOntModel(parameters);
+            case CREATE_TDB:{
+                URL modelURL = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, URL.class, parameters);
+                //File tdbLocation = new File("incrementalMergeintermediateKG");
+                File tdbLocation = FileUtil.createFolderWithRandomNumberInDirectory(new File("./"), "incrementalMergeintermediateKG");
+                tdbLocation.mkdirs();
+                OntModel copiedModel = TdbUtil.bulkLoadToTdbOntModel(tdbLocation.getAbsolutePath(), modelURL.toString(), JenaTransformerHelper.getSpec(parameters));
+                Set<Object> models = new HashSet<>();
+                models.add(copiedModel);
+                try {
+                    models.add(tdbLocation.toURI().toURL());
+                } catch (MalformedURLException ex) {} //Do nothing
+                return models;
+            }
+            case COPY_IN_MEMORY:{
+                Model model = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, Model.class, parameters);
+                if(model == null){
+                    throw new IllegalArgumentException("Could not transform model during copying.");
+                }
+                OntModel copiedModel = JenaHelper.createNewOntModel(parameters);
 
-            copiedModel.add(model);
-            return new HashSet<>(Arrays.asList(copiedModel));
+                copiedModel.add(model);
+                return new HashSet<>(Arrays.asList(copiedModel));
+            }
+            default:{
+                throw new IllegalArgumentException("CopyMode: " + this.copyMode + " is not implemented in IncrementalMerge.");
+            }
         }
     }
     
@@ -414,24 +412,20 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     }
 
     /**
-     * Return true if memory overhead is reduced.
-     * This is done by 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
-     * The default is false - meaning everything is stored in memory.
-     * @return true if memory overhead is reduced
+     * Returns true if OntModels are removed.
+     * @return true if unused OntModels are removed
      */
-    public boolean isLowMemoryOverhead() {
-        return lowMemoryOverhead;
+    public boolean isRemoveUnusedJenaModels() {
+        return removeUnusedJenaModels;
     }
     
     /**
-     * If set to true, the memory overhead is reduced by two facts:
-     * 1) intermediate KG are stored in TDB 2) Jena model are deleted when not needed.
-     * Thus the matcher needs to deal with TDB folder as input. This is not the case for most matchers.
-     * The default is false - meaning everything is stored in memory.
-     * @param lowMemoryOverhead if true, the matching will be memory performant.
+     * If set to true, this removes OntModel/Model which are not needed anymore.
+     * This helps to match a large number of KGs in a memory friendly way.
+     * @param removeUnusedJenaModels if true, unused OntModels will be removed
      */
-    public void setLowMemoryOverhead(boolean lowMemoryOverhead) {
-        this.lowMemoryOverhead = lowMemoryOverhead;
+    public void setRemoveUnusedJenaModels(boolean removeUnusedJenaModels) {
+        this.removeUnusedJenaModels = removeUnusedJenaModels;
     }
     
     /**
@@ -461,4 +455,23 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
             this.intermediateAlignments = null;
         }
     }
+
+    /**
+     * Returns the used copy mode.
+     * @return the used copy mode
+     */
+    public CopyMode getCopyMode() {
+        return copyMode;
+    }
+
+    /**
+     * Sets the copy mode which is used during the merging.
+     * Defaults to None.
+     * @param copyMode new copy mode to use
+     */
+    public void setCopyMode(CopyMode copyMode) {
+        this.copyMode = copyMode;
+    }
+    
+    
 }

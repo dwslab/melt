@@ -35,7 +35,7 @@ public class MultiSourceDispatcherIncrementalMergeTest {
     @Test
     public void noSourceIsModifiedTest() throws Exception{
         MultiSourceDispatcherIncrementalMerge merger = new MatcherFixedMergeTree();
-        merger.setLowMemoryOverhead(false);
+        merger.setCopyMode(CopyMode.COPY_IN_MEMORY);
         List<Set<Object>> models = new ArrayList<>();
         for(int i = 0; i < 3; i++){
             models.add(new HashSet<>(Arrays.asList(getModel("domain" + Integer.toString(i)))));
@@ -47,8 +47,31 @@ public class MultiSourceDispatcherIncrementalMergeTest {
             assertEquals(1, model.size());
             Model m = (Model)model.iterator().next();
             assertEquals(1, m.size());
-        }
+        }        
     }
+    
+    @Test
+    public void sourceIsModifiedTest() throws Exception{
+        MultiSourceDispatcherIncrementalMerge merger = new MatcherFixedMergeTree();
+        merger.setCopyMode(CopyMode.NONE);
+        List<Set<Object>> models = new ArrayList<>();
+        for(int i = 0; i < 3; i++){
+            models.add(new HashSet<>(Arrays.asList(getModel("domain" + Integer.toString(i)))));
+        }
+        
+        merger.match(models, null, null);
+        
+        boolean greaterThanOne = false;
+        for(Set<Object> model : models){
+            assertEquals(1, model.size());
+            Model m = (Model)model.iterator().next();
+            if(m.size() > 1){
+                greaterThanOne = true;
+            }
+        }
+        assertTrue(greaterThanOne, "All models are still the same even though CopyMode is set to None");
+    }
+    
     private Model getModel(String domain){
         Model m = ModelFactory.createDefaultModel();
         m.add(
@@ -103,7 +126,7 @@ public class MultiSourceDispatcherIncrementalMergeTest {
     
     
     @Test
-    public void checkComparatorWorks() throws Exception{
+    public void checkComparatorAscendingWorks() throws Exception{
         List<Set<Object>> models = new ArrayList<>();
         models.add(new HashSet<>(Arrays.asList(generate("10", 10, 0))));
         models.add(new HashSet<>(Arrays.asList(generate("20", 20, 0))));
@@ -118,7 +141,6 @@ public class MultiSourceDispatcherIncrementalMergeTest {
                 MultiSourceDispatcherIncrementalMergeByOrder.AMOUNT_OF_CLASSES_ASCENDING);
         
         merger.match(models, new Alignment(), new Properties());
-        
         assertAllOrders(oneToOneMatcher,Arrays.asList(
                 new SimpleEntry<>("10", 10), 
                 new SimpleEntry<>("20", 20),
@@ -126,12 +148,22 @@ public class MultiSourceDispatcherIncrementalMergeTest {
                 new SimpleEntry<>("40", 40),
                 new SimpleEntry<>("50", 50)
         ));
+    }
+    
+    @Test
+    public void checkComparatorDecendingWorks() throws Exception{
+        List<Set<Object>> models = new ArrayList<>();
+        models.add(new HashSet<>(Arrays.asList(generate("10", 10, 0))));
+        models.add(new HashSet<>(Arrays.asList(generate("20", 20, 0))));
+        models.add(new HashSet<>(Arrays.asList(generate("30", 30, 0))));
+        models.add(new HashSet<>(Arrays.asList(generate("40", 40, 0))));
+        models.add(new HashSet<>(Arrays.asList(generate("50", 50, 0))));
         
+        Collections.shuffle(models, new Random(1324));
         
-        oneToOneMatcher = new SaveOrderMatcherForTest(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
-        merger = new MultiSourceDispatcherIncrementalMergeByOrder(oneToOneMatcher, 
+        SaveOrderMatcherForTest oneToOneMatcher = new SaveOrderMatcherForTest(DatasetIDExtractor.CONFERENCE_TRACK_EXTRACTOR);
+        MultiSourceDispatcherIncrementalMergeByOrder merger = new MultiSourceDispatcherIncrementalMergeByOrder(oneToOneMatcher, 
                 MultiSourceDispatcherIncrementalMergeByOrder.AMOUNT_OF_CLASSES_DECENDING);
-        
         merger.match(models, new Alignment(), new Properties());
         
         assertAllOrders(oneToOneMatcher,Arrays.asList(
@@ -142,6 +174,7 @@ public class MultiSourceDispatcherIncrementalMergeTest {
                 new SimpleEntry<>("10", 10)
         ));
     }
+    
     
     private void assertAllOrders(SaveOrderMatcherForTest oneToOneMatcher, List<Entry<String, Integer>> counts){
         Counter<String> aggregated = new Counter<>();

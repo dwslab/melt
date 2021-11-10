@@ -70,7 +70,8 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
         List<Counter<String>> documents = new ArrayList<>(models.size());
         for(int i=0; i < models.size(); i++){
             try{
-                Model m = (Model)TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(models.get(i), OntModel.class, p);
+                Set<Object> modelRepresentations = models.get(i);
+                Model m = (Model)TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, OntModel.class, p);
                 if(m == null){
                     LOGGER.warn("Initial model is null. Can't compute the similarities between the ontologies/knowledge graphs.");
                     return new double[0][0];
@@ -79,6 +80,9 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
 
                 documents.add(bow);
                 documentFrequency.addAll(bow.getDistinctElements());
+                if(this.isRemoveUnusedJenaModels()){
+                    this.removeOntModelFromSet(modelRepresentations);
+                }
             }catch(TypeTransformationException ex){
                 LOGGER.warn("Conversion to OntModel/Model did not work. Can't compute the similarities between the ontologies/knowledge graphs.", ex);
                 return new double[0][0];
@@ -104,7 +108,7 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
         
         String[] features = selectedWords.toArray(new String[0]);
         //tf-idf
-        LOGGER.info("Compute TF-IDF vectore for each KG.");
+        LOGGER.info("Compute TF-IDF vector for each KG.");
         long n = documents.size();
         int[] featuresDocumentFrequency = Arrays.stream(features).mapToInt(f->documentFrequency.getCount(f)).toArray();
         double[][] data = documents.stream().map(bag -> {
