@@ -15,8 +15,8 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":9,"i15":9,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
 var tableTab = "table-tab";
@@ -137,6 +137,16 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>private static com.fasterxml.jackson.databind.ObjectMapper</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#JSON_MAPPER">JSON_MAPPER</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>private static org.slf4j.Logger</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>,&#8203;? extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&gt;&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mapComparator">mapComparator</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -205,7 +215,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="method-summary" id="method.summary">
 <h2>Method Summary</h2>
 <div class="member-summary" id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="active-table-tab">All Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="table-tab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="table-tab" onclick="show(8);">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="active-table-tab">All Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t1" class="table-tab" onclick="show(1);">Static Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="table-tab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="table-tab" onclick="show(8);">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <table class="summary-table" aria-labelledby="t0">
 <thead>
@@ -305,20 +315,39 @@ double&nbsp;max)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color" id="i13">
+<td class="col-first"><code>static <a href="Counter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">Counter</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#loadFromJsonFile(java.io.File)">loadFromJsonFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;jsonFile)</code></th>
+<td class="col-last">
+<div class="block">Load a counter instance from a json file.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i14">
+<td class="col-first"><code>private static <a href="Counter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">Counter</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#loadFromJsonNode(com.fasterxml.jackson.databind.JsonNode)">loadFromJsonNode</a></span>&#8203;(com.fasterxml.jackson.databind.JsonNode&nbsp;node)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i15">
+<td class="col-first"><code>static <a href="Counter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">Counter</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#loadFromJsonString(java.lang.String)">loadFromJsonString</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jsonRepresentation)</code></th>
+<td class="col-last">
+<div class="block">Given a json representation of a counter, create a new counter.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i16">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mostCommon()">mostCommon</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Return a list of the most common elements and their counts.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i14">
+<tr class="row-color" id="i17">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mostCommon(int)">mostCommon</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="col-last">
 <div class="block">Return a list of the n most common elements and their counts.</div>
 </td>
 </tr>
-<tr class="row-color" id="i15">
+<tr class="alt-color" id="i18">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mostCommonByPercentage(double)">mostCommonByPercentage</a></span>&#8203;(double&nbsp;percentage)</code></th>
 <td class="col-last">
@@ -326,35 +355,35 @@ double&nbsp;max)</code></th>
  together with their frequency.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i16">
+<tr class="row-color" id="i19">
 <td class="col-first"><code><a href="Counter.html" title="type parameter in Counter">T</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mostCommonElement()">mostCommonElement</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Return the most common element.</div>
 </td>
 </tr>
-<tr class="row-color" id="i17">
+<tr class="alt-color" id="i20">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mostCommonElements()">mostCommonElements</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Return a list ordered by their number of occurences.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i18">
+<tr class="row-color" id="i21">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mostCommonElements(int)">mostCommonElements</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="col-last">
 <div class="block">Return a list of the n most common elements.</div>
 </td>
 </tr>
-<tr class="row-color" id="i19">
+<tr class="alt-color" id="i22">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mostCommonElementsByPercentage(double)">mostCommonElementsByPercentage</a></span>&#8203;(double&nbsp;percentage)</code></th>
 <td class="col-last">
 <div class="block">Return a list of the elements with a higher or equal frequency/percentage than the given one.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i20">
+<tr class="row-color" id="i23">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mostCommonElementsByPercentageOrTopN(double,int)">mostCommonElementsByPercentageOrTopN</a></span>&#8203;(double&nbsp;percentage,
 int&nbsp;topN)</code></th>
@@ -362,24 +391,43 @@ int&nbsp;topN)</code></th>
 <div class="block">Return a list of elements which have a higher (or equal) frequency than the specified one but not more than the specified amount(parameter topN).</div>
 </td>
 </tr>
-<tr class="row-color" id="i21">
+<tr class="alt-color" id="i24">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mostCommonWithHighestCount()">mostCommonWithHighestCount</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Return a list of the most common elements with the highest count.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i22">
+<tr class="row-color" id="i25">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#toJson()">toJson</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns a json representation of this counter.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i26">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#toJson(java.io.File)">toJson</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
+<td class="col-last">
+<div class="block">Write the counter to a file (content is json).</div>
+</td>
+</tr>
+<tr class="row-color" id="i27">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#toString()">toString</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i23">
+<tr class="alt-color" id="i28">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#toStringMultiline()">toStringMultiline</a></span>()</code></th>
 <td class="col-last">
 <div class="block">ToString method which returns the counter well formatted in multiple lines to have a better overview.</div>
 </td>
+</tr>
+<tr class="row-color" id="i29">
+<td class="col-first"><code>private void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#toWriter(java.io.Writer)">toWriter</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</code></th>
+<td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -400,6 +448,12 @@ int&nbsp;topN)</code></th>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="LOGGER">
+<h3>LOGGER</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">org.slf4j.Logger</span>&nbsp;<span class="member-name">LOGGER</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="counts">
 <h3>counts</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>,&#8203;<a href="Counter.MutableInt.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">Counter.MutableInt</a>&gt;</span>&nbsp;<span class="member-name">counts</span></div>
@@ -415,6 +469,12 @@ int&nbsp;topN)</code></th>
 <section class="detail" id="mapComparator">
 <h3>mapComparator</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="Counter.html" title="type parameter in Counter">T</a>,&#8203;? extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&gt;&gt;</span>&nbsp;<span class="member-name">mapComparator</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="JSON_MAPPER">
+<h3>JSON_MAPPER</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">com.fasterxml.jackson.databind.ObjectMapper</span>&nbsp;<span class="member-name">JSON_MAPPER</span></div>
 </section>
 </li>
 <li>
@@ -750,6 +810,73 @@ double&nbsp;max)</span></div>
 <dt>Returns:</dt>
 <dd>a string which contains the counter information in multiple lines.</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="toJson()">
+<h3>toJson</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">toJson</span>()</div>
+<div class="block">Returns a json representation of this counter.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a json representation</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="toJson(java.io.File)">
+<h3>toJson</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">toJson</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span></div>
+<div class="block">Write the counter to a file (content is json).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>file</code> - the file to use for writing the JSON content.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="toWriter(java.io.Writer)">
+<h3>toWriter</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">toWriter</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</span>
+               throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="loadFromJsonString(java.lang.String)">
+<h3>loadFromJsonString</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Counter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">Counter</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">loadFromJsonString</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jsonRepresentation)</span></div>
+<div class="block">Given a json representation of a counter, create a new counter.
+ The comparator is not loaded/serialized.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>jsonRepresentation</code> - the json representation of a counter.</dd>
+<dt>Returns:</dt>
+<dd>the new counter</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="loadFromJsonFile(java.io.File)">
+<h3>loadFromJsonFile</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Counter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">Counter</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">loadFromJsonFile</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;jsonFile)</span></div>
+<div class="block">Load a counter instance from a json file.
+ The comparator is not loaded/serialized.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>jsonFile</code> - the json file.</dd>
+<dt>Returns:</dt>
+<dd>the new instance</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="loadFromJsonNode(com.fasterxml.jackson.databind.JsonNode)">
+<h3>loadFromJsonNode</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="Counter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">Counter</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">loadFromJsonNode</span>&#8203;(<span class="parameters">com.fasterxml.jackson.databind.JsonNode&nbsp;node)</span></div>
 </section>
 </li>
 <li>

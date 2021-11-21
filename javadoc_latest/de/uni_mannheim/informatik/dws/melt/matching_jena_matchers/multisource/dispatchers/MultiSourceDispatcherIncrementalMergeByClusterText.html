@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":9,"i3":9,"i4":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":9,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -119,26 +119,41 @@ extends <a href="MultiSourceDispatcherIncrementalMergeByCluster.html" title="cla
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>private boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#debug">debug</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>private static org.slf4j.Logger</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private double</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#maxdf">maxdf</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>private double</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mindf">mindf</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#NEWLINE">NEWLINE</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
+<tr class="alt-color">
+<td class="col-first"><code>private static smile.nlp.normalizer.SimpleNormalizer</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#NORMALIZER">NORMALIZER</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
 <tr class="row-color">
+<td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/text/BreakIterator.html" title="class or interface in java.text" class="external-link">BreakIterator</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#SENTENCE_SPLITTER">SENTENCE_SPLITTER</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#URI_SEPARATOR">URI_SEPARATOR</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -200,27 +215,74 @@ double&nbsp;maxdf)</code></th>
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
+<td class="col-first"><code>private void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#checkDocumentFrequency(double)">checkDocumentFrequency</a></span>&#8203;(double&nbsp;df)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i1">
 <td class="col-first"><code><a href="../../util/Counter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">Counter</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getBagOfWords(org.apache.jena.rdf.model.Model)">getBagOfWords</a></span>&#8203;(org.apache.jena.rdf.model.Model&nbsp;m)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i1">
+<tr class="alt-color" id="i2">
 <td class="col-first"><code>double[][]</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getClusterFeatures(java.util.List,java.lang.Object)">getClusterFeatures</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;parameters)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i2">
+<tr class="row-color" id="i3">
+<td class="col-first"><code>double</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMaxdf()">getMaxdf</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the maximum document frequency (relative) a token needs to have, to be included as a feature.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>double</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMindf()">getMindf</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the minimum document frequency (relative) a token needs to have, to be included as a feature.</div>
+</td>
+</tr>
+<tr class="row-color" id="i5">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isDebug()">isDebug</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns true, if debug files are written.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>private static boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isLiteralAString(org.apache.jena.rdf.model.Literal)">isLiteralAString</a></span>&#8203;(org.apache.jena.rdf.model.Literal&nbsp;lit)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="row-color" id="i7">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setDebug(boolean)">setDebug</a></span>&#8203;(boolean&nbsp;debug)</code></th>
+<td class="col-last">
+<div class="block">If set to true, write some file which contains helpful information e.g.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i8">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setMaxdf(double)">setMaxdf</a></span>&#8203;(double&nbsp;maxdf)</code></th>
+<td class="col-last">
+<div class="block">Sets the maximum document frequency (relative) a token needs to have, to be included as a feature.</div>
+</td>
+</tr>
+<tr class="row-color" id="i9">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setMindf(double)">setMindf</a></span>&#8203;(double&nbsp;mindf)</code></th>
+<td class="col-last">
+<div class="block">Sets the minimum document frequency (relative) a token needs to have, to be included as a feature.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#splitFragment(java.lang.String)">splitFragment</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i11">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#writeTextualRepresentationOfModel(org.apache.jena.rdf.model.Model,java.io.File)">writeTextualRepresentationOfModel</a></span>&#8203;(org.apache.jena.rdf.model.Model&nbsp;m,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;f)</code></th>
@@ -266,6 +328,24 @@ double&nbsp;maxdf)</code></th>
 <section class="detail" id="maxdf">
 <h3>maxdf</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">maxdf</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="debug">
+<h3>debug</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">debug</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="SENTENCE_SPLITTER">
+<h3>SENTENCE_SPLITTER</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/text/BreakIterator.html" title="class or interface in java.text" class="external-link">BreakIterator</a></span>&nbsp;<span class="member-name">SENTENCE_SPLITTER</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="NORMALIZER">
+<h3>NORMALIZER</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">smile.nlp.normalizer.SimpleNormalizer</span>&nbsp;<span class="member-name">NORMALIZER</span></div>
 </section>
 </li>
 <li>
@@ -358,6 +438,84 @@ double&nbsp;maxdf)</span></div>
 <section class="detail" id="isLiteralAString(org.apache.jena.rdf.model.Literal)">
 <h3>isLiteralAString</h3>
 <div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isLiteralAString</span>&#8203;(<span class="parameters">org.apache.jena.rdf.model.Literal&nbsp;lit)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getMindf()">
+<h3>getMindf</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">getMindf</span>()</div>
+<div class="block">Returns the minimum document frequency (relative) a token needs to have, to be included as a feature.
+ Default is 0.0 (to include all tokens).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the relative minimumg document frequency.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setMindf(double)">
+<h3>setMindf</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setMindf</span>&#8203;(<span class="parameters">double&nbsp;mindf)</span></div>
+<div class="block">Sets the minimum document frequency (relative) a token needs to have, to be included as a feature.
+ Default is 0.0 (to include all tokens).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>mindf</code> - the minimum document frequency (relative). This needs to be between 0.0 and 1.0.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getMaxdf()">
+<h3>getMaxdf</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="member-name">getMaxdf</span>()</div>
+<div class="block">Returns the maximum document frequency (relative) a token needs to have, to be included as a feature.
+ Default is 1.0 (to include all tokens).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the relative maximum document frequency.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setMaxdf(double)">
+<h3>setMaxdf</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setMaxdf</span>&#8203;(<span class="parameters">double&nbsp;maxdf)</span></div>
+<div class="block">Sets the maximum document frequency (relative) a token needs to have, to be included as a feature.
+ Default is 1.0 (to include all tokens).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>maxdf</code> - the maximum document frequency (relative). This needs to be between 0.0 and 1.0.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isDebug()">
+<h3>isDebug</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isDebug</span>()</div>
+<div class="block">Returns true, if debug files are written.
+ Default is false.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setDebug(boolean)">
+<h3>setDebug</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setDebug</span>&#8203;(<span class="parameters">boolean&nbsp;debug)</span></div>
+<div class="block">If set to true, write some file which contains helpful information e.g. documentFrequency.json file which contains all information about
+ all words and their document frequency.
+ Default is false.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>debug</code> - if true, write debug files</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="checkDocumentFrequency(double)">
+<h3>checkDocumentFrequency</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">checkDocumentFrequency</span>&#8203;(<span class="parameters">double&nbsp;df)</span></div>
 </section>
 </li>
 </ul>
