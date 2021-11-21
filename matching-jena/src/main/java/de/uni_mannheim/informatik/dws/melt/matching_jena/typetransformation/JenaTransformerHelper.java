@@ -3,9 +3,24 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
+import java.util.logging.Level;
 import org.apache.jena.assembler.assemblers.OntModelSpecAssembler;
 import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFLanguages;
 import org.slf4j.Logger;
@@ -49,4 +64,75 @@ public class JenaTransformerHelper {
         }
     }
     
+    public static String getModelRepresentation(Set<Object> model){
+        for(Object o : model){
+            if(o instanceof URL || o instanceof URI){
+                return o.toString();
+            }
+        }
+        for(Object o : model){
+            if(o instanceof Model){
+                return jenaModelToString((Model)o);
+            }
+        }
+        if(model.isEmpty()){
+            return "<empty>";
+        }
+        return model.iterator().next().toString();
+    }
+    
+    public static String jenaModelToString(Model m){
+        Set<String> subjects = new HashSet<>();
+        ResIterator i =  m.listSubjects();
+        int counter = 1;
+        
+        Map<String, Integer> domains = new HashMap<>();
+        while(i.hasNext()){
+            Resource r = i.next();
+            if(r.isURIResource() == false){
+                continue;
+            }
+            String domain = getUriDomain(r.getURI());
+            domains.put(domain, domains.computeIfAbsent(domain, __-> 0) + 1);
+            if(counter >= 200){
+                break;
+            }
+            counter++;
+        }
+        domains.remove("http://");
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("Jena Model{ ");
+        
+        String nsPrefix = m.getNsPrefixURI("");
+        if(nsPrefix != null)
+            sb.append("default namespace (prefix): ").append(nsPrefix).append(" ");
+        
+        List<Entry<String, Integer>> list = new ArrayList<>(domains.entrySet());
+        list.sort(Entry.comparingByValue(Comparator.reverseOrder()));
+        counter = 1;
+        sb.append("top 3 domains (of 200 resources): ");
+        for (Entry<String, Integer> entry : list) {
+            sb.append(entry.getKey()).append("(").append(entry.getValue()).append(") ");
+            if(counter >= 3){
+                break;
+            }
+            counter++;
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+    
+    
+    private static String getUriDomain(String uri){
+        int lastIndex = uri.lastIndexOf("#");
+        if(lastIndex >= 0){
+        return uri.substring(0, lastIndex + 1);
+        }
+        lastIndex = uri.lastIndexOf("/");
+        if(lastIndex >= 0){
+        return uri.substring(0, lastIndex + 1);
+        }
+        return uri;
+    }
 }
