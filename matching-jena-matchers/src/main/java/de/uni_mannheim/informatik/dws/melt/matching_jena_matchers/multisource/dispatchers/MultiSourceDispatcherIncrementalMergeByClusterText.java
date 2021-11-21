@@ -2,16 +2,19 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.d
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.JenaTransformerHelper;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.Counter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.URIUtil;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -46,11 +49,15 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
     
     private double mindf;
     private double maxdf;
+    private boolean debug;
     
     public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher, ClusterLinkage linkage, double mindf, double maxdf) {
         super(oneToOneMatcher, linkage);
+        checkDocumentFrequency(mindf);
         this.mindf = mindf;
+        checkDocumentFrequency(maxdf);
         this.maxdf = maxdf;
+        this.debug = false;
     }
     
     public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher, ClusterLinkage linkage) {
@@ -71,11 +78,14 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
         for(int i=0; i < models.size(); i++){
             try{
                 Set<Object> modelRepresentations = models.get(i);
+                LOGGER.debug("Computing BOW {}/{} for {}", i, models.size(), JenaTransformerHelper.getModelRepresentation(modelRepresentations));
+                //LOGGER.debug("Load Model");
                 Model m = (Model)TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, OntModel.class, p);
                 if(m == null){
                     LOGGER.warn("Initial model is null. Can't compute the similarities between the ontologies/knowledge graphs.");
                     return new double[0][0];
                 }
+                //LOGGER.debug("Compute BOW");
                 Counter<String> bow = getBagOfWords(m);
 
                 documents.add(bow);
@@ -92,6 +102,10 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
         }
         //create features
         
+        if(this.debug){
+            documentFrequency.toJson(new File("documentFrequency.json"));
+        }
+        
         Set<String> selectedWords;
         if(this.mindf == 0.0 && this.maxdf == 1.0){
             //use all
@@ -105,7 +119,7 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
             selectedWords = documentFrequency.getDistinctElements();
             LOGGER.info("The selection of words results in no features. Use all words as features (backup version). This results in {} words/features.", selectedWords.size());
         }
-        
+                
         String[] features = selectedWords.toArray(new String[0]);
         //tf-idf
         LOGGER.info("Compute TF-IDF vector for each KG.");
@@ -130,19 +144,37 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
     }
     
     
+    private static BreakIterator SENTENCE_SPLITTER = BreakIterator.getSentenceInstance(Locale.US);
+    private static SimpleNormalizer NORMALIZER = SimpleNormalizer.getInstance();
     public Counter<String> getBagOfWords(Model m){
         SimpleTokenizer tokenizer = new SimpleTokenizer(true);
         PorterStemmer porter = new PorterStemmer();
         Counter<String> bow = new Counter<>();
+        //LOGGER.debug("List statements of model");
         StmtIterator i = m.listStatements();
+        //int counter = 0;
         while(i.hasNext()){
+            //LOGGER.debug("Iterate over statement {}", counter++);
             RDFNode n = i.next().getObject();
+            //LOGGER.debug("Object of statement is {}", n);
             if(n.isLiteral()){
                 Literal lit = n.asLiteral();
                 if(isLiteralAString(lit)){
                     String text = lit.getLexicalForm();
                     
-                    String[] sentences = SimpleSentenceSplitter.getInstance().split(SimpleNormalizer.getInstance().normalize(text));
+                    String source = NORMALIZER.normalize(text);
+                    SENTENCE_SPLITTER.setText(source);
+                    int start = SENTENCE_SPLITTER.first();
+                    for (int end = SENTENCE_SPLITTER.next(); end != java.text.BreakIterator.DONE; start = end, end = SENTENCE_SPLITTER.next()) {
+                        Iterator<String> words = Arrays.stream(tokenizer.split(source.substring(start,end)))
+                            .filter(w -> !(EnglishStopWords.DEFAULT.contains(w.toLowerCase()) || EnglishPunctuations.getInstance().contains(w)))
+                            .map(porter::stem)
+                            .map(String::toLowerCase)
+                            .iterator();
+                        bow.addAll(words);
+                    }
+                    /*
+                    String[] sentences = SimpleSentenceSplitter.getInstance().split(NORMALIZER.normalize(text));
                     Iterator<String> words = Arrays.stream(sentences)
                             .flatMap(s -> Arrays.stream(tokenizer.split(s)))
                             .filter(w -> !(EnglishStopWords.DEFAULT.contains(w.toLowerCase()) || EnglishPunctuations.getInstance().contains(w)))
@@ -150,6 +182,7 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
                             .map(String::toLowerCase)
                             .iterator();
                     bow.addAll(words);
+                    */
                 }
             }
         }
@@ -221,4 +254,68 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
             return true;
         return false;
     }
+
+    /**
+     * Returns the minimum document frequency (relative) a token needs to have, to be included as a feature.
+     * Default is 0.0 (to include all tokens).
+     * @return the relative minimumg document frequency. 
+     */
+    public double getMindf() {
+        return mindf;
+    }
+
+    /**
+     * Sets the minimum document frequency (relative) a token needs to have, to be included as a feature.
+     * Default is 0.0 (to include all tokens).
+     * @param mindf the minimum document frequency (relative). This needs to be between 0.0 and 1.0.
+     */
+    public void setMindf(double mindf) {
+        checkDocumentFrequency(mindf);
+        this.mindf = mindf;
+    }
+
+    /**
+     * Returns the maximum document frequency (relative) a token needs to have, to be included as a feature.
+     * Default is 1.0 (to include all tokens).
+     * @return the relative maximum document frequency.
+     */
+    public double getMaxdf() {
+        return maxdf;
+    }
+
+    /**
+     * Sets the maximum document frequency (relative) a token needs to have, to be included as a feature.
+     * Default is 1.0 (to include all tokens).
+     * @param maxdf the maximum document frequency (relative). This needs to be between 0.0 and 1.0.
+     */
+    public void setMaxdf(double maxdf) {
+        checkDocumentFrequency(maxdf);
+        this.maxdf = maxdf;
+    }
+
+    /**
+     * Returns true, if debug files are written.
+     * Default is false.
+     * @return 
+     */
+    public boolean isDebug() {
+        return debug;
+    }
+
+    /**
+     * If set to true, write some file which contains helpful information e.g. documentFrequency.json file which contains all information about
+     * all words and their document frequency.
+     * Default is false.
+     * @param debug if true, write debug files
+     */
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+    
+    private void checkDocumentFrequency(double df){
+        if(df > 1.0 || df < 0.0){
+            throw new IllegalArgumentException("Document frequency needs to be between 0.0 and 1.0 but was " + mindf);
+        }
+    }
+    
 }

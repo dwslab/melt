@@ -1,5 +1,14 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,7 +20,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Counter is for counting arbitrary objects.
@@ -19,6 +32,8 @@ import java.util.stream.Collectors;
  * @param <T> the datatype of the objects to count.
  */
 public class Counter<T> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Counter.class);
+    
     private Map<T, MutableInt> counts;
     private long overallCount;
     private Comparator<Entry<T, ? extends Comparable>> mapComparator;
@@ -354,20 +369,101 @@ public class Counter<T> {
         return this.mostCommon().toString();
     }
     
-     private static final String NEWLINE = System.getProperty("line.separator");
+    private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+    private static final String NEWLINE = System.getProperty("line.separator");
      
     /**
      * ToString method which returns the counter well formatted in multiple lines to have a better overview.
      * @return a string which contains the counter information in multiple lines.
      */
     public String toStringMultiline(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("[").append(NEWLINE);
-        for(Entry<T, Integer> e : this.mostCommon()){
-            sb.append("    ").append(e.getKey()).append("=").append(e.getValue()).append(",").append(NEWLINE);
+        return toJson();
+    }
+    
+    /**
+     * Returns a json representation of this counter.
+     * @return a json representation
+     */
+    public String toJson(){
+        StringWriter writer = new StringWriter();
+        try {
+            toWriter(writer);
+        } catch (IOException ex) {
+            LOGGER.error("Could not create json representation of Counter.", ex);
+            return "{}";
         }
-        sb.append("]");
-        return sb.toString();
+        return writer.toString();
+    }
+    
+    /**
+     * Write the counter to a file (content is json).
+     * @param file the file to use for writing the JSON content.
+     */
+    public void toJson(File file){
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+            toWriter(writer);
+        } catch (IOException ex) {
+            LOGGER.error("Could not write Counter to file", ex);
+        }
+    }
+    
+    private void toWriter(Writer w) throws IOException{
+        w.append("{").append(NEWLINE);
+        List<Entry<T, Integer>> entries = this.mostCommon();
+        int listSize =  entries.size();
+        for(int i = 0; i < listSize; i++){
+            Entry<T, Integer> e = entries.get(i);
+            w.append("  \"").append(e.getKey().toString()).append("\" : ").append(e.getValue().toString());
+            if(i != listSize - 1){
+                w.append(",");
+            }
+            w.append(NEWLINE);
+        }
+        w.append("}");
+    }
+    
+    /**
+     * Given a json representation of a counter, create a new counter.
+     * The comparator is not loaded/serialized.
+     * @param jsonRepresentation the json representation of a counter.
+     * @return the new counter
+     */
+    public static Counter<String> loadFromJsonString(String jsonRepresentation){
+        try {
+            return loadFromJsonNode(JSON_MAPPER.readTree(jsonRepresentation));
+        } catch (JsonProcessingException ex) {
+            LOGGER.warn("Could not parse JSON from string correctly.", ex);
+            return new Counter<>();
+        }
+    }
+    
+    /**
+     * Load a counter instance from a json file.
+     * The comparator is not loaded/serialized.
+     * @param jsonFile the json file.
+     * @return the new instance
+     */
+    public static Counter<String> loadFromJsonFile(File jsonFile){
+        try {
+            return loadFromJsonNode(JSON_MAPPER.readTree(jsonFile));
+        } catch (IOException ex) {
+            LOGGER.warn("Could not parse JSON from file correctly.", ex);
+            return new Counter<>();
+        }
+    }
+    
+    private static Counter<String> loadFromJsonNode(JsonNode node){
+        Counter<String> c = new Counter<>();
+        Iterator<Entry<String, JsonNode>> i = node.fields();
+        while(i.hasNext()){
+            Entry<String, JsonNode> entry = i.next();
+            int value = entry.getValue().asInt(-1);
+            if(value == -1){
+                LOGGER.warn("Could not parse JSON from counter correctly. {} could not be converted to int. Skipping it.", entry.getValue().toString());
+            }
+            c.add(entry.getKey(), value);
+        }
+        return c;
     }
 
     @Override

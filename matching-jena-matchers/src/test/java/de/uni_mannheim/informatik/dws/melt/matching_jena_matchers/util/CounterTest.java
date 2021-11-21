@@ -174,4 +174,17 @@ public class CounterTest {
         two.add("foo", 20);
         assertNotEquals(one, two); // because of different comparator
     }
+    
+    
+    @Test
+    void testSerialization(){
+        Counter<String> one = new Counter<>();
+        one.add("hello", 10);
+        one.add("foo", 20);
+        one.add("test", 97);
+        one.add("bar", 54);
+        
+        Counter<String> two = Counter.loadFromJsonString(one.toJson());
+        assertEquals(one, two);
+    }
 }
