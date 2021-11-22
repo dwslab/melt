@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
 
-import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import java.io.File;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
@@ -17,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Resource;
@@ -55,10 +53,9 @@ public class SentenceTransformersFineTuner extends TransformersBaseFineTuner {
      *   see first parameter pretrained_model_name_or_path of the from_pretrained
      *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
      * @param resultingModelLocation the final location where the fine-tuned model should be stored.
-     * @param tmpDir Sets the tmp directory used by the matcher. In this folder the file with all texts from the knowledge graph are stored.
      */
-    public SentenceTransformersFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation, File tmpDir) {
-        super(extractor, initialModelName, resultingModelLocation, tmpDir);
+    public SentenceTransformersFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
+        super(extractor, initialModelName, resultingModelLocation);
         this.testSize = 0.33f;
         this.trainBatchSize = 64;
         this.testBatchSize = 32;
@@ -66,18 +63,6 @@ public class SentenceTransformersFineTuner extends TransformersBaseFineTuner {
         this.loss = SentenceTransformersLoss.CosineSimilarityLoss;
     }
     
-    /**
-     * Run the training of a NLP sentence transformers.
-     * @param extractor used to extract text from a given resource. This is the text which represents a resource.
-     * @param initialModelName the initial model name for fine tuning which can be downloaded or a path to a directory containing model weights
-     *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
-     *   see first parameter pretrained_model_name_or_path of the from_pretrained
-     *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
-     * @param resultingModelLocation the final location where the fine-tuned model should be stored.
-     */
-    public SentenceTransformersFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
-        this(extractor, initialModelName, resultingModelLocation, FileUtil.SYSTEM_TMP_FOLDER);
-    }
 
     @Override
     public File finetuneModel(File trainingFile) throws PythonServerException {        

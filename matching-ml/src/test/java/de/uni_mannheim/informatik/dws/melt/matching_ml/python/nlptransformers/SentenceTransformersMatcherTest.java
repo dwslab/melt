@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -13,9 +14,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
@@ -34,9 +37,7 @@ public class SentenceTransformersMatcherTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(SentenceTransformersMatcherTest.class);
     
     @Test
-    public void test() throws Exception {        
-        
-        
+    public void matchStsTest() throws Exception {
         File stsTestFile = new File(getClass().getClassLoader().getResource("sts-test.csv").getFile());
         
         //create source and target ontology from stsTestFile as well as reference alignment
@@ -85,7 +86,69 @@ public class SentenceTransformersMatcherTest {
             assertTrue(size >= 10, "An entity has not enough corresponding entities. Thus topk is not fullfilled. "
                     + "t should be greater than 10 but was " + size + " for target " + entityTwo);
         }
+    }
+    
+    //test can be enabled but take very long
+    //@Test
+    public void checkTopKPerResource() throws Exception {
+        File tmp = new File("./tmp");
+        tmp.mkdir();
+        FileUtil.setUserTmpFolder(tmp);
         
+        File stsTestFile = new File(getClass().getClassLoader().getResource("sts-test.csv").getFile());
+
+        //create source and target ontology from stsTestFile as well as reference alignment
+        OntModel source = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
+        OntModel target = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
+        Random random = new Random(1325);
+        int i = 0;
+        try(Reader in = new InputStreamReader(new FileInputStream(stsTestFile), "UTF-8")){            
+            for (CSVRecord row : CSVFormat.TDF.withQuote('\\').parse(in)) {
+                Double confidence = Double.parseDouble(row.get(4));
+                String sentenceSource = row.get(5);
+                String sentenceTarget = row.get(6);
+                
+                String urlSource = "http://source.com/" + i;
+                String urlTarget = "http://target.com/" + i;
+                i++;
+                source.createIndividual(urlSource, OWL.Thing)
+                        .addProperty(RDFS.label, sentenceSource)
+                        .addProperty(RDFS.comment, getRandomString(20, random))
+                        .addProperty(RDFS.comment, getRandomString(20, random));
+                target.createIndividual(urlTarget, OWL.Thing)
+                        .addProperty(RDFS.label, sentenceTarget)
+                        .addProperty(RDFS.comment, getRandomString(20, random))
+                        .addProperty(RDFS.comment, getRandomString(20, random));
+            }
+        }
+        int topk = 10;
+        //run the matcher
+        SentenceTransformersMatcher matcher = new SentenceTransformersMatcher(new LabelExtractor(), "paraphrase-MiniLM-L6-v2");
+        matcher.setResourcesExtractor(Arrays.asList((model, parameters) -> model.listIndividuals()));
+        matcher.setTopK(topk);
+        matcher.setBothDirections(true);
+        matcher.setMultipleTextsToMultipleExamples(true);
+        matcher.setTopkPerResource(true);
+        
+        Alignment systemAlignment = matcher.match(source, target, new Alignment(), new Properties());
+        
+        assertTrue(systemAlignment.size() >= i * topk && systemAlignment.size() <= (i*2) * topk);
+        
+        matcher.setTopkPerResource(false);
+        systemAlignment = matcher.match(source, target, new Alignment(), new Properties());
+        assertTrue(systemAlignment.size() >= i * topk * 3 && systemAlignment.size() <= (i*2) * topk * 3);
+    }
+    
+    
+    private static String getRandomString(int length, Random random){
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+
+        return random.ints(leftLimit, rightLimit + 1)
+          .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+          .limit(length)
+          .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+          .toString();
     }
     
     public static double correlation(Alignment referenceAlignment, Alignment systemAlignment){
@@ -120,11 +183,21 @@ public class SentenceTransformersMatcherTest {
         return new PearsonsCorrelation().correlation(arrayExpected, arrayActual);
     }
 }
+
 class LabelExtractor implements TextExtractor{
     @Override
     public Set<String> extract(Resource r) {
         Set<String> values = new HashSet<>();
         StmtIterator i = r.listProperties(RDFS.label);
+        while(i.hasNext()){
+            RDFNode n = i.next().getObject();
+            if(n.isLiteral()){
+                String text = n.asLiteral().getLexicalForm().trim();
+                if(!text.isEmpty())
+                    values.add(text);
+            }
+        }
+        i = r.listProperties(RDFS.comment);
         while(i.hasNext()){
             RDFNode n = i.next().getObject();
             if(n.isLiteral()){

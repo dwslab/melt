@@ -118,7 +118,7 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
             LOGGER.info("Try out batch size of {}", batchSize);
             //generate a smaller training file -> faster tokenizer
             
-            File tmpTrainingFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_find_max_batch_size", ".txt");
+            File tmpTrainingFile = FileUtil.createFileWithRandomNumber("alignment_transformers_find_max_batch_size", ".txt");
             try{
                 if(this.copyCSVLines(trainingFile, tmpTrainingFile, batchSize) == false){
                     int batchSizeWhichWorks = batchSize / 2;

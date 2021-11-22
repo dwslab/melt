@@ -46,13 +46,11 @@ public abstract class TransformersBaseFineTuner extends TransformersBase {
      *   see first parameter pretrained_model_name_or_path of the from_pretrained
      *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
      * @param resultingModelLocation the final location where the fine-tuned model should be stored.
-     * @param tmpDir Sets the tmp directory used by the matcher. In this folder the file with all texts from the knowledge graph are stored.
      */
-    public TransformersBaseFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation, File tmpDir) {
+    public TransformersBaseFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
         super(extractor, initialModelName);
-        this.tmpDir = tmpDir;
         this.resultingModelLocation = resultingModelLocation;
-        this.trainingFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_train", ".txt");
+        this.trainingFile = FileUtil.createFileWithRandomNumber("alignment_transformers_train", ".txt");
         this.additionallySwitchSourceTarget = false;
     }
     
@@ -73,7 +71,7 @@ public abstract class TransformersBaseFineTuner extends TransformersBase {
      * @throws IOException in case the writing fails
      */
     public File createTrainingFile(OntModel source, OntModel target, Alignment trainingAlignment) throws IOException{
-        File trainFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_train", ".txt");
+        File trainFile = FileUtil.createFileWithRandomNumber("alignment_transformers_train", ".txt");
         int writtenCorrespondences = writeTrainingFile(source, target, trainingAlignment, trainFile, false);
         if(writtenCorrespondences == 0){
             LOGGER.warn("No training file is created because no correspondences have enough text.");
@@ -203,7 +201,7 @@ public abstract class TransformersBaseFineTuner extends TransformersBase {
     public void clearTrainingData(){
         if(this.trainingFile != null && this.trainingFile.exists() && this.trainingFile.length() != 0){
             this.trainingFile.delete();
-            this.trainingFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_train", ".txt");
+            this.trainingFile = FileUtil.createFileWithRandomNumber("alignment_transformers_train", ".txt");
         }
     }
     

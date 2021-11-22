@@ -70,6 +70,18 @@ public class Executor {
     }
     
     /**
+     * Run one matcher with a given name on multiple tracks.
+     *
+     * @param tracks The tracks on which the matchers shall be run.
+     * @param matcher The matcher to be run. This class should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @param name the name of the matcher to use
+     * @return The matching result as {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet runTracks(List<Track> tracks, Object matcher, String name) {
+        return runTracks(tracks, getMatcherMapWithName(matcher, name));
+    }
+    
+    /**
      * Run matchers on multiple tracks.
      *
      * @param tracks The tracks on which the matchers shall be run.
@@ -114,6 +126,17 @@ public class Executor {
     }
     
     /**
+     * This method runs the specified matcher on the specified track.
+     * @param track Track on which the matcher shall be run.
+     * @param matcher The matcher to be run. The classes should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @param name the name of the matcher to use
+     * @return An {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet run(Track track, Object matcher, String name) {
+        return run(track, getMatcherMapWithName(matcher, name));
+    }
+    
+    /**
      * Run matchers on one track.
      * @param track The track to be evaluated.
      * @param matchers The matchers to be run on the given track. The values of the map should implement either IMatcher or IOntologyMatchingToolBridge is some way.
@@ -132,11 +155,23 @@ public class Executor {
      * Run matchers on one test cases.
      *
      * @param testCase One specific testcase on which all the specified matchers shall be run.
-     * @param matchers  A map of matchers from unique_name to matcher instance.The value of the map should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @param matchers  The matchers to be run. This class should implement either IMatcher or IOntologyMatchingToolBridge is some way.
      * @return The result as {@link ExecutionResultSet} instance.
      */
     public static ExecutionResultSet run(TestCase testCase, Object... matchers) {
         return run(Arrays.asList(testCase), getMatcherMap(matchers));
+    }
+    
+    /**
+     * Run matchers on one test cases.
+     *
+     * @param testCase One specific testcase on which all the specified matchers shall be run.
+     * @param matcher  The matcher to be run. This class should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @param name the name of the matcher to use
+     * @return The result as {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet run(TestCase testCase, Object matcher, String name) {
+        return run(Arrays.asList(testCase), getMatcherMapWithName(matcher, name));
     }
     
     /**
@@ -159,6 +194,18 @@ public class Executor {
      */
     public static ExecutionResultSet run(List<TestCase> testCases, Object... matchers) {
         return run(testCases, getMatcherMap(matchers));
+    }
+    
+    /**
+     * Run matchers on a set of test cases.
+     *
+     * @param testCases The test cases on which all the specified matcher shall be run.
+     * @param matcher   The matcher to be run. This class should implement either IMatcher or IOntologyMatchingToolBridge is some way.
+     * @param name the name of the matcher to use
+     * @return The result as {@link ExecutionResultSet} instance.
+     */
+    public static ExecutionResultSet run(List<TestCase> testCases, Object matcher, String name) {
+        return run(testCases, getMatcherMapWithName(matcher, name));
     }
     
     /**
@@ -500,6 +547,12 @@ public class Executor {
             LOGGER.warn("Could not extract runtime from file {}", performanceCSV.getPath(), ex);
         }
         return 0;
+    }
+    
+    private static Map<String, Object> getMatcherMapWithName(Object matcher, String name){
+        Map<String, Object> resultingMatchers = new HashMap<>();
+        resultingMatchers.put(name, matcher);
+        return resultingMatchers;
     }
     
     private static Map<String, Object> getMatcherMap(Object... matchers){

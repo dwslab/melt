@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersFineTuner;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBaseFineTuner;
@@ -209,6 +210,7 @@ public class PythonServer {
         request.addHeader("corpus-chunk-size", Integer.toString(matcher.getCorpusChunkSize()));
         request.addHeader("topk", Integer.toString(matcher.getTopK()));
         request.addHeader("both-directions", Boolean.toString(matcher.isBothDirections()));
+        request.addHeader("topk-per-resource", Boolean.toString(matcher.isTopkPerResource()));
 
         String resultString = runRequest(request);
         try {
@@ -257,7 +259,7 @@ public class PythonServer {
         request.addHeader("model-name", base.getModelName());
         request.addHeader("using-tf", Boolean.toString(base.isUsingTensorflow()));
         request.addHeader("training-arguments", base.getTrainingArguments().toJsonString());
-        request.addHeader("tmp-dir", getCanonicalPath(base.getTmpDir()));
+        request.addHeader("tmp-dir", getCanonicalPath(FileUtil.getUserTmpFolder()));
         request.addHeader("multi-processing", base.getMultiProcessing().toString());
         
         String cudaVisibleDevices = base.getCudaVisibleDevices();

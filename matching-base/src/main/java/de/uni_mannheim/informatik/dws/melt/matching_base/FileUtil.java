@@ -92,6 +92,17 @@ public class FileUtil {
     }
     
     /**
+     * Create a new file in the user defined tmp directory with prefix and suffix and a random number.
+     * The file path will look like: {userDefinedTmp}/{prefix}1234{suffix}
+     * @param prefix the prefix (usually the file name)
+     * @param suffix suffix (usually the file extension) like .txt (the dot needs to be included
+     * @return the file to use.
+     */
+    public static File createFileWithRandomNumberInUserTmp(String prefix, String suffix){
+        return createFileWithRandomNumber(userTmpFolder, prefix, suffix);
+    }
+    
+    /**
      * Returns a positive random number which can be used to create file names with random numbers in it.
      * @return a positive random number
      */
