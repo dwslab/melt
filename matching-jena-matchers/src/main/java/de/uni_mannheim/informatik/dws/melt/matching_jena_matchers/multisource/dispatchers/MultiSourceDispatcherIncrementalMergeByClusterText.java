@@ -296,7 +296,7 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
     /**
      * Returns true, if debug files are written.
      * Default is false.
-     * @return 
+     * @return true, if debug files are written
      */
     public boolean isDebug() {
         return debug;
