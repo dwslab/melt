@@ -36,11 +36,11 @@ public class MultiSourceDispatcherTransitivePairsTextBasedTest {
         
         assertEquals(5, innerMatcher.numberOfMatches());
         
-        innerMatcher.assertOrder(0, getCounter("e"), getCounter("f"));
-        innerMatcher.assertOrder(1, getCounter("c"), getCounter("d"));
-        innerMatcher.assertOrder(2, getCounter("a"), getCounter("b"));
-        innerMatcher.assertOrder(3, getCounter("a"), getCounter("e"));
-        innerMatcher.assertOrder(4, getCounter("a"), getCounter("c"));
+        innerMatcher.assertOrder(0, getCounter("d"), getCounter("c"));
+        innerMatcher.assertOrder(1, getCounter("b"), getCounter("a"));
+        innerMatcher.assertOrder(2, getCounter("f"), getCounter("e"));
+        innerMatcher.assertOrder(3, getCounter("a"), getCounter("c"));
+        innerMatcher.assertOrder(4, getCounter("f"), getCounter("b"));
     }
     
     private Counter<String> getCounter(String... s){
