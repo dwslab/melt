@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -184,55 +184,63 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr class="alt-color" id="i2">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createFileWithRandomNumberInUserTmp(java.lang.String,java.lang.String)">createFileWithRandomNumberInUserTmp</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;suffix)</code></th>
+<td class="col-last">
+<div class="block">Create a new file in the user defined tmp directory with prefix and suffix and a random number.</div>
+</td>
+</tr>
+<tr class="row-color" id="i3">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createFolderWithRandomNumberInDirectory(java.io.File,java.lang.String)">createFolderWithRandomNumberInDirectory</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;folder,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix)</code></th>
 <td class="col-last">
 <div class="block">Creates a folder with a random number attached to the prefix in a given folder.</div>
 </td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="alt-color" id="i4">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#createFolderWithRandomNumberInUserTmp(java.lang.String)">createFolderWithRandomNumberInUserTmp</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix)</code></th>
 <td class="col-last">
 <div class="block">Creates a new folder in the user defined tmp folder.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="row-color" id="i5">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCanonicalPathIfPossible(java.io.File)">getCanonicalPathIfPossible</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
 <td class="col-last">
 <div class="block">Returns the canonical path (resolved symlink, and relative paths) of a file if possible.</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCanonicalPathIfPossible(java.lang.String)">getCanonicalPathIfPossible</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;filePath)</code></th>
 <td class="col-last">
 <div class="block">Returns the canonical path (resolved symlink, and relative paths) of a file if possible.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getRandomPositiveNumber()">getRandomPositiveNumber</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns a positive random number which can be used to create file names with random numbers in it.</div>
 </td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="alt-color" id="i8">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getUserTmpFolder()">getUserTmpFolder</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the folder which the user wants to use a temporary directory.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="row-color" id="i9">
 <td class="col-first"><code>static long</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#lineCount(java.io.File)">lineCount</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
 <td class="col-last">
 <div class="block">Determines the count of lines in a file in a fast way.</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>static void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setUserTmpFolder(java.io.File)">setUserTmpFolder</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;newUserTmpFolder)</code></th>
 <td class="col-last">
@@ -379,6 +387,22 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="detail" id="createFileWithRandomNumber(java.lang.String,java.lang.String)">
 <h3>createFileWithRandomNumber</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">createFileWithRandomNumber</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;suffix)</span></div>
+<div class="block">Create a new file in the user defined tmp directory with prefix and suffix and a random number.
+ The file path will look like: {userDefinedTmp}/{prefix}1234{suffix}</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>prefix</code> - the prefix (usually the file name)</dd>
+<dd><code>suffix</code> - suffix (usually the file extension) like .txt (the dot needs to be included</dd>
+<dt>Returns:</dt>
+<dd>the file to use.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="createFileWithRandomNumberInUserTmp(java.lang.String,java.lang.String)">
+<h3>createFileWithRandomNumberInUserTmp</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">createFileWithRandomNumberInUserTmp</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;suffix)</span></div>
 <div class="block">Create a new file in the user defined tmp directory with prefix and suffix and a random number.
  The file path will look like: {userDefinedTmp}/{prefix}1234{suffix}</div>

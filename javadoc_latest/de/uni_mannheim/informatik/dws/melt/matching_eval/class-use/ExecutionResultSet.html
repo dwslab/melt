@@ -239,16 +239,34 @@ loadScripts(document, 'script');</script>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
-<th class="col-second" scope="row"><span class="type-name-label">Executor.</span><code><span class="member-name-link"><a href="../Executor.html#run(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.util.Map)">run</a></span>&#8203;(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matchers)</code></th>
+<th class="col-second" scope="row"><span class="type-name-label">Executor.</span><code><span class="member-name-link"><a href="../Executor.html#run(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.lang.Object,java.lang.String)">run</a></span>&#8203;(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;matcher,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></th>
 <td class="col-last">
 <div class="block">Run matchers on one test cases.</div>
 </td>
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">Executor.</span><code><span class="member-name-link"><a href="../Executor.html#run(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.util.Map)">run</a></span>&#8203;(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matchers)</code></th>
+<td class="col-last">
+<div class="block">Run matchers on one test cases.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">Executor.</span><code><span class="member-name-link"><a href="../Executor.html#run(de.uni_mannheim.informatik.dws.melt.matching_data.Track,java.lang.Object...)">run</a></span>&#8203;(<a href="../../matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;matchers)</code></th>
+<td class="col-last">
+<div class="block">This method runs the specified matcher on the specified track.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">Executor.</span><code><span class="member-name-link"><a href="../Executor.html#run(de.uni_mannheim.informatik.dws.melt.matching_data.Track,java.lang.Object,java.lang.String)">run</a></span>&#8203;(<a href="../../matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;matcher,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></th>
 <td class="col-last">
 <div class="block">This method runs the specified matcher on the specified track.</div>
 </td>
@@ -271,19 +289,28 @@ loadScripts(document, 'script');</script>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">Executor.</span><code><span class="member-name-link"><a href="../Executor.html#run(java.util.List,java.lang.Object,java.lang.String)">run</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;matcher,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></th>
+<td class="col-last">
+<div class="block">Run matchers on a set of test cases.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">Executor.</span><code><span class="member-name-link"><a href="../Executor.html#run(java.util.List,java.util.Map)">run</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matchers)</code></th>
 <td class="col-last">
 <div class="block">Run matchers on a set of test cases.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code><a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ExecutorParallel.</span><code><span class="member-name-link"><a href="../ExecutorParallel.html#run(de.uni_mannheim.informatik.dws.melt.matching_data.Track,java.util.Map)">run</a></span>&#8203;(<a href="../../matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matchers)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code><a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ExecutorParallel.</span><code><span class="member-name-link"><a href="../ExecutorParallel.html#run(java.util.List,java.util.Map)">run</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matchers)</code></th>
@@ -291,7 +318,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Run the given matchers in parallel.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code><a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ExecutorSeals.</span><code><span class="member-name-link"><a href="../ExecutorSeals.html#run(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.io.File)">run</a></span>&#8203;(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;matcher)</code></th>
@@ -299,7 +326,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Evaluate matcher(s) using the local SEALS client.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code><a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ExecutorSeals.</span><code><span class="member-name-link"><a href="../ExecutorSeals.html#run(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.lang.String)">run</a></span>&#8203;(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testcase,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;matcher)</code></th>
@@ -307,7 +334,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Evaluate matcher(s) using the local SEALS client.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code><a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ExecutorSeals.</span><code><span class="member-name-link"><a href="../ExecutorSeals.html#run(de.uni_mannheim.informatik.dws.melt.matching_data.Track,java.io.File)">run</a></span>&#8203;(<a href="../../matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;matcherDirectory)</code></th>
@@ -315,7 +342,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Evaluate matcher(s) using the local SEALS client.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code><a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ExecutorSeals.</span><code><span class="member-name-link"><a href="../ExecutorSeals.html#run(de.uni_mannheim.informatik.dws.melt.matching_data.Track,java.lang.String)">run</a></span>&#8203;(<a href="../../matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;matcher)</code></th>
@@ -323,7 +350,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Evaluate matcher(s) using the local SEALS client.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code><a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">ExecutorSeals.</span><code><span class="member-name-link"><a href="../ExecutorSeals.html#run(java.util.List,java.io.File)">run</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;matcherDirectory)</code></th>
@@ -331,12 +358,21 @@ loadScripts(document, 'script');</script>
 <div class="block">Evaluate matcher(s) using the local SEALS client.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
 <th class="col-second" scope="row"><span class="type-name-label">Executor.</span><code><span class="member-name-link"><a href="../Executor.html#runTracks(java.util.List,java.lang.Object...)">runTracks</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&gt;&nbsp;tracks,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;matchers)</code></th>
 <td class="col-last">
 <div class="block">Run matchers on multiple tracks.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">Executor.</span><code><span class="member-name-link"><a href="../Executor.html#runTracks(java.util.List,java.lang.Object,java.lang.String)">runTracks</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&gt;&nbsp;tracks,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;matcher,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></th>
+<td class="col-last">
+<div class="block">Run one matcher with a given name on multiple tracks.</div>
 </td>
 </tr>
 <tr class="alt-color">

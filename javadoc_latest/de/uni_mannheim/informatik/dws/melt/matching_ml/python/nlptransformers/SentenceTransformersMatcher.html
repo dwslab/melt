@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -153,12 +153,17 @@ extends <a href="TransformersBase.html" title="class in de.uni_mannheim.informat
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#topK">topK</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
+<tr class="row-color">
+<td class="col-first"><code>private boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#topkPerResource">topkPerResource</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="inherited-list">
 <h3 id="fields.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBase">Fields inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></h3>
-<code><a href="TransformersBase.html#cudaVisibleDevices">cudaVisibleDevices</a>, <a href="TransformersBase.html#extractor">extractor</a>, <a href="TransformersBase.html#modelName">modelName</a>, <a href="TransformersBase.html#multipleTextsToMultipleExamples">multipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#multiProcessing">multiProcessing</a>, <a href="TransformersBase.html#tmpDir">tmpDir</a>, <a href="TransformersBase.html#trainingArguments">trainingArguments</a>, <a href="TransformersBase.html#transformersCache">transformersCache</a>, <a href="TransformersBase.html#usingTensorflow">usingTensorflow</a></code></div>
+<code><a href="TransformersBase.html#cudaVisibleDevices">cudaVisibleDevices</a>, <a href="TransformersBase.html#extractor">extractor</a>, <a href="TransformersBase.html#modelName">modelName</a>, <a href="TransformersBase.html#multipleTextsToMultipleExamples">multipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#multiProcessing">multiProcessing</a>, <a href="TransformersBase.html#trainingArguments">trainingArguments</a>, <a href="TransformersBase.html#transformersCache">transformersCache</a>, <a href="TransformersBase.html#usingTensorflow">usingTensorflow</a></code></div>
 <div class="inherited-list">
 <h3 id="fields.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_base.MatcherFile">Fields inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_base.<a href="../../../matching_base/MatcherFile.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">MatcherFile</a></h3>
 <code><a href="../../../matching_base/MatcherFile.html#FILE_PREFIX">FILE_PREFIX</a>, <a href="../../../matching_base/MatcherFile.html#FILE_SUFFIX">FILE_SUFFIX</a></code></div>
@@ -239,21 +244,33 @@ extends <a href="TransformersBase.html" title="class in de.uni_mannheim.informat
 </td>
 </tr>
 <tr class="row-color" id="i5">
+<td class="col-first"><code>private void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#initExtractors()">initExtractors</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#initialiseResourceExtractor()">initialiseResourceExtractor</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Initilaises the resource extractor such that classes, datatypeproperties, objectproperties, all other properties,
+<div class="block">Initialises the resource extractors such that classes, datatypeproperties, objectproperties, all other properties,
  and instances are matched if the properties suggests to do so.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isBothDirections()">isBothDirections</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns true if both directions are enabled.</div>
 </td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="alt-color" id="i8">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isTopkPerResource()">isTopkPerResource</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns true, if the topk parameter applies to number of resources and not to number of extracted texts.</div>
+</td>
+</tr>
+<tr class="row-color" id="i9">
 <td class="col-first"><code><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.apache.jena.ontology.OntModel&nbsp;source,
 org.apache.jena.ontology.OntModel&nbsp;target,
@@ -264,47 +281,54 @@ org.apache.jena.ontology.OntModel&nbsp;target,
  as Alignment object, and returns the mapping of the resulting alignment.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setBothDirections(boolean)">setBothDirections</a></span>&#8203;(boolean&nbsp;bothDirections)</code></th>
 <td class="col-last">
 <div class="block">Sets the value if both directions are enabled.</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="row-color" id="i11">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCorpusChunkSize(int)">setCorpusChunkSize</a></span>&#8203;(int&nbsp;corpusChunkSize)</code></th>
 <td class="col-last">
 <div class="block">Sets the number of enties which are scaned at a time.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setQueryChunkSize(int)">setQueryChunkSize</a></span>&#8203;(int&nbsp;queryChunkSize)</code></th>
 <td class="col-last">
 <div class="block">Sets the number of queries which are processed simultaneously.</div>
 </td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="row-color" id="i13">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setResourcesExtractor(java.util.List)">setResourcesExtractor</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../matching_jena/ResourcesExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">ResourcesExtractor</a>&gt;&nbsp;resourcesExtractor)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i12">
+<tr class="alt-color" id="i14">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTopK(int)">setTopK</a></span>&#8203;(int&nbsp;topK)</code></th>
 <td class="col-last">
 <div class="block">Sets the number which represents how many correspondences should be created per resource.</div>
 </td>
 </tr>
-<tr class="row-color" id="i13">
+<tr class="row-color" id="i15">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTopkPerResource(boolean)">setTopkPerResource</a></span>&#8203;(boolean&nbsp;topkPerResource)</code></th>
+<td class="col-last">
+<div class="block">If set to true, the topk parameter applies to number of resources and not to number of extracted texts.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i16">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a></span>&#8203;(<a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a>&nbsp;trainingArguments)</code></th>
 <td class="col-last">
 <div class="block">No training arguments can be used for SentenceTransformersMatcher - do NOT call this method.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i14">
+<tr class="row-color" id="i17">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setUsingTensorflow(boolean)">setUsingTensorflow</a></span>&#8203;(boolean&nbsp;usingTensorflow)</code></th>
 <td class="col-last">
@@ -317,7 +341,7 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 </div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBase">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></h3>
-<code><a href="TransformersBase.html#copyCSVLines(java.io.File,java.io.File,int)">copyCSVLines</a>, <a href="TransformersBase.html#getCudaVisibleDevices()">getCudaVisibleDevices</a>, <a href="TransformersBase.html#getExtractor()">getExtractor</a>, <a href="TransformersBase.html#getModelName()">getModelName</a>, <a href="TransformersBase.html#getMultiProcessing()">getMultiProcessing</a>, <a href="TransformersBase.html#getTmpDir()">getTmpDir</a>, <a href="TransformersBase.html#getTrainingArguments()">getTrainingArguments</a>, <a href="TransformersBase.html#getTransformersCache()">getTransformersCache</a>, <a href="TransformersBase.html#isMultipleTextsToMultipleExamples()">isMultipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#isOptimizeForMixedPrecisionTraining()">isOptimizeForMixedPrecisionTraining</a>, <a href="TransformersBase.html#isUsingTensorflow()">isUsingTensorflow</a>, <a href="TransformersBase.html#setCudaVisibleDevices(int...)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setCudaVisibleDevices(java.lang.String)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">setExtractor</a>, <a href="TransformersBase.html#setModelName(java.lang.String)">setModelName</a>, <a href="TransformersBase.html#setMultipleTextsToMultipleExamples(boolean)">setMultipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#setMultiProcessing(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersMultiProcessing)">setMultiProcessing</a>, <a href="TransformersBase.html#setOptimizeForMixedPrecisionTraining(boolean)">setOptimizeForMixedPrecisionTraining</a>, <a href="TransformersBase.html#setTmpDir(java.io.File)">setTmpDir</a>, <a href="TransformersBase.html#setTransformersCache(java.io.File)">setTransformersCache</a></code></div>
+<code><a href="TransformersBase.html#copyCSVLines(java.io.File,java.io.File,int)">copyCSVLines</a>, <a href="TransformersBase.html#getCudaVisibleDevices()">getCudaVisibleDevices</a>, <a href="TransformersBase.html#getExtractor()">getExtractor</a>, <a href="TransformersBase.html#getModelName()">getModelName</a>, <a href="TransformersBase.html#getMultiProcessing()">getMultiProcessing</a>, <a href="TransformersBase.html#getTrainingArguments()">getTrainingArguments</a>, <a href="TransformersBase.html#getTransformersCache()">getTransformersCache</a>, <a href="TransformersBase.html#isMultipleTextsToMultipleExamples()">isMultipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#isOptimizeForMixedPrecisionTraining()">isOptimizeForMixedPrecisionTraining</a>, <a href="TransformersBase.html#isUsingTensorflow()">isUsingTensorflow</a>, <a href="TransformersBase.html#setCudaVisibleDevices(int...)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setCudaVisibleDevices(java.lang.String)">setCudaVisibleDevices</a>, <a href="TransformersBase.html#setExtractor(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor)">setExtractor</a>, <a href="TransformersBase.html#setModelName(java.lang.String)">setModelName</a>, <a href="TransformersBase.html#setMultipleTextsToMultipleExamples(boolean)">setMultipleTextsToMultipleExamples</a>, <a href="TransformersBase.html#setMultiProcessing(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersMultiProcessing)">setMultiProcessing</a>, <a href="TransformersBase.html#setOptimizeForMixedPrecisionTraining(boolean)">setOptimizeForMixedPrecisionTraining</a>, <a href="TransformersBase.html#setTransformersCache(java.io.File)">setTransformersCache</a></code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_jena.<a href="../../../matching_jena/MatcherYAAAJena.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena">MatcherYAAAJena</a></h3>
 <code><a href="../../../matching_jena/MatcherYAAAJena.html#getModelSpec()">getModelSpec</a>, <a href="../../../matching_jena/MatcherYAAAJena.html#match(java.net.URL,java.net.URL,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a>, <a href="../../../matching_jena/MatcherYAAAJena.html#readOntology(java.net.URL,org.apache.jena.ontology.OntModelSpec)">readOntology</a></code></div>
@@ -392,6 +416,12 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">bothDirections</span></div>
 </section>
 </li>
+<li>
+<section class="detail" id="topkPerResource">
+<h3>topkPerResource</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">topkPerResource</span></div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -464,8 +494,14 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <section class="detail" id="initialiseResourceExtractor()">
 <h3>initialiseResourceExtractor</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">initialiseResourceExtractor</span>()</div>
-<div class="block">Initilaises the resource extractor such that classes, datatypeproperties, objectproperties, all other properties,
+<div class="block">Initialises the resource extractors such that classes, datatypeproperties, objectproperties, all other properties,
  and instances are matched if the properties suggests to do so.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="initExtractors()">
+<h3>initExtractors</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">initExtractors</span>()</div>
 </section>
 </li>
 <li>
@@ -576,6 +612,34 @@ org.apache.jena.ontology.OntModel&nbsp;target,
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>bothDirections</code> - true if both directions are enabled</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isTopkPerResource()">
+<h3>isTopkPerResource</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isTopkPerResource</span>()</div>
+<div class="block">Returns true, if the topk parameter applies to number of resources and not to number of extracted texts.
+ This makes only a difference if multitext is enabled.
+ E.g. if a resource has 5 textual representations and multipleTextsToMultipleExamples is set to true, 
+ it would generate for each text a top k canidates and not for each resource. True is the default.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true, if the topk parameter applies to number of resources - false otherwiese</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setTopkPerResource(boolean)">
+<h3>setTopkPerResource</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setTopkPerResource</span>&#8203;(<span class="parameters">boolean&nbsp;topkPerResource)</span></div>
+<div class="block">If set to true, the topk parameter applies to number of resources and not to number of extracted texts.
+ This makes only a difference if multipleTextsToMultipleExamples is enabled.
+ E.g. if set TopkPerResource to false and if a resource has 5 textual representations and multipleTextsToMultipleExamples is set to true, 
+ it would generate for each text a top k canidates and not for each resource. True is the default.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>topkPerResource</code> - true if topk should be applied for a resource and not each textual concept.</dd>
 </dl>
 </section>
 </li>
