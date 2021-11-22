@@ -112,14 +112,14 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
             selectedWords = documentFrequency.getDistinctElements();
             LOGGER.info("Select all {} words as feature", selectedWords.size());
         }else{
-            selectedWords = documentFrequency.betweenFrequencyReturningElements(this.mindf, this.maxdf);
+            selectedWords = documentFrequency.betweenFrequencyRelativeToTotalReturningElements(this.mindf, this.maxdf, models.size());
             LOGGER.info("Select words between frequency {} and {} which are: {} words as feature", this.mindf, this.maxdf, selectedWords.size());
         }
         if(selectedWords.isEmpty()){
             selectedWords = documentFrequency.getDistinctElements();
             LOGGER.info("The selection of words results in no features. Use all words as features (backup version). This results in {} words/features.", selectedWords.size());
         }
-                
+        
         String[] features = selectedWords.toArray(new String[0]);
         //tf-idf
         LOGGER.info("Compute TF-IDF vector for each KG.");

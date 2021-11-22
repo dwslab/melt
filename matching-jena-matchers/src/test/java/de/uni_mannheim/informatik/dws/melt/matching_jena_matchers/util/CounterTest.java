@@ -187,4 +187,16 @@ public class CounterTest {
         Counter<String> two = Counter.loadFromJsonString(one.toJson());
         assertEquals(one, two);
     }
+    
+    @Test
+    void testSerializationBackslash(){
+        Counter<String> one = new Counter<>();
+        one.add("hello", 10);
+        one.add("foo", 20);
+        one.add("\\", 97);
+        one.add("bar", 54);
+        
+        Counter<String> two = Counter.loadFromJsonString(one.toJson());
+        assertEquals(one, two);
+    }
 }
