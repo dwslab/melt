@@ -214,3 +214,12 @@ This class is used to fine-tune a transformer model based on a generated dataset
 
 *Keywords: Transformers Fine Tuner*
 
+## AlcomoFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_owlapi_matchers/AlcomoFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-owlapi-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_owlapi_matchers/AlcomoFilter.java)
+
+Filter which makes and alignment coherent. When using this component, please cite:
+ Christian Meilicke. Alignment Incoherence in Ontology Matching. University Mannheim 2011.
+
+ This filter wraps the original implementation.
+
+*Keywords: Alcomo Filter*
+
