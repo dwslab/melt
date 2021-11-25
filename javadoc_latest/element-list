@@ -85,6 +85,7 @@ de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers
 de.uni_mannheim.informatik.dws.melt.matching_ml.python.openea
 de.uni_mannheim.informatik.dws.melt.matching_ml.util
 de.uni_mannheim.informatik.dws.melt.matching_owlapi
+de.uni_mannheim.informatik.dws.melt.matching_owlapi_matchers
 de.uni_mannheim.informatik.dws.melt.matching_owlapi.typetransformation
 de.uni_mannheim.informatik.dws.melt.matching_validation
 de.uni_mannheim.informatik.dws.melt.receiver_cli

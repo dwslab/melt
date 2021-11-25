@@ -188,10 +188,14 @@ loadScripts(document, 'script');</script>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
-<th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api</a></th>
+<th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.matching_owlapi_matchers">de.uni_mannheim.informatik.dws.melt.matching_owlapi_matchers</a></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
+<th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api</a></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.typetransformation">de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.typetransformation</a></th>
 <td class="col-last">&nbsp;</td>
 </tr>
@@ -700,7 +704,13 @@ boolean&nbsp;computeTransitiveClosure,
 <th class="col-second" scope="row"><span class="type-name-label">ConfidenceFinder.</span><code><span class="member-name-link"><a href="../../matching_eval/paramtuning/ConfidenceFinder.html#getBestConfidenceForFmeasure(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)">getBestConfidenceForFmeasure</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;reference,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;systemAlignment,
 <a href="../../matching_data/GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;gsCompleteness)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">// TODO implement without decimal precision - add to release notes
+
+ If this method takes too long, you can use the more efficient
+ method <a href="../../matching_eval/paramtuning/ConfidenceFinder.html#getBestConfidenceForFmeasure(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,int)"><code>ConfidenceFinder.getBestConfidenceForFmeasure(Alignment, Alignment, GoldStandardCompleteness, int)</code></a>
+ and set a decimal precision (e.g.</div>
+</td>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>static double</code></td>
@@ -747,9 +757,11 @@ double&nbsp;end)</code></th>
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
-<th class="col-second" scope="row"><span class="type-name-label">ConfidenceFinder.</span><code><span class="member-name-link"><a href="../../matching_eval/paramtuning/ConfidenceFinder.html#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,int)">getOccurringConfidences</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
+<th class="col-second" scope="row"><span class="type-name-label">ConfidenceFinder.</span><code><span class="member-name-link"><a href="../../matching_eval/paramtuning/ConfidenceFinder.html#getOccurringConfidences(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,int)">getOccurringConfidences</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
 int&nbsp;decimalPrecision)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">If you require a precise solution, set the <code>decimalPrecision</code> to a negative number.</div>
+</td>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></td>
@@ -3729,6 +3741,73 @@ org.semanticweb.owlapi.model.OWLOntology&nbsp;target,
 <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="de.uni_mannheim.informatik.dws.melt.matching_owlapi_matchers">
+<h2>Uses of <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a> in <a href="../../matching_owlapi_matchers/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_owlapi_matchers</a></h2>
+<div class="use-summary">
+<table class="summary-table">
+<caption><span>Methods in <a href="../../matching_owlapi_matchers/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_owlapi_matchers</a> that return <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Modifier and Type</th>
+<th class="col-second" scope="col">Method</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<td class="col-first"><code>static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">AlcomoFilter.</span><code><span class="member-name-link"><a href="../../matching_owlapi_matchers/AlcomoFilter.html#alcomoAlignmentToYaaaAlignment(de.uni_mannheim.informatik.dws.alcomo.mapping.Mapping)">alcomoAlignmentToYaaaAlignment</a></span>&#8203;(de.uni_mannheim.informatik.dws.alcomo.mapping.Mapping&nbsp;alcomoAlignment)</code></th>
+<td class="col-last">
+<div class="block">Mapping from Alcomo Mapping to YAAA's <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api"><code>Alignment</code></a>.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">AlcomoFilter.</span><code><span class="member-name-link"><a href="../../matching_owlapi_matchers/AlcomoFilter.html#match(org.semanticweb.owlapi.model.OWLOntology,org.semanticweb.owlapi.model.OWLOntology,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.semanticweb.owlapi.model.OWLOntology&nbsp;source,
+org.semanticweb.owlapi.model.OWLOntology&nbsp;target,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
+<td class="col-last">
+<div class="block">OwlAPI implementation.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="use-summary">
+<table class="summary-table">
+<caption><span>Methods in <a href="../../matching_owlapi_matchers/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_owlapi_matchers</a> with parameters of type <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Modifier and Type</th>
+<th class="col-second" scope="col">Method</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<td class="col-first"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">AlcomoFilter.</span><code><span class="member-name-link"><a href="../../matching_owlapi_matchers/AlcomoFilter.html#match(org.semanticweb.owlapi.model.OWLOntology,org.semanticweb.owlapi.model.OWLOntology,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">match</a></span>&#8203;(org.semanticweb.owlapi.model.OWLOntology&nbsp;source,
+org.semanticweb.owlapi.model.OWLOntology&nbsp;target,
+<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
+<td class="col-last">
+<div class="block">OwlAPI implementation.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>(package private) static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">AlcomoFilter.</span><code><span class="member-name-link"><a href="../../matching_owlapi_matchers/AlcomoFilter.html#serializeAlignmentToTemporaryFile(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)">serializeAlignmentToTemporaryFile</a></span>&#8203;(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment)</code></th>
+<td class="col-last">
+<div class="block">Serialize the alignment to a file and return its path.</div>
+</td>
 </tr>
 </tbody>
 </table>
