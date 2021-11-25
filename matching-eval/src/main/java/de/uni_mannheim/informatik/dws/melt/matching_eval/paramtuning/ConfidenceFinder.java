@@ -59,6 +59,7 @@ public class ConfidenceFinder {
         for(Double c : a.getDistinctConfidences()){
             BigDecimal bd = new BigDecimal(c);
             bd = bd.setScale(decimalPrecision, RoundingMode.HALF_UP);
+
             set.add(bd.doubleValue());
         }
         return set;
@@ -90,7 +91,13 @@ public class ConfidenceFinder {
                 executionResult.getSystemAlignment(),
                 executionResult.getTestCase().getGoldStandardCompleteness());
     }
-    
+
+
+    public static double getBestConfidenceForFmeasure(Alignment reference, Alignment systemAlignment,
+                                                      GoldStandardCompleteness gsCompleteness){
+        return getBestConfidenceForFmeasure(reference, systemAlignment, gsCompleteness, 2);
+    }
+
     /**
      * Given two alignments, this method determines the best cutting point (main confidence in correspondences) in order to optimize the F1-score.
      * @param reference the reference alignment to use
@@ -98,13 +105,17 @@ public class ConfidenceFinder {
      * @param gsCompleteness What gold standard completeness is given -
      * If reference alignment is a subset of the overall reference alignment AND we have a one-to-one alignment, use
      * {@link GoldStandardCompleteness#PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE}.
+     * @param decimalPrecision The precision of the confidences. A low precision (such as 2) will optimize the
+     *                         runtime performance - however, it may lead to suboptimal results.
+     *                         For small datasets, you can use a very high number here.
      * @return The optimal confidence threshold for an optimal F1 measure. All correspondences with a confidence
      * LOWER than the result should be discarded. You can directly use
      * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}
      * to cut correspondences LESS than the optimal threshold determined by this method.
      */
     public static double getBestConfidenceForFmeasure(Alignment reference, Alignment systemAlignment,
-                                                      GoldStandardCompleteness gsCompleteness){
+                                                      GoldStandardCompleteness gsCompleteness,
+                                                      int decimalPrecision){
         if(reference.isEmpty()) {
             LOGGER.error("The provided reference is empty, returning minimal confidence.");
             return systemAlignment.getMinimalConfidence();
@@ -115,9 +126,10 @@ public class ConfidenceFinder {
                         "correspondences. Without thresholding: tp: {} fp: {} fn: {}",
                 reference.size(), systemAlignment.size(), m.getTruePositiveSize(), m.getFalsePositiveSize(),
                 m.getFalseNegativeSize());
-        List<Double> systemConfidences = new ArrayList<>(getOccurringConfidences(systemAlignment, 2));
+        List<Double> systemConfidences = new ArrayList<>(getOccurringConfidences(systemAlignment, decimalPrecision));
         Collections.sort(systemConfidences);
-        double bestConf = 1.0d;
+
+        double bestConf = 1.0;
         double bestValue = 0.0d;
         for(Double conf : systemConfidences){
             int tpSize = m.getTruePositive().cut(conf).size();
@@ -158,7 +170,6 @@ public class ConfidenceFinder {
         int fnSize = m.getFalseNegativeSize() + (m.getTruePositiveSize() - tpSize);
         LOGGER.info("Found best confidence of {} which leads to F-Measure of {} (tp: {} fp: {} fn: {})",
             bestConf, bestValue, tpSize, fpSize, fnSize);
-        
         return bestConf;
     }
     
