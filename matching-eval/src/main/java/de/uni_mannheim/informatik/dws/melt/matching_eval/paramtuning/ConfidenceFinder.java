@@ -101,15 +101,14 @@ public class ConfidenceFinder {
 
 
     /**
-     * // TODO implement without decimal precision - add to release notes
-     *
      * If this method takes too long, you can use the more efficient
-     * method {@link ConfidenceFinder#getBestConfidenceForFmeasure(Alignment, Alignment, GoldStandardCompleteness, int)}
+     * method
+     * {@link ConfidenceFinder#getBestConfidenceForFmeasure(Alignment, Alignment, GoldStandardCompleteness, int)}
      * and set a decimal precision (e.g. 1 or 2).
-     * @param reference
-     * @param systemAlignment
-     * @param gsCompleteness
-     * @return
+     * @param reference The reference alignment.
+     * @param systemAlignment The system alignment.
+     * @param gsCompleteness The gold standard completeness.
+     * @return The optimal confidence.
      */
     public static double getBestConfidenceForFmeasure(Alignment reference, Alignment systemAlignment,
                                                       GoldStandardCompleteness gsCompleteness) {
