@@ -22,29 +22,35 @@
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws</groupId>
             <artifactId>alcomo</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.1</version>
         </dependency>
 
         <!-- MELT uses 5.1.19 but ALCOMO requires 3-->
-        <dependency>
+        <!-- latest 5.x version is 5.1.19 , latest 4.x version is 4.5.5 latest 3.x version is 3.5.7-->
+        <!--dependency>
             <groupId>net.sourceforge.owlapi</groupId>
             <artifactId>owlapi-distribution</artifactId>
             <version>3.5.7
-            </version> <!-- latest 5.x version is 5.1.19 , latest 4.x version is 4.5.5 latest 3.x version is 3.5.7-->
-        </dependency>
+            </version>
+        </dependency-->
 
         <dependency>
-            <groupId>de.uni-mannheim.informatik.dws.melt.</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-owlapi</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>de.uni-mannheim.informatik.dws.melt.</groupId>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <scope>test</scope>
             <artifactId>matching-data</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+
+
+        <!-- TEST DELETE ALL DEPS BELOW -->
+
 
     </dependencies>
 

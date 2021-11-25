@@ -3,10 +3,13 @@
 
 ## Changes in 3.3
 
+
 **New**
 - MELT user guide allows for downloading track data directly via the documentation page.
-- TrainTestSplit (with stratification) for any Java object and specialized for alignments (TrainTestSplitAlignment)
+- `TrainTestSplit` (with stratification) for any Java object and specialized for alignments (TrainTestSplitAlignment)
 
+**Improvements**
+- More intuitive behavior of `ConfidenceFinder`: If no precision is specified, the optimal solution is calculated.
 
 ## Changes in 3.2
 
@@ -24,7 +27,6 @@
 - matcher name was not always encoded (because it was used in as file name) (see issue #128)
 - use a new local track for a local test case (fixes issue #121)
 
- 
 **Improvements**
 - Web frontend for Web/Docker packaged matchers works now with javascript and provides better UX
 - Server for Web/Docker based images now more stable

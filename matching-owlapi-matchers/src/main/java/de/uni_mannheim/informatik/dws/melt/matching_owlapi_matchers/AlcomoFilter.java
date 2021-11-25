@@ -7,8 +7,9 @@ import de.uni_mannheim.informatik.dws.alcomo.mapping.Correspondence;
 import de.uni_mannheim.informatik.dws.alcomo.mapping.Mapping;
 import de.uni_mannheim.informatik.dws.alcomo.mapping.SemanticRelation;
 import de.uni_mannheim.informatik.dws.alcomo.ontology.IOntology;
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
-import de.uni_mannheim.informatik.dws.melt.matching_owlapi.MatcherYAAAOwlApi;
+import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherURL;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -19,16 +20,21 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
-import java.util.Iterator;
 import java.util.Properties;
 
-import static de.uni_mannheim.informatik.dws.alcomo.Settings.BlackBoxReasoner.PELLET;
+import static de.uni_mannheim.informatik.dws.alcomo.Settings.BlackBoxReasoner.HERMIT;
 import static de.uni_mannheim.informatik.dws.alcomo.Settings.BlackBoxReasoner;
 
 
-// TODO refactor to URL
-public class AlcomoFilter extends MatcherYAAAOwlApi implements Filter {
+/**
+ * Filter which makes and alignment coherent. When using this component, please cite:
+ * Christian Meilicke. Alignment Incoherence in Ontology Matching. University Mannheim 2011.
+ *
+ * This filter wraps the original implementation.
+ */
+public class AlcomoFilter extends MatcherURL implements Filter {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AlcomoFilter.class);
@@ -45,7 +51,7 @@ public class AlcomoFilter extends MatcherYAAAOwlApi implements Filter {
      * The reasoner that is to be used. Access only through getter/setter.
      */
     private BlackBoxReasoner reasoner;
-    private static final BlackBoxReasoner DEFAULT_REASONER = PELLET;
+    private static final BlackBoxReasoner DEFAULT_REASONER = HERMIT;
 
     /**
      * Constructor. Will set default values.
@@ -64,10 +70,42 @@ public class AlcomoFilter extends MatcherYAAAOwlApi implements Filter {
                     "The matcher is likely not functional. You can set the extraction problem manually again " +
                     "before running the match method.");
         }
-
     }
 
+    @Override
+    public URL match(URL source, URL target, URL inputAlignment) throws Exception {
+        // load ontologies
+        IOntology sourceOntology = new IOntology(source.toString());
+        IOntology targetOntology = new IOntology(new File(target.toURI()).getAbsolutePath());
 
+        // load the alignment
+        Mapping mapping = new Mapping(new File(inputAlignment.toURI()).getAbsolutePath());
+
+        // extraction problem has already been created; let's bind ontologies and alignment
+        extractionProblem.bindSourceOntology(sourceOntology);
+        extractionProblem.bindTargetOntology(targetOntology);
+        extractionProblem.bindMapping(mapping);
+
+        // let's solve the problem
+        extractionProblem.solve();
+
+        // return the filtered alignment
+        Mapping resultingAlcomoMapping = extractionProblem.getExtractedMapping();
+        Alignment result =  alcomoAlignmentToYaaaAlignment(resultingAlcomoMapping);
+        File fileToWrite = FileUtil.createFileWithRandomNumber("alcomo_alignment", ".rdf");
+        result.serialize(fileToWrite);
+        return fileToWrite.toURI().toURL();
+    }
+
+    /**
+     * OwlAPI implementation.
+     * @param source Source ontology.
+     * @param target Target ontology.
+     * @param inputAlignment Input alignment (required for this filter).
+     * @param p Parameters (ignored by this filter).
+     * @return Filtered Alignment.
+     * @throws Exception May be thrown in the case of error.
+     */
     public Alignment match(OWLOntology source, OWLOntology target, Alignment inputAlignment, Properties p) throws Exception {
         String ontology1path = serializeOntologyToTemporaryFile(source);
         String ontology2path = serializeOntologyToTemporaryFile(target);
@@ -91,23 +129,32 @@ public class AlcomoFilter extends MatcherYAAAOwlApi implements Filter {
         // return the filtered alignment
         Mapping resultingAlcomoMapping = extractionProblem.getExtractedMapping();
 
-        return null;
+        return alcomoAlignmentToYaaaAlignment(resultingAlcomoMapping);
     }
 
+    /**
+     * Mapping from Alcomo Mapping to YAAA's {@link Alignment}.
+     * @param alcomoAlignment The ALCOMO alignment ("mapping").
+     * @return {@link Alignment} instance.
+     */
     public static Alignment alcomoAlignmentToYaaaAlignment(Mapping alcomoAlignment) {
         Alignment result = new Alignment();
-        Iterator<Correspondence> iterator = alcomoAlignment.iterator();
-        while (iterator.hasNext()) {
-            Correspondence alcomoCorrespondence = iterator.next();
+        for (Correspondence alcomoCorrespondence : alcomoAlignment) {
             result.add(
                     alcomoCorrespondence.getSourceEntityUri(),
                     alcomoCorrespondence.getTargetEntityUri(),
                     alcomoCorrespondence.getConfidence(),
-                    alcomoCorrespondence.getRelation()
+                    alcomoSemanticRelationToYaaaCorrespondenceRelation(alcomoCorrespondence.getRelation().getType())
             );
         }
+        return result;
     }
 
+    /**
+     * Mapping of the ALCOMO semantic relation code to YAAA's {@link CorrespondenceRelation}.
+     * @param alcomoSemanticRelationCode The ALCOMO semantic code (an integer).
+     * @return Corresponding MELT/YAAA {@link CorrespondenceRelation}.
+     */
     public static CorrespondenceRelation alcomoSemanticRelationToYaaaCorrespondenceRelation(int alcomoSemanticRelationCode) {
         switch (alcomoSemanticRelationCode) {
             case SemanticRelation.EQUIV:
@@ -123,7 +170,6 @@ public class AlcomoFilter extends MatcherYAAAOwlApi implements Filter {
                 return CorrespondenceRelation.UNKNOWN;
         }
     }
-
 
     /**
      * Serialize the alignment to a file and return its path.
@@ -166,7 +212,7 @@ public class AlcomoFilter extends MatcherYAAAOwlApi implements Filter {
         }
         try {
             // create a temporary file
-            File ontologyFile = Files.createTempFile("ontologyForAlcomo", null).toFile();
+            File ontologyFile = FileUtil.createFileWithRandomNumber("ontologyForAlcomo", ".owl");
             ontologyFile.deleteOnExit();
 
             // serialize ontology
@@ -210,4 +256,6 @@ public class AlcomoFilter extends MatcherYAAAOwlApi implements Filter {
     public void setExtractionProblem(ExtractionProblem extractionProblem) {
         this.extractionProblem = extractionProblem;
     }
+
+
 }

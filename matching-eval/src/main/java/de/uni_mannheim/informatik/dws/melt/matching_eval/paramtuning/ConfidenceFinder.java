@@ -53,13 +53,20 @@ public class ConfidenceFinder {
         }
         return set;
     }
-    
-    public static Set<Double> getOccurringConfidences(Alignment a, int decimalPrecision){
-        Set<Double> set = new HashSet<>();
-        for(Double c : a.getDistinctConfidences()){
-            BigDecimal bd = new BigDecimal(c);
-            bd = bd.setScale(decimalPrecision, RoundingMode.HALF_UP);
 
+    /**
+     * If you require a precise solution, set the {@code decimalPrecision} to a negative number.
+     * @param alignment The alignment.
+     * @param decimalPrecision The desired decimal precision. Negative number for optimal precision.
+     * @return Set of precision values.
+     */
+    public static Set<Double> getOccurringConfidences(Alignment alignment, int decimalPrecision){
+        Set<Double> set = new HashSet<>();
+        for(Double c : alignment.getDistinctConfidences()){
+            BigDecimal bd = new BigDecimal(c);
+            if(decimalPrecision < 0) {
+                bd = bd.setScale(decimalPrecision, RoundingMode.HALF_UP);
+            }
             set.add(bd.doubleValue());
         }
         return set;
@@ -93,9 +100,20 @@ public class ConfidenceFinder {
     }
 
 
+    /**
+     * // TODO implement without decimal precision - add to release notes
+     *
+     * If this method takes too long, you can use the more efficient
+     * method {@link ConfidenceFinder#getBestConfidenceForFmeasure(Alignment, Alignment, GoldStandardCompleteness, int)}
+     * and set a decimal precision (e.g. 1 or 2).
+     * @param reference
+     * @param systemAlignment
+     * @param gsCompleteness
+     * @return
+     */
     public static double getBestConfidenceForFmeasure(Alignment reference, Alignment systemAlignment,
-                                                      GoldStandardCompleteness gsCompleteness){
-        return getBestConfidenceForFmeasure(reference, systemAlignment, gsCompleteness, 2);
+                                                      GoldStandardCompleteness gsCompleteness) {
+        return getBestConfidenceForFmeasure(reference, systemAlignment, gsCompleteness, - 1);
     }
 
     /**
@@ -107,7 +125,7 @@ public class ConfidenceFinder {
      * {@link GoldStandardCompleteness#PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE}.
      * @param decimalPrecision The precision of the confidences. A low precision (such as 2) will optimize the
      *                         runtime performance - however, it may lead to suboptimal results.
-     *                         For small datasets, you can use a very high number here.
+     *                         If you require an optimal solution, set the decimal precision to a negative number.
      * @return The optimal confidence threshold for an optimal F1 measure. All correspondences with a confidence
      * LOWER than the result should be discarded. You can directly use
      * {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter}

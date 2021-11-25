@@ -1,0 +1,1020 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
+    xmlns="http://ekaw#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xml:base="http://ekaw">
+  <owl:Ontology rdf:about=""/>  
+  <owl:Class rdf:ID="Event">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Person"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="Accepted_Paper">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Accepted paper to become part of proceedings. 
+Note that camera-ready paper is not considered as 'accepted paper', as it was accepted in a different form!</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Rejected_Paper"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Evaluated_Paper"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Camera_Ready_Paper"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="Positive_Review"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasReview"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Workshop_Paper">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Industrial_Paper"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Paper"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Conference_Paper"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="Industrial_Session">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Conference_Session"/>
+    </rdfs:subClassOf>    
+  </owl:Class>
+  <owl:Class rdf:ID="Regular_Session">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Poster_Session"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Demo_Session"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Session"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Abstract">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Document"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Paper_Author">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Person"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Conference_Trip">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Social_Event"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Tutorial_Abstract">
+    <rdfs:subClassOf rdf:resource="#Abstract"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Camera_Ready_Paper">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="writtenBy"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="Conference_Participant"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Submitted_Paper"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Paper"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Accepted_Paper"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Evaluated_Paper"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="updatedVersionOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Accepted_Paper"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Evaluated_Paper">
+    <owl:disjointWith rdf:resource="#Camera_Ready_Paper"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#hasReview"/>
+        </owl:onProperty>
+        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >3</owl:minCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Assigned_Paper"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Positive_Review">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Negative_Review"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Review"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Neutral_Review"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="Research_Topic"/>
+  <owl:Class rdf:ID="Organising_Agency">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Academic_Institution"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Organisation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Proceedings_Publisher">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Organisation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Rejected_Paper">
+    <owl:disjointWith rdf:resource="#Accepted_Paper"/>
+    <rdfs:subClassOf rdf:resource="#Evaluated_Paper"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Conference_Paper">
+    <owl:disjointWith rdf:resource="#Workshop_Paper"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Paper"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Industrial_Paper">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Paper"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Poster_Paper"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Regular_Paper"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Workshop_Paper"/>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Demo_Paper"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="#Person">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Location"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Document"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Organisation"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Event"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Research_Institute">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Academic_Institution"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Scientific_Event">
+    <rdfs:subClassOf rdf:resource="#Event"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Academic_Institution">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Organisation"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Organising_Agency"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Demo_Session">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Poster_Session"/>
+    </owl:disjointWith>    
+    <owl:disjointWith rdf:resource="#Regular_Session"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Session"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Assigned_Paper">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Submitted_Paper"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasReviewer"/>
+        </owl:onProperty>
+        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >3</owl:minCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Invited_Talk_Abstract">
+    <rdfs:subClassOf rdf:resource="#Abstract"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Neutral_Review">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Review"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Negative_Review"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Positive_Review"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Agency_Staff_Member">
+    <rdfs:subClassOf rdf:resource="#Person"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Organisation">
+    <owl:disjointWith rdf:resource="#Person"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Workshop_Session">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Conference_Session"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Session"/>
+    </rdfs:subClassOf>    
+  </owl:Class>
+  <owl:Class rdf:ID="Track">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Session"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Invited_Talk"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Workshop"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Tutorial"/>
+    </owl:disjointWith>    
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Social_Event"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Contributed_Talk"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Conference"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="#Scientific_Event"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Demo_Chair">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Conference_Participant"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Conference_Participant">
+    <rdfs:subClassOf rdf:resource="#Person"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Tutorial_Chair">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PC_Chair"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="#Conference_Participant"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="PC_Member"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Poster_Session">  
+    <owl:disjointWith rdf:resource="#Regular_Session"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Session"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Demo_Session"/>
+  </owl:Class>
+  <owl:Class rdf:ID="OC_Member">
+    <rdfs:subClassOf rdf:resource="#Conference_Participant"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Review">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Paper"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Document"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Proceedings"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Programme_Brochure"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Flyer"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Web_Site"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Multi-author_Volume"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="#Regular_Paper">
+    <owl:disjointWith rdf:resource="#Industrial_Paper"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Poster_Paper"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Demo_Paper"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Paper"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Invited_Talk">    
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Workshop"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Social_Event"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Tutorial"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Contributed_Talk"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Individual_Presentation"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Track"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Conference"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Session"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="#Social_Event">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Contributed_Talk"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="#Event"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Conference"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Invited_Talk"/>
+    <owl:disjointWith rdf:resource="#Track"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Workshop"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Tutorial"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="OC_Chair">
+    <rdfs:subClassOf rdf:resource="#OC_Member"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Conference_Banquet">
+    <rdfs:subClassOf rdf:resource="#Social_Event"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Multi-author_Volume">
+    <owl:disjointWith rdf:resource="#Review"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Programme_Brochure"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Paper"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Web_Site"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Document"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Flyer"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="Workshop_Chair">
+    <rdfs:subClassOf rdf:resource="#Conference_Participant"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#PC_Member"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#PC_Chair"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="#Submitted_Paper">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Paper"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Camera_Ready_Paper"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Web_Site">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Programme_Brochure"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Document"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Proceedings"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Review"/>
+    <owl:disjointWith rdf:resource="#Multi-author_Volume"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Flyer"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Paper"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="Conference_Proceedings">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Proceedings"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="volumeContainsPaper"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#Conference_Paper"/>
+              <owl:Class rdf:about="#Invited_Talk_Abstract"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Workshop">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Conference"/>
+    </owl:disjointWith>    
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Session"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Tutorial"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Track"/>
+    <owl:disjointWith rdf:resource="#Social_Event"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Individual_Presentation"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="#Scientific_Event"/>
+    <owl:disjointWith rdf:resource="#Invited_Talk"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Session_Chair">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#PC_Member"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Conference_Participant"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Proceedings">
+    <rdfs:subClassOf rdf:resource="#Multi-author_Volume"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#Accepted_Paper"/>
+              <owl:Class rdf:about="#Invited_Talk_Abstract"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#volumeContainsPaper"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#volumeContainsPaper"/>
+        </owl:onProperty>
+        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:minCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Web_Site"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Paper"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Programme_Brochure"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Flyer"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Review"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Early-Registered_Participant">
+    <rdfs:subClassOf rdf:resource="#Conference_Participant"/>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Late-Registered_Participant"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="#PC_Chair">
+    <owl:disjointWith rdf:resource="#Tutorial_Chair"/>
+    <rdfs:subClassOf rdf:resource="#Conference_Participant"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#PC_Member"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Workshop_Chair"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Session">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Conference"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Contributed_Talk"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="partOfEvent"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#Conference"/>
+              <owl:Class rdf:about="#Track"/>
+              <owl:Class rdf:about="#Workshop"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasEvent"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#Individual_Presentation"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>    
+    <owl:disjointWith rdf:resource="#Invited_Talk"/>
+    <owl:disjointWith rdf:resource="#Workshop"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Tutorial"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Track"/>
+    <rdfs:subClassOf rdf:resource="#Scientific_Event"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#partOfEvent"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#Conference"/>
+              <owl:Class rdf:about="#Workshop"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="University">
+    <rdfs:subClassOf rdf:resource="#Academic_Institution"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Location">
+    <owl:disjointWith rdf:resource="#Person"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Contributed_Talk">
+    <owl:disjointWith rdf:resource="#Social_Event"/>
+    <owl:disjointWith rdf:resource="#Session"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Conference"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="presentationOfPaper"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Individual_Presentation"/>
+    </rdfs:subClassOf>    
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Camera_Ready_Paper"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#presentationOfPaper"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Invited_Talk"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Tutorial"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Track"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Individual_Presentation">
+    <owl:disjointWith rdf:resource="#Workshop"/>
+    <rdfs:subClassOf rdf:resource="#Scientific_Event"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Poster_Paper">
+    <owl:disjointWith rdf:resource="#Industrial_Paper"/>
+    <owl:disjointWith rdf:resource="#Regular_Paper"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Demo_Paper"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Paper"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Possible_Reviewer">
+    <rdfs:subClassOf rdf:resource="#Person"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Student">
+    <rdfs:subClassOf rdf:resource="#Person"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Negative_Review">
+    <rdfs:subClassOf rdf:resource="#Review"/>
+    <owl:disjointWith rdf:resource="#Neutral_Review"/>
+    <owl:disjointWith rdf:resource="#Positive_Review"/>
+  </owl:Class>
+  <owl:Class rdf:about="#PC_Member">
+    <rdfs:subClassOf rdf:resource="#Possible_Reviewer"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Programme_Brochure">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Flyer"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Document"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Web_Site"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Paper"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Multi-author_Volume"/>
+    <owl:disjointWith rdf:resource="#Review"/>
+    <owl:disjointWith rdf:resource="#Proceedings"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Flyer">
+    <owl:disjointWith rdf:resource="#Web_Site"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Paper"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Review"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Document"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Multi-author_Volume"/>
+    <owl:disjointWith rdf:resource="#Proceedings"/>
+    <owl:disjointWith rdf:resource="#Programme_Brochure"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Invited_Speaker">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Presenter"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Late-Registered_Participant">
+    <rdfs:subClassOf rdf:resource="#Conference_Participant"/>
+    <owl:disjointWith rdf:resource="#Early-Registered_Participant"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Presenter">
+    <rdfs:subClassOf rdf:resource="#Conference_Participant"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Conference_Session">
+    <owl:disjointWith rdf:resource="#Workshop_Session"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#partOfEvent"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#Conference"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Session"/>    
+  </owl:Class>
+  <owl:Class rdf:about="#Tutorial">    
+    <owl:disjointWith rdf:resource="#Track"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Conference"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Workshop"/>
+    <owl:disjointWith rdf:resource="#Contributed_Talk"/>
+    <owl:disjointWith rdf:resource="#Social_Event"/>
+    <rdfs:subClassOf rdf:resource="#Individual_Presentation"/>
+    <owl:disjointWith rdf:resource="#Invited_Talk"/>
+    <owl:disjointWith rdf:resource="#Session"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Paper">
+    <owl:disjointWith rdf:resource="#Programme_Brochure"/>
+    <owl:disjointWith rdf:resource="#Multi-author_Volume"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Document"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#Flyer"/>
+    <owl:disjointWith rdf:resource="#Proceedings"/>
+    <owl:disjointWith rdf:resource="#Web_Site"/>
+    <owl:disjointWith rdf:resource="#Review"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SC_Member">
+    <rdfs:subClassOf rdf:resource="#PC_Member"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Demo_Paper">
+    <owl:disjointWith rdf:resource="#Poster_Paper"/>
+    <owl:disjointWith rdf:resource="#Industrial_Paper"/>
+    <rdfs:subClassOf rdf:resource="#Paper"/>
+    <owl:disjointWith rdf:resource="#Regular_Paper"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Conference">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >One edition of a conference</rdfs:comment>
+    <owl:disjointWith rdf:resource="#Social_Event"/>    
+    <owl:disjointWith rdf:resource="#Tutorial"/>
+    <owl:disjointWith rdf:resource="#Contributed_Talk"/>
+    <rdfs:subClassOf rdf:resource="#Scientific_Event"/>
+    <owl:disjointWith rdf:resource="#Workshop"/>
+    <owl:disjointWith rdf:resource="#Invited_Talk"/>
+    <owl:disjointWith rdf:resource="#Session"/>
+    <owl:disjointWith rdf:resource="#Track"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Document">
+    <owl:disjointWith rdf:resource="#Person"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="eventOnList">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Programme_Brochure"/>
+          <owl:Class rdf:about="#Web_Site"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="listsEvent"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#Event"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="inverse_of_partOf_7">
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="hasPart"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="#Event"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#partOfEvent">
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="#Event"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="partOf"/>
+    </rdfs:subPropertyOf>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="#hasEvent"/>
+    </owl:inverseOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="references">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="referencedIn"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#listsEvent">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Programme_Brochure"/>
+          <owl:Class rdf:about="#Web_Site"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <owl:inverseOf rdf:resource="#eventOnList"/>
+    <rdfs:range rdf:resource="#Event"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasEvent">
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="#Event"/>
+    <owl:inverseOf rdf:resource="#partOfEvent"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="#hasPart"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasReview">
+    <rdfs:range rdf:resource="#Review"/>
+    <rdfs:domain rdf:resource="#Paper"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="reviewOfPaper"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="organisedBy">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Organisation"/>
+          <owl:Class rdf:about="#Person"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#Event"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="organises"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasPart">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="#partOf"/>
+    </owl:inverseOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#partOf">
+    <owl:inverseOf rdf:resource="#hasPart"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#presentationOfPaper">
+    <rdfs:domain rdf:resource="#Individual_Presentation"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="paperPresentedAs"/>
+    </owl:inverseOf>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Abstract"/>
+          <owl:Class rdf:about="#Paper"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="reviewerOfPaper">
+    <rdfs:domain rdf:resource="#Possible_Reviewer"/>
+    <rdfs:range rdf:resource="#Paper"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="#hasReviewer"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="locationOf">
+    <rdfs:domain rdf:resource="#Location"/>
+    <rdfs:range rdf:resource="#Event"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="heldIn"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="publisherOf">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Multi-author_Volume"/>
+          <owl:Class rdf:about="#Programme_Brochure"/>
+          <owl:Class rdf:about="#Web_Site"/>
+          <owl:Class rdf:about="#Flyer"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#Organisation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#paperPresentedAs">
+    <rdfs:range rdf:resource="#Individual_Presentation"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Abstract"/>
+          <owl:Class rdf:about="#Paper"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <owl:inverseOf rdf:resource="#presentationOfPaper"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="scientificallyOrganises">
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="#organises"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="#Academic_Institution"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="scientificallyOrganisedBy"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#writtenBy">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="authorOf"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#Document"/>
+    <rdfs:range rdf:resource="#Person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#heldIn">
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="#Location"/>
+    <owl:inverseOf rdf:resource="#locationOf"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasUpdatedVersion">
+    <rdfs:domain rdf:resource="#Document"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="#updatedVersionOf"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#Document"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="technicallyOrganisedBy">
+    <rdfs:subPropertyOf rdf:resource="#organisedBy"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="technicallyOrganises"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#updatedVersionOf">
+    <rdfs:domain rdf:resource="#Document"/>
+    <owl:inverseOf rdf:resource="#hasUpdatedVersion"/>
+    <rdfs:range rdf:resource="#Document"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#organises">
+    <rdfs:range rdf:resource="#Event"/>
+    <owl:inverseOf rdf:resource="#organisedBy"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Organisation"/>
+          <owl:Class rdf:about="#Person"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#reviewOfPaper">
+    <rdfs:range rdf:resource="#Paper"/>
+    <rdfs:domain rdf:resource="#Review"/>
+    <owl:inverseOf rdf:resource="#hasReview"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#authorOf">
+    <owl:inverseOf rdf:resource="#writtenBy"/>
+    <rdfs:range rdf:resource="#Document"/>
+    <rdfs:domain rdf:resource="#Person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#volumeContainsPaper">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="paperInVolume"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#referencedIn">
+    <owl:inverseOf rdf:resource="#references"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#paperInVolume">
+    <owl:inverseOf rdf:resource="#volumeContainsPaper"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#scientificallyOrganisedBy">
+    <rdfs:subPropertyOf rdf:resource="#organisedBy"/>
+    <owl:inverseOf rdf:resource="#scientificallyOrganises"/>
+    <rdfs:range rdf:resource="#Academic_Institution"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="coversTopic">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Paper"/>
+          <owl:Class rdf:about="#Event"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="topicCoveredBy"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#Research_Topic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="reviewWrittenBy">
+    <rdfs:domain rdf:resource="#Review"/>
+    <rdfs:range rdf:resource="#Possible_Reviewer"/>
+    <rdfs:subPropertyOf rdf:resource="#writtenBy"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#technicallyOrganises">
+    <owl:inverseOf rdf:resource="#technicallyOrganisedBy"/>
+    <rdfs:subPropertyOf rdf:resource="#organises"/>
+    <rdfs:domain rdf:resource="#Organisation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#topicCoveredBy">
+    <owl:inverseOf rdf:resource="#coversTopic"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Paper"/>
+          <owl:Class rdf:about="#Event"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#Research_Topic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasReviewer">
+    <rdfs:domain rdf:resource="#Paper"/>
+    <owl:inverseOf rdf:resource="#reviewerOfPaper"/>
+    <rdfs:range rdf:resource="#Possible_Reviewer"/>
+  </owl:ObjectProperty>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 2.1, Build 284)  http://protege.stanford.edu -->
