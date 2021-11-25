@@ -51,7 +51,7 @@ public class Executor {
      * @return Single Execution Result
      */
     public static ExecutionResult runSingle(TestCase testCase, Object matcher, String matcherName) {
-        if(isMatcher(matcher) == false){
+        if(!isMatcher(matcher)){
             LOGGER.warn("Matcher does not implement IMatcher or IOntologyMatchingToolBridge. Returning a null Execution result.");
             return null;
         }
@@ -246,7 +246,7 @@ public class Executor {
                     return Long.parseLong(m.group(1));
             }
         } catch (IOException ex) {
-            LOGGER.error("Could not retive runtime. Return 0 as runtime.", ex);
+            LOGGER.error("Could not retrieve runtime. Return 0 as runtime.", ex);
             return 0;
         }
         return 0;

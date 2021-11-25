@@ -10,7 +10,8 @@ import java.util.Map;
  * @author Jan Portisch
  */
 public enum CorrespondenceRelation {
-    
+
+
     /**
      * Equivalence relation, when two concepts are exactly the same (has the same intension/semantic).
      * Represents an OWL equivalence relation. Use the following symbol for textual representation: =

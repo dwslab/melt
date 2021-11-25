@@ -7,6 +7,8 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Corresponde
  * The edge of a graph.
  */
 class MwbEdge{
+
+
     /**
      * Attribute for storing the graph : source node of the edge
      */
@@ -20,13 +22,13 @@ class MwbEdge{
      */
     private Correspondence correspondence;
     
-    private int weigth;
+    private int weight;
     
     public MwbEdge(MwbNode source, MwbNode target, Correspondence correspondence, int weight) {
         this.source = source;
         this.target = target;
         this.correspondence = correspondence;
-        this.weigth = weight;
+        this.weight = weight;
     }
     
     public MwbNode getSource() {
@@ -38,7 +40,7 @@ class MwbEdge{
     }
     
     public int getWeight() {
-        return weigth;
+        return weight;
     }
     
     public Correspondence getCorrespondence(){

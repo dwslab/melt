@@ -95,8 +95,7 @@ class ExecutionRunner implements Callable<ExecutionResult> {
         long runTime;
         URL resultingAlignment = null;
         long startTime = System.nanoTime();
-        
-        
+
         try {
             AlignmentAndParameters alignmentAndParameters = GenericMatcherCaller.runMatcher(matcher, 
                     getUrlOrNull(testCase.getSource()),

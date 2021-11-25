@@ -34,7 +34,7 @@ public class FileUtil {
     
     /**
      * Sets a folder which represents a location for temporary data.
-     * This does not neccessarily needs to be the systems tmp folder but any folder the user would like to use.
+     * This does not necessarily needs to be the systems tmp folder but any folder the user would like to use.
      * @param newUserTmpFolder the new folder - it should be a directory and existent.
      */
     public static void setUserTmpFolder(File newUserTmpFolder){

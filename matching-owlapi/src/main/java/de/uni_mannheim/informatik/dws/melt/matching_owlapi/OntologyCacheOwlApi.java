@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class OntologyCacheOwlApi {
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(OntologyCacheOwlApi.class);
 
     /**
@@ -79,9 +80,11 @@ public class OntologyCacheOwlApi {
         //in case the ontology import another ontology which does not work, ignore silently
         //see issue https://github.com/owlcs/owlapi/issues/503
         //same as in https://github.com/ernestojimenezruiz/logmap-matcher/blob/2f139a5a0bcc9377dd5744155af39d85d6dec205/src/main/java/uk/ac/ox/krr/logmap2/OntologyLoader.java#L117
-        OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
-        config = config.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
-        man.setOntologyLoaderConfiguration(config);
+
+        // TODO comment in later
+        //OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
+        //config = config.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
+        //man.setOntologyLoaderConfiguration(config);
         return man;
     }
     

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>matching-parent</artifactId>
+        <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+        <version>3.3-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>matching-owlapi-matchers</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+
+        <!-- ALCOMO Maven Fork -->
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws</groupId>
+            <artifactId>alcomo</artifactId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- MELT uses 5.1.19 but ALCOMO requires 3-->
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-distribution</artifactId>
+            <version>3.5.7
+            </version> <!-- latest 5.x version is 5.1.19 , latest 4.x version is 4.5.5 latest 3.x version is 3.5.7-->
+        </dependency>
+
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt.</groupId>
+            <artifactId>matching-owlapi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt.</groupId>
+            <scope>test</scope>
+            <artifactId>matching-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
