@@ -41,14 +41,16 @@ public class SentenceTransformersMatcher extends TransformersBase {
     private int corpusChunkSize;
     private int topK;
     private boolean bothDirections;
+    private boolean topkPerResource;
     
     public SentenceTransformersMatcher(TextExtractor extractor, String modelName){
         super(extractor, modelName);
-        initialiseResourceExtractor();
+        initExtractors();
         this.queryChunkSize = 100;
         this.corpusChunkSize = 500000;
         this.topK = 10;
         this.bothDirections = true;
+        this.topkPerResource = true;
     }
     
     @Override
@@ -57,8 +59,8 @@ public class SentenceTransformersMatcher extends TransformersBase {
         if(inputAlignment == null)
             inputAlignment = new Alignment();
         for(ResourcesExtractor resExtractor : resourcesExtractor){
-            File corpus = FileUtil.createFileWithRandomNumber(this.tmpDir, "corpus", ".txt");
-            File queries = FileUtil.createFileWithRandomNumber(this.tmpDir, "queries", ".txt");
+            File corpus = FileUtil.createFileWithRandomNumber("corpus", ".txt");
+            File queries = FileUtil.createFileWithRandomNumber("queries", ".txt");
             try{
                 int linesWrittenSource = createTextFile(source, corpus, resExtractor, parameters);
                 int linesWrittenTarget = createTextFile(target, queries, resExtractor, parameters);
@@ -125,10 +127,14 @@ public class SentenceTransformersMatcher extends TransformersBase {
     
     //getter setter
     /**
-     * Initilaises the resource extractor such that classes, datatypeproperties, objectproperties, all other properties,
+     * Initialises the resource extractors such that classes, datatypeproperties, objectproperties, all other properties,
      * and instances are matched if the properties suggests to do so.
      */
     public void initialiseResourceExtractor() {
+        initExtractors();
+    }
+    
+    private void initExtractors(){
         this.resourcesExtractor = new ArrayList<>();
         this.resourcesExtractor.add((model, parameters) -> {
                 if(TypeTransformerHelper.shouldMatchClasses(parameters)){
@@ -252,6 +258,30 @@ public class SentenceTransformersMatcher extends TransformersBase {
     public void setBothDirections(boolean bothDirections) {
         this.bothDirections = bothDirections;
     }
+
+    /**
+     * Returns true, if the topk parameter applies to number of resources and not to number of extracted texts.
+     * This makes only a difference if multitext is enabled.
+     * E.g. if a resource has 5 textual representations and multipleTextsToMultipleExamples is set to true, 
+     * it would generate for each text a top k canidates and not for each resource. True is the default.
+     * @return true, if the topk parameter applies to number of resources - false otherwiese
+     */
+    public boolean isTopkPerResource() {
+        return topkPerResource;
+    }
+
+    /**
+     * If set to true, the topk parameter applies to number of resources and not to number of extracted texts.
+     * This makes only a difference if multipleTextsToMultipleExamples is enabled.
+     * E.g. if set TopkPerResource to false and if a resource has 5 textual representations and multipleTextsToMultipleExamples is set to true, 
+     * it would generate for each text a top k canidates and not for each resource. True is the default.
+     * @param topkPerResource true if topk should be applied for a resource and not each textual concept.
+     */
+    public void setTopkPerResource(boolean topkPerResource) {
+        this.topkPerResource = topkPerResource;
+    }
+    
+    
     
     //override setters which are not needed
 

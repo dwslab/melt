@@ -61,7 +61,7 @@ public class TransformersFilter extends TransformersBase implements Filter {
     
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        File inputFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_predict", ".txt");
+        File inputFile = FileUtil.createFileWithRandomNumber("alignment_transformers_predict", ".txt");
         Map<Correspondence, List<Integer>> map;
         try{
             map = createPredictionFile(source, target, inputAlignment, inputFile, false);
@@ -186,7 +186,7 @@ public class TransformersFilter extends TransformersBase implements Filter {
             LOGGER.info("Try out batch size of {}", batchSize);
             //generate a smaller training file -> faster tokenizer
             
-            File tmpTrainingFile = FileUtil.createFileWithRandomNumber(this.tmpDir, "alignment_transformers_predict_find_max_batch_size", ".txt");
+            File tmpTrainingFile = FileUtil.createFileWithRandomNumber("alignment_transformers_predict_find_max_batch_size", ".txt");
             try{
                 if(this.copyCSVLines(trainingFile, tmpTrainingFile, batchSize) == false){
                     int batchSizeWhichWorks = batchSize / 2;

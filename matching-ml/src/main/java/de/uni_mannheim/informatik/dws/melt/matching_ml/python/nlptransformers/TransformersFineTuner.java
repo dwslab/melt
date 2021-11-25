@@ -29,24 +29,11 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
      *   see first parameter pretrained_model_name_or_path of the from_pretrained
      *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
      * @param resultingModelLocation the final location where the fine-tuned model should be stored.
-     * @param tmpDir Sets the tmp directory used by the matcher. In this folder the file with all texts from the knowledge graph are stored.
-     */
-    public TransformersFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation, File tmpDir) {
-        super(extractor, initialModelName, resultingModelLocation, tmpDir);
-    }
-    
-    /**
-     * Run the training of a NLP transformer.
-     * @param extractor used to extract text from a given resource. This is the text which represents a resource.
-     * @param initialModelName the initial model name for fine tuning which can be downloaded or a path to a directory containing model weights
-     *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
-     *   see first parameter pretrained_model_name_or_path of the from_pretrained
-     *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
-     * @param resultingModelLocation the final location where the fine-tuned model should be stored.
      */
     public TransformersFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
-        this(extractor, initialModelName, resultingModelLocation, FileUtil.SYSTEM_TMP_FOLDER);
-    }    
+        super(extractor, initialModelName, resultingModelLocation);
+    }
+    
     
     @Override
     public File finetuneModel(File trainingFile) throws Exception{

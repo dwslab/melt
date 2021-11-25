@@ -109,7 +109,6 @@ public class CLIOptions {
         
         options.addOption(Option.builder("testcases")
                 .longOpt("testcases")
-                .required()
                 .hasArgs()
                 .valueSeparator(' ')
                 .desc("The testcases to use (only those which are mentioned in this option are used"

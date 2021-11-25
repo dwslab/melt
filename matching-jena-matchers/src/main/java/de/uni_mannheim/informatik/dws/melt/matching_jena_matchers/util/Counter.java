@@ -1,17 +1,40 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.StringJoiner;
+import java.util.TreeMap;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Counter is for counting arbitrary objects.
@@ -19,6 +42,8 @@ import java.util.stream.Collectors;
  * @param <T> the datatype of the objects to count.
  */
 public class Counter<T> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Counter.class);
+    
     private Map<T, MutableInt> counts;
     private long overallCount;
     private Comparator<Entry<T, ? extends Comparable>> mapComparator;
@@ -190,6 +215,19 @@ public class Counter<T> {
     }
     
     /**
+     * Return a sorted map of the most common elements and their counts.
+     * Ordered from the most common to the least.
+     * @return sorted map
+     */
+    public LinkedHashMap<T, Integer> getSortedMap() {
+        LinkedHashMap<T, Integer> lhm = new LinkedHashMap<>();
+        counts.entrySet().stream()
+                .sorted(this.mapComparator)
+                .forEach(e -> lhm.put(e.getKey(), e.getValue().get()));
+        return lhm;
+    }
+    
+    /**
      * Return a list of the most common elements with the highest count.
      * Usually this is only one element but if there are multiple ones with the same count,
      * then this function will return them all.
@@ -309,13 +347,39 @@ public class Counter<T> {
     /**
      * Return a list of elements with their frequency.
      * Only elements are returned where the frequency is between the given min and max arguments
-     * (greter or equal to min and less or equal to max).
+     * (greater or equal to min and less or equal to max).
      * Ordered from the most common to the least.
      * @param min the min frequency (inclusive)
      * @param max the max frequency (inclusive)
      * @return list of elements with their frequency
      */
     public List<Entry<T, Double>> betweenFrequency(double min, double max) {
+        return betweenFrequencyRelativeToTotal(min, max, this.overallCount);
+    }
+    
+    /**
+     * Return a set of elements where the frequency is between the given min and max arguments
+     * (greater or equal to min and less or equal to max).
+     * Ordered from the most common to the least.
+     * @param min the min frequency (inclusive)
+     * @param max the max frequency (inclusive)
+     * @return set of elements
+     */
+    public Set<T> betweenFrequencyReturningElements(double min, double max) {
+        return betweenFrequencyRelativeToTotalReturningElements(min, max, this.overallCount);
+    }
+    
+    /**
+     * Return a list of elements with their frequency relative to the given total number.
+     * Only elements are returned where the frequency is between the given min and max arguments
+     * (greater or equal to min and less or equal to max).
+     * Ordered from the most common to the least.
+     * @param min the min frequency (inclusive)
+     * @param max the max frequency (inclusive)
+     * @param total the total number to compare with
+     * @return list of elements with their frequency
+     */
+    public List<Entry<T, Double>> betweenFrequencyRelativeToTotal(double min, double max, long total) {
         if (min < 0.0 || min > 1.0)
             throw new IllegalArgumentException("min argument not between zero and one: " + min);
         if (max < 0.0 || max > 1.0)
@@ -323,7 +387,7 @@ public class Counter<T> {
                 
         List<Entry<T, Double>> list = new ArrayList<>();
         for(Entry<T, MutableInt> count : this.counts.entrySet()){
-            double frequency = (double)count.getValue().get() / (double) this.overallCount;
+            double frequency = (double)count.getValue().get() / (double) total;
             if(min <= frequency && frequency <= max){
                 list.add(new SimpleEntry<>(count.getKey(), frequency));
             }
@@ -333,7 +397,16 @@ public class Counter<T> {
             .collect(Collectors.toList());
     }
     
-    public Set<T> betweenFrequencyReturningElements(double min, double max) {
+    /**
+     * Return a set of elements where the frequency is between the given min and max arguments
+     * (greater or equal to min and less or equal to max). It calculates the frequency compared to the parameter total.
+     * Ordered from the most common to the least.
+     * @param min the min frequency (inclusive)
+     * @param max the max frequency (inclusive)
+     * @param total the total number to compare with
+     * @return set of elements
+     */
+    public Set<T> betweenFrequencyRelativeToTotalReturningElements(double min, double max, long total) {
         if (min < 0.0 || min > 1.0)
             throw new IllegalArgumentException("min argument not between zero and one: " + min);
         if (max < 0.0 || max > 1.0)
@@ -341,7 +414,7 @@ public class Counter<T> {
                 
         Set<T> set = new HashSet<>();
         for(Entry<T, MutableInt> count : this.counts.entrySet()){
-            double frequency = (double)count.getValue().get() / (double) this.overallCount;
+            double frequency = (double)count.getValue().get() / (double) total;
             if(min <= frequency && frequency <= max){
                 set.add(count.getKey());
             }
@@ -354,20 +427,90 @@ public class Counter<T> {
         return this.mostCommon().toString();
     }
     
-     private static final String NEWLINE = System.getProperty("line.separator");
+    private static final ObjectMapper JSON_MAPPER = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
      
     /**
      * ToString method which returns the counter well formatted in multiple lines to have a better overview.
      * @return a string which contains the counter information in multiple lines.
      */
     public String toStringMultiline(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("[").append(NEWLINE);
-        for(Entry<T, Integer> e : this.mostCommon()){
-            sb.append("    ").append(e.getKey()).append("=").append(e.getValue()).append(",").append(NEWLINE);
+        return toJson();
+    }
+    
+    /**
+     * Returns a json representation of this counter.
+     * @return a json representation
+     */
+    public String toJson(){
+        try{
+            return JSON_MAPPER.writeValueAsString(this.getSortedMap());        
+        } catch (IOException ex) {
+            LOGGER.error("Could not serialize Counter to string", ex);
+            return "";
         }
-        sb.append("]");
-        return sb.toString();
+    }
+    
+    /**
+     * Write the counter to a file (content is json).
+     * @param file the file to use for writing the JSON content.
+     */
+    public void toJson(File file){
+        try{
+            JSON_MAPPER.writeValue(file, this.getSortedMap());
+        } catch (IOException ex) {
+            LOGGER.error("Could not write Counter to file", ex);
+        }
+    }
+    
+    /**
+     * Given a json representation of a counter, create a new counter.
+     * The comparator is not loaded/serialized.
+     * @param jsonRepresentation the json representation of a counter.
+     * @return the new counter
+     */
+    public static Counter<String> loadFromJsonString(String jsonRepresentation){
+        try(JsonParser jParser = new JsonFactory().createParser(jsonRepresentation)){
+            return loadFromJsonParser(jParser);
+        } catch (IOException ex) {
+            LOGGER.warn("Could not parse JSON from string correctly.", ex);
+            return new Counter<>();
+        }
+    }
+    
+    /**
+     * Load a counter instance from a json file.
+     * The comparator is not loaded/serialized.
+     * @param jsonFile the json file.
+     * @return the new instance
+     */
+    public static Counter<String> loadFromJsonFile(File jsonFile){
+        try(JsonParser jParser = new JsonFactory().createParser(jsonFile)){
+            return loadFromJsonParser(jParser);
+        } catch (IOException ex) {
+            LOGGER.warn("Could not parse JSON from file correctly.", ex);
+            return new Counter<>();
+        }
+    }
+    
+    private static Counter<String> loadFromJsonParser(JsonParser parser) throws IOException{
+        Counter<String> c = new Counter<>();        
+        // Check the first token
+        if (parser.nextToken() != JsonToken.START_OBJECT) {
+            throw new IllegalStateException("Expected content to be an object");
+        }
+        int i = 0;
+        // Iterate over the tokens until the end of the object
+        while (parser.nextToken() != JsonToken.END_OBJECT) {
+            //read one key value pair
+            i++;
+            if(i % 500000 == 0)
+                LOGGER.info("Parse counter entry {}", i);            
+            String key = parser.getCurrentName();
+            parser.nextToken();
+            int value = parser.getIntValue();
+            c.add(key, value);
+        }
+        return c;
     }
 
     @Override

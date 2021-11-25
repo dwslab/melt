@@ -1835,10 +1835,6 @@ def inner_sentencetransformers_prediction(request_headers):
         transformers_init(request_headers)
         
         model_name = request_headers["model-name"]
-        #using_tensorflow = request_headers["using-tf"].lower() == "true"
-        #training_arguments = json.loads(request_headers["training-arguments"])
-        tmp_dir = request_headers["tmp-dir"]
-        
         corpus_file_name = request_headers["corpus-file-name"]
         queries_file_name = request_headers["queries-file-name"]
         
@@ -1846,6 +1842,8 @@ def inner_sentencetransformers_prediction(request_headers):
         corpus_chunk_size = int(request_headers["corpus-chunk-size"])
         top_k = int(request_headers["topk"])
         both_directions = request_headers["both-directions"].lower() == "true"
+        topk_per_resource = request_headers["topk-per-resource"].lower() == "true"
+
         
         from sentence_transformers import SentenceTransformer, util
         import torch
@@ -1909,8 +1907,25 @@ def inner_sentencetransformers_prediction(request_headers):
         results = []
         for (left, right), scores in result_dict.items():
             results.append((left, right, max(scores)))
+        
+        if topk_per_resource == False:
+            return results
+        
+        # if top k per resource is true, then further filter the alignment
+        source_dict = defaultdict(set)
+        target_dict = defaultdict(set)
+        for correspondence in results:
+            source_dict[correspondence[0]].add(correspondence)
+            target_dict[correspondence[1]].add(correspondence)
 
-        return results
+        final_alignment = set()
+        for alignment in source_dict.values():
+            selected = sorted(alignment, key=lambda x: x[2], reverse=True)[:top_k]
+            final_alignment.update(selected)
+        for alignment in target_dict.values():
+            selected = sorted(alignment, key=lambda x: x[2], reverse=True)[:top_k]
+            final_alignment.update(selected)
+        return list(final_alignment)
     except Exception as e:
         import traceback
         return "ERROR " + traceback.format_exc()

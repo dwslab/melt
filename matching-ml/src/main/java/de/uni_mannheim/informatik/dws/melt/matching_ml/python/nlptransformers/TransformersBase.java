@@ -30,7 +30,6 @@ public abstract class TransformersBase extends MatcherYAAAJena {
     protected String modelName;
     
     protected TransformersTrainerArguments trainingArguments;
-    protected File tmpDir;
     protected boolean usingTensorflow;
     protected String cudaVisibleDevices;
     protected File transformersCache;
@@ -52,7 +51,6 @@ public abstract class TransformersBase extends MatcherYAAAJena {
         
         //set useful defaults
         this.trainingArguments = new TransformersTrainerArguments();
-        this.tmpDir = FileUtil.SYSTEM_TMP_FOLDER;
         this.usingTensorflow = false;
         this.cudaVisibleDevices = ""; //use all GPUs
         this.transformersCache = null; //use default
@@ -118,33 +116,6 @@ public abstract class TransformersBase extends MatcherYAAAJena {
         this.trainingArguments = configuration;
     }
 
-    /**
-     * Returns the tmp directory used by the matcher.
-     * In this folder the file with all texts from the ont models are stored.
-     * Usually the created files are removed automatically.
-     * @return the tmp directory
-     */
-    public File getTmpDir() {
-        return tmpDir;
-    }
-
-    /**
-     * Sets the tmp directory used by the matcher.
-     * In this folder the file with all texts from the knowledge graph are stored.
-     * Usually the created files are removed automatically.
-     * Default is the systems tmp folder.
-     * @param tmpDir the tmp dir to be used.
-     */
-    public void setTmpDir(File tmpDir) {
-        if(tmpDir == null){
-            throw new IllegalArgumentException("TmpDir should not be not to null.");
-        }
-        if(!tmpDir.exists()){
-            tmpDir.mkdirs();
-        }
-        this.tmpDir = tmpDir;
-    }
-   
     /**
      * Returns a boolean value if tensorflow is used to train the model.
      * If true, the models are run with tensorflow. If false, pytorch is used.

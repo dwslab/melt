@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import static de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcherTest.correlation;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.util.TrainTestSplitAlignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -34,7 +35,9 @@ public class SentenceTransformersFineTunerTest {
     
     //@Test
     public void testValidationFile() throws Exception {
-        
+        File tmp = new File("./tmp");
+        tmp.mkdir();
+        FileUtil.setUserTmpFolder(tmp);
         TestCaseOntModel testcase = getStsTestCase();
         
         Alignment referenceSample = testcase.reference.sampleByFraction(0.2, 1234);
@@ -47,9 +50,8 @@ public class SentenceTransformersFineTunerTest {
         validation = makeNegatives(validation, 2, 1234);
         
         File model = new File("./sentenceTransformersModel");
-        File tmp = new File("./tmp");
-        tmp.mkdirs();
-        SentenceTransformersFineTuner fineTuner = new SentenceTransformersFineTuner(new LabelExtractor(), "sshleifer/tiny-distilroberta-base", model, tmp);
+        
+        SentenceTransformersFineTuner fineTuner = new SentenceTransformersFineTuner(new LabelExtractor(), "sshleifer/tiny-distilroberta-base", model);
         
         File trainingFile = fineTuner.createTrainingFile(testcase.source, testcase.target, train);
         File validationFile = fineTuner.createTrainingFile(testcase.source, testcase.target, validation);
