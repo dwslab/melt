@@ -64,7 +64,7 @@ public class ConfidenceFinder {
         Set<Double> set = new HashSet<>();
         for(Double c : alignment.getDistinctConfidences()){
             BigDecimal bd = new BigDecimal(c);
-            if(decimalPrecision < 0) {
+            if(decimalPrecision > 0) {
                 bd = bd.setScale(decimalPrecision, RoundingMode.HALF_UP);
             }
             set.add(bd.doubleValue());
