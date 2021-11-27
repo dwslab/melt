@@ -40,7 +40,7 @@ public enum ConceptType {
     /**
      * Default Logger
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(ConceptType.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConceptType.class);
 
     private static Node[] classTypes = new Node[] {
         OWL.Class.asNode(), OWL.Restriction.asNode(), RDFS.Class.asNode(), RDFS.Datatype.asNode()

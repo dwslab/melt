@@ -65,7 +65,7 @@ public class EvaluatorCSV extends Evaluator {
     /**
      * Default Logger
      */
-    private Logger LOGGER = LoggerFactory.getLogger(EvaluatorCSV.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorCSV.class);
 
     private ConfusionMatrixMetric confusionMatrixMetric;
     private TypeRefiner classRefiner;

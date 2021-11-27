@@ -39,7 +39,7 @@ public enum ResourceType {
     /**
      * Default Logger
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(ResourceType.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceType.class);
 
     
     private static Node[] classTypes = new Node[] {
