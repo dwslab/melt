@@ -26,12 +26,13 @@ import org.slf4j.LoggerFactory;
 /**
  * A high precision matcher which focuses on URI fragment and label (only element based string comparison).
  * It achives the following scores:
- * <table border="1" summary="overview of performance on different tracks">
- *   <tr><th>Track</th><th>PREC</th><th>REC</th><th>F1</th></tr>
- *   <tr><td>anatomy</td><td>0.9905</td><td>0.6174</td><td>0.7607</td></tr>
- *   <tr><td>conference <br>(micro)</td><td>0.8046</td><td>0.4590</td><td>0.5845</td></tr>
- *   <tr><td>largebio</td><td>0.9911</td><td>0.4233</td><td>0.5932</td></tr>
- * </table>
+ * <pre>
+ * | Track              | PREC   | REC    | F1     |
+ * |--------------------|--------|--------|--------|
+ * | anatomy            | 0.9905 | 0.6174 | 0.7607 |
+ * | conference (micro) | 0.8046 | 0.4590 | 0.5845 |
+ * | largebio           | 0.9911 | 0.4233 | 0.5932 |
+ * </pre>
  */
 public class HighPrecisionMatcher extends MatcherYAAAJena {
     private static final Logger LOGGER = LoggerFactory.getLogger(HighPrecisionMatcher.class);
