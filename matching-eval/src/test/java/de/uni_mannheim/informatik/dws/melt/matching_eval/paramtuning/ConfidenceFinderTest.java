@@ -117,8 +117,8 @@ public class ConfidenceFinderTest {
         double result = ConfidenceFinder.getBestConfidenceForFmeasure(reference, system,
                 GoldStandardCompleteness.COMPLETE);
 
-        // note that we have rounding behavior here...
-        Assertions.assertEquals(0.82, result);
+
+        Assertions.assertEquals(0.82, Math.round(result * 100.0) / 100.0 );
     }
 
     @Test
@@ -172,32 +172,6 @@ public class ConfidenceFinderTest {
 
         double result = ConfidenceFinder.getBestConfidenceForFmeasure(er);
         Assertions.assertEquals(0.9, result);
-    }
-
-    /**
-     * TODO: This test seems to be incomplete... Since there are no assertions, it is disabled.
-     */
-    @Test
-    @Disabled
-    public void checkGetAllPossibleSteps() {
-        Alignment a = new Alignment();
-        Set<Double> reference = new HashSet<>();
-
-        BigDecimal begin = BigDecimal.ZERO;
-        BigDecimal end = BigDecimal.valueOf(1.0);
-        BigDecimal step = BigDecimal.valueOf(0.001);
-        for (BigDecimal i = begin; i.compareTo(end) < 0; i = i.add(step)) {
-            double d = i.doubleValue();
-            a.add("http://one.com/" + d, "http://two.com/" + d, d);
-            reference.add(d);
-        }
-
-        //Set<Double> confs = ConfidenceFinder.getOccurringConfidences(a);
-        //assertSame(confs, reference);
-
-        //Set<Double> confs = ConfidenceFinder.getOccurringConfidences(a,1);
-        //assertSame(confs, new HashSet<>(Arrays.asList(0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)));
-        //TODO: make assertion
     }
 
     /**
