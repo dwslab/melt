@@ -12,31 +12,30 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * This is a simple matcher that forwards a given alignment if the input alignment is not available.
- * In case you want to always use the given alignemnt even if the input alignment is available, then use
- * {@link ForwardAlwaysMatcher}.
+ * This is a simple matcher that forwards a given alignment always (even if the input alignment is available).
+ * In case the input alignment should be used when availabel, use {@link ForwardMatcher }.
  */
-public class ForwardMatcher extends MatcherYAAAJena {
+public class ForwardAlwaysMatcher extends MatcherYAAAJena {
 
     /**
      * Alignment to be returned.
      */
     public Alignment alignmentToBeUsed;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ForwardMatcher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ForwardAlwaysMatcher.class);
 
     /**
      * Constructor
      * Alignment to be forwarded must be given in match operation.
      */
-    public ForwardMatcher(){
+    public ForwardAlwaysMatcher(){
     }
 
     /**
      * Constructor
      * @param fileToLoadAlignmentFrom Alignment file.
      */
-    public ForwardMatcher(File fileToLoadAlignmentFrom){
+    public ForwardAlwaysMatcher(File fileToLoadAlignmentFrom){
         try {
             alignmentToBeUsed = new Alignment(fileToLoadAlignmentFrom);
         } catch (SAXException | IOException exception){
@@ -48,7 +47,7 @@ public class ForwardMatcher extends MatcherYAAAJena {
      * Constructor
      * @param filePathToLoadAlignmentFrom Alignment file path.
      */
-    public ForwardMatcher(String filePathToLoadAlignmentFrom){
+    public ForwardAlwaysMatcher(String filePathToLoadAlignmentFrom){
         this(new File(filePathToLoadAlignmentFrom));
     }
 
@@ -56,15 +55,12 @@ public class ForwardMatcher extends MatcherYAAAJena {
      * Constructor
      * @param alignmentToBeUsed The alignment to be forwarded.
      */
-    public ForwardMatcher(Alignment alignmentToBeUsed){
+    public ForwardAlwaysMatcher(Alignment alignmentToBeUsed){
         this.alignmentToBeUsed = alignmentToBeUsed;
     }
 
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
-        if(inputAlignment != null && inputAlignment.size() > 0){
-            return inputAlignment;
-        }
         return this.alignmentToBeUsed;
     }
 

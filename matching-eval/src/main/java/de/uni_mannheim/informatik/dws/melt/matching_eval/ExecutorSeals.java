@@ -497,7 +497,7 @@ public class ExecutorSeals {
             LOGGER.error("Could not transform originalSystemAlignment URI to URL.", ex);
         }
         
-        ExecutionResult result = new ExecutionResult(testCase, matcherName, systemAlignmentURL, matcherRuntime, null);
+        ExecutionResult result = new ExecutionResult(testCase, matcherName, systemAlignmentURL, matcherRuntime, null, null);
         result.setMatcherLog(logfileToBeWritten);
         result.setMatcherErrorLog(errorFileToBeWritten);
         return result;

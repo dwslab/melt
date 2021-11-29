@@ -71,7 +71,7 @@ public class EvaluatorBasic extends Evaluator {
     }
 
     @Override
-    public void writeResultsToDirectory(File baseDirectory) {
+    protected void writeResultsToDirectory(File baseDirectory) {
         try {
             if(!baseDirectory.exists()){
                 baseDirectory.mkdirs();

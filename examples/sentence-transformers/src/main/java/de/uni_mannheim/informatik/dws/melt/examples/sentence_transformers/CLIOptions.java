@@ -3,6 +3,8 @@ package de.uni_mannheim.informatik.dws.melt.examples.sentence_transformers;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorForTransformers;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorSet;
@@ -10,10 +12,15 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtra
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersLoss;
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map.Entry;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -116,12 +123,13 @@ public class CLIOptions {
                 .build()
         );
 
-        options.addOption(Option.builder("f")
-                .longOpt("fractions")
+        options.addOption(Option.builder("pos")
+                .longOpt("positives")
                 .hasArgs()
                 .valueSeparator(' ')
-                .desc("The training fraction to be used for training, space separated. Example:\n" +
-                        "--fractions 0.1 0.2 0.3")
+                .desc("How the positives should be generated. If it is a float point number, then the reference will be sampled. "
+                        + "If it is a string, then it is assumed to be a class pointing to a matcher class. Example:\n" +
+                        "--positives 0.1 0.2 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.HighPrecisionMatcher")
                 .build()
         );
         
@@ -227,35 +235,81 @@ public class CLIOptions {
         }
     }
     
+    /**
+     * Returns the lowercased mode.
+     * @return the lowercased mode.
+     */
     public String getMode() {
         return this.cmd.getOptionValue("m").toLowerCase(Locale.ROOT).trim();
     }
     
-     /**
-     * This helper method simply parses the provided training fractions as float array.
+    /**
+     * This helper method simply parses the provided positives generators.
+     * @param testCase the testcase for which the input alignment should be generated.
      * @return Float array. Will default to a value if no fractions parameter is provided.
      */
-    public List<Float> getFractions() {
-        if (!cmd.hasOption("f")) {
-            LOGGER.error("No fractions provided. Please provide them space-separated via the -f option, e.g.:\n" +
-                    "-f 0.2 0.4\n" +
+    public List<Entry<String, TestCase>> getTestCaseWithPositives(TestCase testCase) {
+        
+        List<Entry<String, TestCase>> result = new ArrayList<>();
+        if (!cmd.hasOption("pos")) {
+            LOGGER.error("It is not provided how positives examples should be generated. Please provide them space-separated via the -p option, e.g.:\n" +
+                    "-pos 0.2 0.4\n" +
                     "Using default: 0.2.");
-            return Arrays.asList(0.2f);
+            TestCase trainingCase = TrackRepository.generateTestCaseWithSampledReferenceAlignment(
+                        testCase, 0.2, 41, false);
+            result.add(new SimpleEntry<>("ref0.2", trainingCase));
+            return result;
         }
-        List<Float> fractions = new ArrayList<>();
-        for(String f : cmd.getOptionValues("f")){
+        
+        for(String f : cmd.getOptionValues("pos")){
             float parsedValue = 0;
             try {
                 parsedValue = Float.parseFloat(f);
+                TestCase tc = TrackRepository.generateTestCaseWithSampledReferenceAlignment(testCase, parsedValue, 41, false);
+                result.add(new SimpleEntry<>("posref" + Float.toString(parsedValue), tc));
             } catch (NumberFormatException ex) {
-                LOGGER.warn("Argument fraction (-f) which is set to \"{}\" is not a floating point number.", f);
-                System.exit(1);
-                return null;
+                try {
+                    Class<?> matcherclass = Class.forName(f);
+                    Object matcherInstance = null;
+                    try {
+                        matcherInstance = matcherclass.newInstance();
+                    } catch (InstantiationException | IllegalAccessException instEx) {
+                        LOGGER.error("Could not instantiate the class {}. The matcher will not be called.", f, instEx);
+                        System.exit(1);
+                        return null;
+                    }
+                    ExecutionResult r = Executor.runSingle(testCase, matcherInstance);
+                    URL matcherPosURL = r.getOriginalSystemAlignment();
+                    if(matcherPosURL == null){
+                        LOGGER.warn("Could not run matcher class {} on testcase {}", matcherclass.getSimpleName(), testCase.getName());
+                        System.exit(1);
+                        return null;
+                    }
+                    URI positives = null;
+                    try{
+                        positives = matcherPosURL.toURI();
+                    }catch (URISyntaxException ex1) {
+                        LOGGER.warn("Could not convert URL to URI: {}", matcherPosURL, ex);
+                        System.exit(1);
+                        return null;
+                    }
+                    TestCase tc = new TestCase(
+                            testCase.getName(), testCase.getSource(), testCase.getTarget(), 
+                            testCase.getReference(), testCase.getTrack(), 
+                            positives, testCase.getGoldStandardCompleteness(), testCase.getParameters());
+                    result.add(new SimpleEntry<>("pos" + matcherclass.getSimpleName(), tc));
+                } catch (ClassNotFoundException ex1) {
+                    LOGGER.warn("Argument positives (-pos) which is set to \"{}\" is not a floating point number or a string pointing to a class.", f);
+                    System.exit(1);
+                    return null;
+                }
             }
-            fractions.add(parsedValue);
         }
-        return fractions;
+        return result;
     }
+    
+    
+    
     
     public List<TextExtractor> getTextExtractors(){
         List<TextExtractor> textExtractors = new ArrayList<>();

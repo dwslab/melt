@@ -1,24 +1,35 @@
 package de.uni_mannheim.informatik.dws.melt.examples.sentence_transformers;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherPipelineSequential;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MeltUtil;
+import de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.Evaluator;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorBasic;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorRank;
+import de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning.ConfidenceFinder;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.MaxWeightBipartiteExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.ConfidenceCombiner;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.ForwardAlwaysMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.StringProcessing;
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersFineTuner;
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersLoss;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.addnegatives.AddNegativesViaAlignment;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorSet;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFilter;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFineTuner;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,11 +47,10 @@ public class Main {
         cliOptions.initializeStaticCmdParameters();
         String mode = cliOptions.getMode();
         switch (mode) {
-            case "zero":
-            case "zeroshot":
-            case "zeroshotevaluation":
-                LOGGER.info("Mode: ZEROSHOT");
-                zeroShotEvaluation(cliOptions);
+            case "bi-encoder":
+            case "biencoder":
+                LOGGER.info("Mode: BI-ENCODER");
+                biEncoder(cliOptions);
                 break;
             case "tcfintune":
             case "tcfinetuned":
@@ -73,66 +83,109 @@ public class Main {
         String gpu = cliOptions.getGPU();
         File transformersCache = cliOptions.getTransformersCache();
         File targetDir = cliOptions.getTargetDirectoryForModels();
-        for (float fraction : cliOptions.getFractions()) {
-            for (TestCase testCase : cliOptions.getTestCases()) {
-                TestCase trainingCase = TrackRepository.generateTestCaseWithSampledReferenceAlignment(
-                        testCase, fraction, 41, false);
+        
+        //inititialize biEncoder with the optimal configuration found earlier
+        //this is also our "recall" matcher
+        SentenceTransformersMatcher biEncoder = new SentenceTransformersMatcher(
+            TextExtractor.appendStringPostProcessing(new TextExtractorSet(), StringProcessing::normalizeOnlyCamelCaseAndUnderscore),
+            "all-MiniLM-L6-v2"
+        );
+        biEncoder.setMultipleTextsToMultipleExamples(true);
+        biEncoder.setCudaVisibleDevices(gpu);
+        biEncoder.setTopK(5);
+        biEncoder.setTransformersCache(transformersCache);
+
+        for (TestCase testCase : cliOptions.getTestCases()) {
+            for(Entry<String, TestCase> trainingCase : cliOptions.getTestCaseWithPositives(testCase)){
                 for(TextExtractor textExtractor : cliOptions.getTextExtractors()){
                     for(boolean additionallySwitchSourceTarget : cliOptions.getAdditionallySwitchSourceTarget()){
                         for(boolean isMultipleTextsToMultipleExamples : cliOptions.getMultiText()){
-                            for(SentenceTransformersLoss loss : cliOptions.getLoss()){
-                                for (String model : cliOptions.getTransformerModels()) {
-                                    // Step 1: Training
-                                    // ----------------
+                            for (String model : cliOptions.getTransformerModels()) {
+                                
+                                String configurationName = "ftTestCase_" + model + "_" + trainingCase.getKey() + "_" + textExtractor.getClass().getSimpleName() +
+                                        "_isMulti_" + isMultipleTextsToMultipleExamples + "_isSwitch_" + additionallySwitchSourceTarget +
+                                        "_" + testCase.getName();
+                                configurationName = configurationName.replaceAll(" ", "_");
+                                File finetunedModelFile = new File(targetDir, configurationName);
+                                
+                                //generate the recall alignment once for the test case
+                                ExecutionResultSet testCaseResults = Executor.run(testCase, biEncoder, configurationName + "_RecallMatcher");
+                                Alignment recallAlignment = testCaseResults.get(testCase, configurationName + "_RecallMatcher").getSystemAlignment();
+                                
+                                //auto threshold for initial recall alignment
+                                double bestConfidenceF1 = ConfidenceFinder.getBestConfidenceForFmeasure(trainingCase.getValue().getParsedInputAlignment(),
+                                    recallAlignment,
+                                    GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+                                Executor.runMatcherOnTop(testCaseResults, configurationName + "_RecallMatcher", 
+                                        new ConfidenceFilter(bestConfidenceF1), configurationName + "_RecallMatcherCutConfidence");                                
+                                Executor.runMatcherOnTop(testCaseResults, configurationName + "_RecallMatcherCutConfidence", 
+                                        new MaxWeightBipartiteExtractor(), configurationName + "_RecallMatcherCutConfidenceOneOne");
+                                
+                                // Step 1: Training
+                                // ----------------
 
-                                    String configurationName = "ftTestCase_" + model + "_" + fraction + "_" + textExtractor.getClass().getSimpleName() +
-                                            "_isMulti_" + isMultipleTextsToMultipleExamples + "_isSwitch_" + additionallySwitchSourceTarget + "_loss_" + loss.toString() +
-                                            "_" + testCase.getName();
-                                    configurationName = configurationName.replaceAll(" ", "_");
-                                    File finetunedModelFile = new File(targetDir, configurationName);
-                                    
-                                    TextExtractor modifiedTextExtractor = TextExtractor.appendStringPostProcessing(textExtractor, StringProcessing::normalizeOnlyCamelCaseAndUnderscore);
+                                
 
-                                    // Step 1.1.: Running the test case and generating training examples
-                                    SentenceTransformersFineTuner fineTuner = new SentenceTransformersFineTuner(modifiedTextExtractor, model, finetunedModelFile);
-                                    fineTuner.setMultipleTextsToMultipleExamples(isMultipleTextsToMultipleExamples);
-                                    fineTuner.setCudaVisibleDevices(gpu);
-                                    fineTuner.setNumberOfEpochs(5);
-                                    fineTuner.setAdditionallySwitchSourceTarget(additionallySwitchSourceTarget);
-                                    fineTuner.setTransformersCache(transformersCache);
-                                    fineTuner.setLoss(loss);
+                                TextExtractor modifiedTextExtractor = TextExtractor.appendStringPostProcessing(textExtractor, StringProcessing::normalizeOnlyCamelCaseAndUnderscore);
 
-                                    TrainingPipeline trainingPipeline = new TrainingPipeline(fineTuner);
+                                TransformersFineTuner fineTuner = new TransformersFineTuner(modifiedTextExtractor, model, finetunedModelFile);
+                                fineTuner.setAdditionallySwitchSourceTarget(additionallySwitchSourceTarget);
+                                fineTuner.setCudaVisibleDevices(gpu);
+                                fineTuner.setMultipleTextsToMultipleExamples(isMultipleTextsToMultipleExamples);
+                                fineTuner.setTransformersCache(transformersCache);
 
-                                    Executor.run(trainingCase, trainingPipeline);
+                                //CrossEncoderTrainingPipeline trainingPipeline = new CrossEncoderTrainingPipeline(fineTuner, recallAlignment);
+                                                                
+                                Executor.run(trainingCase.getValue(),
+                                        new MatcherPipelineSequential(new AddNegativesViaAlignment(recallAlignment), fineTuner));
 
-                                    // Step 1.2: Fine-Tuning the Model
-                                    try {
-                                        trainingPipeline.getFineTuner().finetuneModel();
-                                    } catch (Exception e) {
-                                        LOGGER.warn("Exception during training:", e);
-                                    }
-
-                                    // Step 2: Apply Model
-                                    // -------------------
-                                    SentenceTransformersMatcher matcher = new SentenceTransformersMatcher(modifiedTextExtractor, finetunedModelFile.getAbsolutePath());
-                                    matcher.setMultipleTextsToMultipleExamples(isMultipleTextsToMultipleExamples);
-                                    matcher.setCudaVisibleDevices(gpu);
-                                    matcher.setTransformersCache(transformersCache);
-                                    
-                                    Map<String, Object> matchers = new HashMap<>();
-                                    matchers.put(configurationName, matcher);
-                                    
-                                    ers.addAll(Executor.run(trainingCase, matchers));
+                                // Step 1.2: Fine-Tuning the Model
+                                try {
+                                    fineTuner.finetuneModel();
+                                } catch (Exception e) {
+                                    LOGGER.warn("Exception during training:", e);
                                 }
+
+                                // Step 2: Apply Model
+                                // -------------------
+                                
+                                TransformersFilter transformersFilter = new TransformersFilter(modifiedTextExtractor, finetunedModelFile.getAbsolutePath());
+                                transformersFilter.setMultipleTextsToMultipleExamples(isMultipleTextsToMultipleExamples);
+                                transformersFilter.setCudaVisibleDevices(gpu);
+                                transformersFilter.setTransformersCache(transformersCache);                                
+                                if(recallAlignment.size() > 50_000){
+                                    transformersFilter.setOptimizeAll(true);
+                                }
+                                
+                                testCaseResults.addAll(Executor.run(testCase,
+                                        new MatcherPipelineSequential(
+                                                new ForwardAlwaysMatcher(recallAlignment), 
+                                                transformersFilter,
+                                                new ConfidenceCombiner(TransformersFilter.class)
+                                        ), 
+                                        configurationName + "_CrossEncoder"));
+                                                                
+                                //auto threshold for initial recall alignment
+                                double bestConfidenceCrossEncoderF1 = ConfidenceFinder.getBestConfidenceForFmeasure(trainingCase.getValue().getParsedInputAlignment(),
+                                    testCaseResults.get(testCase, configurationName + "_CrossEncoder").getSystemAlignment(),
+                                    GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+                                Executor.runMatcherOnTop(testCaseResults, configurationName + "_CrossEncoder", 
+                                        new ConfidenceFilter(bestConfidenceCrossEncoderF1), configurationName + "_CrossEncoderCutConfidence");                                
+                                Executor.runMatcherOnTop(testCaseResults, configurationName + "_CrossEncoderCutConfidence", 
+                                        new MaxWeightBipartiteExtractor(), configurationName + "_CrossEncoderCutConfidenceOneOne");
+                                
+                                ers.addAll(testCaseResults);
                             }
                         }
                     }
                 }
             }
         }
-        EvaluatorCSV evaluator = new EvaluatorCSV(ers);
-        evaluator.writeToDirectory();
+        
+        File resultsDir = Evaluator.getDirectoryWithCurrentTime();
+        new EvaluatorBasic(ers).writeToDirectory(resultsDir);
+        new EvaluatorCSV(ers).writeToDirectory(resultsDir);
+        new EvaluatorRank(ers).writeToDirectory(resultsDir);
     }
 
 
@@ -145,7 +198,7 @@ public class Main {
      * @param tracks            Tracks to be evaluated.
      * @throws Exception General exception.
      */
-    static void zeroShotEvaluation(CLIOptions cliOptions) {
+    static void biEncoder(CLIOptions cliOptions) {
         List<TestCase> testCases = cliOptions.getTestCases();
 
         ExecutionResultSet ers = new ExecutionResultSet();
