@@ -88,6 +88,21 @@ Removes all reflexive edges (which maps A to A) from an alignment.
 
 *Keywords: Reflexive Correspondence Filter*
 
+## NtoMCorrespondenceFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/NtoMCorrespondenceFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/NtoMCorrespondenceFilter.java)
+
+A filter which removes correspondences where source or target is matched to more than one entity.
+ All such correspondences will be removed.
+ As an example: if alignment looks like
+ <ul>
+ <li>A, B</li>
+ <li>C, D</li>
+ <li>C, E</li>
+ <li>F, D</li>
+ </ul>
+ then the last three are removed because C and D are matched multiple times.
+
+*Keywords: NtoM Correspondence Filter*
+
 ## TopXFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/TopXFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/TopXFilter.java)
 
 This filter keeps only the top X correspondences according to confidence.
