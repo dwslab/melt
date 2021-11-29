@@ -96,7 +96,9 @@ loadScripts(document, 'script');</script>
 <hr>
 <pre>public class <span class="type-name-label">ForwardMatcher</span>
 extends <a href="../../matching_jena/MatcherYAAAJena.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena">MatcherYAAAJena</a></pre>
-<div class="block">This is a simple matcher that forwards a given alignment.</div>
+<div class="block">This is a simple matcher that forwards a given alignment if the input alignment is not available.
+ In case you want to always use the given alignemnt even if the input alignment is available, then use
+ <a href="ForwardAlwaysMatcher.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel"><code>ForwardAlwaysMatcher</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

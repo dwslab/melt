@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -128,6 +128,11 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 </thead>
 <tbody>
 <tr class="alt-color">
+<td class="col-first"><code>protected boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#adjustMaxBatchSize">adjustMaxBatchSize</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>private static org.slf4j.Logger</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -204,6 +209,40 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 <div class="block">Finetune a given model with the provided text in the csv file (three columns: first text, second text, label(0/1))</div>
 </td>
 </tr>
+<tr class="alt-color" id="i2">
+<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCudaVisibleDevicesButOnlyOneGPU()">getCudaVisibleDevicesButOnlyOneGPU</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i3">
+<td class="col-first"><code>int</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMaximumPerDeviceTrainBatchSize()">getMaximumPerDeviceTrainBatchSize</a></span>()</code></th>
+<td class="col-last">
+<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i4">
+<td class="col-first"><code>int</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMaximumPerDeviceTrainBatchSize(java.io.File)">getMaximumPerDeviceTrainBatchSize</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</code></th>
+<td class="col-last">
+<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.</div>
+</td>
+</tr>
+<tr class="row-color" id="i5">
+<td class="col-first"><code>boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isAdjustMaxBatchSize()">isAdjustMaxBatchSize</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the value if max batch size is adjusted or not.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i6">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setAdjustMaxBatchSize(boolean)">setAdjustMaxBatchSize</a></span>&#8203;(boolean&nbsp;adjustMaxBatchSize)</code></th>
+<td class="col-last">
+<div class="block">If set to true, then it will set the max value of the search space for the training batch size to the maximum
+ which is possible with the current GPU/CPU.</div>
+</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -250,6 +289,12 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 <section class="detail" id="LOGGER">
 <h3>LOGGER</h3>
 <div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">org.slf4j.Logger</span>&nbsp;<span class="member-name">LOGGER</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="adjustMaxBatchSize">
+<h3>adjustMaxBatchSize</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">adjustMaxBatchSize</span></div>
 </section>
 </li>
 </ul>
@@ -306,6 +351,38 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 </section>
 </li>
 <li>
+<section class="detail" id="getMaximumPerDeviceTrainBatchSize()">
+<h3>getMaximumPerDeviceTrainBatchSize</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">getMaximumPerDeviceTrainBatchSize</span>()</div>
+<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.
+ It uses the data collected by running this fine tuner on testcases.
+ If you have a file (comma separated) then you can use <a href="#getMaximumPerDeviceTrainBatchSize(java.io.File)"><code>getMaximumPerDeviceTrainBatchSize(java.io.File)</code></a>.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the maximum <code>per_device_train_batch_size </code> with the current configuration</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getMaximumPerDeviceTrainBatchSize(java.io.File)">
+<h3>getMaximumPerDeviceTrainBatchSize</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">getMaximumPerDeviceTrainBatchSize</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;trainingFile)</span></div>
+<div class="block">This functions tries to execute the training with one step to check which maximum <code>per_device_train_batch_size </code> is possible.It will start with 2 and checks only powers of 2.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>trainingFile</code> - the training file to use</dd>
+<dt>Returns:</dt>
+<dd>the maximum <code>per_device_train_batch_size </code> with the current configuration</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getCudaVisibleDevicesButOnlyOneGPU()">
+<h3>getCudaVisibleDevicesButOnlyOneGPU</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">getCudaVisibleDevicesButOnlyOneGPU</span>()</div>
+</section>
+</li>
+<li>
 <section class="detail" id="addTrainingParameterToMakeTrainingFaster()">
 <h3>addTrainingParameterToMakeTrainingFaster</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">addTrainingParameterToMakeTrainingFaster</span>()</div>
@@ -320,6 +397,29 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 <dl class="notes">
 <dt>See Also:</dt>
 <dd><a href="https://huggingface.co/transformers/performance.html">Transformers performance page on huggingface</a></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isAdjustMaxBatchSize()">
+<h3>isAdjustMaxBatchSize</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">isAdjustMaxBatchSize</span>()</div>
+<div class="block">Returns the value if max batch size is adjusted or not.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if the batch size is modified.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setAdjustMaxBatchSize(boolean)">
+<h3>setAdjustMaxBatchSize</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setAdjustMaxBatchSize</span>&#8203;(<span class="parameters">boolean&nbsp;adjustMaxBatchSize)</span></div>
+<div class="block">If set to true, then it will set the max value of the search space for the training batch size to the maximum
+ which is possible with the current GPU/CPU.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>adjustMaxBatchSize</code> - true to enable the adjustment</dd>
 </dl>
 </section>
 </li>

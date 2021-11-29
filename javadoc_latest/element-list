@@ -74,6 +74,7 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierar
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.addnegatives
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalExtractors
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.resourcesExtractors
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.wrapper
 de.uni_mannheim.informatik.dws.melt.matching_jena.multisource

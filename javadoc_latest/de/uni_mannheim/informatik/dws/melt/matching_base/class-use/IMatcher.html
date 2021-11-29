@@ -340,17 +340,24 @@ loadScripts(document, 'script');</script>
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/elementlevel/HighPrecisionMatcher.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel">HighPrecisionMatcher</a></span></code></th>
+<td class="col-last">
+<div class="block">A high precision matcher which focuses on URI fragment and label (only element based string comparison).</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/elementlevel/StopwordExtraction.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel">StopwordExtraction</a></span></code></th>
 <td class="col-last">
 <div class="block">Extracts corpus dependent stopwords from instances, classes and properties.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/elementlevel/StringMatcher.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel">StringMatcher</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/elementlevel/SynonymTextMatcher.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel">SynonymTextMatcher</a></span></code></th>
 <td class="col-last">
@@ -496,19 +503,26 @@ loadScripts(document, 'script');</script>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/filter/NtoMCorrespondenceFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">NtoMCorrespondenceFilter</a></span></code></th>
+<td class="col-last">
+<div class="block">A filter which removes correspondences where source or target is matched to more than one entity.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/filter/ReflexiveCorrespondenceFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">ReflexiveCorrespondenceFilter</a></span></code></th>
 <td class="col-last">
 <div class="block">Removes all reflexive edges (which maps A to A) from an alignment.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/filter/TopXFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">TopXFilter</a></span></code></th>
 <td class="col-last">
 <div class="block">This filter keeps only the top X correspondences according to confidence.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/filter/TypeFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">TypeFilter</a></span></code></th>
 <td class="col-last">
@@ -699,19 +713,26 @@ loadScripts(document, 'script');</script>
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>class&nbsp;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/metalevel/ForwardMatcher.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ForwardMatcher</a></span></code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/metalevel/ForwardAlwaysMatcher.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ForwardAlwaysMatcher</a></span></code></th>
 <td class="col-last">
-<div class="block">This is a simple matcher that forwards a given alignment.</div>
+<div class="block">This is a simple matcher that forwards a given alignment always (even if the input alignment is available).</div>
 </td>
 </tr>
 <tr class="row-color">
+<td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/metalevel/ForwardMatcher.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ForwardMatcher</a></span></code></th>
+<td class="col-last">
+<div class="block">This is a simple matcher that forwards a given alignment if the input alignment is not available.</div>
+</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/metalevel/MachineLearningWEKAFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">MachineLearningWEKAFilter</a></span></code></th>
 <td class="col-last">
 <div class="block">Non functional code.</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/metalevel/ScaleAdditionalConfidence.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ScaleAdditionalConfidence</a></span></code></th>
 <td class="col-last">
@@ -719,14 +740,14 @@ loadScripts(document, 'script');</script>
  given interval (by default [0,1]).</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/metalevel/ScaleConfidence.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ScaleConfidence</a></span></code></th>
 <td class="col-last">
 <div class="block">Scales the correspondence confidence values linearly to an given interval (by default [0,1]).</div>
 </td>
 </tr>
-<tr class="alt-color">
+<tr class="row-color">
 <td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/metalevel/TrainingAlignmentGenerator.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">TrainingAlignmentGenerator</a></span></code></th>
 <td class="col-last">
@@ -818,6 +839,13 @@ loadScripts(document, 'script');</script>
 </td>
 </tr>
 <tr class="alt-color">
+<td class="col-first"><code>class&nbsp;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/util/addnegatives/AddNegativesViaAlignment.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.addnegatives">AddNegativesViaAlignment</a></span></code></th>
+<td class="col-last">
+<div class="block">This component adds negative correspondences to the input alignment via an alignment (generated by a recall optimized matcher).</div>
+</td>
+</tr>
+<tr class="row-color">
 <td class="col-first"><code>class&nbsp;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="../../matching_jena_matchers/util/addnegatives/AddNegativesViaMatcher.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.addnegatives">AddNegativesViaMatcher</a></span></code></th>
 <td class="col-last">
