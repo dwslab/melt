@@ -9,7 +9,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BaselineStringMatcher;
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +23,48 @@ class EvaluatorCSVTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(EvaluatorCSVTest.class);
 
 
+    /**
+     * Note that this test will fail if the version is changed in the MELT repository. If the version is changed,
+     * adapt this unit test.
+     */
+    @Test
+    void testForTrackVersion(){
+        final String conferenceVersion = "conference-v1";
+        EvaluatorCSV evaluatorCSV = new EvaluatorCSV(Executor.run(TrackRepository.Conference.V1, new BaselineStringMatcher()));
+        final String baseDirectoryName = "versionTestBaseDirectory";
+        File baseDirectory = new File("./" + baseDirectoryName);
+        evaluatorCSV.writeToDirectory(baseDirectory);
 
+        // making sure that the files were written
+        File trackPerformanceCubeFile = new File("./" + baseDirectoryName + "/trackPerformanceCube.csv");
+        File testCasePerformanceCubeFile = new File("./" + baseDirectoryName + "/testCasePerformanceCube.csv");
+        assertTrue(trackPerformanceCubeFile.exists());
+        assertTrue(testCasePerformanceCubeFile.exists());
 
+        try {
+            // track performance cube
+            StringBuilder sb = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new FileReader(trackPerformanceCubeFile));
+            String line;
+            while((line = reader.readLine()) != null){
+                sb.append(line);
+            }
+            assertTrue(sb.toString().contains(conferenceVersion));
+            reader.close();
+
+            // test case performance cube
+            sb = new StringBuilder();
+            reader = new BufferedReader(new FileReader(testCasePerformanceCubeFile));
+            while((line = reader.readLine()) != null){
+                sb.append(line);
+            }
+            assertTrue(sb.toString().contains(conferenceVersion));
+            reader.close();
+        } catch (Exception e){
+            fail("Exception must not appear.", e);
+        }
+        deleteDirectory(baseDirectory);
+    }
 
     /**
      * This tests uses the 2018 alignment files for DOME and ALOD2Vec and evaluates them on the OAEI Anatomy data set
@@ -35,16 +74,19 @@ class EvaluatorCSVTest {
      */
     @Test
     void testEvaluator() {
-        ExecutionResultSet resultSet = Executor.loadFromFolder("./src/test/resources/externalAlignmentForEvaluation", TrackRepository.Anatomy.Default.getTestCases().get(0));
+        ExecutionResultSet resultSet = Executor.loadFromFolder(
+                "./src/test/resources/externalAlignmentForEvaluation",
+                TrackRepository.Anatomy.Default.getTestCases().get(0)
+        );
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(resultSet);
         File baseDirectory = new File("./testBaseDirectory");
-        baseDirectory.mkdir();
         evaluatorCSV.writeToDirectory(baseDirectory);
-        assertTrue(baseDirectory.listFiles().length > 0);
+        File[] baseDirFiles = baseDirectory.listFiles();
+        assertNotNull(baseDirFiles);
+        assertTrue(baseDirFiles.length > 0);
 
         File trackPerformanceCubeFile = new File("./testBaseDirectory/trackPerformanceCube.csv");
         File testCasePerformanceCubeFile = new File("./testBaseDirectory/testCasePerformanceCube.csv");
-
         assertTrue(trackPerformanceCubeFile.exists());
         assertTrue(testCasePerformanceCubeFile.exists());
 
@@ -80,17 +122,12 @@ class EvaluatorCSVTest {
             fail();
         }
 
-        try {
-            FileUtils.deleteDirectory(baseDirectory);
-        } catch (IOException ioe) {
-            LOGGER.error("Could not clean up after test. Test directory 'testBaseDirectory' still exists on disk.", ioe);
-        }
+        deleteDirectory(baseDirectory);
     }
 
     /**
      * This test tests incomplete alignments / partial gold standard.
-     * This test is identical to {@link EvaluatorCSVTest#testEvaluatorPartialGoldStandard()} but tests complete GS and
-     * uses an assert true for tpAndFp < cNumber.
+     * This test tests complete GS and uses an assert true for tpAndFp &lt; cNumber.
      */
     @Test
     void testEvaluatorPartialGoldStandard() {
@@ -105,9 +142,10 @@ class EvaluatorCSVTest {
 
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(resultSet);
         File baseDirectory = new File("./testBaseDirectory");
-        baseDirectory.mkdir();
         evaluatorCSV.writeToDirectory(baseDirectory);
-        assertTrue(baseDirectory.listFiles().length > 0);
+        File[] files = baseDirectory.listFiles();
+        assertNotNull(files);
+        assertTrue(files.length > 0);
 
         File trackPerformanceCubeFile = new File("./testBaseDirectory/trackPerformanceCube.csv");
         File testCasePerformanceCubeFile = new File("./testBaseDirectory/testCasePerformanceCube.csv");
@@ -125,23 +163,22 @@ class EvaluatorCSVTest {
 
             boolean loop_1 = true;
 
-            loopOverFile:
-            while((readLine = reader.readLine()) != null){
+            while ((readLine = reader.readLine()) != null) {
                 String[] splitLine = readLine.split(",");
-                if(positionTp != -1 && positionFp != -1 && !readLine.contains("ALL")){
+                if (positionTp != -1 && positionFp != -1 && !readLine.contains("ALL")) {
                     continue;
                 }
-                if(positionTp == -1){
+                if (positionTp == -1) {
                     positionTp = getPosition("# of TP", splitLine);
                 }
-                if(positionFp == -1){
+                if (positionFp == -1) {
                     positionFp = getPosition("# of FP", splitLine);
                 }
-                if(positionCorrespondencesNumber == -1){
+                if (positionCorrespondencesNumber == -1) {
                     positionCorrespondencesNumber = getPosition("# of Correspondences", splitLine);
                 }
 
-                if(!loop_1) {
+                if (!loop_1) {
                     // Now we add 1 to the expected result because the added correspondence is not counted as a FP because we use a partial gold standard here!
                     int tpAndFp = Integer.parseInt(splitLine[positionTp]) + Integer.parseInt(splitLine[positionFp]);
                     int cNumber = Integer.parseInt(splitLine[positionCorrespondencesNumber]);
@@ -154,11 +191,8 @@ class EvaluatorCSVTest {
             ioException.printStackTrace();
             fail();
         }
-        try {
-            FileUtils.deleteDirectory(baseDirectory);
-        } catch (IOException ioe) {
-            LOGGER.error("Could not clean up after test. Test directory 'testBaseDirectory' still exists on disk.", ioe);
-        }
+
+        deleteDirectory(baseDirectory);
     }
 
     /**
@@ -179,9 +213,10 @@ class EvaluatorCSVTest {
 
         EvaluatorCSV evaluatorCSV = new EvaluatorCSV(resultSet);
         File baseDirectory = new File("./testBaseDirectory");
-        baseDirectory.mkdir();
         evaluatorCSV.writeToDirectory(baseDirectory);
-        assertTrue(baseDirectory.listFiles().length > 0);
+        File[] baseDirFiles = baseDirectory.listFiles();
+        assertNotNull(baseDirFiles);
+        assertTrue(baseDirFiles.length > 0);
 
         File trackPerformanceCubeFile = new File("./testBaseDirectory/trackPerformanceCube.csv");
         File testCasePerformanceCubeFile = new File("./testBaseDirectory/testCasePerformanceCube.csv");
@@ -199,7 +234,6 @@ class EvaluatorCSVTest {
 
             boolean loop_1 = true;
 
-            loopOverFile:
             while((readLine = reader.readLine()) != null){
                 String[] splitLine = readLine.split(",");
                 if(positionTp != -1 && positionFp != -1 && !readLine.contains("ALL")){
@@ -228,11 +262,7 @@ class EvaluatorCSVTest {
             e.printStackTrace();
             fail(e);
         }
-        try {
-            FileUtils.deleteDirectory(baseDirectory);
-        } catch (IOException ioe) {
-            LOGGER.error("Could not clean up after test. Test directory 'testBaseDirectory' still exists on disk.", ioe);
-        }
+        deleteDirectory(baseDirectory);
     }
 
     /**
@@ -266,5 +296,17 @@ class EvaluatorCSVTest {
             result++;
         }
         return -1;
+    }
+
+    private void deleteDirectory(File directory){
+        if (directory == null){
+            return;
+        }
+        try {
+            FileUtils.deleteDirectory(directory);
+        } catch (IOException ioe) {
+            LOGGER.error("Could not clean up after test. " +
+                    "Test directory '" + directory.getName() + "' still exists on disk.", ioe);
+        }
     }
 }
