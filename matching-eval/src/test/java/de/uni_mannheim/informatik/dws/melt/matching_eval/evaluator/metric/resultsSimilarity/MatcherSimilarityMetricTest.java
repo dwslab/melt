@@ -23,8 +23,8 @@ class MatcherSimilarityMetricTest {
         alignment_2.add("http://www.left.com/e1", "http://www.right.com/e1");
         alignment_2.add("http://www.left.com/e3", "http://www.right.com/e3");
 
-        ExecutionResult result_1 = new ExecutionResult(null, null, null, 1L, alignment_1, null, null, null);
-        ExecutionResult result_2 = new ExecutionResult(null, null, null, 1L, alignment_2, null, null, null);
+        ExecutionResult result_1 = new ExecutionResult(null, null, null, 1L, alignment_1, null, null, null, null);
+        ExecutionResult result_2 = new ExecutionResult(null, null, null, 1L, alignment_2, null, null, null, null);
 
         assertEquals(1.0 / 3.0, MatcherSimilarityMetric.computeSimilarity(result_1, result_2));
     }
@@ -55,8 +55,8 @@ class MatcherSimilarityMetricTest {
 
         TestCase anatomyTestCase = TrackRepository.Anatomy.Default.getTestCases().get(0);
 
-        ExecutionResult result_1 = new ExecutionResult(anatomyTestCase, "Matcher_1", null, 1L, alignment_1, null, null, null);
-        ExecutionResult result_2 = new ExecutionResult(anatomyTestCase, "Matcher_2", null, 1L, alignment_2, null, null, null);
+        ExecutionResult result_1 = new ExecutionResult(anatomyTestCase, "Matcher_1", null, 1L, alignment_1, null, null, null, null);
+        ExecutionResult result_2 = new ExecutionResult(anatomyTestCase, "Matcher_2", null, 1L, alignment_2, null, null, null, null);
 
         ExecutionResultSet set_1 = new ExecutionResultSet();
         set_1.add(result_1);

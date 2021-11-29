@@ -41,6 +41,8 @@ public class ExecutionResult {
     private Alignment referenceAlignment;
     private Object matcher;
     private Set<Refiner> refinements;
+    
+    private Object parameters;
 
     /**
      * Reference to the log message file of the matcher.
@@ -62,8 +64,9 @@ public class ExecutionResult {
      * @param referenceAlignment Alignment to the reference alignment
      * @param matcher Reference to the mather which was used
      * @param refinements Refinements which were executed on this executionResult
+     * @param parameters Parameters which maybe enhanced by the matchers
      */
-    public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, Alignment systemAlignment, Alignment referenceAlignment, Object matcher, Set<Refiner> refinements) {
+    public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, Alignment systemAlignment, Alignment referenceAlignment, Object matcher, Set<Refiner> refinements, Object parameters) {
         this.testCase = testCase;
         this.matcherName = matcherName;
         this.runtime = runtime;
@@ -71,8 +74,12 @@ public class ExecutionResult {
         this.systemAlignment = systemAlignment;
         this.referenceAlignment = referenceAlignment;
         this.matcher = matcher;
-        if(refinements != null) this.refinements = refinements;
-        else this.refinements = new HashSet<>();
+        if(refinements != null){
+            this.refinements = refinements;
+        } else{
+            this.refinements = new HashSet<>();
+        }
+        this.parameters = parameters;
     }
     
     /**
@@ -83,7 +90,7 @@ public class ExecutionResult {
      * @param referenceAlignment Alignment to the reference alignment
      */
     public ExecutionResult(TestCase testCase, String matcherName, Alignment systemAlignment, Alignment referenceAlignment) {
-        this(testCase, matcherName, null, 0, systemAlignment, referenceAlignment, null, new HashSet<>());
+        this(testCase, matcherName, null, 0, systemAlignment, referenceAlignment, null, new HashSet<>(), null);
     }
 
     /**
@@ -95,7 +102,7 @@ public class ExecutionResult {
      * @param systemAlignment Alignment to the alignment output produced by the matcher
      */
     public ExecutionResult(TestCase testCase, String matcherName, Alignment systemAlignment) {
-        this(testCase, matcherName, null, 0, systemAlignment, testCase.getParsedReferenceAlignment(), null, new HashSet<>());
+        this(testCase, matcherName, null, 0, systemAlignment, testCase.getParsedReferenceAlignment(), null, new HashSet<>(), null);
     }
 
     /**
@@ -105,9 +112,10 @@ public class ExecutionResult {
      * @param originalSystemAlignment URL where the system alignment is persisted in. Note that this URL is parsed immediately into a mapping.
      * @param runtime Runtime by the matcher.
      * @param matcher Matcher that was used for the testCase.
+     * @param parameters Parameters which maybe enhanced by the matchers
      */
-    public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, Object matcher) {
-        this(testCase, matcherName, originalSystemAlignment, runtime, null, testCase.getParsedReferenceAlignment(), matcher, new HashSet<>());
+    public ExecutionResult(TestCase testCase, String matcherName, URL originalSystemAlignment, long runtime, Object matcher, Object parameters) {
+        this(testCase, matcherName, originalSystemAlignment, runtime, null, testCase.getParsedReferenceAlignment(), matcher, new HashSet<>(), parameters);
     }
 
     /**
@@ -120,7 +128,7 @@ public class ExecutionResult {
      * @param refinement The refinement that was used.
      */
     public ExecutionResult(ExecutionResult base, Alignment systemAlignment, Alignment referenceAlignment, Refiner refinement) {
-        this(base.testCase, base.matcherName, base.originalSystemAlignment, base.runtime, systemAlignment, referenceAlignment, base.matcher, addRefinementToNewSet(base.refinements, refinement));
+        this(base.testCase, base.matcherName, base.originalSystemAlignment, base.runtime, systemAlignment, referenceAlignment, base.matcher, addRefinementToNewSet(base.refinements, refinement), base.getParameters());
     }
     
     /**
@@ -170,6 +178,19 @@ public class ExecutionResult {
      */
     public long getRuntime() {
         return runtime;
+    }
+    
+    /**
+     * Adds runtime to this execution result.
+     * Mostly used by 
+     * {@link Executor#runMatcherOnTop(ExecutionResultSet, String, Object, String)}
+     * to add the runtime of the additional matcher.
+     * @param additionalRuntime the runtime to add to the current execution result.
+     */
+    public void addRuntime(long additionalRuntime){
+        if(additionalRuntime < 0 )
+            throw new IllegalArgumentException("additionalRuntime is smaller than zero.");
+        this.runtime += additionalRuntime;
     }
 
     public Object getMatcher() {
@@ -262,6 +283,11 @@ public class ExecutionResult {
     public Set<Refiner> getRefinements() {
         return refinements;
     }
+
+    public Object getParameters() {
+        return parameters;
+    }
+    
     
     @Override
     public int hashCode() {

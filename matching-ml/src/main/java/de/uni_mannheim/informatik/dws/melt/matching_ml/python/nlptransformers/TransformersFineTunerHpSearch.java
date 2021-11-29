@@ -43,7 +43,6 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
      */
     private TransformersHpSearchSpace hpMutations;
     
-    private boolean adjustMaxBatchSize;
     
     
     public TransformersFineTunerHpSearch(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
@@ -95,88 +94,6 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
         return this.resultingModelLocation;
     }
     
-    public int getMaximumPerDeviceTrainBatchSize(){
-        if(this.trainingFile == null || !this.trainingFile.exists() || this.trainingFile.length() == 0){
-            throw new IllegalArgumentException("Cannot get maximum per device train batch size because no training file is generated. Did you call the match method before (e.g. in a pipeline)?");
-        }
-        return getMaximumPerDeviceTrainBatchSize(this.trainingFile);
-    }
-
-    /**
-     * This functions tries to execute the training with one step to check which maximum {@code per_device_train_batch_size } is possible.It will start with 2 and checks only powers of 2.
-     * @param trainingFile the training file to use
-     * @return the maximum {@code per_device_train_batch_size } with the current configuration
-     */
-    public int getMaximumPerDeviceTrainBatchSize (File trainingFile){        
-        //save variables for restoring afterwards
-        TransformersTrainerArguments backupArguments = this.trainingArguments;
-        String backupCudaString = this.cudaVisibleDevices;
-                
-        this.cudaVisibleDevices = getCudaVisibleDevicesButOnlyOneGPU();
-        int batchSize = 4;
-        while(batchSize < 8193){
-            LOGGER.info("Try out batch size of {}", batchSize);
-            //generate a smaller training file -> faster tokenizer
-            
-            File tmpTrainingFile = FileUtil.createFileWithRandomNumber("alignment_transformers_find_max_batch_size", ".txt");
-            try{
-                if(this.copyCSVLines(trainingFile, tmpTrainingFile, batchSize) == false){
-                    int batchSizeWhichWorks = batchSize / 2;
-                    LOGGER.info("File contains too few lines to further increase batch size. Thus use now {}", batchSizeWhichWorks);
-                }
-                this.trainingArguments = new TransformersTrainerArguments(backupArguments);
-                this.trainingArguments.addParameter("per_device_train_batch_size", batchSize);
-                this.trainingArguments.addParameter("save_at_end", false);
-                this.trainingArguments.addParameter("max_steps", 1);
-                super.finetuneModel(tmpTrainingFile);
-            }catch (PythonServerException ex) {
-                //CUDA ERROR: RuntimeError: CUDA out of memory. Tried to allocate 192.00 MiB (GPU 0; 10.76 GiB total capacity; 9.54 GiB already allocated; 50.56 MiB free; 9.59 GiB reserved in total by PyTorch)
-                //CPU  ERROR: RuntimeError: [enforce fail at ..\c10\core\CPUAllocator.cpp:79] data. DefaultCPUAllocator: not enough memory: you tried to allocate 50878464 bytes.
-                if(ex.getMessage().contains("not enough memory") || ex.getMessage().contains("out of memory")){
-                    int batchSizeWhichWorks = batchSize / 2;
-                    LOGGER.info("Found memory error, thus returning batchsize of {}", batchSizeWhichWorks);
-                    this.trainingArguments = backupArguments;
-                    this.cudaVisibleDevices = backupCudaString;
-                    return batchSizeWhichWorks;
-                }else{
-                    LOGGER.warn("Something went wrong in python server during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
-                    this.trainingArguments = backupArguments;
-                    this.cudaVisibleDevices = backupCudaString;
-                    return 8;
-                }
-            }catch (IOException ex) {
-                LOGGER.warn("Something went wrong with io during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
-                this.trainingArguments = backupArguments;
-                this.cudaVisibleDevices = backupCudaString;
-                return 8;
-            }catch (Exception ex) {
-                LOGGER.warn("Something went wrong during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
-                this.trainingArguments = backupArguments;
-                this.cudaVisibleDevices = backupCudaString;
-                return 8;
-            }finally{
-                tmpTrainingFile.delete();
-            }
-            batchSize *= 2;
-        }
-        
-        LOGGER.info("It looks like that batch sizes up to 8192 works out which is unusual. If greater batch sizes are possible the code to search max batch size needs to be changed.");
-        this.trainingArguments = backupArguments;
-        this.cudaVisibleDevices = backupCudaString;
-        return batchSize;
-    }
-    
-    public String getCudaVisibleDevicesButOnlyOneGPU(){
-        String gpus = this.getCudaVisibleDevices();
-        if(gpus == null) // this means use all available.
-            return "0"; //then we select only the first one
-        gpus = gpus.trim();
-        if(gpus.isEmpty())
-            return "0"; // same as above
-        String[] array = gpus.split(",");
-        return array[0]; // one element is always contained
-    }
-
     /**
      * Returns the number of trials which should be executed during hyperparameter search.
      * This means how many different hyperparameter combinations should be tried out.
@@ -268,22 +185,4 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
             throw new IllegalArgumentException("HpMutations should not be null.");
         this.hpMutations = hpMutations;
     }
-
-    /**
-     * Returns the value if max batch size is adjusted or not.
-     * @return true if the batch size is modified.
-     */
-    public boolean isAdjustMaxBatchSize() {
-        return adjustMaxBatchSize;
-    }
-
-    /**
-     * If set to true, then it will set the max value of the search space for the training batch size to the maximum
-     * which is possible with the current GPU/CPU.
-     * @param adjustMaxBatchSize true to enable the adjustment
-     */
-    public void setAdjustMaxBatchSize(boolean adjustMaxBatchSize) {
-        this.adjustMaxBatchSize = adjustMaxBatchSize;
-    }
-    
 }

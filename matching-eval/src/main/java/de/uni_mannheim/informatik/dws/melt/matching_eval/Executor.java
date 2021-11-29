@@ -52,7 +52,7 @@ public class Executor {
      */
     public static ExecutionResult runSingle(TestCase testCase, Object matcher, String matcherName) {
         if(!isMatcher(matcher)){
-            LOGGER.warn("Matcher does not implement IMatcher or IOntologyMatchingToolBridge. Returning a null Execution result.");
+            LOGGER.warn("Class {} does not implement IMatcher or IOntologyMatchingToolBridge. Returning a null Execution result.", matcher.getClass().getSimpleName());
             return null;
         }
         return ExecutionRunner.runMatcher(testCase, matcher, matcherName);
@@ -273,7 +273,7 @@ public class Executor {
             if (f.isFile() && f.getName().endsWith(".rdf")) {
                 long runtime = tryToGetRuntime(new File(f.getParentFile(), f.getName().substring(0, f.getName().length() - 4) + "_log.txt"));
                 try {
-                    results.add(new ExecutionResult(testCase, FilenameUtils.removeExtension(f.getName()), f.toURI().toURL(), runtime, null));
+                    results.add(new ExecutionResult(testCase, FilenameUtils.removeExtension(f.getName()), f.toURI().toURL(), runtime, null, null));
                 } catch (MalformedURLException ex) {
                     LOGGER.error("Cannot convert file URI to URL.", ex);
                 }
@@ -411,7 +411,7 @@ public class Executor {
                 TestCase testCase = name2tc.get(fileName);
 
                 if(testCase != null) {
-                    results.add(new ExecutionResult(testCase,matcherName, f.toURI().toURL(), 0, null));
+                    results.add(new ExecutionResult(testCase,matcherName, f.toURI().toURL(), 0, null, null));
                 } else LOGGER.error("Could not find test case " + fileName + " of file " + f.getName());
             } catch (IllegalStateException ise){
                 LOGGER.error("Could not parse file name: " + f.getName());
@@ -520,7 +520,7 @@ public class Executor {
                         }
                         File performanceFile = new File(matcherFolder, "performance.csv");
                         try {
-                            results.add(new ExecutionResult(testcase, matcherFolder.getName(), alignmentFile.toURI().toURL(), getTimeFromPerformanceCSV(performanceFile), null));
+                            results.add(new ExecutionResult(testcase, matcherFolder.getName(), alignmentFile.toURI().toURL(), getTimeFromPerformanceCSV(performanceFile), null, null));
                         } catch (MalformedURLException ex) {
                             LOGGER.error("Could not build URL for file " + alignmentFile.getName());
                         }
@@ -720,18 +720,32 @@ public class Executor {
     
     /**
      * Runs a matcher on top of another. This means that the previous matchings do not need to be recalculated.
-     * @param previousResults the results from the previous runs.
+     * @param oldResults the results from the previous runs already containing result from the oldMatcherName.
      * @param oldMatcherName the matcher name which should exist in previous results
      * @param newMatcherName the new matcher name
      * @param matcher the actual matcher
      * @return the execution results together with the new matcher
      */
-//    public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet previousResults, String oldMatcherName, String newMatcherName, Object matcher){
-//        
-//        for(ExecutionResult result : previousResults.getGroup(oldMatcherName)){
-//            
-//        }
-//    }
+    public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet oldResults, String oldMatcherName, Object matcher, String newMatcherName){
+        return runMatcherOnTop(oldResults, oldMatcherName, getMatcherMapWithName(matcher, newMatcherName));
+    }
     
-    
+    public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet oldResults, String oldMatcherName, Map<String, Object> newMatchers){
+        ExecutionResultSet newResultSet = new ExecutionResultSet();
+        for(ExecutionResult oldResult : oldResults.getGroup(oldMatcherName)){
+            for(Entry<String, Object> newMatcher : newMatchers.entrySet()){
+                ExecutionResult newResult = ExecutionRunner.runMatcher(
+                    oldResult.getTestCase(),
+                    newMatcher.getValue(),
+                    newMatcher.getKey(),
+                    oldResult.getSystemAlignment(),
+                    oldResult.getParameters()
+                );
+                newResult.addRuntime(oldResult.getRuntime());
+                newResultSet.add(newResult);
+            }
+        }
+        oldResults.addAll(newResultSet);
+        return oldResults;
+    }
 }

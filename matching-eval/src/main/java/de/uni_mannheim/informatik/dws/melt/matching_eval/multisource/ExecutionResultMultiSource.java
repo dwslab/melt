@@ -123,6 +123,7 @@ public class ExecutionResultMultiSource {
                     testcaseToAlignment.getOrDefault(testCase, new Alignment()), 
                     testCase.getParsedReferenceAlignment(),
                     null,
+                    null,
                     null
             ));
         }

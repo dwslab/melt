@@ -67,30 +67,6 @@ public class AddNegativesViaMatcher extends MatcherYAAAJena implements IMatcherC
      * @return the correspondences from the recall alignment, where positive examples have the equivalence relation and negative examples have INCOMPAT relation
      */
     public static Alignment addNegatives(Alignment recallAlignment, Alignment referenceAlignment){
-        
-        //generate the training examples
-        Iterable<Correspondence> alternatives = recallAlignment.retrieve(
-                QueryFactory.and(
-                    QueryFactory.or(
-                        QueryFactory.in(Correspondence.SOURCE, referenceAlignment.getDistinctSourcesAsSet()),
-                        QueryFactory.in(Correspondence.TARGET, referenceAlignment.getDistinctTargetsAsSet())
-                    ),
-                    QueryFactory.equal(Correspondence.RELATION, CorrespondenceRelation.EQUIVALENCE)
-                )
-        );
-        
-        Alignment trainingAlignment = new Alignment();
-        for(Correspondence c : alternatives) {
-            if(referenceAlignment.contains(c)) {
-                trainingAlignment.add(
-                        new Correspondence(c.getEntityOne(), c.getEntityTwo(), c.getConfidence(), CorrespondenceRelation.EQUIVALENCE, c.getExtensions())
-                );
-            } else {
-                trainingAlignment.add(
-                        new Correspondence(c.getEntityOne(), c.getEntityTwo(), c.getConfidence(), CorrespondenceRelation.INCOMPAT, c.getExtensions())
-                );
-            }
-        }
-        return trainingAlignment;
+        return AddNegativesViaAlignment.addNegatives(recallAlignment, referenceAlignment);
     }
 }

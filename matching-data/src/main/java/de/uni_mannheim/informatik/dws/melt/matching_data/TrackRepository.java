@@ -521,12 +521,14 @@ public class TrackRepository {
             public static Track DOID_ORDO = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "phenotype", "phenotype-doid-ordo-2017-bioportal");
 
             /**
-             * This task consists of matching the HP (31,034 classes) and MESH (305,349) ontologies. The BioPortal-based alignment contains 2,466 mappings. Not used in 2018
+             * This task consists of matching the HP (31,034 classes) and MESH (305,349) ontologies. The BioPortal-based alignment contains 2,466 mappings. Not used in 2018.
+             * @deprecated 
              */
             public static Track HP_MESH = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-hp-mesh-2017-bioportal");
 
             /**
-             * This task consists of matching the HP (31,034 classes) and OMIM (93,048) ontologies. The BioPortal-based alignment contains 3,768 mappings. Not used in 2018
+             * This task consists of matching the HP (31,034 classes) and OMIM (93,048) ontologies. The BioPortal-based alignment contains 3,768 mappings. Not used in 2018.
+             * @deprecated 
              */
             public static Track HP_OMIM = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-hp-omim-2017-bioportal");
         }

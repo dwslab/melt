@@ -35,6 +35,7 @@ class ExecutionResultTest {
                     "Failing Matcher",
                     new File("./src/test/resources/EmptyReferencealignmentForTest.rdf").toURI().toURL(),
                     10L,
+                    null,
                     null);
             assertNotNull(result.getSystemAlignment());
             assertNotNull(result.getOriginalSystemAlignment());

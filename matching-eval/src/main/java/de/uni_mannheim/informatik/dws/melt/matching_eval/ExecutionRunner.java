@@ -94,6 +94,7 @@ class ExecutionRunner implements Callable<ExecutionResult> {
         LOGGER.info("Running matcher {} on testcase {} (track {}).",matcherName, testCase.getName(),trackName);
         long runTime;
         URL resultingAlignment = null;
+        Object resultingParameters = null;
         long startTime = System.nanoTime();
 
         try {
@@ -103,6 +104,7 @@ class ExecutionRunner implements Callable<ExecutionResult> {
                     inputAlignment, 
                     parameters);
             resultingAlignment = alignmentAndParameters.getAlignment(URL.class);
+            resultingParameters = alignmentAndParameters.getParameters();
         } catch (Exception ex) {
             LOGGER.error("Exception during matching (matcher " + matcherName + " on testcase " +  testCase.getName() + ").", ex);
         }
@@ -123,7 +125,7 @@ class ExecutionRunner implements Callable<ExecutionResult> {
                 LOGGER.error("Original system alignment does not point to a file and thus cannot be deleted on evaluation exit. " +
                         "Use Executor.deleteOriginalSystemResults", ex);
             }
-            return new ExecutionResult(testCase, matcherName, resultingAlignment, runTime, matcher);
+            return new ExecutionResult(testCase, matcherName, resultingAlignment, runTime, matcher, resultingParameters);
         }
         return null;
         

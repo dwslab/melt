@@ -108,8 +108,9 @@ public class TransformersFilter extends TransformersBase implements Filter {
      * @param predictionAlignment the alignment to process. All correspondences which have enough text are used.
      * @param outputFile the csv file to which the output should be written to.
      * @param append if true, then the training alignment is append to the given file.
-     * @return the map which maps the row number to the correspondence.
-     * In case of multipleTextsToMultipleExamples is set to true, multiple rows can correspond to one correspondence.
+     * @return the map which maps the the correspondence to (possibly multiple) row numbers.
+     * In case of multipleTextsToMultipleExamples is set to true, multiple rows can correspond to one correspondence,
+     * because each text (e.g. label, comment etc) of the two resources is used as an example.
      * @throws IOException in case the writing fails.
      */
     public Map<Correspondence, List<Integer>> createPredictionFile(OntModel source, OntModel target, Alignment predictionAlignment, File outputFile, boolean append) throws IOException {

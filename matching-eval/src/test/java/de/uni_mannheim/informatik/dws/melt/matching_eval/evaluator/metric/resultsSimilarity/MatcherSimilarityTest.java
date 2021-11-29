@@ -45,9 +45,9 @@ class MatcherSimilarityTest {
 
         TestCase anatomyTestCase = TrackRepository.Anatomy.Default.getTestCases().get(0);
 
-        ExecutionResult result_1 = new ExecutionResult(anatomyTestCase, "Matcher_1", null, 1L, alignment_1, null, null, null);
-        ExecutionResult result_2 = new ExecutionResult(anatomyTestCase, "Matcher_2", null, 1L, alignment_2, null, null, null);
-        ExecutionResult result_3 = new ExecutionResult(anatomyTestCase, "Matcher_3", null, 1L, alignment_3, null, null, null);
+        ExecutionResult result_1 = new ExecutionResult(anatomyTestCase, "Matcher_1", null, 1L, alignment_1, null, null, null, null);
+        ExecutionResult result_2 = new ExecutionResult(anatomyTestCase, "Matcher_2", null, 1L, alignment_2, null, null, null, null);
+        ExecutionResult result_3 = new ExecutionResult(anatomyTestCase, "Matcher_3", null, 1L, alignment_3, null, null, null, null);
 
         ExecutionResultSet set_1 = new ExecutionResultSet();
         set_1.add(result_1);
@@ -77,9 +77,9 @@ class MatcherSimilarityTest {
 
         TestCase anatomyTestCase = TrackRepository.Anatomy.Default.getTestCases().get(0);
 
-        ExecutionResult result_1 = new ExecutionResult(anatomyTestCase, "Matcher_1", null, 1L, alignment_1, null, null, null);
-        ExecutionResult result_2 = new ExecutionResult(anatomyTestCase, "Matcher_2", null, 1L, alignment_2, null, null, null);
-        ExecutionResult result_3 = new ExecutionResult(anatomyTestCase, "Matcher_3", null, 1L, alignment_3, null, null, null);
+        ExecutionResult result_1 = new ExecutionResult(anatomyTestCase, "Matcher_1", null, 1L, alignment_1, null, null, null, null);
+        ExecutionResult result_2 = new ExecutionResult(anatomyTestCase, "Matcher_2", null, 1L, alignment_2, null, null, null, null);
+        ExecutionResult result_3 = new ExecutionResult(anatomyTestCase, "Matcher_3", null, 1L, alignment_3, null, null, null, null);
 
         ExecutionResultSet set_1 = new ExecutionResultSet();
         set_1.add(result_1);
@@ -105,8 +105,8 @@ class MatcherSimilarityTest {
 
         TestCase anatomyTestCase = TrackRepository.Anatomy.Default.getTestCases().get(0);
 
-        ExecutionResult result_1 = new ExecutionResult(anatomyTestCase, "Matcher_1", null, 1L, alignment_1, null, null, null);
-        ExecutionResult result_2 = new ExecutionResult(anatomyTestCase, "Matcher_2", null, 1L, alignment_2, null, null, null);
+        ExecutionResult result_1 = new ExecutionResult(anatomyTestCase, "Matcher_1", null, 1L, alignment_1, null, null, null, null);
+        ExecutionResult result_2 = new ExecutionResult(anatomyTestCase, "Matcher_2", null, 1L, alignment_2, null, null, null, null);
 
         ExecutionResultSet set_1 = new ExecutionResultSet();
         set_1.add(result_1);
