@@ -544,7 +544,8 @@ public class EvaluatorCSV extends Evaluator {
                         propertiesCm.getTruePositiveSize(), propertiesCm.getFalsePositiveSize(),
                         propertiesCm.getFalseNegativeSize(), propertiesCm.getNumberOfCorrespondences(), "-", "-"));
                 testCasePerformanceCubePrinter.printRecord((Object[]) toStringArrayWithArrayAtTheEnd(extensionValues,
-                        testCase.getTrack().getName(), testCase.getName(), matcher, "PROPERTIES",
+                        testCase.getTrack().getName(), testCase.getTrack().getVersion(),
+                        testCase.getName(), matcher, "PROPERTIES",
                         propertiesCm.getPrecision(), propertiesCm.getRecall(), propertiesResidualCm.getRecall(),
                         propertiesCm.getF1measure(), propertiesCm.getTruePositiveSize(),
                         propertiesCm.getFalsePositiveSize(), propertiesCm.getFalseNegativeSize(),
