@@ -24,7 +24,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.Properties;
 
-import static de.uni_mannheim.informatik.dws.alcomo.Settings.BlackBoxReasoner.HERMIT;
 import static de.uni_mannheim.informatik.dws.alcomo.Settings.BlackBoxReasoner;
 import static de.uni_mannheim.informatik.dws.alcomo.Settings.BlackBoxReasoner.PELLET;
 
