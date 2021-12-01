@@ -26,6 +26,7 @@ import java.util.Properties;
 
 import static de.uni_mannheim.informatik.dws.alcomo.Settings.BlackBoxReasoner.HERMIT;
 import static de.uni_mannheim.informatik.dws.alcomo.Settings.BlackBoxReasoner;
+import static de.uni_mannheim.informatik.dws.alcomo.Settings.BlackBoxReasoner.PELLET;
 
 
 /**
@@ -51,7 +52,7 @@ public class AlcomoFilter extends MatcherURL implements Filter {
      * The reasoner that is to be used. Access only through getter/setter.
      */
     private BlackBoxReasoner reasoner;
-    private static final BlackBoxReasoner DEFAULT_REASONER = HERMIT;
+    private static final BlackBoxReasoner DEFAULT_REASONER = PELLET;
 
     /**
      * Constructor. Will set default values.
@@ -62,7 +63,7 @@ public class AlcomoFilter extends MatcherURL implements Filter {
         try {
             extractionProblem = new ExtractionProblem(
                     ExtractionProblem.ENTITIES_CONCEPTSPROPERTIES,
-                    ExtractionProblem.METHOD_OPTIMAL,
+                    ExtractionProblem.METHOD_GREEDY,
                     ExtractionProblem.REASONING_EFFICIENT
             );
         } catch (PCFException pe) {
@@ -256,6 +257,5 @@ public class AlcomoFilter extends MatcherURL implements Filter {
     public void setExtractionProblem(ExtractionProblem extractionProblem) {
         this.extractionProblem = extractionProblem;
     }
-
 
 }

@@ -6,7 +6,11 @@
 
 **New**
 - MELT user guide allows for downloading track data directly via the documentation page.
-- `TrainTestSplit` (with stratification) for any Java object and specialized for alignments (TrainTestSplitAlignment)
+- `TrainTestSplit` (with stratification) for any Java object and specialized for alignments (`TrainTestSplitAlignment`).
+- New alignment repair filter: `AlcomoFilter`.
+
+**Fixed**
+- Handling of multiple track versions by `EvaluatorCSV` (fixes [issue #140](https://github.com/dwslab/melt/issues/140)).
 
 **Improvements**
 - More intuitive behavior of `ConfidenceFinder`: If no precision is specified, the optimal solution is calculated.
