@@ -26,7 +26,6 @@ class AlcomoFilterTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AlcomoFilterTest.class);
 
-
     @Test
     void urlTest() {
         try {
@@ -71,6 +70,7 @@ class AlcomoFilterTest {
             File systemFile = loadFile("csa-cmt-ekaw.rdf");
             assertNotNull(systemFile);
             Alignment systemAlignment = AlignmentParser.parse(systemFile);
+            systemAlignment.addExtensionValue("http://www.jan-portisch.eu/example", "myValue");
 
             TestCase tc = new TestCase("TEST_CMT_EKAW", sourceFile.toURI(), targetFile.toURI(), referenceFile.toURI(),
                     null, systemFile.toURI(), GoldStandardCompleteness.COMPLETE, null);
@@ -83,12 +83,12 @@ class AlcomoFilterTest {
                     systemAlignment, null);
 
             assertTrue(filteredAlignment.size() < alignmentSizeBefore);
+            assertEquals("myValue",filteredAlignment.getExtensions().get("http://www.jan-portisch.eu/example"));
 
         } catch (Exception e){
             fail(e);
         }
     }
-
 
     @Test
     void serializeAlignmentToTemporaryFile() {

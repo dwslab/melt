@@ -11,6 +11,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherURL;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
@@ -92,6 +93,17 @@ public class AlcomoFilter extends MatcherURL implements Filter {
         // return the filtered alignment
         Mapping resultingAlcomoMapping = extractionProblem.getExtractedMapping();
         Alignment result =  alcomoAlignmentToYaaaAlignment(resultingAlcomoMapping);
+
+        // let's copy extension values:
+        try {
+            Alignment inputAlignmentYaaa = AlignmentParser.parse(inputAlignment);
+            result.copyExtensionsToThisAlignment(inputAlignmentYaaa);
+        } catch (Exception e){
+            // we just load to transfer extension values.
+            // A failure here should not lead to a program failure.
+            LOGGER.error("Could not parse input alignment.", e);
+        }
+
         File fileToWrite = FileUtil.createFileWithRandomNumber("alcomo_alignment", ".rdf");
         result.serialize(fileToWrite);
         return fileToWrite.toURI().toURL();
@@ -129,7 +141,12 @@ public class AlcomoFilter extends MatcherURL implements Filter {
         // return the filtered alignment
         Mapping resultingAlcomoMapping = extractionProblem.getExtractedMapping();
 
-        return alcomoAlignmentToYaaaAlignment(resultingAlcomoMapping);
+        // copy extension values:
+        Alignment result = alcomoAlignmentToYaaaAlignment(resultingAlcomoMapping);
+        if(inputAlignment != null){
+            result.copyExtensionsToThisAlignment(inputAlignment);
+        }
+        return result;
     }
 
     /**

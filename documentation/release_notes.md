@@ -14,6 +14,7 @@
 
 **Improvements**
 - More intuitive behavior of `ConfidenceFinder`: If no precision is specified, the optimal solution is calculated.
+- It is now possible to copy extensions from one alignment to another (multiple methods `copyExtensionsTo...`).
 
 ## Changes in 3.2
 
