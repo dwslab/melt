@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_owlapi_matchers;
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness;
-import de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_owlapi.OntologyCacheOwlApi;

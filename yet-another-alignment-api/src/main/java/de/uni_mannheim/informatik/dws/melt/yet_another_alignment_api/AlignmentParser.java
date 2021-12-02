@@ -31,11 +31,11 @@ import org.slf4j.LoggerFactory;
  */
 public class AlignmentParser {
 
+
     /**
      * Default logger.
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(AlignmentParser.class);
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlignmentParser.class);
 
     private static final ThreadLocal<SAXParser> threadLocal = new ThreadLocal<SAXParser>(){
         @Override

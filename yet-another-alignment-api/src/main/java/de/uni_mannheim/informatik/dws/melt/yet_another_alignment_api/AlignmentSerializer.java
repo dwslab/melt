@@ -17,12 +17,13 @@ import org.apache.commons.text.StringEscapeUtils;
 
 
 /**
- * The AlignmentSerializer writes a {@link Alignment} to a file.
+ * The AlignmentSerializer writes an {@link Alignment} to a file.
  *
  * @author Sven Hertling
  * @author Jan Portisch
  */
 public class AlignmentSerializer {
+
 
     /**
      * Constant for UTF-8 encoding.
