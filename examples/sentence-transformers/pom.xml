@@ -22,6 +22,12 @@
             <artifactId>matching-ml</artifactId>
             <version>${matching.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>matching-owlapi-matchers</artifactId>
+            <version>${matching.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>

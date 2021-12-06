@@ -6,6 +6,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
 
 import java.io.*;
@@ -738,7 +739,7 @@ public class Executor {
                     oldResult.getTestCase(),
                     newMatcher.getValue(),
                     newMatcher.getKey(),
-                    oldResult.getSystemAlignment(),
+                    new Alignment(oldResult.getSystemAlignment()),
                     oldResult.getParameters()
                 );
                 newResult.addRuntime(oldResult.getRuntime());

@@ -113,7 +113,19 @@ public abstract class TransformersBase extends MatcherYAAAJena {
      * @param configuration the trainer configuration
      */
     public void setTrainingArguments(TransformersTrainerArguments configuration) {
+        if(configuration == null)
+            throw new IllegalArgumentException("training arguments cannot be set to null");
         this.trainingArguments = configuration;
+    }
+    
+    /**
+     * Adds a training argument for the transformers trainer.
+     * Any of the trainer arguments can be used. For further documentation, see{@link TransformersTrainerArguments}.
+     * @param key The key of the training argument like warmup_ratio
+     * @param value the corresponding value like 0.2
+     */
+    public void addTrainingArgument(String key, Object value){
+        this.trainingArguments.addParameter(key, value);
     }
 
     /**

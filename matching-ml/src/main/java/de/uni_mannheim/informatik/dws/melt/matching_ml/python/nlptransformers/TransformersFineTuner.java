@@ -88,7 +88,7 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
                 this.trainingArguments.addParameter("per_device_train_batch_size", batchSize);
                 this.trainingArguments.addParameter("save_at_end", false);
                 this.trainingArguments.addParameter("max_steps", 1);
-                finetuneModel(tmpTrainingFile);
+                PythonServer.getInstance().transformersFineTuning(this, tmpTrainingFile);
             }catch (PythonServerException ex) {
                 //CUDA ERROR: RuntimeError: CUDA out of memory. Tried to allocate 192.00 MiB (GPU 0; 10.76 GiB total capacity; 9.54 GiB already allocated; 50.56 MiB free; 9.59 GiB reserved in total by PyTorch)
                 //CPU  ERROR: RuntimeError: [enforce fail at ..\c10\core\CPUAllocator.cpp:79] data. DefaultCPUAllocator: not enough memory: you tried to allocate 50878464 bytes.

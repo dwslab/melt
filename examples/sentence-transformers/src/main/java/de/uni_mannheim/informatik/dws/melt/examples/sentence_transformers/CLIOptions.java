@@ -407,6 +407,19 @@ public class CLIOptions {
                     case "knowledgegraph":
                         tracks.add(TrackRepository.Knowledgegraph.V4);
                         break;
+                    case "largebio":
+                    case "largebio-all":
+                        TrackRepository.Largebio.unlimitEntityExpansion();
+                        tracks.add(TrackRepository.Largebio.V2016.ALL);
+                        break;
+                    case "largebio-small":
+                        TrackRepository.Largebio.unlimitEntityExpansion();
+                        tracks.add(TrackRepository.Largebio.V2016.ONLY_SMALL);
+                        break;
+                    case "largebio-whole":
+                        TrackRepository.Largebio.unlimitEntityExpansion();
+                        tracks.add(TrackRepository.Largebio.V2016.ONLY_WHOLE);
+                        break;
                     default:
                         LOGGER.warn("Could not map track: " + trackString);
                         System.exit(1);
