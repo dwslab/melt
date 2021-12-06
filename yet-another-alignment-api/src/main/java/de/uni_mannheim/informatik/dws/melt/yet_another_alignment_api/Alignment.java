@@ -123,8 +123,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         this.onto1 = new OntoInfo(alignment.onto1);
         this.onto2 = new OntoInfo(alignment.onto2);        
         this.extensions = new HashMap<>(alignment.extensions);
-        if(copyCorrespondences)
+        if(copyCorrespondences) {
             addAll(alignment);
+        }
     }
     
     private void init(boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence){
@@ -574,7 +575,8 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      */
     public Alignment sample(int n, Random rnd){
         if(n > this.size() || n < 0) {
-            throw new IllegalArgumentException("Parameter n is out of range (smaller zero or greater than the size of current alignment.");
+            throw new IllegalArgumentException("Parameter n is out of range (smaller zero or greater than the size " +
+                    "of current alignment.");
         }
         ArrayList<Correspondence> correspondenceList = new ArrayList<>(this);
         Collections.shuffle(correspondenceList, rnd);
@@ -745,6 +747,96 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      */
     public static Alignment switchSourceWithTarget(Alignment alignment){
         return alignment.reverseWithoutRelationChange();
+    }
+
+    /**
+     * This method creates a deep copy of {@code targetAlignment} and further copies extension values from the {@code
+     * sourceAlignment}. The confidence is never overwritten.
+     * @param sourceAlignment The alignment from which the extension values shall be transferred to the {@code
+     * targetAlignment}.
+     * @param targetAlignment The alignment which will be copied and to which are the extension values are copied.
+     * @param isOverwriteValues If the {@code targetAlignment} alignment already contains an extension key available in
+     *                         the {@code sourceAlignment}, it will be overwritten with the value of the {@code
+     *                         sourceAlignment}. If false, the value will not be overwritten.
+     * @return A new alignment instance.
+     */
+    public static Alignment copyExtensionsToAlignment(Alignment sourceAlignment, Alignment targetAlignment,
+                                                      boolean isOverwriteValues){
+        Alignment result = new Alignment(targetAlignment, true);
+        result.copyExtensionsToThisAlignment(sourceAlignment, isOverwriteValues);
+        return result;
+    }
+
+    /**
+     * This method creates a deep copy of {@code targetAlignment} and further copies extension values from the {@code
+     * sourceAlignment}. The confidence is never overwritten. If the {@code targetAlignment} already contains
+     * the extension key, no value will be copied from the {@code sourceAlignment}.
+     * @param sourceAlignment The alignment from which the extension values shall be transferred to the {@code
+     * targetAlignment}.
+     * @param targetAlignment The alignment which will be copied and to which are the extension values are copied.
+     * @return A new alignment instance.
+     */
+    public static Alignment copyExtensionsToAlignment(Alignment sourceAlignment, Alignment targetAlignment){
+        return copyExtensionsToAlignment(sourceAlignment, targetAlignment, false);
+    }
+
+    /**
+     * Copies extensions from correspondences in the {@code otherAlignment} to this alignment.
+     * If this alignment already has an extension for the key in question, the extension will not be overwritten.
+     * The confidence is never overwritten.
+     * Extensions are only copied for correspondences available in the {@code otherAlignment} and this alignment.
+     * @param otherAlignment The other alignment from which the extensions shall be transferred.
+     */
+    public void copyExtensionsToThisAlignment(Alignment otherAlignment){
+        copyExtensionsToThisAlignment(otherAlignment, false);
+    }
+
+    /**
+     * Copies extensions from correspondences in the {@code otherAlignment} to this alignment.
+     * @param otherAlignment The other alignment from which the extension values shall be transferred.
+     * @param isOverwriteValues If {@code this} alignment already contains an extension key available in the
+     * {@code otherAlignment}, it will be overwritten with the value of the {@code otherAlignment}. If false,
+     * the value will not be overwritten.
+     */
+    public void copyExtensionsToThisAlignment(Alignment otherAlignment, boolean isOverwriteValues){
+        if (otherAlignment == null){
+            return;
+        }
+        if(this.extensions == null){
+            this.extensions = new HashMap<>();
+        }
+
+        // alignment extensions
+        for(Map.Entry<String, String> otherAlignmentExtension : otherAlignment.getExtensions().entrySet()){
+            if(this.extensions.containsKey(otherAlignmentExtension.getKey())){
+                // contained, check if we need to overwrite
+                if(isOverwriteValues) {
+                    this.extensions.put(otherAlignmentExtension.getKey(), otherAlignmentExtension.getValue());
+                }
+            } else {
+                // extension does not yet exist, add alignment extension
+                this.extensions.put(otherAlignmentExtension.getKey(), otherAlignmentExtension.getValue());
+            }
+        }
+
+        // correspondence extensions
+        for(Correspondence otherCor : otherAlignment){
+            if(this.contains(otherCor)){
+                Correspondence thisCor = this.getCorrespondence(
+                        otherCor.getEntityOne(), otherCor.getEntityTwo(), otherCor.getRelation()
+                );
+                for(Map.Entry<String, Object> otherCorExtension : otherCor.getExtensions().entrySet()){
+                    if(thisCor.getExtensions().containsKey(otherCorExtension.getKey())){
+                        if(isOverwriteValues){
+                            thisCor.addExtensionValue(otherCorExtension.getKey(), otherCorExtension.getValue());
+                        }
+                    } else {
+                        // extension does not yet exist, add correspondence extension
+                        thisCor.addExtensionValue(otherCorExtension.getKey(), otherCorExtension.getValue());
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -1016,7 +1108,8 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     private static final String NEWLINE = System.getProperty("line.separator");
             
     /**
-     * ToString method which returns the alignment in multiple lines (each correspondence in one line) to have a better overview.
+     * ToString method which returns the alignment in multiple lines (each correspondence in one line) to have a
+     * better overview.
      * @return a string which contains the alignment in multiple lines.
      */
     public String toStringMultiline(){
@@ -1030,8 +1123,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
-     * ToString method which returns the alignment in multiple lines (each correspondence in one line) to have a better overview.
-     * In comparison to toStringMultiline, this method prints also the alignment and correspondence extensions and onto infos.
+     * ToString method which returns the alignment in multiple lines (each correspondence in one line) to have a
+     * better overview. In comparison to toStringMultiline, this method prints also the alignment and correspondence
+     * extensions and onto infos.
      * @return a string which contains the alignment in multiple lines.
      */
     public String toStringMultilineInfo(){
@@ -1044,9 +1138,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
                 .append(",").append(NEWLINE);
         
         if(this.onto1 != null)
-            sb.append("  source=").append(this.onto1.toString()).append(",").append(NEWLINE);
+            sb.append("  source=").append(this.onto1).append(",").append(NEWLINE);
         if(this.onto2 != null)
-            sb.append("  target=").append(this.onto2.toString()).append(",").append(NEWLINE);
+            sb.append("  target=").append(this.onto2).append(",").append(NEWLINE);
         if(this.method != null && !this.method.isEmpty())
             sb.append("  method=").append(this.method).append(",").append(NEWLINE);
         if(this.type != null && !this.type.isEmpty())

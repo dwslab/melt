@@ -33,8 +33,7 @@ public class Correspondence implements Comparable<Correspondence> {
     protected CorrespondenceRelation relation;
     protected String identifier;
     protected Map<String, Object> extensions;
-        
-    
+
     /**
      * Constructor
      * @param entityOne URI of the entity from the source ontology as String.
@@ -90,7 +89,6 @@ public class Correspondence implements Comparable<Correspondence> {
     public Correspondence(String entityOne, String entityTwo, double confidence, Object... extensions) {
         this(entityOne, entityTwo, confidence, CorrespondenceRelation.EQUIVALENCE, parseExtensions(extensions));
     }
-
 
     /**
      * Constructor

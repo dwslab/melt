@@ -52,18 +52,34 @@ public class AlignmentTest {
     
     @Test
     public void testEmptyException(){
-        Alignment m = new Alignment();
-        assertThrows(NoSuchElementException.class, () -> {m.iterator().next();});
+        Alignment alignment = new Alignment();
+        assertThrows(NoSuchElementException.class, () -> {alignment.iterator().next();});
     }
 
     @Test
     public void testOne(){
-        Alignment m = new Alignment();
-        m.add("a", "b");
-        Iterator i = m.iterator();
+        Alignment alignment = new Alignment();
+        alignment.add("a", "b");
+        Iterator<Correspondence> i = alignment.iterator();
         assertTrue(i.hasNext(), "Has next");
         assertNotNull(i.next(), "check value");
         assertFalse(i.hasNext(), "Has next");
+    }
+
+    @Test
+    public void isSourceContained(){
+        Alignment alignment = new Alignment();
+        alignment.add("a", "b");
+        assertTrue(alignment.isSourceContained("a"));
+        assertFalse(alignment.isSourceContained("b"));
+    }
+
+    @Test
+    public void isTargetContained(){
+        Alignment alignment = new Alignment();
+        alignment.add("a", "b");
+        assertTrue(alignment.isTargetContained("b"));
+        assertFalse(alignment.isTargetContained("a"));
     }
     
     @Test
@@ -74,7 +90,7 @@ public class AlignmentTest {
         m.add("e", "f");
         
         
-        Iterator i = m.iterator();
+        Iterator<Correspondence> i = m.iterator();
         assertTrue(i.hasNext(),"Has next");
         assertTrue(i.hasNext(), "Has next");
         assertTrue(i.hasNext(), "Has next");
@@ -298,21 +314,84 @@ public class AlignmentTest {
         
         //List<Correspondence> correspondences = new ArrayList();
         for(int i=0; i< 100; i++){
-            a.add("http://left.com/" + Integer.toString(i), "http://right.com/" + Integer.toString(i));
+            a.add("http://left.com/" + i, "http://right.com/" + i);
         }
  
         Alignment twenty = a.sampleByFraction(0.2, new Random(1234));
-        Alignment fourty = a.sampleByFraction(0.4, new Random(1234));
+        Alignment forty = a.sampleByFraction(0.4, new Random(1234));
         Alignment sixty = a.sampleByFraction(0.6, new Random(1234));
         Alignment eighty = a.sampleByFraction(0.8, new Random(1234));
         
         assertTrue(eighty.containsAll(sixty));
-        assertTrue(eighty.containsAll(fourty));
+        assertTrue(eighty.containsAll(forty));
         assertTrue(eighty.containsAll(twenty));
         
-        assertTrue(sixty.containsAll(fourty));
+        assertTrue(sixty.containsAll(forty));
         assertTrue(sixty.containsAll(twenty));
         
-        assertTrue(fourty.containsAll(twenty));
+        assertTrue(forty.containsAll(twenty));
+    }
+
+    @Test
+    void copyExtensionsToAlignment(){
+        Alignment source = new Alignment();
+        source.addExtensionValue("alignmentExtension", "sourceValue");
+        Correspondence cs1 = new Correspondence("A", "B", 0.8);
+        cs1.addExtensionValue("AB-key-1", "Source-A-value-1");
+        cs1.addExtensionValue("AB-key-2", "Source-A-value-2");
+        source.add(cs1);
+        Correspondence cs2 = new Correspondence("C", "D", 1.0);
+        cs2.addExtensionValue("CD-key", "Source-CD-value");
+        source.add(cs2);
+
+        Alignment target = new Alignment();
+        target.addExtensionValue("alignmentExtension", "targetValue");
+        Correspondence ct1 = new Correspondence("A", "B", 0.9);
+        ct1.addExtensionValue("AB-key-1", "Target-A-value-1");
+        target.add(ct1);
+
+
+        // Test 1: No overwrite
+        Alignment noOverwrite = Alignment.copyExtensionsToAlignment(source, target);
+
+        // alignment extension
+        assertEquals(1, noOverwrite.getExtensions().size());
+        assertEquals("targetValue", noOverwrite.getExtensions().get("alignmentExtension"));
+
+        // correspondence extension
+        assertEquals(1, noOverwrite.size());
+        Correspondence c = noOverwrite.getCorrespondence("A", "B", CorrespondenceRelation.EQUIVALENCE);
+        assertEquals(0.9, c.getConfidence());
+        assertEquals(2, c.getExtensions().size());
+        assertEquals("Target-A-value-1", c.getExtensions().get("AB-key-1"));
+        assertEquals("Source-A-value-2", c.getExtensions().get("AB-key-2"));
+
+        // Test 1: With overwrite
+        Alignment overwrite = Alignment.copyExtensionsToAlignment(source, target, true);
+
+        // alignment extension
+        assertEquals(1, overwrite.getExtensions().size());
+        assertEquals("sourceValue", overwrite.getExtensions().get("alignmentExtension"));
+
+        // correspondence extension
+        assertEquals(1, overwrite.size());
+        c = overwrite.getCorrespondence("A", "B", CorrespondenceRelation.EQUIVALENCE);
+        assertEquals(0.9, c.getConfidence());
+        assertEquals(2, c.getExtensions().size());
+        assertEquals("Source-A-value-1", c.getExtensions().get("AB-key-1"));
+        assertEquals("Source-A-value-2", c.getExtensions().get("AB-key-2"));
+    }
+
+    /**
+     * For now very simple boundary condition tests.
+     */
+    @Test
+    void toStringMultilineInfo(){
+        Alignment a = new Alignment();
+        assertNotNull(a.toStringMultiline());
+        assertNotNull(a.toStringMultilineInfo());
+        a.add("A", "B");
+        assertNotNull(a.toStringMultiline());
+        assertNotNull(a.toStringMultilineInfo());
     }
 }

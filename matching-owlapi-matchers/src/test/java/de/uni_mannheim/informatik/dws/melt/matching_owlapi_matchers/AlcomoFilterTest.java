@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_owlapi_matchers;
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness;
-import de.uni_mannheim.informatik.dws.melt.matching_data.LocalTrack;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_owlapi.OntologyCacheOwlApi;
@@ -26,7 +25,6 @@ class AlcomoFilterTest {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AlcomoFilterTest.class);
-
 
     @Test
     void urlTest() {
@@ -72,6 +70,7 @@ class AlcomoFilterTest {
             File systemFile = loadFile("csa-cmt-ekaw.rdf");
             assertNotNull(systemFile);
             Alignment systemAlignment = AlignmentParser.parse(systemFile);
+            systemAlignment.addExtensionValue("http://www.jan-portisch.eu/example", "myValue");
 
             TestCase tc = new TestCase("TEST_CMT_EKAW", sourceFile.toURI(), targetFile.toURI(), referenceFile.toURI(),
                     null, systemFile.toURI(), GoldStandardCompleteness.COMPLETE, null);
@@ -84,12 +83,12 @@ class AlcomoFilterTest {
                     systemAlignment, null);
 
             assertTrue(filteredAlignment.size() < alignmentSizeBefore);
+            assertEquals("myValue",filteredAlignment.getExtensions().get("http://www.jan-portisch.eu/example"));
 
         } catch (Exception e){
             fail(e);
         }
     }
-
 
     @Test
     void serializeAlignmentToTemporaryFile() {

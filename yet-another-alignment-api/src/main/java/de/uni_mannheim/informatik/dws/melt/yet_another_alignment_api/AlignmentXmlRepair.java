@@ -1,7 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
-import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers.TypeTransformerHelper;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -18,7 +18,6 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.text.StringEscapeUtils;
@@ -31,9 +30,11 @@ import org.xml.sax.SAXException;
  * Thus it is not parsable by a stream parser.
  */
 public class AlignmentXmlRepair {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AlignmentXmlRepair.class);
     
-    private static final Pattern resourceAttributePattern = Pattern.compile("rdf:resource\\s*=\\s*\"(.+?)\"");
+    private static final Pattern RESOURCE_ATTRIBUTE_PATTERN = Pattern.compile("rdf:resource\\s*=\\s*\"(.+?)\"");
     
      /**
      * Repairs an alignment file inplace.
@@ -124,7 +125,7 @@ public class AlignmentXmlRepair {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8))){
                 String line;
                 while ((line=reader.readLine()) != null) {
-                    Matcher m = resourceAttributePattern.matcher(line);
+                    Matcher m = RESOURCE_ATTRIBUTE_PATTERN.matcher(line);
                     boolean found = m.find();
                     if (found) {
                         StringBuffer sb = new StringBuffer();

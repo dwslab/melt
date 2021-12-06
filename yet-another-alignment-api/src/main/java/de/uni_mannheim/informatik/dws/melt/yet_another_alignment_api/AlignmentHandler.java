@@ -12,7 +12,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Sven Hertling
  * @author Jan Portisch
  */
-class AlignmentHandler extends DefaultHandler{
+class AlignmentHandler extends DefaultHandler {
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AlignmentHandler.class );
     
