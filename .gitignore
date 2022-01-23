@@ -88,6 +88,7 @@ paper/*.pdf
 Spielewiese.java
 Playground.java
 Playground[0-9].java
+examples/melt-experiments
 
 # gradle
 .gradle/

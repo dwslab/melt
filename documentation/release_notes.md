@@ -15,6 +15,7 @@
 **Improvements**
 - More intuitive behavior of `ConfidenceFinder`: If no precision is specified, the optimal solution is calculated.
 - It is now possible to copy extensions from one alignment to another (multiple methods `copyExtensionsTo...`).
+- New mode for `TopXFilter`: `SOURCE_AND_TARGET`
 
 ## Changes in 3.2
 
