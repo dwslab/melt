@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ExecutorTest {
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorTest.class);
 
     @AfterAll
@@ -33,7 +35,7 @@ public class ExecutorTest {
         try {
             FileUtils.deleteDirectory(new File(directoryName));
         } catch (IOException e) {
-            // we do not fail here...
+            LOGGER.warn("Failed to delete '" + directoryName + "'");
         }
     }
 

@@ -1,4 +1,4 @@
-gensim==3.8.3
+gensim==4.0
 flask>=2.0
 numpy>=1.11.3
 scikit-learn>=0.23.1

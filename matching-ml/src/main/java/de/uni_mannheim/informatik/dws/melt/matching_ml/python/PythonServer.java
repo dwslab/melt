@@ -108,6 +108,10 @@ public class PythonServer {
      */
     private File resourcesDirectory = new File(DEFAULT_RESOURCES_DIRECTORY);
 
+    /**
+     * Developer note: Do not change the default port since other applications rely on it (e.g. the python tests).
+     * Rather user {@link PythonServer#setPort(int)} if you need to change the port in certain cases.
+     */
     private static final int DEFAULT_PORT = 41193;
 
     /**
