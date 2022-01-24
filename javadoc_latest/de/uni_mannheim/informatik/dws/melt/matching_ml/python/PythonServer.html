@@ -108,7 +108,9 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <tr class="alt-color">
 <td class="col-first"><code>private static int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#DEFAULT_PORT">DEFAULT_PORT</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Developer note: Do not change the default port since other applications rely on it (e.g.</div>
+</td>
 </tr>
 <tr class="row-color">
 <td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
@@ -787,6 +789,8 @@ org.apache.http.client.methods.HttpGet&nbsp;request)</code></th>
 <section class="detail" id="DEFAULT_PORT">
 <h3>DEFAULT_PORT</h3>
 <div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">DEFAULT_PORT</span></div>
+<div class="block">Developer note: Do not change the default port since other applications rely on it (e.g. the python tests).
+ Rather user <a href="#setPort(int)"><code>setPort(int)</code></a> if you need to change the port in certain cases.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd><a href="../../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer.DEFAULT_PORT">Constant Field Values</a></dd>
