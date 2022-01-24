@@ -18,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This test requires a working internet connection.
+ * It further requires that the public DBnary SPARQL endpoint is online:
+ * <a href="http://kaiko.getalp.org/sparql">http://kaiko.getalp.org/sparql</a>
  */
 public class WiktionaryKnowledgeSourceTest {
 
