@@ -2,6 +2,7 @@
 <p>
 <a href="https://github.com/dwslab/melt/actions/workflows/java_build.yml"><img src="https://github.com/dwslab/melt/actions/workflows/java_build.yml/badge.svg"></a>
 <a href="https://github.com/dwslab/melt/actions/workflows/java_documentation.yml"><img src="https://github.com/dwslab/melt/actions/workflows/java_documentation.yml/badge.svg"></a>
+<a href="https://github.com/dwslab/melt/actions/workflows/python_tests.yml"><img src="https://github.com/dwslab/melt/actions/workflows/python_tests.yml/badge.svg"></a>
 <a href="https://github.com/dwslab/melt/actions/workflows/documentation_check.yml"><img src="https://github.com/dwslab/melt/actions/workflows/documentation_check.yml/badge.svg"></a>
 <a href="https://github.com/dwslab/melt/actions/workflows/java_doclet.yml"><img src="https://github.com/dwslab/melt/actions/workflows/java_doclet.yml/badge.svg"></a>
 <a href="https://github.com/dwslab/melt/actions/workflows/java_coverage.yml"><img src="https://github.com/dwslab/melt/actions/workflows/java_coverage.yml/badge.svg"></a>
