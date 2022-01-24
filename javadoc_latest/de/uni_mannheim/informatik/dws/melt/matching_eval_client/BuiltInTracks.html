@@ -159,7 +159,9 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <tr class="row-color" id="i1">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getTrackOptions()">getTrackOptions</a></span>()</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Get all <i>default</i> string representations for each track.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -185,7 +187,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html" title="class or interface in java.util" class="external-link">TreeMap</a>&lt;<a href="../matching_data/Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="member-name">simpleNameToTrackMap</span></div>
 <div class="block">A map linking from each track to the allowed string representations to identify the track.
  The List order matters: The first string will be the preferred string which will show up in the command line
- client.
+ client. The preferred strings must be lower-cased.
  <p>
  The map is not complete. It contains only the latest version of the most-used tracks.</div>
 </section>
@@ -216,6 +218,13 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="detail" id="getTrackOptions()">
 <h3>getTrackOptions</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="member-name">getTrackOptions</span>()</div>
+<div class="block">Get all <i>default</i> string representations for each track.
+ For example, the result will contain <code>"instancematching"</code> but not <code>"instancematching-geolink-cruise"</code>
+ because the latter is not the default identifying name.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>A list of default names.</dd>
+</dl>
 </section>
 </li>
 <li>
