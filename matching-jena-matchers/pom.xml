@@ -45,6 +45,24 @@
         </dependency>
         
         <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>openblas-platform</artifactId>
+            <version>0.3.17-1.5.6</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>de.lmu.ifi.dbs.elki</groupId>
+            <artifactId>elki-clustering</artifactId>
+            <version>0.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>de.lmu.ifi.dbs.elki</groupId>
+            <artifactId>elki-core-dbids-int</artifactId>
+            <version>0.7.5</version>
+        </dependency>
+
+        
+        <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>yet-another-alignment-api</artifactId>
             <version>${project.version}</version>

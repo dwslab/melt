@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge;
 
 /**
  * The clustering likage.

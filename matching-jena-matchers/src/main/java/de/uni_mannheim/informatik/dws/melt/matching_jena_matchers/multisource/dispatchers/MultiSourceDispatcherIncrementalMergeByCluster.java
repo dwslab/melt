@@ -1,5 +1,9 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterLinkage;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterDistance;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.Clusterer;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClustererSmile;
 import java.util.List;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -23,15 +27,38 @@ public abstract class MultiSourceDispatcherIncrementalMergeByCluster extends Mul
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherIncrementalMergeByCluster.class);
     
     /**
-     * the linkage method.
-     * final becuase it should not change to be able to use the cache.
+     * the cluster linkage method lie single averge or complete.
      */
-    private final ClusterLinkage linkage;
+    private ClusterLinkage linkage;
+    
+    /**
+     * The cluster distance like euclidean (the default) etc.
+     */
+    private ClusterDistance distance;
+    
+    /**
+     * The cluster implementation.
+     */
+    private Clusterer clusterer;
+    
+    public MultiSourceDispatcherIncrementalMergeByCluster(Object oneToOneMatcher) {
+        this(oneToOneMatcher, ClusterLinkage.COMPLETE);
+    }
     
     public MultiSourceDispatcherIncrementalMergeByCluster(Object oneToOneMatcher, ClusterLinkage linkage) {
+        this(oneToOneMatcher, linkage, ClusterDistance.EUCLIDEAN);
+    }
+    
+    public MultiSourceDispatcherIncrementalMergeByCluster(Object oneToOneMatcher, ClusterLinkage linkage, ClusterDistance distance) {
+        this(oneToOneMatcher, linkage, distance, new ClustererSmile());
+    }
+    
+    public MultiSourceDispatcherIncrementalMergeByCluster(Object oneToOneMatcher, ClusterLinkage linkage, ClusterDistance distance, Clusterer clusterer) {
         super(oneToOneMatcher);
         this.linkage = linkage;
-    }        
+        this.distance = distance;
+        this.clusterer = clusterer;
+    }
     
     @Override
     public int[][] getMergeTree(List<Set<Object>> models, Object parameters){
@@ -53,6 +80,25 @@ public abstract class MultiSourceDispatcherIncrementalMergeByCluster extends Mul
     }
     
     public abstract double[][] getClusterFeatures(List<Set<Object>> models, Object parameters);
+
+    
+    public ClusterLinkage getLinkage() {
+        return linkage;
+    }
+
+    public void setLinkage(ClusterLinkage linkage) {
+        this.linkage = linkage;
+    }
+
+    public ClusterDistance getDistance() {
+        return distance;
+    }
+
+    public void setDistance(ClusterDistance distance) {
+        this.distance = distance;
+    }
+    
+    
     
     private Linkage getLinkage(double[][] data){
         switch(this.linkage){
