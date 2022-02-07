@@ -212,7 +212,7 @@ class WikidataKnowledgeSourceTest {
         // try in another language to check multi-language feature
         HashSet<String> result2 = wikidata.getLabelsForLink(wikidata.getLinker().linkToSingleConcept("financial services"), Language.ENGLISH);
         assertTrue(result2.size() > 0);
-        assertTrue(result2.contains("financial services"));
+        assertTrue(result2.contains("finance industry"));
     }
 
     /**
