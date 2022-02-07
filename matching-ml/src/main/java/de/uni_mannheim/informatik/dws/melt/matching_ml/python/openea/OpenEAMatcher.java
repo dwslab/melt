@@ -107,7 +107,7 @@ public class OpenEAMatcher extends MatcherYAAAJena{
         this(FileUtil.SYSTEM_TMP_FOLDER, getDefaultConfig(), false, 0.8, 1234);
     }
     
-    private static OpenEAConfiguration getDefaultConfig(){
+    public static OpenEAConfiguration getDefaultConfig(){
         return new OpenEAConfiguration(OpenEAMatcher.class.getResourceAsStream("/openea_default_arguments.json"));
     }
     

@@ -15,6 +15,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jena.ontology.OntModel;
@@ -111,7 +112,7 @@ public class SentenceTransformersFineTuner extends TransformersBaseFineTuner {
         int positiveCorrespondencesNotUsed = 0;
         int positiveCorrespondences = 0;
         int examples = 0;
-        Map<Resource,Set<String>> cache = new HashMap<>();
+        Map<Resource,Map<String, Set<String>>> cache = new HashMap<>();
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(trainFile, append), StandardCharsets.UTF_8))){
             
             for(Correspondence posCorrespondence : trainingAlignment.getCorrespondencesRelation(CorrespondenceRelation.EQUIVALENCE)){
@@ -149,15 +150,22 @@ public class SentenceTransformersFineTuner extends TransformersBaseFineTuner {
         return examples;
     }
     
-    private int writeOneTriplet(Resource anchor, Resource positive, Resource hardNegative, Map<Resource,Set<String>> cache, Writer writer) throws IOException{
+    private int writeOneTriplet(Resource anchor, Resource positive, Resource hardNegative, Map<Resource,Map<String, Set<String>>> cache, Writer writer) throws IOException{
         int writtenExamples = 0;
-        for(String anchorText : getTextualRepresentation(anchor, cache)){
-            for(String positiveText : getTextualRepresentation(positive, cache)){
-                for(String hardNegativeText : getTextualRepresentation(hardNegative, cache)){
-                    writtenExamples++;
-                    writer.write(StringEscapeUtils.escapeCsv(anchorText) + "," + 
-                            StringEscapeUtils.escapeCsv(positiveText) +  "," + 
-                            StringEscapeUtils.escapeCsv(hardNegativeText) + NEWLINE);
+        Map<String, Set<String>> anchorGroups = getTextualRepresentation(anchor, cache);
+        Map<String, Set<String>> positiveGroups = getTextualRepresentation(positive, cache);
+        Map<String, Set<String>> hardNegativeGroups = getTextualRepresentation(hardNegative, cache);
+        
+        for(Entry<String, Set<String>> anchorGroup : anchorGroups.entrySet()){
+            for(String positiveText : positiveGroups.get(anchorGroup.getKey())){
+                for(String hardNegativeText : hardNegativeGroups.get(anchorGroup.getKey())){
+                    for(String anchorText : anchorGroup.getValue()){
+                        writtenExamples++;
+                        writer.write(StringEscapeUtils.escapeCsv(anchorText) + "," + 
+                                StringEscapeUtils.escapeCsv(positiveText) +  "," + 
+                                StringEscapeUtils.escapeCsv(hardNegativeText) + NEWLINE);
+                        
+                    }
                 }
             }
         }

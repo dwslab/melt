@@ -89,6 +89,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
     private int createTextFile(OntModel model, File file, ResourcesExtractor extractor, Properties parameters) throws IOException {
         //LOGGER.info("Write text to file {}", file);
         int linesWritten = 0;
+        TextExtractor simpleTextExtractor = this.getExtractor();
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))){
             Iterator<? extends OntResource> resourceIterator = extractor.extract(model, parameters);
             if(this.multipleTextsToMultipleExamples){
@@ -96,7 +97,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
                     OntResource r = resourceIterator.next();
                     if(!r.isURIResource())
                         continue;
-                    for(String text : this.extractor.extract(r)){
+                    for(String text : simpleTextExtractor.extract(r)){
                         text = text.trim();
                         if(text.isEmpty())
                             continue;
@@ -110,7 +111,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
                     if(!r.isURIResource())
                         continue;
                     StringBuilder sb = new StringBuilder();
-                    for(String text : this.extractor.extract(r)){
+                    for(String text : simpleTextExtractor.extract(r)){
                         sb.append(text.trim()).append(" ");
                     }
                     String text = sb.toString().trim();

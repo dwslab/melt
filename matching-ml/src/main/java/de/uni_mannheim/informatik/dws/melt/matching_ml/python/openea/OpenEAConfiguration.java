@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_ml.python.openea;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +28,9 @@ public class OpenEAConfiguration {
      * ObjectMapper from jackson to parse JSON configuration.
      */
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+    static{
+        JSON_MAPPER.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+    }
     
     /**
      * Keys which are atomatically set.

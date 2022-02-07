@@ -38,7 +38,7 @@ public class TransformersFilterTest {
         //https://huggingface.co/sgugger/finetuned-bert-mrpc
         //https://huggingface.co/datasets/glue
         File mrpcTestFile = new File(getClass().getClassLoader().getResource("mrpc-test-subset.csv").getFile());
-        TransformersFilter zeroShot = new TransformersFilter(null, "bert-base-cased-finetuned-mrpc");
+        TransformersFilter zeroShot = new TransformersFilter((TextExtractor)null, "bert-base-cased-finetuned-mrpc");
         //zeroShot.setTransformersCache(new File("N:\\tmp\\transformers_cache"));
         
         List<Double> confidences = zeroShot.predictConfidences(mrpcTestFile);

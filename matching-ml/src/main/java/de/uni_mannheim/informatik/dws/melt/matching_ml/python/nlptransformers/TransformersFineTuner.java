@@ -3,10 +3,27 @@ package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServerException;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +40,7 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
     //https://github.com/huggingface/transformers/issues/6753
     //https://github.com/huggingface/transformers/issues/1742
     
-    protected boolean adjustMaxBatchSize;
+    protected BatchSizeOptimization batchSizeOptimization;
 
     /**
      * Run the training of a NLP transformer.
@@ -36,18 +53,34 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
      */
     public TransformersFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
         super(extractor, initialModelName, resultingModelLocation);
+        this.batchSizeOptimization = BatchSizeOptimization.NONE;
+    }
+    
+    /**
+     * Run the training of a NLP transformer.
+     * @param extractor used to extract text from a given resource. This is the text which represents a resource.
+     * @param initialModelName the initial model name for fine tuning which can be downloaded or a path to a directory containing model weights
+     *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
+     *   see first parameter pretrained_model_name_or_path of the from_pretrained
+     *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
+     * @param resultingModelLocation the final location where the fine-tuned model should be stored.
+     */
+    public TransformersFineTuner(TextExtractorMap extractor, String initialModelName, File resultingModelLocation) {
+        super(extractor, initialModelName, resultingModelLocation);
+        this.batchSizeOptimization = BatchSizeOptimization.NONE;
     }
     
     
     @Override
     public File finetuneModel(File trainingFile) throws Exception{
-        if(this.adjustMaxBatchSize){
+        if(this.batchSizeOptimization != BatchSizeOptimization.NONE){
             int maxBatchSize = getMaximumPerDeviceTrainBatchSize(trainingFile);
             this.trainingArguments.addParameter("per_device_train_batch_size", maxBatchSize);
         }
         PythonServer.getInstance().transformersFineTuning(this, trainingFile);
         return this.resultingModelLocation;
     }
+    
     
     /**
      * This functions tries to execute the training with one step to check which maximum {@code per_device_train_batch_size } is possible.It will start with 2 and checks only powers of 2.
@@ -61,28 +94,32 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
         }
         return getMaximumPerDeviceTrainBatchSize(this.trainingFile);
     }
-
+    
+    
     /**
      * This functions tries to execute the training with one step to check which maximum {@code per_device_train_batch_size } is possible.It will start with 2 and checks only powers of 2.
+     * It uses the data collected by running this fine tuner on testcases.
      * @param trainingFile the training file to use
      * @return the maximum {@code per_device_train_batch_size } with the current configuration
      */
-    public int getMaximumPerDeviceTrainBatchSize (File trainingFile){        
+    public int getMaximumPerDeviceTrainBatchSize (File trainingFile){
         //save variables for restoring afterwards
         TransformersTrainerArguments backupArguments = this.trainingArguments;
         String backupCudaString = this.cudaVisibleDevices;
                 
         this.cudaVisibleDevices = getCudaVisibleDevicesButOnlyOneGPU();
         int batchSize = 4;
+        List<String> batchExamples = getExamplesForBatchSizeOptimization(trainingFile, 8194, this.batchSizeOptimization);
         while(batchSize < 8193){
             LOGGER.info("Try out batch size of {}", batchSize);
             //generate a smaller training file -> faster tokenizer
             
             File tmpTrainingFile = FileUtil.createFileWithRandomNumber("alignment_transformers_find_max_batch_size", ".txt");
             try{
-                if(this.copyCSVLines(trainingFile, tmpTrainingFile, batchSize) == false){
+                if(this.writeExamplesToFile(batchExamples, tmpTrainingFile, batchSize) == false){
                     int batchSizeWhichWorks = batchSize / 2;
                     LOGGER.info("File contains too few lines to further increase batch size. Thus use now {}", batchSizeWhichWorks);
+                    return batchSizeWhichWorks;
                 }
                 this.trainingArguments = new TransformersTrainerArguments(backupArguments);
                 this.trainingArguments.addParameter("per_device_train_batch_size", batchSize);
@@ -126,6 +163,7 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
         return batchSize;
     }
     
+    
     private String getCudaVisibleDevicesButOnlyOneGPU(){
         String gpus = this.getCudaVisibleDevices();
         if(gpus == null) // this means use all available.
@@ -160,7 +198,7 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
      * @return true if the batch size is modified.
      */
     public boolean isAdjustMaxBatchSize() {
-        return adjustMaxBatchSize;
+        return batchSizeOptimization != BatchSizeOptimization.NONE;
     }
 
     /**
@@ -169,6 +207,20 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
      * @param adjustMaxBatchSize true to enable the adjustment
      */
     public void setAdjustMaxBatchSize(boolean adjustMaxBatchSize) {
-        this.adjustMaxBatchSize = adjustMaxBatchSize;
+        if(adjustMaxBatchSize){
+            this.batchSizeOptimization = BatchSizeOptimization.USE_LONGEST_TEXTS;
+        }else{
+            this.batchSizeOptimization = BatchSizeOptimization.NONE;
+        }
     }
+
+    public BatchSizeOptimization getBatchSizeOptimization() {
+        return batchSizeOptimization;
+    }
+
+    public void setBatchSizeOptimization(BatchSizeOptimization batchSizeOptimization) {
+        this.batchSizeOptimization = batchSizeOptimization;
+    }
+    
+    
 }

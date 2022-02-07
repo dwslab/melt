@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import java.io.File;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
@@ -12,9 +13,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public abstract class TransformersBaseFineTuner extends TransformersBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransformersBaseFineTuner.class);
     
-    private static final String NEWLINE = System.getProperty("line.separator");
+    protected static final String NEWLINE = System.getProperty("line.separator");
     
     protected File resultingModelLocation;
     protected File trainingFile;
@@ -47,11 +50,24 @@ public abstract class TransformersBaseFineTuner extends TransformersBase {
      *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
      * @param resultingModelLocation the final location where the fine-tuned model should be stored.
      */
-    public TransformersBaseFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
+    public TransformersBaseFineTuner(TextExtractorMap extractor, String initialModelName, File resultingModelLocation) {
         super(extractor, initialModelName);
         this.resultingModelLocation = resultingModelLocation;
         this.trainingFile = FileUtil.createFileWithRandomNumber("alignment_transformers_train", ".txt");
         this.additionallySwitchSourceTarget = false;
+    }
+    
+    /**
+     * Run the training of a NLP transformer.
+     * @param extractor used to extract text from a given resource. This is the text which represents a resource.
+     * @param initialModelName the initial model name for fine tuning which can be downloaded or a path to a directory containing model weights
+     *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
+     *   see first parameter pretrained_model_name_or_path of the from_pretrained
+     *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
+     * @param resultingModelLocation the final location where the fine-tuned model should be stored.
+     */
+    public TransformersBaseFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
+        this(TextExtractorMap.wrapTextExtractor(extractor), initialModelName, resultingModelLocation);
     }
     
     @Override
@@ -104,7 +120,7 @@ public abstract class TransformersBaseFineTuner extends TransformersBase {
         int positiveExamples = 0;        
         int negativeExamples = 0;
         int numberOfAddedExamples = this.additionallySwitchSourceTarget ? 2 : 1;
-        Map<Resource,Set<String>> cache = new HashMap<>();
+        Map<Resource, Map<String, Set<String>>> cache = new HashMap<>();
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(trainFile, append), StandardCharsets.UTF_8))){
             for(Correspondence c : trainingAlignment){
                 String clazz;
@@ -120,12 +136,17 @@ public abstract class TransformersBaseFineTuner extends TransformersBase {
                 }
                 
                 int examplesForThisCorrespondence = 0;
-                for(String textLeft : getTextualRepresentation(source.getResource(c.getEntityOne()), cache)){
-                    for(String textRight : getTextualRepresentation(target.getResource(c.getEntityTwo()), cache)){
-                        examplesForThisCorrespondence += numberOfAddedExamples;
-                        writer.write(StringEscapeUtils.escapeCsv(textLeft) + "," + StringEscapeUtils.escapeCsv(textRight) +  "," + clazz + NEWLINE);
-                        if(this.additionallySwitchSourceTarget)
-                            writer.write(StringEscapeUtils.escapeCsv(textRight) + "," + StringEscapeUtils.escapeCsv(textLeft) +  "," + clazz + NEWLINE);
+                Map<String, Set<String>> sourceTexts = getTextualRepresentation(source.getResource(c.getEntityOne()), cache);
+                Map<String, Set<String>> targetTexts = getTextualRepresentation(target.getResource(c.getEntityTwo()), cache);
+                
+                for(Entry<String, Set<String>> textLeftGroup : sourceTexts.entrySet()){
+                    for(String textRight : targetTexts.get(textLeftGroup.getKey())){
+                        for(String textLeft : textLeftGroup.getValue()){
+                            examplesForThisCorrespondence += numberOfAddedExamples;
+                            writer.write(StringEscapeUtils.escapeCsv(textLeft) + "," + StringEscapeUtils.escapeCsv(textRight) +  "," + clazz + NEWLINE);
+                            if(this.additionallySwitchSourceTarget)
+                                writer.write(StringEscapeUtils.escapeCsv(textRight) + "," + StringEscapeUtils.escapeCsv(textLeft) +  "," + clazz + NEWLINE);
+                        }
                     }
                 }
                 if(c.getRelation() == CorrespondenceRelation.EQUIVALENCE){
@@ -145,32 +166,6 @@ public abstract class TransformersBaseFineTuner extends TransformersBase {
                 trainingAlignment.size(), positiveCorrespondences, negativeCorrespondences, wrongRelationCorrespodences, notUsedCorrespondences);
         return positiveExamples + negativeExamples;
     }
-    
-    protected Set<String> getTextualRepresentation(Resource r, Map<Resource,Set<String>> cache){
-        Set<String> cacheResult = cache.get(r);
-        if(cacheResult != null)
-            return cacheResult;
-        Set<String> texts = new HashSet<>();
-        if(this.multipleTextsToMultipleExamples){
-            for(String extractedText : this.extractor.extract(r)){
-                if(!StringUtils.isBlank(extractedText)){
-                    texts.add(extractedText);
-                }
-            }
-        }else{
-            StringBuilder sb = new StringBuilder();
-            for(String text : this.extractor.extract(r)){
-                sb.append(text.trim()).append(" ");
-            }
-            String extractedText = sb.toString();
-            if(!StringUtils.isBlank(extractedText)){
-                texts.add(extractedText);
-            }
-        }
-        cache.put(r, texts);
-        return texts;
-    }
-    
     
     /**
      * Finetune a given model with the provided text in the csv file (three columns: first text, second text, label(0/1))

@@ -1,27 +1,23 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena;
 
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
 
 /**
  * Given a resource (from Jena - which has the model behind - and thus allows to traverse the whole graph),
  * this interface extracts the literals which are usually helpful for matching.
- * There are many classes which implement this interface.
+ * The returned value is a map between the key (e.g. where it is extracted from like label or fragment etc) and the corresponding texts.
  */
-public interface LiteralExtractor {
+public interface LiteralExtractorMap {
 
 
     /**
      * Given a jena resource <code>r</code>, it extracts the literals which are usually helpful for matching.
      * It does not do any tokenization nor transformation.
      * @param r the jena resource to extract the literals (which describe this resource).
-     * @return a set of literals which describes the resource.
+     * @return a a map between the key (e.g. where it is extracted from like label or fragment etc) and the corresponding texts.
      */
-    Set<Literal> extract(Resource r);
-    
-    public static LiteralExtractor wrapLiteralExtractorMap(LiteralExtractorMap extractorMap){
-        return (Resource r) -> extractorMap.extract(r).values().stream().flatMap(Set::stream).collect(Collectors.toSet());
-    }
+    Map<String, Set<Literal>> extract(Resource r);
 }
