@@ -207,6 +207,13 @@ This component adds negative samples to the alignment.
 
 *Keywords: Add Negatives Randomly Share*
 
+## UriInterfaceWrapper [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/UriInterfaceWrapper.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/UriInterfaceWrapper.java)
+
+This matcher implements the URL interface and wrapps a MatcherYAAA.
+ This is useful for ParisMatcher if the input is already a NT file.
+
+*Keywords: Uri Interface Wrapper*
+
 ## ParisMatcher [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/wrapper/ParisMatcher.java)
 
 This is a wrapper for <a href="http://webdam.inria.fr/paris/">PARIS matching system</a> by Fabian Suchanek et al.
