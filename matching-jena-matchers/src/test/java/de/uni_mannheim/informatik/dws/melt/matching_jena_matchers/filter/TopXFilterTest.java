@@ -37,6 +37,7 @@ class TopXFilterTest {
         Alignment result = filter.filter(ALIGNMENT_1);
         assertEquals(6, result.size());
         assertTrue(result.contains(new Correspondence("A", "A", 1.0)));
+        assertTrue(result.contains(new Correspondence("A", "B", 0.9)));
         assertFalse(result.contains(new Correspondence("A", "C", 0.8)));
 
         // source with threshold filter
@@ -64,6 +65,14 @@ class TopXFilterTest {
         result = filter.filter(ALIGNMENT_1);
         assertEquals(10, result.size());
         assertTrue(result.contains(new Correspondence("A", "A", 1.0)));
+
+        // source and target
+        filter = new TopXFilter(2, TopXFilter.TopFilterMode.SOURCE_AND_TARGET, 0.0);
+        result = filter.filter(ALIGNMENT_1);
+        assertEquals(10, result.size());
+        assertTrue(result.contains(new Correspondence("C", "C")));
+        assertFalse(result.contains(new Correspondence("A", "D")));
+        assertFalse(result.contains(new Correspondence("A", "C")));
 
         // null
         assertNull(filter.filter(null));

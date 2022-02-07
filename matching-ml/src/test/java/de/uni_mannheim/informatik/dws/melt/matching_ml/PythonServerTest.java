@@ -53,7 +53,9 @@ class PythonServerTest {
         assertFalse(pythonServer.isInVocabulary("China", pathToModel));
 
         // test case 2: vector file
-        File vectorFile = new File(getPathOfResource("test_model_vectors.kv"));
+        String pathToVectorFile = getPathOfResource("test_model_vectors.kv");
+        assertNotNull(pathToVectorFile, "Test resource not found.");
+        File vectorFile = new File(pathToVectorFile);
         assertTrue(pythonServer.isInVocabulary("Europe", vectorFile));
         assertTrue(pythonServer.isInVocabulary("united", vectorFile));
         assertFalse(pythonServer.isInVocabulary("China", vectorFile));
@@ -319,7 +321,7 @@ class PythonServerTest {
         assertTrue(vectorFile.exists(), "No vector file was written.");
         assertTrue(modelFile.exists(), "No model file was written.");
         double similarity = pythonServer.getSimilarity("Menschen", "Brüder", vectorFilePath);
-        assertTrue(similarity > -1.0, "Problem with the simliarity. Similarity: " + similarity);
+        assertTrue(similarity > -1.0, "Problem with the similarity. Similarity: " + similarity);
 
         // cleaning up
         modelFile.delete();

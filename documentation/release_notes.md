@@ -15,6 +15,9 @@
 **Improvements**
 - More intuitive behavior of `ConfidenceFinder`: If no precision is specified, the optimal solution is calculated.
 - It is now possible to copy extensions from one alignment to another (multiple methods `copyExtensionsTo...`).
+- New mode for `TopXFilter`: `SOURCE_AND_TARGET`
+- Python server uses now gensim 4.x and flask 2.x ([issue #67](https://github.com/dwslab/melt/issues/67)).
+- Python server can be shut down via `/shutdown`.
 
 ## Changes in 3.2
 

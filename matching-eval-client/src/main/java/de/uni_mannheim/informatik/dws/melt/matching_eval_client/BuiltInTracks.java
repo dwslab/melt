@@ -11,7 +11,7 @@ public class BuiltInTracks {
     /**
      * A map linking from each track to the allowed string representations to identify the track.
      * The List order matters: The first string will be the preferred string which will show up in the command line
-     * client.
+     * client. The preferred strings must be lower-cased.
      * <p>
      * The map is not complete. It contains only the latest version of the most-used tracks.
      */
@@ -280,6 +280,12 @@ public class BuiltInTracks {
         });
     }
 
+    /**
+     * Get all <i>default</i> string representations for each track.
+     * For example, the result will contain {@code "instancematching"} but not {@code "instancematching-geolink-cruise"}
+     * because the latter is not the default identifying name.
+     * @return A list of default names.
+     */
     public static List<String> getTrackOptions() {
         List<String> result = new ArrayList<>();
         for (Map.Entry<Track, List<String>> entry : simpleNameToTrackMap.entrySet()) {

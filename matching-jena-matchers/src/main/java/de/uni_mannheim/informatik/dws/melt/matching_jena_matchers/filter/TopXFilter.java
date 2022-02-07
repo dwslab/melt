@@ -61,7 +61,7 @@ public class TopXFilter extends MatcherYAAAJena implements Filter {
     }
 
     /**
-     * Filters the given alignment such that there are only the top X correpondences (according to confidence) for
+     * Filters the given alignment such that there are only the top X correspondences (according to confidence) for
      * every source node.
      * @param alignment The initial alignment.
      * @return The filtered alignment.
@@ -108,8 +108,13 @@ public class TopXFilter extends MatcherYAAAJena implements Filter {
                         result.addAll(filterTopX(alignment.getCorrespondencesTarget(target).iterator()));
                     }
                 }
+                break;
+            case SOURCE_AND_TARGET:
+                TopXFilter sourceFilter = new TopXFilter(this.x, TopFilterMode.SOURCE, this.threshold);
+                TopXFilter targetFilter = new TopXFilter(this.x, TopFilterMode.TARGET, this.threshold);
+                result.addAll(sourceFilter.filter(alignment));
+                result.addAll(targetFilter.filter(alignment));
         }
-
         return result;
     }
 
@@ -189,6 +194,12 @@ public class TopXFilter extends MatcherYAAAJena implements Filter {
          * Keep the top X correspondences for the target.
          */
         TARGET,
+
+        /**
+         * Keep the top X correspondences for the source and for the target.
+         * Note that this may lead to more than X correspondences for a single source/target element in some cases.
+         */
+        SOURCE_AND_TARGET,
 
         /**
          * Keep the top X correspondences for the smaller side in the alignment.

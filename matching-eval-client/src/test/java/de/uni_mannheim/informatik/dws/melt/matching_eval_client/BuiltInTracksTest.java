@@ -22,9 +22,8 @@ class BuiltInTracksTest {
         assertNotNull(result);
         assertTrue(result.size() > 3);
 
-        for(String s : result){
-            System.out.println(s);
-        }
+        assertTrue(result.contains("instancematching"));
+        assertFalse(result.contains("instancematching-geolink-cruise"));
     }
 
 }

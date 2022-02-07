@@ -17,7 +17,10 @@ from datetime import datetime
 from collections import defaultdict
 
 logging.basicConfig(
-    handlers=[logging.FileHandler(__file__ + ".log", "a+", "utf-8"), logging.StreamHandler(sys.stdout)],
+    handlers=[
+        logging.FileHandler(__file__ + ".log", "a+", "utf-8"),
+        logging.StreamHandler(sys.stdout),
+    ],
     # format="PythonServer: %(asctime)s %(levelname)s:%(message)s",
     format="%(asctime)s %(levelname)-5s ExternalPythonProcess     - %(message)s",
     level=logging.INFO,
@@ -45,6 +48,7 @@ def display_server_status():
         A message indicating that the server is running.
     """
     return "MELT ML Server running. Ready to accept requests."
+
 
 @app.route("/check-requirements", methods=["GET"])
 def check_requirements() -> str:
@@ -82,6 +86,7 @@ def check_requirements() -> str:
             message += "\n=> Everything is installed. You are good to go!"
         app.logger.info(message)
         return message
+
 
 class MySentences(object):
     """Data structure to iterate over the lines of a file in a memory-friendly way. The files can be gzipped."""
@@ -149,7 +154,7 @@ def get_vocab_size():
     model_path = request.headers.get("model_path")
     vector_path = request.headers.get("vector_path")
     vectors = get_vectors(model_path, vector_path)
-    return str(len(vectors.vocab))
+    return str(len(vectors.key_to_index))
 
 
 @app.route("/train-word2vec", methods=["GET"])
@@ -185,32 +190,32 @@ def train_word_2_vec():
             model = models.Word2Vec(
                 min_count=int(min_count),
                 sample=float(sample),
-                size=int(vector_dimension),
+                vector_size=int(vector_dimension),
                 workers=int(number_of_threads),
                 window=int(window_size),
                 sg=1,
                 negative=int(negatives),
-                iter=int(iterations),
+                epochs=int(iterations),
             )
         else:
             model = models.Word2Vec(
                 min_count=int(min_count),
                 sample=float(sample),
-                size=int(vector_dimension),
+                vector_size=int(vector_dimension),
                 workers=int(number_of_threads),
                 window=int(window_size),
                 sg=0,
                 cbow_mean=1,
                 alpha=0.05,
                 negative=int(negatives),
-                iter=int(iterations),
+                epochs=int(iterations),
             )
 
         app.logger.info("Model object initialized. Building Vocabulary...")
-        model.build_vocab(sentences)
+        model.build_vocab(corpus_iterable=sentences)
         app.logger.info("Vocabulary built. Training now...")
         model.train(
-            sentences=sentences, total_examples=model.corpus_count, epochs=int(epochs)
+            corpus_iterable=sentences, total_examples=model.corpus_count, epochs=int(epochs)
         )
         app.logger.info("Model trained.")
 
@@ -240,7 +245,7 @@ def is_in_vocabulary():
     model_path = request.headers.get("model_path")
     vector_path = request.headers.get("vector_path")
     vectors = get_vectors(model_path, vector_path)
-    return str(concept in vectors.vocab)
+    return str(concept in vectors.key_to_index)
 
 
 @app.route("/get-vocabulary-terms", methods=["GET"])
@@ -249,7 +254,7 @@ def get_vocabulary_terms():
     vector_path = request.headers.get("vector_path")
     vectors = get_vectors(model_path, vector_path)
     result = ""
-    for word in vectors.vocab:
+    for word in vectors.key_to_index:
         result += word + "\n"
     return result
 
@@ -302,11 +307,11 @@ def get_similarity_given_model():
         app.logger.error(message)
         return message
 
-    if concept_1 not in vectors.vocab:
+    if concept_1 not in vectors.key_to_index:
         message = "ERROR! concept_1 not in the vocabulary."
         app.logger.error(message)
         return message
-    if concept_2 not in vectors.vocab:
+    if concept_2 not in vectors.key_to_index:
         message = "ERROR! concept_2 not in the vocabulary."
         app.logger.error(message)
         return message
@@ -330,7 +335,7 @@ def get_vector_given_model():
         app.logger.error(message)
         return message
 
-    if concept not in vectors.vocab:
+    if concept not in vectors.key_to_index:
         message = "ERROR! Concept '" + str(concept) + "' not in the vocabulary."
         app.logger.error(message)
         return message
@@ -759,8 +764,8 @@ def write_vectors_as_text_file():
     vectors = get_vectors(model_path=model_path, vector_path=vector_path)
     final_string = ""
     if entity_file is None:
-        for concept in vectors.vocab:
-            if concept in vectors.vocab:
+        for concept in vectors.key_to_index:
+            if concept in vectors.key_to_index:
                 vector = vectors.get_vector(concept)
                 final_string += concept + " "
                 for element in np.nditer(vector):
@@ -775,7 +780,7 @@ def write_vectors_as_text_file():
     else:
         concepts = read_concept_file(entity_file)
         for concept in concepts:
-            if concept in vectors.vocab:
+            if concept in vectors.key_to_index:
                 vector = vectors.get_vector(concept)
                 final_string += concept + " "
                 for element in np.nditer(vector):
@@ -836,7 +841,7 @@ def align_embeddings():
             return "ERROR Function not available"
 
         results = []
-        for source_uri in projected_source.vocab:
+        for source_uri in projected_source.key_to_index:
             most_similar_target = projected_target.most_similar(
                 positive=[projected_source[source_uri]], topn=1
             )[0]
@@ -1332,53 +1337,73 @@ def run_openea():
         return "ERROR " + traceback.format_exc()
 
 
-
-
 ############################################
 # Transformers section with helper functions
 ############################################
 
-def transformers_create_dataset(using_tensorflow, tokenizer, left_sentences, right_sentences, labels=None):
+
+def transformers_create_dataset(
+    using_tensorflow, tokenizer, left_sentences, right_sentences, labels=None
+):
     tensor_type = "tf" if using_tensorflow else "pt"
-    # padding (padding=True) is not applied here because the tokenizer is given to the trainer 
+    # padding (padding=True) is not applied here because the tokenizer is given to the trainer
     # which does the padding for each batch (more efficient)
     # TODO: remove padding here and generate no dataset but just give the encodings to the trainer
-    encodings = tokenizer(left_sentences, right_sentences, return_tensors=tensor_type, padding=True, truncation="longest_first")
-    
+    encodings = tokenizer(
+        left_sentences,
+        right_sentences,
+        return_tensors=tensor_type,
+        padding=True,
+        truncation="longest_first",
+    )
+
     if using_tensorflow:
         import tensorflow as tf
+
         if labels:
-            return tf.data.Dataset.from_tensor_slices((dict(encodings),labels))
+            return tf.data.Dataset.from_tensor_slices((dict(encodings), labels))
         else:
-            return tf.data.Dataset.from_tensor_slices(dict(encodings)) # TODO: check
+            return tf.data.Dataset.from_tensor_slices(dict(encodings))  # TODO: check
     else:
         import torch
+
         if labels:
+
             class MyDatasetWithLabels(torch.utils.data.Dataset):
                 def __init__(self, encodings, labels):
                     self.encodings = encodings
                     self.labels = labels
 
                 def __getitem__(self, idx):
-                    item = {key: val[idx].detach().clone() for key, val in self.encodings.items()}
-                    item['labels'] = torch.tensor(self.labels[idx])
+                    item = {
+                        key: val[idx].detach().clone()
+                        for key, val in self.encodings.items()
+                    }
+                    item["labels"] = torch.tensor(self.labels[idx])
                     return item
 
                 def __len__(self):
                     return len(self.labels)
+
             return MyDatasetWithLabels(encodings, labels)
         else:
+
             class MyDataset(torch.utils.data.Dataset):
                 def __init__(self, encodings):
                     self.encodings = encodings
 
                 def __getitem__(self, idx):
-                    item = {key: val[idx].detach().clone() for key, val in self.encodings.items()}
+                    item = {
+                        key: val[idx].detach().clone()
+                        for key, val in self.encodings.items()
+                    }
                     return item
 
                 def __len__(self):
                     return len(self.encodings.input_ids)
+
             return MyDataset(encodings)
+
 
 def transformers_read_file(file_path, with_labels):
     data_left = []
@@ -1393,23 +1418,36 @@ def transformers_read_file(file_path, with_labels):
                 labels.append(int(row[2]))
     return data_left, data_right, labels
 
-def transformers_get_training_arguments(using_tensorflow, initial_parameters, user_parameters, melt_parameters):
+
+def transformers_get_training_arguments(
+    using_tensorflow, initial_parameters, user_parameters, melt_parameters
+):
     import dataclasses
+
     if using_tensorflow:
         from transformers import TFTrainingArguments
-        allowed_arguments = set([field.name for field in dataclasses.fields(TFTrainingArguments)])
+
+        allowed_arguments = set(
+            [field.name for field in dataclasses.fields(TFTrainingArguments)]
+        )
     else:
         from transformers import TrainingArguments
-        allowed_arguments = set([field.name for field in dataclasses.fields(TrainingArguments)])
-    
+
+        allowed_arguments = set(
+            [field.name for field in dataclasses.fields(TrainingArguments)]
+        )
+
     training_arguments = dict(initial_parameters)
     training_arguments.update(user_parameters)
     training_arguments.update(melt_parameters)
-    
+
     not_available = training_arguments.keys() - allowed_arguments
     if len(not_available) > 0:
-        app.logger.warning("The following attributes are not set as training arguments because " +
-                        "they do not exist in the currently installed version of transformer: " + str(not_available))
+        app.logger.warning(
+            "The following attributes are not set as training arguments because "
+            + "they do not exist in the currently installed version of transformer: "
+            + str(not_available)
+        )
         for key_not_avail in not_available:
             del training_arguments[key_not_avail]
     if using_tensorflow:
@@ -1418,11 +1456,12 @@ def transformers_get_training_arguments(using_tensorflow, initial_parameters, us
         training_args = TrainingArguments(**training_arguments)
     return training_args
 
+
 def transformers_search_folder_with_highest_count(root_folder, count_regex):
     highest_step = 0
     highest_step_folder = ""
     for item in os.listdir(root_folder):
-        
+
         item_path = os.path.join(root_folder, item)
         if os.path.isdir(item_path):
             checkpoint_search = re.search(count_regex, item)
@@ -1433,6 +1472,7 @@ def transformers_search_folder_with_highest_count(root_folder, count_regex):
                     highest_step_folder = item_path
     return highest_step_folder
 
+
 def transformers_init(request_headers):
     if "cuda-visible-devices" in request_headers:
         os.environ["CUDA_VISIBLE_DEVICES"] = request_headers["cuda-visible-devices"]
@@ -1440,23 +1480,38 @@ def transformers_init(request_headers):
     if "transformers-cache" in request_headers:
         os.environ["TRANSFORMERS_CACHE"] = request_headers["transformers-cache"]
 
+
 # needs to be at the top level because only top level function can be pickled
 def multi_process_wrapper_function(queue, func, argument):
     queue.put(func(argument))
 
+
 def run_function_multi_process(request, func):
     multi_processing = request.headers["multi-processing"]
-    if multi_processing == 'no_multi_process':
+    if multi_processing == "no_multi_process":
         return func(dict(request.headers.items(lower=True)))
     else:
-        import multiprocessing as mp 
-        ctx = mp.get_context() if multi_processing == 'default_multi_process' else mp.get_context(multi_processing)
+        import multiprocessing as mp
+
+        ctx = (
+            mp.get_context()
+            if multi_processing == "default_multi_process"
+            else mp.get_context(multi_processing)
+        )
         queue = ctx.Queue()
-        process = ctx.Process(target=multi_process_wrapper_function, args=(queue, func, dict(request.headers.items(lower=True)),))
+        process = ctx.Process(
+            target=multi_process_wrapper_function,
+            args=(
+                queue,
+                func,
+                dict(request.headers.items(lower=True)),
+            ),
+        )
         process.start()
         my_result = queue.get()
         process.join()
         return my_result
+
 
 def inner_transformers_prediction(request_headers):
     try:
@@ -1470,40 +1525,55 @@ def inner_transformers_prediction(request_headers):
         training_arguments = json.loads(request_headers["training-arguments"])
 
         from transformers import AutoTokenizer
+
         tokenizer = AutoTokenizer.from_pretrained(model_name)
-        
+
         app.logger.info("Prepare transformers dataset and tokenize")
         data_left, data_right, _ = transformers_read_file(prediction_file_path, False)
         assert len(data_left) == len(data_right)
-        predict_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left, data_right)
+        predict_dataset = transformers_create_dataset(
+            using_tensorflow, tokenizer, data_left, data_right
+        )
         app.logger.info("Transformers dataset contains %s rows.", len(data_left))
 
-        
         with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
             initial_arguments = {
-                'report_to': 'none',
+                "report_to": "none",
                 #'disable_tqdm' : True,
             }
             fixed_arguments = {
-                'output_dir': os.path.join(tmpdirname, "trainer_output_dir")
+                "output_dir": os.path.join(tmpdirname, "trainer_output_dir")
             }
-            training_args = transformers_get_training_arguments(using_tensorflow, initial_arguments, training_arguments, fixed_arguments)
+            training_args = transformers_get_training_arguments(
+                using_tensorflow, initial_arguments, training_arguments, fixed_arguments
+            )
 
             app.logger.info("Loading transformers model")
             if using_tensorflow:
                 import tensorflow as tf
-                app.logger.info("Num gpu avail: " + str(len(tf.config.list_physical_devices('GPU'))))
+
+                app.logger.info(
+                    "Num gpu avail: " + str(len(tf.config.list_physical_devices("GPU")))
+                )
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
                 with training_args.strategy.scope():
-                    model = TFAutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
+                    model = TFAutoModelForSequenceClassification.from_pretrained(
+                        model_name, num_labels=2
+                    )
 
-                trainer = TFTrainer(model=model, tokenizer=tokenizer, args=training_args)
+                trainer = TFTrainer(
+                    model=model, tokenizer=tokenizer, args=training_args
+                )
             else:
                 import torch
+
                 app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
                 from transformers import Trainer, AutoModelForSequenceClassification
-                model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
+
+                model = AutoModelForSequenceClassification.from_pretrained(
+                    model_name, num_labels=2
+                )
 
                 trainer = Trainer(model=model, tokenizer=tokenizer, args=training_args)
 
@@ -1517,7 +1587,9 @@ def inner_transformers_prediction(request_headers):
         return scores.tolist()
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
+
 
 @app.route("/transformers-prediction", methods=["GET"])
 def transformers_prediction():
@@ -1527,60 +1599,87 @@ def transformers_prediction():
     else:
         return jsonify(result)
 
+
 def inner_transformers_finetuning(request_headers):
     try:
         transformers_init(request_headers)
-        
+
         initial_model_name = request_headers["model-name"]
         resulting_model_location = request_headers["resulting-model-location"]
         tmp_dir = request_headers["tmp-dir"]
         training_file = request_headers["training-file"]
         using_tensorflow = request_headers["using-tf"].lower() == "true"
         training_arguments = json.loads(request_headers["training-arguments"])
-        
-        save_at_end = training_arguments.get('save_at_end', True)
-        training_arguments.pop('save_at_end', None) # delete if existent
+
+        save_at_end = training_arguments.get("save_at_end", True)
+        training_arguments.pop("save_at_end", None)  # delete if existent
 
         from transformers import AutoTokenizer
+
         tokenizer = AutoTokenizer.from_pretrained(initial_model_name)
-        
+
         app.logger.info("Prepare transformers dataset and tokenize")
         data_left, data_right, labels = transformers_read_file(training_file, True)
         assert len(data_left) == len(data_right) == len(labels)
-        training_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left, data_right, labels)
-        app.logger.info("Transformers dataset contains %s examples.", len(training_dataset))
+        training_dataset = transformers_create_dataset(
+            using_tensorflow, tokenizer, data_left, data_right, labels
+        )
+        app.logger.info(
+            "Transformers dataset contains %s examples.", len(training_dataset)
+        )
 
         with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
             initial_arguments = {
-                'report_to': 'none',
+                "report_to": "none",
                 # 'disable_tqdm' : True,
             }
 
             fixed_arguments = {
-                'output_dir': os.path.join(tmpdirname, "trainer_output_dir"),
-                'save_strategy' : 'no',
+                "output_dir": os.path.join(tmpdirname, "trainer_output_dir"),
+                "save_strategy": "no",
             }
-        
-            training_args = transformers_get_training_arguments(using_tensorflow, initial_arguments, training_arguments, fixed_arguments)
+
+            training_args = transformers_get_training_arguments(
+                using_tensorflow, initial_arguments, training_arguments, fixed_arguments
+            )
 
             app.logger.info("Loading transformers model")
             if using_tensorflow:
                 import tensorflow as tf
-                app.logger.info("Num gpu avail: " + str(len(tf.config.list_physical_devices('GPU'))))
+
+                app.logger.info(
+                    "Num gpu avail: " + str(len(tf.config.list_physical_devices("GPU")))
+                )
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
                 with training_args.strategy.scope():
-                    model = TFAutoModelForSequenceClassification.from_pretrained(initial_model_name, num_labels=2)
+                    model = TFAutoModelForSequenceClassification.from_pretrained(
+                        initial_model_name, num_labels=2
+                    )
 
-                trainer = TFTrainer(model=model, tokenizer=tokenizer, train_dataset=training_dataset, args=training_args)
+                trainer = TFTrainer(
+                    model=model,
+                    tokenizer=tokenizer,
+                    train_dataset=training_dataset,
+                    args=training_args,
+                )
             else:
                 import torch
+
                 app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
                 from transformers import Trainer, AutoModelForSequenceClassification
-                model = AutoModelForSequenceClassification.from_pretrained(initial_model_name, num_labels=2)
-                
+
+                model = AutoModelForSequenceClassification.from_pretrained(
+                    initial_model_name, num_labels=2
+                )
+
                 # tokenizer is added to the trainer because only in this case the tokenizer will be saved along the model to be reused.
-                trainer = Trainer(model=model, tokenizer=tokenizer, train_dataset=training_dataset, args=training_args)
+                trainer = Trainer(
+                    model=model,
+                    tokenizer=tokenizer,
+                    train_dataset=training_dataset,
+                    args=training_args,
+                )
 
             app.logger.info("Run training")
             trainer.train()
@@ -1591,7 +1690,9 @@ def inner_transformers_finetuning(request_headers):
         return "True"
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
+
 
 @app.route("/transformers-finetuning", methods=["GET"])
 def transformers_finetuning():
@@ -1600,6 +1701,7 @@ def transformers_finetuning():
         return result
     else:
         return jsonify(result)
+
 
 @app.route("/transformers-finetuning-hp-search", methods=["GET"])
 def transformers_finetuning_hp_search():
@@ -1620,67 +1722,104 @@ def transformers_finetuning_hp_search():
         hp_space = json.loads(request.headers["hp-space"])
         hp_mutations = json.loads(request.headers["hp-mutations"])
 
-        if optimizing_metric not in set(['loss', 'accuracy', 'f1', 'precision', 'recall', 'auc', 'aucf1']):
-            raise ValueError("optimize_metric is not one of loss, accuracy, f1, precision, recall, auc, aucf1.")
+        if optimizing_metric not in set(
+            ["loss", "accuracy", "f1", "precision", "recall", "auc", "aucf1"]
+        ):
+            raise ValueError(
+                "optimize_metric is not one of loss, accuracy, f1, precision, recall, auc, aucf1."
+            )
 
-        optimize_direction = 'minimize' if optimizing_metric == 'loss' else 'maximize'
+        optimize_direction = "minimize" if optimizing_metric == "loss" else "maximize"
 
         from transformers import AutoTokenizer
+
         tokenizer = AutoTokenizer.from_pretrained(initial_model_name)
-        
+
         app.logger.info("Prepare transformers dataset and tokenize")
         data_left, data_right, labels = transformers_read_file(training_file, True)
         assert len(data_left) == len(data_right) == len(labels)
-        
-        from sklearn.model_selection import train_test_split
-        [data_left_train, data_left_test, data_right_train, data_right_test, labels_train, labels_test] = train_test_split(data_left, data_right, labels, stratify=labels, test_size=test_size)
-    
-        training_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left_train, data_right_train, labels_train)
-        eval_dataset = transformers_create_dataset(using_tensorflow, tokenizer, data_left_test, data_right_test, labels_test)
 
-        app.logger.info("Transformers dataset for training has %s and for eval %s examples.", len(training_dataset), len(eval_dataset))
-        
+        from sklearn.model_selection import train_test_split
+
+        [
+            data_left_train,
+            data_left_test,
+            data_right_train,
+            data_right_test,
+            labels_train,
+            labels_test,
+        ] = train_test_split(
+            data_left, data_right, labels, stratify=labels, test_size=test_size
+        )
+
+        training_dataset = transformers_create_dataset(
+            using_tensorflow, tokenizer, data_left_train, data_right_train, labels_train
+        )
+        eval_dataset = transformers_create_dataset(
+            using_tensorflow, tokenizer, data_left_test, data_right_test, labels_test
+        )
+
+        app.logger.info(
+            "Transformers dataset for training has %s and for eval %s examples.",
+            len(training_dataset),
+            len(eval_dataset),
+        )
+
         with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
             initial_arguments = {
-                'report_to': 'none',
-                'disable_tqdm' : True,
+                "report_to": "none",
+                "disable_tqdm": True,
             }
 
             fixed_arguments = {
-                'output_dir': os.path.join(tmpdirname, "trainer_output_dir"),
-                'skip_memory_metrics' : True, # see https://github.com/huggingface/transformers/issues/11249
-                'save_strategy' : 'epoch',
-                'do_eval' : True,
-                'evaluation_strategy': 'epoch',
+                "output_dir": os.path.join(tmpdirname, "trainer_output_dir"),
+                "skip_memory_metrics": True,  # see https://github.com/huggingface/transformers/issues/11249
+                "save_strategy": "epoch",
+                "do_eval": True,
+                "evaluation_strategy": "epoch",
             }
-            training_args = transformers_get_training_arguments(using_tensorflow, initial_arguments, training_arguments, fixed_arguments)
-            
-            from sklearn.metrics import accuracy_score, roc_auc_score, precision_recall_fscore_support
+            training_args = transformers_get_training_arguments(
+                using_tensorflow, initial_arguments, training_arguments, fixed_arguments
+            )
+
+            from sklearn.metrics import (
+                accuracy_score,
+                roc_auc_score,
+                precision_recall_fscore_support,
+            )
+
             def compute_metrics(pred):
                 labels = pred.label_ids
                 preds = pred.predictions.argmax(-1)
                 acc = accuracy_score(labels, preds)
-                precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average='binary', pos_label=1, zero_division=0)
+                precision, recall, f1, _ = precision_recall_fscore_support(
+                    labels, preds, average="binary", pos_label=1, zero_division=0
+                )
                 preds_proba = softmax(pred.predictions, axis=1)[:, 1]
                 auc = roc_auc_score(labels, preds_proba)
                 return {
-                    'accuracy': acc,
-                    'f1': f1,
-                    'precision': precision,
-                    'recall': recall,
-                    'auc': auc,
-                    'aucf1': auc + f1
+                    "accuracy": acc,
+                    "f1": f1,
+                    "precision": precision,
+                    "recall": recall,
+                    "auc": auc,
+                    "aucf1": auc + f1,
                 }
 
             app.logger.info("Loading transformers model")
             if using_tensorflow:
                 import tensorflow as tf
-                app.logger.info("Num gpu avail: " + str(len(tf.config.list_physical_devices('GPU'))))
+
+                app.logger.info(
+                    "Num gpu avail: " + str(len(tf.config.list_physical_devices("GPU")))
+                )
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
-                
+
                 def model_init():
                     # TODO: check if necessary with training_args.strategy.scope():
-                    return TFAutoModelForSequenceClassification.from_pretrained(initial_model_name, num_labels=2)
+                    return TFAutoModelForSequenceClassification.from_pretrained(
+                        initial_model_name, num_labels=2
+                    )
 
                 trainer = TFTrainer(
                     model_init=model_init,
@@ -1688,15 +1827,19 @@ def transformers_finetuning_hp_search():
                     train_dataset=training_dataset,
                     eval_dataset=eval_dataset,
                     compute_metrics=compute_metrics,
-                    args=training_args
+                    args=training_args,
                 )
             else:
                 import torch
+
                 app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
                 from transformers import Trainer, AutoModelForSequenceClassification
+
                 def model_init():
-                    return AutoModelForSequenceClassification.from_pretrained(initial_model_name, num_labels=2)
-                
+                    return AutoModelForSequenceClassification.from_pretrained(
+                        initial_model_name, num_labels=2
+                    )
+
                 # tokenizer is added to the trainer because only in this case the tokenizer will be saved along the model to be reused.
                 trainer = Trainer(
                     model_init=model_init,
@@ -1704,64 +1847,73 @@ def transformers_finetuning_hp_search():
                     train_dataset=training_dataset,
                     eval_dataset=eval_dataset,
                     compute_metrics=compute_metrics,
-                    args=training_args
+                    args=training_args,
                 )
-             
+
             # based on the following example: https://docs.ray.io/en/master/tune/examples/pbt_transformers.html
             app.logger.info("Run hyperparameter search")
-            
-            ray_local_dir = os.path.join(tmpdirname, 'ray_local_dir')
-            run_name = 'run_' + datetime.today().strftime("%Y-%m-%d_%H-%M-%S")
-            
+
+            ray_local_dir = os.path.join(tmpdirname, "ray_local_dir")
+            run_name = "run_" + datetime.today().strftime("%Y-%m-%d_%H-%M-%S")
+
             import ray
+
             ray.init(include_dashboard=False, ignore_reinit_error=True)
             from ray import tune
             from ray.tune.schedulers import PopulationBasedTraining
-            
+
             # process search space
             def process_search_space(search_space):
                 for key, value in search_space.items():
-                    function_to_call = getattr(tune, value['name'], None)
+                    function_to_call = getattr(tune, value["name"], None)
                     if function_to_call is None:
-                        raise ValueError('the following function name is not part of ray.tune: ' + str(value['name']))
-                    search_space[key] = function_to_call(**value['params'])
+                        raise ValueError(
+                            "the following function name is not part of ray.tune: "
+                            + str(value["name"])
+                        )
+                    search_space[key] = function_to_call(**value["params"])
+
             process_search_space(hp_space)
             process_search_space(hp_mutations)
-            
+
             shorter_names = {
                 "weight_decay": "w_decay",
                 "learning_rate": "lr",
                 "per_device_train_batch_size": "batch",
-                "num_train_epochs": "epochs"
+                "num_train_epochs": "epochs",
             }
-            param_dict_shorter_names = {hp_key: shorter_names[hp_key] if hp_key in shorter_names else hp_key 
-                for hp_key in set(hp_space.keys()).union(hp_mutations.keys()) }
+            param_dict_shorter_names = {
+                hp_key: shorter_names[hp_key] if hp_key in shorter_names else hp_key
+                for hp_key in set(hp_space.keys()).union(hp_mutations.keys())
+            }
 
             app.logger.info("hp_space: " + str(hp_space))
             app.logger.info("hp_mutations: " + str(hp_mutations))
-            
+
             from ray.tune import CLIReporter
+
             class FlushingReporter(CLIReporter):
                 def report(self, trials, done, *sys_info):
                     print(self._progress_str(trials, done, *sys_info), flush=True)
-            
-            reporter = FlushingReporter(parameter_columns=param_dict_shorter_names,
+
+            reporter = FlushingReporter(
+                parameter_columns=param_dict_shorter_names,
                 metric_columns={
-                    'objective': 'objective',
-                    'eval_auc': 'auc',
-                    'eval_f1': 'f1',
-                    'eval_precision': 'prec',
-                    'eval_recall': 'rec',
-                    'eval_accuracy': 'acc',
-                    'time_total_s':'time(s)',
-                }
+                    "objective": "objective",
+                    "eval_auc": "auc",
+                    "eval_f1": "f1",
+                    "eval_precision": "prec",
+                    "eval_recall": "rec",
+                    "eval_accuracy": "acc",
+                    "time_total_s": "time(s)",
+                },
             )
 
             best_run = trainer.hyperparameter_search(
                 hp_space=lambda _: hp_space,
                 backend="ray",
                 n_trials=number_of_trials,
-                compute_objective=lambda x: x['eval_' + optimizing_metric],
+                compute_objective=lambda x: x["eval_" + optimizing_metric],
                 direction=optimize_direction,
                 scheduler=PopulationBasedTraining(
                     time_attr="training_iteration",
@@ -1782,43 +1934,57 @@ def transformers_finetuning_hp_search():
             )
 
             ray.shutdown()
-            
+
             trial_root_folder = os.path.join(ray_local_dir, run_name, best_run.run_id)
-            highest_outer_step_folder = transformers_search_folder_with_highest_count(trial_root_folder, 'checkpoint_([0-9]+)')
+            highest_outer_step_folder = transformers_search_folder_with_highest_count(
+                trial_root_folder, "checkpoint_([0-9]+)"
+            )
 
             if not highest_outer_step_folder:
-                app.logger.warning("Could not find a checkpoint directory to load to best model from. Return without saving any model.")
+                app.logger.warning(
+                    "Could not find a checkpoint directory to load to best model from. Return without saving any model."
+                )
                 return "ERROR Could not find a checkpoint directory to load to best model from"
-            
-            highest_step_folder = transformers_search_folder_with_highest_count(highest_outer_step_folder, 'checkpoint-([0-9]+)')
+
+            highest_step_folder = transformers_search_folder_with_highest_count(
+                highest_outer_step_folder, "checkpoint-([0-9]+)"
+            )
             if not highest_step_folder:
-                app.logger.warning("Could not find a checkpoint within the checkpoint directory but lets try the outer checkpoint directory.")
+                app.logger.warning(
+                    "Could not find a checkpoint within the checkpoint directory but lets try the outer checkpoint directory."
+                )
                 highest_step_folder = highest_outer_step_folder
-            
-            app.logger.info("Found best model in checkpoint folder: " + str(highest_step_folder))
+
+            app.logger.info(
+                "Found best model in checkpoint folder: " + str(highest_step_folder)
+            )
 
             if using_tensorflow:
                 with training_args.strategy.scope():
-                    model = TFAutoModelForSequenceClassification.from_pretrained(highest_step_folder, num_labels=2)
+                    model = TFAutoModelForSequenceClassification.from_pretrained(
+                        highest_step_folder, num_labels=2
+                    )
                 tokenizer = AutoTokenizer.from_pretrained(highest_step_folder)
                 trainer = TFTrainer(
                     model=model,
                     tokenizer=tokenizer,
                     eval_dataset=eval_dataset,
                     compute_metrics=compute_metrics,
-                    args=training_args
+                    args=training_args,
                 )
             else:
-                model = AutoModelForSequenceClassification.from_pretrained(highest_step_folder, num_labels=2)
+                model = AutoModelForSequenceClassification.from_pretrained(
+                    highest_step_folder, num_labels=2
+                )
                 tokenizer = AutoTokenizer.from_pretrained(highest_step_folder)
                 trainer = Trainer(
                     model=model,
                     tokenizer=tokenizer,
                     eval_dataset=eval_dataset,
                     compute_metrics=compute_metrics,
-                    args=training_args
+                    args=training_args,
                 )
-            
+
             app.logger.info("Best model scored:")
             trainer.evaluate()
 
@@ -1828,28 +1994,33 @@ def transformers_finetuning_hp_search():
         return "True"
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
+
 
 def inner_sentencetransformers_prediction(request_headers):
     try:
         transformers_init(request_headers)
-        
+
         model_name = request_headers["model-name"]
         corpus_file_name = request_headers["corpus-file-name"]
         queries_file_name = request_headers["queries-file-name"]
-        
+
         query_chunk_size = int(request_headers["query-chunk-size"])
         corpus_chunk_size = int(request_headers["corpus-chunk-size"])
         top_k = int(request_headers["topk"])
         both_directions = request_headers["both-directions"].lower() == "true"
         topk_per_resource = request_headers["topk-per-resource"].lower() == "true"
 
-        
         from sentence_transformers import SentenceTransformer, util
         import torch
-        
-        cache_folder_path = request_headers["transformers-cache"] if "transformers-cache" in request_headers else None
-        
+
+        cache_folder_path = (
+            request_headers["transformers-cache"]
+            if "transformers-cache" in request_headers
+            else None
+        )
+
         embedder = SentenceTransformer(model_name, cache_folder=cache_folder_path)
 
         def load_file(file_path):
@@ -1864,53 +2035,71 @@ def inner_sentencetransformers_prediction(request_headers):
         corpus, corpus_pos_to_id = load_file(corpus_file_name)
         queries, queries_pos_to_id = load_file(queries_file_name)
 
-        app.logger.info('loaded corpora with %s corpus documents and %s query documents. Compute now embedding.', len(corpus), len(queries))
+        app.logger.info(
+            "loaded corpora with %s corpus documents and %s query documents. Compute now embedding.",
+            len(corpus),
+            len(queries),
+        )
 
-        app.logger.info('Compute corpus embedding.')
+        app.logger.info("Compute corpus embedding.")
         corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
-        app.logger.info('Compute query embedding.')
+        app.logger.info("Compute query embedding.")
         query_embeddings = embedder.encode(queries, convert_to_tensor=True)
 
         app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
         if torch.cuda.is_available():
-            corpus_embeddings = corpus_embeddings.to('cuda')
-            query_embeddings = query_embeddings.to('cuda')
+            corpus_embeddings = corpus_embeddings.to("cuda")
+            query_embeddings = query_embeddings.to("cuda")
 
         corpus_embeddings = util.normalize_embeddings(corpus_embeddings)
         query_embeddings = util.normalize_embeddings(query_embeddings)
 
-        app.logger.info('Run semantic search with topk=%s', top_k)
+        app.logger.info("Run semantic search with topk=%s", top_k)
 
-        hits = util.semantic_search(query_embeddings, corpus_embeddings, 
-            query_chunk_size, corpus_chunk_size, top_k, util.dot_score)
+        hits = util.semantic_search(
+            query_embeddings,
+            corpus_embeddings,
+            query_chunk_size,
+            corpus_chunk_size,
+            top_k,
+            util.dot_score,
+        )
 
-        app.logger.info('Preparing results')
+        app.logger.info("Preparing results")
         result_dict = defaultdict(set)
         for query_pos, query_hits in enumerate(hits):
             query_id = queries_pos_to_id[query_pos]
             for hit in query_hits:
-                corpus_pos = hit['corpus_id']
+                corpus_pos = hit["corpus_id"]
                 corpus_id = corpus_pos_to_id[corpus_pos]
-                result_dict[(corpus_id, query_id)].add(hit['score'])
+                result_dict[(corpus_id, query_id)].add(hit["score"])
 
         if both_directions:
-            app.logger.info('Run semantic search with topk=%s in other direction', top_k)
-            hits = util.semantic_search(corpus_embeddings, query_embeddings,
-                query_chunk_size, corpus_chunk_size, top_k, util.dot_score)
-            
+            app.logger.info(
+                "Run semantic search with topk=%s in other direction", top_k
+            )
+            hits = util.semantic_search(
+                corpus_embeddings,
+                query_embeddings,
+                query_chunk_size,
+                corpus_chunk_size,
+                top_k,
+                util.dot_score,
+            )
+
             for corpus_pos, corpus_hits in enumerate(hits):
                 corpus_id = corpus_pos_to_id[corpus_pos]
                 for hit in corpus_hits:
-                    query_pos = hit['corpus_id']
+                    query_pos = hit["corpus_id"]
                     query_id = queries_pos_to_id[query_pos]
-                    result_dict[(corpus_id, query_id)].add(hit['score'])
+                    result_dict[(corpus_id, query_id)].add(hit["score"])
         results = []
         for (left, right), scores in result_dict.items():
             results.append((left, right, max(scores)))
-        
+
         if topk_per_resource == False:
             return results
-        
+
         # if top k per resource is true, then further filter the alignment
         source_dict = defaultdict(set)
         target_dict = defaultdict(set)
@@ -1928,7 +2117,9 @@ def inner_sentencetransformers_prediction(request_headers):
         return list(final_alignment)
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
+
 
 @app.route("/sentencetransformers-prediction", methods=["GET"])
 def sentencetransformers_prediction():
@@ -1943,72 +2134,105 @@ def inner_sentencetransformers_finetuning(request_headers):
     try:
         # https://github.com/UKPLab/sentence-transformers/issues/791#issuecomment-790402913
         transformers_init(request_headers)
-        
+
         model_name = request_headers["model-name"]
         tmp_dir = request_headers["tmp-dir"]
         resulting_model_location = request_headers["resulting-model-location"]
         training_file = request_headers["training-file"]
-        
+
         sentence_loss = request_headers["loss"]
         train_batch_size = int(request_headers["train-batch-size"])
         test_batch_size = int(request_headers["test-batch-size"])
         num_epochs = int(request_headers["num-epochs"])
-        cache_folder_path = request_headers["transformers-cache"] if "transformers-cache" in request_headers else None
-        
+        cache_folder_path = (
+            request_headers["transformers-cache"]
+            if "transformers-cache" in request_headers
+            else None
+        )
+
         from sentence_transformers import SentenceTransformer, InputExample, losses
+
         model = SentenceTransformer(model_name, cache_folder=cache_folder_path)
 
-        if sentence_loss == 'CosineSimilarityLoss':
-            parser = lambda row : InputExample(texts=[row[0], row[1]], label=float(row[2]))
+        if sentence_loss == "CosineSimilarityLoss":
+            parser = lambda row: InputExample(
+                texts=[row[0], row[1]], label=float(row[2])
+            )
             train_loss = losses.CosineSimilarityLoss(model)
-        elif sentence_loss == 'MultipleNegativesRankingLoss':
-            parser = lambda row : InputExample(texts=[row[0], row[1]])
+        elif sentence_loss == "MultipleNegativesRankingLoss":
+            parser = lambda row: InputExample(texts=[row[0], row[1]])
             train_loss = losses.MultipleNegativesRankingLoss(model)
-        elif sentence_loss == 'MultipleNegativesRankingLossWithHardNegatives':
-            parser = lambda row : InputExample(texts=row)
+        elif sentence_loss == "MultipleNegativesRankingLossWithHardNegatives":
+            parser = lambda row: InputExample(texts=row)
             train_loss = losses.MultipleNegativesRankingLoss(model)
         else:
-            raise ValueError('the selected loss is not available')
-        
+            raise ValueError("the selected loss is not available")
+
         def read_input_examples(file_path, input_example_generator):
             input_examples = []
             with open(file_path, encoding="utf-8") as csvfile:
                 for row in csv.reader(csvfile, delimiter=","):
                     input_examples.append(input_example_generator(row))
             return input_examples
-        
+
         all_input_examples = read_input_examples(training_file, parser)
         if "validation-file" in request_headers:
             train_examples = all_input_examples
-            validation_examples = read_input_examples(request_headers["validation-file"], parser)
-            app.logger.info('Use separate train and validation file: %s train and %s validation.', len(train_examples), len(validation_examples))
+            validation_examples = read_input_examples(
+                request_headers["validation-file"], parser
+            )
+            app.logger.info(
+                "Use separate train and validation file: %s train and %s validation.",
+                len(train_examples),
+                len(validation_examples),
+            )
         else:
             test_size = float(request_headers["test-size"])
             from sklearn.model_selection import train_test_split
-            train_examples, validation_examples = train_test_split(all_input_examples, 
-                                                           stratify=[i.label for i in all_input_examples],
-                                                           test_size=test_size)
-            app.logger.info('Loaded %s examples. Do a split(validation percentage: %s): %s are training and %s are validation', len(all_input_examples), test_size, len(train_examples), len(validation_examples))
-        
-        
+
+            train_examples, validation_examples = train_test_split(
+                all_input_examples,
+                stratify=[i.label for i in all_input_examples],
+                test_size=test_size,
+            )
+            app.logger.info(
+                "Loaded %s examples. Do a split(validation percentage: %s): %s are training and %s are validation",
+                len(all_input_examples),
+                test_size,
+                len(train_examples),
+                len(validation_examples),
+            )
+
         from sentence_transformers.evaluation import EmbeddingSimilarityEvaluator
         from torch.utils.data import DataLoader
         import math
-        
-        train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=train_batch_size)        
-        evaluator = EmbeddingSimilarityEvaluator.from_input_examples(validation_examples, write_csv=True, batch_size=test_batch_size)
-        warmup_steps = math.ceil(len(train_dataloader) * num_epochs  * 0.1) # 10% of train data for warm-up
-        
-        app.logger.info('Run the training now')
-        model.fit(train_objectives=[(train_dataloader, train_loss)], 
-                  epochs=num_epochs, warmup_steps=warmup_steps,
-                  save_best_model=True, output_path=resulting_model_location,
-                  evaluator=evaluator)
 
-        return model.best_score # this will return a float value with the best score
+        train_dataloader = DataLoader(
+            train_examples, shuffle=True, batch_size=train_batch_size
+        )
+        evaluator = EmbeddingSimilarityEvaluator.from_input_examples(
+            validation_examples, write_csv=True, batch_size=test_batch_size
+        )
+        warmup_steps = math.ceil(
+            len(train_dataloader) * num_epochs * 0.1
+        )  # 10% of train data for warm-up
+
+        app.logger.info("Run the training now")
+        model.fit(
+            train_objectives=[(train_dataloader, train_loss)],
+            epochs=num_epochs,
+            warmup_steps=warmup_steps,
+            save_best_model=True,
+            output_path=resulting_model_location,
+            evaluator=evaluator,
+        )
+
+        return model.best_score  # this will return a float value with the best score
     except Exception as e:
         import traceback
+
         return "ERROR " + traceback.format_exc()
+
 
 @app.route("/sentencetransformers-finetuning", methods=["GET"])
 def sentencetransformers_finetuning():
@@ -2039,7 +2263,12 @@ def handle_exception(e):
     return "ERROR: " + str(e), 500
 
 
-if __name__ == "__main__":
+@app.route("/shutdown", methods=["GET"])
+def shutdown():
+    request.environ.get("werkzeug.server.shutdown")()
+
+
+def main():
     # threaded=False because otherwise GridSearchCV do not run in parallel
     # see https://stackoverflow.com/questions/50665837/using-flask-with-joblib
     # determine the port
@@ -2055,7 +2284,7 @@ if __name__ == "__main__":
                 logging.info("Cannot parse log level " + sys.argv[2])
             else:
                 logging.getLogger().setLevel(numeric_level)
-                logging.getLogger('werkzeug').setLevel(numeric_level)
+                logging.getLogger("werkzeug").setLevel(numeric_level)
             logging.info("Received port and log level")
             int_port = int(sys.argv[1])
             if int_port > 0:
@@ -2068,3 +2297,7 @@ if __name__ == "__main__":
         logging.error(e)
     logging.info(f"Starting server using port {port}")
     app.run(debug=False, port=port, threaded=False)
+
+
+if __name__ == "__main__":
+    main()
