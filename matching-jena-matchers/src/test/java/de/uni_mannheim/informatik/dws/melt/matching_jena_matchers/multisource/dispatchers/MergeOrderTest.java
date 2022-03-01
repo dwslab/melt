@@ -3,7 +3,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MergeTreeUtilTest {
+public class MergeOrderTest {
     
     @Test
     public void testGetHeight(){
@@ -11,14 +11,16 @@ public class MergeTreeUtilTest {
         for(int i = 1; i < 10; i++){
             int n = (int)Math.pow(2, i);
             int[][] tree = getBalanced(n);
-            int height = MergeTreeUtil.getHeight(tree);
+            MergeOrder m = new MergeOrder(tree);
+            int height = m.getHeight();
             assertEquals(i + 1, height);
         }
         
         for(int i = 2; i < 10; i++){
             for(boolean variant : Arrays.asList(true, false)){
                 int[][] tree = getLeftSkewed(i, variant);
-                int height = MergeTreeUtil.getHeight(tree);
+                MergeOrder m = new MergeOrder(tree);
+                int height = m.getHeight();
                 int expected = i;
                 assertEquals(expected, height);
             }
@@ -30,12 +32,12 @@ public class MergeTreeUtilTest {
 
         int n = (int)Math.pow(2, 19);
         int[][] tree = getBalanced(n);
-        int height = MergeTreeUtil.getHeight(tree);
+        int height = new MergeOrder(tree).getHeight();
         assertEquals(20, height);
 
         for(boolean variant : Arrays.asList(true, false)){
             int[][] treeTwo = getLeftSkewed(450_000, variant);
-            int heightTwo = MergeTreeUtil.getHeight(treeTwo);
+            int heightTwo = new MergeOrder(treeTwo).getHeight();
             int expected = 450_000;
             assertEquals(expected, heightTwo);
         }
@@ -43,10 +45,10 @@ public class MergeTreeUtilTest {
     }
     
     @Test
-    public void testGetCountOfParallelExecutions(){
-        assertIterableEquals(Arrays.asList(1,1,1,1), MergeTreeUtil.getCountOfParallelExecutions(getRightSkewed(5, true)));
-        assertIterableEquals(Arrays.asList(4,2,1), MergeTreeUtil.getCountOfParallelExecutions(getBalanced(8)));
-        assertIterableEquals(Arrays.asList(8,4,2,1), MergeTreeUtil.getCountOfParallelExecutions(getBalanced(16)));
+    public void testGetCountOfParallelExecutions(){        
+        assertIterableEquals(Arrays.asList(1,1,1,1), new MergeOrder(getRightSkewed(5, true)).getCountOfParallelExecutions());
+        assertIterableEquals(Arrays.asList(4,2,1), new MergeOrder(getBalanced(8)).getCountOfParallelExecutions());
+        assertIterableEquals(Arrays.asList(8,4,2,1), new MergeOrder(getBalanced(16)).getCountOfParallelExecutions());
     }
     
     

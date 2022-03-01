@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MergeOrder;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.HumanReadbleByteCount;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
@@ -66,12 +67,21 @@ public class ClustererSmile implements Clusterer {
     }
 
     @Override
-    public ClusterResult run(double[][] features, ClusterLinkage linkage, ClusterDistance distance) {
+    public MergeOrder run(double[][] features, ClusterLinkage linkage, ClusterDistance distance) {
+        if(features.length == 0){
+            LOGGER.warn("Features for clustering is empty and do not contain any rows. Return empty merge order.");
+            return new MergeOrder(new int[0][0]);
+        }
+        long n = features.length;
+        long distanceMatrixLength = n * (n+1) / 2;
+        LOGGER.info("Compute distance matrix for {} instances/rows with {} features/columns. The distance matrix will have {} entries.",
+                features.length, features[0].length, distanceMatrixLength);
         float[] proximity = getProximity(features, distance);
+        
+        LOGGER.info("Compute the linkage based on the distance matrix.");
         Linkage hacLinkage = getLinkage(features.length, proximity, linkage);
-
         HierarchicalClustering clusters = HierarchicalClustering.fit(hacLinkage);
-        return new ClusterResult(clusters.getTree(), clusters.getHeight());
+        return new MergeOrder(clusters.getTree(), clusters.getHeight());
     }
 
     /**
@@ -144,9 +154,8 @@ public class ClustererSmile implements Clusterer {
 
     public static float[] proximity(double[][] data, ClusterDistance clusterDistance) {
         long n = data.length;
-        if(n > 65535) {
-            throw new IllegalArgumentException("This implementation does not scale to datasets which has more than 65535 instances" +
-                    " because the pairwise distance does not fit in one array (integer index).");
+        if(n > 46340) {
+            throw new IllegalArgumentException("This implementation does not scale to datasets which has more than 46340 instances");
         }
         long length = n * (n + 1) / 2;
         Distance<double[]> distance = getSmileDistanceFunction(clusterDistance);
@@ -163,9 +172,8 @@ public class ClustererSmile implements Clusterer {
     
     public static float[] proximityParallel(double[][] data, ClusterDistance clusterDistance){
         long n = data.length;
-        if(n > 65535) {
-            throw new IllegalArgumentException("This implementation does not scale to datasets which has more than 65535 instances" +
-                    " because the pairwise distance does not fit in one array (integer index).");
+        if(n > 46340) {
+            throw new IllegalArgumentException("This implementation does not scale to datasets which has more than 46340 instances");
         }
         long length = n * (n+1) / 2;
         Distance<double[]> distance = getSmileDistanceFunction(clusterDistance);
@@ -183,9 +191,8 @@ public class ClustererSmile implements Clusterer {
     public static float[] proximityEuclideanParallel(double[][] data, int numberOfThreads, int numberOfExamplesPerThread, boolean squared){
         ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
         long n = data.length;
-        if(n > 65535) {
-            throw new IllegalArgumentException("This implementation does not scale to datasets which has more than 65535 instances" +
-                    " because the pairwise distance does not fit in one array (integer index).");
+        if(n > 46340) {
+            throw new IllegalArgumentException("This implementation does not scale to datasets which has more than 46340 instances");
         }
         long length = n * (n+1) / 2;
         
@@ -236,6 +243,61 @@ public class ClustererSmile implements Clusterer {
             }
         }
         exec.shutdown();
-        return proximity;        
+        return proximity;
     }
 }
+/*
+//WEKA
+    
+public static void main(String[] args){
+    HierarchyVisualizer
+    //graphs.
+    Instances dataset=null;// = load(DATA);
+    HierarchicalClusterer hc = new HierarchicalClusterer();
+    hc.setLinkType(new SelectedTag(4, TAGS_LINK_TYPE));  // CENTROID
+    hc.setNumClusters(3);
+    try {
+        hc.buildClusterer(dataset);
+        for (Instance instance : dataset) {
+            System.out.printf("(%.0f,%.0f): %s%n", 
+                    instance.value(0), instance.value(1), 
+                    hc.clusterInstance(instance));
+        }
+        hc.graph()
+        //displayDendrogram(hc.graph());
+    } catch (Exception e) {
+        System.err.println(e);
+    }
+}
+
+
+private Instances getInstances(List<String> texts) throws Exception {
+    ArrayList<Attribute> attributes = new ArrayList<>();
+    Attribute contents = new Attribute("contents");
+    attributes.add(contents);
+    Instances data = new Instances("texts", attributes, texts.size());
+    for(String s : texts){
+        Instance inst = new DenseInstance(1);
+        inst.setValue(contents, s);
+        data.add(inst);
+    }
+
+    StringToWordVector filter = new StringToWordVector();
+    filter.setInputFormat(data);
+    filter.setIDFTransform(true);
+    filter.setStopwordsHandler(new Rainbow());
+    filter.setLowerCaseTokens(true);
+
+    HierarchicalClusterer hc = new HierarchicalClusterer();
+    hc.setLinkType(new SelectedTag(4, TAGS_LINK_TYPE));  // CENTROID
+    hc.setNumClusters(3);
+
+    FilteredClusterer fc = new FilteredClusterer();
+    fc.setFilter(filter);
+    fc.setClusterer(hc);
+    fc.buildClusterer(data);
+
+    return data;
+}
+    
+*/

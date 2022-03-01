@@ -97,7 +97,7 @@ public class MultiSourceDispatcherIncrementalMergeTest {
             models.add(new HashSet<>(Arrays.asList(m)));
         }
 
-        MultiSourceDispatcherIncrementalMerge merger = new MatcherFixedMergeTree(new BaselineStringMatcher(), MergeTreeUtilTest.getLeftSkewed(7, true));
+        MultiSourceDispatcherIncrementalMerge merger = new MatcherFixedMergeTree(new BaselineStringMatcher(), MergeOrderTest.getLeftSkewed(7, true));
         merger.setNumberOfThreads(threads);
         AlignmentAndParameters result = merger.match(models, null, null);
         Alignment a = result.getAlignment(Alignment.class);

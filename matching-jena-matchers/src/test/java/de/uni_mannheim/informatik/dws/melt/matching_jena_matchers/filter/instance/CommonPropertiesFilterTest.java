@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.instance.CommonPropertiesFilter;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
@@ -13,8 +13,10 @@ import org.apache.jena.rdf.model.Resource;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-
-public class InstanceFilterBasedOnCommonPropertiesTest {
+/**
+ * InstanceFilterBasedOnCommonPropertiesTest
+ */
+public class CommonPropertiesFilterTest {
     private static final String namespaceSource = "http://melt.dws.informatik.uni-mannheim.de/source/";
     private static final String namespaceTarget = "http://melt.dws.informatik.uni-mannheim.de/target/";
     

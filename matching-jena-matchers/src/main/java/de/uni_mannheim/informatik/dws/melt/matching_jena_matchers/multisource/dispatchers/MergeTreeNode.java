@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -6,28 +6,29 @@ import java.util.List;
 import java.util.Queue;
 
 /**
- * This class is a utility class which represents a hierarchical clustering.
+ * This class is a utility class which represents the merge tree is a different way
+ * (for which it is easier to calculate the height of the tree).
  */
-public class ClusterNode {
+public class MergeTreeNode {
     
     private int id;
-    private ClusterNode left;
-    private ClusterNode right;
+    private MergeTreeNode left;
+    private MergeTreeNode right;
     
     private double distance;
 
-    public ClusterNode(int id, ClusterNode left, ClusterNode right, double distance) {
+    public MergeTreeNode(int id, MergeTreeNode left, MergeTreeNode right, double distance) {
         this.id = id;
         this.left = left;
         this.right = right;
         this.distance = distance;
     }
 
-    public ClusterNode(int id, ClusterNode left, ClusterNode right) {
+    public MergeTreeNode(int id, MergeTreeNode left, MergeTreeNode right) {
         this(id, left, right, 0.0d);
     }
     
-    public ClusterNode(int id) {
+    public MergeTreeNode(int id) {
         this(id, null, null, 0.0d);
     }
     
@@ -41,14 +42,14 @@ public class ClusterNode {
     */
     public int getHeight(){
         //https://www.geeksforgeeks.org/iterative-method-to-find-height-of-binary-tree/
-        Queue<ClusterNode> q = new LinkedList<>();
+        Queue<MergeTreeNode> q = new LinkedList<>();
         q.add(this);
         int height = 0;
   
         while (!q.isEmpty()){
             int nodeCount = q.size();
             while (nodeCount > 0){
-                ClusterNode newnode = q.poll();
+                MergeTreeNode newnode = q.poll();
                 if (newnode.left != null)
                     q.add(newnode.left);
                 if (newnode.right != null)
@@ -63,25 +64,25 @@ public class ClusterNode {
     
     
     
-    public static ClusterNode fromMatrix(int[][] clusterMatrix){
+    public static MergeTreeNode fromMatrix(int[][] clusterMatrix){
         return fromMatrix(clusterMatrix, null);
     }
     
-    public static ClusterNode fromMatrix(int[][] clusterMatrix, double[] height){
+    public static MergeTreeNode fromMatrix(int[][] clusterMatrix, double[] height){
         //https://github.com/scipy/scipy/blob/v1.7.1/scipy/cluster/hierarchy.py#L1400-L1496
         int n = clusterMatrix.length + 1;
         
-        List<ClusterNode> nodes = new ArrayList<>();
+        List<MergeTreeNode> nodes = new ArrayList<>();
         
         for(int i = 0; i < n; i++){
-            nodes.add(new ClusterNode(i));
+            nodes.add(new MergeTreeNode(i));
         }
         if(height != null){
             if(clusterMatrix.length != height.length){
                 throw new IllegalArgumentException("clusterMatrix and height does not have the same size. Please fix.");
             }
         }
-        ClusterNode nd = null;
+        MergeTreeNode nd = null;
         for(int i=0; i < clusterMatrix.length; i++){
             int[] array = clusterMatrix[i];
             if(array.length < 2 )
@@ -95,9 +96,9 @@ public class ClusterNode {
                 throw new IllegalArgumentException("Corrupt cluster matrix. Index to cluster is used before it is formed. See row "  + i + " column 1");
             
             if(height == null){
-                nd = new ClusterNode(i+n, nodes.get(fi), nodes.get(fj));
+                nd = new MergeTreeNode(i+n, nodes.get(fi), nodes.get(fj));
             }else{
-                nd = new ClusterNode(i+n, nodes.get(fi), nodes.get(fj), height[i]);
+                nd = new MergeTreeNode(i+n, nodes.get(fi), nodes.get(fj), height[i]);
             }
             nodes.add(nd);
         }

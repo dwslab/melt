@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MergeOrder;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -8,63 +9,63 @@ public class ClusterResultTest {
     void testCtor() {
         //check null
         assertThrows(IllegalArgumentException.class, ()-> {
-            double[] height = new double[]{};
-            ClusterResult r = new ClusterResult(null, height);
+            double[] distances = new double[]{};
+            MergeOrder r = new MergeOrder(null, distances);
         });
         
         assertThrows(IllegalArgumentException.class, ()-> {
             int[][] tree = new int[][]{{1,2}};
-            ClusterResult r = new ClusterResult(tree, null);
+            MergeOrder r = new MergeOrder(tree, (double[])null);
         });
         
         //check different length
         assertThrows(IllegalArgumentException.class, ()-> {
             int[][] tree = new int[][]{{1,2}};
-            double[] height = new double[]{};
-            ClusterResult r = new ClusterResult(tree, height);
+            double[] distances = new double[]{};
+            MergeOrder r = new MergeOrder(tree, distances);
         });
         
         //check different merge size
         assertThrows(IllegalArgumentException.class, ()-> {
             int[][] tree = new int[][]{{1,2}, {3,5,4}};
-            double[] height = new double[]{0.1, 0.2};
-            ClusterResult r = new ClusterResult(tree, height);
+            double[] distances = new double[]{0.1, 0.2};
+            MergeOrder r = new MergeOrder(tree, distances);
         });
         
         int[][] tree = new int[][]{{1,2}, {3,4}};
-        double[] height = new double[]{0.1, 0.2};
-        ClusterResult r = new ClusterResult(tree, height);
+        double[] distances = new double[]{0.1, 0.2};
+        MergeOrder r = new MergeOrder(tree, distances);
         
         assertEquals(tree.length, r.getTree().length);
-        assertEquals(height.length, r.getHeight().length);
+        assertEquals(distances.length, r.getDistances().length);
     }
     
     @Test
     void testHashCodeAndEquals() {
  
-        ClusterResult A = new ClusterResult(
+        MergeOrder A = new MergeOrder(
                 new int[][]{{1,2}, {3,4}}, 
                 new double[]{0.1, 0.2});
         
-        ClusterResult Asame = new ClusterResult(
+        MergeOrder Asame = new MergeOrder(
                 new int[][]{{1,2}, {3,4}}, 
                 new double[]{0.1, 0.2});        
         assertEquals(A.hashCode(), Asame.hashCode());
         assertTrue(A.equals(Asame));
         
-        ClusterResult differentOrder = new ClusterResult(
+        MergeOrder differentOrder = new MergeOrder(
                 new int[][]{{2,1}, {3,4}}, 
                 new double[]{0.1, 0.2});
         assertEquals(A.hashCode(), differentOrder.hashCode());
         assertTrue(A.equals(differentOrder));
         
-        ClusterResult differentHeight = new ClusterResult(
+        MergeOrder differentHeight = new MergeOrder(
                 new int[][]{{2,1}, {3,4}}, 
                 new double[]{0.2, 0.3});        
         assertNotEquals(A.hashCode(), differentHeight.hashCode());
         assertFalse(A.equals(differentHeight));
         
-        ClusterResult differentSize = new ClusterResult(
+        MergeOrder differentSize = new MergeOrder(
                 new int[][]{{2,1}, {3,4}, {5,6}}, 
                 new double[]{0.1, 0.2, 0.3});        
         assertNotEquals(A.hashCode(), differentSize.hashCode());

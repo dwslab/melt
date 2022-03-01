@@ -2,6 +2,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.OntologyCacheJena;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,6 +17,8 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.assembler.assemblers.OntModelSpecAssembler;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
@@ -64,6 +67,58 @@ public class JenaTransformerHelper {
         }
     }
     
+    public static List<String> getShortNameForModelRepresentations(List<Set<Object>> models){
+        List<String> names = new ArrayList<>(models.size());
+        for(Set<Object> m : models){
+            names.add(getShortNameForModelRepresentation(m));
+        }
+        return names;
+    }
+    
+    public static String getShortNameForModelRepresentation(Set<Object> model){
+        if(model.isEmpty()){
+            return "<empty>";
+        }
+        for(Object o : model){
+            if(o instanceof URL){
+                String name = FilenameUtils.getName(((URL)o).getPath());
+                if(StringUtils.isBlank(name) == false)
+                    return name;
+            }else if(o instanceof URI){
+                String name = FilenameUtils.getName(((URI)o).getPath());
+                if(StringUtils.isBlank(name) == false)
+                    return name;
+            }
+        }
+        for(Object o : model){
+            if(o instanceof Model){
+                Model m = (Model)o;
+                String nsPrefix = m.getNsPrefixURI("");
+                if(StringUtils.isBlank(nsPrefix) == false)
+                    return nsPrefix;
+                List<Entry<String, Integer>> list = getDomainCountsFromSubjects(m, 200);
+                if(list.isEmpty() == false){
+                    return list.get(0).getKey();
+                }
+            }
+        }
+        return model.iterator().next().toString();
+        /*
+        StringBuilder sb = new StringBuilder();
+        for(Object o : model){
+            if(o instanceof URL){
+                String name = FilenameUtils.getName(((URL)o).getPath());
+                if(StringUtils.isBlank(name) == false)
+                    sb.append(name);
+            }
+        }
+        sb.append("(");
+        sb.append(TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(model, Model.class).size());
+        sb.append(")");
+        return sb.toString();
+        */
+    }
+    
     public static String getModelRepresentation(Set<Object> model){
         for(Object o : model){
             if(o instanceof URL || o instanceof URI){
@@ -82,24 +137,7 @@ public class JenaTransformerHelper {
     }
     
     public static String jenaModelToString(Model m){
-        Set<String> subjects = new HashSet<>();
-        ResIterator i =  m.listSubjects();
-        int counter = 1;
         
-        Map<String, Integer> domains = new HashMap<>();
-        while(i.hasNext()){
-            Resource r = i.next();
-            if(r.isURIResource() == false){
-                continue;
-            }
-            String domain = getUriDomain(r.getURI());
-            domains.put(domain, domains.computeIfAbsent(domain, __-> 0) + 1);
-            if(counter >= 200){
-                break;
-            }
-            counter++;
-        }
-        domains.remove("http://");
         
         StringBuilder sb = new StringBuilder();
         sb.append("Jena Model{ ");
@@ -108,9 +146,8 @@ public class JenaTransformerHelper {
         if(nsPrefix != null)
             sb.append("default namespace (prefix): ").append(nsPrefix).append(" ");
         
-        List<Entry<String, Integer>> list = new ArrayList<>(domains.entrySet());
-        list.sort(Entry.comparingByValue(Comparator.reverseOrder()));
-        counter = 1;
+        List<Entry<String, Integer>> list = getDomainCountsFromSubjects(m, 200);
+        int counter = 1;
         sb.append("top 3 domains (of 200 resources): ");
         for (Entry<String, Integer> entry : list) {
             sb.append(entry.getKey()).append("(").append(entry.getValue()).append(") ");
@@ -121,6 +158,29 @@ public class JenaTransformerHelper {
         }
         sb.append("}");
         return sb.toString();
+    }
+    
+    private static List<Entry<String, Integer>> getDomainCountsFromSubjects(Model m, int sampleSize){
+        Map<String, Integer> domains = new HashMap<>();
+        ResIterator i =  m.listSubjects();
+        int counter = 1;
+        while(i.hasNext()){
+            Resource r = i.next();
+            if(r.isURIResource() == false){
+                continue;
+            }
+            String domain = getUriDomain(r.getURI());
+            if(domain == null || domain.equals("http://"))
+                continue;
+            domains.put(domain, domains.computeIfAbsent(domain, __-> 0) + 1);
+            if(counter >= sampleSize){
+                break;
+            }
+            counter++;
+        }
+        List<Entry<String, Integer>> list = new ArrayList<>(domains.entrySet());
+        list.sort(Entry.comparingByValue(Comparator.reverseOrder()));
+        return list;
     }
     
     

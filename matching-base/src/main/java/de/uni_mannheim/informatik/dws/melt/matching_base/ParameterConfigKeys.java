@@ -114,5 +114,21 @@ public class ParameterConfigKeys {
      * A string decribing the RDF serialization format which is a hint for the reading code.
      * Values can be: RDFXML, TTL, NTriple, NQuad etc (see also the documentation in <a href="https://jena.apache.org/documentation/io/rdf-input.html">jena</a>).
      */
-    public static final String HINT_LANG = "http://oaei.ontologymatching.org/format";
+    public static final String HINT_LANG = "http://oaei.ontologymatching.org/hintLang";
+    
+    /**
+     * A topical distance measure between the KGs / ontologies.
+     * This is represented as a floating point number (double).
+     * Zero means same topic (e.g. same KG) higher numbers means no same topics.
+     * This number is not normalized. For the normalized one, see {@link #TOPIC_DISTANCE_NORMALIZED}.
+     */
+    public static final String TOPIC_DISTANCE = "http://oaei.ontologymatching.org/topicDistance";
+    
+    /**
+     * A topical distance measure between the KGs / ontologies.
+     * This is represented as a floating point number (double) between zero and one (normalized).
+     * Zero means same topic (e.g. same KG) one means no same topics.
+     * For the original (non-normalized) value, see {@link #TOPIC_DISTANCE}.
+     */
+    public static final String TOPIC_DISTANCE_NORMALIZED = "http://oaei.ontologymatching.org/topicDistanceNormalized";
 }

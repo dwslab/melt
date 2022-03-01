@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MergeOrder;
 import de.lmu.ifi.dbs.elki.algorithm.clustering.hierarchical.AnderbergHierarchicalClustering;
 import de.lmu.ifi.dbs.elki.algorithm.clustering.hierarchical.CLINK;
 import de.lmu.ifi.dbs.elki.algorithm.clustering.hierarchical.HierarchicalClusteringAlgorithm;
@@ -61,7 +62,7 @@ public class ClustererELKI implements Clusterer {
     
     
     @Override
-    public ClusterResult run(double[][] features, ClusterLinkage linkage, ClusterDistance distance) {
+    public MergeOrder run(double[][] features, ClusterLinkage linkage, ClusterDistance distance) {
         
         //make sure that the DBIDs start from zero (last parameter)
         DatabaseConnection dbc = new ArrayAdapterDatabaseConnection(features, null, 0);
@@ -92,7 +93,7 @@ public class ClustererELKI implements Clusterer {
     
     
     
-    public static ClusterResult transformPointerHierarchy(PointerHierarchyRepresentationResult r) {
+    public static MergeOrder transformPointerHierarchy(PointerHierarchyRepresentationResult r) {
         DBIDDataStore parent = r.getParentStore();
         DoubleDataStore parentDistance = r.getParentDistanceStore();
         DBIDRange ids = (DBIDRange) r.getDBIDs();
@@ -127,7 +128,7 @@ public class ClustererELKI implements Clusterer {
                 merges[counter][1] = successorClusterID;                
             }
         }
-        return new ClusterResult(merges, heights);
+        return new MergeOrder(merges, heights);
     }
     
 

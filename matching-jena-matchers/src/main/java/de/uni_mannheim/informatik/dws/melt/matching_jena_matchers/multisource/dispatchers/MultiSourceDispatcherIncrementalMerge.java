@@ -1,33 +1,29 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers;
 
-import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatchingException;
+import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.IMatcherMultiSourceCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MatcherMultiSourceURL;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MultiSourceDispatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.JenaHelper;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.TdbUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.multisource.IndexBasedJenaMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.JenaTransformerHelper;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.FileCache;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +43,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     private boolean removeUnusedJenaModels;
     private CopyMode copyMode;
     private List<Alignment> intermediateAlignments;
+    private FileCache<MergeOrder> mergeOrderFileCache;
 
     /**
      * Constructor which expects the actual one to one matcher and a boolean if information should be added to the union.
@@ -60,6 +57,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         this.removeUnusedJenaModels = false;
         this.copyMode = CopyMode.NONE;
         this.numberOfThreads = 1;
+        this.mergeOrderFileCache = null;
     }
     
     public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher) {
@@ -81,33 +79,44 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     
     @Override
     public AlignmentAndParameters match(List<Set<Object>> models, Object inputAlignment, Object parameters) throws Exception {
-        int[][] mergeTree = getMergeTree(models, parameters);
+        MergeOrder mergeOrder = null;
+        if(mergeOrderFileCache != null){
+            mergeOrder = mergeOrderFileCache.loadFromFileOrUseSuplier(()-> getMergeTree(models, parameters));
+            mergeOrderFileCache.saveIfCacheNotExistent();
+        }else{
+            mergeOrder = getMergeTree(models, parameters);
+        }
         
-        if(mergeTree == null){
-            LOGGER.warn("Merging tree is null. Please check subclasses, expecially what they return at method getMergeTree. Returning input alignment.");
+        if(mergeOrder == null){
+            LOGGER.warn("Merging order is null. Please check subclasses, expecially what they return at method getMergeTree. Returning input alignment.");
             return new AlignmentAndParameters(inputAlignment, parameters);
         }
         
-        if(mergeTree.length != models.size()-1){
-            throw new IllegalArgumentException("Merging tree has not enough entries. There are " + models.size() + "model but only " + mergeTree.length + " entries in tree (expected " + (models.size()-1) + " ). Stopping merging.");
+        if(mergeOrder.getTree().length != models.size()-1){
+            throw new IllegalArgumentException("Merging tree has unexpected number of merges. There are " + models.size() + " model(s) but " + mergeOrder.getTree().length + " entries in tree (expected " + (models.size()-1) + " ). Stopping merging.");
         }
         
         if(this.intermediateAlignments != null)
-            this.intermediateAlignments.clear();
+            this.intermediateAlignments = new ArrayList<>(mergeOrder.getTree().length);
         callClearIndex(); // clear index if some index already exists.
         
         Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
+        mergeOrder.setLabels(JenaTransformerHelper.getShortNameForModelRepresentations(models));
+        
         if(this.numberOfThreads > 1){
-            return runParallel(mergeTree, models, inputAlignment, p);
+            return runParallel(mergeOrder, models, inputAlignment, p);
         }else{
-            return runSequential(mergeTree, models, inputAlignment, p);
+            return runSequential(mergeOrder, models, inputAlignment, p);
         }
     }
     
-    private AlignmentAndParameters runSequential(int[][] mergeTree, List<Set<Object>> models, Object inputAlignment, Properties p) throws MatchingException, Exception{
+    private AlignmentAndParameters runSequential(MergeOrder mergeOrder, List<Set<Object>> models, Object inputAlignment, Properties p) throws MatchingException, Exception{
         List<Set<Object>> mergedOntologies = new ArrayList<>();
-        
+        int[][] mergeTree = mergeOrder.getTree();
+        double[] distances = mergeOrder.getDistances();
+        double[] distancesNormalized  = mergeOrder.getDistancesNormalized();
+                
         int n = models.size();
         int mergeCount = mergeTree.length;
         LOGGER.info("Now performing {} merges.", mergeCount);
@@ -179,16 +188,19 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                     if(isLeftModelGreater(leftOntology, rightOntology, p)){
                         //copy target because otherwise the original model will be modified. Which can be persisted on disk.
                         source = rightOntology;
-                        target = getCopiedModel(leftOntology, p);
+                        target = this.copyMode.getCopiedModel(leftOntology, p);
                     }else{
                         //copy target because otherwise the original model will be modified. Which can be persisted on disk.
                         source = leftOntology;
-                        target = getCopiedModel(rightOntology, p);
+                        target = this.copyMode.getCopiedModel(rightOntology, p);
                     }
                 }
             }
+            String mergeLabel = mergeOrder.getLabel(left) + "-" + mergeOrder.getLabel(right);
+            Properties parameters = addDistance(DispatcherHelper.deepCopy(p), distances[i], distancesNormalized[i]);
+            Object copiedInputAlignment = DispatcherHelper.deepCopy(inputAlignment);
             
-            MergeResult mergeResult = MergeExecutor.merge(oneToOneMatcher, source, target, inputAlignment, p, addingInformationToUnion, -1);
+            MergeResult mergeResult = MergeExecutor.merge(oneToOneMatcher, source, target, copiedInputAlignment, parameters, addingInformationToUnion, -1, this.removeUnusedJenaModels, mergeLabel);
             mergedOntologies.add(mergeResult.getResult());
             
             Alignment resultingAlignment = mergeResult.getAlignment();
@@ -199,75 +211,72 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
             finalAlignment.addAll(resultingAlignment);
             if(this.intermediateAlignments != null)
                 this.intermediateAlignments.add(resultingAlignment);
-            
-            if(this.removeUnusedJenaModels){
-                removeOntModelFromSet(source);
-            }
         }
-        
         return new AlignmentAndParameters(finalAlignment, p);
-        
     }
     
-    private AlignmentAndParameters runParallel(int[][] mergeTree, List<Set<Object>> models, Object inputAlignment, Properties p) throws MatchingException{
-        int mergeCount = mergeTree.length;
-        int n = models.size();
-        
-        LOGGER.info("Now performing {} merges.", mergeCount);
+    private AlignmentAndParameters runParallel(MergeOrder mergeOrder, List<Set<Object>> models, Object inputAlignment, Properties p) throws MatchingException{
+        if(this.copyMode == CopyMode.CREATE_TDB)
+            throw new IllegalArgumentException("Copy mode for parallel merge should not be set to CopyMode.CREATE_TDB");
         Alignment finalAlignment = new Alignment();
         
         List<Set<Object>> mergedModels = new ArrayList<>();
         mergedModels.addAll(models);
         
+        int n = models.size();
         for(int i = 0; i < n; i++){
             mergedModels.add(null);
         }
         
+        int[][] mergeTree = mergeOrder.getTree();
+        double[] distances = mergeOrder.getDistances();
+        double[] distancesNormalized = mergeOrder.getDistancesNormalized();
         List<MergeTaskPos> merges = new ArrayList<>();
         for(int i=0; i < mergeTree.length; i++){
             int[] mergePair = mergeTree[i];
             if(mergePair.length < 2)
                 throw new IllegalArgumentException("Merge tree is not valid. In row " + i + " less than two elements appear: " + Arrays.toString(mergePair));
-            merges.add(new MergeTaskPos(mergePair[0], mergePair[1], n + i));
+            merges.add(new MergeTaskPos(mergePair[0], mergePair[1], n + i, distances[i], distancesNormalized[i]));
         }
         
+        //to be removed        
+        //mergeOrder.displayTree();
+        
+        //in the parallel mode, it is not necessary to look for already merged elements because everything happens in parallel
+        //and the matcher cannot improve speed (by using a cache)
+        //thus we look only for the larger KG which is the target.
+        
+        //the order in which the results are processed is irrelevant
         ExecutorService exec = Executors.newFixedThreadPool(this.numberOfThreads);
-        List<Integer> parallelMergesPossible = MergeTreeUtil.getCountOfParallelExecutions(mergeTree);
-        LOGGER.info("Run parallel merge with {} threads.", this.numberOfThreads);
+        ExecutorCompletionService<MergeResult> completionService = new ExecutorCompletionService<>(exec);
+        List<Integer> parallelMergesPossible = mergeOrder.getCountOfParallelExecutions();
+        LOGGER.info("Run parallel merge with {} merges ({} threads).", mergeTree.length, this.numberOfThreads);
         LOGGER.info("Following the list of counts which show how many matching tasks could be processed in parallel for each stage: {}", parallelMergesPossible);
         try{
             int stage = 1;
             while(!merges.isEmpty()){
-                List<Future<MergeResult>> futures = new ArrayList<>();
                 List<MergeTaskPos> runnable = new ArrayList<>();
                 for(MergeTaskPos task : merges){
                     Set<Object> one = mergedModels.get(task.getClusterOnePos());
                     Set<Object> two = mergedModels.get(task.getClusterTwoPos());
                     if(one != null && two != null){
-                        //decide what is source what is target - the target is the bigger one
-                        Set<Object> source = one;
-                        Set<Object> target = two;
+                        runnable.add(task);
+                        String mergeLabel = mergeOrder.getLabel(task.getClusterOnePos()) + "-" + mergeOrder.getLabel(task.getClusterTwoPos());
+                        Properties parameters = addDistance(DispatcherHelper.deepCopy(p), task.getDistance(), task.getDistanceNormalized());
+                        Object copiedInputAlignment = DispatcherHelper.deepCopy(inputAlignment);
+                        completionService.submit(new MergeExecutor(this.oneToOneMatcher, one, two, copiedInputAlignment, parameters, 
+                                addingInformationToUnion, task.getClusterResultPos(), this.removeUnusedJenaModels, this.copyMode, mergeLabel));
+                        
+                        /*
+                        //to be removed
+                        MergeResult result = null;
                         try {
-                            if(isLeftModelGreater(one, two, p)){
-                                source = two;
-                                target = one;
-                            }
-                        } catch (TypeTransformationException ex) {
-                            LOGGER.warn("Could not transform model to jena model and cannot compare the size. Thus stick to default order."
-                                    + "Should not make any change unless the matcher is not symmetric.");
+                            result = new MergeExecutor(this.oneToOneMatcher, one, two,
+                                    DispatcherHelper.deepCopy(inputAlignment), DispatcherHelper.deepCopy(p),
+                                    addingInformationToUnion, task.getClusterResultPos(), this.removeUnusedJenaModels, this.copyMode, mergeLabel).call();
+                        } catch (Exception ex) {
+                            java.util.logging.Logger.getLogger(MultiSourceDispatcherIncrementalMerge.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        runnable.add(task);                            
-                        futures.add(exec.submit(new MergeExecutor(this.oneToOneMatcher, source, target, 
-                                DispatcherHelper.deepCopy(inputAlignment), DispatcherHelper.deepCopy(p), 
-                                addingInformationToUnion, task.getClusterResultPos())));
-                    }
-                }
-                LOGGER.info("Run matching stage {}/{} with possibly {} tasks in parallel (actual parallelization depend on threads which is {})", stage++, parallelMergesPossible.size(), runnable.size(), this.numberOfThreads);
-                merges.removeAll(runnable);
-
-                for (Future<MergeResult> f : futures) {
-                    try {
-                        MergeResult result = f.get();// get is the blocking call here
                         mergedModels.set(result.getNewPos(), result.getResult());
                         Alignment resultingAlignment = result.getAlignment();
                         if(resultingAlignment == null){
@@ -276,7 +285,31 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                         }
                         finalAlignment.addAll(resultingAlignment);
                         if(this.intermediateAlignments != null)
-                            this.intermediateAlignments.add(resultingAlignment);
+                            this.intermediateAlignments.set(result.getNewPos() - n, resultingAlignment);
+                        //to be removed - end
+                        */
+                    }
+                }
+                
+                LOGGER.info("Run matching stage {}/{} with possibly {} tasks in parallel (actual number of parallel threads: {})", stage++, parallelMergesPossible.size(), runnable.size(), this.numberOfThreads);
+                merges.removeAll(runnable);
+                
+                for(int i = 0; i < runnable.size(); i++ ) {
+                    try {
+                        MergeResult result = completionService.take().get();// get is the blocking call here
+                        if(result == null){
+                            LOGGER.error("The result of a merge is null. The whole merge will be canceled.");
+                            throw new MatchingException("The result of a merge is null. The whole merge will be canceled.");
+                        }
+                        mergedModels.set(result.getNewPos(), result.getResult());
+                        Alignment resultingAlignment = result.getAlignment();
+                        if(resultingAlignment == null){
+                            LOGGER.error("The resulting alignment is null. Maybe a transformation error. The whole merge will be canceled.");
+                            throw new MatchingException("The resulting alignment is null. Maybe a transformetrion error. The whole merge will be canceled.");
+                        }
+                        finalAlignment.addAll(resultingAlignment);
+                        if(this.intermediateAlignments != null)
+                            this.intermediateAlignments.set(result.getNewPos() - n, resultingAlignment);
                     } catch (InterruptedException | ExecutionException ex) {
                         LOGGER.warn("Error when waiting for parallel results of matcher execution.", ex);
                     }
@@ -288,15 +321,14 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         return new AlignmentAndParameters(finalAlignment, p);
     }
     
-    protected void removeOntModelFromSet(Set<Object> set){
-        for (Iterator<Object> i = set.iterator(); i.hasNext();) {
-            Object element = i.next();
-            // this selects Jena Model and OntModel
-            if (element instanceof Model) {
-                i.remove();
-            }
-        }
-    }    
+    
+    private static Properties addDistance(Properties p, double distance, double normalizedDistance){
+        p.put(ParameterConfigKeys.TOPIC_DISTANCE, distance);
+        p.put(ParameterConfigKeys.TOPIC_DISTANCE_NORMALIZED, normalizedDistance);
+        return p;
+    }
+    
+    
              
     /**
      * Returns the merging tree (which ontologies are merged in which order).
@@ -307,7 +339,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
      *      If an element j in the row is less than n, then observation j was merged at this stage. 
      *      If j &ge; n then the merge was with the cluster formed at the (earlier) stage j-n of the algorithm.
      */
-    public abstract int[][] getMergeTree(List<Set<Object>> models, Object parameters);
+    public abstract MergeOrder getMergeTree(List<Set<Object>> models, Object parameters);
     
     
     
@@ -328,39 +360,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         }
     }
     
-    private Set<Object> getCopiedModel(Set<Object> modelRepresentations, Properties parameters) throws TypeTransformationException{
-        switch(this.copyMode){
-            case NONE:{
-                return modelRepresentations;
-            }
-            case CREATE_TDB:{
-                URL modelURL = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, URL.class, parameters);
-                //File tdbLocation = new File("incrementalMergeintermediateKG");
-                File tdbLocation = FileUtil.createFolderWithRandomNumberInDirectory(new File("./"), "incrementalMergeintermediateKG");
-                tdbLocation.mkdirs();
-                OntModel copiedModel = TdbUtil.bulkLoadToTdbOntModel(tdbLocation.getAbsolutePath(), modelURL.toString(), JenaTransformerHelper.getSpec(parameters));
-                Set<Object> models = new HashSet<>();
-                models.add(copiedModel);
-                try {
-                    models.add(tdbLocation.toURI().toURL());
-                } catch (MalformedURLException ex) {} //Do nothing
-                return models;
-            }
-            case COPY_IN_MEMORY:{
-                Model model = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(modelRepresentations, Model.class, parameters);
-                if(model == null){
-                    throw new IllegalArgumentException("Could not transform model during copying.");
-                }
-                OntModel copiedModel = JenaHelper.createNewOntModel(parameters);
-
-                copiedModel.add(model);
-                return new HashSet<>(Arrays.asList(copiedModel));
-            }
-            default:{
-                throw new IllegalArgumentException("CopyMode: " + this.copyMode + " is not implemented in IncrementalMerge.");
-            }
-        }
-    }
+    
     
     //getter and setter:
 
@@ -473,5 +473,26 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         this.copyMode = copyMode;
     }
     
+    /**
+     * Returns the cache file which is used to store the merge tree.
+     * In case no cache file is set, then null is returned.
+     * @return the cache file or null
+     */
+    public File getCacheFile() {
+        if(this.mergeOrderFileCache == null)
+            return null;
+        return this.mergeOrderFileCache.getFile();
+    }
     
+    /**
+     * Sets the cache file which should be used to cache the merge tree.
+     * Only use this method if the same models are merged over and over again.
+     * Thus the merge tree do not need to be computed multiple times.
+     * In case the file does not exists, the new computed merge tree is stored in this file.
+     * In all other cases, the file will not be modified. The cache file needs to be deleted to compute the merge tree again.
+     * @param cacheFile the file for storing the merge tree.
+     */
+    public void setCacheFile(File cacheFile) {
+        this.mergeOrderFileCache = new FileCache<>(cacheFile);
+    }
 }

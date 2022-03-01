@@ -22,18 +22,25 @@ public class DispatcherHelper {
             return null;
         //the below fix is due to jackson - see the comment at the end of the file
         if(o instanceof Properties){
-            try {
-                Map<Object, Object> map = objectMapper.readValue(objectMapper.writeValueAsString(o), new TypeReference<Map<Object,Object>>(){});
-                Properties p = new Properties();
-                p.putAll(map);
-                return p;
-            } catch (JsonProcessingException ex) {
-                LOGGER.error("Could not make a deep copy of instance of {}. Returning null.", o.getClass());
-                return null;
-            }
+            return deepCopy((Properties) o);
         }
         try {
             return objectMapper.readValue(objectMapper.writeValueAsString(o), o.getClass());
+        } catch (JsonProcessingException ex) {
+            LOGGER.error("Could not make a deep copy of instance of {}. Returning null.", o.getClass());
+            return null;
+        }
+    }
+    
+    public static Properties deepCopy(Properties o){
+        if(o == null)
+            return null;
+        //the below fix is due to jackson - see the comment at the end of the file
+        try {
+            Map<Object, Object> map = objectMapper.readValue(objectMapper.writeValueAsString(o), new TypeReference<Map<Object,Object>>(){});
+            Properties p = new Properties();
+            p.putAll(map);
+            return p;
         } catch (JsonProcessingException ex) {
             LOGGER.error("Could not make a deep copy of instance of {}. Returning null.", o.getClass());
             return null;

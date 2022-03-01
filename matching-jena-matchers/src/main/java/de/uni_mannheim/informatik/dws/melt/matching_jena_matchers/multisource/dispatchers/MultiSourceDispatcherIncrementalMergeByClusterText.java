@@ -36,7 +36,6 @@ import smile.nlp.dictionary.EnglishPunctuations;
 import smile.nlp.dictionary.EnglishStopWords;
 import smile.nlp.normalizer.SimpleNormalizer;
 import smile.nlp.stemmer.PorterStemmer;
-import smile.nlp.tokenizer.SimpleSentenceSplitter;
 import smile.nlp.tokenizer.SimpleTokenizer;
 
 /**
@@ -92,7 +91,7 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
                 documents.add(bow);
                 documentFrequency.addAll(bow.getDistinctElements());
                 if(this.isRemoveUnusedJenaModels()){
-                    this.removeOntModelFromSet(modelRepresentations);
+                    MergeExecutor.removeOntModelFromSet(modelRepresentations);
                 }
             }catch(TypeTransformationException ex){
                 LOGGER.warn("Conversion to OntModel/Model did not work. Can't compute the similarities between the ontologies/knowledge graphs.", ex);

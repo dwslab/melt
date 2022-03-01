@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MergeOrder;
 import java.util.Arrays;
 import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,10 +41,10 @@ public class ClustererSmileTest {
         double[][] features = getRandomDoubleMatrix(100, 20, 123);
         
         ClustererSmile smile = new ClustererSmile();
-        ClusterResult smileResult = smile.run(features, ClusterLinkage.SINGLE, ClusterDistance.EUCLIDEAN);
+        MergeOrder smileResult = smile.run(features, ClusterLinkage.SINGLE, ClusterDistance.EUCLIDEAN);
         
         ClustererELKI elki = new ClustererELKI(true);
-        ClusterResult elkiResult = elki.run(features, ClusterLinkage.SINGLE, ClusterDistance.EUCLIDEAN);
+        MergeOrder elkiResult = elki.run(features, ClusterLinkage.SINGLE, ClusterDistance.EUCLIDEAN);
         
         assertEquals(smileResult.hashCode(), elkiResult.hashCode());
         assertTrue(smileResult.equals(elkiResult));

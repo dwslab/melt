@@ -27,7 +27,7 @@ public class MatcherFixedMergeTree extends MultiSourceDispatcherIncrementalMerge
     }
 
     @Override
-    public int[][] getMergeTree(List<Set<Object>> models, Object parameters) {
-        return this.mergeTree;
+    public MergeOrder getMergeTree(List<Set<Object>> models, Object parameters) {
+        return new MergeOrder(this.mergeTree);
     }
 }

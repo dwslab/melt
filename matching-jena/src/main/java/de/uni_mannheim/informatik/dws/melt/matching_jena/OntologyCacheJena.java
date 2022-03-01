@@ -91,6 +91,7 @@ public class OntologyCacheJena {
         } else {
             // → do not use cache
             // plain vanilla case: read ontology and return
+            LOGGER.info("Reading model not cached (" + uri + ")");
             return readOntModel(uri, spec, hintlang);
         }
     }

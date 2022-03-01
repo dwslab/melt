@@ -18,7 +18,6 @@ public class FileCache <T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileCache.class);
     
     protected File file;
-    protected Supplier<T> instanceSuplier;
     protected T instance;
     
     
@@ -28,23 +27,36 @@ public class FileCache <T> {
     
     public FileCache(File file, Supplier<T> instanceSuplier){
         this.file = file;
-        this.instanceSuplier = instanceSuplier;
-        load();
+        load(instanceSuplier);
     }
     
+    public FileCache(String file){
+        this(new File(file));
+    }
+    public FileCache(File file){
+        this.file = file;
+    }
+    
+    
+    public T loadFromFileOrUseSuplier(Supplier<T> instanceSuplier){
+        load(instanceSuplier);
+        return this.instance;
+    }
+    
+    
     @SuppressWarnings("unchecked")
-    protected void load(){
+    private void load(Supplier<T> instanceSuplier){
         if(this.file.exists()){
-            LOGGER.info("Load from cache file");
+            LOGGER.info("Load from cache file {}", this.file);
             try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
                 this.instance = (T) ois.readObject();
             } catch (Exception ex) {
-                LOGGER.error("Could not load the instance from file. Call the suplier to get a new one.", ex);
-                this.instance = this.instanceSuplier.get();
+                LOGGER.error("Could not load the instance from file {}. Call the suplier to get a new one.", this.file, ex);
+                this.instance = instanceSuplier.get();
             }
         }else{
             LOGGER.info("Call instance supplier");
-            this.instance = this.instanceSuplier.get();
+            this.instance = instanceSuplier.get();
         }
     }
     
@@ -89,7 +101,8 @@ public class FileCache <T> {
         try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))){
             out.writeObject(instance);
         } catch (IOException ex) {
-            LOGGER.error("Could not save the instance of FileCache to file.", ex);
+            file.delete();
+            LOGGER.error("Could not save the instance of FileCache to file {}.", file, ex);
         }
     }
     
@@ -101,5 +114,8 @@ public class FileCache <T> {
             save();
         }
     }
-    
+
+    public File getFile() {
+        return file;
+    }
 }

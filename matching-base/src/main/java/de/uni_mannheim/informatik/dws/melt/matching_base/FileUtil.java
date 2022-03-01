@@ -38,8 +38,13 @@ public class FileUtil {
      * @param newUserTmpFolder the new folder - it should be a directory and existent.
      */
     public static void setUserTmpFolder(File newUserTmpFolder){
+        if(newUserTmpFolder == null){
+            throw new IllegalArgumentException("The given userTmpFolder is null.");
+        }
+        newUserTmpFolder.mkdirs();
         if(newUserTmpFolder.isDirectory() == false)
             throw new IllegalArgumentException("The given userTmpFolder is not a directory.");
+        LOGGER.info("Setting user tmp folder to {}", newUserTmpFolder);
         userTmpFolder = newUserTmpFolder;
     }
     

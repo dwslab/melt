@@ -59,11 +59,11 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
     }
     
     @Override
-    public int[][] getMergeTree(List<Set<Object>> models, Object parameters){
+    public MergeOrder getMergeTree(List<Set<Object>> models, Object parameters){
         int numberOfModels = models.size();
         if(numberOfModels < 2){
             LOGGER.warn("Nothing to merge because number of model is less than two.");
-            return new int[0][0];
+            return new MergeOrder(new int[0][0]);
         }
         
         Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
@@ -80,10 +80,6 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
             inducedOrder.sort(this.comparator);
         }
         
-        //for(ModelAndIndex i : inducedOrder){
-        //    System.out.println(i.getModel(OntModel.class).size());
-        //}
-        
         int[][] mergeTree = new int[numberOfModels - 1][2];
         
         //merge the first two in the list
@@ -94,14 +90,7 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
             mergeTree[i - 1][0] = numberOfModels + (i - 2); // the merged model before
             mergeTree[i - 1][1] = inducedOrder.get(i).getIndex();
         }
-        
-        //JFrame f = new JFrame();
-        //f.setSize(new Dimension(1000, 1000));
-        //f.setLocationRelativeTo(null);
-        //f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //f.getContentPane().add(new Dendrogram(clusters.getTree(), clusters.getHeight()).canvas().panel());
-        //f.setVisible(true);
-        return mergeTree;
+        return new MergeOrder(mergeTree);
     }
     
     
@@ -175,7 +164,7 @@ public class MultiSourceDispatcherIncrementalMergeByOrder extends MultiSourceDis
     
     public static final Comparator<ModelAndIndex> IDENTITY = Comparator.comparing(ModelAndIndex::getIndex);
     
-    public static final Comparator<ModelAndIndex> REVERSED = IDENTITY.reversed();
+    public static final Comparator<ModelAndIndex> IDENTITY_REVERSED = IDENTITY.reversed();
     
     /**
      * Sorted by the number of classes in a model. This means models/ontologies/knowledge graphs with small number of classes will be merged first.

@@ -41,14 +41,47 @@ public class ScaleConfidence extends MatcherYAAAJena implements Filter {
         double scale = newMax - newMin;
         if(range == 0.0){
             for(Correspondence c : alignment){
-                c.setConfidence((scale * c.getConfidence()) + newMin);//TODO: check
+                c.setConfidence((scale * c.getConfidence()) + newMin);
             }
         }else{
             for(Correspondence c : alignment){
-                c.setConfidence(((scale * (c.getConfidence() - min))/ range) + newMin);
+                c.setConfidence(((scale * (c.getConfidence() - min)) / range) + newMin);
             }
         }
         
-        return alignment;        
-    }    
+        return alignment;
+    }
+    
+    public static double[] scaleArray(double[] array){
+        return scaleArray(array, 0.0d, 1.0d);
+    }
+    
+    public static double[] scaleArray(double[] array, double newMin, double newMax){        
+        //find min and max:
+        double min = 1.0;
+        double max = 0.0;
+        for(double c : array){
+            if(c > max){
+                max = c;
+            }
+            if(c < min){
+                min = c;
+            }
+        }
+        
+        //scale:
+        double range = max - min;
+        double scale = newMax - newMin;
+        double[] newArray = new double[array.length];
+        if(range == 0.0){
+            for(int i = 0; i < array.length; i++){
+                newArray[i] = (scale * array[i]) + newMin;
+            }
+        }else{
+            for(int i = 0; i < array.length; i++){
+                newArray[i] = ((scale * (array[i] - min)) / range) + newMin;
+            }
+        }
+        return newArray;
+    }
 }

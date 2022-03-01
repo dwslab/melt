@@ -8,8 +8,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.atlas.lib.DateTimeUtils;
+import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.graph.compose.Polyadic;
+import org.apache.jena.graph.impl.WrappedGraph;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.query.Dataset;
@@ -74,6 +77,13 @@ public class TdbUtil {
         dest.finishBulk() ;
         
         return ModelFactory.createOntologyModel(spec, d.getDefaultModel());
+    }
+    
+    public static OntModel createTDBbackedModel(String tdblocation, Model m, OntModelSpec spec){
+        Dataset d = TDBFactory.createDataset(tdblocation);
+        Model tdbModel = d.getDefaultModel();
+        tdbModel.add(m);
+        return ModelFactory.createOntologyModel(spec, tdbModel);
     }
     
     /*
@@ -142,6 +152,27 @@ public class TdbUtil {
         }catch (URISyntaxException | IllegalArgumentException | FileSystemNotFoundException | SecurityException ex) {
             return null;
         }
+    }
+    
+    public static boolean isModelBackedByTDB(Model model){
+        return isGraphBackedByTDB(model.getGraph());
+    }
+    public static boolean isGraphBackedByTDB(Graph graph){
+        if(graph instanceof GraphTDB){
+            return true;
+        }else if(graph instanceof Polyadic){
+            Polyadic polyadicGraph = (Polyadic)graph;
+            if(isGraphBackedByTDB(polyadicGraph.getBaseGraph()))
+                return true;
+            for(Graph subGraph : polyadicGraph.getSubGraphs()){
+                if(isGraphBackedByTDB(subGraph))
+                    return true;
+            }
+        }else if(graph instanceof WrappedGraph){
+            if(isGraphBackedByTDB(((WrappedGraph)graph).getWrapped()))
+                return true;
+        }
+        return false;
     }
     
     

@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.d
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
+import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
@@ -29,41 +30,65 @@ import org.slf4j.LoggerFactory;
 public class MergeExecutor implements Callable<MergeResult>{
     private static final Logger LOGGER = LoggerFactory.getLogger(MergeExecutor.class);
     
-    private Object matcher;
-    private Set<Object> source;
-    private Set<Object> target;
-    private Object inputAlignment;
-    private Object parameters;
-    private boolean addInformationToUnion;
-    private int newPos;
+    private final Object matcher;
+    private final Set<Object> kgOne;
+    private final Set<Object> kgTwo;
+    private final Object inputAlignment;
+    private final Properties parameters;
+    private final boolean addInformationToUnion;
+    private final int newPos;
+    private final boolean removeUnusedJenaModels;
+    private final CopyMode copyMode;
+    private final String labelOfMergeTask;
 
-    public MergeExecutor(Object matcher, Set<Object> source, Set<Object> target, Object inputAlignment, Object parameters, boolean addInformationToUnion, int newPos) {
+    public MergeExecutor(Object matcher, Set<Object> kgOne, Set<Object> kgTwo, Object inputAlignment, Properties parameters, 
+            boolean addInformationToUnion, int newPos, boolean removeUnusedJenaModels, CopyMode copyMode, String labelOfMergeTask) {
         this.matcher = matcher;
-        this.source = source;
-        this.target = target;
+        this.kgOne = kgOne;
+        this.kgTwo = kgTwo;
         this.inputAlignment = inputAlignment;
         this.parameters = parameters;
         this.addInformationToUnion = addInformationToUnion;
         this.newPos = newPos;
+        this.removeUnusedJenaModels = removeUnusedJenaModels;
+        this.copyMode = copyMode;
+        this.labelOfMergeTask = labelOfMergeTask;
     }
     
     @Override
     public MergeResult call() throws Exception {
-        return merge(matcher, source, target, inputAlignment, parameters, addInformationToUnion, newPos);
+        Thread.currentThread().setName(this.labelOfMergeTask);
+        //first check what is the source and target for the merge
+        //decide what is source what is target - the target is the bigger one
+        Set<Object> source = this.kgOne;
+        Set<Object> target = this.kgTwo;
+        try {
+            if(hasFirstKgMoreTriples(this.kgOne, this.kgTwo, this.parameters)){
+                source = this.kgTwo;
+                target = this.kgOne;
+            }
+        } catch (TypeTransformationException ex) {
+            LOGGER.warn("Could not transform model to jena model and cannot compare the size. Thus stick to default order."
+                    + "Should not make any change unless the matcher is not symmetric.");
+        }
+        target = copyMode.getCopiedModel(target, parameters);
+        return merge(matcher, source, target, inputAlignment, parameters, addInformationToUnion, newPos, removeUnusedJenaModels, labelOfMergeTask);
     }
     
-    
-    public static MergeResult merge(Object matcher, Set<Object> source, Set<Object> target, Object inputAlignment, Object parameters, boolean addInformationToUnion, int newPos) throws Exception{
+    public static MergeResult merge(Object matcher, Set<Object> source, Set<Object> target, Object inputAlignment, Object parameters, 
+            boolean addInformationToUnion, int newPos, boolean removeUnusedJenaModels, String labelOfMergeTask) throws Exception{
         Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
-        return merge(matcher, source, target, inputAlignment, p, addInformationToUnion, newPos);
+        return merge(matcher, source, target, inputAlignment, p, addInformationToUnion, newPos, removeUnusedJenaModels, labelOfMergeTask);
     }
     
-    public static MergeResult merge(Object matcher, Set<Object> source, Set<Object> target, Object inputAlignment, Properties parameters, boolean addInformationToUnion, int newPos) throws Exception{
-        LOGGER.info("Generate alignment with a 1:1 matcher");
+    public static MergeResult merge(Object matcher, Set<Object> source, Set<Object> target, Object inputAlignment, Properties parameters, 
+            boolean addInformationToUnion, int newPos, boolean removeUnusedJenaModels, String labelOfMergeTask) throws Exception{
+        LOGGER.info("Generate alignment with a 1:1 matcher for merge {}", labelOfMergeTask);
         long startRun = System.nanoTime();
         AlignmentAndParameters alignmentAndPrameters = GenericMatcherCaller.runMatcherMultipleRepresentations(matcher, source, target, inputAlignment, parameters);
         long runDuration = System.nanoTime() - startRun;
-        LOGGER.info("Finished alignment in {} seconds ({}).", runDuration /1_000_000_000, DurationFormatUtils.formatDurationWords(runDuration/1_000_000, true, true));
+        LOGGER.info("Finished alignment in {} seconds ({}) for merge {}.", runDuration /1_000_000_000, 
+                DurationFormatUtils.formatDurationWords(runDuration/1_000_000, true, true), labelOfMergeTask);
         
         
         Alignment alignment = TypeTransformerRegistry.getTransformedObject(alignmentAndPrameters.getAlignment(), Alignment.class);
@@ -72,7 +97,7 @@ public class MergeExecutor implements Callable<MergeResult>{
             return null;
         }
 
-        LOGGER.info("Merge source ontology with alignment into target ontology.");
+        LOGGER.info("Merge source ontology with alignment into target ontology for merge {}.", labelOfMergeTask);
         //need to transform the model in something known like jena model.
         Model sourceModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(source, Model.class, parameters);
         Model targetModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(target, Model.class, parameters);
@@ -87,9 +112,43 @@ public class MergeExecutor implements Callable<MergeResult>{
         long startMergeTime = System.nanoTime();
         mergeSourceIntoTarget(sourceModel, targetModel, alignment, addInformationToUnion);
         long mergeDuration = System.nanoTime() - startMergeTime;
-        LOGGER.info("The merging took {} seconds ({}).", mergeDuration /1_000_000_000, DurationFormatUtils.formatDurationWords(mergeDuration/1_000_000, true, true));
-
+        LOGGER.info("The merging took {} seconds ({}) for merge {}.", mergeDuration /1_000_000_000, 
+                DurationFormatUtils.formatDurationWords(mergeDuration/1_000_000, true, true), labelOfMergeTask);
+        
+        if(removeUnusedJenaModels){
+            removeOntModelFromSet(source);
+        }
         return new MergeResult(newPos, new HashSet<>(Arrays.asList(targetModel)), alignment);
+    }
+    
+    public static void removeOntModelFromSet(Set<Object> set){
+        for (Iterator<Object> i = set.iterator(); i.hasNext();) {
+            Object element = i.next();
+            // this selects Jena Model and OntModel
+            if (element instanceof Model) {
+                i.remove();
+            }
+        }
+    }
+    
+    /**
+     * Returns true if the first KG/model is greater than the second one.
+     * Internally it will transform the KG to a jena model and compare it with the size (triple number).
+     * @param firstKG the first KG
+     * @param secondKG the second KG
+     * @param parameters the parameters
+     * @return true if the first KG/model is greater than the second one
+     * @throws TypeTransformationException in case the transformation did not work out.
+     */
+    public static boolean hasFirstKgMoreTriples(Set<Object> firstKG, Set<Object> secondKG, Properties parameters) throws TypeTransformationException{
+        Model leftModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(firstKG, Model.class, parameters);
+        Model rightModel = TypeTransformerRegistry.getTransformedObjectMultipleRepresentations(secondKG, Model.class, parameters);
+        if(leftModel == null || rightModel == null){
+            //just return true because usually this does matter that much and if it cannot be transformed to Model it is usually broken
+            //and will break at the end of the main loop
+            return true;
+        }
+        return leftModel.size() > rightModel.size();
     }
     
     
