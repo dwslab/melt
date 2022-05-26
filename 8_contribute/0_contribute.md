@@ -31,11 +31,11 @@ Note that when you commit a documentation change, you have to set the pull reque
 
 ![image](../media/branch_selection.png)
 
-Alternatively to changes in the Web UI, you can also [fork the project](https://docs.github.com/en/get-started/quickstart/fork-a-repo) (remember to `git checkout gh-pages`), apply your changes locally, and perform a [pull request]((https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
+Alternatively to changes in the Web UI, you can also [fork the project](https://docs.github.com/en/get-started/quickstart/fork-a-repo) (remember to `git checkout gh-pages`), apply your changes locally, and perform a [pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
 
 After you applied your changes and they have been confirmed by the administrators, the new page will be automatically built by our pipeline and will immediately appear in the rendered user guide.
 
 ## Improve and Extend the Code Base
-If you are knowlegeable in Java and/or Python and you want to add features to MELT or fix bugs: Simply [fork the repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and [create a pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request). We are happy to merge any improvements in the main branch.
+If you are knowlegeable in Java and/or Python and you want to add features to MELT or fix bugs: Simply [fork the repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and [create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request). We are happy to merge any improvements in the main branch.
 
 MELT code quality is ensured by more than 200 [unit tests](https://junit.org/junit5/docs/current/user-guide/#:~:text=JUnit%20Jupiter%20is%20the%20combination%20of%20the%20new,JUnit%204%20based%20tests%20on%20the%20platform.%201.2.). You can check that you did not accidently break anything with your changes by running them. Ideally, you also create a unit test for your new feature / your fix to ensure that it works as intended.
