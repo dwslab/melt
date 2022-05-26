@@ -1,4 +1,6 @@
 # gh-pages of MELT
+[![Documentation Link Check](https://github.com/dwslab/melt/actions/workflows/documentation_check.yml/badge.svg)](https://github.com/dwslab/melt/actions/workflows/documentation_check.yml)
+
 This repository contains multiple Web artifacts, some of which are generated and pushed automatically:
 - The source code files (Jekyll) for the [MELT User Guide](https://dwslab.github.io/melt/)
 - <a href="https://dwslab.github.io/melt/javadoc_latest/index.html">The latest JavaDoc resources for MELT</a>
