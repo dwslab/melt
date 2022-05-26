@@ -237,14 +237,14 @@ extends <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt
 <li>
 <section class="detail" id="LOGGER">
 <h3>LOGGER</h3>
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">org.slf4j.Logger</span>&nbsp;<span class="member-name">LOGGER</span></div>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">org.slf4j.Logger</span>&nbsp;<span class="member-name">LOGGER</span></div>
 <div class="block">Default logger.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="folderToTestCases">
 <h3>folderToTestCases</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">folderToTestCases</span></div>
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">folderToTestCases</span></div>
 <div class="block">Folder holding the individual test cases of the track.</div>
 </section>
 </li>
@@ -270,7 +270,7 @@ extends <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt
 <dd><code>version</code> - Version of the track.</dd>
 <dd><code>folderToTestCases</code> - The test case folder has to follow a specific structure: It contains a folder for each
                           test case. The Folder's name will be the test case's name. In each test case folder,
-                          there has to be a file named source.rdf, target.rdf, and alignment.rdf.</dd>
+                          there has to be a file named source.rdf, target.rdf, and reference.rdf.</dd>
 <dd><code>goldStandardCompleteness</code> - Completeness of the gold standard.</dd>
 </dl>
 </section>
@@ -291,7 +291,7 @@ extends <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt
                               It has to follow a specific structure:
                               It contains a folder for each test case.
                               The Folder's name will be the test case's name. In each test case folder,
-                              there has to be a file named source.rdf, target.rdf, and alignment.rdf.</dd>
+                              there has to be a file named source.rdf, target.rdf, and reference.rdf.</dd>
 <dd><code>goldStandardCompleteness</code> - Completeness of the gold standard.</dd>
 </dl>
 </section>
@@ -326,7 +326,7 @@ extends <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt
 <dd><code>version</code> - Version of the track.</dd>
 <dd><code>folderToTestCasesPath</code> - The test case folder has to follow a specific structure: It contains a folder for
                               each test case. The folder's name will be the test case's name. In each test case
-                              folder, there has to be a file named source.rdf, target.rdf, and alignment.rdf.</dd>
+                              folder, there has to be a file named source.rdf, target.rdf, and reference.rdf.</dd>
 </dl>
 </section>
 </li>
