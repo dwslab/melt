@@ -278,6 +278,27 @@ public class BuiltInTracks {
                 add("benchmark-film-r5");
             }
         });
+        simpleNameToTrackMap.put(TrackRepository.ProcessMatching.ALL, new ArrayList<String>() {
+            {
+                add("pm-all");
+                add("process-matching-all");
+                add("processmatching-all");
+            }
+        });
+        simpleNameToTrackMap.put(TrackRepository.ProcessMatching.UA, new ArrayList<String>() {
+            {
+                add("pm-ua");
+                add("process-matching-ua");
+                add("processmatching-ua");
+            }
+        });
+        simpleNameToTrackMap.put(TrackRepository.ProcessMatching.BR, new ArrayList<String>() {
+            {
+                add("pm-br");
+                add("process-matching-br");
+                add("processmatching-br");
+            }
+        });
     }
 
     /**
