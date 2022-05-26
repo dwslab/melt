@@ -78,7 +78,6 @@ class TrackRepositoryTest {
     }
 
     
-    //@Test
     public void testMeltRepository(){
         //LargeBio
         assertEquals(6, TrackRepository.Largebio.V2016.ALL.getTestCases().size());
@@ -118,6 +117,11 @@ class TrackRepositoryTest {
         assertEquals(1, TrackRepository.Complex.GeoLink.getTestCases().size());
         assertEquals(1, TrackRepository.Complex.PopgeoLink.getTestCases().size());
         assertEquals(4, TrackRepository.Complex.Hydrography.getTestCases().size());
+
+        // Process Matching
+        assertTrue(TrackRepository.ProcessMatching.ALL.getTestCases().size() > 0);
+        assertTrue(TrackRepository.ProcessMatching.BR.getTestCases().size() > 0);
+        assertTrue(TrackRepository.ProcessMatching.UA.getTestCases().size() > 0);
     }
     
     

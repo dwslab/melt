@@ -15,7 +15,7 @@ public class BuiltInTracks {
      * <p>
      * The map is not complete. It contains only the latest version of the most-used tracks.
      */
-    private static TreeMap<Track, List<String>> simpleNameToTrackMap;
+    private static final TreeMap<Track, List<String>> simpleNameToTrackMap;
 
     static {
         simpleNameToTrackMap = new TreeMap<>();
