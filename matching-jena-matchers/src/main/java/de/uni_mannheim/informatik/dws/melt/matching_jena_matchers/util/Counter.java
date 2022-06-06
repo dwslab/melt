@@ -155,11 +155,11 @@ public class Counter<T> {
     /**
      * Removes one count of the given element from this counter (the element is still in the counter if it was added multiple times).
      * It will remove the element only if it is present (optional operation).
-     * Returns <tt>true</tt> if this counter contained the specified element <tt>t</tt> (or
+     * Returns true if this counter contained the specified element t (or
      * equivalently, if this collection changed as a result of the call).
      * In case you want to remove all counts of an element, then use {@link #removeAll(java.lang.Object) }.
      * @param t the element to remove
-     * @return <tt>true</tt> if an element was removed
+     * @return true if an element was removed
      */
     public boolean remove(T t){
         MutableInt c = this.counts.get(t);
@@ -178,13 +178,13 @@ public class Counter<T> {
     /**
      * Removes the specified number of occurances of the given element from this counter.
      * It will remove the element only if it is present (optional operation).
-     * Returns <tt>true</tt> if this counter contained the specified element <tt>t</tt> (or
+     * Returns true if this counter contained the specified element t (or
      * equivalently, if this collection changed as a result of the call).
      * If the element should be removed more times, than it is added, the corresponding element is removed from this counter.
      * In case you want to remove all counts of an element, then use {@link #removeAll(java.lang.Object) }.
      * @param t the element to remove
      * @param howOften how often this element should be removed.
-     * @return <tt>true</tt> if an element was removed
+     * @return true if an element was removed
      */
     public boolean remove(T t, int howOften){
         MutableInt c = this.counts.get(t);
@@ -207,10 +207,10 @@ public class Counter<T> {
     
     /**
      * Removes the given element from this counter (even if it appears multiple times), if it is present (optional operation).
-     * Returns <tt>true</tt> if this counter contained the specified element <tt>t</tt> (or
+     * Returns true if this counter contained the specified element t (or
      * equivalently, if this collection changed as a result of the call).
      * @param t the element to remove
-     * @return <tt>true</tt> if an element was removed
+     * @return true if an element was removed
      */
     public boolean removeAll(T t){
         MutableInt c = this.counts.get(t);
@@ -225,10 +225,10 @@ public class Counter<T> {
     
     /**
      * Removes the given element from this counter (even if it appears multiple times), if it is present (optional operation).
-     * Returns <tt>true</tt> if this counter contained the specified element <tt>t</tt> (or
+     * Returns true if this counter contained the specified element t (or
      * equivalently, if this collection changed as a result of the call).
      * @param elements the element to remove
-     * @return <tt>true</tt> if the counter was changed/modified
+     * @return true if the counter was changed/modified
      */
     public boolean removeAll(Collection<T> elements){
         boolean modified = false;
@@ -244,7 +244,7 @@ public class Counter<T> {
      * It will substract the other counter from this counter.
      * This counter will be modified and the counts are reduced.
      * @param other the other counter with values to be removed from this counter.
-     * @return <tt>true</tt> if this counter was changed/modified
+     * @return true if this counter was changed/modified
      */
     public boolean substract(Counter<T> other){
         boolean modified = false;
