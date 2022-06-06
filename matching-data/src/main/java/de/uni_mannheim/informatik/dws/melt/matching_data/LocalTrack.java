@@ -105,7 +105,7 @@ public class LocalTrack extends Track {
     
     /**
      * Default Constructor.
-     * The gold standard is assumed to be complete use {@link #LocalTrack(java.lang.String, java.lang.String, java.util.List, de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness) in case it is different. 
+     * The gold standard is assumed to be complete use {@link #LocalTrack(java.lang.String, java.lang.String, java.util.List, de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)} in case it is different. 
      * @param name Name of the track. Can be any text identifying the track
      * @param version Version of the track. Can be any text identifying the version e.g. semantic versioning like 1.0.1.
      * @param testCases the testcases corresponding to this track. The track in the testcases can be set to null (will be set in this constructor).
