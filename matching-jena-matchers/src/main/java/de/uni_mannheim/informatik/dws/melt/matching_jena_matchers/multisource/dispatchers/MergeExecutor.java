@@ -4,6 +4,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.Alignme
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.GenericMatcherCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TdbUtil;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.CorrespondenceRelation;
@@ -13,12 +14,15 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.tdb.TDB;
+import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class MergeExecutor implements Callable<MergeResult>{
     private static final Logger LOGGER = LoggerFactory.getLogger(MergeExecutor.class);
     
-    private final Object matcher;
+    private final Supplier<Object> matcherSupplier;
     private final Set<Object> kgOne;
     private final Set<Object> kgTwo;
     private final Object inputAlignment;
@@ -41,9 +45,9 @@ public class MergeExecutor implements Callable<MergeResult>{
     private final CopyMode copyMode;
     private final String labelOfMergeTask;
 
-    public MergeExecutor(Object matcher, Set<Object> kgOne, Set<Object> kgTwo, Object inputAlignment, Properties parameters, 
+    public MergeExecutor(Supplier<Object> matcherSupplier, Set<Object> kgOne, Set<Object> kgTwo, Object inputAlignment, Properties parameters, 
             boolean addInformationToUnion, int newPos, boolean removeUnusedJenaModels, CopyMode copyMode, String labelOfMergeTask) {
-        this.matcher = matcher;
+        this.matcherSupplier = matcherSupplier;
         this.kgOne = kgOne;
         this.kgTwo = kgTwo;
         this.inputAlignment = inputAlignment;
@@ -72,7 +76,7 @@ public class MergeExecutor implements Callable<MergeResult>{
                     + "Should not make any change unless the matcher is not symmetric.");
         }
         target = copyMode.getCopiedModel(target, parameters);
-        return merge(matcher, source, target, inputAlignment, parameters, addInformationToUnion, newPos, removeUnusedJenaModels, labelOfMergeTask);
+        return merge(matcherSupplier.get(), source, target, inputAlignment, parameters, addInformationToUnion, newPos, removeUnusedJenaModels, labelOfMergeTask);
     }
     
     public static MergeResult merge(Object matcher, Set<Object> source, Set<Object> target, Object inputAlignment, Object parameters, 
@@ -109,6 +113,10 @@ public class MergeExecutor implements Callable<MergeResult>{
             LOGGER.error("Could not transform target to Model");
             return null;
         }
+        
+        //double threshold = getThreshold(alignment);
+        //alignment = alignment.cut(threshold);
+        
         long startMergeTime = System.nanoTime();
         mergeSourceIntoTarget(sourceModel, targetModel, alignment, addInformationToUnion);
         long mergeDuration = System.nanoTime() - startMergeTime;
@@ -121,11 +129,21 @@ public class MergeExecutor implements Callable<MergeResult>{
         return new MergeResult(newPos, new HashSet<>(Arrays.asList(targetModel)), alignment);
     }
     
+    
+    /*
+    public static double getThreshold(Alignment alignment){
+        
+    }
+    */
+    
+    
     public static void removeOntModelFromSet(Set<Object> set){
         for (Iterator<Object> i = set.iterator(); i.hasNext();) {
             Object element = i.next();
             // this selects Jena Model and OntModel
             if (element instanceof Model) {
+                //Model m = (Model)element;
+                //TdbUtil.release(m);                
                 i.remove();
             }
         }

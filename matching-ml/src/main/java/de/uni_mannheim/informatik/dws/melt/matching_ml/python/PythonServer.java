@@ -974,6 +974,31 @@ public class PythonServer {
             return file.getAbsolutePath();
         }
     }
+    
+    
+    public List<Integer> runGroupShuffleSplit(List<Integer> groups, double trainSize) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        map.put("trainSize", trainSize);
+        map.put("groups", groups);
+        String jsonContent = JSON_MAPPER.writeValueAsString(map);
+
+        HttpPost request = new HttpPost(serverUrl + "/run-group-shuffle-split");
+        request.setEntity(new StringEntity(jsonContent, ContentType.APPLICATION_JSON));
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            HttpEntity entity = response.getEntity();
+            if (entity == null) {
+                throw new Exception("No server response.");
+            } else {
+                String resultString = EntityUtils.toString(entity);
+                if (resultString.startsWith("ERROR") || resultString.contains("500 Internal Server Error")) {
+                    throw new Exception(resultString);
+                } else
+                    return JSON_MAPPER.readValue(resultString, JSON_MAPPER.getTypeFactory().constructCollectionType(List.class, Integer.class));
+            }
+        }
+        
+        
+    }
 
     /**
      * A quick technical demo. If the service works, it will print "Hello {@code name}".

@@ -7,6 +7,7 @@ public enum TestCaseType {
     SOURCE,
     TARGET,
     REFERENCE,
+    INPUT,
     PARAMETERS;
 
     @Override

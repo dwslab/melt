@@ -394,4 +394,48 @@ public class AlignmentTest {
         assertNotNull(a.toStringMultiline());
         assertNotNull(a.toStringMultilineInfo());
     }
+    
+    
+    @Test
+    void copyConstructorTest(){
+        Alignment a = new Alignment();
+        Correspondence c = new Correspondence("A", "B");
+        c.addAdditionalConfidence("Foo", 0.5);
+        a.add(c);
+        
+        //make a copy here
+        Alignment b = new Alignment(a, true);
+        assertEquals(1, b.iterator().next().getExtensions().size());
+        c.addAdditionalConfidence("Bar", 0.6);
+        
+        assertEquals(1, b.iterator().next().getExtensions().size());
+    }
+    
+    
+    @Test
+    void getDistinctSourceAndTargetsAsSetTest(){
+        for(boolean index : Arrays.asList(true, false)){
+            Alignment a = new Alignment(index, index, index, index);
+            a.add("A", "B");
+            a.add("A", "E");
+            a.add("A", "D");
+            a.add("B", "A");
+            a.add("C", "D");
+            a.add("C", "D");
+
+            assertEquals(new HashSet<>(Arrays.asList("A", "B", "C")), a.getDistinctSourcesAsSet());
+            assertEquals(new HashSet<>(Arrays.asList("A", "B", "D", "E")), a.getDistinctTargetsAsSet());
+            assertEquals(new HashSet<>(Arrays.asList("A", "B", "C", "D", "E")), a.getDistinctSourceAndTargetsAsSet());
+            
+            
+            a = new Alignment(index, index, index, index);
+            a.add("A", "D");
+            a.add("B", "E");
+            a.add("C", "F");
+            
+            assertEquals(new HashSet<>(Arrays.asList("A", "B", "C")), a.getDistinctSourcesAsSet());
+            assertEquals(new HashSet<>(Arrays.asList("D", "E", "F")), a.getDistinctTargetsAsSet());
+            assertEquals(new HashSet<>(Arrays.asList("A", "B", "C", "D", "E", "F")), a.getDistinctSourceAndTargetsAsSet());
+        }
+    }
 }

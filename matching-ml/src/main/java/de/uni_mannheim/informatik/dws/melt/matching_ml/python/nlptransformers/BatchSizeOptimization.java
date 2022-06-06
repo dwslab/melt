@@ -5,12 +5,18 @@ package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
  */
 public enum BatchSizeOptimization {
     
+    /**
+     * Use the longest texts in the dataset to determine the highest batch size.
+     */
     USE_LONGEST_TEXTS,
     
+    /**
+     * Use the texts with the highest number of words to determine the highest batch size.
+     */
     USE_MAX_WORDS,
     
     /**
-     * Use leroem ipsum text to find the highest batch size.
+     * Use a long lorem ipsum text to determine the highest batch size.
      */
     USE_THEORETICAL_MAX,
     

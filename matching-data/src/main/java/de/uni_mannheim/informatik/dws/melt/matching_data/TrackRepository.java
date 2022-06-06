@@ -533,6 +533,39 @@ public class TrackRepository {
             public static Track HP_OMIM = new SealsTrack("http://repositories.seals-project.eu/tdrs/", "phenotype", "phenotype-hp-omim-2017-bioportal");
         }
     }
+    
+    
+    /**
+     * Bio-ML: A ML-friendly Biomedical track for Equivalence and Subsumption Matching.<br>
+     * This track presents an unified evaluation framework suitable for both ML-based and non-ML-based OM systems.
+     * The datasets of this track are based on Mondo and the UMLS Metathesaurus.
+     */
+    public static class BioML {
+        /**
+         * The 2022 edition involves the following ontologies: 
+         * <ul>
+         * <li>OMIM (Online Mendelian Inheritance in Man)</li>
+         * <li>ORDO (Orphanet Rare Disease Ontology)</li>
+         * <li>NCIT (National Cancer Institute Thesaurus)</li>
+         * <li>DOID (Human Disease Ontology)</li>
+         * <li>FMA (Foundational Model of Anatyomy)</li>
+         * <li>SNOMED CT</li>
+         * </ul>
+         * See also <a href="https://doi.org/10.5281/zenodo.6510086">https://doi.org/10.5281/zenodo.6510086</a>.
+         */
+        public static class V2022 {
+            /**
+             * 
+             */
+            public static Track EQUIV_UNSUPERVISED = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "bio-ml-equiv-unsupervised", "2022");
+
+            /**
+             * 
+             */
+            public static Track EQUIV_SUPERVISED = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "bio-ml-equiv-supervised", "2022");
+        }
+    }
+    
 
 
     /**

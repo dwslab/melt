@@ -5,16 +5,13 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import java.io.File;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
-import static de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBaseFineTuner.NEWLINE;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -22,11 +19,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.StringJoiner;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -191,6 +190,17 @@ public abstract class TransformersBase extends MatcherYAAAJena {
      */
     public void setUsingTensorflow(boolean usingTensorflow) {
         this.usingTensorflow = usingTensorflow;
+    }
+    
+    protected String getCudaVisibleDevicesButOnlyOneGPU(){
+        String gpus = this.getCudaVisibleDevices();
+        if(gpus == null) // this means use all available.
+            return "0"; //then we select only the first one
+        gpus = gpus.trim();
+        if(gpus.isEmpty())
+            return "0"; // same as above
+        String[] array = gpus.split(",");
+        return array[0]; // one element is always contained
     }
 
     /**
@@ -362,42 +372,90 @@ public abstract class TransformersBase extends MatcherYAAAJena {
 "nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum " +
 "zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis " +
 "eleifend option congue nihil imperdiet doming id quod mazim placerat facer.");
-    
-    protected List<String> getExamplesForBatchSizeOptimization(File trainingFile, int numberOfExamples, BatchSizeOptimization optimization){        
+    private static final Pattern SPLIT_WORDS = Pattern.compile("\\s+");
+        
+    protected List<String> getExamplesForBatchSizeOptimization(File trainingFile, int numberOfExamples, BatchSizeOptimization optimization) {        
         switch(optimization){
             case USE_LONGEST_TEXTS:{
-                try {
-                    List<String> list = Files.readAllLines(trainingFile.toPath(), StandardCharsets.UTF_8);
-                    list.sort(Comparator.comparingInt(String::length).reversed());
-                    return list.subList(0, Math.min(list.size(), numberOfExamples));
-                } catch (IOException ex) {
-                    LOGGER.warn("Could not read fiel for determining best BatchSize.", ex);
-                    return new ArrayList<>();
-                }
-            }
-            /*
+                return getExamplesForBatchSizeOptimizationGivenComparator(trainingFile, numberOfExamples, new Comparator<List<String>>() {
+                    @Override
+                    public int compare(List<String> o1, List<String> o2) {
+                        int lengthOne = o1.stream().mapToInt(s -> s.length()).sum();
+                        int lengthTwo = o2.stream().mapToInt(s -> s.length()).sum();
+                        return Integer.compare(lengthOne, lengthTwo);
+                    }
+                });
+            }            
             case USE_MAX_WORDS:{
-                try {
-                    List<String> list = Files.readAllLines(trainingFile.toPath(), StandardCharsets.UTF_8);
-                    list.sort(Comparator.comparingInt(String::length).reversed());
-                    return list.subList(0, Math.min(list.size(), numberOfExamples));
-                } catch (IOException ex) {
-                    LOGGER.warn("Could not read fiel for determining best BatchSize.", ex);
-                    return new ArrayList<>();
-                }
-            }*/
+                return getExamplesForBatchSizeOptimizationGivenComparator(trainingFile, numberOfExamples, new Comparator<List<String>>() {
+                    @Override
+                    public int compare(List<String> o1, List<String> o2) {
+                        int lengthOne = o1.stream().mapToInt(s -> SPLIT_WORDS.split(s).length).sum();
+                        int lengthTwo = o2.stream().mapToInt(s -> SPLIT_WORDS.split(s).length).sum();
+                        return Integer.compare(lengthOne, lengthTwo);
+                    }
+                });
+            }
             case USE_THEORETICAL_MAX:{
-                List<String> list = new ArrayList<>(numberOfExamples);
-                for(int i=0; i<numberOfExamples; i++){
-                    list.add(LOREM_IPSUM + "," + LOREM_IPSUM + ",1");
-                }
-                return list;
+                return createLoremIpsum(numberOfExamples);
             }
             default:
                 throw new UnsupportedOperationException("batchSizeOptimization not implemented");
         }
     }
+    /**
+     * Creates examples for the batch size optimization which takes care of the csv format (in case one entity is distributed over multiple lines.
+     * @param trainingFile the trainign file to read from
+     * @param numberOfExamples number of examples to be returned
+     * @param comparer the compararer (shoud fulfill the comparer interface -1 if first is smaller than second etc)
+     * @return the largest elements in this file as a list of strings (these are already csv formatted).
+     */
+    private static List<String> getExamplesForBatchSizeOptimizationGivenComparator(File trainingFile, int numberOfExamples, Comparator<List<String>> comparer){
+        PriorityQueue<List<String>> minHeap = new PriorityQueue<>(numberOfExamples, comparer);
+        try(CSVParser csvParser = CSVFormat.DEFAULT.parse(new InputStreamReader(new FileInputStream(trainingFile), StandardCharsets.UTF_8))){
+            for (CSVRecord record : csvParser) {
+                List<String> example = new ArrayList<>();
+                for(String x : record){
+                    example.add(x);
+                }
+
+                if(minHeap.size() < numberOfExamples){
+                    minHeap.add(example);
+                }else{
+                    List<String> l = minHeap.peek();
+                    if (comparer.compare(minHeap.peek(), example) < 0){
+                        minHeap.poll();
+                        minHeap.add(example);
+                    }
+                }
+            }
+            List<List<String>> sortedHeap = new ArrayList<>(minHeap);
+            sortedHeap.sort(comparer.reversed());
+            
+            List<String> returnList = new ArrayList<>();
+            for(List<String> record : sortedHeap){
+                StringJoiner sj = new StringJoiner(",");
+                for(String x : record){
+                    sj.add(StringEscapeUtils.escapeCsv(x));
+                }
+                returnList.add(sj.toString());
+            }
+            return returnList;
+        } catch (IOException ex) {
+            LOGGER.warn("Could not read file for determining best BatchSize. Fallback to USE_THEORETICAL_MAX using lorem ipsum text.", ex);
+            return createLoremIpsum(numberOfExamples);
+        }
+    }
     
+    
+    private static List<String> createLoremIpsum(int numberOfExamples){
+        List<String> list = new ArrayList<>(numberOfExamples);
+        for(int i=0; i<numberOfExamples; i++){
+            //escape csv is already done when initializing LOREM_IPSUM
+            list.add(LOREM_IPSUM + "," + LOREM_IPSUM + ",1");
+        }
+        return list;
+    }
     protected boolean writeExamplesToFile(List<String> list, File destination, int numberOfExamples) throws IOException{
         int i = 1;
         try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destination), StandardCharsets.UTF_8))){
@@ -413,3 +471,35 @@ public abstract class TransformersBase extends MatcherYAAAJena {
         return i >= numberOfExamples;
     }
 }
+
+/*
+//use longest texts:
+Comparator<String> comparer = (String o1, String o2) -> Integer.compare(o1.length(), o2.length());
+
+PriorityQueue<String> minHeap = new PriorityQueue<>(numberOfExamples, comparer);
+try(CSVParser csvParser = CSVFormat.DEFAULT.parse(new InputStreamReader(new FileInputStream(trainingFile), StandardCharsets.UTF_8))){
+    for (CSVRecord record : csvParser) {
+        StringJoiner sj = new StringJoiner(",");
+        for(String x : record){
+            sj.add(StringEscapeUtils.escapeCsv(x));
+        }
+        String line = sj.toString();
+
+        if(minHeap.size() < numberOfExamples){
+            minHeap.add(line);
+        }else{
+            if (minHeap.peek().length() < line.length()){
+                minHeap.poll();
+                minHeap.add(line);
+            }
+        }
+    }
+    List<String> returnList = new ArrayList<>(minHeap);
+    returnList.sort(comparer.reversed());
+    return returnList;
+
+} catch (IOException ex) {
+    LOGGER.warn("Could not read file for determining best BatchSize. Fallback to USE_THEORETICAL_MAX using lorem ipsum text.", ex);
+    return createLoremIpsum(numberOfExamples);
+}
+*/

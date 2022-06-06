@@ -313,6 +313,10 @@ public class MergeOrder implements Serializable {
         return Integer.toString(pos);
     }
     
+    public boolean isLeaf(int pos){
+        return pos < this.numberOfExamples;
+    }
+    
     /**
      * Displays the tree in a JFrame to interatcively look at the tree.
      */

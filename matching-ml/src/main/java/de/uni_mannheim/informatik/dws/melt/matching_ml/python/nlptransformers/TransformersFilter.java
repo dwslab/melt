@@ -187,11 +187,13 @@ public class TransformersFilter extends TransformersBase implements Filter {
     protected int getMaximumPerDeviceEvalBatchSize(File trainingFile){
         //save variables for restoring afterwards
         TransformersTrainerArguments backupArguments = this.trainingArguments;
+        String backupCudaString = this.cudaVisibleDevices;
         
+        this.cudaVisibleDevices = getCudaVisibleDevicesButOnlyOneGPU();
         int batchSize = 4;
         List<String> batchExamples = getExamplesForBatchSizeOptimization(trainingFile, 8194, this.batchSizeOptimization);
         while(batchSize < 8193){
-            LOGGER.info("Try out batch size of {}", batchSize);
+            LOGGER.info("Try out per_device_eval_batch_size of {}", batchSize);
             //generate a smaller training file -> faster tokenizer
             
             File tmpTrainingFile = FileUtil.createFileWithRandomNumber("alignment_transformers_predict_find_max_batch_size", ".txt");
@@ -212,19 +214,18 @@ public class TransformersFilter extends TransformersBase implements Filter {
                     int batchSizeWhichWorks = batchSize / 2;
                     LOGGER.info("Found memory error, thus returning batchsize of {}", batchSizeWhichWorks);
                     this.trainingArguments = backupArguments;
+                    this.cudaVisibleDevices = backupCudaString;
                     return batchSizeWhichWorks;
                 }else{
                     LOGGER.warn("Something went wrong in python server during getMaximumPerDeviceEvalBatchSize. Return default of 8", ex);
                     this.trainingArguments = backupArguments;
+                    this.cudaVisibleDevices = backupCudaString;
                     return 8;
                 }
-            }catch (IOException ex) {
-                LOGGER.warn("Something went wrong with io during getMaximumPerDeviceEvalBatchSize. Return default of 8", ex);
-                this.trainingArguments = backupArguments;
-                return 8;
             }catch (Exception ex) {
                 LOGGER.warn("Something went wrong during getMaximumPerDeviceEvalBatchSize. Return default of 8", ex);
                 this.trainingArguments = backupArguments;
+                this.cudaVisibleDevices = backupCudaString;
                 return 8;
             }finally{
                 tmpTrainingFile.delete();

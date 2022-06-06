@@ -9,6 +9,7 @@ import java.io.Writer;
 import java.nio.file.Paths;
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCaseType;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import java.util.List;
@@ -56,6 +57,18 @@ public class SaveAsSealsRepo {
                         folder,track.getName(), track.getVersion(), "suite",
                         testCase.getName(),"component", "reference.xml").toFile());
                 }
+                
+                if(testCase.getParameters() != null){
+                    FileUtils.copyURLToFile(testCase.getParameters().toURL(), Paths.get(
+                        folder,track.getName(), track.getVersion(), "suite",
+                        testCase.getName(),"component", "parameters.xml").toFile());
+                }
+                
+                if(testCase.getInputAlignment()!= null){
+                    FileUtils.copyURLToFile(testCase.getInputAlignment().toURL(), Paths.get(
+                        folder,track.getName(), track.getVersion(), "suite",
+                        testCase.getName(),"component", "input.xml").toFile());
+                }
             }
             saveSuiteFile(track, 
                     Paths.get(folder, track.getName(), track.getVersion(), "suite.xml").toFile()
@@ -83,6 +96,7 @@ public class SaveAsSealsRepo {
     }
     
     public static void main(String[] args){
-        save(TrackRepository.Biodiv.V2021OWL, "./upload");
+        save(TrackRepository.BioML.V2022.EQUIV_UNSUPERVISED, "./upload");
+        save(TrackRepository.BioML.V2022.EQUIV_SUPERVISED, "./upload");
     }
 }

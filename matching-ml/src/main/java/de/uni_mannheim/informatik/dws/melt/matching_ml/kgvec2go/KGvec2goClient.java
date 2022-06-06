@@ -73,7 +73,7 @@ public class KGvec2goClient {
      *
      * @return Client instance.
      */
-    public static KGvec2goClient getInstance() {
+    public synchronized static KGvec2goClient getInstance() {
         if (instance == null) instance = new KGvec2goClient();
         if (isShutDown) instance.startServer();
         return instance;

@@ -508,6 +508,23 @@ def query_vector_space_model_batch():
     except Exception as e:
         return str(e)
 
+@app.route("/run-group-shuffle-split", methods=["POST"])
+def run_shuffle_split():
+    try:
+        content = request.get_json()
+
+        import numpy as np
+        from sklearn.model_selection import GroupShuffleSplit
+
+        groups = np.array(content["groups"])
+        X = np.ones(shape=(len(groups), 2))
+        gss = GroupShuffleSplit(n_splits=1, train_size=content["trainSize"], random_state=42)
+        for train_idx, test_idx in gss.split(X, groups=groups):
+            return jsonify(train_idx.tolist())
+        return "True"
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
 
 english_stopwords = {
     "has",
@@ -1614,6 +1631,9 @@ def inner_transformers_finetuning(request_headers):
         save_at_end = training_arguments.get("save_at_end", True)
         training_arguments.pop("save_at_end", None)  # delete if existent
 
+        weight_of_positive_class = training_arguments.get("weight_of_positive_class", -1.0)
+        training_arguments.pop("weight_of_positive_class", None)  # delete if existent
+
         from transformers import AutoTokenizer
 
         tokenizer = AutoTokenizer.from_pretrained(initial_model_name)
@@ -1648,7 +1668,7 @@ def inner_transformers_finetuning(request_headers):
                 import tensorflow as tf
 
                 app.logger.info(
-                    "Num gpu avail: " + str(len(tf.config.list_physical_devices("GPU")))
+                    "Using Tensorflow. Num GPU available: " + str(len(tf.config.list_physical_devices("GPU")))
                 )
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
@@ -1666,7 +1686,7 @@ def inner_transformers_finetuning(request_headers):
             else:
                 import torch
 
-                app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
+                app.logger.info("Using pytorch. GPU used: " + str(torch.cuda.is_available()))
                 from transformers import Trainer, AutoModelForSequenceClassification
 
                 model = AutoModelForSequenceClassification.from_pretrained(
@@ -1680,6 +1700,42 @@ def inner_transformers_finetuning(request_headers):
                     train_dataset=training_dataset,
                     args=training_args,
                 )
+                
+                if weight_of_positive_class >= 0.0:
+                    # calculate class weights
+                    if weight_of_positive_class > 1.0:
+                        import numpy as np
+                        from sklearn.utils.class_weight import compute_class_weight
+                        unique_labels = np.unique(labels)
+                        if len(unique_labels) <= 1:
+                            class_weights = [0.5, 0.5] # only one label available -> default to [0.5, 0.5]
+                        else:
+                            class_weights = compute_class_weight('balanced', classes=unique_labels, y=labels)                        
+                    else:
+                        class_weights = [ 1.0 - weight_of_positive_class, weight_of_positive_class]
+                    app.logger.info("Using class weights: " + str(class_weights))
+                    class WeightedLossTrainer(Trainer):
+    
+                        def set_melt_weight(self, melt_weight_arg):
+                            self.melt_weight = torch.FloatTensor(melt_weight_arg).to(device=self.args.device)
+                            
+
+                        def compute_loss(self, model, inputs, return_outputs=False):
+                            labels = inputs.get("labels")
+                            outputs = model(**inputs)
+                            logits = outputs.get('logits')
+                            loss_fct = torch.nn.CrossEntropyLoss(weight=self.melt_weight)
+                            loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
+                            return (loss, outputs) if return_outputs else loss
+
+                    trainer = WeightedLossTrainer(
+                        model=model,
+                        tokenizer=tokenizer,
+                        train_dataset=training_dataset,
+                        args=training_args,
+                    )
+                    trainer.set_melt_weight(class_weights)
+
 
             app.logger.info("Run training")
             trainer.train()
@@ -1811,7 +1867,7 @@ def transformers_finetuning_hp_search():
                 import tensorflow as tf
 
                 app.logger.info(
-                    "Num gpu avail: " + str(len(tf.config.list_physical_devices("GPU")))
+                    "Using Tensorflow. Num GPU available: " + str(len(tf.config.list_physical_devices("GPU")))
                 )
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
@@ -1832,7 +1888,7 @@ def transformers_finetuning_hp_search():
             else:
                 import torch
 
-                app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
+                app.logger.info("Using pytorch. GPU used: " + str(torch.cuda.is_available()))
                 from transformers import Trainer, AutoModelForSequenceClassification
 
                 def model_init():

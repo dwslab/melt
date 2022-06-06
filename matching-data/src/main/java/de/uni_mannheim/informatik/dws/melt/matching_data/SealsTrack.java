@@ -54,10 +54,11 @@ public class SealsTrack extends Track {
         SealsDownloadHelper bmd = new SealsDownloadHelper(tdrsLocation, testDataCollectionName, testDataVersionNumber);
         for(String testCaseId : bmd.getTestCases()){
             LOGGER.info("  currently downloading {}", testCaseId);
-            URL source = bmd.getDataItem(testCaseId, "source");
-            URL target = bmd.getDataItem(testCaseId, "target");
-            URL reference = bmd.getDataItem(testCaseId, "reference");
-            URL parameters = bmd.getDataItem(testCaseId, "parameters");
+            URL source = bmd.getDataItem(testCaseId, TestCaseType.SOURCE);
+            URL target = bmd.getDataItem(testCaseId, TestCaseType.TARGET);
+            URL reference = bmd.getDataItem(testCaseId, TestCaseType.REFERENCE);
+            URL input = bmd.getDataItem(testCaseId, TestCaseType.INPUT);
+            URL parameters = bmd.getDataItem(testCaseId, TestCaseType.PARAMETERS);
             
             if(exists(source) == false || exists(target) == false){
                 LOGGER.error("Source or Target is not defined - continue");
@@ -68,6 +69,9 @@ public class SealsTrack extends Track {
             this.saveInDefaultLayout(target, testCaseId, TestCaseType.TARGET);
             if(exists(reference)){
                 this.saveInDefaultLayout(reference, testCaseId, TestCaseType.REFERENCE);
+            }
+            if(exists(input)){
+                this.saveInDefaultLayout(input, testCaseId, TestCaseType.INPUT);
             }
             if(exists(parameters)){
                 this.saveInDefaultLayout(parameters, testCaseId, TestCaseType.PARAMETERS);

@@ -506,6 +506,11 @@ public class DefaultExtensions {
         GOLD_STANDARD_CONFIDENCE("http://melt.dws.uni-mannheim.de/vocabulary#gold-standard-confidence"),
         
         /**
+         * The typ of ml split. Usually the values are string which can be "reain", "val", "test".
+         */
+        ML_SPLIT("http://melt.dws.uni-mannheim.de/vocabulary#ml-split"),
+        
+        /**
          * The base URI that is to be used with extension predicates that have to be defined "on the spot" and
          * require a base URI. 
          */

@@ -6,6 +6,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.di
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClustererSmile;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +53,25 @@ public abstract class MultiSourceDispatcherIncrementalMergeByCluster extends Mul
         this.clusterer = clusterer;
     }
     
+    //with Supplier instead of matcher object
+    
+    public MultiSourceDispatcherIncrementalMergeByCluster(Supplier<Object> matcherSupplier, ClusterLinkage linkage) {
+        this(matcherSupplier, linkage, ClusterDistance.EUCLIDEAN);
+    }
+    
+    public MultiSourceDispatcherIncrementalMergeByCluster(Supplier<Object> matcherSupplier, ClusterLinkage linkage, ClusterDistance distance) {
+        this(matcherSupplier, linkage, distance, new ClustererSmile());
+    }
+    
+    public MultiSourceDispatcherIncrementalMergeByCluster(Supplier<Object> matcherSupplier, ClusterLinkage linkage, ClusterDistance distance, Clusterer clusterer) {
+        super(matcherSupplier);
+        this.linkage = linkage;
+        this.distance = distance;
+        this.clusterer = clusterer;
+    }
+    
+    
+    
     @Override
     public MergeOrder getMergeTree(List<Set<Object>> models, Object parameters){
         LOGGER.info("Compute cluster features");
@@ -77,5 +97,15 @@ public abstract class MultiSourceDispatcherIncrementalMergeByCluster extends Mul
 
     public void setDistance(ClusterDistance distance) {
         this.distance = distance;
+    }
+
+    public Clusterer getClusterer() {
+        return clusterer;
+    }
+
+    public void setClusterer(Clusterer clusterer) {
+        if(clusterer == null)
+            throw new IllegalArgumentException("Clusterer is null");
+        this.clusterer = clusterer;
     }
 }

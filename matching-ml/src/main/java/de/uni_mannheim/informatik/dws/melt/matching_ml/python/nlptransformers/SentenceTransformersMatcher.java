@@ -19,6 +19,7 @@ import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.Collections;
@@ -43,7 +44,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
     private boolean bothDirections;
     private boolean topkPerResource;
     
-    public SentenceTransformersMatcher(TextExtractor extractor, String modelName){
+    public SentenceTransformersMatcher(TextExtractorMap extractor, String modelName){
         super(extractor, modelName);
         initExtractors();
         this.queryChunkSize = 100;
@@ -51,6 +52,10 @@ public class SentenceTransformersMatcher extends TransformersBase {
         this.topK = 10;
         this.bothDirections = true;
         this.topkPerResource = true;
+    }
+    
+    public SentenceTransformersMatcher(TextExtractor extractor, String modelName){
+        this(TextExtractorMap.wrapTextExtractor(extractor), modelName);
     }
     
     @Override

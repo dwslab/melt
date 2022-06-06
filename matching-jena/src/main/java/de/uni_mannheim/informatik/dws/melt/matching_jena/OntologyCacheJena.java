@@ -253,4 +253,7 @@ public class OntologyCacheJena {
         return ModelFactory.createOntologyModel(spec, d.getDefaultModel());
     }
     */
+    public static int numberOfCacheEntries(){
+        return ontologyCache.size();
+    }
 }

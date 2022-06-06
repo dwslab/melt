@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.d
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatchingException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
+import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.IMatcherMultiSourceCaller;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MatcherMultiSourceURL;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.MultiSourceDispatcher;
@@ -12,18 +13,25 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.multisource.IndexBasedJ
 import de.uni_mannheim.informatik.dws.melt.matching_jena.typetransformation.JenaTransformerHelper;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.FileCache;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.io.File;
 import java.net.URL;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import org.apache.jena.rdf.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +44,7 @@ import org.slf4j.LoggerFactory;
 public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMultiSourceURL implements MultiSourceDispatcher, IMatcherMultiSourceCaller{
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiSourceDispatcherIncrementalMerge.class);
     
-    private final Object oneToOneMatcher;
+    private Supplier<Object> matcherSupplier;
     
     private int numberOfThreads;
     private boolean addingInformationToUnion;
@@ -44,6 +52,9 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     private CopyMode copyMode;
     private List<Alignment> intermediateAlignments;
     private FileCache<MergeOrder> mergeOrderFileCache;
+    private File serializedTreeFile;
+    private Map<Entry<String, String>, Alignment> goldStandard;
+    private DatasetIDExtractor idExtractor;
 
     /**
      * Constructor which expects the actual one to one matcher and a boolean if information should be added to the union.
@@ -51,18 +62,40 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
      * @param addInformationToUnion if true all information from matched entities are in the union.
      */
     public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher, boolean addInformationToUnion) {
-        this.oneToOneMatcher = oneToOneMatcher;
+        this.matcherSupplier = () -> oneToOneMatcher;
         this.addingInformationToUnion = addInformationToUnion;
         this.intermediateAlignments = null; // default is not to save intermediate alignments
         this.removeUnusedJenaModels = false;
         this.copyMode = CopyMode.NONE;
         this.numberOfThreads = 1;
         this.mergeOrderFileCache = null;
+        this.goldStandard = null;
     }
     
     public MultiSourceDispatcherIncrementalMerge(Object oneToOneMatcher) {
         this(oneToOneMatcher, true);
     }
+    
+    /**
+     * Constructor which expects the actual one to one matcher and a boolean if information should be added to the union.
+     * @param matcherSupplier a function which returns a new configured matcher everytime when it is called.
+     * @param addInformationToUnion if true all information from matched entities are in the union.
+     */
+    public MultiSourceDispatcherIncrementalMerge(Supplier<Object> matcherSupplier, boolean addInformationToUnion) {
+        this.matcherSupplier = matcherSupplier;
+        this.addingInformationToUnion = addInformationToUnion;
+        this.intermediateAlignments = null; // default is not to save intermediate alignments
+        this.removeUnusedJenaModels = false;
+        this.copyMode = CopyMode.NONE;
+        this.numberOfThreads = 1;
+        this.mergeOrderFileCache = null;
+        this.goldStandard = null;
+    }
+    
+    public MultiSourceDispatcherIncrementalMerge(Supplier<Object> matcherSupplier) {
+        this(matcherSupplier, true);
+    }
+    
     
     @Override
     public URL match(List<URL> models, URL inputAlignment, URL parameters) throws Exception {        
@@ -103,6 +136,8 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
         Properties p = TypeTransformerRegistry.getTransformedPropertiesOrNewInstance(parameters);
         
         mergeOrder.setLabels(JenaTransformerHelper.getShortNameForModelRepresentations(models));
+        if(this.serializedTreeFile != null)
+            mergeOrder.writeToFile(this.serializedTreeFile);
         
         if(this.numberOfThreads > 1){
             return runParallel(mergeOrder, models, inputAlignment, p);
@@ -200,7 +235,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
             Properties parameters = addDistance(DispatcherHelper.deepCopy(p), distances[i], distancesNormalized[i]);
             Object copiedInputAlignment = DispatcherHelper.deepCopy(inputAlignment);
             
-            MergeResult mergeResult = MergeExecutor.merge(oneToOneMatcher, source, target, copiedInputAlignment, parameters, addingInformationToUnion, -1, this.removeUnusedJenaModels, mergeLabel);
+            MergeResult mergeResult = MergeExecutor.merge(this.matcherSupplier.get(), source, target, copiedInputAlignment, parameters, addingInformationToUnion, -1, this.removeUnusedJenaModels, mergeLabel);
             mergedOntologies.add(mergeResult.getResult());
             
             Alignment resultingAlignment = mergeResult.getAlignment();
@@ -211,6 +246,11 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
             finalAlignment.addAll(resultingAlignment);
             if(this.intermediateAlignments != null)
                 this.intermediateAlignments.add(resultingAlignment);
+            
+            if(this.removeUnusedJenaModels){
+                LOGGER.info("Calling GC");
+                System.gc();
+            }
         }
         return new AlignmentAndParameters(finalAlignment, p);
     }
@@ -256,6 +296,7 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
             int stage = 1;
             while(!merges.isEmpty()){
                 List<MergeTaskPos> runnable = new ArrayList<>();
+                LOGGER.debug("Check which tasks are able to run and submit them to the execution pool");
                 for(MergeTaskPos task : merges){
                     Set<Object> one = mergedModels.get(task.getClusterOnePos());
                     Set<Object> two = mergedModels.get(task.getClusterTwoPos());
@@ -263,8 +304,9 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                         runnable.add(task);
                         String mergeLabel = mergeOrder.getLabel(task.getClusterOnePos()) + "-" + mergeOrder.getLabel(task.getClusterTwoPos());
                         Properties parameters = addDistance(DispatcherHelper.deepCopy(p), task.getDistance(), task.getDistanceNormalized());
+                        
                         Object copiedInputAlignment = DispatcherHelper.deepCopy(inputAlignment);
-                        completionService.submit(new MergeExecutor(this.oneToOneMatcher, one, two, copiedInputAlignment, parameters, 
+                        completionService.submit(new MergeExecutor(this.matcherSupplier, one, two, copiedInputAlignment, parameters, 
                                 addingInformationToUnion, task.getClusterResultPos(), this.removeUnusedJenaModels, this.copyMode, mergeLabel));
                         
                         /*
@@ -291,6 +333,12 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                     }
                 }
                 
+                if(runnable.isEmpty()){
+                    LOGGER.warn("There are still {} merges to be done, but none of them is possible. Following the list of not executed merges:\n {}", 
+                            merges.size(), merges.stream().map(x->x.toString()).collect(Collectors.joining("\n")));
+                    throw new MatchingException("Not all merges are executed.");
+                }
+                
                 LOGGER.info("Run matching stage {}/{} with possibly {} tasks in parallel (actual number of parallel threads: {})", stage++, parallelMergesPossible.size(), runnable.size(), this.numberOfThreads);
                 merges.removeAll(runnable);
                 
@@ -301,7 +349,16 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                             LOGGER.error("The result of a merge is null. The whole merge will be canceled.");
                             throw new MatchingException("The result of a merge is null. The whole merge will be canceled.");
                         }
-                        mergedModels.set(result.getNewPos(), result.getResult());
+                        
+                        //set the new model
+                        Set<Object> resultingModel = result.getResult();
+                        if(resultingModel == null){
+                            LOGGER.error("The resulting model of a merge is null (final pos: {0). The whole merge will be canceled.", result.getNewPos());
+                            throw new MatchingException("The resulting model of a merge is null. The whole merge will be canceled.");
+                        }
+                        mergedModels.set(result.getNewPos(), resultingModel);
+                        
+                        //add the alignment
                         Alignment resultingAlignment = result.getAlignment();
                         if(resultingAlignment == null){
                             LOGGER.error("The resulting alignment is null. Maybe a transformation error. The whole merge will be canceled.");
@@ -312,12 +369,18 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
                             this.intermediateAlignments.set(result.getNewPos() - n, resultingAlignment);
                     } catch (InterruptedException | ExecutionException ex) {
                         LOGGER.warn("Error when waiting for parallel results of matcher execution.", ex);
+                        throw new MatchingException("Error when waiting for parallel results of matcher execution.", ex);
                     }
+                }
+                if(this.removeUnusedJenaModels){
+                    LOGGER.info("Calling GC");
+                    System.gc();
                 }
             }
         }finally{
             exec.shutdown();
         }
+        //regression java - https://commons.apache.org/proper/commons-math/userguide/stat.html#a1.4_Simple_regression
         return new AlignmentAndParameters(finalAlignment, p);
     }
     
@@ -355,8 +418,9 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
     }
     
     private void callClearIndex(){
-        if(this.oneToOneMatcher instanceof IndexBasedJenaMatcher){
-            ((IndexBasedJenaMatcher)this.oneToOneMatcher).clearIndex();
+        Object matcher = this.matcherSupplier.get();
+        if(matcher instanceof IndexBasedJenaMatcher){
+            ((IndexBasedJenaMatcher)matcher).clearIndex();
         }
     }
     
@@ -494,5 +558,64 @@ public abstract class MultiSourceDispatcherIncrementalMerge extends MatcherMulti
      */
     public void setCacheFile(File cacheFile) {
         this.mergeOrderFileCache = new FileCache<>(cacheFile);
+    }
+
+    /**
+     * Return the file where the serialzed merge tree is stored.
+     * @return the file where the serialzed merge tree is stored.
+     */
+    public File getSerializedTreeFile() {
+        return serializedTreeFile;
+    }
+
+    /**
+     * Sets the file where the serialzed merge tree is stored.
+     * Set this to a non null value to write the serialzed merge tree to file.
+     * @param serializedTreeFile the file where the serialzed merge tree is stored.
+     */
+    public void setSerializedTreeFile(File serializedTreeFile) {
+        this.serializedTreeFile = serializedTreeFile;
+    }
+
+    /**
+     * Return the function which returns a new configured matcher object.
+     * In case it is not null, it will be used instead of the matcher object.
+     * @return the matcher supplier function
+     */
+    public Supplier<Object> getMatcherSupplier() {
+        return matcherSupplier;
+    }
+
+    /**
+     * If a matcher supplier is set, then this will be used instead of the matcher object.
+     * @param matcherSupplier the matcher supplier (when called, this function should return a new configured matcher object)
+     */
+    public void setMatcherSupplier(Supplier<Object> matcherSupplier) {
+        this.matcherSupplier = matcherSupplier;
+    }
+    
+    
+    public void setGoldStandard(Object alignment, DatasetIDExtractor idExtractor) throws TypeTransformationException{
+        setGoldStandard(TypeTransformerRegistry.getTransformedObject(alignment, Alignment.class), idExtractor);
+    }
+    
+    public void setGoldStandard(Alignment alignment, DatasetIDExtractor idExtractor){
+        if(alignment == null)
+            throw new IllegalArgumentException("Gold standard is null - thus cannot be used.");
+        if(idExtractor == null)
+            throw new IllegalArgumentException("IdExtractor is null - thus cannot be used.");
+        this.goldStandard = new HashMap<>();
+        this.idExtractor = idExtractor;
+        for(Correspondence c : alignment){
+            String idOne = idExtractor.getDatasetID(c.getEntityOne());
+            String idTwo = idExtractor.getDatasetID(c.getEntityTwo());
+            if(idOne.compareTo(idTwo) > 0){
+                Entry<String, String> key = new SimpleEntry<>(idTwo, idOne);
+                this.goldStandard.computeIfAbsent(key, __-> new Alignment()).add(c.reverse());
+            }else{
+                Entry<String, String> key = new SimpleEntry<>(idOne, idTwo);
+                this.goldStandard.computeIfAbsent(key, __-> new Alignment()).add(c);
+            }
+        }
     }
 }

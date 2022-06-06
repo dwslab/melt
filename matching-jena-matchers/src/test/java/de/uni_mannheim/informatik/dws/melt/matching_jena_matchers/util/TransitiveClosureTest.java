@@ -32,4 +32,22 @@ public class TransitiveClosureTest {
         assertTrue(tc.getClosure().iterator().next().containsAll(Arrays.asList("a", "b", "c", "d")));
     }
     
+    @Test
+    void getIdentitySetForElementTest() {
+        TransitiveClosure<String> tc = new TransitiveClosure<>();
+        tc.add("a", "b");
+        tc.add("b", "c");
+        tc.add("d", "e");
+        
+        assertEquals(3, tc.getIdentitySetForElement("a").size());        
+        assertEquals(2, tc.getIdentitySetForElement("d").size());
+        
+        assertEquals(tc.getIdentitySetForElement("a"), tc.getIdentitySetForElement("b"));
+        assertEquals(tc.getIdentitySetForElement("a"), tc.getIdentitySetForElement("c"));
+        assertEquals(tc.getIdentitySetForElement("d"), tc.getIdentitySetForElement("e"));
+        
+        assertNotEquals(tc.getIdentitySetForElement("a"), tc.getIdentitySetForElement("d"));
+        
+    }
+    
 }

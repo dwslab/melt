@@ -158,23 +158,52 @@ public class TdbUtil {
         return isGraphBackedByTDB(model.getGraph());
     }
     public static boolean isGraphBackedByTDB(Graph graph){
-        if(graph instanceof GraphTDB){
+        return getGraphTDB(graph) != null;
+    }
+    
+    
+    public static boolean release(Model model){
+        return release(model.getGraph());
+    }
+    /**
+     * Release from the JVM.All caching is lost.
+     * @param graph the graph.
+     * @return true, if the release worked
+     */
+    public static boolean release(Graph graph){
+        GraphTDB g = getGraphTDB(graph);
+        if(g != null){
+            TDBFactory.release(g.getDatasetGraphTDB());
             return true;
-        }else if(graph instanceof Polyadic){
-            Polyadic polyadicGraph = (Polyadic)graph;
-            if(isGraphBackedByTDB(polyadicGraph.getBaseGraph()))
-                return true;
-            for(Graph subGraph : polyadicGraph.getSubGraphs()){
-                if(isGraphBackedByTDB(subGraph))
-                    return true;
-            }
-        }else if(graph instanceof WrappedGraph){
-            if(isGraphBackedByTDB(((WrappedGraph)graph).getWrapped()))
-                return true;
         }
         return false;
     }
     
+    
+    private static GraphTDB getGraphTDB(Model model){
+        return getGraphTDB(model.getGraph());
+    }
+    
+    private static GraphTDB getGraphTDB(Graph graph){
+        if(graph instanceof GraphTDB){
+            return (GraphTDB)graph;
+        }else if(graph instanceof Polyadic){
+            Polyadic polyadicGraph = (Polyadic)graph;
+            GraphTDB g = getGraphTDB(polyadicGraph.getBaseGraph());
+            if(g != null)
+                return g;
+            for(Graph subGraph : polyadicGraph.getSubGraphs()){
+                g = getGraphTDB(subGraph);
+                if(g != null)
+                    return g;
+            }
+        }else if(graph instanceof WrappedGraph){
+            GraphTDB g = getGraphTDB(((WrappedGraph)graph).getWrapped());
+            if(g != null)
+                return g;
+        }
+        return null;
+    }
     
     
     //copied from jena because DestinationDSG is private

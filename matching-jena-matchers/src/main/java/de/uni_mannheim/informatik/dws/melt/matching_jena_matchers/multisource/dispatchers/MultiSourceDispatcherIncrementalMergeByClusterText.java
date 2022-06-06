@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -66,6 +67,25 @@ public class MultiSourceDispatcherIncrementalMergeByClusterText extends MultiSou
     
     public MultiSourceDispatcherIncrementalMergeByClusterText(Object oneToOneMatcher) {
         this(oneToOneMatcher, ClusterLinkage.SINGLE, 0.0, 1.0);
+    }
+    
+    //with supplier instead of matcher object 
+    
+    public MultiSourceDispatcherIncrementalMergeByClusterText(Supplier<Object> matcherSupplier, ClusterLinkage linkage, double mindf, double maxdf) {
+        super(matcherSupplier, linkage);
+        checkDocumentFrequency(mindf);
+        this.mindf = mindf;
+        checkDocumentFrequency(maxdf);
+        this.maxdf = maxdf;
+        this.debug = false;
+    }
+    
+    public MultiSourceDispatcherIncrementalMergeByClusterText(Supplier<Object> matcherSupplier, ClusterLinkage linkage) {
+        this(matcherSupplier, linkage, 0.0, 1.0);
+    }
+    
+    public MultiSourceDispatcherIncrementalMergeByClusterText(Supplier<Object> matcherSupplier) {
+        this(matcherSupplier, ClusterLinkage.SINGLE, 0.0, 1.0);
     }
     
     @Override

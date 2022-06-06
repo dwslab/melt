@@ -141,4 +141,33 @@ public class ExecutorTest {
         assertTrue(tcZeroAlignmentOnTop.containsAll(tcZeroAlignment));
         assertTrue(tcZeroAlignmentOnTop.contains(new Correspondence("A", "B")));        
     }
+    
+    
+    @Test
+    void runMatcherOnTopTestWithAlignmentExtensions(){
+        TestCase tc = TrackRepository.Conference.V1.getFirstTestCase();
+        
+        ExecutionResultSet results = Executor.run(tc, new MatcherYAAAJena() {
+            @Override
+            public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
+                Correspondence a = new Correspondence("A", "B");
+                a.addAdditionalConfidence("First", 0.5);
+                return new Alignment(Arrays.asList(a));
+            }
+        }, "mymatcher");
+        
+        results = Executor.runMatcherOnTop(results, "mymatcher", new MatcherYAAAJena() {
+            @Override
+            public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
+                for(Correspondence c : inputAlignment){
+                    c.addAdditionalConfidence("Second", 0.3);
+                }
+                return inputAlignment;
+            }
+        }, "mysecondmatcher");
+        
+        assertEquals(2, results.size());
+        assertEquals(1, results.get(tc, "mymatcher").getSystemAlignment().iterator().next().getExtensions().size());
+        assertEquals(2, results.get(tc, "mysecondmatcher").getSystemAlignment().iterator().next().getExtensions().size());
+    }
 }

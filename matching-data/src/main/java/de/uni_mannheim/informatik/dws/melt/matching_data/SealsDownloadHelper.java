@@ -62,7 +62,7 @@ public class SealsDownloadHelper {
         return names;
     }
 
-    public URL getDataItem(String testCaseId, String componentType) {
+    public URL getDataItem(String testCaseId, TestCaseType componentType) {
         String url = createLocation(this.testDataRepositoryUrl,
                 "testdata",
                 "persistent",
@@ -71,7 +71,7 @@ public class SealsDownloadHelper {
                 "suite",
                 encode(testCaseId),
                 "component",
-                encode(componentType));
+                encode(componentType.toString()));
         try {
             return new URL(url);
         } catch (MalformedURLException e) {

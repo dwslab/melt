@@ -143,6 +143,24 @@ public class Correspondence implements Comparable<Correspondence> {
         this("", "", 1.0);
     }
     
+    /**
+     * Copy constructor for correspondences. Important: Copies the extensions only shallow.
+     * This menas the objetc values of the hashmap are shared (pointing to the same object).
+     * @param other the other correspondence
+     */
+    public Correspondence(Correspondence other) {
+        this.entityOne = other.entityOne;
+        this.entityTwo = other.entityTwo;
+        this.confidence = other.confidence;
+        this.relation = other.relation;
+        this.identifier = other.identifier;
+        if(other.extensions == null){
+            this.extensions = null;
+        } else{
+            this.extensions = new HashMap<>(other.extensions);
+        }
+    }
+    
     private static Map<String,Object> parseExtensions(Object[] arr){
         Map<String, Object> map = new HashMap<>();
         for (int i = 0; i < arr.length; i+=2) {
@@ -160,7 +178,7 @@ public class Correspondence implements Comparable<Correspondence> {
      * @return New reversed correspondence.
      */
     public Correspondence reverseWithoutRelationChange(){
-        return new Correspondence(entityTwo, entityOne, confidence, relation, extensions, identifier);
+        return new Correspondence(entityTwo, entityOne, confidence, relation, new HashMap<>(extensions), identifier);
     }
     
     /**
@@ -170,7 +188,7 @@ public class Correspondence implements Comparable<Correspondence> {
      * @return New reversed correspondence.
      */
     public Correspondence reverse(){
-        return new Correspondence(entityTwo, entityOne, confidence, relation.reverse(), extensions, identifier);
+        return new Correspondence(entityTwo, entityOne, confidence, relation.reverse(), new HashMap<>(extensions), identifier);
     }
 
     /**
@@ -208,8 +226,8 @@ public class Correspondence implements Comparable<Correspondence> {
 
     /**
      * Set the value for an extension.
-     * Possible keys are defined in class DefaultExtensions.
-     * @param extensionUri The URI identifying the extension. Possible keys are defined in class DefaultExtensions
+     * Possible keys are defined in class {@link DefaultExtensions}.
+     * @param extensionUri The URI identifying the extension. Possible keys are defined in class {@link DefaultExtensions}.
      * @param extensionValue The value of the extension to be set.
      */
     public void addExtensionValue(String extensionUri, Object extensionValue){

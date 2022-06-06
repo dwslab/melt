@@ -30,8 +30,19 @@ public class ClustererSmile implements Clusterer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClustererSmile.class);
 
+    /**
+     * Number of threads to compute the distance matrix.
+     */
     private int numberOfThreads;
+    /**
+     * Number of examples to process in each thread for computing the distance matrix.
+     * E.g. if specified 10, then the distances between these 10 examples are computed in one thread.
+     */
     private int numberOfExamplesPerThread;
+    /**
+     * If true uses the BLAS component to calculate the distance matrix (this might not be numerically stable).
+     */
+    private boolean useBLAS;
 
     public ClustererSmile() {
         this(0);
@@ -46,16 +57,26 @@ public class ClustererSmile implements Clusterer {
     public ClustererSmile(int numberOfThreads) {
         this(numberOfThreads, 700);
     }
-
+    
     /**
      * Clusterer based on the SMILE library.
      *
      * @param numberOfThreads number of threads to use (-1 to use all processors
      * and 0 to use no threads)
-     * @param numberOfExamplesPerThread number of examples to compute in each
-     * batch/thread
+     * @param numberOfExamplesPerThread number of examples to compute in each batch/thread
      */
-    public ClustererSmile(int numberOfThreads, int numberOfExamplesPerThread) {
+    public ClustererSmile(int numberOfThreads, int numberOfExamplesPerThread){
+        this(numberOfThreads, numberOfExamplesPerThread, true);
+    }
+
+    /**
+     * Clusterer based on the SMILE library.
+     *
+     * @param numberOfThreads number of threads to use (-1 to use all processors and 0 to use no threads)
+     * @param numberOfExamplesPerThread number of examples to compute in each batch/thread
+     * @param useBLAS if true uses the BLAS component to calculate the distance matrix (this might not be numerically stable)
+     */
+    public ClustererSmile(int numberOfThreads, int numberOfExamplesPerThread, boolean useBLAS) {
         if (numberOfThreads < 0) {
             this.numberOfThreads = Runtime.getRuntime().availableProcessors();
         }
@@ -64,6 +85,7 @@ public class ClustererSmile implements Clusterer {
         }
         this.numberOfThreads = numberOfThreads;
         this.numberOfExamplesPerThread = numberOfExamplesPerThread;
+        this.useBLAS = useBLAS;
     }
 
     @Override
@@ -74,13 +96,19 @@ public class ClustererSmile implements Clusterer {
         }
         long n = features.length;
         long distanceMatrixLength = n * (n+1) / 2;
-        LOGGER.info("Compute distance matrix for {} instances/rows with {} features/columns. The distance matrix will have {} entries.",
-                features.length, features[0].length, distanceMatrixLength);
+        
+        String featureMatrix = HumanReadbleByteCount.convert(8 * n * features[0].length); //double needs 8 bytes
+        String distanceMatrix = HumanReadbleByteCount.convert(4 * distanceMatrixLength); // float needs 4 bytes
+        LOGGER.info("Compute distance matrix for {} instances/rows with {} features/columns (feature matrix requires {})."
+                + "The distance matrix will have {} entries (requires {}).",
+                features.length, features[0].length, featureMatrix, distanceMatrixLength, distanceMatrix);
         float[] proximity = getProximity(features, distance);
         
         LOGGER.info("Compute the linkage based on the distance matrix.");
         Linkage hacLinkage = getLinkage(features.length, proximity, linkage);
         HierarchicalClustering clusters = HierarchicalClustering.fit(hacLinkage);
+        
+        LOGGER.info("Finished computing the linkage.");
         return new MergeOrder(clusters.getTree(), clusters.getHeight());
     }
 
@@ -126,11 +154,15 @@ public class ClustererSmile implements Clusterer {
      */
     public float[] getProximity(double[][] features, ClusterDistance distance){
         if(this.numberOfThreads > 1){
-            if(distance == ClusterDistance.EUCLIDEAN)
-                return proximityEuclideanParallel(features, this.numberOfThreads, this.numberOfExamplesPerThread, false);
-            else if(distance == ClusterDistance.SQUARED_EUCLIDEAN)
-                return proximityEuclideanParallel(features, this.numberOfThreads, this.numberOfExamplesPerThread, true);
-            else{
+            if(this.useBLAS){
+                if(distance == ClusterDistance.EUCLIDEAN)
+                    return proximityEuclideanParallel(features, this.numberOfThreads, this.numberOfExamplesPerThread, false);
+                else if(distance == ClusterDistance.SQUARED_EUCLIDEAN)
+                    return proximityEuclideanParallel(features, this.numberOfThreads, this.numberOfExamplesPerThread, true);
+                else{
+                    return proximityParallel(features, distance);
+                }
+            }else{
                 return proximityParallel(features, distance);
             }
         }else{
@@ -196,11 +228,6 @@ public class ClustererSmile implements Clusterer {
         }
         long length = n * (n+1) / 2;
         
-        String featureMatrix = HumanReadbleByteCount.convert(8 * n * data[0].length); //double needs 8 bytes
-        String distanceMatrix = HumanReadbleByteCount.convert(4 * length); // float needs 4 bytes
-        LOGGER.info("Feature matrix: Number of rows/documents: {}  Number of columns/features: {}  Memory consumption: {}", n, data[0].length, featureMatrix);
-        LOGGER.info("Distance matrix: Length: {}  Memory consumption: {}", length, distanceMatrix);
-        
         CompletionService<DistanceMatrixComputationResult> completionService = new ExecutorCompletionService<>(exec);
         long numberJobs = 0;
         for(int i=0; i < n; i+=numberOfExamplesPerThread){
@@ -210,7 +237,7 @@ public class ClustererSmile implements Clusterer {
                 numberJobs++;
             }
         }
-        LOGGER.info("Number of jobs: {}  ({} in parallel)", numberJobs, numberOfThreads);
+        LOGGER.info("Number of jobs created to compute the distance matrix: {}  ({} in parallel)", numberJobs, numberOfThreads);
 
         int processedJobs = 0;
         float[] proximity = new float[(int)length];

@@ -60,7 +60,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     /**
      * Extended attributes.
      */
-    protected Map<String, String> extensions;
+    protected Map<String, Object> extensions;
 
     public Alignment() {
         init(true, true, true, true);
@@ -112,6 +112,8 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     
     /**
      * Copy constructor which copies all information stores in alignment as well as all correspondences (depending on attribute copyCorrespondences).
+     * Important: the extensions (on alignment and correspondence level) are copied only shallow. 
+     * This menas the objetc values of the hashmap are shared (pointing to the same object). 
      * @param alignment The alignment which shall be copied (deep copy).
      * @param copyCorrespondences if true copies all information, if false copies all but no correspondences
      */
@@ -124,7 +126,9 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         this.onto2 = new OntoInfo(alignment.onto2);        
         this.extensions = new HashMap<>(alignment.extensions);
         if(copyCorrespondences) {
-            addAll(alignment);
+            for(Correspondence c : alignment){
+                add(new Correspondence(c));
+            }
         }
     }
     
@@ -807,7 +811,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         }
 
         // alignment extensions
-        for(Map.Entry<String, String> otherAlignmentExtension : otherAlignment.getExtensions().entrySet()){
+        for(Map.Entry<String, Object> otherAlignmentExtension : otherAlignment.getExtensions().entrySet()){
             if(this.extensions.containsKey(otherAlignmentExtension.getKey())){
                 // contained, check if we need to overwrite
                 if(isOverwriteValues) {
@@ -850,7 +854,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
     
     /**
-     * Serialize this mapping directly to a given file.
+     * Serialize this mapping directly to a given file in the <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">default XML format</a>.
      * This also works if the alignment is huge.
      * @param file The file for writing the mapping.
      * @throws IOException An IOException.
@@ -988,6 +992,31 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         return makeSet(this.getDistinctTargets());
     }
     
+    public Set<String> getDistinctSourceAndTargetsAsSet(){
+        Set<String> uniqueElements = new HashSet<>();
+        //source
+        if(this.indexSource == null){
+            for(Correspondence c : this){
+                uniqueElements.add(c.entityOne);
+            }
+        }else{
+            for(String s : this.indexSource.getDistinctKeys(noQueryOptions())){
+                uniqueElements.add(s);
+            }
+        }
+        
+        if(this.indexTarget == null){
+            for(Correspondence c : this){
+                uniqueElements.add(c.entityTwo);
+            }
+        }else{
+            for(String s : this.indexTarget.getDistinctKeys(noQueryOptions())){
+                uniqueElements.add(s);
+            }
+        }
+        return uniqueElements;
+    }
+    
     public Iterable<CorrespondenceRelation> getDistinctRelations(){
         if(this.indexRelation == null){
             return this.stream().map(c -> c.relation).collect(Collectors.toSet());
@@ -1070,9 +1099,32 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      *                     Note that many default extension URIs are contained in {@link DefaultExtensions}.
      * @return The value of the extension as String, null if there is no value.
      */
-    public String getExtensionValue(String extensionUri){
+    public Object getExtensionValue(String extensionUri){
         if(extensions == null) return null;
         return extensions.get(extensionUri);
+    }
+    
+    /**
+     * Obtain the value of an extension.
+     * @param extensionUri The URI identifying the extension.
+     *                     Note that many default extension URIs are contained in {@link DefaultExtensions}.
+     * @return The value of the extension as String, null if there is no value.
+     */
+    public String getExtensionValueAsString(String extensionUri){
+        if(extensions == null) return null;
+        return extensions.get(extensionUri).toString();
+    }
+    
+    /**
+     * Obtain the value of an extension.
+     * @param extensionUri The URI identifying the extension.
+     * @param <T> Extension value type.
+     * @return The value of the extension as String, null if there is no value.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getExtensionValueCasted(String extensionUri){
+        if(extensions == null) return null;
+        return (T) extensions.get(extensionUri);
     }
 
     /**
@@ -1081,7 +1133,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      *                     Note that many default extension URIs are contained in {@link DefaultExtensions}.
      * @param extensionValue The value of the extension to be set.
      */
-    public void addExtensionValue(String extensionUri, String extensionValue){
+    public void addExtensionValue(String extensionUri, Object extensionValue){
         if(extensions == null) extensions = new HashMap<>();
         extensions.put(extensionUri, extensionValue);
     }
@@ -1094,14 +1146,14 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      *  <li>value: extension value</li>
      * </ul>
      */
-    public Map<String, String> getExtensions() { return this.extensions; }
+    public Map<String, Object> getExtensions() { return this.extensions; }
 
     /**
      * Set the extensions of the alignment. Note that this method will overwrite existing extensions of the
      * alignment.
      * @param extensions The alignment extensions to be set.
      */
-    public void setExtensions(Map<String, String> extensions) {
+    public void setExtensions(Map<String, Object> extensions) {
         this.extensions = extensions;
     }
     
@@ -1148,8 +1200,8 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         if(this.level != null && !this.level.isEmpty())
             sb.append("  level=").append(this.level).append(",").append(NEWLINE);
         if(this.extensions != null){
-            for(Entry<String, String> e : this.extensions.entrySet()){
-                sb.append("  ").append(e.getKey()).append("=").append(e.getValue()).append(",").append(NEWLINE);
+            for(Entry<String, Object> e : this.extensions.entrySet()){
+                sb.append("  ").append(e.getKey()).append("=").append(e.getValue().toString()).append(",").append(NEWLINE);
             }
         }
         

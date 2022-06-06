@@ -3,7 +3,7 @@ from io import BytesIO
 import logging
 import tempfile
 from six.moves import urllib
-from xml.sax.saxutils import quoteattr
+from xml.sax.saxutils import quoteattr, escape
 
 # Serialization
 
@@ -56,27 +56,44 @@ def __get_xml_intro(onto_one=None, onto_two=None, extension=None):
         + __get_ontology_string(onto_two, "onto2")
     )
 
+def __get_extension_label_and_base(full_uri):
+    lastIndex = full_uri.rfind('#')
+    if lastIndex > 0:
+        return full_uri[lastIndex+1:], full_uri[:lastIndex+1]
+    lastIndex = full_uri.rfind('/')
+    if lastIndex > 0:
+        return full_uri[lastIndex+1:], full_uri[:lastIndex+1]
+    return full_uri, full_uri
 
-def __get_mapping_string(source, target, relation, confidence):
-    return """
+
+def __get_mapping_string(source, target, relation, confidence, *args):
+    cell_text = ["""
   <map>
     <Cell>
       <entity1 rdf:resource=%s/>
       <entity2 rdf:resource=%s/>
       <relation>%s</relation>
-      <measure rdf:datatype="xsd:float">%s</measure>
-    </Cell>
-  </map>""" % (
+      <measure rdf:datatype="xsd:float">%s</measure>""" % (
         quoteattr(source),
         quoteattr(target),
-        relation,
-        confidence,
-    )
+        escape(str(relation)),
+        escape(str(confidence))
+    )]
+    if len(args) > 0:
+        
+        for ext_key, ext_value in args[0].items():
+            ext_label, ext_base = __get_extension_label_and_base(ext_key)
+            ext_label = escape(str(ext_label))
+            cell_text.append('      <alignapilocalns:%s xmlns:alignapilocalns=%s>%s</alignapilocalns:%s>' %
+                (ext_label, quoteattr(ext_base), escape(str(ext_value)), ext_label))
+    cell_text.append("""    </Cell>
+  </map>""")
+    return '\n'.join(cell_text)
 
 
 def __get_xml_outro():
     return """
-  </Alignment>
+</Alignment>
 </rdf:RDF>
 """
 
@@ -87,15 +104,15 @@ def serialize_mapping_to_file(
     """
     Serialize a alignment (iterable of (source, target, relation, confidence)) to a given file.
     :param file_path: represent the path of the file as a string
-    :param alignment: iterable of (source, target, relation, confidence)
+    :param alignment: iterable of (source, target, relation, confidence, extensions) - extensions is a dictionary and is optional
     :param onto_one: description of ontology one as (id, url, formalismName, formalismURI)
     :param onto_two: description of ontology two as (id, url, formalismName, formalismURI)
     :param extension: iterable of (key, value) describing the alignment
     """
     with open(file_path, "w", encoding="utf-8") as out_file:
         out_file.write(__get_xml_intro(onto_one, onto_two, extension))
-        for source, target, relation, confidence in alignment:
-            out_file.write(__get_mapping_string(source, target, relation, confidence))
+        for correspondence in alignment:
+            out_file.write(__get_mapping_string(*correspondence))
         out_file.write(__get_xml_outro())
 
 
@@ -105,7 +122,7 @@ def serialize_mapping_to_tmp_file(
     """
     Serialize a alignment (iterable of (source, target, relation, confidence)) to a file in the systems temp folder
     (which is not deleted) and return a file url of that file.
-    :param alignment: iterable of (source, target, relation, confidence)
+    :param alignment: iterable of (source, target, relation, confidence, extensions) - extensions is a dictionary and is optional
     :param onto_one: description of ontology one as (id, url, formalismName, formalismURI)
     :param onto_two: description of ontology two as (id, url, formalismName, formalismURI)
     :param extension: iterable of (key, value) describing the alignment
@@ -115,8 +132,8 @@ def serialize_mapping_to_tmp_file(
         "w", prefix="alignment_", suffix=".rdf", delete=False
     ) as out_file:
         out_file.write(__get_xml_intro(onto_one, onto_two, extension))
-        for source, target, relation, confidence in alignment:
-            out_file.write(__get_mapping_string(source, target, relation, confidence))
+        for correspondence in alignment:
+            out_file.write(__get_mapping_string(*correspondence))
         out_file.write(__get_xml_outro())
     return urllib.parse.urljoin("file:", urllib.request.pathname2url(out_file.name))
 
@@ -130,11 +147,12 @@ class AlignmentHandler(object):
         self.rdf = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"
         self.text = ""
         self.alignment = []
-        self.one_cell = ["", "", "", ""]
+        self.one_cell = ["", "", "", "", {}]
         self.extension = {}
         self.onto1 = ""
         self.onto2 = ""
         self.onto_temp = ["", ""]
+        self.in_cell = False
         self.used_tags = set(
             [
                 self.base + name
@@ -167,6 +185,8 @@ class AlignmentHandler(object):
             self.one_cell[1] = attrs[self.rdf + "resource"]  # .encode('utf-8')
         elif name == self.base + "Ontology":
             self.onto_temp[0] = attrs[self.rdf + "about"]  # .encode('utf-8')
+        elif name == self.base + "Cell":
+            self.in_cell = True
         self.text = ""
 
     def end(self, name):
@@ -176,7 +196,8 @@ class AlignmentHandler(object):
             self.one_cell[3] = self.text.strip()
         elif name == self.base + "Cell":
             self.alignment.append(self.one_cell)
-            self.one_cell = ["", "", "", ""]
+            self.one_cell = ["", "", "", "", {}]
+            self.in_cell = False
         elif name == self.base + "location":
             self.onto_temp[1] = self.text.strip()
         elif name == self.base + "onto1":
@@ -187,11 +208,12 @@ class AlignmentHandler(object):
             if self.onto_temp[0] == "" and self.onto_temp[1] == "":
                 self.onto_temp[0] = self.text.strip()
             self.onto2 = list(self.onto_temp)
-        elif name == self.base + "measure":
-            self.one_cell[3] = self.text.strip()
         elif name not in self.used_tags:
-            key = name[name.index("}") + 1 :]
-            self.extension[key] = self.text
+            key = name.replace("{","",1).replace("}","",1) #name[name.index("}") + 1 :]
+            if self.in_cell:
+                self.one_cell[4][key] = self.text
+            else:
+                self.extension[key] = self.text
 
     def data(self, chars):
         self.text += chars
@@ -199,28 +221,43 @@ class AlignmentHandler(object):
     def close(self):
         pass
 
+def remove_cell_extensions(alignment):
+    for c in alignment:
+        c.pop()
 
-def parse_mapping_from_string(s):
+def parse_mapping_from_string(s, parse_cell_extensions=False):
     """
     Parses a alignment from a given string.
     :param s: a string representing a alignment in alignment format
-    :return: (alignment: list of (source, target, relation, confidence), onto1 as ((id, url, formalismName, formalismURI),
-    onto2 similar to onto1, extension (iterable of key, values) )
+    :param parse_cell_extensions: if true, also parses the cell extensions 
+    :return: (alignment: list of (source, target, relation, confidence, extensions - which are parsed only when parse_cell_extensions is True), 
+    onto1 as (id, url, formalismName, formalismURI),
+    onto2 similar to onto1, 
+    extension (iterable of key, values)
+    )
     """
     handler = AlignmentHandler()
     etree.parse(BytesIO(s.encode("utf-8")), etree.XMLParser(target=handler))
+    if parse_cell_extensions == False:
+        remove_cell_extensions(handler.alignment)
     return handler.alignment, handler.onto1, handler.onto2, handler.extension
 
 
-def parse_mapping_from_file(source):
+def parse_mapping_from_file(source, parse_cell_extensions=False):
     """
     Parses a alignment from a filename or file object.
     :param source: is a filename or file object containing a alignment in alignment format
-    :return: (alignment: list of (source, target, relation, confidence), onto1 as ((id, url, formalismName, formalismURI),
-    onto2 similar to onto1, extension (iterable of key, values) )
+    :param parse_cell_extensions: if true, also parses the cell extensions 
+    :return: (alignment: list of (source, target, relation, confidence, extensions - which are parsed only when parse_cell_extensions is True), 
+    onto1 as (id, url, formalismName, formalismURI),
+    onto2 similar to onto1, 
+    extension (iterable of key, values)
+    )
     """
     handler = AlignmentHandler()
     etree.parse(source, etree.XMLParser(target=handler))
+    if parse_cell_extensions == False:
+        remove_cell_extensions(handler.alignment)
     return handler.alignment, handler.onto1, handler.onto2, handler.extension
 
 

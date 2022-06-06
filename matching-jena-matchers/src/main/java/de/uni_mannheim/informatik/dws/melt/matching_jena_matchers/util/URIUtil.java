@@ -12,11 +12,11 @@ public class URIUtil {
      * @return fragment
      */
     public static String getUriFragment(String uri){
-        int lastIndex = uri.lastIndexOf("#");
+        int lastIndex = uri.lastIndexOf('#');
         if(lastIndex >= 0){
             return uri.substring(lastIndex + 1);
         }
-        lastIndex = uri.lastIndexOf("/");
+        lastIndex = uri.lastIndexOf('/');
         if(lastIndex >= 0){
             return uri.substring(lastIndex + 1);
         }

@@ -30,7 +30,10 @@ public interface CopyMode {
     public static CopyMode NONE = new CopyMode() {
         @Override
         public Set<Object> getCopiedModel(Set<Object> modelRepresentations, Properties parameters) throws TypeTransformationException {
-            //remove URL representations fo KG/model because the copied model will be modified
+            if(modelRepresentations.size() <= 1){
+                return modelRepresentations; // only one representation available - do not remove anything
+            }
+            //remove URL representations of KG/model because the copied model will be modified
             //and thus the URL is not a representation anymore.
             Set<Object> modelRep = new HashSet<>();
             for(Object o : modelRepresentations){

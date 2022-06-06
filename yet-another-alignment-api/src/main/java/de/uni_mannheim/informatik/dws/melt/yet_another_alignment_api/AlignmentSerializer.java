@@ -3,13 +3,12 @@ package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
@@ -33,7 +32,7 @@ public class AlignmentSerializer {
     private static final String newline = System.getProperty("line.separator");
 
     /**
-     * Method to write the specified alignment to the specified file
+     * Method to write the specified alignment to the specified file in the <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">default XML format</a>.
      * @param alignment The alignment that shall be written.
      * @param file The file to which the alignment shall be written.
      * @throws IOException Exception that occurred while serializing the alignment.
@@ -57,12 +56,22 @@ public class AlignmentSerializer {
         }
         
         try (FileOutputStream out = new FileOutputStream(file)) {
-            out.write(getXmlIntro(alignment).getBytes(ENCODING));
-            for(Correspondence cell : alignment){
-                out.write(getXmlMappingCellMultiLine(cell).getBytes(ENCODING));
-            }
-            out.write(getXmlOutro().getBytes(ENCODING));
-        }        
+            serialize(alignment, out);
+        }
+    }
+    
+    /**
+     * Method to write the specified alignment to the specified outputstream in the <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">default XML format</a>.
+     * @param alignment The alignment that shall be written.
+     * @param stream the stream where the serialized alignment should be written to (the stream is not closed)
+     * @throws IOException Exception that occurred while serializing the alignment.
+     */
+    public static void serialize(Alignment alignment, OutputStream stream) throws IOException {
+        stream.write(getXmlIntro(alignment).getBytes(ENCODING));
+        for(Correspondence cell : alignment){
+            stream.write(getXmlMappingCellMultiLine(cell).getBytes(ENCODING));
+        }
+        stream.write(getXmlOutro().getBytes(ENCODING));
     }
 
     /**
@@ -97,10 +106,10 @@ public class AlignmentSerializer {
         sb.append("  <type>??</type>\n");
 
         if(alignment.getExtensions() != null) {
-            for (HashMap.Entry<String, String> extension : alignment.getExtensions().entrySet()) {
+            for (HashMap.Entry<String, Object> extension : alignment.getExtensions().entrySet()) {
                 String extensionLabel = getExtensionLabel(extension.getKey());
                 sb.append("      <alignapilocalns:" + extensionLabel + " xmlns:alignapilocalns=\"" + getExtensionBaseUri(extension.getKey()) + "\">")
-                        .append(extension.getValue() + "</alignapilocalns:" + extensionLabel + ">\n");
+                        .append(extension.getValue().toString() + "</alignapilocalns:" + extensionLabel + ">\n");
             }
         }
 

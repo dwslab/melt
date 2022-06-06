@@ -117,4 +117,22 @@ public class TransitiveClosure <T> {
         }            
         return foundClosureIDs.size() <= 1;        
     }
+    
+    /**
+     * Returns the identity set in which the given object is stored.
+     * @param element the element to search the identiry set for
+     * @return the identity set
+     */
+    public Set<T> getIdentitySetForElement(T element){
+        Integer closureID = this.objectToId.get(element);
+        if(closureID == null){
+            return null;
+        }else{
+            return this.idToClosure.getOrDefault(closureID, null);
+        }
+    }
+    
+    public Integer getIdentityID(T element){
+        return this.objectToId.get(element);
+    }
 }

@@ -29,7 +29,7 @@ public class TestCase {
     /** 
      * A test case always belongs to a track. 
      */
-    private final Track track;
+    private Track track;
     
     /**
      * URI pointing to the source file for matching.
@@ -106,6 +106,9 @@ public class TestCase {
         this(name, source, target, reference, track, null, GoldStandardCompleteness.COMPLETE, null);
     }
 
+    void setTrack(Track track){
+        this.track = track;
+    }
     
     public String getName() {
         return name;

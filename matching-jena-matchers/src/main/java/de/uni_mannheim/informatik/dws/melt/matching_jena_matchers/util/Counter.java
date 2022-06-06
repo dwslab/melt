@@ -18,6 +18,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -150,6 +151,110 @@ public class Counter<T> {
             c.increment(howOften);
         }
     }
+    
+    /**
+     * Removes one count of the given element from this counter (the element is still in the counter if it was added multiple times).
+     * It will remove the element only if it is present (optional operation).
+     * Returns <tt>true</tt> if this counter contained the specified element <tt>t</tt> (or
+     * equivalently, if this collection changed as a result of the call).
+     * In case you want to remove all counts of an element, then use {@link #removeAll(java.lang.Object) }.
+     * @param t the element to remove
+     * @return <tt>true</tt> if an element was removed
+     */
+    public boolean remove(T t){
+        MutableInt c = this.counts.get(t);
+        if(c == null){
+            return false;
+        }else{
+            this.overallCount--;
+            c.decrement();
+            if(c.value <=0){
+                this.counts.remove(t);
+            }
+            return true;
+        }
+    }
+    
+    /**
+     * Removes the specified number of occurances of the given element from this counter.
+     * It will remove the element only if it is present (optional operation).
+     * Returns <tt>true</tt> if this counter contained the specified element <tt>t</tt> (or
+     * equivalently, if this collection changed as a result of the call).
+     * If the element should be removed more times, than it is added, the corresponding element is removed from this counter.
+     * In case you want to remove all counts of an element, then use {@link #removeAll(java.lang.Object) }.
+     * @param t the element to remove
+     * @param howOften how often this element should be removed.
+     * @return <tt>true</tt> if an element was removed
+     */
+    public boolean remove(T t, int howOften){
+        MutableInt c = this.counts.get(t);
+        if(c == null){
+            return false;
+        }else{
+            if(c.value > howOften){
+                c.decrement(howOften);
+                this.overallCount-=howOften;
+            }else if(c.value == howOften) {
+                this.overallCount-=howOften;
+                this.counts.remove(t);
+            }else{
+                this.overallCount-=c.value;
+                this.counts.remove(t);
+            }
+            return true;
+        }
+    }
+    
+    /**
+     * Removes the given element from this counter (even if it appears multiple times), if it is present (optional operation).
+     * Returns <tt>true</tt> if this counter contained the specified element <tt>t</tt> (or
+     * equivalently, if this collection changed as a result of the call).
+     * @param t the element to remove
+     * @return <tt>true</tt> if an element was removed
+     */
+    public boolean removeAll(T t){
+        MutableInt c = this.counts.get(t);
+        if(c == null){
+            return false;
+        }else{
+            this.overallCount -= c.value;
+            this.counts.remove(t);
+            return true;
+        }
+    }
+    
+    /**
+     * Removes the given element from this counter (even if it appears multiple times), if it is present (optional operation).
+     * Returns <tt>true</tt> if this counter contained the specified element <tt>t</tt> (or
+     * equivalently, if this collection changed as a result of the call).
+     * @param elements the element to remove
+     * @return <tt>true</tt> if the counter was changed/modified
+     */
+    public boolean removeAll(Collection<T> elements){
+        boolean modified = false;
+        for(T element : elements){
+            if(this.removeAll(element)){
+                modified = true;
+            }
+        }
+        return modified;
+    }
+    
+    /**
+     * It will substract the other counter from this counter.
+     * This counter will be modified and the counts are reduced.
+     * @param other the other counter with values to be removed from this counter.
+     * @return <tt>true</tt> if this counter was changed/modified
+     */
+    public boolean substract(Counter<T> other){
+        boolean modified = false;
+        for(Entry<T, MutableInt> entry : other.counts.entrySet()){
+            if(this.remove(entry.getKey(), entry.getValue().value)){
+                modified = true;
+            }
+        }
+        return modified;
+    }
 
     /**
      * Get the count for a specific element.
@@ -188,6 +293,10 @@ public class Counter<T> {
         return counts.size();
     }
     
+    public boolean isEmpty(){
+        return this.overallCount == 0;
+    }
+    
     /**
      * Return a list of the n most common elements and their counts.
      * Ordered from the most common to the least.
@@ -223,6 +332,21 @@ public class Counter<T> {
         LinkedHashMap<T, Integer> lhm = new LinkedHashMap<>();
         counts.entrySet().stream()
                 .sorted(this.mapComparator)
+                .forEach(e -> lhm.put(e.getKey(), e.getValue().get()));
+        return lhm;
+    }
+    
+    /**
+     * Return a sorted map of the most common elements (limit by n) and their counts.
+     * Ordered from the most common to the least.
+     * @param n the number of elements to put in the sorted map
+     * @return sorted map
+     */
+    public LinkedHashMap<T, Integer> getSortedMap(int n) {
+        LinkedHashMap<T, Integer> lhm = new LinkedHashMap<>();
+        counts.entrySet().stream()
+                .sorted(this.mapComparator)
+                .limit(n)
                 .forEach(e -> lhm.put(e.getKey(), e.getValue().get()));
         return lhm;
     }
@@ -438,12 +562,26 @@ public class Counter<T> {
     }
     
     /**
+     * ToString method which returns return values from functions like {@link #mostCommon(int) } well formatted in multiple lines to have a better overview.
+     * @param n the number of elements to print as multiline
+     * @return a string which contains the counter information in multiple lines.
+     */
+    public String toStringMultiline(int n){
+        try{
+            return JSON_MAPPER.writeValueAsString(this.getSortedMap(n));
+        } catch (IOException ex) {
+            LOGGER.error("Could not serialize object to string", ex);
+            return "";
+        }
+    }
+    
+    /**
      * Returns a json representation of this counter.
      * @return a json representation
      */
     public String toJson(){
         try{
-            return JSON_MAPPER.writeValueAsString(this.getSortedMap());        
+            return JSON_MAPPER.writeValueAsString(this.getSortedMap());
         } catch (IOException ex) {
             LOGGER.error("Could not serialize Counter to string", ex);
             return "";
@@ -551,6 +689,9 @@ public class Counter<T> {
         
         public MutableInt(){this.value = 1;}        
         public MutableInt(int initial){this.value = initial;}
+        
+        public void decrement() { --value; }
+        public void decrement(int decrement) { value-=decrement; }
         
         public void increment() { ++value; }
         public void increment(int increment) { value+=increment; }

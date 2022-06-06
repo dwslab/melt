@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +82,89 @@ public class LocalTrack extends Track {
         this(name, version, new File(folderToTestCasesPath));
     }
 
+    
+    /**************************************
+     * Constructors with list of testcases.
+     **************************************/
+    
+    /**
+     * Default Constructor
+     * @param name Name of the track. Can be any text identifying the track
+     * @param version Version of the track. Can be any text identifying the version e.g. semantic versioning like 1.0.1.
+     * @param testCases the testcases corresponding to this track. The track in the testcases can be set to null (will be set in this constructor).
+     * @param goldStandardCompleteness how complete is the gold standard for this track.
+     */
+    public LocalTrack(String name, String version, List<TestCase> testCases, GoldStandardCompleteness goldStandardCompleteness){
+        super("http://localhost/", name, version, false, goldStandardCompleteness);
+        this.testCases = testCases;
+        for(TestCase tc : this.testCases){
+            tc.setTrack(this);
+        }
+    }
+    
+    /**
+     * Default Constructor.
+     * The gold standard is assumed to be complete use {@link #LocalTrack(java.lang.String, java.lang.String, java.util.List, de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness) in case it is different. 
+     * @param name Name of the track. Can be any text identifying the track
+     * @param version Version of the track. Can be any text identifying the version e.g. semantic versioning like 1.0.1.
+     * @param testCases the testcases corresponding to this track. The track in the testcases can be set to null (will be set in this constructor).
+     */
+    public LocalTrack(String name, String version, List<TestCase> testCases){
+        this(name,version, testCases, GoldStandardCompleteness.COMPLETE);
+    }
+    
+    /**
+     * TestCases needs to be added after generating this track (when using this constructor).
+     * @param name Name of the track. Can be any text identifying the track
+     * @param version Version of the track. Can be any text identifying the version e.g. semantic versioning like 1.0.1.
+     * @param goldStandardCompleteness how complete is the gold standard for this track.
+     */
+    public LocalTrack(String name, String version, GoldStandardCompleteness goldStandardCompleteness){
+        super("http://localhost/", name, version, false, goldStandardCompleteness);
+        this.testCases = new ArrayList<>();
+    }
+    
+    /**
+     * TestCases needs to be added after generating this track (when using this constructor).
+     * A complete gold standard is assumed. 
+     * @param name Name of the track. Can be any text identifying the track
+     * @param version Version of the track. Can be any text identifying the version e.g. semantic versioning like 1.0.1.
+     */
+    public LocalTrack(String name, String version){
+        super("http://localhost/", name, version, false, GoldStandardCompleteness.COMPLETE);
+        this.testCases = new ArrayList<>();
+    }
+    
+    public TestCase addTestCase(TestCase tc){
+        tc.setTrack(this);
+        this.testCases.add(tc);
+        return tc;
+    }
+    
+    public TestCase addTestCase(String name, URI source, URI target, URI reference, URI inputAlignment, GoldStandardCompleteness goldStandardCompleteness, URI parameters){
+        TestCase tc = new TestCase(name,source,target,reference,this, inputAlignment, goldStandardCompleteness, parameters);
+        this.testCases.add(tc);
+        return tc;
+    }
+    
+    public TestCase addTestCase(String name, File source, File target, File reference, File inputAlignment, GoldStandardCompleteness goldStandardCompleteness, File parameters){
+        TestCase tc = new TestCase(name,
+                source.toURI(),
+                target.toURI(),
+                reference == null ? null : reference.toURI(),
+                this, 
+                inputAlignment == null ? null : inputAlignment.toURI(), 
+                goldStandardCompleteness, 
+                parameters == null ? null : parameters.toURI());
+        this.testCases.add(tc);
+        return tc;
+    }
+    
+    public TestCase addTestCase(String name, File source, File target, File reference){
+        return addTestCase(name, source,target, reference, null, this.goldStandardCompleteness, null);
+    }
+    
+    
     @Override
     protected void downloadToCache() throws Exception {
         // intentionally kept empty

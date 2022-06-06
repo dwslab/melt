@@ -70,6 +70,11 @@ public class MergeTaskPos {
         }
         return true;
     }
+
+    @Override
+    public String toString() {        
+        return "merge(" + clusterOnePos + "," + clusterTwoPos + ") to " + clusterResultPos + "(dist:" + distance + " norm:" + distanceNormalized + ')';
+    }
     
     
 }

@@ -199,4 +199,75 @@ public class CounterTest {
         Counter<String> two = Counter.loadFromJsonString(one.toJson());
         assertEquals(one, two);
     }
+    
+    @Test
+    void substractTest(){
+        Counter<String> one = new Counter<>();
+        one.add("hello", 5);
+        one.add("test", 6);
+        one.add("bla", 7);
+        one.add("blub", 8);
+        
+        Counter<String> two = new Counter<>();
+        two.add("hello", 7);
+        two.add("test", 6);
+        two.add("bla", 3);
+        
+        assertTrue(one.substract(two));
+        
+        assertEquals(2, one.getDistinctElements().size());
+        assertEquals(12, one.getCount());
+        
+        assertEquals(0, one.getCount("hello"));
+        assertEquals(0, one.getCount("test"));
+        assertEquals(4, one.getCount("bla"));
+        assertEquals(8, one.getCount("blub"));
+    }
+    
+    
+    @Test
+    void removeTest(){
+        Counter<String> one = new Counter<>();
+        one.add("hello", 5);
+        one.add("test", 6);
+        one.add("bla", 7);
+        
+        one.remove("hello", 5);
+        one.remove("test", 8);
+        one.remove("bla", 1);
+        
+        assertEquals(6, one.getCount());
+        
+        assertEquals(0, one.getCount("hello"));
+        assertEquals(0, one.getCount("test"));
+        assertEquals(6, one.getCount("bla"));
+        
+        
+        Counter<String> two = new Counter<>();
+        two.add("hello", 5);
+        assertTrue(two.remove("hello"));
+        assertEquals(4, two.getCount("hello"));
+        
+        
+        Counter<String> three = new Counter<>();
+        three.add("hello");
+        assertTrue(three.remove("hello"));
+        assertEquals(0, three.getCount("hello"));
+        assertEquals(0, three.getCount());        
+    }
+    
+    @Test
+    void removeAllTest(){
+        Counter<String> one = new Counter<>();
+        one.add("hello", 5);
+        one.add("test", 6);
+        one.add("bla", 7);
+        
+        one.removeAll("hello");
+        
+        assertEquals(13, one.getCount());
+        assertEquals(0, one.getCount("hello"));
+        assertEquals(6, one.getCount("test"));
+        assertEquals(7, one.getCount("bla"));
+    }
 }

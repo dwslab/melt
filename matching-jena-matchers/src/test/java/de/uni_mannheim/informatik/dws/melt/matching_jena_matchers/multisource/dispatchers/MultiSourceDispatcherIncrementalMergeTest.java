@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.d
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AlignmentAndParameters;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.BaselineStringMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.Counter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.TransitiveClosure;
@@ -24,6 +25,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
+import org.apache.jena.vocabulary.VOID;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -173,6 +175,60 @@ public class MultiSourceDispatcherIncrementalMergeTest {
                 new SimpleEntry<>("20", 20),
                 new SimpleEntry<>("10", 10)
         ));
+    }
+    
+    
+    @Test
+    public void checkForAdaptiveThresholdWithGoldStandard() throws Exception{
+        Model zero = ModelFactory.createDefaultModel();
+        zero.add(zero.createResource("http://zero.com/"), RDF.type, VOID.Dataset);
+        zero.add(zero.createResource("http://zero.com/a"), RDFS.label, "a");
+        zero.add(zero.createResource("http://zero.com/b"), RDFS.label, "b");
+        zero.add(zero.createResource("http://zero.com/c"), RDFS.label, "c");
+        zero.add(zero.createResource("http://zero.com/x"), RDFS.label, "x");
+        
+        Model one = ModelFactory.createDefaultModel();
+        one.add(zero.createResource("http://one.com/"), RDF.type, VOID.Dataset);
+        one.add(one.createResource("http://one.com/a"), RDFS.label, "a");
+        one.add(one.createResource("http://one.com/b"), RDFS.label, "b");
+        one.add(one.createResource("http://one.com/c"), RDFS.label, "c");
+        one.add(one.createResource("http://one.com/y"), RDFS.label, "y");
+        
+        Model two = ModelFactory.createDefaultModel();
+        two.add(zero.createResource("http://two.com/"), RDF.type, VOID.Dataset);
+        two.add(two.createResource("http://two.com/a"), RDFS.label, "a");
+        two.add(two.createResource("http://two.com/b"), RDFS.label, "b");
+        two.add(two.createResource("http://two.com/c"), RDFS.label, "c");
+        two.add(two.createResource("http://two.com/z"), RDFS.label, "z");
+        
+                
+        Alignment gold = new Alignment();
+        gold.add("http://zero.com/a", "http://one.com/a", 1.0);
+        gold.add("http://zero.com/b", "http://one.com/b", 1.0);        
+        /*
+        MatcherYAAAJena matcher = new MatcherYAAAJena() {
+            @Override
+            public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
+                List<Resource> left = source.listSubjectsWithProperty(RDF.type, VOID.Dataset).toList();
+                List<Resource> right = target.listSubjectsWithProperty(RDF.type, VOID.Dataset).toList();
+                if(left.size() == 1 && right.size() == 1){
+                    
+                }
+                
+            }
+        };
+        
+        MultiSourceDispatcherIncrementalMerge m = new MatcherFixedMergeTree(matcher, new int[][]{
+            {0,1},
+            {3,2}
+        });
+        
+        List<Set<Object>> models = new ArrayList<>();
+        models.add(new HashSet<>(Arrays.asList(zero)));
+        models.add(new HashSet<>(Arrays.asList(one)));
+        models.add(new HashSet<>(Arrays.asList(two)));
+        m.match(models, new Properties(), new Alignment());
+        */
     }
     
     

@@ -355,7 +355,7 @@ public abstract class Track implements Comparable<Track> {
                     encode(this.name),
                     encode(this.version),
                     encode(testCaseName),
-                    type.toString() + ".rdf").toFile();
+                    type.toFileName()).toFile();
         saveToFile(in, file);
     }
     
@@ -383,13 +383,13 @@ public abstract class Track implements Comparable<Track> {
                     testCaseName + ".rdf").toFile();
             if(file.exists() == false)
                 saveToFile(in, file);
-        }else if(type == TestCaseType.PARAMETERS){
+        }else{ // for input and parameters
             File file = Paths.get(
                     cacheFolder.getAbsolutePath(),
                     encode(this.remoteLocation),
                     encode(this.name),
                     encode(this.version),
-                    "parameters",
+                    type.toString(),
                     testCaseName + ".rdf").toFile();
             if(file.exists() == false)
                 saveToFile(in, file);
@@ -445,6 +445,7 @@ public abstract class Track implements Comparable<Track> {
             File source_file = new File(f, TestCaseType.SOURCE.toFileName());
             File target_file = new File(f, TestCaseType.TARGET.toFileName());
             File reference_file = new File(f, TestCaseType.REFERENCE.toFileName());
+            File input_file = new File(f, TestCaseType.INPUT.toFileName());
             File parameters_file = new File(f, TestCaseType.PARAMETERS.toFileName());
             
             if(source_file.exists() == false || target_file.exists() == false){
@@ -461,7 +462,7 @@ public abstract class Track implements Comparable<Track> {
                     target_file.toURI(),
                     reference_file.exists() ? reference_file.toURI() : null,
                     this,
-                    null,
+                    input_file.exists() ? input_file.toURI() : null,
                     this.goldStandardCompleteness,
                     parameters_file.exists() ? parameters_file.toURI() : null));
         }
@@ -513,16 +514,20 @@ public abstract class Track implements Comparable<Track> {
                 continue;
             }
             
+            File inputFile = Paths.get(cacheFolder.getAbsolutePath(),
+                    encode(this.remoteLocation),encode(this.name), encode(this.version),
+                    TestCaseType.INPUT.toString(), referenceFile.getName()).toFile();
+            
             File parametersFile = Paths.get(cacheFolder.getAbsolutePath(),
                     encode(this.remoteLocation),encode(this.name), encode(this.version),
-                    "parameters", referenceFile.getName()).toFile();
+                    TestCaseType.PARAMETERS.toString(), referenceFile.getName()).toFile();
             
             testCases.add(new TestCase(fileNameWithoutExtension,
                     sourceFile.toURI(),
                     targetFile.toURI(),
                     referenceFile.toURI(),
                     this,
-                    null,
+                    inputFile.exists() ? inputFile.toURI() : null,
                     this.goldStandardCompleteness,
                     parametersFile.exists() ? parametersFile.toURI() : null));
         }

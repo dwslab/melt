@@ -111,7 +111,7 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
         int batchSize = 4;
         List<String> batchExamples = getExamplesForBatchSizeOptimization(trainingFile, 8194, this.batchSizeOptimization);
         while(batchSize < 8193){
-            LOGGER.info("Try out batch size of {}", batchSize);
+            LOGGER.info("Try out per_device_train_batch_size of {}", batchSize);
             //generate a smaller training file -> faster tokenizer
             
             File tmpTrainingFile = FileUtil.createFileWithRandomNumber("alignment_transformers_find_max_batch_size", ".txt");
@@ -141,11 +141,6 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
                     this.cudaVisibleDevices = backupCudaString;
                     return 8;
                 }
-            }catch (IOException ex) {
-                LOGGER.warn("Something went wrong with io during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
-                this.trainingArguments = backupArguments;
-                this.cudaVisibleDevices = backupCudaString;
-                return 8;
             }catch (Exception ex) {
                 LOGGER.warn("Something went wrong during getMaximumPerDeviceTrainBatchSize. Return default of 8", ex);
                 this.trainingArguments = backupArguments;
@@ -163,18 +158,6 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
         return batchSize;
     }
     
-    
-    private String getCudaVisibleDevicesButOnlyOneGPU(){
-        String gpus = this.getCudaVisibleDevices();
-        if(gpus == null) // this means use all available.
-            return "0"; //then we select only the first one
-        gpus = gpus.trim();
-        if(gpus.isEmpty())
-            return "0"; // same as above
-        String[] array = gpus.split(",");
-        return array[0]; // one element is always contained
-    }
-    
     /**
      * This will add (potencially multiple) training parameters to the current {@link TransformersBase#trainingArguments trainingArguments}
      * to make the training faster. Thus do not change the trainingArguments object afterwards 
@@ -187,7 +170,6 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
      * @see <a href="https://huggingface.co/transformers/performance.html">Transformers performance page on huggingface</a>
      */
     public void addTrainingParameterToMakeTrainingFaster(){
-        //https://huggingface.co/transformers/performance.html
         //https://huggingface.co/transformers/performance.html
         this.trainingArguments.addParameter("fp16", true);
     }
