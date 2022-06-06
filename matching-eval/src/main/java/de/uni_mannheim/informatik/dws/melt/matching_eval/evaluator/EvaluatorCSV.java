@@ -190,7 +190,7 @@ public class EvaluatorCSV extends Evaluator {
         if (results != null) {
             for (ExecutionResult result : results) {
                 if (result != null && result.getSystemAlignment() != null) {
-                    Map<String, String> extensions = result.getSystemAlignment().getExtensions();
+                    Map<String, Object> extensions = result.getSystemAlignment().getExtensions();
                     if (extensions != null) {
                         uniqueExtensions.addAll(extensions.keySet());
                     }
@@ -333,8 +333,7 @@ public class EvaluatorCSV extends Evaluator {
             if (isPrintAlignmentExtensions && this.alignmentExtensions != null && this.alignmentExtensions.size() > 0) {
                 Set<ExecutionResult> temporaryExecutionResult = results.getGroup(track, matcher);
                 if (temporaryExecutionResult.iterator().hasNext()) {
-                    Map<String, String> alignmentExtensions = temporaryExecutionResult.iterator().next().getSystemAlignment().getExtensions();
-                    extensionValues = determineAlignmentExtensionValuesToWriteForCSV(alignmentExtensions);
+                    extensionValues = determineAlignmentExtensionValuesToWriteForCSV(temporaryExecutionResult.iterator().next().getSystemAlignment().getExtensions());
                 } else extensionValues = new String[0];
             } else extensionValues = new String[0];
 
@@ -507,8 +506,7 @@ public class EvaluatorCSV extends Evaluator {
                 if (isPrintAlignmentExtensions &&
                         this.alignmentExtensions != null &&
                         this.alignmentExtensions.size() > 0) {
-                    Map<String, String> alignmentExtensions = results.get(testCase, matcher).getSystemAlignment().getExtensions();
-                    extensionValues = determineAlignmentExtensionValuesToWriteForCSV(alignmentExtensions);
+                    extensionValues = determineAlignmentExtensionValuesToWriteForCSV(results.get(testCase, matcher).getSystemAlignment().getExtensions());
                 } else extensionValues = new String[0];
 
                 File fileToBeWritten = new File(
@@ -576,12 +574,12 @@ public class EvaluatorCSV extends Evaluator {
      * @param existingExtensionValues The existing extension values in the alignment.
      * @return Tokenized extension values in the correct order for the CSV file to print.
      */
-    private String[] determineAlignmentExtensionValuesToWriteForCSV(Map<String, String> existingExtensionValues) {
+    private String[] determineAlignmentExtensionValuesToWriteForCSV(Map<String, Object> existingExtensionValues) {
         String[] result = new String[this.alignmentExtensions.size()];
         for (int i = 0; i < this.alignmentExtensions.size(); i++) {
             String extensionUri = alignmentExtensions.get(i);
             if (existingExtensionValues.containsKey(extensionUri)) {
-                result[i] = existingExtensionValues.get((String) extensionUri);
+                result[i] = existingExtensionValues.get(extensionUri).toString();
             } else {
                 result[i] = "-";
             }

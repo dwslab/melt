@@ -81,21 +81,20 @@ public class EvaluatorBasic extends Evaluator {
             }
 
             File fileToBeWritten = new File(baseDirectory, RESULT_FILE_NAME);
-            CSVPrinter printer = CSVFormat.DEFAULT.print(fileToBeWritten, StandardCharsets.UTF_8);
-            printer.printRecord(getHeader());
-            for (ExecutionResult er : results) {
-                String[] extensionValues;
-                if(isPrintAlignmentExtensions && this.alignmentExtensions != null && this.alignmentExtensions.size() > 0) {
-                    Map<String, String> alignmentExtensions = er.getSystemAlignment().getExtensions();
-                    extensionValues = determineExtensionValuesToWriteForCSV(alignmentExtensions);
-                } else extensionValues = new String[0];
-                ConfusionMatrix matrix = this.metric.compute(er);
-                printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, er.getTestCase().getTrack().getName(), er.getTestCase().getName(), er.getMatcherName(), matrix.getPrecision(),
-                        matrix.getRecall(),matrix.getF1measure(), matrix.getTruePositiveSize(),
-                        matrix.getFalsePositiveSize(), matrix.getFalseNegativeSize(), er.getRuntime()));
+            try (CSVPrinter printer = CSVFormat.DEFAULT.print(fileToBeWritten, StandardCharsets.UTF_8)) {
+                printer.printRecord(getHeader());
+                for (ExecutionResult er : results) {
+                    String[] extensionValues;
+                    if(isPrintAlignmentExtensions && this.alignmentExtensions != null && this.alignmentExtensions.size() > 0) {
+                        extensionValues = determineExtensionValuesToWriteForCSV(er.getSystemAlignment().getExtensions());
+                    } else extensionValues = new String[0];
+                    ConfusionMatrix matrix = this.metric.compute(er);
+                    printer.printRecord(toStringArrayWithArrayAtTheEnd(extensionValues, er.getTestCase().getTrack().getName(), er.getTestCase().getName(), er.getMatcherName(), matrix.getPrecision(),
+                            matrix.getRecall(),matrix.getF1measure(), matrix.getTruePositiveSize(),
+                            matrix.getFalsePositiveSize(), matrix.getFalseNegativeSize(), er.getRuntime()));
+                }
+                printer.flush();
             }
-            printer.flush();
-            printer.close();
         } catch (IOException ioe){
             LOGGER.error("Problem with results writer.", ioe);
         }
@@ -131,7 +130,7 @@ public class EvaluatorBasic extends Evaluator {
         if(results != null) {
             for (ExecutionResult result : results) {
                 if(result != null && result.getSystemAlignment() != null) {
-                    Map<String, String> extensions = result.getSystemAlignment().getExtensions();
+                    Map<String, Object> extensions = result.getSystemAlignment().getExtensions();
                     if (extensions != null) {
                         uniqueExtensions.addAll(extensions.keySet());
                     }
@@ -152,7 +151,7 @@ public class EvaluatorBasic extends Evaluator {
         String[] result = new String[individualValues.length + putAtTheEnd.length];
         int i = 0;
         for(; i < individualValues.length; i++){
-            result[i] = "" + individualValues[i];
+            result[i] = individualValues[i].toString();
         }
         for(int newI = 0; i + newI < result.length; newI++){
             result[i + newI] = putAtTheEnd[newI];
@@ -165,12 +164,12 @@ public class EvaluatorBasic extends Evaluator {
      * @param existingExtensionValues The existing extension values in the alignment.
      * @return Tokenized extension values in the correct order for the CSV file to print.
      */
-    private String[] determineExtensionValuesToWriteForCSV(Map<String,String> existingExtensionValues){
+    private String[] determineExtensionValuesToWriteForCSV(Map<String,Object> existingExtensionValues){
         String[] result = new String[this.alignmentExtensions.size()];
         for(int i = 0; i < this.alignmentExtensions.size(); i++){
             String extensionUri = alignmentExtensions.get(i);
             if(existingExtensionValues.containsKey(extensionUri)) {
-                result[i] = existingExtensionValues.get((String) extensionUri);
+                result[i] = existingExtensionValues.get(extensionUri).toString();
             } else {
                 result[i] = "-";
             }
