@@ -100,6 +100,7 @@ public class LocalTrack extends Track {
         for(TestCase tc : this.testCases){
             tc.setTrack(this);
         }
+        this.folderToTestCases = null;
     }
     
     /**
@@ -122,6 +123,7 @@ public class LocalTrack extends Track {
     public LocalTrack(String name, String version, GoldStandardCompleteness goldStandardCompleteness){
         super("http://localhost/", name, version, false, goldStandardCompleteness);
         this.testCases = new ArrayList<>();
+        this.folderToTestCases = null;
     }
     
     /**
@@ -133,6 +135,7 @@ public class LocalTrack extends Track {
     public LocalTrack(String name, String version){
         super("http://localhost/", name, version, false, GoldStandardCompleteness.COMPLETE);
         this.testCases = new ArrayList<>();
+        this.folderToTestCases = null;
     }
     
     public TestCase addTestCase(TestCase tc){
