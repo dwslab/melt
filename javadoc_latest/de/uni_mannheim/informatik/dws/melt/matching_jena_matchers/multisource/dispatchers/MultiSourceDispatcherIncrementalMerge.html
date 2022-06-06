@@ -15,8 +15,8 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":6,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
+<script type="text/javascript">var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":6,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
 var tableTab = "table-tab";
@@ -120,8 +120,18 @@ implements <a href="../../../matching_base/multisource/MultiSourceDispatcher.htm
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
-<td class="col-first"><code>private <a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></code></td>
+<td class="col-first"><code>private <a href="CopyMode.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#copyMode">copyMode</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;,&#8203;<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#goldStandard">goldStandard</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>private <a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#idExtractor">idExtractor</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
@@ -135,18 +145,28 @@ implements <a href="../../../matching_base/multisource/MultiSourceDispatcher.htm
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
+<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#matcherSupplier">matcherSupplier</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>private <a href="../../util/FileCache.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">FileCache</a>&lt;<a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#mergeOrderFileCache">mergeOrderFileCache</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
 <td class="col-first"><code>private int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#numberOfThreads">numberOfThreads</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
-<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#oneToOneMatcher">oneToOneMatcher</a></span></code></th>
+<td class="col-first"><code>private boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#removeUnusedJenaModels">removeUnusedJenaModels</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
-<td class="col-first"><code>private boolean</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#removeUnusedJenaModels">removeUnusedJenaModels</a></span></code></th>
+<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#serializedTreeFile">serializedTreeFile</a></span></code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
@@ -179,6 +199,17 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <div class="block">Constructor which expects the actual one to one matcher and a boolean if information should be added to the union.</div>
 </td>
 </tr>
+<tr class="alt-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.util.function.Supplier)">MultiSourceDispatcherIncrementalMerge</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.util.function.Supplier,boolean)">MultiSourceDispatcherIncrementalMerge</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier,
+boolean&nbsp;addInformationToUnion)</code></th>
+<td class="col-last">
+<div class="block">Constructor which expects the actual one to one matcher and a boolean if information should be added to the union.</div>
+</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -189,7 +220,7 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <section class="method-summary" id="method.summary">
 <h2>Method Summary</h2>
 <div class="member-summary" id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="active-table-tab">All Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="table-tab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t3" class="table-tab" onclick="show(4);">Abstract Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="table-tab" onclick="show(8);">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="active-table-tab">All Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t1" class="table-tab" onclick="show(1);">Static Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="table-tab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t3" class="table-tab" onclick="show(4);">Abstract Methods</button><button role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="table-tab" onclick="show(8);">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <table class="summary-table" aria-labelledby="t0">
 <thead>
@@ -201,74 +232,96 @@ boolean&nbsp;addInformationToUnion)</code></th>
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
+<td class="col-first"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addDistance(java.util.Properties,double,double)">addDistance</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p,
+double&nbsp;distance,
+double&nbsp;normalizedDistance)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i1">
 <td class="col-first"><code>private void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#callClearIndex()">callClearIndex</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i1">
-<td class="col-first"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCopiedModel(java.util.Set,java.util.Properties)">getCopiedModel</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;modelRepresentations,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;parameters)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
 <tr class="alt-color" id="i2">
-<td class="col-first"><code><a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></code></td>
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCacheFile()">getCacheFile</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Returns the cache file which is used to store the merge tree.</div>
+</td>
+</tr>
+<tr class="row-color" id="i3">
+<td class="col-first"><code><a href="CopyMode.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getCopyMode()">getCopyMode</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the used copy mode.</div>
 </td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="alt-color" id="i4">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getIntermediateAlignments()">getIntermediateAlignments</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the intermediate alignments.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
-<td class="col-first"><code>abstract int[][]</code></td>
+<tr class="row-color" id="i5">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMatcherSupplier()">getMatcherSupplier</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Return the function which returns a new configured matcher object.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i6">
+<td class="col-first"><code>abstract <a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMergeTree(java.util.List,java.lang.Object)">getMergeTree</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;parameters)</code></th>
 <td class="col-last">
 <div class="block">Returns the merging tree (which ontologies are merged in which order).</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getNumberOfThreads()">getNumberOfThreads</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns the number of thread which are used during merge.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i6">
+<tr class="alt-color" id="i8">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getSerializedTreeFile()">getSerializedTreeFile</a></span>()</code></th>
+<td class="col-last">
+<div class="block">Return the file where the serialzed merge tree is stored.</div>
+</td>
+</tr>
+<tr class="row-color" id="i9">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isAddingInformationToUnion()">isAddingInformationToUnion</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Return true if all information / triples are added to the union.</div>
 </td>
 </tr>
-<tr class="row-color" id="i7">
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>protected boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isLeftModelGreater(java.util.Set,java.util.Set,java.util.Properties)">isLeftModelGreater</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;leftOntology,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;rightOntology,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i8">
+<tr class="row-color" id="i11">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isRemoveUnusedJenaModels()">isRemoveUnusedJenaModels</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns true if OntModels are removed.</div>
 </td>
 </tr>
-<tr class="row-color" id="i9">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#isSavingIntermediateAlignments()">isSavingIntermediateAlignments</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns true if intermediate alignments are stored.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="row-color" id="i13">
 <td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.util.List,java.net.URL,java.net.URL)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;inputAlignment,
@@ -277,7 +330,7 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <div class="block">Matches multiple ontologies/knowledge graphs together.</div>
 </td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="alt-color" id="i14">
 <td class="col-first"><code><a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#match(java.util.List,java.lang.Object,java.lang.Object)">match</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
@@ -286,74 +339,102 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <div class="block">Matches multiple ontologies / knowledge graphs together.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i12">
+<tr class="row-color" id="i15">
 <td class="col-first"><code>boolean</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#needsTransitiveClosureForEvaluation()">needsTransitiveClosureForEvaluation</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Returns a boolean value if the matcher needs a transitive closure for evaluation.</div>
 </td>
 </tr>
-<tr class="row-color" id="i13">
-<td class="col-first"><code>protected void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#removeOntModelFromSet(java.util.Set)">removeOntModelFromSet</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;set)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="alt-color" id="i14">
-<td class="col-first"><code>private <a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#runParallel(int%5B%5D%5B%5D,java.util.List,java.lang.Object,java.util.Properties)">runParallel</a></span>&#8203;(int[][]&nbsp;mergeTree,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="row-color" id="i15">
-<td class="col-first"><code>private <a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#runSequential(int%5B%5D%5B%5D,java.util.List,java.lang.Object,java.util.Properties)">runSequential</a></span>&#8203;(int[][]&nbsp;mergeTree,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
 <tr class="alt-color" id="i16">
+<td class="col-first"><code>private <a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#runParallel(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MergeOrder,java.util.List,java.lang.Object,java.util.Properties)">runParallel</a></span>&#8203;(<a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a>&nbsp;mergeOrder,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i17">
+<td class="col-first"><code>private <a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#runSequential(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MergeOrder,java.util.List,java.lang.Object,java.util.Properties)">runSequential</a></span>&#8203;(<a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a>&nbsp;mergeOrder,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i18">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setAddingInformationToUnion(boolean)">setAddingInformationToUnion</a></span>&#8203;(boolean&nbsp;addInformationToUnion)</code></th>
 <td class="col-last">
 <div class="block">Sets the value if all information / triples are added to the union.</div>
 </td>
 </tr>
-<tr class="row-color" id="i17">
+<tr class="row-color" id="i19">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCopyMode(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.CopyMode)">setCopyMode</a></span>&#8203;(<a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a>&nbsp;copyMode)</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCacheFile(java.io.File)">setCacheFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;cacheFile)</code></th>
+<td class="col-last">
+<div class="block">Sets the cache file which should be used to cache the merge tree.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i20">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setCopyMode(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.CopyMode)">setCopyMode</a></span>&#8203;(<a href="CopyMode.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a>&nbsp;copyMode)</code></th>
 <td class="col-last">
 <div class="block">Sets the copy mode which is used during the merging.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i18">
+<tr class="row-color" id="i21">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setGoldStandard(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">setGoldStandard</a></span>&#8203;(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+<a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;idExtractor)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i22">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setGoldStandard(java.lang.Object,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">setGoldStandard</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;alignment,
+<a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;idExtractor)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i23">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setMatcherSupplier(java.util.function.Supplier)">setMatcherSupplier</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier)</code></th>
+<td class="col-last">
+<div class="block">If a matcher supplier is set, then this will be used instead of the matcher object.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i24">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setNumberOfThreads(int)">setNumberOfThreads</a></span>&#8203;(int&nbsp;numberOfThreads)</code></th>
 <td class="col-last">
 <div class="block">Sets the number of threads which are used during merge.</div>
 </td>
 </tr>
-<tr class="row-color" id="i19">
+<tr class="row-color" id="i25">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setNumberOfThreadsToCpuCores()">setNumberOfThreadsToCpuCores</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Sets the number of threads which are used during merge to the number of available CPU cores.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i20">
+<tr class="alt-color" id="i26">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setRemoveUnusedJenaModels(boolean)">setRemoveUnusedJenaModels</a></span>&#8203;(boolean&nbsp;removeUnusedJenaModels)</code></th>
 <td class="col-last">
 <div class="block">If set to true, this removes OntModel/Model which are not needed anymore.</div>
 </td>
 </tr>
-<tr class="row-color" id="i21">
+<tr class="row-color" id="i27">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setSavingIntermediateAlignments(boolean)">setSavingIntermediateAlignments</a></span>&#8203;(boolean&nbsp;intermediateAlignmentsNew)</code></th>
 <td class="col-last">
 <div class="block">Set to true if the intermediate alignments should be stored.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i28">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setSerializedTreeFile(java.io.File)">setSerializedTreeFile</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;serializedTreeFile)</code></th>
+<td class="col-last">
+<div class="block">Sets the file where the serialzed merge tree is stored.</div>
 </td>
 </tr>
 </tbody>
@@ -381,9 +462,9 @@ boolean&nbsp;addInformationToUnion)</code></th>
 </section>
 </li>
 <li>
-<section class="detail" id="oneToOneMatcher">
-<h3>oneToOneMatcher</h3>
-<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="member-name">oneToOneMatcher</span></div>
+<section class="detail" id="matcherSupplier">
+<h3>matcherSupplier</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="member-name">matcherSupplier</span></div>
 </section>
 </li>
 <li>
@@ -407,13 +488,37 @@ boolean&nbsp;addInformationToUnion)</code></th>
 <li>
 <section class="detail" id="copyMode">
 <h3>copyMode</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></span>&nbsp;<span class="member-name">copyMode</span></div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="CopyMode.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></span>&nbsp;<span class="member-name">copyMode</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="intermediateAlignments">
 <h3>intermediateAlignments</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&gt;</span>&nbsp;<span class="member-name">intermediateAlignments</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="mergeOrderFileCache">
+<h3>mergeOrderFileCache</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../util/FileCache.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">FileCache</a>&lt;<a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a>&gt;</span>&nbsp;<span class="member-name">mergeOrderFileCache</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="serializedTreeFile">
+<h3>serializedTreeFile</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">serializedTreeFile</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="goldStandard">
+<h3>goldStandard</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,&#8203;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;,&#8203;<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&gt;</span>&nbsp;<span class="member-name">goldStandard</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="idExtractor">
+<h3>idExtractor</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a></span>&nbsp;<span class="member-name">idExtractor</span></div>
 </section>
 </li>
 </ul>
@@ -441,6 +546,25 @@ boolean&nbsp;addInformationToUnion)</span></div>
 <section class="detail" id="&lt;init&gt;(java.lang.Object)">
 <h3>MultiSourceDispatcherIncrementalMerge</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">MultiSourceDispatcherIncrementalMerge</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;oneToOneMatcher)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.util.function.Supplier,boolean)">
+<h3>MultiSourceDispatcherIncrementalMerge</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">MultiSourceDispatcherIncrementalMerge</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier,
+boolean&nbsp;addInformationToUnion)</span></div>
+<div class="block">Constructor which expects the actual one to one matcher and a boolean if information should be added to the union.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>matcherSupplier</code> - a function which returns a new configured matcher everytime when it is called.</dd>
+<dd><code>addInformationToUnion</code> - if true all information from matched entities are in the union.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.util.function.Supplier)">
+<h3>MultiSourceDispatcherIncrementalMerge</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">MultiSourceDispatcherIncrementalMerge</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier)</span></div>
 </section>
 </li>
 </ul>
@@ -520,9 +644,9 @@ boolean&nbsp;addInformationToUnion)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="runSequential(int[][],java.util.List,java.lang.Object,java.util.Properties)">
+<section class="detail" id="runSequential(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MergeOrder,java.util.List,java.lang.Object,java.util.Properties)">
 <h3>runSequential</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></span>&nbsp;<span class="member-name">runSequential</span>&#8203;(<span class="parameters">int[][]&nbsp;mergeTree,
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></span>&nbsp;<span class="member-name">runSequential</span>&#8203;(<span class="parameters"><a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a>&nbsp;mergeOrder,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</span>
@@ -536,9 +660,9 @@ boolean&nbsp;addInformationToUnion)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="runParallel(int[][],java.util.List,java.lang.Object,java.util.Properties)">
+<section class="detail" id="runParallel(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MergeOrder,java.util.List,java.lang.Object,java.util.Properties)">
 <h3>runParallel</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></span>&nbsp;<span class="member-name">runParallel</span>&#8203;(<span class="parameters">int[][]&nbsp;mergeTree,
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../../matching_base/typetransformer/AlignmentAndParameters.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">AlignmentAndParameters</a></span>&nbsp;<span class="member-name">runParallel</span>&#8203;(<span class="parameters"><a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a>&nbsp;mergeOrder,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;inputAlignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p)</span>
@@ -550,15 +674,17 @@ boolean&nbsp;addInformationToUnion)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="removeOntModelFromSet(java.util.Set)">
-<h3>removeOntModelFromSet</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">removeOntModelFromSet</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;set)</span></div>
+<section class="detail" id="addDistance(java.util.Properties,double,double)">
+<h3>addDistance</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a></span>&nbsp;<span class="member-name">addDistance</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;p,
+double&nbsp;distance,
+double&nbsp;normalizedDistance)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="getMergeTree(java.util.List,java.lang.Object)">
 <h3>getMergeTree</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">int[][]</span>&nbsp;<span class="member-name">getMergeTree</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a></span>&nbsp;<span class="member-name">getMergeTree</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;parameters)</span></div>
 <div class="block">Returns the merging tree (which ontologies are merged in which order).
  Have a look at the return description to see the merging tree format.</div>
@@ -590,18 +716,6 @@ boolean&nbsp;addInformationToUnion)</span></div>
 <section class="detail" id="callClearIndex()">
 <h3>callClearIndex</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">callClearIndex</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="getCopiedModel(java.util.Set,java.util.Properties)">
-<h3>getCopiedModel</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="member-name">getCopiedModel</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;modelRepresentations,
-<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;parameters)</span>
-                            throws <span class="exceptions"><a href="../../../matching_base/typetransformer/TypeTransformationException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">TypeTransformationException</a></span></div>
-<dl class="notes">
-<dt>Throws:</dt>
-<dd><code><a href="../../../matching_base/typetransformer/TypeTransformationException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">TypeTransformationException</a></code></dd>
-</dl>
 </section>
 </li>
 <li>
@@ -720,7 +834,7 @@ boolean&nbsp;addInformationToUnion)</span></div>
 <li>
 <section class="detail" id="getCopyMode()">
 <h3>getCopyMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></span>&nbsp;<span class="member-name">getCopyMode</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CopyMode.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></span>&nbsp;<span class="member-name">getCopyMode</span>()</div>
 <div class="block">Returns the used copy mode.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -731,13 +845,105 @@ boolean&nbsp;addInformationToUnion)</span></div>
 <li>
 <section class="detail" id="setCopyMode(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.CopyMode)">
 <h3>setCopyMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setCopyMode</span>&#8203;(<span class="parameters"><a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a>&nbsp;copyMode)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setCopyMode</span>&#8203;(<span class="parameters"><a href="CopyMode.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a>&nbsp;copyMode)</span></div>
 <div class="block">Sets the copy mode which is used during the merging.
  Defaults to None.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>copyMode</code> - new copy mode to use</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getCacheFile()">
+<h3>getCacheFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">getCacheFile</span>()</div>
+<div class="block">Returns the cache file which is used to store the merge tree.
+ In case no cache file is set, then null is returned.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the cache file or null</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setCacheFile(java.io.File)">
+<h3>setCacheFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setCacheFile</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;cacheFile)</span></div>
+<div class="block">Sets the cache file which should be used to cache the merge tree.
+ Only use this method if the same models are merged over and over again.
+ Thus the merge tree do not need to be computed multiple times.
+ In case the file does not exists, the new computed merge tree is stored in this file.
+ In all other cases, the file will not be modified. The cache file needs to be deleted to compute the merge tree again.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>cacheFile</code> - the file for storing the merge tree.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getSerializedTreeFile()">
+<h3>getSerializedTreeFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">getSerializedTreeFile</span>()</div>
+<div class="block">Return the file where the serialzed merge tree is stored.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the file where the serialzed merge tree is stored.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setSerializedTreeFile(java.io.File)">
+<h3>setSerializedTreeFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setSerializedTreeFile</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;serializedTreeFile)</span></div>
+<div class="block">Sets the file where the serialzed merge tree is stored.
+ Set this to a non null value to write the serialzed merge tree to file.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>serializedTreeFile</code> - the file where the serialzed merge tree is stored.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getMatcherSupplier()">
+<h3>getMatcherSupplier</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="member-name">getMatcherSupplier</span>()</div>
+<div class="block">Return the function which returns a new configured matcher object.
+ In case it is not null, it will be used instead of the matcher object.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the matcher supplier function</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setMatcherSupplier(java.util.function.Supplier)">
+<h3>setMatcherSupplier</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setMatcherSupplier</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier)</span></div>
+<div class="block">If a matcher supplier is set, then this will be used instead of the matcher object.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>matcherSupplier</code> - the matcher supplier (when called, this function should return a new configured matcher object)</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setGoldStandard(java.lang.Object,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">
+<h3>setGoldStandard</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setGoldStandard</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;alignment,
+<a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;idExtractor)</span>
+                     throws <span class="exceptions"><a href="../../../matching_base/typetransformer/TypeTransformationException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">TypeTransformationException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="../../../matching_base/typetransformer/TypeTransformationException.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer">TypeTransformationException</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setGoldStandard(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">
+<h3>setGoldStandard</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setGoldStandard</span>&#8203;(<span class="parameters"><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+<a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;idExtractor)</span></div>
 </section>
 </li>
 </ul>

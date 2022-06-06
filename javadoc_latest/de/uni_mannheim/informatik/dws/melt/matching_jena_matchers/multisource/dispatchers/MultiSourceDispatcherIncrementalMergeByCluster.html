@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+<script type="text/javascript">var data = {"i0":10,"i1":6,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -182,6 +182,24 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 <a href="clustermerge/Clusterer.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">Clusterer</a>&nbsp;clusterer)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
+<tr class="alt-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.util.function.Supplier,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterLinkage)">MultiSourceDispatcherIncrementalMergeByCluster</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier,
+<a href="clustermerge/ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterLinkage</a>&nbsp;linkage)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.util.function.Supplier,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterLinkage,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterDistance)">MultiSourceDispatcherIncrementalMergeByCluster</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier,
+<a href="clustermerge/ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterLinkage</a>&nbsp;linkage,
+<a href="clustermerge/ClusterDistance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterDistance</a>&nbsp;distance)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.util.function.Supplier,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterLinkage,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterDistance,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.Clusterer)">MultiSourceDispatcherIncrementalMergeByCluster</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier,
+<a href="clustermerge/ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterLinkage</a>&nbsp;linkage,
+<a href="clustermerge/ClusterDistance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterDistance</a>&nbsp;distance,
+<a href="clustermerge/Clusterer.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">Clusterer</a>&nbsp;clusterer)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -204,28 +222,28 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
+<td class="col-first"><code><a href="clustermerge/Clusterer.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">Clusterer</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getClusterer()">getClusterer</a></span>()</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i1">
 <td class="col-first"><code>abstract double[][]</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getClusterFeatures(java.util.List,java.lang.Object)">getClusterFeatures</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;parameters)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i1">
+<tr class="alt-color" id="i2">
 <td class="col-first"><code><a href="clustermerge/ClusterDistance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterDistance</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getDistance()">getDistance</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i2">
+<tr class="row-color" id="i3">
 <td class="col-first"><code><a href="clustermerge/ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterLinkage</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getLinkage()">getLinkage</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i3">
-<td class="col-first"><code>private smile.clustering.linkage.Linkage</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getLinkage(double%5B%5D%5B%5D)">getLinkage</a></span>&#8203;(double[][]&nbsp;data)</code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
 <tr class="alt-color" id="i4">
-<td class="col-first"><code>int[][]</code></td>
+<td class="col-first"><code><a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getMergeTree(java.util.List,java.lang.Object)">getMergeTree</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;parameters)</code></th>
 <td class="col-last">
@@ -234,10 +252,15 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 </tr>
 <tr class="row-color" id="i5">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setDistance(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterDistance)">setDistance</a></span>&#8203;(<a href="clustermerge/ClusterDistance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterDistance</a>&nbsp;distance)</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setClusterer(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.Clusterer)">setClusterer</a></span>&#8203;(<a href="clustermerge/Clusterer.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">Clusterer</a>&nbsp;clusterer)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i6">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setDistance(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterDistance)">setDistance</a></span>&#8203;(<a href="clustermerge/ClusterDistance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterDistance</a>&nbsp;distance)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i7">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#setLinkage(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterLinkage)">setLinkage</a></span>&#8203;(<a href="clustermerge/ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterLinkage</a>&nbsp;linkage)</code></th>
 <td class="col-last">&nbsp;</td>
@@ -248,7 +271,7 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 </div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.MultiSourceDispatcherIncrementalMerge">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.<a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MultiSourceDispatcherIncrementalMerge</a></h3>
-<code><a href="MultiSourceDispatcherIncrementalMerge.html#getCopyMode()">getCopyMode</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#getIntermediateAlignments()">getIntermediateAlignments</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#getNumberOfThreads()">getNumberOfThreads</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#isAddingInformationToUnion()">isAddingInformationToUnion</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#isLeftModelGreater(java.util.Set,java.util.Set,java.util.Properties)">isLeftModelGreater</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#isRemoveUnusedJenaModels()">isRemoveUnusedJenaModels</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#isSavingIntermediateAlignments()">isSavingIntermediateAlignments</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#match(java.util.List,java.net.URL,java.net.URL)">match</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#match(java.util.List,java.lang.Object,java.lang.Object)">match</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#needsTransitiveClosureForEvaluation()">needsTransitiveClosureForEvaluation</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#removeOntModelFromSet(java.util.Set)">removeOntModelFromSet</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setAddingInformationToUnion(boolean)">setAddingInformationToUnion</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setCopyMode(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.CopyMode)">setCopyMode</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setNumberOfThreads(int)">setNumberOfThreads</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setNumberOfThreadsToCpuCores()">setNumberOfThreadsToCpuCores</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setRemoveUnusedJenaModels(boolean)">setRemoveUnusedJenaModels</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setSavingIntermediateAlignments(boolean)">setSavingIntermediateAlignments</a></code></div>
+<code><a href="MultiSourceDispatcherIncrementalMerge.html#getCacheFile()">getCacheFile</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#getCopyMode()">getCopyMode</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#getIntermediateAlignments()">getIntermediateAlignments</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#getMatcherSupplier()">getMatcherSupplier</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#getNumberOfThreads()">getNumberOfThreads</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#getSerializedTreeFile()">getSerializedTreeFile</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#isAddingInformationToUnion()">isAddingInformationToUnion</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#isLeftModelGreater(java.util.Set,java.util.Set,java.util.Properties)">isLeftModelGreater</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#isRemoveUnusedJenaModels()">isRemoveUnusedJenaModels</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#isSavingIntermediateAlignments()">isSavingIntermediateAlignments</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#match(java.util.List,java.net.URL,java.net.URL)">match</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#match(java.util.List,java.lang.Object,java.lang.Object)">match</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#needsTransitiveClosureForEvaluation()">needsTransitiveClosureForEvaluation</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setAddingInformationToUnion(boolean)">setAddingInformationToUnion</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setCacheFile(java.io.File)">setCacheFile</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setCopyMode(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.CopyMode)">setCopyMode</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setGoldStandard(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">setGoldStandard</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setGoldStandard(java.lang.Object,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">setGoldStandard</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setMatcherSupplier(java.util.function.Supplier)">setMatcherSupplier</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setNumberOfThreads(int)">setNumberOfThreads</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setNumberOfThreadsToCpuCores()">setNumberOfThreadsToCpuCores</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setRemoveUnusedJenaModels(boolean)">setRemoveUnusedJenaModels</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setSavingIntermediateAlignments(boolean)">setSavingIntermediateAlignments</a>, <a href="MultiSourceDispatcherIncrementalMerge.html#setSerializedTreeFile(java.io.File)">setSerializedTreeFile</a></code></div>
 <div class="inherited-list">
 <h3 id="methods.inherited.from.class.java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -328,6 +351,30 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 <a href="clustermerge/Clusterer.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">Clusterer</a>&nbsp;clusterer)</span></div>
 </section>
 </li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.util.function.Supplier,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterLinkage)">
+<h3>MultiSourceDispatcherIncrementalMergeByCluster</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">MultiSourceDispatcherIncrementalMergeByCluster</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier,
+<a href="clustermerge/ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterLinkage</a>&nbsp;linkage)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.util.function.Supplier,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterLinkage,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterDistance)">
+<h3>MultiSourceDispatcherIncrementalMergeByCluster</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">MultiSourceDispatcherIncrementalMergeByCluster</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier,
+<a href="clustermerge/ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterLinkage</a>&nbsp;linkage,
+<a href="clustermerge/ClusterDistance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterDistance</a>&nbsp;distance)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.util.function.Supplier,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterLinkage,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterDistance,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.Clusterer)">
+<h3>MultiSourceDispatcherIncrementalMergeByCluster</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">MultiSourceDispatcherIncrementalMergeByCluster</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;matcherSupplier,
+<a href="clustermerge/ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterLinkage</a>&nbsp;linkage,
+<a href="clustermerge/ClusterDistance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterDistance</a>&nbsp;distance,
+<a href="clustermerge/Clusterer.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">Clusterer</a>&nbsp;clusterer)</span></div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -339,7 +386,7 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 <li>
 <section class="detail" id="getMergeTree(java.util.List,java.lang.Object)">
 <h3>getMergeTree</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int[][]</span>&nbsp;<span class="member-name">getMergeTree</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a></span>&nbsp;<span class="member-name">getMergeTree</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;models,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;parameters)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="MultiSourceDispatcherIncrementalMerge.html#getMergeTree(java.util.List,java.lang.Object)">MultiSourceDispatcherIncrementalMerge</a></code></span></div>
 <div class="block">Returns the merging tree (which ontologies are merged in which order).
@@ -389,9 +436,15 @@ extends <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.
 </section>
 </li>
 <li>
-<section class="detail" id="getLinkage(double[][])">
-<h3>getLinkage</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">smile.clustering.linkage.Linkage</span>&nbsp;<span class="member-name">getLinkage</span>&#8203;(<span class="parameters">double[][]&nbsp;data)</span></div>
+<section class="detail" id="getClusterer()">
+<h3>getClusterer</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="clustermerge/Clusterer.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">Clusterer</a></span>&nbsp;<span class="member-name">getClusterer</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setClusterer(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.Clusterer)">
+<h3>setClusterer</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">setClusterer</span>&#8203;(<span class="parameters"><a href="clustermerge/Clusterer.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">Clusterer</a>&nbsp;clusterer)</span></div>
 </section>
 </li>
 </ul>

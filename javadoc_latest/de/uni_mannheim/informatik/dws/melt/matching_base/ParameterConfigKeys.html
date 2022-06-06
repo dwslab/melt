@@ -210,6 +210,20 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#TOPIC_DISTANCE">TOPIC_DISTANCE</a></span></code></th>
+<td class="col-last">
+<div class="block">A topical distance measure between the KGs / ontologies.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#TOPIC_DISTANCE_NORMALIZED">TOPIC_DISTANCE_NORMALIZED</a></span></code></th>
+<td class="col-last">
+<div class="block">A topical distance measure between the KGs / ontologies.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#USE_ONTOLOGY_CACHE">USE_ONTOLOGY_CACHE</a></span></code></th>
 <td class="col-last">
 <div class="block">A boolean value (true/false and not a string!) if the ontology cache should be used or not.</div>
@@ -467,6 +481,34 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <dl class="notes">
 <dt>See Also:</dt>
 <dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys.HINT_LANG">Constant Field Values</a></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="TOPIC_DISTANCE">
+<h3>TOPIC_DISTANCE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">TOPIC_DISTANCE</span></div>
+<div class="block">A topical distance measure between the KGs / ontologies.
+ This is represented as a floating point number (double).
+ Zero means same topic (e.g. same KG) higher numbers means no same topics.
+ This number is not normalized. For the normalized one, see <a href="#TOPIC_DISTANCE_NORMALIZED"><code>TOPIC_DISTANCE_NORMALIZED</code></a>.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys.TOPIC_DISTANCE">Constant Field Values</a></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="TOPIC_DISTANCE_NORMALIZED">
+<h3>TOPIC_DISTANCE_NORMALIZED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="member-name">TOPIC_DISTANCE_NORMALIZED</span></div>
+<div class="block">A topical distance measure between the KGs / ontologies.
+ This is represented as a floating point number (double) between zero and one (normalized).
+ Zero means same topic (e.g. same KG) one means no same topics.
+ For the original (non-normalized) value, see <a href="#TOPIC_DISTANCE"><code>TOPIC_DISTANCE</code></a>.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd><a href="../../../../../../constant-values.html#de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys.TOPIC_DISTANCE_NORMALIZED">Constant Field Values</a></dd>
 </dl>
 </section>
 </li>

@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -216,17 +216,25 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#serialize(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File)">serialize</a></span>&#8203;(<a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
 <td class="col-last">
-<div class="block">Method to write the specified alignment to the specified file</div>
+<div class="block">Method to write the specified alignment to the specified file in the <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">default XML format</a>.</div>
 </td>
 </tr>
 <tr class="row-color" id="i9">
+<td class="col-first"><code>static void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#serialize(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.OutputStream)">serialize</a></span>&#8203;(<a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;stream)</code></th>
+<td class="col-last">
+<div class="block">Method to write the specified alignment to the specified outputstream in the <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">default XML format</a>.</div>
+</td>
+</tr>
+<tr class="alt-color" id="i10">
 <td class="col-first"><code>private static void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#serializeOntoInfo(java.lang.StringBuilder,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.OntoInfo,java.lang.String)">serializeOntoInfo</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link">StringBuilder</a>&nbsp;sb,
 <a href="OntoInfo.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">OntoInfo</a>&nbsp;o,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="alt-color" id="i10">
+<tr class="row-color" id="i11">
 <td class="col-first"><code>static void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#serializeToCSV(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File)">serializeToCSV</a></span>&#8203;(<a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
@@ -234,7 +242,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Method to write the specified alignment to the specified file (in CSV format).</div>
 </td>
 </tr>
-<tr class="row-color" id="i11">
+<tr class="alt-color" id="i12">
 <td class="col-first"><code>static void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#serializeToCSVWithExtensions(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File)">serializeToCSVWithExtensions</a></span>&#8203;(<a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
@@ -301,11 +309,27 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">serialize</span>&#8203;(<span class="parameters"><a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span>
                       throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Method to write the specified alignment to the specified file</div>
+<div class="block">Method to write the specified alignment to the specified file in the <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">default XML format</a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>alignment</code> - The alignment that shall be written.</dd>
 <dd><code>file</code> - The file to which the alignment shall be written.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Exception that occurred while serializing the alignment.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="serialize(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.OutputStream)">
+<h3>serialize</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">serialize</span>&#8203;(<span class="parameters"><a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;stream)</span>
+                      throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Method to write the specified alignment to the specified outputstream in the <a href="https://moex.gitlabpages.inria.fr/alignapi/format.html">default XML format</a>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>alignment</code> - The alignment that shall be written.</dd>
+<dd><code>stream</code> - the stream where the serialized alignment should be written to (the stream is not closed)</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Exception that occurred while serializing the alignment.</dd>
 </dl>

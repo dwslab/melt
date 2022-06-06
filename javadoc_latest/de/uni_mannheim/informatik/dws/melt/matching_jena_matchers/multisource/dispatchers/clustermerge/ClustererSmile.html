@@ -114,12 +114,23 @@ implements <a href="Clusterer.html" title="interface in de.uni_mannheim.informat
 <tr class="row-color">
 <td class="col-first"><code>private int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#numberOfExamplesPerThread">numberOfExamplesPerThread</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Number of examples to process in each thread for computing the distance matrix.</div>
+</td>
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>private int</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#numberOfThreads">numberOfThreads</a></span></code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Number of threads to compute the distance matrix.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>private boolean</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#useBLAS">useBLAS</a></span></code></th>
+<td class="col-last">
+<div class="block">If true uses the BLAS component to calculate the distance matrix (this might not be numerically stable).</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -153,6 +164,14 @@ implements <a href="Clusterer.html" title="interface in de.uni_mannheim.informat
 <tr class="alt-color">
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(int,int)">ClustererSmile</a></span>&#8203;(int&nbsp;numberOfThreads,
 int&nbsp;numberOfExamplesPerThread)</code></th>
+<td class="col-last">
+<div class="block">Clusterer based on the SMILE library.</div>
+</td>
+</tr>
+<tr class="row-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(int,int,boolean)">ClustererSmile</a></span>&#8203;(int&nbsp;numberOfThreads,
+int&nbsp;numberOfExamplesPerThread,
+boolean&nbsp;useBLAS)</code></th>
 <td class="col-last">
 <div class="block">Clusterer based on the SMILE library.</div>
 </td>
@@ -223,7 +242,7 @@ boolean&nbsp;squared)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i6">
-<td class="col-first"><code><a href="ClusterResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterResult</a></code></td>
+<td class="col-first"><code><a href="../MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#run(double%5B%5D%5B%5D,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterLinkage,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterDistance)">run</a></span>&#8203;(double[][]&nbsp;features,
 <a href="ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterLinkage</a>&nbsp;linkage,
 <a href="ClusterDistance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterDistance</a>&nbsp;distance)</code></th>
@@ -257,12 +276,22 @@ boolean&nbsp;squared)</code></th>
 <section class="detail" id="numberOfThreads">
 <h3>numberOfThreads</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">numberOfThreads</span></div>
+<div class="block">Number of threads to compute the distance matrix.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="numberOfExamplesPerThread">
 <h3>numberOfExamplesPerThread</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="member-name">numberOfExamplesPerThread</span></div>
+<div class="block">Number of examples to process in each thread for computing the distance matrix.
+ E.g. if specified 10, then the distances between these 10 examples are computed in one thread.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="useBLAS">
+<h3>useBLAS</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">useBLAS</span></div>
+<div class="block">If true uses the BLAS component to calculate the distance matrix (this might not be numerically stable).</div>
 </section>
 </li>
 </ul>
@@ -301,8 +330,22 @@ int&nbsp;numberOfExamplesPerThread)</span></div>
 <dt>Parameters:</dt>
 <dd><code>numberOfThreads</code> - number of threads to use (-1 to use all processors
  and 0 to use no threads)</dd>
-<dd><code>numberOfExamplesPerThread</code> - number of examples to compute in each
- batch/thread</dd>
+<dd><code>numberOfExamplesPerThread</code> - number of examples to compute in each batch/thread</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(int,int,boolean)">
+<h3>ClustererSmile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">ClustererSmile</span>&#8203;(<span class="parameters">int&nbsp;numberOfThreads,
+int&nbsp;numberOfExamplesPerThread,
+boolean&nbsp;useBLAS)</span></div>
+<div class="block">Clusterer based on the SMILE library.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>numberOfThreads</code> - number of threads to use (-1 to use all processors and 0 to use no threads)</dd>
+<dd><code>numberOfExamplesPerThread</code> - number of examples to compute in each batch/thread</dd>
+<dd><code>useBLAS</code> - if true uses the BLAS component to calculate the distance matrix (this might not be numerically stable)</dd>
 </dl>
 </section>
 </li>
@@ -317,7 +360,7 @@ int&nbsp;numberOfExamplesPerThread)</span></div>
 <li>
 <section class="detail" id="run(double[][],de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterLinkage,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge.ClusterDistance)">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClusterResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterResult</a></span>&nbsp;<span class="member-name">run</span>&#8203;(<span class="parameters">double[][]&nbsp;features,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a></span>&nbsp;<span class="member-name">run</span>&#8203;(<span class="parameters">double[][]&nbsp;features,
 <a href="ClusterLinkage.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterLinkage</a>&nbsp;linkage,
 <a href="ClusterDistance.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers.clustermerge">ClusterDistance</a>&nbsp;distance)</span></div>
 <dl class="notes">

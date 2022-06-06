@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -193,6 +193,18 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="block">Returns the transitive closure.</div>
 </td>
 </tr>
+<tr class="row-color" id="i5">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getIdentityID(T)">getIdentityID</a></span>&#8203;(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&nbsp;element)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i6">
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getIdentitySetForElement(T)">getIdentitySetForElement</a></span>&#8203;(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&nbsp;element)</code></th>
+<td class="col-last">
+<div class="block">Returns the identity set in which the given object is stored.</div>
+</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -287,6 +299,25 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <section class="detail" id="belongToTheSameCluster(java.lang.Iterable)">
 <h3>belongToTheSameCluster</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="member-name">belongToTheSameCluster</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&nbsp;elements)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getIdentitySetForElement(T)">
+<h3 id="getIdentitySetForElement(java.lang.Object)">getIdentitySetForElement</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;</span>&nbsp;<span class="member-name">getIdentitySetForElement</span>&#8203;(<span class="parameters"><a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&nbsp;element)</span></div>
+<div class="block">Returns the identity set in which the given object is stored.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>element</code> - the element to search the identiry set for</dd>
+<dt>Returns:</dt>
+<dd>the identity set</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getIdentityID(T)">
+<h3 id="getIdentityID(java.lang.Object)">getIdentityID</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="member-name">getIdentityID</span>&#8203;(<span class="parameters"><a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&nbsp;element)</span></div>
 </section>
 </li>
 </ul>

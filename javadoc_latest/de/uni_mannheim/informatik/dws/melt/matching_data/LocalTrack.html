@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -149,6 +149,21 @@ extends <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt
 </thead>
 <tbody>
 <tr class="alt-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String,java.lang.String)">LocalTrack</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;version)</code></th>
+<td class="col-last">
+<div class="block">TestCases needs to be added after generating this track (when using this constructor).</div>
+</td>
+</tr>
+<tr class="row-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String,java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)">LocalTrack</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;version,
+<a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness)</code></th>
+<td class="col-last">
+<div class="block">TestCases needs to be added after generating this track (when using this constructor).</div>
+</td>
+</tr>
+<tr class="alt-color">
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.io.File)">LocalTrack</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;version,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;folderToTestCases)</code></th>
@@ -182,6 +197,23 @@ extends <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt
 <div class="block">Default Constructor</div>
 </td>
 </tr>
+<tr class="alt-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.util.List)">LocalTrack</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;version,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases)</code></th>
+<td class="col-last">
+<div class="block">Default Constructor.</div>
+</td>
+</tr>
+<tr class="row-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.util.List,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)">LocalTrack</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;version,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases,
+<a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness)</code></th>
+<td class="col-last">
+<div class="block">Default Constructor</div>
+</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -204,11 +236,46 @@ extends <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt
 </thead>
 <tbody>
 <tr class="alt-color" id="i0">
+<td class="col-first"><code><a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addTestCase(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase)">addTestCase</a></span>&#8203;(<a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;tc)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i1">
+<td class="col-first"><code><a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addTestCase(java.lang.String,java.io.File,java.io.File,java.io.File)">addTestCase</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;source,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;target,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;reference)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i2">
+<td class="col-first"><code><a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addTestCase(java.lang.String,java.io.File,java.io.File,java.io.File,java.io.File,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,java.io.File)">addTestCase</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;source,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;target,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;reference,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;inputAlignment,
+<a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;parameters)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i3">
+<td class="col-first"><code><a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addTestCase(java.lang.String,java.net.URI,java.net.URI,java.net.URI,java.net.URI,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,java.net.URI)">addTestCase</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;source,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;target,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;reference,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;inputAlignment,
+<a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;parameters)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i4">
 <td class="col-first"><code>protected void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#downloadToCache()">downloadToCache</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
-<tr class="row-color" id="i1">
+<tr class="row-color" id="i5">
 <td class="col-first"><code>protected <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#readFromCache()">readFromCache</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
@@ -330,6 +397,68 @@ extends <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt
 </dl>
 </section>
 </li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.util.List,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)">
+<h3>LocalTrack</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">LocalTrack</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;version,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases,
+<a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness)</span></div>
+<div class="block">Default Constructor</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - Name of the track. Can be any text identifying the track</dd>
+<dd><code>version</code> - Version of the track. Can be any text identifying the version e.g. semantic versioning like 1.0.1.</dd>
+<dd><code>testCases</code> - the testcases corresponding to this track. The track in the testcases can be set to null (will be set in this constructor).</dd>
+<dd><code>goldStandardCompleteness</code> - how complete is the gold standard for this track.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.util.List)">
+<h3>LocalTrack</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">LocalTrack</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;version,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&gt;&nbsp;testCases)</span></div>
+<div class="block">Default Constructor.
+ The gold standard is assumed to be complete use <a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.util.List,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)"><code>LocalTrack(java.lang.String, java.lang.String, java.util.List, de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)</code></a> in case it is different.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - Name of the track. Can be any text identifying the track</dd>
+<dd><code>version</code> - Version of the track. Can be any text identifying the version e.g. semantic versioning like 1.0.1.</dd>
+<dd><code>testCases</code> - the testcases corresponding to this track. The track in the testcases can be set to null (will be set in this constructor).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness)">
+<h3>LocalTrack</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">LocalTrack</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;version,
+<a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness)</span></div>
+<div class="block">TestCases needs to be added after generating this track (when using this constructor).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - Name of the track. Can be any text identifying the track</dd>
+<dd><code>version</code> - Version of the track. Can be any text identifying the version e.g. semantic versioning like 1.0.1.</dd>
+<dd><code>goldStandardCompleteness</code> - how complete is the gold standard for this track.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
+<h3>LocalTrack</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">LocalTrack</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;version)</span></div>
+<div class="block">TestCases needs to be added after generating this track (when using this constructor).
+ A complete gold standard is assumed.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - Name of the track. Can be any text identifying the track</dd>
+<dd><code>version</code> - Version of the track. Can be any text identifying the version e.g. semantic versioning like 1.0.1.</dd>
+</dl>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -338,6 +467,45 @@ extends <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt
 <section class="method-details" id="method.detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="addTestCase(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase)">
+<h3>addTestCase</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a></span>&nbsp;<span class="member-name">addTestCase</span>&#8203;(<span class="parameters"><a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;tc)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addTestCase(java.lang.String,java.net.URI,java.net.URI,java.net.URI,java.net.URI,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,java.net.URI)">
+<h3>addTestCase</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a></span>&nbsp;<span class="member-name">addTestCase</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;source,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;target,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;reference,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;inputAlignment,
+<a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;parameters)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addTestCase(java.lang.String,java.io.File,java.io.File,java.io.File,java.io.File,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,java.io.File)">
+<h3>addTestCase</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a></span>&nbsp;<span class="member-name">addTestCase</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;source,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;target,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;reference,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;inputAlignment,
+<a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;parameters)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addTestCase(java.lang.String,java.io.File,java.io.File,java.io.File)">
+<h3>addTestCase</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a></span>&nbsp;<span class="member-name">addTestCase</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;source,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;target,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;reference)</span></div>
+</section>
+</li>
 <li>
 <section class="detail" id="downloadToCache()">
 <h3>downloadToCache</h3>

@@ -78,6 +78,10 @@ loadScripts(document, 'script');</script>
 <th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.clustering">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.clustering</a></th>
 <td class="col-last">&nbsp;</td>
 </tr>
+<tr class="alt-color">
+<th class="col-first" scope="row"><a href="#de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers</a></th>
+<td class="col-last">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -333,6 +337,91 @@ org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering&nbsp;
 org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering&nbsp;clusteringAlgorithm,
 boolean&nbsp;addCorrespondences,
 boolean&nbsp;removeCorrespondences)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">
+<h2>Uses of <a href="../DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a> in <a href="../../../matching_jena_matchers/multisource/dispatchers/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers</a></h2>
+<div class="use-summary">
+<table class="summary-table">
+<caption><span>Fields in <a href="../../../matching_jena_matchers/multisource/dispatchers/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers</a> declared as <a href="../DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a></span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Modifier and Type</th>
+<th class="col-second" scope="col">Field</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<td class="col-first"><code>private <a href="../DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">MultiSourceDispatcherIncrementalMerge.</span><code><span class="member-name-link"><a href="../../../matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMerge.html#idExtractor">idExtractor</a></span></code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="use-summary">
+<table class="summary-table">
+<caption><span>Methods in <a href="../../../matching_jena_matchers/multisource/dispatchers/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers</a> with parameters of type <a href="../DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a></span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Modifier and Type</th>
+<th class="col-second" scope="col">Method</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">DatasetIDExtractorHelperJena.</span><code><span class="member-name-link"><a href="../../../matching_jena_matchers/multisource/dispatchers/DatasetIDExtractorHelperJena.html#getDatasetIDFromModel(org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">getDatasetIDFromModel</a></span>&#8203;(org.apache.jena.rdf.model.Model&nbsp;model,
+<a href="../DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;extractor)</code></th>
+<td class="col-last">
+<div class="block">Extracts the dataset id by iterating over all resources and return the most appearing dataset id.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">DatasetIDExtractorHelperJena.</span><code><span class="member-name-link"><a href="../../../matching_jena_matchers/multisource/dispatchers/DatasetIDExtractorHelperJena.html#getDatasetIDFromModelbySampling(org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">getDatasetIDFromModelbySampling</a></span>&#8203;(org.apache.jena.rdf.model.Model&nbsp;model,
+<a href="../DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;extractor)</code></th>
+<td class="col-last">
+<div class="block">Extracts the dataset id by sample 20 resources and return the most appearing dataset id.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">DatasetIDExtractorHelperJena.</span><code><span class="member-name-link"><a href="../../../matching_jena_matchers/multisource/dispatchers/DatasetIDExtractorHelperJena.html#getDatasetIDFromModelbySampling(org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor,int)">getDatasetIDFromModelbySampling</a></span>&#8203;(org.apache.jena.rdf.model.Model&nbsp;model,
+<a href="../DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;extractor,
+int&nbsp;numSamples)</code></th>
+<td class="col-last">
+<div class="block">Extracts the dataset id by sample resources and return the most appearing dataset id.</div>
+</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></td>
+<th class="col-second" scope="row"><span class="type-name-label">DatasetIDExtractorHelperJena.</span><code><span class="member-name-link"><a href="../../../matching_jena_matchers/multisource/dispatchers/DatasetIDExtractorHelperJena.html#getDatasetIDFromModelbySampling(org.apache.jena.rdf.model.Model,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor,int,java.util.Set)">getDatasetIDFromModelbySampling</a></span>&#8203;(org.apache.jena.rdf.model.Model&nbsp;model,
+<a href="../DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;extractor,
+int&nbsp;numSamples,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;excludedDatasetIDs)</code></th>
+<td class="col-last">
+<div class="block">Extracts the dataset id by sample resources and return the most appearing dataset id.</div>
+</td>
+</tr>
+<tr class="alt-color">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">MultiSourceDispatcherIncrementalMerge.</span><code><span class="member-name-link"><a href="../../../matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMerge.html#setGoldStandard(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">setGoldStandard</a></span>&#8203;(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+<a href="../DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;idExtractor)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
+<td class="col-first"><code>void</code></td>
+<th class="col-second" scope="row"><span class="type-name-label">MultiSourceDispatcherIncrementalMerge.</span><code><span class="member-name-link"><a href="../../../matching_jena_matchers/multisource/dispatchers/MultiSourceDispatcherIncrementalMerge.html#setGoldStandard(java.lang.Object,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">setGoldStandard</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;alignment,
+<a href="../DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;idExtractor)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 </tbody>

@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "alt-color";
 var rowColor = "row-color";
@@ -116,11 +116,6 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color">
-<td class="col-first"><code>protected <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="FileCache.html" title="type parameter in FileCache">T</a>&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#instanceSuplier">instanceSuplier</a></span></code></th>
-<td class="col-last">&nbsp;</td>
-</tr>
-<tr class="row-color">
 <td class="col-first"><code>private static org.slf4j.Logger</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#LOGGER">LOGGER</a></span></code></th>
 <td class="col-last">&nbsp;</td>
@@ -145,8 +140,16 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </thead>
 <tbody>
 <tr class="alt-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.io.File)">FileCache</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color">
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.io.File,java.util.function.Supplier)">FileCache</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file,
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="FileCache.html" title="type parameter in FileCache">T</a>&gt;&nbsp;instanceSuplier)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color">
+<th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String)">FileCache</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;file)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="row-color">
@@ -183,32 +186,42 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="row-color" id="i1">
-<td class="col-first"><code>protected void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#load()">load</a></span>()</code></th>
+<td class="col-first"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getFile()">getFile</a></span>()</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 <tr class="alt-color" id="i2">
+<td class="col-first"><code>private void</code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#load(java.util.function.Supplier)">load</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="FileCache.html" title="type parameter in FileCache">T</a>&gt;&nbsp;instanceSuplier)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="row-color" id="i3">
+<td class="col-first"><code><a href="FileCache.html" title="type parameter in FileCache">T</a></code></td>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#loadFromFileOrUseSuplier(java.util.function.Supplier)">loadFromFileOrUseSuplier</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="FileCache.html" title="type parameter in FileCache">T</a>&gt;&nbsp;instanceSuplier)</code></th>
+<td class="col-last">&nbsp;</td>
+</tr>
+<tr class="alt-color" id="i4">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#save()">save</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Save instance to file now.</div>
 </td>
 </tr>
-<tr class="row-color" id="i3">
+<tr class="row-color" id="i5">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#saveAtShutdown()">saveAtShutdown</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Save instance to file when JVM terminates.</div>
 </td>
 </tr>
-<tr class="alt-color" id="i4">
+<tr class="alt-color" id="i6">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#saveAtShutdownIfCacheNotExistent()">saveAtShutdownIfCacheNotExistent</a></span>()</code></th>
 <td class="col-last">
 <div class="block">Save instance to file when JVM terminates but only if cache file does not exists.</div>
 </td>
 </tr>
-<tr class="row-color" id="i5">
+<tr class="row-color" id="i7">
 <td class="col-first"><code>void</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#saveIfCacheNotExistent()">saveIfCacheNotExistent</a></span>()</code></th>
 <td class="col-last">
@@ -246,12 +259,6 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </section>
 </li>
 <li>
-<section class="detail" id="instanceSuplier">
-<h3>instanceSuplier</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="FileCache.html" title="type parameter in FileCache">T</a>&gt;</span>&nbsp;<span class="member-name">instanceSuplier</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="instance">
 <h3>instance</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="FileCache.html" title="type parameter in FileCache">T</a></span>&nbsp;<span class="member-name">instance</span></div>
@@ -279,6 +286,18 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="FileCache.html" title="type parameter in FileCache">T</a>&gt;&nbsp;instanceSuplier)</span></div>
 </section>
 </li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String)">
+<h3>FileCache</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">FileCache</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;file)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.io.File)">
+<h3>FileCache</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">FileCache</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span></div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -288,9 +307,15 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="load()">
+<section class="detail" id="loadFromFileOrUseSuplier(java.util.function.Supplier)">
+<h3>loadFromFileOrUseSuplier</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileCache.html" title="type parameter in FileCache">T</a></span>&nbsp;<span class="member-name">loadFromFileOrUseSuplier</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="FileCache.html" title="type parameter in FileCache">T</a>&gt;&nbsp;instanceSuplier)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="load(java.util.function.Supplier)">
 <h3>load</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">load</span>()</div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">load</span>&#8203;(<span class="parameters"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="FileCache.html" title="type parameter in FileCache">T</a>&gt;&nbsp;instanceSuplier)</span></div>
 </section>
 </li>
 <li>
@@ -332,6 +357,12 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <h3>saveIfCacheNotExistent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">saveIfCacheNotExistent</span>()</div>
 <div class="block">Save instance to file now but only if cache file is not existent.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getFile()">
+<h3>getFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="member-name">getFile</span>()</div>
 </section>
 </li>
 </ul>

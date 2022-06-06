@@ -57,6 +57,27 @@ loadScripts(document, 'script');</script>
 <li>
 <div class="type-summary">
 <table class="summary-table">
+<caption><span>Interface Summary</span></caption>
+<thead>
+<tr>
+<th class="col-first" scope="col">Interface</th>
+<th class="col-last" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="alt-color">
+<th class="col-first" scope="row"><a href="CopyMode.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></th>
+<td class="col-last">
+<div class="block">Defines different modes how a model should be copied during incremental merge.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li>
+<div class="type-summary">
+<table class="summary-table">
 <caption><span>Class Summary</span></caption>
 <thead>
 <tr>
@@ -66,15 +87,27 @@ loadScripts(document, 'script');</script>
 </thead>
 <tbody>
 <tr class="alt-color">
+<th class="col-first" scope="row"><a href="DatasetIDExtractorHelperJena.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">DatasetIDExtractorHelperJena</a></th>
+<td class="col-last">
+<div class="block">Extracts the dataset id from a whole model based on sampling some resources.</div>
+</td>
+</tr>
+<tr class="row-color">
 <th class="col-first" scope="row"><a href="DispatcherHelper.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">DispatcherHelper</a></th>
 <td class="col-last">
 <div class="block">A helper class which contains some static function which are often used in dispatchers.</div>
 </td>
 </tr>
-<tr class="row-color">
+<tr class="alt-color">
 <th class="col-first" scope="row"><a href="MergeExecutor.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeExecutor</a></th>
 <td class="col-last">
 <div class="block">The class which actually runs a merge in <a href="MultiSourceDispatcherIncrementalMerge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers"><code>MultiSourceDispatcherIncrementalMerge</code></a>.</div>
+</td>
+</tr>
+<tr class="row-color">
+<th class="col-first" scope="row"><a href="MergeOrder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeOrder</a></th>
+<td class="col-last">
+<div class="block">The information of how KGs should be merged together (in which order).</div>
 </td>
 </tr>
 <tr class="alt-color">
@@ -90,9 +123,10 @@ loadScripts(document, 'script');</script>
 </td>
 </tr>
 <tr class="alt-color">
-<th class="col-first" scope="row"><a href="MergeTreeUtil.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeTreeUtil</a></th>
+<th class="col-first" scope="row"><a href="MergeTreeNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">MergeTreeNode</a></th>
 <td class="col-last">
-<div class="block">A helper class for a merge tree represented by an int[][].</div>
+<div class="block">This class is a utility class which represents the merge tree is a different way
+ (for which it is easier to calculate the height of the tree).</div>
 </td>
 </tr>
 <tr class="row-color">
@@ -148,27 +182,6 @@ loadScripts(document, 'script');</script>
 <tr class="alt-color">
 <th class="col-first" scope="row"><a href="NodeAndReplaced.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">NodeAndReplaced</a></th>
 <td class="col-last">&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</div>
-</li>
-<li>
-<div class="type-summary">
-<table class="summary-table">
-<caption><span>Enum Summary</span></caption>
-<thead>
-<tr>
-<th class="col-first" scope="col">Enum</th>
-<th class="col-last" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="alt-color">
-<th class="col-first" scope="row"><a href="CopyMode.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.dispatchers">CopyMode</a></th>
-<td class="col-last">
-<div class="block">Defines different modes how a model should be copied during incremental merge.</div>
-</td>
 </tr>
 </tbody>
 </table>
