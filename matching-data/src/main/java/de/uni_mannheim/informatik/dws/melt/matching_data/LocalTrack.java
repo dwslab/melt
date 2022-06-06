@@ -21,12 +21,12 @@ public class LocalTrack extends Track {
     /**
      * Default logger.
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(LocalTrack.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LocalTrack.class);
 
     /**
      * Folder holding the individual test cases of the track.
      */
-    private File folderToTestCases;
+    private final File folderToTestCases;
 
     /**
      * Default Constructor
@@ -34,7 +34,7 @@ public class LocalTrack extends Track {
      * @param version Version of the track.
      * @param folderToTestCases The test case folder has to follow a specific structure: It contains a folder for each
      *                          test case. The Folder's name will be the test case's name. In each test case folder,
-     *                          there has to be a file named source.rdf, target.rdf, and alignment.rdf.
+     *                          there has to be a file named source.rdf, target.rdf, and reference.rdf.
      * @param goldStandardCompleteness Completeness of the gold standard.
      */
     public LocalTrack(String name, String version, File folderToTestCases, GoldStandardCompleteness goldStandardCompleteness){
@@ -50,7 +50,7 @@ public class LocalTrack extends Track {
      *                              It has to follow a specific structure:
      *                              It contains a folder for each test case.
      *                              The Folder's name will be the test case's name. In each test case folder,
-     *                              there has to be a file named source.rdf, target.rdf, and alignment.rdf.
+     *                              there has to be a file named source.rdf, target.rdf, and reference.rdf.
      * @param goldStandardCompleteness Completeness of the gold standard.
      */
     public LocalTrack(String name, String version, String folderToTestCasesPath, GoldStandardCompleteness goldStandardCompleteness){
@@ -76,7 +76,7 @@ public class LocalTrack extends Track {
      * @param version Version of the track.
      * @param folderToTestCasesPath The test case folder has to follow a specific structure: It contains a folder for
      *                              each test case. The folder's name will be the test case's name. In each test case
-     *                              folder, there has to be a file named source.rdf, target.rdf, and alignment.rdf.
+     *                              folder, there has to be a file named source.rdf, target.rdf, and reference.rdf.
      */
     public LocalTrack(String name, String version, String folderToTestCasesPath){
         this(name, version, new File(folderToTestCasesPath));
@@ -184,13 +184,13 @@ public class LocalTrack extends Track {
             File reference_file = new File(f, TestCaseType.REFERENCE.toFileName());
             File parameters_file = new File(f, TestCaseType.PARAMETERS.toFileName());
 
-            if(source_file.exists() == false || target_file.exists() == false){
+            if(!source_file.exists() || !target_file.exists()){
                 LOGGER.error("There was a problem reading local test case: " + f.getName() + ". Files " +
                         source_file.getName() + " and " + target_file.getName() + " need to exist.");
                 continue;
             }
 
-            if(reference_file.exists() == false && skipTestsWithoutRefAlign) {
+            if(!reference_file.exists() && skipTestsWithoutRefAlign) {
                 LOGGER.warn("Reference file of test case  " + f.getName() + " not found. Skipping...");
                 continue;
             }

@@ -152,7 +152,6 @@ class WikidataKnowledgeSourceTest {
         // Q458 -P31-> Q1048835 -P279-> Q15642541 -P279-> Q1496967
         assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1048835", "http://www.wikidata.org/entity/Q458", 1));
         assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q15642541", "http://www.wikidata.org/entity/Q458", 2));
-        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1496967", "http://www.wikidata.org/entity/Q458", 3));
 
         // check with links
         String linkQ1048835 = wikidata.getLinker().linkToSingleConcept("political territorial entity");
@@ -169,7 +168,6 @@ class WikidataKnowledgeSourceTest {
         // combinations
         assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1048835", linkQ458, 1));
         assertTrue(wikidata.isHypernym(linkQ15642541, "http://www.wikidata.org/entity/Q458", 2));
-        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1496967", linkQ458, 3));
 
         // check false
         assertFalse(wikidata.isHypernym("http://www.wikidata.org/entity/Q15642541", "http://www.wikidata.org/entity/Q458", 1));
@@ -212,7 +210,7 @@ class WikidataKnowledgeSourceTest {
         // try in another language to check multi-language feature
         HashSet<String> result2 = wikidata.getLabelsForLink(wikidata.getLinker().linkToSingleConcept("financial services"), Language.ENGLISH);
         assertTrue(result2.size() > 0);
-        assertTrue(result2.contains("financial services"));
+        assertTrue(result2.contains("finance industry"));
     }
 
     /**

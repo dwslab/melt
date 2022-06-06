@@ -42,7 +42,24 @@ public class TrackRepository {
         /**
          * Default Anatomy Testsuite which is used all the time.
          */
-        public static Track Default = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "anatomy_track", "anatomy_track-default");//new SealsTrack("http://repositories.seals-project.eu/tdrs/", "anatomy_track", "anatomy_track-default");
+        public static Track Default = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "anatomy_track",
+                "anatomy_track-default");//new SealsTrack("http://repositories.seals-project.eu/tdrs/", "anatomy_track", "anatomy_track-default");
+    }
+
+    /**
+     * Process Matching Track (last run in 2017)
+     * For more info see <a href="https://web.informatik.uni-mannheim.de/oaei/pm17/">Process Matching Track Website</a>
+     */
+    public static class ProcessMatching {
+
+        public static final Track ALL = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "pm",
+                "2017-all");
+
+        public static final Track BR = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "pm",
+                "2017-br");
+
+        public static final Track UA = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "pm",
+                "2017-ua");
     }
 
     /**

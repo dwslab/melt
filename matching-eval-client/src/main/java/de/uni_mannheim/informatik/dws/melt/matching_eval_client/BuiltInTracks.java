@@ -15,7 +15,7 @@ public class BuiltInTracks {
      * <p>
      * The map is not complete. It contains only the latest version of the most-used tracks.
      */
-    private static TreeMap<Track, List<String>> simpleNameToTrackMap;
+    private static final TreeMap<Track, List<String>> simpleNameToTrackMap;
 
     static {
         simpleNameToTrackMap = new TreeMap<>();
@@ -276,6 +276,27 @@ public class BuiltInTracks {
         simpleNameToTrackMap.put(TrackRepository.SystematicBenchmark.Film.V2016.R5, new ArrayList<String>() {
             {
                 add("benchmark-film-r5");
+            }
+        });
+        simpleNameToTrackMap.put(TrackRepository.ProcessMatching.ALL, new ArrayList<String>() {
+            {
+                add("pm-all");
+                add("process-matching-all");
+                add("processmatching-all");
+            }
+        });
+        simpleNameToTrackMap.put(TrackRepository.ProcessMatching.UA, new ArrayList<String>() {
+            {
+                add("pm-ua");
+                add("process-matching-ua");
+                add("processmatching-ua");
+            }
+        });
+        simpleNameToTrackMap.put(TrackRepository.ProcessMatching.BR, new ArrayList<String>() {
+            {
+                add("pm-br");
+                add("process-matching-br");
+                add("processmatching-br");
             }
         });
     }

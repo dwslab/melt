@@ -15,6 +15,7 @@ class ServerThread(threading.Thread):
     def __init__(self, *args, **kwargs):
         super(ServerThread, self).__init__(*args, **kwargs)
         self._stop_event = threading.Event()
+        self.daemon = True
 
     def run(self):
         server.main()
