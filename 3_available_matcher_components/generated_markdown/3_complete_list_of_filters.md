@@ -103,6 +103,15 @@ A filter which removes correspondences where source or target is matched to more
 
 *Keywords: NtoM Correspondence Filter*
 
+## ConfidenceCurvatureFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ConfidenceCurvatureFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/ConfidenceCurvatureFilter.java)
+
+Filters the alignment by computing the inflection point of the sorted
+ confidences. To make it more stable a smoothing (spline interpolation) can be
+ used. Furthermore also the elbow point of the confidences can be used to
+ filter them.
+
+*Keywords: Confidence Curvature Filter*
+
 ## TopXFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/TopXFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/TopXFilter.java)
 
 This filter keeps only the top X correspondences according to confidence.
