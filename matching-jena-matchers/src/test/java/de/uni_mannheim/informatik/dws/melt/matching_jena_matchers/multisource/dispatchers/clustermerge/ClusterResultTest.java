@@ -14,25 +14,25 @@ public class ClusterResultTest {
         });
         
         assertThrows(IllegalArgumentException.class, ()-> {
-            int[][] tree = new int[][]{{1,2}};
+            int[][] tree = new int[][]{{0,1}};
             MergeOrder r = new MergeOrder(tree, (double[])null);
         });
         
         //check different length
         assertThrows(IllegalArgumentException.class, ()-> {
-            int[][] tree = new int[][]{{1,2}};
+            int[][] tree = new int[][]{{0,1}};
             double[] distances = new double[]{};
             MergeOrder r = new MergeOrder(tree, distances);
         });
         
         //check different merge size
         assertThrows(IllegalArgumentException.class, ()-> {
-            int[][] tree = new int[][]{{1,2}, {3,5,4}};
+            int[][] tree = new int[][]{{0,1}, {2,3,4}};
             double[] distances = new double[]{0.1, 0.2};
             MergeOrder r = new MergeOrder(tree, distances);
         });
         
-        int[][] tree = new int[][]{{1,2}, {3,4}};
+        int[][] tree = new int[][]{{0, 1}, {2, 3}};
         double[] distances = new double[]{0.1, 0.2};
         MergeOrder r = new MergeOrder(tree, distances);
         
@@ -44,29 +44,29 @@ public class ClusterResultTest {
     void testHashCodeAndEquals() {
  
         MergeOrder A = new MergeOrder(
-                new int[][]{{1,2}, {3,4}}, 
+                new int[][]{{0, 1}, {2, 3}}, 
                 new double[]{0.1, 0.2});
         
         MergeOrder Asame = new MergeOrder(
-                new int[][]{{1,2}, {3,4}}, 
+                new int[][]{{0, 1}, {2, 3}}, 
                 new double[]{0.1, 0.2});        
         assertEquals(A.hashCode(), Asame.hashCode());
         assertTrue(A.equals(Asame));
         
         MergeOrder differentOrder = new MergeOrder(
-                new int[][]{{2,1}, {3,4}}, 
+                new int[][]{{1, 0}, {2, 3}}, 
                 new double[]{0.1, 0.2});
         assertEquals(A.hashCode(), differentOrder.hashCode());
         assertTrue(A.equals(differentOrder));
         
         MergeOrder differentHeight = new MergeOrder(
-                new int[][]{{2,1}, {3,4}}, 
+                new int[][]{{1,0}, {2, 3}}, 
                 new double[]{0.2, 0.3});        
         assertNotEquals(A.hashCode(), differentHeight.hashCode());
         assertFalse(A.equals(differentHeight));
         
         MergeOrder differentSize = new MergeOrder(
-                new int[][]{{2,1}, {3,4}, {5,6}}, 
+                new int[][]{{1, 0}, {2, 3}, {4,5}}, 
                 new double[]{0.1, 0.2, 0.3});        
         assertNotEquals(A.hashCode(), differentSize.hashCode());
         assertFalse(A.equals(differentSize));

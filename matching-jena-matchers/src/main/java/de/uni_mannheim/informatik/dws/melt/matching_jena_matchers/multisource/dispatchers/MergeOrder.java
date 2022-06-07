@@ -62,7 +62,7 @@ public class MergeOrder implements Serializable {
     }
     
     public MergeOrder(int[][] tree, double[] distances) {
-        this(tree, distances, IntStream.range(0, tree.length + 1).mapToObj(i-> Integer.toString(i)).collect(Collectors.toList()));
+        this(tree, distances, tree==null? null : IntStream.range(0, tree.length + 1).mapToObj(i-> Integer.toString(i)).collect(Collectors.toList()));
     }
     
     public MergeOrder(int[][] tree, double[] distances, List<String> labels) {
