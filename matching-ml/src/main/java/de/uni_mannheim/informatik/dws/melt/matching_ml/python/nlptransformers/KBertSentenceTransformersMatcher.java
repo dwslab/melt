@@ -1,65 +1,60 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.ResourcesExtractor;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
-import org.apache.commons.text.StringEscapeUtils;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.TextExtractorKBert;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.constant.InputTypes;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
+import org.apache.jena.rdf.model.RDFNode;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.StreamSupport;
+
+import static org.apache.commons.text.StringEscapeUtils.escapeCsv;
 
 public class KBertSentenceTransformersMatcher extends SentenceTransformersMatcher {
-    public KBertSentenceTransformersMatcher(TextExtractorMap extractor, String modelName) {
-        super(extractor, modelName);
+    public KBertSentenceTransformersMatcher(String modelName) {
+        super(new TextExtractorKBert(), modelName);
     }
 
-    public KBertSentenceTransformersMatcher(TextExtractor extractor, String modelName) {
-        super(extractor, modelName);
+    // Function to get the Spliterator
+    public static <T> Iterable<T> getIterable(Iterator<T> iterator) {
+        return () -> iterator;
     }
 
     @Override
     protected int createTextFile(OntModel model, File file, ResourcesExtractor extractor, Properties parameters)
             throws IOException {
         //LOGGER.info("Write text to file {}", file);
-        int linesWritten = 0;
-        TextExtractor simpleTextExtractor = this.getExtractor();
+        AtomicInteger linesWritten = new AtomicInteger();
+        TextExtractorMap simpleTextExtractor = this.getExtractorMap();
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
-            Iterator<? extends OntResource> resourceIterator = extractor.extract(model, parameters);
             if (this.multipleTextsToMultipleExamples) {
-                while (resourceIterator.hasNext()) {
-                    OntResource r = resourceIterator.next();
-                    if (!r.isURIResource())
-                        continue;
-                    for (String text : simpleTextExtractor.extract(r)) {
-                        text = text.trim();
-                        if (text.isEmpty())
-                            continue;
-                        writer.write(StringEscapeUtils.escapeCsv(r.getURI()) + "," + StringEscapeUtils.escapeCsv(text) + NEWLINE);
-                        linesWritten++;
-                    }
-                }
+                throw (new NotImplementedException(
+                        "K-BERT Sentence Transformer currently only supports generating one example per set of texts"));
             } else {
-                while (resourceIterator.hasNext()) {
-                    OntResource r = resourceIterator.next();
-                    if (!r.isURIResource())
-                        continue;
-                    StringBuilder sb = new StringBuilder();
-                    for (String text : simpleTextExtractor.extract(r)) {
-                        sb.append(text.trim()).append(" ");
-                    }
-                    String text = sb.toString().trim();
-                    if (text.isEmpty())
-                        continue;
-                    writer.write(StringEscapeUtils.escapeCsv(r.getURI()) + "," + StringEscapeUtils.escapeCsv(text) + NEWLINE);
-                    linesWritten++;
-                }
+                StreamSupport.stream(getIterable(extractor.extract(model, parameters)).spliterator(), false)
+                        .filter(RDFNode::isURIResource)
+                        .forEach(r -> simpleTextExtractor.extract(r).entrySet().stream()
+                                .sorted(Comparator.comparing(e -> InputTypes.fromName(e.getKey())))
+                                .flatMap(e -> e.getValue().stream().map(v -> escapeCsv(e.getKey()) + "," + escapeCsv(v) + NEWLINE))
+                                .forEach(line -> {
+                                    try {
+                                        writer.write(line);
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    linesWritten.getAndIncrement();
+                                })
+                        );
             }
         }
-        return linesWritten;
+        return linesWritten.get();
     }
 
 }
