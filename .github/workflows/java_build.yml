@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        java: ['8', '11', '15']
+        java: ['8', '11', '17']
         include:
         - os: ubuntu-latest
           pipcache: ~/.cache/pip
@@ -23,7 +23,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.java }}
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Cache Maven packages
       uses: actions/cache@v2
       with:
