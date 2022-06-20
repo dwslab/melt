@@ -26,38 +26,51 @@ import org.gradoop.flink.util.FlinkAsciiGraphLoader;
 import org.gradoop.flink.util.GradoopFlinkConfig;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 
 public class TestFamerClustering {
-   
     
+    /***********************************
+     * Run these test only on JRE 8-11 because Flink does not yet support java 17:
+     * https://stackoverflow.com/questions/71951793/what-is-the-java-version-that-the-flink-can-support-in-2022
+     * https://issues.apache.org/jira/browse/FLINK-15736
+     ***********************************/
+   
     @Test
+    @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
     public void testCenter(){
         testClusteringApproach(new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
     }
     
     @Test
+    @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
     public void testMergeCenter(){
         testClusteringApproach(new MergeCenter(PrioritySelection.MIN, 1.0, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
     }
     
     @Test
+    @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
     public void testClip(){
         CLIPConfig clipconfig = new CLIPConfig(0.0, 1, false, 0.5, 0.2, 0.3);
         testClusteringApproach(new CLIP(clipconfig, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 5);
     }
     
     @Test
+    @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
     public void testStarOne(){
         testClusteringApproach(new Star(PrioritySelection.MIN, Star.StarType.ONE, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
     }
     
     @Test
+    @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
     public void testStarTwo(){
         testClusteringApproach(new Star(PrioritySelection.MIN, Star.StarType.TWO, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
     }
     
     @Test
+    @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
     public void testConnectedComponents(){
         testClusteringApproach(new ConnectedComponents(Integer.MAX_VALUE, "", null, ClusteringOutputType.GRAPH), 3);
     }
@@ -86,6 +99,7 @@ public class TestFamerClustering {
     }
     
     @Test
+    @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
     public void testDifferentClusteringOutputType(){
         Alignment alignment = getTestAlignment();
                 
@@ -125,6 +139,7 @@ public class TestFamerClustering {
     }
     
     @Test
+    @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
     public void testTestExtractor(){
         Set<String> possibilities = new HashSet<>(Arrays.asList("a", "b"));
         
