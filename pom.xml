@@ -10,7 +10,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <junit.version>5.9.0-M1</junit.version>
         <slf4j.version>1.7.33</slf4j.version>
-        <surefire.version>3.0.0-M5</surefire.version>
+        <surefire.version>3.0.0-M7</surefire.version>
         <javadoc.version>3.4.0</javadoc.version>
     </properties>
 
