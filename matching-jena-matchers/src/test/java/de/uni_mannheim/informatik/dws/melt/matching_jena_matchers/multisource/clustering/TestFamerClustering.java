@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.c
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractorUrlPattern;
+import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.Arrays;
@@ -27,8 +28,11 @@ import org.gradoop.flink.util.FlinkAsciiGraphLoader;
 import org.gradoop.flink.util.GradoopFlinkConfig;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
@@ -39,12 +43,24 @@ public class TestFamerClustering {
      * https://stackoverflow.com/questions/71951793/what-is-the-java-version-that-the-flink-can-support-in-2022
      * https://issues.apache.org/jira/browse/FLINK-15736
      ***********************************/
-   
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestFamerClustering.class);
+    
+    @BeforeAll
+    public static void setup(){
+        JRE j = JRE.currentVersion();
+        System.out.println("current jre version: " + j);
+        System.out.println("is in range: " + EnumSet.range(JRE.JAVA_8, JRE.JAVA_11).contains(j));
+        LOGGER.info("current jre version: {}", j);
+        LOGGER.info("is in range: {}", EnumSet.range(JRE.JAVA_8, JRE.JAVA_11).contains(j));
+    }
+    
     @Test
     public void testCenter(){
         JRE j = JRE.currentVersion();
         System.out.println("current jre version: " + j);
         System.out.println(EnumSet.range(JRE.JAVA_8, JRE.JAVA_11).contains(j));
+        LOGGER.info("current jre version: {}", j);
+        LOGGER.info("is in range: {}", EnumSet.range(JRE.JAVA_8, JRE.JAVA_11).contains(j));
         testClusteringApproach(new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
     }
     
