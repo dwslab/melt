@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDEx
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -41,6 +42,9 @@ public class TestFamerClustering {
    
     @Test
     public void testCenter(){
+        JRE j = JRE.currentVersion();
+        System.out.println("current jre version: " + j);
+        System.out.println(EnumSet.range(JRE.JAVA_8, JRE.JAVA_11).contains(j));
         testClusteringApproach(new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
     }
     
