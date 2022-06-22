@@ -367,7 +367,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${javadoc.version}</version>
+                        <version>3.3.2</version> <!-- version 3.3.2 is the last version where the doclet works and the files are generated - does not work with version 3.4.0 -->
                         <configuration>
                             <doclet>de.uni_mannheim.informatik.dws.melt.doclet.MarkdownDoclet</doclet>
                             <!-- can be found at /documentation/melt_doclet - not installed by default -->

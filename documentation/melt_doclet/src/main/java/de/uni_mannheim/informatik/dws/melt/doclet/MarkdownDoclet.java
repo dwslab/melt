@@ -9,6 +9,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -57,6 +59,10 @@ public class MarkdownDoclet extends Standard {
                     }
                 }
             }
+            
+            writeFooter(matchers);
+            writeFooter(matcherMultiSource);
+            writeFooter(filters);
         } catch (IOException ex) {
 
         }
@@ -152,6 +158,14 @@ public class MarkdownDoclet extends Standard {
         writer.write("---");
         writer.newLine();
         writer.write("# " + title);
+        writer.newLine();
+    }
+    
+    private static final String DATE_TIME = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm").format(LocalDateTime.now());
+    private static void writeFooter(BufferedWriter writer) throws IOException {
+        writer.write("---");
+        writer.newLine();
+        writer.write("<sub>automatically generated on " + DATE_TIME + "</sub>");
         writer.newLine();
     }
 
