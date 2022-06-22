@@ -8,3 +8,5 @@ footer_content: "MELT Team 2021"
 
 back_to_top: true
 back_to_top_text: "Back to top"
+
+exclude: ["javadoc_latest/"]
