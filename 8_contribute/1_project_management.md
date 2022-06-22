@@ -30,3 +30,18 @@ Run:
 - [requires admin rights] Place Track Data in `/data5/tdrs/testdata/persistent/` on `wifo5-14` (download server). 
 - Create entries in `TrackRepository`.
 - If desired, add the track to BuilInTracks to create a shortcut in the CLI.
+
+
+## Run test coverage locally
+
+```
+mvn clean test jacoco:report
+```
+
+To do it only for one class/method:
+
+```
+mvn test jacoco:report -Djacoco.append=false -Dtest=de.uni_mannheim.informatik.dws.melt.{the selected class}
+```
+
+then you find in folder `target\site\jacoco` the corresponding files.
