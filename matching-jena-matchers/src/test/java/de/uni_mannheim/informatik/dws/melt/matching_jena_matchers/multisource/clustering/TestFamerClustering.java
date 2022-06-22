@@ -43,24 +43,9 @@ public class TestFamerClustering {
      * https://stackoverflow.com/questions/71951793/what-is-the-java-version-that-the-flink-can-support-in-2022
      * https://issues.apache.org/jira/browse/FLINK-15736
      ***********************************/
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestFamerClustering.class);
-    
-    @BeforeAll
-    public static void setup(){
-        JRE j = JRE.currentVersion();
-        System.out.println("current jre version: " + j);
-        System.out.println("is in range: " + EnumSet.range(JRE.JAVA_8, JRE.JAVA_11).contains(j));
-        LOGGER.info("current jre version: {}", j);
-        LOGGER.info("is in range: {}", EnumSet.range(JRE.JAVA_8, JRE.JAVA_11).contains(j));
-    }
     
     @Test
     public void testCenter(){
-        JRE j = JRE.currentVersion();
-        System.out.println("current jre version: " + j);
-        System.out.println(EnumSet.range(JRE.JAVA_8, JRE.JAVA_11).contains(j));
-        LOGGER.info("current jre version: {}", j);
-        LOGGER.info("is in range: {}", EnumSet.range(JRE.JAVA_8, JRE.JAVA_11).contains(j));
         testClusteringApproach(new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), 4);
     }
     

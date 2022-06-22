@@ -5,8 +5,10 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDEx
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
-
+@EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
 public class TestMultipleClustering {
 
 
