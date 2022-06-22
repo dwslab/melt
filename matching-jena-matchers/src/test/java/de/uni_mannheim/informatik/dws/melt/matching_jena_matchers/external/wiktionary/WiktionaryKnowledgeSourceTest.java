@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * It further requires that the public DBnary SPARQL endpoint is online:
  * <a href="http://kaiko.getalp.org/sparql">http://kaiko.getalp.org/sparql</a>
  */
+@Disabled("Disabled because there is a problem with mapdb. See issue https://github.com/dwslab/melt/issues/172")
 public class WiktionaryKnowledgeSourceTest {
 
 
