@@ -1,25 +1,26 @@
-package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
+package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.ResourcesExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.TextExtractorKBert;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.constant.InputTypes;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntResource;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.nio.file.Files;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.StreamSupport;
 
 import static org.apache.commons.text.StringEscapeUtils.escapeCsv;
 
 public class KBertSentenceTransformersMatcher extends SentenceTransformersMatcher {
-    public KBertSentenceTransformersMatcher(String modelName) {
-        super(new TextExtractorKBert(), modelName);
+    public KBertSentenceTransformersMatcher(TextExtractorMap extractor, String modelName) {
+        super(extractor, modelName);
     }
 
     // Function to get the Spliterator
@@ -28,12 +29,12 @@ public class KBertSentenceTransformersMatcher extends SentenceTransformersMatche
     }
 
     @Override
-    protected int createTextFile(OntModel model, File file, ResourcesExtractor extractor, Properties parameters)
+    public int createTextFile(OntModel model, File file, ResourcesExtractor extractor, Properties parameters)
             throws IOException {
         //LOGGER.info("Write text to file {}", file);
         AtomicInteger linesWritten = new AtomicInteger();
         TextExtractorMap simpleTextExtractor = this.getExtractorMap();
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8))) {
             if (this.multipleTextsToMultipleExamples) {
                 throw (new NotImplementedException(
                         "K-BERT Sentence Transformer currently only supports generating one example per set of texts"));

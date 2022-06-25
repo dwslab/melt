@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.constant;
+package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert;
 
 import java.util.Arrays;
 import java.util.Map;

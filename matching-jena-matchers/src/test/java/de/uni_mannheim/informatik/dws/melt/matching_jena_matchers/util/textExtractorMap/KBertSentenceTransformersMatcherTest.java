@@ -1,13 +1,12 @@
-package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorMap;
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
-import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.TextExtractorKBert;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert.KBertSentenceTransformersMatcher;
 import org.apache.jena.ontology.OntModel;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -26,7 +25,7 @@ public class KBertSentenceTransformersMatcherTest {
         URL source = testCase.getSource().toURL();
         OntModel sourceOntology = getTransformedObject(source, OntModel.class, properties);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                new LabelExtractor(), "paraphrase-MiniLM-L6-v2");
+                new TextExtractorKBert(), "paraphrase-MiniLM-L6-v2");
         File corpus = FileUtil.createFileWithRandomNumber("corpus", ".txt");
 
         // when
