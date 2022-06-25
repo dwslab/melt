@@ -1,6 +1,6 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.statement;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.statement;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.processedNode.ProcessedLiteral;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode.ProcessedLiteral;
 import org.apache.jena.rdf.model.Statement;
 
 public class LiteralObjectStatement extends ObjectStatement<ProcessedLiteral> {

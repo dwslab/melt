@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.constant;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.constant;
 
 public enum KBertLabelPropertyTypes {
     LABEL,

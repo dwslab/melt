@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.ResourcesExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
 import org.apache.commons.lang3.NotImplementedException;
@@ -16,10 +17,8 @@ import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.StreamSupport;
 
-import static org.apache.commons.text.StringEscapeUtils.escapeCsv;
-
 public class KBertSentenceTransformersMatcher extends SentenceTransformersMatcher {
-    public KBertSentenceTransformersMatcher(TextExtractorMap extractor, String modelName) {
+    public KBertSentenceTransformersMatcher(TextExtractor extractor, String modelName) {
         super(extractor, modelName);
     }
 
@@ -43,7 +42,7 @@ public class KBertSentenceTransformersMatcher extends SentenceTransformersMatche
                         .filter(RDFNode::isURIResource)
                         .forEach(r -> simpleTextExtractor.extract(r).entrySet().stream()
                                 .sorted(Comparator.comparing(e -> InputTypes.fromName(e.getKey())))
-                                .flatMap(e -> e.getValue().stream().map(v -> escapeCsv(e.getKey()) + "," + escapeCsv(v) + NEWLINE))
+                                .flatMap(e -> e.getValue().stream())
                                 .forEach(line -> {
                                     try {
                                         writer.write(line);

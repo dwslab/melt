@@ -1,11 +1,11 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.processedNode;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.PropertyVocabulary;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.constant.KBertLabelPropertyTypes;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.constant.KBertLabelPropertyTypes;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.vocabulary.RDFS;
 
-import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.kBert.constant.KBertLabelPropertyTypes.*;
+import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.constant.KBertLabelPropertyTypes.*;
 
 public class ProcessedProperty extends ProcessedResource<Property> {
     public ProcessedProperty(Property property) {

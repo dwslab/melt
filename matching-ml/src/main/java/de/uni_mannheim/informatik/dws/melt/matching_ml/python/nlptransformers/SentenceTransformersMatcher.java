@@ -35,7 +35,7 @@ import org.apache.jena.ontology.OntResource;
 public class SentenceTransformersMatcher extends TransformersBase {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(SentenceTransformersMatcher.class);
-    protected static final String NEWLINE = System.getProperty("line.separator");
+    public static final String NEWLINE = System.getProperty("line.separator");
     
     private List<ResourcesExtractor> resourcesExtractor;
     private int queryChunkSize;
