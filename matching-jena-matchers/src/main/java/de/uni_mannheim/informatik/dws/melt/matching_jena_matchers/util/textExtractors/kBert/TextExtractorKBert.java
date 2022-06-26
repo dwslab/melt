@@ -1,5 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode.ProcessedRDFNode;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode.ProcessedResource;
@@ -7,7 +9,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtra
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.statement.ObjectStatement;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.statement.ResourceObjectStatement;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.statement.SubjectStatement;
-import org.apache.jena.atlas.lib.SetUtils;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 
@@ -18,6 +19,9 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher.NEWLINE;
+import static org.apache.commons.text.StringEscapeUtils.escapeCsv;
 
 public class TextExtractorKBert implements TextExtractor {
 
@@ -47,18 +51,30 @@ public class TextExtractorKBert implements TextExtractor {
             targetName = new ProcessedResource<>(targetResource).getNormalized();
         }
 
-        Set<String> normalizedObjectStatements = processedObjectStatements.values().stream()
+        Set<Map<String, String>> normalizedObjectStatements = processedObjectStatements.values().stream()
                 .flatMap(Collection::stream)
-                .map(objectStatement -> objectStatement.getNormalized(targetName))
+                .map(ObjectStatement::getNormalized)
                 .collect(Collectors.toSet());
 
         Iterable<Statement> subjectStatements = () -> targetResource.getModel().listStatements(null, null, targetResource);
-        Set<String> normalizedSubjectStatements = StreamSupport
+        Set<Map<String, String>> normalizedSubjectStatements = StreamSupport
                 .stream(subjectStatements.spliterator(), false)
                 .filter(statement -> !statement.getSubject().isAnon())
-                .map(statement -> new SubjectStatement(statement, targetName).getNormalized())
+                .map(statement -> new SubjectStatement(statement).getNormalized())
                 .collect(Collectors.toSet());
 
-        return SetUtils.union(normalizedObjectStatements, normalizedSubjectStatements);
+        String jsonMolecule;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonMolecule = mapper.writer().writeValueAsString(Map.of(
+                    "t", targetName,
+                    "o", normalizedSubjectStatements,
+                    "s", normalizedObjectStatements
+            ));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        String extracted = escapeCsv(targetResource.getURI()) + "," + escapeCsv(jsonMolecule) + NEWLINE;
+        return Set.of(extracted);
     }
 }

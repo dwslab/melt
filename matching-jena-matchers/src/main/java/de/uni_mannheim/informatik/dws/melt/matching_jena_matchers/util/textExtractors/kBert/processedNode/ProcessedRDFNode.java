@@ -2,8 +2,6 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtr
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.StringProcessing;
 
-import static org.apache.commons.text.StringEscapeUtils.escapeCsv;
-
 public abstract class ProcessedRDFNode {
 
     /**
@@ -12,7 +10,7 @@ public abstract class ProcessedRDFNode {
      * @return todo
      */
     public String getNormalized() {
-        return escapeCsv(StringProcessing.normalizeJoining(getRaw()));
+        return StringProcessing.normalizeJoining(getRaw());
     }
 
     protected abstract String getRaw();

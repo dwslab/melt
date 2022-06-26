@@ -4,23 +4,19 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtra
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode.ProcessedRDFNode;
 import org.apache.jena.rdf.model.Statement;
 
-import static de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher.NEWLINE;
-import static org.apache.commons.text.StringEscapeUtils.escapeCsv;
+import java.util.Map;
 
 public abstract class ObjectStatement<T extends ProcessedRDFNode> {
     protected final ProcessedProperty predicate;
-    private final String subjectId;
     protected T object;
 
     public ObjectStatement(Statement statement) {
-        this.subjectId = escapeCsv(statement.getSubject().getURI());
         this.predicate = new ProcessedProperty(statement.getPredicate());
         this.object = null;
     }
 
-    public String getNormalized(String target) {
-        return String.join(",", subjectId, target, predicate.getNormalized(), object.getNormalized(), "o")
-                + NEWLINE;
+    public Map<String, String> getNormalized() {
+        return Map.of("p", predicate.getNormalized(), "o", object.getNormalized());
     }
 
     public T getObject() {
