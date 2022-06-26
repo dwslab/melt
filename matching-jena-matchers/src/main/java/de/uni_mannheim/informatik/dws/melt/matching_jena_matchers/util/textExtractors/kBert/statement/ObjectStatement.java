@@ -5,18 +5,21 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtra
 import org.apache.jena.rdf.model.Statement;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher.NEWLINE;
+import static org.apache.commons.text.StringEscapeUtils.escapeCsv;
 
 public abstract class ObjectStatement<T extends ProcessedRDFNode> {
     protected final ProcessedProperty predicate;
+    private final String subjectId;
     protected T object;
 
     public ObjectStatement(Statement statement) {
+        this.subjectId = escapeCsv(statement.getSubject().getURI());
         this.predicate = new ProcessedProperty(statement.getPredicate());
         this.object = null;
     }
 
     public String getNormalized(String target) {
-        return String.join(",", target, predicate.getNormalized(), object.getNormalized(), "o")
+        return String.join(",", subjectId, target, predicate.getNormalized(), object.getNormalized(), "o")
                 + NEWLINE;
     }
 
