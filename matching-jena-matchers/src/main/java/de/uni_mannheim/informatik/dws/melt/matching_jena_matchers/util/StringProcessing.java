@@ -31,6 +31,16 @@ public class StringProcessing {
     }
 
     /**
+     * Normalizes a string and joins the resulting tokens with whitespace. Recognizes camelCase.
+     *
+     * @param stringToBeNormalized The String that shall be normalized.
+     * @return normalized String, joined with whitespace
+     */
+    public static String normalizeJoining(String stringToBeNormalized) {
+        return String.join(" ", normalizeToStringArray(stringToBeNormalized));
+    }
+
+    /**
      * Normalizes a string and removes all (English) stopwords. Recognizes camelCase.
      * @param stringToBeNormalized The String that shall be normalized.
      * @return Bag of words.

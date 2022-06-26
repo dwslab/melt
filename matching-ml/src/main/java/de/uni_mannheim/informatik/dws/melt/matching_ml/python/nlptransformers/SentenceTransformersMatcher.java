@@ -35,7 +35,7 @@ import org.apache.jena.ontology.OntResource;
 public class SentenceTransformersMatcher extends TransformersBase {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(SentenceTransformersMatcher.class);
-    private static final String NEWLINE = System.getProperty("line.separator");
+    public static final String NEWLINE = System.getProperty("line.separator");
     
     private List<ResourcesExtractor> resourcesExtractor;
     private int queryChunkSize;
@@ -91,7 +91,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
     }
     
     
-    private int createTextFile(OntModel model, File file, ResourcesExtractor extractor, Properties parameters) throws IOException {
+    protected int createTextFile(OntModel model, File file, ResourcesExtractor extractor, Properties parameters) throws IOException {
         //LOGGER.info("Write text to file {}", file);
         int linesWritten = 0;
         TextExtractor simpleTextExtractor = this.getExtractor();
