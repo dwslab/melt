@@ -56,6 +56,24 @@ Or this:
 ```
 java.lang.SecurityException: Invalid signature file digest for Manifest main attributes.
 ```
+Or this:
+```
+Exception in thread "main" java.lang.ExceptionInInitializerError
+	at ......
+	at ......
+Caused by: java.lang.NullPointerException
+	at org.apache.jena.tdb.sys.EnvTDB.processGlobalSystemProperties(EnvTDB.java:33)
+	at org.apache.jena.tdb.TDB.init(TDB.java:254)
+	at org.apache.jena.tdb.sys.InitTDB.start(InitTDB.java:29)
+	at org.apache.jena.sys.JenaSystem.lambda$init$2(JenaSystem.java:117)
+	at java.util.ArrayList.forEach(ArrayList.java:1257)
+	at org.apache.jena.sys.JenaSystem.forEach(JenaSystem.java:192)
+	at org.apache.jena.sys.JenaSystem.forEach(JenaSystem.java:169)
+	at org.apache.jena.sys.JenaSystem.init(JenaSystem.java:115)
+	at org.apache.jena.rdf.model.ModelFactory.<clinit>(ModelFactory.java:49)
+	... 2 more
+```
+
 In such a case use the [maven shade plugin](https://maven.apache.org/plugins/maven-shade-plugin/index.html) with a [ServicesResourceTransformer](https://maven.apache.org/plugins/maven-shade-plugin/examples/resource-transformers.html)
 to [build an exectuable jar](https://maven.apache.org/plugins/maven-shade-plugin/examples/executable-jar.html).
 .
