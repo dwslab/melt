@@ -2079,15 +2079,6 @@ def inner_sentencetransformers_prediction(request_headers):
 
         embedder = SentenceTransformer(model_name, cache_folder=cache_folder_path)
 
-        def load_file(file_path):
-            mapping_pos_to_id = dict()
-            corpus = []
-            with open(file_path, encoding="utf-8") as csvfile:
-                for i, row in enumerate(csv.reader(csvfile, delimiter=",")):
-                    mapping_pos_to_id[i] = row[0]
-                    corpus.append(row[1])
-            return corpus, mapping_pos_to_id
-
         corpus, corpus_pos_to_id = load_file(corpus_file_name)
         queries, queries_pos_to_id = load_file(queries_file_name)
 
@@ -2175,6 +2166,16 @@ def inner_sentencetransformers_prediction(request_headers):
         import traceback
 
         return "ERROR " + traceback.format_exc()
+
+
+def load_file(file_path):
+    mapping_pos_to_id = dict()
+    corpus = []
+    with open(file_path, encoding="utf-8") as csvfile:
+        for i, row in enumerate(csv.reader(csvfile, delimiter=",")):
+            mapping_pos_to_id[i] = row[0]
+            corpus.append(row[1])
+    return corpus, mapping_pos_to_id
 
 
 @app.route("/sentencetransformers-prediction", methods=["GET"])
