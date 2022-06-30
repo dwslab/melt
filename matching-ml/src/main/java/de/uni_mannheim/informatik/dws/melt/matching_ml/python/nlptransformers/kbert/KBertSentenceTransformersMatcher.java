@@ -20,6 +20,7 @@ import java.util.stream.StreamSupport;
 public class KBertSentenceTransformersMatcher extends SentenceTransformersMatcher {
     public KBertSentenceTransformersMatcher(TextExtractor extractor, String modelName) {
         super(extractor, modelName);
+        this.fileSuffix = ".csv";
     }
 
     // Function to get the Spliterator

@@ -43,6 +43,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
     private int topK;
     private boolean bothDirections;
     private boolean topkPerResource;
+    protected String fileSuffix;
     
     public SentenceTransformersMatcher(TextExtractorMap extractor, String modelName){
         super(extractor, modelName);
@@ -52,6 +53,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
         this.topK = 10;
         this.bothDirections = true;
         this.topkPerResource = true;
+        this.fileSuffix = ".txt";
     }
     
     public SentenceTransformersMatcher(TextExtractor extractor, String modelName){
@@ -64,8 +66,8 @@ public class SentenceTransformersMatcher extends TransformersBase {
         if(inputAlignment == null)
             inputAlignment = new Alignment();
         for(ResourcesExtractor resExtractor : resourcesExtractor){
-            File corpus = FileUtil.createFileWithRandomNumber("corpus", ".txt");
-            File queries = FileUtil.createFileWithRandomNumber("queries", ".txt");
+            File corpus = FileUtil.createFileWithRandomNumber("corpus", fileSuffix);
+            File queries = FileUtil.createFileWithRandomNumber("queries", fileSuffix);
             try{
                 int linesWrittenSource = createTextFile(source, corpus, resExtractor, parameters);
                 int linesWrittenTarget = createTextFile(target, queries, resExtractor, parameters);
