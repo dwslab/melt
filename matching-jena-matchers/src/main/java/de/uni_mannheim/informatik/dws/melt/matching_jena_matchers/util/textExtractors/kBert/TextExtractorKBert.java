@@ -68,8 +68,8 @@ public class TextExtractorKBert implements TextExtractor {
         try {
             jsonMolecule = mapper.writer().writeValueAsString(Map.of(
                     "t", targetName,
-                    "o", normalizedSubjectStatements,
-                    "s", normalizedObjectStatements
+                    "s", normalizedSubjectStatements,
+                    "o", normalizedObjectStatements
             ));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
