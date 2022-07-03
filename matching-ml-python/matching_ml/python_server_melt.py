@@ -733,7 +733,7 @@ def __sims2scores(sims, pos2id, topsims, eps=1e-7):
     result = []
     sims = abs(
         sims
-    )  # TODO or maybe clip? are opposite vectors "similar" or "dissimilar"?!
+    )
     for pos in np.argsort(sims)[::-1]:
         if pos in pos2id and sims[pos] > eps:  # ignore deleted/rewritten documents
             # convert positions of resulting docs back to ids
@@ -999,7 +999,6 @@ def neural_net_projection(word_vector_src, word_vector_tgt, lexicon):
             "The embeddings do not contain enough vector for the input alignment."
         )
 
-    # TODO: optimize model
     model = Sequential()
     model.add(
         Dense(
@@ -1365,7 +1364,6 @@ def transformers_create_dataset(
     tensor_type = "tf" if using_tensorflow else "pt"
     # padding (padding=True) is not applied here because the tokenizer is given to the trainer
     # which does the padding for each batch (more efficient)
-    # TODO: remove padding here and generate no dataset but just give the encodings to the trainer
     encodings = tokenizer(
         left_sentences,
         right_sentences,
@@ -1380,7 +1378,7 @@ def transformers_create_dataset(
         if labels:
             return tf.data.Dataset.from_tensor_slices((dict(encodings), labels))
         else:
-            return tf.data.Dataset.from_tensor_slices(dict(encodings))  # TODO: check
+            return tf.data.Dataset.from_tensor_slices(dict(encodings))
     else:
         import torch
 
@@ -1872,7 +1870,6 @@ def transformers_finetuning_hp_search():
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
                 def model_init():
-                    # TODO: check if necessary with training_args.strategy.scope():
                     return TFAutoModelForSequenceClassification.from_pretrained(
                         initial_model_name, num_labels=2
                     )
