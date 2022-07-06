@@ -13,6 +13,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersFineTuner;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBaseFineTuner;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert.KBertSentenceTransformersMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import org.apache.commons.io.FileUtils;
@@ -215,6 +216,7 @@ public class PythonServer {
         request.addHeader("topk", Integer.toString(matcher.getTopK()));
         request.addHeader("both-directions", Boolean.toString(matcher.isBothDirections()));
         request.addHeader("topk-per-resource", Boolean.toString(matcher.isTopkPerResource()));
+        request.addHeader("kbert", Boolean.toString(matcher.getClass() == KBertSentenceTransformersMatcher.class));
 
         String resultString = runRequest(request);
         try {
