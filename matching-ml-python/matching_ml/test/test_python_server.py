@@ -23,6 +23,19 @@ def server_thread():
     server_thread.stop()
 
 
+@pytest.fixture()
+def app():
+    my_app.config.update({
+        "TESTING": True,
+    })
+    yield my_app
+
+
+@pytest.fixture()
+def client(app):
+    return app.test_client()
+
+
 def test_get_vector(server_thread):
     test_model_vectors = "../../test/resources/test_model_vectors.kv"
     vector_test_path = Path(test_model_vectors)
@@ -69,6 +82,25 @@ def test_get_similarity(server_thread):
     assert float(result_str) > 0
 
 
-def teardown_module(module):
-    print("Shutting down...")
-    server_thread.stop()
+def test_sentence_transformers_prediction_kbert(client):
+    # def test_sentence_transformers_prediction_kbert():
+    test_model = 'paraphrase-albert-small-v2'
+    response = client.get(
+        "/sentencetransformers-prediction",
+        headers={
+            "kbert": "true",
+            "model-name": "paraphrase-albert-small-v2",
+            "using-tf": "false",
+            "training-arguments": "{}",
+            "tmp-dir": str(RESOURCES_DIR),
+            "multi-processing": "no_multi_process",
+            "corpus-file-name": str(RESOURCES_DIR / 'corpus_kbert.csv'),
+            "queries-file-name": str(RESOURCES_DIR / 'queries_kbert.csv'),
+            "query-chunk-size": "100",
+            "corpus-chunk-size": "500000",
+            "topk": "5",
+            "both-directions": "true",
+            "topk-per-resource": "true",
+        },
+    )
+    print('')
