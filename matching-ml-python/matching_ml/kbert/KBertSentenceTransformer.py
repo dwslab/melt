@@ -219,17 +219,6 @@ class KBertSentenceTransformer(SentenceTransformer):
         n_neighbors_per_predicate_grouped_by_role = n_neighbors_per_role_and_predicate.groupby('role')
         max_predicates_per_role = n_neighbors_per_predicate_grouped_by_role.size().max()
 
-        def pad_to_max_predicates_per_role(role_predicate_group_sizes):
-            padding_size = max_predicates_per_role - role_predicate_group_sizes.shape[0]
-            return role_predicate_group_sizes.append(pd.DataFrame({
-                'size': pd.Series(padding_size * [0], dtype=int),
-                'role': padding_size * [role_predicate_group_sizes.name],
-                'p': [str(i) for i in range(padding_size)]
-            }))
-
-        n_neighbors_per_role_and_predicate = n_neighbors_per_predicate_grouped_by_role \
-            .apply(pad_to_max_predicates_per_role)
-
         predicates_in_outer_rounds = pd.DataFrame(
             data=get_group_y_in_round_x(n_neighbors_per_role_and_predicate['size']),
             index=[n_neighbors_per_role_and_predicate['role'], n_neighbors_per_role_and_predicate['p']]
