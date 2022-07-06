@@ -23,3 +23,19 @@ def test_sentence_transformer():
     # When
     embeddings = model.encode(corpus, batch_size=32, convert_to_tensor=True)
     assert False
+
+
+def test_tokenize_long_description():
+    # target thymus gland makes problems
+    # Given
+    model = KBertSentenceTransformer('paraphrase-albert-small-v2')
+    corpus_file_name = str(RESOURCES_DIR / 'queries_kbert.csv')
+    corpus, corpus_pos_to_id = load_file(corpus_file_name)
+    # When
+    features = model.tokenize([corpus[2456]])
+    # Then
+    features_1d = ['input_ids', 'position_ids', 'token_type_ids']
+    feature_2d = 'attention_mask'
+    assert all(k in features.keys() for k in features_1d + [feature_2d])
+    assert all(features[k].numpy().shape == (1, model.max_seq_length) for k in features_1d)
+    assert features[feature_2d].numpy().shape == (1, model.max_seq_length, model.max_seq_length)
