@@ -158,7 +158,6 @@ class KBertSentenceTransformer(SentenceTransformer):
         pooling_module = self._last_module()
         pooling_module.forward = lambda features: pooling_forward(pooling_module, features)
 
-
     def tokenize(self, texts: Union[List[str], List[Dict], List[Tuple[str, str]]]) -> Dict[str, torch.Tensor]:
         molecules = pd.DataFrame([json.loads(text) for text in texts])
         tokenizer = super(KBertSentenceTransformer, self).tokenizer
@@ -255,16 +254,32 @@ class KBertSentenceTransformer(SentenceTransformer):
 
         # Drop statements that do not fit into the input
         statements['n_tokens_cumsum'] = statements['n_tokens'].cumsum()
-        statements = statements[statements['n_tokens_cumsum'] <= target['remaining_tokens']]
+        statements['token_offset'] = np.pad(statements['n_tokens_cumsum'], (1, 0))[:-1]
+        statements = statements[statements['token_offset'] < target['remaining_tokens']]
 
-        seq_length = statements['n_tokens_cumsum'].max() + target['n_target_tokens']
-        delta_seq_length = self.max_seq_length - seq_length
-        seq_padding = np.repeat(0, delta_seq_length)
+        seq_padding = np.array([])
+        seq_length = self.max_seq_length
 
-        is_subject_statement = statements['role'] == 's'
-        max_tokens_per_role = statements.groupby('role')['n_tokens'].max()
+        # Crop last statement if it only fits partially into the input
+        last_statement = statements.iloc[-1]
+        if last_statement['n_tokens_cumsum'] > target['remaining_tokens']:
+            n_tokens_2_crop = last_statement['n_tokens_cumsum'] - target['remaining_tokens']
+            last_statement_index = last_statement.name
+            statements.loc[last_statement_index, ['n_tokens', 'n_tokens_cumsum']] = \
+                statements.loc[last_statement_index, ['n_tokens', 'n_tokens_cumsum']] - n_tokens_2_crop
+            statements.at[last_statement_index, 'tokens'] = \
+                statements.at[last_statement_index, 'tokens'][:-n_tokens_2_crop]
+
+        # Add padding if statements are shorter than max_seq_length
+        elif last_statement['n_tokens_cumsum'] < target['remaining_tokens']:
+            seq_length = statements['n_tokens_cumsum'].max() + target['n_target_tokens']
+
+            delta_seq_length = self.max_seq_length - seq_length
+            seq_padding = np.repeat(0, delta_seq_length)
 
         # Compute position ids of subject statements
+        max_tokens_per_role = statements.groupby('role')['n_tokens'].max()
+        is_subject_statement = statements['role'] == 's'
         if 's' in max_tokens_per_role:
             subject_positions = np.arange(max_tokens_per_role['s'])
             statements.loc[is_subject_statement, 'position_ids'] = statements \
@@ -289,7 +304,6 @@ class KBertSentenceTransformer(SentenceTransformer):
         attention_mask = np.zeros(2 * [self.max_seq_length])
 
         # Add holes for statements (tokens in statements can see each other)
-        statements['token_offset'] = np.pad(statements['n_tokens_cumsum'], (1, 0))[:-1]
         statements['hole_coordinates'] = statements.apply(
             lambda row: np.arange(row['token_offset'], row['n_tokens_cumsum']), axis=1)
         statement_holes = statements.apply(
