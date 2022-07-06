@@ -733,7 +733,7 @@ def __sims2scores(sims, pos2id, topsims, eps=1e-7):
     result = []
     sims = abs(
         sims
-    )  # TODO or maybe clip? are opposite vectors "similar" or "dissimilar"?!
+    )
     for pos in np.argsort(sims)[::-1]:
         if pos in pos2id and sims[pos] > eps:  # ignore deleted/rewritten documents
             # convert positions of resulting docs back to ids
@@ -999,7 +999,6 @@ def neural_net_projection(word_vector_src, word_vector_tgt, lexicon):
             "The embeddings do not contain enough vector for the input alignment."
         )
 
-    # TODO: optimize model
     model = Sequential()
     model.add(
         Dense(
@@ -1365,7 +1364,6 @@ def transformers_create_dataset(
     tensor_type = "tf" if using_tensorflow else "pt"
     # padding (padding=True) is not applied here because the tokenizer is given to the trainer
     # which does the padding for each batch (more efficient)
-    # TODO: remove padding here and generate no dataset but just give the encodings to the trainer
     encodings = tokenizer(
         left_sentences,
         right_sentences,
@@ -1380,7 +1378,7 @@ def transformers_create_dataset(
         if labels:
             return tf.data.Dataset.from_tensor_slices((dict(encodings), labels))
         else:
-            return tf.data.Dataset.from_tensor_slices(dict(encodings))  # TODO: check
+            return tf.data.Dataset.from_tensor_slices(dict(encodings))
     else:
         import torch
 
@@ -1872,7 +1870,6 @@ def transformers_finetuning_hp_search():
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
                 def model_init():
-                    # TODO: check if necessary with training_args.strategy.scope():
                     return TFAutoModelForSequenceClassification.from_pretrained(
                         initial_model_name, num_labels=2
                     )
@@ -2068,7 +2065,7 @@ def inner_sentencetransformers_prediction(request_headers):
         both_directions = request_headers["both-directions"].lower() == "true"
         topk_per_resource = request_headers["topk-per-resource"].lower() == "true"
 
-        from sentence_transformers import SentenceTransformer, util
+        from sentence_transformers import util
         import torch
 
         cache_folder_path = (
@@ -2077,16 +2074,12 @@ def inner_sentencetransformers_prediction(request_headers):
             else None
         )
 
-        embedder = SentenceTransformer(model_name, cache_folder=cache_folder_path)
-
-        def load_file(file_path):
-            mapping_pos_to_id = dict()
-            corpus = []
-            with open(file_path, encoding="utf-8") as csvfile:
-                for i, row in enumerate(csv.reader(csvfile, delimiter=",")):
-                    mapping_pos_to_id[i] = row[0]
-                    corpus.append(row[1])
-            return corpus, mapping_pos_to_id
+        if "kbert" in request_headers and request_headers["kbert"].lower() == "true":
+            from kbert.KBertSentenceTransformer import KBertSentenceTransformer
+            embedder = KBertSentenceTransformer(model_name, cache_folder=cache_folder_path)
+        else:
+            from sentence_transformers import SentenceTransformer
+            embedder = SentenceTransformer(model_name, cache_folder=cache_folder_path)
 
         corpus, corpus_pos_to_id = load_file(corpus_file_name)
         queries, queries_pos_to_id = load_file(queries_file_name)
@@ -2175,6 +2168,16 @@ def inner_sentencetransformers_prediction(request_headers):
         import traceback
 
         return "ERROR " + traceback.format_exc()
+
+
+def load_file(file_path):
+    mapping_pos_to_id = dict()
+    corpus = []
+    with open(file_path, encoding="utf-8") as csvfile:
+        for i, row in enumerate(csv.reader(csvfile, delimiter=",")):
+            mapping_pos_to_id[i] = row[0]
+            corpus.append(row[1])
+    return corpus, mapping_pos_to_id
 
 
 @app.route("/sentencetransformers-prediction", methods=["GET"])

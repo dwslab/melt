@@ -13,6 +13,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersFineTuner;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBaseFineTuner;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert.KBertSentenceTransformersMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import org.apache.commons.io.FileUtils;
@@ -215,6 +216,7 @@ public class PythonServer {
         request.addHeader("topk", Integer.toString(matcher.getTopK()));
         request.addHeader("both-directions", Boolean.toString(matcher.isBothDirections()));
         request.addHeader("topk-per-resource", Boolean.toString(matcher.isTopkPerResource()));
+        request.addHeader("kbert", Boolean.toString(matcher.getClass() == KBertSentenceTransformersMatcher.class));
 
         String resultString = runRequest(request);
         try {
@@ -1163,12 +1165,22 @@ public class PythonServer {
         File serverResourceDirectory = this.resourcesDirectory;
         serverResourceDirectory.mkdirs();
 
-        exportResource(serverResourceDirectory, "python_server_melt.py");
+        String pythonDirectoryName = "matching_ml";
+        File sourceDirectory = new File(new File(
+                this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()
+        ).getParentFile().getParentFile().getParentFile(), "matching-ml-python/" + pythonDirectoryName);
+        File destination = new File(serverResourceDirectory, pythonDirectoryName);
+        try {
+            FileUtils.copyDirectory(sourceDirectory, destination);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         exportResource(serverResourceDirectory, "requirements.txt");
 
         httpClient = HttpClients.createDefault(); // has to be re-instantiated
         String canonicalPath;
-        File serverFile = new File(serverResourceDirectory, "python_server_melt.py");
+        File serverFile = new File(serverResourceDirectory, pythonDirectoryName + "/python_server_melt.py");
         try {
             if (!serverFile.exists()) {
                 LOGGER.error("Server File does not exist. Cannot start server. ABORTING. Please make sure that " +
