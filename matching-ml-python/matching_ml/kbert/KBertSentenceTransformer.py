@@ -254,8 +254,13 @@ class KBertSentenceTransformer(SentenceTransformer):
             last_statement_index = last_statement.name
             statements.loc[last_statement_index, ['n_tokens', 'n_tokens_cumsum']] = \
                 statements.loc[last_statement_index, ['n_tokens', 'n_tokens_cumsum']] - n_tokens_2_crop
-            statements.at[last_statement_index, 'tokens'] = \
-                statements.at[last_statement_index, 'tokens'][:-n_tokens_2_crop]
+            if last_statement['role'] == 's':
+                statements.at[last_statement_index, 'tokens'] = \
+                    statements.at[last_statement_index, 'tokens'][n_tokens_2_crop:]
+            else:
+                statements.at[last_statement_index, 'tokens'] = \
+                    statements.at[last_statement_index, 'tokens'][:-n_tokens_2_crop]
+
 
         # Add padding if statements are shorter than max_seq_length
         elif last_statement['n_tokens_cumsum'] < self.max_seq_length:
@@ -266,15 +271,15 @@ class KBertSentenceTransformer(SentenceTransformer):
 
         # Compute position ids of subject statements
         max_tokens_per_role = statements.groupby('role')['n_tokens'].max()
-        offset_target = max_tokens_per_role['s'] + 1
         is_subject_statement = statements['role'] == 's'
         if 's' in max_tokens_per_role:
+            offset_target = max_tokens_per_role['s'] + 1
             subject_positions = np.arange(1, offset_target)
             statements.loc[is_subject_statement, 'position_ids'] = statements \
                 .loc[is_subject_statement, 'n_tokens'] \
                 .apply(lambda n: subject_positions[max_tokens_per_role['s'] - n:])
         else:
-            max_tokens_per_role['s'] = 0
+            offset_target = 1
 
         # Compute position ids of target
         target['position_ids'] = np.arange(
