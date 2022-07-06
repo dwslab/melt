@@ -266,9 +266,10 @@ class KBertSentenceTransformer(SentenceTransformer):
 
         # Compute position ids of subject statements
         max_tokens_per_role = statements.groupby('role')['n_tokens'].max()
+        offset_target = max_tokens_per_role['s'] + 1
         is_subject_statement = statements['role'] == 's'
         if 's' in max_tokens_per_role:
-            subject_positions = np.arange(max_tokens_per_role['s'])
+            subject_positions = np.arange(1, offset_target)
             statements.loc[is_subject_statement, 'position_ids'] = statements \
                 .loc[is_subject_statement, 'n_tokens'] \
                 .apply(lambda n: subject_positions[max_tokens_per_role['s'] - n:])
@@ -277,11 +278,11 @@ class KBertSentenceTransformer(SentenceTransformer):
 
         # Compute position ids of target
         target['position_ids'] = np.arange(
-            max_tokens_per_role['s'], max_tokens_per_role['s'] + target['n_target_tokens'])
+            offset_target, offset_target + target['n_target_tokens'])
 
         # Compute position ids of object statements
         if 'o' in max_tokens_per_role:
-            offset_object_statements = max_tokens_per_role['s'] + target['n_target_tokens']
+            offset_object_statements = offset_target + target['n_target_tokens']
             object_positions = np.arange(offset_object_statements, offset_object_statements + max_tokens_per_role['o'])
             statements.loc[~is_subject_statement, 'position_ids'] = statements \
                 .loc[~is_subject_statement, 'n_tokens'] \
@@ -311,13 +312,15 @@ class KBertSentenceTransformer(SentenceTransformer):
 
         return pd.Series({
             'input_ids': np.concatenate([
-                *statements['tokens'],
+                [self.tokenizer.cls_token_id],
                 target['target_tokens'],
+                *statements['tokens'],
                 seq_padding
             ])[np.newaxis, :],
             'position_ids': np.concatenate([
-                *statements['position_ids'],
+                [0],
                 target['position_ids'],
+                *statements['position_ids'],
                 seq_padding
             ])[np.newaxis, :],
             'token_type_ids': np.zeros((1, self.max_seq_length)),
