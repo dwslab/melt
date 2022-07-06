@@ -1,6 +1,5 @@
 from typing import Optional, Tuple, Union, Dict
 
-import numpy as np
 import torch
 from transformers.modeling_outputs import BaseModelOutputWithPooling
 
@@ -45,7 +44,7 @@ def albert_forward(
         else:
             token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=device)
     # =========================================== Modification Start ===================================================
-    extended_attention_mask = bert_get_extended_attention_mask(attention_mask, input_shape)
+    extended_attention_mask = self.get_extended_attention_mask(attention_mask, input_shape)
     # =========================================== Modification End =====================================================
     head_mask = self.get_head_mask(head_mask, self.config.num_hidden_layers)
 
