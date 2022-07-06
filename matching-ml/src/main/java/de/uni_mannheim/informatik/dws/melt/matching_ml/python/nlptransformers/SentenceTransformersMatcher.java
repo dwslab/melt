@@ -34,10 +34,10 @@ import org.apache.jena.ontology.OntResource;
  */
 public class SentenceTransformersMatcher extends TransformersBase {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(SentenceTransformersMatcher.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(SentenceTransformersMatcher.class);
     public static final String NEWLINE = System.getProperty("line.separator");
     
-    private List<ResourcesExtractor> resourcesExtractor;
+    protected List<ResourcesExtractor> resourcesExtractor;
     private int queryChunkSize;
     private int corpusChunkSize;
     private int topK;
