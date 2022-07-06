@@ -880,7 +880,7 @@ def __canoncorr(X, Y):
     # sio.savemat('np_vector.mat', {'X': X, 'Y': Y})
     # additional constraint because otherwise line ' A = linalg.solve(Rx, U[:, :d]) ' does not work
     assert (
-        X.shape[0] > X.shape[1] and Y.shape[0] > Y.shape[1]
+            X.shape[0] > X.shape[1] and Y.shape[0] > Y.shape[1]
     ), "Vector dimension must be greater than trainings lexicon - maybe decrease vector size."
 
     k = X.shape[0]
@@ -1041,7 +1041,7 @@ def neural_net_projection(word_vector_src, word_vector_tgt, lexicon):
 
 
 def cca_projection(
-    word_vector_source, word_vector_target, lexicon, top_correlation_ratio=0.5
+        word_vector_source, word_vector_target, lexicon, top_correlation_ratio=0.5
 ):
     word_vector_source.init_sims(replace=True)
     word_vector_target.init_sims(replace=True)
@@ -1058,16 +1058,16 @@ def cca_projection(
 
     amount_A = int(np.ceil(top_correlation_ratio * A.shape[1]))
     U = (
-        word_vector_target.vectors
-        - word_vector_target.vectors.mean(axis=0, keepdims=True)
+            word_vector_target.vectors
+            - word_vector_target.vectors.mean(axis=0, keepdims=True)
     ).dot(A[:, 0:amount_A])
     U = __normr(U)
     projected_target_vectors = __create_keyed_vector(word_vector_target, U)
 
     amount_B = int(np.ceil(top_correlation_ratio * B.shape[1]))
     V = (
-        word_vector_source.vectors
-        - word_vector_source.vectors.mean(axis=0, keepdims=True)
+            word_vector_source.vectors
+            - word_vector_source.vectors.mean(axis=0, keepdims=True)
     ).dot(B[:, 0:amount_B])
     V = __normr(V)
     projected_source_vectors = __create_keyed_vector(word_vector_source, V)
@@ -1359,7 +1359,7 @@ def run_openea():
 
 
 def transformers_create_dataset(
-    using_tensorflow, tokenizer, left_sentences, right_sentences, labels=None
+        using_tensorflow, tokenizer, left_sentences, right_sentences, labels=None
 ):
     tensor_type = "tf" if using_tensorflow else "pt"
     # padding (padding=True) is not applied here because the tokenizer is given to the trainer
@@ -1435,7 +1435,7 @@ def transformers_read_file(file_path, with_labels):
 
 
 def transformers_get_training_arguments(
-    using_tensorflow, initial_parameters, user_parameters, melt_parameters
+        using_tensorflow, initial_parameters, user_parameters, melt_parameters
 ):
     import dataclasses
 
@@ -1554,7 +1554,7 @@ def inner_transformers_prediction(request_headers):
         with tempfile.TemporaryDirectory(dir=tmp_dir) as tmpdirname:
             initial_arguments = {
                 "report_to": "none",
-                #'disable_tqdm' : True,
+                # 'disable_tqdm' : True,
             }
             fixed_arguments = {
                 "output_dir": os.path.join(tmpdirname, "trainer_output_dir")
@@ -1698,7 +1698,7 @@ def inner_transformers_finetuning(request_headers):
                     train_dataset=training_dataset,
                     args=training_args,
                 )
-                
+
                 if weight_of_positive_class >= 0.0:
                     # calculate class weights
                     if weight_of_positive_class > 1.0:
@@ -1706,17 +1706,17 @@ def inner_transformers_finetuning(request_headers):
                         from sklearn.utils.class_weight import compute_class_weight
                         unique_labels = np.unique(labels)
                         if len(unique_labels) <= 1:
-                            class_weights = [0.5, 0.5] # only one label available -> default to [0.5, 0.5]
+                            class_weights = [0.5, 0.5]  # only one label available -> default to [0.5, 0.5]
                         else:
-                            class_weights = compute_class_weight('balanced', classes=unique_labels, y=labels)                        
+                            class_weights = compute_class_weight('balanced', classes=unique_labels, y=labels)
                     else:
-                        class_weights = [ 1.0 - weight_of_positive_class, weight_of_positive_class]
+                        class_weights = [1.0 - weight_of_positive_class, weight_of_positive_class]
                     app.logger.info("Using class weights: " + str(class_weights))
+
                     class WeightedLossTrainer(Trainer):
-    
+
                         def set_melt_weight(self, melt_weight_arg):
                             self.melt_weight = torch.FloatTensor(melt_weight_arg).to(device=self.args.device)
-                            
 
                         def compute_loss(self, model, inputs, return_outputs=False):
                             labels = inputs.get("labels")
@@ -1733,7 +1733,6 @@ def inner_transformers_finetuning(request_headers):
                         args=training_args,
                     )
                     trainer.set_melt_weight(class_weights)
-
 
             app.logger.info("Run training")
             trainer.train()
@@ -1777,7 +1776,7 @@ def transformers_finetuning_hp_search():
         hp_mutations = json.loads(request.headers["hp-mutations"])
 
         if optimizing_metric not in set(
-            ["loss", "accuracy", "f1", "precision", "recall", "auc", "aucf1"]
+                ["loss", "accuracy", "f1", "precision", "recall", "auc", "aucf1"]
         ):
             raise ValueError(
                 "optimize_metric is not one of loss, accuracy, f1, precision, recall, auc, aucf1."
@@ -2076,7 +2075,11 @@ def inner_sentencetransformers_prediction(request_headers):
 
         if "kbert" in request_headers and request_headers["kbert"].lower() == "true":
             from kbert.KBertSentenceTransformer import KBertSentenceTransformer
-            embedder = KBertSentenceTransformer(model_name, cache_folder=cache_folder_path)
+            embedder = KBertSentenceTransformer(
+                model_name,
+                cache_folder=cache_folder_path,
+                pooling_mode=request_headers['pooling-mode']
+            )
         else:
             from sentence_transformers import SentenceTransformer
             embedder = SentenceTransformer(model_name, cache_folder=cache_folder_path)

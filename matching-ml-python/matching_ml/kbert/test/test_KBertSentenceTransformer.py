@@ -5,13 +5,13 @@ from kbert.constants import RESOURCES_DIR
 from matching_ml.python_server_melt import load_file
 
 
-def test_kbert_sentence_transformer():
+def test_encode():
     # Given
-    model = KBertSentenceTransformer('paraphrase-albert-small-v2')
+    model = KBertSentenceTransformer('paraphrase-albert-small-v2', pooling_mode='mean_target')
     corpus_file_name = str(RESOURCES_DIR / 'corpus_kbert.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
-    embeddings = model.encode(corpus, batch_size=2, convert_to_tensor=True)
+    embeddings = model.encode(corpus[1859:1861], batch_size=2, convert_to_tensor=True)
     assert False
 
 

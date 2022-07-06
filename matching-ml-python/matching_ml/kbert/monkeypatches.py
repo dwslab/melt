@@ -109,6 +109,15 @@ def pooling_forward(self, features: Dict[str, torch.Tensor]):
             output_vectors.append(sum_embeddings / sum_mask)
         if self.pooling_mode_mean_sqrt_len_tokens:
             output_vectors.append(sum_embeddings / torch.sqrt(sum_mask))
+    # =========================================== Modification Start ===================================================
+    if self.pooling_mode_first_target:
+        output_vectors.append(token_embeddings[:, 1, :])
+    if self.pooling_mode_mean_target:
+        target_mask_expanded = features['target_mask'].unsqueeze(-1)
+        sum_embeddings = torch.sum(target_mask_expanded * token_embeddings, 1)
+        sum_mask = target_mask_expanded.sum(1)
+        output_vectors.append(sum_embeddings / sum_mask)
+    # =========================================== Modification End =====================================================
 
     output_vector = torch.cat(output_vectors, 1)
     features.update({'sentence_embedding': output_vector})
