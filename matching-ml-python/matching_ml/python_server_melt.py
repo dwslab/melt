@@ -2065,7 +2065,7 @@ def inner_sentencetransformers_prediction(request_headers):
         both_directions = request_headers["both-directions"].lower() == "true"
         topk_per_resource = request_headers["topk-per-resource"].lower() == "true"
 
-        from sentence_transformers import SentenceTransformer, util
+        from sentence_transformers import util
         import torch
 
         cache_folder_path = (
@@ -2074,7 +2074,12 @@ def inner_sentencetransformers_prediction(request_headers):
             else None
         )
 
-        embedder = SentenceTransformer(model_name, cache_folder=cache_folder_path)
+        if "kbert" in request_headers and request_headers["kbert"].lower() == "true":
+            from kbert.KBertSentenceTransformer import KBertSentenceTransformer
+            embedder = KBertSentenceTransformer(model_name, cache_folder=cache_folder_path)
+        else:
+            from sentence_transformers import SentenceTransformer
+            embedder = SentenceTransformer(model_name, cache_folder=cache_folder_path)
 
         corpus, corpus_pos_to_id = load_file(corpus_file_name)
         queries, queries_pos_to_id = load_file(queries_file_name)
