@@ -1163,12 +1163,22 @@ public class PythonServer {
         File serverResourceDirectory = this.resourcesDirectory;
         serverResourceDirectory.mkdirs();
 
-        exportResource(serverResourceDirectory, "python_server_melt.py");
+        String pythonDirectoryName = "matching_ml";
+        File sourceDirectory = new File(new File(
+                this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()
+        ).getParentFile().getParentFile().getParentFile(), "matching-ml-python/" + pythonDirectoryName);
+        File destination = new File(serverResourceDirectory, pythonDirectoryName);
+        try {
+            FileUtils.copyDirectory(sourceDirectory, destination);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         exportResource(serverResourceDirectory, "requirements.txt");
 
         httpClient = HttpClients.createDefault(); // has to be re-instantiated
         String canonicalPath;
-        File serverFile = new File(serverResourceDirectory, "python_server_melt.py");
+        File serverFile = new File(serverResourceDirectory, pythonDirectoryName + "/python_server_melt.py");
         try {
             if (!serverFile.exists()) {
                 LOGGER.error("Server File does not exist. Cannot start server. ABORTING. Please make sure that " +
