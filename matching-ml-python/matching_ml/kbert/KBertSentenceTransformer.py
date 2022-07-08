@@ -165,8 +165,6 @@ class KBertSentenceTransformer(SentenceTransformer):
         target_tokens = tokenizer.batch_encode_plus(molecules['t'].tolist(), add_special_tokens=False)
         molecules['target_tokens'] = target_tokens.input_ids
         molecules['n_target_tokens'] = molecules['target_tokens'].apply(len)
-        molecules['remaining_tokens'] = np.repeat(self.max_seq_length, len(molecules))
-        molecules['remaining_tokens'] -= molecules['n_target_tokens']
 
         object_statements = prepare_statements(molecules, 'o')
         object_statements['text'] = object_statements['p'] + ' ' + object_statements['n']
@@ -197,7 +195,6 @@ class KBertSentenceTransformer(SentenceTransformer):
         :param target: pandas series representing the target concept to encode, with following fields:
         - target_tokens: list of tokens the target concept is encoded to by original transformer's tokenizer
         - n_target_tokens: number of tokens the target is encoded to by original transformer's tokenizer
-        - remaining_tokens: number of tokens left to be filled before reaching transformer's max sequence length
         :param statements: dataframe containing all statements connected to the given target concept, with following
         columns:
         - p: the statement's predicate's label
@@ -242,17 +239,18 @@ class KBertSentenceTransformer(SentenceTransformer):
             )).set_index('position').sort_index()
 
         # Drop statements that do not fit into the input
-        statements['n_tokens_cumsum'] = statements['n_tokens'].cumsum()
-        statements['token_offset'] = np.pad(statements['n_tokens_cumsum'], (1, 0))[:-1]
-        statements = statements[statements['token_offset'] < target['remaining_tokens']]
+        n_all_seeing_tokens = target['n_target_tokens'] + 1
+        statements['n_tokens_cumsum'] = statements['n_tokens'].cumsum() + n_all_seeing_tokens
+        statements['n_tokens_cumsum_previous'] = np.pad(statements['n_tokens_cumsum'], (1, 0))[:-1]
+        statements = statements[statements['n_tokens_cumsum_previous'] < self.max_seq_length]
 
         seq_padding = np.array([])
         seq_length = self.max_seq_length
 
         # Crop last statement if it only fits partially into the input
         last_statement = statements.iloc[-1]
-        if last_statement['n_tokens_cumsum'] > target['remaining_tokens']:
-            n_tokens_2_crop = last_statement['n_tokens_cumsum'] - target['remaining_tokens']
+        if last_statement['n_tokens_cumsum'] > self.max_seq_length:
+            n_tokens_2_crop = last_statement['n_tokens_cumsum'] - self.max_seq_length
             last_statement_index = last_statement.name
             statements.loc[last_statement_index, ['n_tokens', 'n_tokens_cumsum']] = \
                 statements.loc[last_statement_index, ['n_tokens', 'n_tokens_cumsum']] - n_tokens_2_crop
@@ -260,17 +258,18 @@ class KBertSentenceTransformer(SentenceTransformer):
                 statements.at[last_statement_index, 'tokens'][:-n_tokens_2_crop]
 
         # Add padding if statements are shorter than max_seq_length
-        elif last_statement['n_tokens_cumsum'] < target['remaining_tokens']:
-            seq_length = statements['n_tokens_cumsum'].max() + target['n_target_tokens']
+        elif last_statement['n_tokens_cumsum'] < self.max_seq_length:
+            seq_length = statements['n_tokens_cumsum'].max()
 
             delta_seq_length = self.max_seq_length - seq_length
             seq_padding = np.repeat(0, delta_seq_length)
 
         # Compute position ids of subject statements
         max_tokens_per_role = statements.groupby('role')['n_tokens'].max()
+        offset_target = max_tokens_per_role['s'] + 1
         is_subject_statement = statements['role'] == 's'
         if 's' in max_tokens_per_role:
-            subject_positions = np.arange(max_tokens_per_role['s'])
+            subject_positions = np.arange(1, offset_target)
             statements.loc[is_subject_statement, 'position_ids'] = statements \
                 .loc[is_subject_statement, 'n_tokens'] \
                 .apply(lambda n: subject_positions[max_tokens_per_role['s'] - n:])
@@ -279,11 +278,11 @@ class KBertSentenceTransformer(SentenceTransformer):
 
         # Compute position ids of target
         target['position_ids'] = np.arange(
-            max_tokens_per_role['s'], max_tokens_per_role['s'] + target['n_target_tokens'])
+            offset_target, offset_target + target['n_target_tokens'])
 
         # Compute position ids of object statements
         if 'o' in max_tokens_per_role:
-            offset_object_statements = max_tokens_per_role['s'] + target['n_target_tokens']
+            offset_object_statements = offset_target + target['n_target_tokens']
             object_positions = np.arange(offset_object_statements, offset_object_statements + max_tokens_per_role['o'])
             statements.loc[~is_subject_statement, 'position_ids'] = statements \
                 .loc[~is_subject_statement, 'n_tokens'] \
@@ -292,9 +291,16 @@ class KBertSentenceTransformer(SentenceTransformer):
         # compute attention mask
         attention_mask = np.zeros(2 * [self.max_seq_length])
 
+        # Add holes for target and cls (target and cls tokens can see each other and can see and be seen by all
+        # statement tokens)
+        all_seeing_holes_x = np.tile(np.arange(n_all_seeing_tokens), seq_length)
+        all_seeing_holes_y = np.repeat(np.arange(seq_length), n_all_seeing_tokens)
+        attention_mask[all_seeing_holes_y, all_seeing_holes_x] = 1
+        attention_mask[all_seeing_holes_x, all_seeing_holes_y] = 1
+
         # Add holes for statements (tokens in statements can see each other)
         statements['hole_coordinates'] = statements.apply(
-            lambda row: np.arange(row['token_offset'], row['n_tokens_cumsum']), axis=1)
+            lambda row: np.arange(row['n_tokens_cumsum_previous'], row['n_tokens_cumsum']), axis=1)
         statement_holes = statements.apply(
             lambda row: pd.Series({
                 'y': np.tile(row['hole_coordinates'], row['n_tokens_cumsum']),
@@ -302,22 +308,19 @@ class KBertSentenceTransformer(SentenceTransformer):
             }), axis=1
         ).apply(np.concatenate)
         attention_mask[statement_holes['y'], statement_holes['x']] = 1
-
-        # Add holes for target (target tokens can see each other and can see and be seen by all statement tokens)
-        target_holes_x = np.tile(np.arange(seq_length - target['n_target_tokens'], seq_length), seq_length)
-        target_holes_y = np.repeat(np.arange(seq_length), target['n_target_tokens'])
-        attention_mask[target_holes_y, target_holes_x] = 1
-        attention_mask[target_holes_x, target_holes_y] = 1
+        # todo: also make sure cls token has correct position and correct id and correct type
 
         return pd.Series({
             'input_ids': np.concatenate([
-                *statements['tokens'],
+                [self.tokenizer.cls_token_id],
                 target['target_tokens'],
+                *statements['tokens'],
                 seq_padding
             ])[np.newaxis, :],
             'position_ids': np.concatenate([
-                *statements['position_ids'],
+                [0],
                 target['position_ids'],
+                *statements['position_ids'],
                 seq_padding
             ])[np.newaxis, :],
             'token_type_ids': np.zeros((1, self.max_seq_length)),
