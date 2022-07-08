@@ -44,6 +44,8 @@ public class SentenceTransformersMatcher extends TransformersBase {
     private boolean bothDirections;
     private boolean topkPerResource;
     protected String fileSuffix;
+
+    private String poolingMode;
     
     public SentenceTransformersMatcher(TextExtractorMap extractor, String modelName){
         super(extractor, modelName);
@@ -54,6 +56,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
         this.bothDirections = true;
         this.topkPerResource = true;
         this.fileSuffix = ".txt";
+        this.poolingMode = "mean";
     }
     
     public SentenceTransformersMatcher(TextExtractor extractor, String modelName){
@@ -311,5 +314,13 @@ public class SentenceTransformersMatcher extends TransformersBase {
         if(usingTensorflow){
             throw new IllegalArgumentException("SentenceTransformersMatcher only work with Pytorch. Do not set usingTensorflow to true.");
         }
+    }
+
+    public String getPoolingMode() {
+        return poolingMode;
+    }
+
+    public void setPoolingMode(String poolingMode) {
+        this.poolingMode = poolingMode;
     }
 }

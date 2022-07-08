@@ -217,6 +217,7 @@ public class PythonServer {
         request.addHeader("both-directions", Boolean.toString(matcher.isBothDirections()));
         request.addHeader("topk-per-resource", Boolean.toString(matcher.isTopkPerResource()));
         request.addHeader("kbert", Boolean.toString(matcher.getClass() == KBertSentenceTransformersMatcher.class));
+        request.addHeader("pooling-mode", matcher.getPoolingMode());
 
         String resultString = runRequest(request);
         try {

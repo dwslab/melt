@@ -132,7 +132,7 @@ def get_group_y_in_round_x(group_sizes: pd.Series, max_group_size: int = None) -
 
 
 class KBertSentenceTransformer(SentenceTransformer):
-    def __init__(self, model_name_or_path, **kwargs):
+    def __init__(self, model_name_or_path, pooling_mode=None, **kwargs):
         super().__init__(model_name_or_path, **kwargs)
 
         transformer_module = self._first_module()
@@ -157,6 +157,17 @@ class KBertSentenceTransformer(SentenceTransformer):
 
         pooling_module = self._last_module()
         pooling_module.forward = lambda features: pooling_forward(pooling_module, features)
+
+        pooling_module.pooling_mode_first_target = False
+        pooling_module.pooling_mode_mean_target = False
+        if pooling_mode is not None and pooling_mode in {'first_target', 'mean_target'}:
+            pooling_module.pooling_mode_mean_tokens = False
+            pooling_module.pooling_mode_max_tokens = False
+            pooling_module.pooling_mode_cls_token = False
+            if pooling_mode == 'first_target':
+                pooling_module.pooling_mode_first_target = True
+            if pooling_mode == 'mean_target':
+                pooling_module.pooling_mode_mean_target = True
 
     def tokenize(self, texts: Union[List[str], List[Dict], List[Tuple[str, str]]]) -> Dict[str, torch.Tensor]:
         molecules = pd.DataFrame([json.loads(text) for text in texts])
@@ -187,7 +198,18 @@ class KBertSentenceTransformer(SentenceTransformer):
             statements=s
         ))
 
-        return {label: torch.IntTensor(np.concatenate(col)) for label, col in encodings.iteritems()}
+        target_mask = np.zeros((molecules.shape[0], self.max_seq_length))
+        mask_holes = molecules[['n_target_tokens']].apply(lambda row: pd.Series({
+            'x': np.arange(1, row['n_target_tokens'] + 1),
+            'y': np.repeat(row.name, row['n_target_tokens'])
+        }), axis=1).apply(np.concatenate)
+        target_mask[mask_holes['y'], mask_holes['x']] = 1
+
+        return {
+                   label: torch.IntTensor(np.concatenate(col)) for label, col in encodings.iteritems()
+               } | {
+                   'target_mask': torch.IntTensor(target_mask)
+               }
 
     def encode_statements_for_target(self, target: pd.Series, statements: pd.DataFrame):
         """
@@ -254,8 +276,13 @@ class KBertSentenceTransformer(SentenceTransformer):
             last_statement_index = last_statement.name
             statements.loc[last_statement_index, ['n_tokens', 'n_tokens_cumsum']] = \
                 statements.loc[last_statement_index, ['n_tokens', 'n_tokens_cumsum']] - n_tokens_2_crop
-            statements.at[last_statement_index, 'tokens'] = \
-                statements.at[last_statement_index, 'tokens'][:-n_tokens_2_crop]
+            if last_statement['role'] == 's':
+                statements.at[last_statement_index, 'tokens'] = \
+                    statements.at[last_statement_index, 'tokens'][n_tokens_2_crop:]
+            else:
+                statements.at[last_statement_index, 'tokens'] = \
+                    statements.at[last_statement_index, 'tokens'][:-n_tokens_2_crop]
+
 
         # Add padding if statements are shorter than max_seq_length
         elif last_statement['n_tokens_cumsum'] < self.max_seq_length:
@@ -266,15 +293,15 @@ class KBertSentenceTransformer(SentenceTransformer):
 
         # Compute position ids of subject statements
         max_tokens_per_role = statements.groupby('role')['n_tokens'].max()
-        offset_target = max_tokens_per_role['s'] + 1
         is_subject_statement = statements['role'] == 's'
         if 's' in max_tokens_per_role:
+            offset_target = max_tokens_per_role['s'] + 1
             subject_positions = np.arange(1, offset_target)
             statements.loc[is_subject_statement, 'position_ids'] = statements \
                 .loc[is_subject_statement, 'n_tokens'] \
                 .apply(lambda n: subject_positions[max_tokens_per_role['s'] - n:])
         else:
-            max_tokens_per_role['s'] = 0
+            offset_target = 1
 
         # Compute position ids of target
         target['position_ids'] = np.arange(
