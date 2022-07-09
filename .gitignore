@@ -131,3 +131,4 @@ matching-eval-client/dependency-reduced-pom.xml
 
 # mapdb files
 *.wal.0
+/matching-ml-python/matching_ml/test/.pytest_cache/v/cache/
