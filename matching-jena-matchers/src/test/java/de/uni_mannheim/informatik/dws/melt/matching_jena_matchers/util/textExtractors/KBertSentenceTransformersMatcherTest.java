@@ -25,7 +25,7 @@ public class KBertSentenceTransformersMatcherTest {
         URL source = testCase.getSource().toURL();
         OntModel sourceOntology = getTransformedObject(source, OntModel.class, properties);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                new TextExtractorKBert(false), "paraphrase-MiniLM-L6-v2");
+                new TextExtractorKBert(false, true), "paraphrase-MiniLM-L6-v2");
         File corpus = FileUtil.createFileWithRandomNumber("corpus", ".csv");
 
         // when
@@ -43,7 +43,7 @@ public class KBertSentenceTransformersMatcherTest {
         URL source = testCase.getSource().toURL();
         OntModel sourceOntology = getTransformedObject(source, OntModel.class, properties);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                new TextExtractorKBert(true), "paraphrase-MiniLM-L6-v2");
+                new TextExtractorKBert(true, true), "paraphrase-MiniLM-L6-v2");
         File corpus = FileUtil.createFileWithRandomNumber("corpus", ".csv");
 
         // when
@@ -61,7 +61,7 @@ public class KBertSentenceTransformersMatcherTest {
         URL target = testCase.getTarget().toURL();
         OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                new TextExtractorKBert(true), "paraphrase-MiniLM-L6-v2");
+                new TextExtractorKBert(true, true), "paraphrase-MiniLM-L6-v2");
         File corpus = FileUtil.createFileWithRandomNumber("queries", ".csv");
 
         // when

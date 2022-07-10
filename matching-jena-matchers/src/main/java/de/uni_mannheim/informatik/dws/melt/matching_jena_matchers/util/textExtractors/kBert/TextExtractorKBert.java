@@ -28,10 +28,12 @@ import static de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransfor
 import static org.apache.commons.lang3.StringEscapeUtils.escapeCsv;
 
 public class TextExtractorKBert implements TextExtractor {
-    private boolean useAllTargets;
+    private final boolean useAllTargets;
+    private final boolean normalize;
 
-    public TextExtractorKBert(boolean useAllTargets) {
+    public TextExtractorKBert(boolean useAllTargets, boolean normalize) {
         this.useAllTargets = useAllTargets;
+        this.normalize = normalize;
     }
 
     @Override
@@ -71,29 +73,34 @@ public class TextExtractorKBert implements TextExtractor {
             targets = Set.of(targetNormalizedLiteral);
         }
         // skip triples where object has target resource label
-        Set<Map<String, String>> normalizedObjectStatements = null;
+        Set<Map<String, String>> objectStatementRows = null;
         try {
-            normalizedObjectStatements = objectStatementStream
+            objectStatementRows = objectStatementStream
                     .filter(osm -> !targets.contains(osm.getNeighbor().getNormalizedLiteral()))
-                    .map(ObjectStatement::getRow)
+                    .map(stmt -> this.normalize ? stmt.getNormalizedRow() : stmt.getRawRow())
                     .collect(Collectors.toSet());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         Iterable<Statement> subjectStatements = () -> targetResource.getModel().listStatements(null, null, targetResource);
-        Set<Map<String, String>> normalizedSubjectStatements = StreamSupport
+        Set<Map<String, String>> subjectStatementRows = StreamSupport
                 .stream(subjectStatements.spliterator(), false)
                 .filter(statement -> !statement.getSubject().isAnon())
-                .map(statement -> new SubjectStatement(statement).getRow())
+                .map(statement -> {
+                    SubjectStatement stmt = new SubjectStatement(statement);
+                    return this.normalize ? stmt.getNormalizedRow() : stmt.getRawRow();
+                })
                 .collect(Collectors.toSet());
 
         String jsonMolecule;
         ObjectMapper mapper = new ObjectMapper();
         try {
             jsonMolecule = mapper.writer().writeValueAsString(Map.of(
-                    "t", targets.stream().map(NormalizedLiteral::getLexical).collect(Collectors.toSet()),
-                    "s", SetUtils.union(normalizedSubjectStatements, normalizedObjectStatements)
+                    "t", targets.stream()
+                            .map(t -> this.normalize ? t.getNormalized() : t.getLexical())
+                            .collect(Collectors.toSet()),
+                    "s", SetUtils.union(subjectStatementRows, objectStatementRows)
             ));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

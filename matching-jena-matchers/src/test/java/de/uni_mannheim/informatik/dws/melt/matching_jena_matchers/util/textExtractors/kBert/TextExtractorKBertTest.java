@@ -28,7 +28,7 @@ class TextExtractorKBertTest {
         URL target = testCase.getTarget().toURL();
         OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                new TextExtractorKBert(true), "paraphrase-MiniLM-L6-v2");
+                new TextExtractorKBert(true, true), "paraphrase-MiniLM-L6-v2");
         TextExtractorMap simpleTextExtractor = matcher.getExtractorMap();
         Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
         OntResource resource = StreamSupport.stream(getIterable(resourceIterator).spliterator(), false)

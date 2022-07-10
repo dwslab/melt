@@ -41,4 +41,8 @@ public class NormalizedLiteral {
     public String getLexical() {
         return lexical;
     }
+
+    public String getNormalized() {
+        return normalized;
+    }
 }

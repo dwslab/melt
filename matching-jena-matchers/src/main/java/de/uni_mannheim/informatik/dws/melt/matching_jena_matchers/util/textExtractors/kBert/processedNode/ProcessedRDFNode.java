@@ -14,5 +14,9 @@ public abstract class ProcessedRDFNode {
         return new NormalizedLiteral(getRaw());
     }
 
+    public String getNormalized() {
+        return getNormalizedLiteral().getNormalized();
+    }
+
     public abstract String getRaw();
 }
