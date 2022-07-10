@@ -31,7 +31,7 @@ public abstract class Evaluator {
     /**
      *  The directory where the results shall be written to.
      */
-    private static File resultsDirectory;
+    public static File resultsDirectory;
     static {
         setDefaultResultsDirectory(new File("results"));
     }

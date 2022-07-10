@@ -7,6 +7,6 @@ import org.apache.jena.rdf.model.Statement;
 public class ResourceObjectStatement extends ObjectStatement<ProcessedResource<Resource>> {
     public ResourceObjectStatement(Statement statement) {
         super(statement);
-        this.object = new ProcessedResource<>(statement.getResource());
+        this.neighbor = new ProcessedResource<>(statement.getResource());
     }
 }

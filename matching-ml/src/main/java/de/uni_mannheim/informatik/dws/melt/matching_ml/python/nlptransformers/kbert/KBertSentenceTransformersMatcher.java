@@ -17,11 +17,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.StreamSupport;
 
 public class KBertSentenceTransformersMatcher extends SentenceTransformersMatcher {
+    public static final Map<Boolean, String> NORMALIZED_MAP = Map.of(true, "normalized", false, "raw");
+    public static final Map<Boolean, String> ALL_TARGETS_MAP = Map.of(true, "all_targets", false, "one_target");
+
     public KBertSentenceTransformersMatcher(TextExtractor extractor, String modelName) {
         super(extractor, modelName);
         this.fileSuffix = ".csv";

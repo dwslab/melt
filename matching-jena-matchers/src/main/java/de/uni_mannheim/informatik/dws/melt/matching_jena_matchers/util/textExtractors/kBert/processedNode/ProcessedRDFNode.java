@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.StringProcessing;
+
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.NormalizedLiteral;
 
 public abstract class ProcessedRDFNode {
 
@@ -9,9 +10,13 @@ public abstract class ProcessedRDFNode {
      *
      * @return todo
      */
-    public String getNormalized() {
-        return StringProcessing.normalizeJoining(getRaw());
+    public NormalizedLiteral getNormalizedLiteral() {
+        return new NormalizedLiteral(getRaw());
     }
 
-    protected abstract String getRaw();
+    public String getNormalized() {
+        return getNormalizedLiteral().getNormalized();
+    }
+
+    public abstract String getRaw();
 }

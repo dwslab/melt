@@ -298,7 +298,7 @@ http://mouse.owl#MA_0002254,vein of trabecular bone
 http://mouse.owl#MA_0002275,cleidocephalic
 http://mouse.owl#MA_0000702,aorta smooth muscle
 http://mouse.owl#MA_0000569,head/neck bone
-http://www.geneontology.org/formats/oboInOwl#SynonymType,Synonym Type
+http://www.geneontology.org/formats/oboInOwl#SynonymType,SynonymType
 http://mouse.owl#MA_0002063,testicular artery
 http://mouse.owl#MA_0002546,juxtaglomerular apparatus juxtaglomerular complex
 http://mouse.owl#MA_0000887,amygdaloid area amygdala
@@ -2286,7 +2286,7 @@ http://mouse.owl#MA_0001286,vitreous humour vitreous humor
 http://mouse.owl#MA_0002707,nail matrix
 http://mouse.owl#MA_0002561,stomach region
 http://mouse.owl#MA_0001754,larynx connective tissue
-http://www.geneontology.org/formats/oboInOwl#DbXref,Db Xref
+http://www.geneontology.org/formats/oboInOwl#DbXref,DbXref
 http://mouse.owl#MA_0000679,lower leg nerve
 http://mouse.owl#MA_0002306,gastrocnemius
 http://mouse.owl#MA_0000977,islands of Calleja
@@ -2550,7 +2550,7 @@ http://mouse.owl#MA_0001199,tectorial membrane
 http://mouse.owl#MA_0000107,elastic cartilage
 http://mouse.owl#MA_0000813,brain meninges
 http://mouse.owl#MA_0000407,prepuce
-http://www.geneontology.org/formats/oboInOwl#ObsoleteClass,Obsolete Class
+http://www.geneontology.org/formats/oboInOwl#ObsoleteClass,ObsoleteClass
 http://mouse.owl#MA_0002657,ureter subluminal urothelium
 http://mouse.owl#MA_0000923,presubiculum
 http://mouse.owl#MA_0000197,metencephalon

@@ -6,6 +6,6 @@ import org.apache.jena.rdf.model.Statement;
 public class LiteralObjectStatement extends ObjectStatement<ProcessedLiteral> {
     public LiteralObjectStatement(Statement statement) {
         super(statement);
-        this.object = new ProcessedLiteral(statement.getLiteral());
+        this.neighbor = new ProcessedLiteral(statement.getLiteral());
     }
 }

@@ -23,10 +23,12 @@ public class PropertyVocabulary {
         
         ResourceFactory.createProperty("http://schema.org/name"),
         ResourceFactory.createProperty("http://schema.org/alternateName"),
-        ResourceFactory.createProperty("http://schema.org/additionalName")
+        ResourceFactory.createProperty("http://schema.org/additionalName"),
+
+        ResourceFactory.createProperty("http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym")
     ));
     
-    public static final Set<String> LABEL_NAMES = new HashSet<>(Arrays.asList("label", "name"));
+    public static final Set<String> LABEL_NAMES = Set.of("label", "name", "hasrelatedsynonym");
     
     public static final Set<Property> COMMENT_LIKE_PROPERTIES = new HashSet<>(Arrays.asList(
         ResourceFactory.createProperty("http://www.w3.org/2000/01/rdf-schema#comment"),
@@ -38,10 +40,12 @@ public class PropertyVocabulary {
         ResourceFactory.createProperty("http://dbpedia.org/ontology/description"),
 
         ResourceFactory.createProperty("http://purl.org/dc/terms/abstract"),
-        ResourceFactory.createProperty("http://dbpedia.org/ontology/abstract")
+        ResourceFactory.createProperty("http://dbpedia.org/ontology/abstract"),
+
+        ResourceFactory.createProperty("http://www.geneontology.org/formats/oboInOwl#hasDefinition")
     ));
     
-    public static final Set<String> COMMENT_NAMES = new HashSet<>(Arrays.asList("comment", "description", "abstract"));
+    public static final Set<String> COMMENT_NAMES = Set.of("comment", "description", "abstract", "hasdefinition");
     
     
     public static final Set<Property> DESCRIPTIVE_PROPERTIES = getDescriptiveProperties();

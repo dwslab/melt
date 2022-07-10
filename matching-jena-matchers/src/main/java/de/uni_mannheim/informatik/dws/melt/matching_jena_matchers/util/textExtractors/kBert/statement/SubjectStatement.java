@@ -1,26 +1,15 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.statement;
 
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode.ProcessedProperty;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode.ProcessedResource;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 
-import java.util.Map;
-
-public class SubjectStatement {
-    protected final ProcessedProperty predicate;
-    protected final ProcessedResource<Resource> subject;
+public class SubjectStatement extends ProcessedStatement<ProcessedResource<Resource>> {
 
     public SubjectStatement(Statement statement) {
-        this.predicate = new ProcessedProperty(statement.getPredicate());
-        this.subject = new ProcessedResource<>(statement.getSubject());
+        super(statement);
+        this.neighbor = new ProcessedResource<>(statement.getSubject());
+        this.role = NeighborRole.SUBJECT;
     }
 
-    public Map<String, String> getNormalized() {
-        return Map.of("p", predicate.getNormalized(), "s", subject.getNormalized());
-    }
-
-    public ProcessedProperty getPredicate() {
-        return predicate;
-    }
 }

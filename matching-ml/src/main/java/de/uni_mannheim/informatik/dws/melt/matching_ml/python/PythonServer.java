@@ -66,6 +66,7 @@ public class PythonServer {
      * ObjectMapper from jackson to generate JSON.
      */
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+    public static final String PYTHON_DIRECTORY_NAME = "matching_ml";
 
     /**
      * Constructor
@@ -1166,11 +1167,10 @@ public class PythonServer {
         File serverResourceDirectory = this.resourcesDirectory;
         serverResourceDirectory.mkdirs();
 
-        String pythonDirectoryName = "matching_ml";
         File sourceDirectory = new File(new File(
                 this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()
-        ).getParentFile().getParentFile().getParentFile(), "matching-ml-python/" + pythonDirectoryName);
-        File destination = new File(serverResourceDirectory, pythonDirectoryName);
+        ).getParentFile().getParentFile().getParentFile(), "matching-ml-python/" + PYTHON_DIRECTORY_NAME);
+        File destination = new File(serverResourceDirectory, PYTHON_DIRECTORY_NAME);
         try {
             FileUtils.copyDirectory(sourceDirectory, destination);
         } catch (IOException e) {
@@ -1181,7 +1181,7 @@ public class PythonServer {
 
         httpClient = HttpClients.createDefault(); // has to be re-instantiated
         String canonicalPath;
-        File serverFile = new File(serverResourceDirectory, pythonDirectoryName + "/python_server_melt.py");
+        File serverFile = new File(serverResourceDirectory, PYTHON_DIRECTORY_NAME + "/python_server_melt.py");
         try {
             if (!serverFile.exists()) {
                 LOGGER.error("Server File does not exist. Cannot start server. ABORTING. Please make sure that " +
