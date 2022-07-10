@@ -17,7 +17,7 @@ import static de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.
 
 public class KBertSentenceTransformersMatcherTest {
     @Test
-    public void testGenerateKBertInput() throws Exception {
+    public void testGenerateKBertInputOneTarget() throws Exception {
         // given
         TestCase testCase = TrackRepository.Anatomy.Default.getTestCase(0);
         URL parameters = testCase.getParameters().toURL();
@@ -25,11 +25,47 @@ public class KBertSentenceTransformersMatcherTest {
         URL source = testCase.getSource().toURL();
         OntModel sourceOntology = getTransformedObject(source, OntModel.class, properties);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                new TextExtractorKBert(), "paraphrase-MiniLM-L6-v2");
+                new TextExtractorKBert(false), "paraphrase-MiniLM-L6-v2");
         File corpus = FileUtil.createFileWithRandomNumber("corpus", ".csv");
 
         // when
         matcher.createTextFile(sourceOntology, corpus, matcher.getResourcesExtractor().get(0), properties);
+
+        // then
+        System.out.println("");
+    }
+    @Test
+    public void testGenerateKBertInputAllTargets() throws Exception {
+        // given
+        TestCase testCase = TrackRepository.Anatomy.Default.getTestCase(0);
+        URL parameters = testCase.getParameters().toURL();
+        Properties properties = getTransformedPropertiesOrNewInstance(parameters);
+        URL source = testCase.getSource().toURL();
+        OntModel sourceOntology = getTransformedObject(source, OntModel.class, properties);
+        KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
+                new TextExtractorKBert(true), "paraphrase-MiniLM-L6-v2");
+        File corpus = FileUtil.createFileWithRandomNumber("corpus", ".csv");
+
+        // when
+        matcher.createTextFile(sourceOntology, corpus, matcher.getResourcesExtractor().get(0), properties);
+
+        // then
+        System.out.println("");
+    }
+    @Test
+    public void testGenerateKBertInputAllTargetsQueries() throws Exception {
+        // given
+        TestCase testCase = TrackRepository.Anatomy.Default.getTestCase(0);
+        URL parameters = testCase.getParameters().toURL();
+        Properties properties = getTransformedPropertiesOrNewInstance(parameters);
+        URL target = testCase.getTarget().toURL();
+        OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
+        KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
+                new TextExtractorKBert(true), "paraphrase-MiniLM-L6-v2");
+        File corpus = FileUtil.createFileWithRandomNumber("queries", ".csv");
+
+        // when
+        matcher.createTextFile(targetOntology, corpus, matcher.getResourcesExtractor().get(0), properties);
 
         // then
         System.out.println("");

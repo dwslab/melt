@@ -16,13 +16,13 @@ public class ProcessedResource<T extends Resource> extends ProcessedRDFNode {
         this.resource = resource;
     }
 
-    protected String getRaw() {
+    public String getRaw() {
         Iterable<Statement> statements = resource::listProperties;
         return StreamSupport.stream(statements.spliterator(), false)
                 .filter(s -> s.getObject().isLiteral())
                 .map(LiteralObjectStatement::new)
                 .min(Comparator.comparing(s -> s.getPredicate().getLabelType()))
-                .map(s -> s.getObject().getNormalized())
+                .map(s -> s.getNeighbor().getRaw())
                 .or(() -> Optional.ofNullable(new TextExtractorUrlFragment().extract(resource).iterator().next()))
                 .orElse(null);
     }

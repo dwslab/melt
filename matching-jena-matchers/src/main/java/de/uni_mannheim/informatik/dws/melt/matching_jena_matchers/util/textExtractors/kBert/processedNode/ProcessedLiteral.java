@@ -10,7 +10,7 @@ public class ProcessedLiteral extends ProcessedRDFNode {
     }
 
     @Override
-    protected String getRaw() {
+    public String getRaw() {
         return literal.getLexicalForm().trim();
     }
 }

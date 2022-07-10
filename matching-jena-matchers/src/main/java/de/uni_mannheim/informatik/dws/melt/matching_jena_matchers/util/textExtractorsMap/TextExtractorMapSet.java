@@ -6,17 +6,17 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.PropertyVocabulary;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.StringProcessing;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.URIUtil;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -25,112 +25,78 @@ import org.apache.jena.rdf.model.StmtIterator;
  * or {@link de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFineTuner}.
  */
 public class TextExtractorMapSet implements TextExtractorMap {
-    private TextExtractorAllAnnotationProperties annotationExtractor = new TextExtractorAllAnnotationProperties();
-    
+    private TextExtractorLongAndShortAnnotationProperties annotationExtractor =
+            new TextExtractorLongAndShortAnnotationProperties();
+
     @Override
     public Map<String, Set<String>> extract(Resource r) {
-        Set<NormalizedLiteral> shortTexts = new HashSet<>();
-        Set<NormalizedLiteral> longTexts = new HashSet<>();
-        
+        Map<String, Set<NormalizedLiteral>> texts = getLongAndShortTextNormalizedLiterals(r);
+
+        Map<String, Set<String>> extractedLiterals = new HashMap<>();
+        extractedLiterals.put("shortTexts", getTexts(texts.get("short")));
+        extractedLiterals.put("longTexts", getTexts(texts.get("long")));
+        return extractedLiterals;
+    }
+
+    @NotNull
+    public Map<String, Set<NormalizedLiteral>> getLongAndShortTextNormalizedLiterals(Resource r) {
+        Map<String, Set<NormalizedLiteral>> texts = Map.of("short", new HashSet<>(), "long", new HashSet<>());
+
         String longestLiteral = "";
         StmtIterator i = r.listProperties();
-        while(i.hasNext()){
+        while (i.hasNext()) {
             Statement stmt = i.next();
             RDFNode object = stmt.getObject();
-            if(object.isLiteral()){
+            if (object.isLiteral()) {
                 Literal literal = object.asLiteral();
-                if(TextExtractorAllStringLiterals.isLiteralAString(literal)){
+                if (TextExtractorAllStringLiterals.isLiteralAString(literal)) {
                     String text = literal.getLexicalForm().trim();
-                    if(!text.isEmpty()){
+                    if (!text.isEmpty()) {
                         Property p = stmt.getPredicate();
-                        
-                        if(PropertyVocabulary.hasPropertyLabelFragment(p)){
-                            shortTexts.add(new NormalizedLiteral(text));
-                        }else if(PropertyVocabulary.hasPropertyCommentFragment(p)){
-                            longTexts.add(new NormalizedLiteral(text));
-                        }                        
-                        if(text.length() > longestLiteral.length()){
+
+                        if (PropertyVocabulary.hasPropertyLabelFragment(p)) {
+                            texts.get("short").add(new NormalizedLiteral(text));
+                        } else if (PropertyVocabulary.hasPropertyCommentFragment(p)) {
+                            texts.get("long").add(new NormalizedLiteral(text));
+                        }
+                        if (text.length() > longestLiteral.length()) {
                             longestLiteral = text;
                         }
                     }
                 }
             }
         }
-        
-        if(longestLiteral.isEmpty() == false){
+
+        if (longestLiteral.isEmpty() == false) {
             NormalizedLiteral longest = new NormalizedLiteral(longestLiteral);
-            if(shortTexts.contains(longest) == false && longTexts.contains(longest) == false){
-                longTexts.add(longest);
+            if (texts.get("short").contains(longest) == false && texts.get("long").contains(longest) == false) {
+                texts.get("long").add(longest);
             }
         }
-            
-        
-        //add literal
+
+
+        // add uri fragment text
         String uri = r.getURI();
-        if(uri != null){
+        if (uri != null) {
             String fragment = URIUtil.getUriFragment(uri).trim();
-            if(StringProcessing.containsMostlyNumbers(fragment) == false){
-                shortTexts.add(new NormalizedLiteral(fragment));
+            if (StringProcessing.containsMostlyNumbers(fragment) == false) {
+                texts.get("short").add(new NormalizedLiteral(fragment));
             }
         }
-        
-        //add annotation properties
-        for(String s : annotationExtractor.extract(r)){
-            NormalizedLiteral candidate = new NormalizedLiteral(s);
-            if(shortTexts.contains(candidate) == false && longTexts.contains(candidate) == false){
-                shortTexts.add(candidate);
-            }
-        }
-                
-        Map<String, Set<String>> extractedLiterals = new HashMap<>();
-        extractedLiterals.put("shortTexts", getTexts(shortTexts));
-        extractedLiterals.put("longTexts", getTexts(longTexts));        
-        return extractedLiterals;
+
+        // add annotation properties
+        annotationExtractor.extract(r).forEach((key, value) ->
+                texts.get(key).addAll(value.stream().map(NormalizedLiteral::new).collect(Collectors.toSet()))
+        );
+
+        return texts;
     }
-    
-    private Set<String> getTexts(Set<NormalizedLiteral> literals){
+
+    private Set<String> getTexts(Set<NormalizedLiteral> literals) {
         Set<String> extractedLiterals = new HashSet<>();
-        for(NormalizedLiteral l : literals){
+        for (NormalizedLiteral l : literals) {
             extractedLiterals.add(l.getLexical());
         }
         return extractedLiterals;
-    }
-}
-class NormalizedLiteral{
-    private final String lexical;
-    private final String normalized;
-
-    public NormalizedLiteral(String lexical) {
-        this.lexical = lexical;
-        this.normalized = String.join(" ", StringProcessing.normalize(lexical));
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 59 * hash + Objects.hashCode(this.normalized);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final NormalizedLiteral other = (NormalizedLiteral) obj;
-        if (!Objects.equals(this.normalized, other.normalized)) {
-            return false;
-        }
-        return true;
-    }
-    
-    public String getLexical() {
-        return lexical;
     }
 }
