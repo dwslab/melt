@@ -57,7 +57,6 @@ public class TextExtractorKBert implements TextExtractor {
         if (this.useAllTargets) {
             targets = new TextExtractorMapSet()
                     .getLongAndShortTextNormalizedLiterals(targetResource).get("short");
-            System.out.println("");
         } else {
             Set<ObjectStatement<? extends ProcessedRDFNode>> literalObjectStatements =
                     processedObjectStatements.get(LiteralObjectStatement.class);

@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors;
 
-import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.TextExtractorKBert;
@@ -23,8 +22,6 @@ public class KBertSentenceTransformersMatcherTest {
 
     @Test
     public void testGenerateKBertInputVariations() throws Exception {
-        Map<Boolean, String> normalizedMap = Map.of(true, "normalized", false, "raw");
-        Map<Boolean, String> allTargetsMap = Map.of(true, "all_targets", false, "one_target");
         File rootFile = new File(
                 new File(
                         this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()
@@ -41,7 +38,7 @@ public class KBertSentenceTransformersMatcherTest {
                     OntModel sourceOntology = getTransformedObject(source, OntModel.class, properties);
                     KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
                             new TextExtractorKBert(allTargets, normalized), "paraphrase-MiniLM-L6-v2");
-                    File targetFile = new File(rootFile, normalizedMap.get(normalized) + "/" + allTargetsMap.get(allTargets) + "/" + entry.getKey() + ".csv");
+                    File targetFile = new File(rootFile, KBertSentenceTransformersMatcher.NORMALIZED_MAP.get(normalized) + "/" + KBertSentenceTransformersMatcher.ALL_TARGETS_MAP.get(allTargets) + "/" + entry.getKey() + ".csv");
 
                     // when
                     matcher.createTextFile(sourceOntology, targetFile, matcher.getResourcesExtractor().get(0), properties);

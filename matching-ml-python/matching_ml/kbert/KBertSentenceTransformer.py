@@ -17,6 +17,12 @@ RANDOM_STATE = RandomState(seed=SEED)
 ROLE_RANKS = pd.Series({'s': 1, 'o': 0}, name='rank')
 
 
+def get_token_offsets(df: pd.DataFrame, offset):
+    df['token_offset_next'] = df['n_tokens'].cumsum() + offset
+    df['token_offset'] = np.pad(df['token_offset_next'], (1, 0), constant_values=offset)[:-1]
+    return df
+
+
 def add_neighbor_positions(predicate_df: pd.DataFrame, neighbor_positions: npt.NDArray[int]) -> pd.DataFrame:
     """
     Given a dataframe of all neighbors for a specific predicate with a specific role, and the positions at which
@@ -78,7 +84,7 @@ def get_global_predicate_positions_for_outer_round(predicates: pd.Series, max_pr
     :return: pandas series indexed with combinations of role and predicate, indicating the global position at which each
     predicate appears when iterating over both predicates and roles
     """
-    n_predicates_per_role_in_this_outer_round = predicates.groupby('role').sum()
+    n_predicates_per_role_in_this_outer_round = predicates.groupby('r').sum()
 
     inner_round_offsets = pd.DataFrame(
         data=get_group_y_in_round_x(n_predicates_per_role_in_this_outer_round, max_group_size=max_predicates_per_role),
@@ -96,7 +102,7 @@ def get_global_predicate_positions_for_outer_round(predicates: pd.Series, max_pr
         predicates=role_predicates,
         inner_round_offsets=inner_round_offsets_by_role.loc[role],
         outer_round_offset=outer_round_offset
-    ) for role, role_predicates in predicates.groupby('role')])
+    ) for role, role_predicates in predicates.groupby('r')])
     global_predicate_positions.name = predicates.name
     return global_predicate_positions
 
@@ -112,7 +118,7 @@ def prepare_statements(role, molecules):
     else:
         statements = pd.DataFrame(statement_dicts.tolist(), columns=['p', role], index=statement_dicts.index) \
             .rename(columns={role: 'n'})
-    statements['role'] = role
+    statements['r'] = role
     return statements
 
 
@@ -142,14 +148,19 @@ def get_statement_texts(statements: pd.DataFrame) -> pd.DataFrame:
     :param statements: pandas Dataframe with following columns:
     - p: text of statement's predicate
     - n: text of statement's neighbor (object or subject)
-    - role: 's' if n is a subject, 'o' if it is an object
+    - r: 's' if n is a subject, 'o' if it is an object
     :return: statements dataframe with new column 'text' containing textual representation of the statement
     """
-    statements.loc[statements['role'] == 's', 'text'] = \
-        statements.loc[statements['role'] == 's', 'n'] + ' ' + statements.loc[statements['role'] == 's', 'p']
-    statements.loc[statements['role'] == 'o', 'text'] = \
-        statements.loc[statements['role'] == 'o', 'p'] + ' ' + statements.loc[statements['role'] == 'o', 'n']
+    statements.loc[statements['r'] == 's', 'text'] = \
+        statements.loc[statements['r'] == 's', 'n'] + ' ' + statements.loc[statements['r'] == 's', 'p']
+    statements.loc[statements['r'] == 'o', 'text'] = \
+        statements.loc[statements['r'] == 'o', 'p'] + ' ' + statements.loc[statements['r'] == 'o', 'n']
     return statements
+
+
+def molecules_from_texts(texts):
+    molecules = pd.DataFrame([json.loads(text) for text in texts])
+    return molecules
 
 
 class KBertSentenceTransformer(SentenceTransformer):
@@ -191,48 +202,59 @@ class KBertSentenceTransformer(SentenceTransformer):
                 pooling_module.pooling_mode_mean_target = True
 
     def tokenize(self, texts: Union[List[str], List[Dict], List[Tuple[str, str]]]) -> Dict[str, torch.Tensor]:
-        molecules = self.molecules_from_texts(texts)
+        molecules = molecules_from_texts(texts)
+        targets = self.targets_from_molecules(molecules)
+        molecules['n_target_tokens'] = group_by_index(targets)['n_tokens'].sum()
+        molecules.loc[molecules['n_target_tokens'] > self.max_seq_length - 1, 'n_target_tokens'] = self.max_seq_length - 1
         statements = self.statements_from_molecules(molecules)
-        encodings = group_by_index(statements).apply(lambda s: self.encode_statements_for_target(
-            target=molecules.loc[s.name],
+        encodings = group_by_index(statements).apply(lambda s: self.encode_statements_for_targets(
+            targets=targets.loc[[s.name]],
             statements=s
         ))
-
-        target_mask = np.zeros((molecules.shape[0], self.max_seq_length))
-        mask_holes = molecules[['n_target_tokens']].apply(lambda row: pd.Series({
-            'x': np.arange(1, row['n_target_tokens'] + 1),
-            'y': np.repeat(row.name, row['n_target_tokens'])
+        targets_mask = np.zeros((molecules.shape[0], self.max_seq_length))
+        targets_mask_holes = molecules[['n_target_tokens']].apply(lambda row: pd.Series({
+            'y': np.repeat(row.name, row['n_target_tokens']),
+            'x': np.arange(1, row['n_target_tokens'] + 1)
         }), axis=1).apply(np.concatenate)
-        target_mask[mask_holes['y'], mask_holes['x']] = 1
-
+        targets_mask[targets_mask_holes['y'], targets_mask_holes['x']] = 1
         return {
                    label: torch.IntTensor(np.concatenate(col)) for label, col in encodings.iteritems()
                } | {
-                   'target_mask': torch.IntTensor(target_mask)
+                   'targets_mask': torch.IntTensor(targets_mask)
                }
 
     def statements_from_molecules(self, molecules):
-        statements = pd.concat(prepare_statements(role, col) for role, col in molecules[['s', 'o']].iteritems())
+
+        statement_dicts = molecules['s'].explode().dropna()
+        statements = pd.DataFrame(statement_dicts.tolist(), index=statement_dicts.index)
         statements = get_statement_texts(statements)
         statements['tokens'] = self.tokenizer.batch_encode_plus(
             statements['text'].tolist(), add_special_tokens=False
         ).input_ids
         statements['n_tokens'] = statements['tokens'].apply(len)
+        statements['statement_seeing'] = False
+        statements['all_seeing'] = False
         return statements
 
-    def molecules_from_texts(self, texts):
-        molecules = pd.DataFrame([json.loads(text) for text in texts])
-        target_tokens = self.tokenizer.batch_encode_plus(molecules['t'].tolist(), add_special_tokens=False)
-        molecules['target_tokens'] = target_tokens.input_ids
-        molecules['n_target_tokens'] = molecules['target_tokens'].apply(len)
-        return molecules
+    # todo: two corpora, two queries for kbert (one with one target, one with multpile)
+    def targets_from_molecules(self, molecules):
+        targets = molecules.explode('t')[['t']].rename(columns={'t': 'text'})
+        tokens = self.tokenizer.batch_encode_plus(targets['text'].tolist(), add_special_tokens=False)
+        targets['tokens'] = tokens.input_ids
+        targets['n_tokens'] = targets['tokens'].apply(len)
+        targets['statement_seeing'] = True
+        targets['all_seeing'] = False
+        targets['r'] = 't'
+        targets = group_by_index(targets).apply(get_token_offsets, 1)
+        return targets
 
-    def encode_statements_for_target(self, target: pd.Series, statements: pd.DataFrame):
+    def encode_statements_for_targets(self, targets: pd.DataFrame, statements: pd.DataFrame):
         """
         Given a target and its neighboring statements, generates inputs for a KBert transformer.
-        :param target: pandas series representing the target concept to encode, with following fields:
-        - target_tokens: list of tokens the target concept is encoded to by original transformer's tokenizer
-        - n_target_tokens: number of tokens the target is encoded to by original transformer's tokenizer
+        :param targets: pandas series representing the target concept to encode, with following fields:
+        # todo: adjust
+        - tokens: list of tokens the target concept is encoded to by original transformer's tokenizer
+        - n_tokens: number of tokens the target is encoded to by original transformer's tokenizer
         :param statements: dataframe containing all statements connected to the given target concept, with following
         columns:
         - p: the statement's predicate's label
@@ -248,55 +270,81 @@ class KBertSentenceTransformer(SentenceTransformer):
           (1, <transformer max sequence length>, <transformer max sequence length>) containing the visibility matrix for
           this text molecule
         """
-        n_all_seeing_tokens = target['n_target_tokens'] + 1
-        statements = self.sample_statements(n_all_seeing_tokens, statements)
+        n_target_tokens = targets['n_tokens'].sum()
+        n_all_seeing_tokens = n_target_tokens + 1
 
+        encodings = pd.DataFrame({
+            'text': '[CLS]',
+            'tokens': [[self.tokenizer.cls_token_id]],
+            'n_tokens': [1],
+            'token_offset': [0],
+            'token_offset_next': [1],
+            'all_seeing': True,
+            'statement_seeing': True,
+            'r': None
+        })
+        encodings = pd.concat((encodings, targets[encodings.columns]), ignore_index=True)
+
+        if n_all_seeing_tokens < self.max_seq_length:
+            statements = self.sample_statements(n_all_seeing_tokens, statements)
+            encodings = pd.concat((encodings, statements[encodings.columns]), ignore_index=True)
+        # todo: maybe normalize property names
+        # todo: descriptions are not targets
         seq_padding = np.array([])
         seq_length = self.max_seq_length
 
-        # Crop last statement if it only fits partially into the input
-        last_statement = statements.iloc[-1]
-        if last_statement['n_tokens_cumsum'] > self.max_seq_length:
-            n_tokens_2_crop = last_statement['n_tokens_cumsum'] - self.max_seq_length
-            last_statement_index = last_statement.name
-            statements.loc[last_statement_index, ['n_tokens', 'n_tokens_cumsum']] = \
-                statements.loc[last_statement_index, ['n_tokens', 'n_tokens_cumsum']] - n_tokens_2_crop
-            if last_statement['role'] == 's':
-                statements.at[last_statement_index, 'tokens'] = \
-                    statements.at[last_statement_index, 'tokens'][n_tokens_2_crop:]
+        # Crop last text if it only fits partially into the input
+        last_encoding = encodings.iloc[-1]
+        if last_encoding['token_offset_next'] > self.max_seq_length:
+            n_tokens_2_crop = last_encoding['token_offset_next'] - self.max_seq_length
+            last_encoding_index = last_encoding.name
+            encodings.loc[last_encoding_index, ['n_tokens', 'token_offset_next']] = \
+                encodings.loc[last_encoding_index, ['n_tokens', 'token_offset_next']] - n_tokens_2_crop
+            if last_encoding['r'] == 's':
+                encodings.at[last_encoding_index, 'tokens'] = \
+                    encodings.at[last_encoding_index, 'tokens'][n_tokens_2_crop:]
             else:
-                statements.at[last_statement_index, 'tokens'] = \
-                    statements.at[last_statement_index, 'tokens'][:-n_tokens_2_crop]
+                encodings.at[last_encoding_index, 'tokens'] = \
+                    encodings.at[last_encoding_index, 'tokens'][:-n_tokens_2_crop]
 
         # Add padding if statements are shorter than max_seq_length
-        elif last_statement['n_tokens_cumsum'] < self.max_seq_length:
-            seq_length = statements['n_tokens_cumsum'].max()
-
+        elif last_encoding['token_offset_next'] < self.max_seq_length:
+            seq_length = encodings['token_offset_next'].max()
             delta_seq_length = self.max_seq_length - seq_length
             seq_padding = np.repeat(0, delta_seq_length)
 
+        # Position IDs
+        # [CLS] is at position 0
+        encodings['position_ids'] = pd.Series(None, dtype='object')
+        encodings.at[0, 'position_ids'] = [0]
+
         # Compute position ids of subject statements
-        max_tokens_per_role = statements.groupby('role')['n_tokens'].max()
-        is_subject_statement = statements['role'] == 's'
+        max_tokens_per_role = encodings.groupby('r')['n_tokens'].max()
+        is_subject_statement = encodings['r'] == 's'
         if 's' in max_tokens_per_role:
-            offset_target = max_tokens_per_role['s'] + 1
-            subject_positions = np.arange(1, offset_target)
-            statements.loc[is_subject_statement, 'position_ids'] = statements \
+            offset_targets = max_tokens_per_role['s'] + 1
+            subject_positions = np.arange(1, offset_targets)
+            encodings.loc[is_subject_statement, 'position_ids'] = encodings \
                 .loc[is_subject_statement, 'n_tokens'] \
                 .apply(lambda n: subject_positions[max_tokens_per_role['s'] - n:])
         else:
-            offset_target = 1
+            offset_targets = 1
 
-        # Compute position ids of target
-        target['position_ids'] = np.arange(
-            offset_target, offset_target + target['n_target_tokens'])
+        # Compute position ids of targets
+        max_target_tokens = targets['n_tokens'].max()
+        target_positions = np.arange(offset_targets, offset_targets + max_target_tokens)
+        is_target = encodings['r'] == 't'
+        encodings.loc[is_target, 'position_ids'] = encodings.loc[is_target, 'n_tokens'] \
+            .apply(lambda n: target_positions[:n])
 
         # Compute position ids of object statements
         if 'o' in max_tokens_per_role:
-            offset_object_statements = offset_target + target['n_target_tokens']
-            object_positions = np.arange(offset_object_statements, offset_object_statements + max_tokens_per_role['o'])
-            statements.loc[~is_subject_statement, 'position_ids'] = statements \
-                .loc[~is_subject_statement, 'n_tokens'] \
+            is_object_statement = encodings['r'] == 'o'
+            offset_object_statements = offset_targets + max_target_tokens
+            object_positions = np.arange(offset_object_statements,
+                                         offset_object_statements + max_tokens_per_role['o'])
+            encodings.loc[is_object_statement, 'position_ids'] = encodings \
+                .loc[is_object_statement, 'n_tokens'] \
                 .apply(lambda n: object_positions[:n])
 
         # compute attention mask
@@ -304,34 +352,37 @@ class KBertSentenceTransformer(SentenceTransformer):
 
         # Add holes for target and cls (target and cls tokens can see each other and can see and be seen by all
         # statement tokens)
-        all_seeing_holes_x = np.tile(np.arange(n_all_seeing_tokens), seq_length)
-        all_seeing_holes_y = np.repeat(np.arange(seq_length), n_all_seeing_tokens)
-        attention_mask[all_seeing_holes_y, all_seeing_holes_x] = 1
-        attention_mask[all_seeing_holes_x, all_seeing_holes_y] = 1
+        # CLS sees and is seen by all tokens
+        cls_holes_x = np.repeat(0, seq_length)
+        cls_holes_y = np.arange(seq_length)
+        attention_mask[cls_holes_x, cls_holes_y] = 1
+        attention_mask[cls_holes_y, cls_holes_x] = 1
 
-        # Add holes for statements (tokens in statements can see each other)
-        statements['hole_coordinates'] = statements.apply(
-            lambda row: np.arange(row['n_tokens_cumsum_previous'], row['n_tokens_cumsum']), axis=1)
-        statement_holes = statements.apply(
+        # each target sees all statements and is seen by all statements
+        if n_all_seeing_tokens < self.max_seq_length:
+            statement_seeing_holes_x = np.tile(np.arange(1, n_all_seeing_tokens), seq_length - n_all_seeing_tokens)
+            statement_seeing_holes_y = np.repeat(np.arange(n_all_seeing_tokens, seq_length), n_target_tokens)
+            attention_mask[statement_seeing_holes_y, statement_seeing_holes_x] = 1
+            attention_mask[statement_seeing_holes_x, statement_seeing_holes_y] = 1
+
+        # Add holes for statements and targets (tokens in statements and targets can see each other)
+        encodings['hole_coordinates'] = encodings.apply(
+            lambda row: np.arange(row['token_offset'], row['token_offset_next']), axis=1)
+        self_seeing_text_holes = encodings.apply(
             lambda row: pd.Series({
-                'y': np.tile(row['hole_coordinates'], row['n_tokens_cumsum']),
-                'x': np.repeat(row['hole_coordinates'], row['n_tokens_cumsum'])
+                'y': np.tile(row['hole_coordinates'], row['token_offset_next']),
+                'x': np.repeat(row['hole_coordinates'], row['token_offset_next'])
             }), axis=1
-        ).apply(np.concatenate)
-        attention_mask[statement_holes['y'], statement_holes['x']] = 1
-        # todo: also make sure cls token has correct position and correct id and correct type
+        ).reset_index(drop=True).apply(np.concatenate)
+        attention_mask[self_seeing_text_holes['y'], self_seeing_text_holes['x']] = 1
 
         return pd.Series({
             'input_ids': np.concatenate([
-                [self.tokenizer.cls_token_id],
-                target['target_tokens'],
-                *statements['tokens'],
+                *encodings['tokens'],
                 seq_padding
             ])[np.newaxis, :],
             'position_ids': np.concatenate([
-                [0],
-                target['position_ids'],
-                *statements['position_ids'],
+                *encodings['position_ids'],
                 seq_padding
             ])[np.newaxis, :],
             'token_type_ids': np.zeros((1, self.max_seq_length)),
@@ -358,14 +409,14 @@ class KBertSentenceTransformer(SentenceTransformer):
         - n_tokens_cumsum_previous: n_tokens_cumsum from previous row, 0 in row 0
         """
         # determine which predicates are present in which outer rounds
-        statements_grouped_by_role_and_predicate = statements.groupby(['role', 'p'], as_index=False)
+        statements_grouped_by_role_and_predicate = statements.groupby(['r', 'p'], as_index=False)
         n_neighbors_per_role_and_predicate = statements_grouped_by_role_and_predicate.size()
         predicates_in_outer_rounds = pd.DataFrame(
             data=get_group_y_in_round_x(n_neighbors_per_role_and_predicate['size']),
-            index=[n_neighbors_per_role_and_predicate['role'], n_neighbors_per_role_and_predicate['p']]
+            index=[n_neighbors_per_role_and_predicate['r'], n_neighbors_per_role_and_predicate['p']]
         )
         # get offsets for computing positions in each outer round
-        max_predicates_per_role = n_neighbors_per_role_and_predicate.groupby('role').size().max()
+        max_predicates_per_role = n_neighbors_per_role_and_predicate.groupby('r').size().max()
         outer_round_offsets = np.pad(predicates_in_outer_rounds, ((0, 0), (1, 0)))[:, :-1].sum(axis=0).cumsum()
         global_predicate_positions = predicates_in_outer_rounds.apply(
             lambda predicates_in_outer_round: get_global_predicate_positions_for_outer_round(
@@ -380,7 +431,6 @@ class KBertSentenceTransformer(SentenceTransformer):
                 neighbor_positions=global_predicate_positions.loc[predicate_df.name].values
             )).set_index('position').sort_index()
         # Drop statements that do not fit into the input
-        statements['n_tokens_cumsum'] = statements['n_tokens'].cumsum() + n_reserved_spaces
-        statements['n_tokens_cumsum_previous'] = np.pad(statements['n_tokens_cumsum'], (1, 0))[:-1]
-        statements = statements[statements['n_tokens_cumsum_previous'] < self.max_seq_length]
+        statements = get_token_offsets(statements, n_reserved_spaces)
+        statements = statements[statements['token_offset'] < self.max_seq_length]
         return statements
