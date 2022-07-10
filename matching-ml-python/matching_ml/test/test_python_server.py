@@ -88,7 +88,31 @@ def test_sentence_transformers_prediction_kbert(client):
     response = client.get(
         "/sentencetransformers-prediction",
         headers={
+            "pooling-mode": "mean_target",
             "kbert": "true",
+            "model-name": "paraphrase-albert-small-v2",
+            "using-tf": "false",
+            "training-arguments": "{}",
+            "tmp-dir": str(RESOURCES_DIR),
+            "multi-processing": "no_multi_process",
+            "corpus-file-name": str(RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets' / 'corpus.csv'),
+            "queries-file-name": str(RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets' / 'queries.csv'),
+            "query-chunk-size": "100",
+            "corpus-chunk-size": "500000",
+            "topk": "5",
+            "both-directions": "true",
+            "topk-per-resource": "true",
+        },
+    )
+    print('')
+
+
+def test_sentence_transformers_prediction(client):
+    # def test_sentence_transformers_prediction_kbert():
+    test_model = 'paraphrase-albert-small-v2'
+    response = client.get(
+        "/sentencetransformers-prediction",
+        headers={
             "model-name": "paraphrase-albert-small-v2",
             "using-tf": "false",
             "training-arguments": "{}",

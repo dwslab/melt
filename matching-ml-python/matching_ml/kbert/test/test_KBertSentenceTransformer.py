@@ -10,18 +10,29 @@ from matching_ml.python_server_melt import load_file
 def test_encode():
     # Given
     model = KBertSentenceTransformer('paraphrase-albert-small-v2', pooling_mode='mean_target')
-    corpus_file_name = str(RESOURCES_DIR / 'corpus_kbert.csv')
+    corpus_file_name = str(RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets' / 'queries.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
     embeddings = model.encode(corpus[1859:1861], batch_size=2, convert_to_tensor=True)
     assert embeddings.numpy().shape == (2, 768)
 
 
-@pytest.mark.skip
+# @pytest.mark.skip
 def test_sentence_transformer():
     # Given
     model = SentenceTransformer('paraphrase-albert-small-v2')
-    corpus_file_name = str(RESOURCES_DIR / 'corpus_kbert.csv')
+    corpus_file_name = str(RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets' / 'queries.csv')
+    corpus, corpus_pos_to_id = load_file(corpus_file_name)
+    # When
+    embeddings = model.encode(corpus, batch_size=32, convert_to_tensor=True)
+    assert False
+
+
+# @pytest.mark.skip
+def test_sentence_transformer_queries():
+    # Given
+    model = SentenceTransformer('paraphrase-albert-small-v2')
+    corpus_file_name = str(RESOURCES_DIR / 'queries_kbert.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
     embeddings = model.encode(corpus, batch_size=32, convert_to_tensor=True)
