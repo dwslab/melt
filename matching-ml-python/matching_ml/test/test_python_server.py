@@ -89,6 +89,7 @@ def test_sentence_transformers_prediction_kbert(client):
         "/sentencetransformers-prediction",
         headers={
             "pooling-mode": "mean_target",
+            "sampling-mode": "stratified",
             "kbert": "true",
             "model-name": "paraphrase-albert-small-v2",
             "using-tf": "false",
