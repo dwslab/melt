@@ -17,9 +17,9 @@ RANDOM_STATE = RandomState(seed=SEED)
 ROLE_RANKS = pd.Series({'s': 1, 'o': 0}, name='rank')
 
 
-def get_token_offsets(df: pd.DataFrame, offset):
-    df['token_offset_next'] = df['n_tokens'].cumsum() + offset
-    df['token_offset'] = np.pad(df['token_offset_next'], (1, 0), constant_values=offset)[:-1]
+def add_token_offsets(df: pd.DataFrame) -> pd.DataFrame:
+    df['token_offset_next'] = df['n_tokens'].cumsum()
+    df['token_offset'] = np.pad(df['token_offset_next'], (1, 0))[:-1]
     return df
 
 
@@ -212,6 +212,49 @@ def sort_statements_stratified(statements):
     return statements
 
 
+def add_position_ids(atoms):
+    """
+
+    :param atoms:
+    :return:
+    """
+    # Position IDs
+    # [CLS] is at position 0
+    atoms = atoms.reset_index(drop=True)
+    atoms['position_ids'] = pd.Series(None, dtype='object')
+    atoms.at[0, 'position_ids'] = [0]
+
+    # Compute position ids of subject statements
+    max_tokens_per_role = atoms.groupby('r')['n_tokens'].max()
+    is_subject_statement = atoms['r'] == 's'
+    if 's' in max_tokens_per_role:
+        offset_targets = max_tokens_per_role['s'] + 1
+        subject_positions = np.arange(1, offset_targets)
+        atoms.loc[is_subject_statement, 'position_ids'] = atoms \
+            .loc[is_subject_statement, 'n_tokens'] \
+            .apply(lambda n: subject_positions[max_tokens_per_role['s'] - n:])
+    else:
+        offset_targets = 1
+
+    # Compute position ids of targets
+    is_target = atoms['r'] == 't'
+    n_target_tokens = atoms.loc[is_target, 'n_tokens']
+    max_target_tokens = n_target_tokens.max()
+    target_positions = np.arange(offset_targets, offset_targets + max_target_tokens)
+    atoms.loc[is_target, 'position_ids'] = n_target_tokens.apply(lambda n: target_positions[:n])
+
+    # Compute position ids of object statements
+    if 'o' in max_tokens_per_role:
+        is_object_statement = atoms['r'] == 'o'
+        offset_object_statements = offset_targets + max_target_tokens
+        object_positions = np.arange(offset_object_statements,
+                                     offset_object_statements + max_tokens_per_role['o'])
+        atoms.loc[is_object_statement, 'position_ids'] = atoms \
+            .loc[is_object_statement, 'n_tokens'] \
+            .apply(lambda n: object_positions[:n])
+    return atoms
+
+
 class KBertSentenceTransformer(SentenceTransformer):
     def __init__(self, model_name_or_path, pooling_mode=None, sampling_mode='stratified', **kwargs):
         super().__init__(model_name_or_path, **kwargs)
@@ -254,21 +297,33 @@ class KBertSentenceTransformer(SentenceTransformer):
 
     def tokenize(self, texts: Union[List[str], List[Dict], List[Tuple[str, str]]]) -> Dict[str, torch.Tensor]:
         molecules = molecules_from_texts(texts)
+        n_molecules = molecules.shape[0]
+
         targets = self.targets_from_molecules(molecules)
-        molecules['n_target_tokens'] = group_by_index(targets)['n_tokens'].sum()
-        molecules.loc[
-            molecules['n_target_tokens'] > self.max_seq_length - 1, 'n_target_tokens'] = self.max_seq_length - 1
+        target_groups = group_by_index(targets)
+        molecules['n_target_tokens'] = target_groups['n_tokens'].sum()
+        molecules['n_targets'] = target_groups.size()
+
+        has_molecule_too_many_target_tokens = molecules['n_target_tokens'] > self.max_seq_length - 1
+        molecules.loc[has_molecule_too_many_target_tokens, 'n_target_tokens'] = self.max_seq_length - 1
         statements = self.statements_from_molecules(molecules)
-        encodings = group_by_index(statements).apply(lambda s: self.encode_statements_for_targets(
-            targets=targets.loc[[s.name]],
-            statements=s
-        ))
-        targets_mask = np.zeros((molecules.shape[0], self.max_seq_length))
-        targets_mask_holes = molecules[['n_target_tokens']].apply(lambda row: pd.Series({
-            'y': np.repeat(row.name, row['n_target_tokens']),
-            'x': np.arange(1, row['n_target_tokens'] + 1)
-        }), axis=1).apply(np.concatenate)
-        targets_mask[targets_mask_holes['y'], targets_mask_holes['x']] = 1
+        atoms = group_by_index(statements).apply(
+            lambda s: self.atoms_from_targets_and_statements(targets=targets.loc[[s.name]], statements=s))
+        atoms.index = atoms.index.droplevel(1)
+
+        targets_mask = np.zeros((n_molecules, molecules['n_targets'].max(), self.max_seq_length))
+        targets_mask_holes = group_by_index(atoms[atoms['r'] == 't']).apply(
+            lambda df: df.reset_index(drop=True).apply(
+                lambda row: pd.Series({
+                    'z': np.repeat(df.name, row['n_tokens']),
+                    'y': np.repeat(row.name, row['n_tokens']),
+                    'x': np.arange(row['token_offset'], row['token_offset_next']),
+                }), axis=1)
+        ).explode(['x', 'y', 'z']).astype(int).values
+        targets_mask[tuple([*targets_mask_holes.T])] = 1
+
+        encodings = group_by_index(atoms).apply(self.encodings_from_atoms)
+
         return {
                    label: torch.IntTensor(np.concatenate(col)) for label, col in encodings.iteritems()
                } | {
@@ -276,7 +331,6 @@ class KBertSentenceTransformer(SentenceTransformer):
                }
 
     def statements_from_molecules(self, molecules):
-
         statement_dicts = molecules['s'].explode().dropna()
         statements = pd.DataFrame(statement_dicts.tolist(), index=statement_dicts.index)
         statements = get_statement_texts(statements)
@@ -297,22 +351,21 @@ class KBertSentenceTransformer(SentenceTransformer):
         targets['statement_seeing'] = True
         targets['all_seeing'] = False
         targets['r'] = 't'
-        targets = group_by_index(targets).apply(get_token_offsets, 1)
         return targets
 
-    def encode_statements_for_targets(self, targets: pd.DataFrame, statements: pd.DataFrame):
+    def encodings_from_atoms(self, atoms: pd.DataFrame):
         """
-        Given a target and its neighboring statements, generates inputs for a KBert transformer.
-        :param targets: pandas dataframe containing all target concepts to encode, with following columns:
-        # todo: adjust
-        - tokens: list of tokens the target concept is encoded to by original transformer's tokenizer
-        - n_tokens: number of tokens the target is encoded to by original transformer's tokenizer
-        :param statements: dataframe containing all statements connected to the given target concept, with following
-        columns:
-        - p: the statement's predicate's label
-        - role: 's' if the statement contains a subject, 'o' if it contains an object
-        - tokens: list of tokens the statement is encoded to by original transformer's tokenizer
-        - n_tokens: number of tokens the statement is encoded to by original transformer's tokenizer
+        Given atoms of a text molecule, generates inputs for a KBert transformer.
+        :param atoms: dataframe containing all atoms for the given text molecule, columns:
+        - text: the atoms text representation
+        - tokens: list of tokens the atom is encoded to by original transformer's tokenizer
+        - n_tokens: number of tokens the atom is encoded to by original transformer's tokenizer
+        - all_seeing: whether an atom sees all other atoms
+        - statement_seeing: whether an atom sees all statement atoms
+        - r: 's' if the atom is a target, 's' if it is a subject statement, 'o' if it is an object statement, None if it
+         is the [CLS] token
+        - token_offset: position in model input at which an atom starts
+        - token_offset_next: position in model input at which the next atom starts
         :return: pandas series with following fields:
         - input_ids: 2D-array of dimension (1, <transformer max sequence length>) containing all tokens from statements
           and target concept, padded with trailing 0s
@@ -322,148 +375,122 @@ class KBertSentenceTransformer(SentenceTransformer):
           (1, <transformer max sequence length>, <transformer max sequence length>) containing the visibility matrix for
           this text molecule
         """
-        n_target_tokens = targets['n_tokens'].sum()
-        n_all_seeing_tokens = n_target_tokens + 1
-
-        encodings = pd.DataFrame({
-            'text': '[CLS]',
-            'tokens': [[self.tokenizer.cls_token_id]],
-            'n_tokens': [1],
-            'token_offset': [0],
-            'token_offset_next': [1],
-            'all_seeing': True,
-            'statement_seeing': True,
-            'r': None
-        })
-        encodings = pd.concat((encodings, targets[encodings.columns]), ignore_index=True)
-
-        if n_all_seeing_tokens < self.max_seq_length:
-            statements = self.sample_statements_stratified(n_all_seeing_tokens, statements)
-            encodings = pd.concat((encodings, statements[encodings.columns]), ignore_index=True)
-        seq_padding = np.array([])
-        seq_length = self.max_seq_length
-
-        # Crop last text if it only fits partially into the input
-        last_encoding = encodings.iloc[-1]
-        if last_encoding['token_offset_next'] > self.max_seq_length:
-            n_tokens_2_crop = last_encoding['token_offset_next'] - self.max_seq_length
-            last_encoding_index = last_encoding.name
-            encodings.loc[last_encoding_index, ['n_tokens', 'token_offset_next']] = \
-                encodings.loc[last_encoding_index, ['n_tokens', 'token_offset_next']] - n_tokens_2_crop
-            if last_encoding['r'] == 's':
-                encodings.at[last_encoding_index, 'tokens'] = \
-                    encodings.at[last_encoding_index, 'tokens'][n_tokens_2_crop:]
-            else:
-                encodings.at[last_encoding_index, 'tokens'] = \
-                    encodings.at[last_encoding_index, 'tokens'][:-n_tokens_2_crop]
-
         # Add padding if statements are shorter than max_seq_length
-        elif last_encoding['token_offset_next'] < self.max_seq_length:
-            seq_length = encodings['token_offset_next'].max()
-            delta_seq_length = self.max_seq_length - seq_length
-            seq_padding = np.repeat(0, delta_seq_length)
+        seq_padding = np.repeat(0, self.max_seq_length - atoms['token_offset_next'].max())
 
-        # Position IDs
-        # [CLS] is at position 0
-        encodings['position_ids'] = pd.Series(None, dtype='object')
-        encodings.at[0, 'position_ids'] = [0]
+        atoms = add_position_ids(atoms)
 
-        # Compute position ids of subject statements
-        max_tokens_per_role = encodings.groupby('r')['n_tokens'].max()
-        is_subject_statement = encodings['r'] == 's'
-        if 's' in max_tokens_per_role:
-            offset_targets = max_tokens_per_role['s'] + 1
-            subject_positions = np.arange(1, offset_targets)
-            encodings.loc[is_subject_statement, 'position_ids'] = encodings \
-                .loc[is_subject_statement, 'n_tokens'] \
-                .apply(lambda n: subject_positions[max_tokens_per_role['s'] - n:])
-        else:
-            offset_targets = 1
-
-        # Compute position ids of targets
-        max_target_tokens = targets['n_tokens'].max()
-        target_positions = np.arange(offset_targets, offset_targets + max_target_tokens)
-        is_target = encodings['r'] == 't'
-        encodings.loc[is_target, 'position_ids'] = encodings.loc[is_target, 'n_tokens'] \
-            .apply(lambda n: target_positions[:n])
-
-        # Compute position ids of object statements
-        if 'o' in max_tokens_per_role:
-            is_object_statement = encodings['r'] == 'o'
-            offset_object_statements = offset_targets + max_target_tokens
-            object_positions = np.arange(offset_object_statements,
-                                         offset_object_statements + max_tokens_per_role['o'])
-            encodings.loc[is_object_statement, 'position_ids'] = encodings \
-                .loc[is_object_statement, 'n_tokens'] \
-                .apply(lambda n: object_positions[:n])
-
-        # compute attention mask
-        attention_mask = np.zeros(2 * [self.max_seq_length])
-
-        # Add holes for target and cls (target and cls tokens can see each other and can see and be seen by all
-        # statement tokens)
-        # CLS sees and is seen by all tokens
-        cls_holes_x = np.repeat(0, seq_length)
-        cls_holes_y = np.arange(seq_length)
-        attention_mask[cls_holes_x, cls_holes_y] = 1
-        attention_mask[cls_holes_y, cls_holes_x] = 1
-
-        # each target sees all statements and is seen by all statements
-        if n_all_seeing_tokens < self.max_seq_length:
-            statement_seeing_holes_x = np.tile(np.arange(1, n_all_seeing_tokens), seq_length - n_all_seeing_tokens)
-            statement_seeing_holes_y = np.repeat(np.arange(n_all_seeing_tokens, seq_length), n_target_tokens)
-            attention_mask[statement_seeing_holes_y, statement_seeing_holes_x] = 1
-            attention_mask[statement_seeing_holes_x, statement_seeing_holes_y] = 1
-
-        # Add holes for statements and targets (tokens in statements and targets can see each other)
-        encodings['hole_coordinates'] = encodings.apply(
-            lambda row: np.arange(row['token_offset'], row['token_offset_next']), axis=1)
-        self_seeing_text_holes = encodings.apply(
-            lambda row: pd.Series({
-                'y': np.tile(row['hole_coordinates'], row['token_offset_next']),
-                'x': np.repeat(row['hole_coordinates'], row['token_offset_next'])
-            }), axis=1
-        ).reset_index(drop=True).apply(np.concatenate)
-        attention_mask[self_seeing_text_holes['y'], self_seeing_text_holes['x']] = 1
+        attention_mask = self.attention_mask_from_atoms(atoms)
 
         return pd.Series({
             'input_ids': np.concatenate([
-                *encodings['tokens'],
+                *atoms['tokens'],
                 seq_padding
             ])[np.newaxis, :],
             'position_ids': np.concatenate([
-                *encodings['position_ids'],
+                *atoms['position_ids'],
                 seq_padding
             ])[np.newaxis, :],
             'token_type_ids': np.zeros((1, self.max_seq_length)),
             'attention_mask': attention_mask[np.newaxis, :, :]
         })
 
-    def sample_statements_stratified(self, n_reserved_spaces: int, statements: pd.DataFrame):
+    def attention_mask_from_atoms(self, atoms):
+        # compute attention mask
+        attention_mask = np.zeros(2 * [self.max_seq_length])
+
+        # Add holes for target and cls (target and cls tokens can see each other and can see and be seen by all
+        # statement tokens)
+        # CLS sees and is seen by all tokens
+        seq_length = atoms['token_offset_next'].max()
+        cls_holes_x = np.repeat(0, seq_length)
+        cls_holes_y = np.arange(seq_length)
+        attention_mask[cls_holes_x, cls_holes_y] = 1
+        attention_mask[cls_holes_y, cls_holes_x] = 1
+
+        # each target sees all statements and is seen by all statements
+        sum_target_tokens = atoms.loc[atoms['r'] == 't', 'n_tokens'].sum()
+        n_statement_seeing_tokens = sum_target_tokens + 1
+        if n_statement_seeing_tokens < self.max_seq_length:
+            statement_seeing_holes_x = np.tile(
+                np.arange(1, n_statement_seeing_tokens),
+                seq_length - n_statement_seeing_tokens)
+            statement_seeing_holes_y = np.repeat(np.arange(n_statement_seeing_tokens, seq_length), sum_target_tokens)
+            attention_mask[statement_seeing_holes_y, statement_seeing_holes_x] = 1
+            attention_mask[statement_seeing_holes_x, statement_seeing_holes_y] = 1
+
+        # Add holes for statements and targets (tokens in statements and targets can see each other)
+        atoms['hole_coordinates'] = atoms.apply(
+            lambda row: np.arange(row['token_offset'], row['token_offset_next']), axis=1)
+        self_seeing_text_holes = atoms.apply(
+            lambda row: pd.Series({
+                'y': np.tile(row['hole_coordinates'], row['token_offset_next']),
+                'x': np.repeat(row['hole_coordinates'], row['token_offset_next'])
+            }), axis=1
+        ).reset_index(drop=True).apply(np.concatenate)
+        attention_mask[self_seeing_text_holes['y'], self_seeing_text_holes['x']] = 1
+        return attention_mask
+
+    def sort_statements(self, statements: pd.DataFrame):
         """
-        Given a dataframe of statements and the number of spaces already reserved, samples n statements for each target,
-        including as many predicates in the sample as possible while also sampling in a balanced fashion from both
-        subject and object statements. Randomizes the order of predicates and which statements with a specific predicate
-        are sampled.
-        :param n_reserved_spaces: number of spaces in max_seq_length that are reserved for tokens not in statements
-        (target, [CLS])
-        :param statements: statements dataframe with following columns:
-        - p: statement predicate text
-        - n: statement neighbor text
-        - role: whether n is object or subject
-        - text: statement text representation
-        - tokens: input ids of text's tokens
-        - n_tokens: number of tokens in a statement
-        :return: the sample from the statements dataframe with following additional columns:
-        - n_tokens_cumsum: cumulative sum over column n_tokens
-        - n_tokens_cumsum_previous: n_tokens_cumsum from previous row, 0 in row 0
+        Given a dataframe of statements sorts the dataframe according to the configured sampling mode
+        :param statements: statements dataframe
+        :return: the sorted statements dataframe
         """
         if self.sampling_mode == 'stratified':
-            statements = sort_statements_stratified(statements)
+            return sort_statements_stratified(statements)
         else:
-            statements = sort_statements_random(statements)
+            return sort_statements_random(statements)
 
-        # Drop statements that do not fit into the input
-        statements = get_token_offsets(statements, n_reserved_spaces)
-        statements = statements[statements['token_offset'] < self.max_seq_length]
-        return statements
+    def atoms_from_targets_and_statements(self, targets, statements):
+        """
+        Given statements and targets of a text molecule, computes all text atoms for it, including the respective
+        offsets in the transformer inputs
+        :param targets: dataframe containing all targets of the given text molecule
+        :param statements: dataframe containing all statements of the given text molecule
+        :return: dataframe containing all atoms for the given text molecule, columns:
+        - text: the atoms text representation
+        - tokens: list of tokens the atom is encoded to by original transformer's tokenizer
+        - n_tokens: number of tokens the atom is encoded to by original transformer's tokenizer
+        - all_seeing: whether an atom sees all other atoms
+        - statement_seeing: whether an atom sees all statement atoms
+        - r: 's' if the atom is a target, 's' if it is a subject statement, 'o' if it is an object statement, None if it
+         is the [CLS] token
+        - token_offset: position in model input at which an atom starts
+        - token_offset_next: position in model input at which the next atom starts
+        """
+        n_target_tokens = targets['n_tokens'].sum()
+        atoms = pd.DataFrame({
+            'text': '[CLS]',
+            'tokens': [[self.tokenizer.cls_token_id]],
+            'n_tokens': [1],
+            'all_seeing': True,
+            'statement_seeing': True,
+            'r': None
+        })
+
+        atoms = pd.concat((atoms, targets[atoms.columns]), ignore_index=True)
+
+        if n_target_tokens <= self.max_seq_length:
+            statements = self.sort_statements(statements)
+            atoms = pd.concat((atoms, statements[atoms.columns]), ignore_index=True)
+
+        atoms = add_token_offsets(atoms)
+
+        atoms = atoms[atoms['token_offset'] < self.max_seq_length]
+
+        atoms_max_index = atoms.index.max()
+        last_atom = atoms.loc[atoms_max_index]
+
+        # Crop last text if it only fits partially into the input
+        if last_atom['token_offset_next'] > self.max_seq_length:
+            n_tokens_2_crop = last_atom['token_offset_next'] - self.max_seq_length
+            atoms.loc[atoms_max_index, ['n_tokens', 'token_offset_next']] = \
+                atoms.loc[atoms_max_index, ['n_tokens', 'token_offset_next']] - n_tokens_2_crop
+            if last_atom['r'] == 's':
+                atoms.at[atoms_max_index, 'tokens'] = \
+                    atoms.at[atoms_max_index, 'tokens'][n_tokens_2_crop:]
+            else:
+                atoms.at[atoms_max_index, 'tokens'] = \
+                    atoms.at[atoms_max_index, 'tokens'][:-n_tokens_2_crop]
+        return atoms

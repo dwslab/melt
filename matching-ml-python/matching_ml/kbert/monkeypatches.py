@@ -99,24 +99,37 @@ def pooling_forward(self, features: Dict[str, torch.Tensor]):
 
         # If tokens are weighted (by WordWeights layer), feature 'token_weights_sum' will be present
         if 'token_weights_sum' in features:
-            sum_mask = features['token_weights_sum'].unsqueeze(-1).expand(sum_embeddings.size())
+            n_tokens_per_target_and_molecule = features['token_weights_sum'].unsqueeze(-1).expand(sum_embeddings.size())
         else:
-            sum_mask = input_mask_expanded.sum(1)
+            n_tokens_per_target_and_molecule = input_mask_expanded.sum(1)
 
-        sum_mask = torch.clamp(sum_mask, min=1e-9)
+        n_tokens_per_target_and_molecule = torch.clamp(n_tokens_per_target_and_molecule, min=1e-9)
 
         if self.pooling_mode_mean_tokens:
-            output_vectors.append(sum_embeddings / sum_mask)
+            output_vectors.append(sum_embeddings / n_tokens_per_target_and_molecule)
         if self.pooling_mode_mean_sqrt_len_tokens:
-            output_vectors.append(sum_embeddings / torch.sqrt(sum_mask))
+            output_vectors.append(sum_embeddings / torch.sqrt(n_tokens_per_target_and_molecule))
     # =========================================== Modification Start ===================================================
     if self.pooling_mode_first_target:
         output_vectors.append(token_embeddings[:, 1, :])
     if self.pooling_mode_mean_target:
-        target_mask_expanded = features['targets_mask'].unsqueeze(-1)
-        sum_embeddings = torch.sum(target_mask_expanded * token_embeddings, 1)
-        sum_mask = target_mask_expanded.sum(1)
-        output_vectors.append(sum_embeddings / sum_mask)
+        targets_mask = features['targets_mask'].unsqueeze(-1)
+        token_embeddings_expanded = token_embeddings.unsqueeze(1)
+        target_token_embeddings = targets_mask * token_embeddings_expanded
+        # sum over all token embeddings of each target in each molecule
+        sum_token_embeddings_per_target_and_molecule = torch.sum(target_token_embeddings, 2)
+        # n tokens per target in each molecule
+        n_tokens_per_target_and_molecule = targets_mask.sum(2)
+        # average embedding for each target in each molecule
+        average_target_embeddings_per_molecule = \
+            torch.nan_to_num(sum_token_embeddings_per_target_and_molecule / n_tokens_per_target_and_molecule)
+
+        # sum of average target embeddings for each molecule
+        sum_average_target_embeddings_per_molecule = average_target_embeddings_per_molecule.sum(1)
+        # number of targets in each molecule
+        n_targets_per_molecule = targets_mask.any(dim=2).sum(1)
+        mean_average_target_embeddings = sum_average_target_embeddings_per_molecule / n_targets_per_molecule
+        output_vectors.append(mean_average_target_embeddings)
     # =========================================== Modification End =====================================================
 
     output_vector = torch.cat(output_vectors, 1)
