@@ -219,6 +219,7 @@ public class PythonServer {
         request.addHeader("topk-per-resource", Boolean.toString(matcher.isTopkPerResource()));
         request.addHeader("kbert", Boolean.toString(matcher.getClass() == KBertSentenceTransformersMatcher.class));
         request.addHeader("pooling-mode", matcher.getPoolingMode());
+        request.addHeader("sampling-mode", matcher.getSamplingMode());
 
         String resultString = runRequest(request);
         try {

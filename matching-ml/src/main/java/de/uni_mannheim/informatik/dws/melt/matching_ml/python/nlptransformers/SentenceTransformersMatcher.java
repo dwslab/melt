@@ -46,7 +46,8 @@ public class SentenceTransformersMatcher extends TransformersBase {
     protected String fileSuffix;
 
     private String poolingMode;
-    
+    private String samplingMode;
+
     public SentenceTransformersMatcher(TextExtractorMap extractor, String modelName){
         super(extractor, modelName);
         initExtractors();
@@ -322,5 +323,13 @@ public class SentenceTransformersMatcher extends TransformersBase {
 
     public void setPoolingMode(String poolingMode) {
         this.poolingMode = poolingMode;
+    }
+
+    public String getSamplingMode() {
+        return samplingMode;
+    }
+
+    public void setSamplingMode(String poolingMode) {
+        this.samplingMode = poolingMode;
     }
 }

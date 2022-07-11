@@ -2078,6 +2078,7 @@ def inner_sentencetransformers_prediction(request_headers):
             embedder = KBertSentenceTransformer(
                 model_name,
                 cache_folder=cache_folder_path,
+                sampling_mode=request_headers['sampling-mode'],
                 pooling_mode=request_headers['pooling-mode']
             )
         else:

@@ -163,9 +163,60 @@ def molecules_from_texts(texts):
     return molecules
 
 
+def sort_statements_random(statements: pd.DataFrame) -> pd.DataFrame:
+    """
+    Given a dataframe of statements, randomly assigns a position to each statement and orders the statements by these
+    positions
+    :param statements: statements dataframe
+    :return: the randomly shuffled dataframe
+    """
+    return statements.sample(frac=1, ignore_index=True)
+
+
+def sort_statements_stratified(statements):
+    """
+    Given a dataframe of statements, sorts the dataframe such that taking the first n statements includes as many
+    predicates in the sample as possible while also sampling in a balanced fashion from both subject and object
+    statements. Randomizes the order of predicates and which statements with a specific predicate are sampled.
+    :param statements: statements dataframe with following columns:
+    - p: statement predicate text
+    - n: statement neighbor text
+    - role: whether n is object or subject
+    - text: statement text representation
+    - tokens: input ids of text's tokens
+    - n_tokens: number of tokens in a statement
+    :return: the statements dataframe, sorted by the computed positions
+    """
+    # determine which predicates are present in which outer rounds
+    statements_grouped_by_role_and_predicate = statements.groupby(['r', 'p'], as_index=False)
+    n_neighbors_per_role_and_predicate = statements_grouped_by_role_and_predicate.size()
+    predicates_in_outer_rounds = pd.DataFrame(
+        data=get_group_y_in_round_x(n_neighbors_per_role_and_predicate['size']),
+        index=[n_neighbors_per_role_and_predicate['r'], n_neighbors_per_role_and_predicate['p']]
+    )
+    # get offsets for computing positions in each outer round
+    max_predicates_per_role = n_neighbors_per_role_and_predicate.groupby('r').size().max()
+    outer_round_offsets = np.pad(predicates_in_outer_rounds, ((0, 0), (1, 0)))[:, :-1].sum(axis=0).cumsum()
+    global_predicate_positions = predicates_in_outer_rounds.apply(
+        lambda predicates_in_outer_round: get_global_predicate_positions_for_outer_round(
+            predicates=predicates_in_outer_round,
+            max_predicates_per_role=max_predicates_per_role,
+            outer_round_offset=outer_round_offsets[predicates_in_outer_round.name]
+        ))
+    # compute global statement positions
+    statements = statements_grouped_by_role_and_predicate.apply(
+        lambda predicate_df: add_neighbor_positions(
+            predicate_df=predicate_df,
+            neighbor_positions=global_predicate_positions.loc[predicate_df.name].values
+        )).set_index('position').sort_index()
+    return statements
+
+
 class KBertSentenceTransformer(SentenceTransformer):
-    def __init__(self, model_name_or_path, pooling_mode=None, **kwargs):
+    def __init__(self, model_name_or_path, pooling_mode=None, sampling_mode='stratified', **kwargs):
         super().__init__(model_name_or_path, **kwargs)
+
+        self.sampling_mode = sampling_mode
 
         transformer_module = self._first_module()
         self.max_seq_length = transformer_module.max_seq_length
@@ -205,7 +256,8 @@ class KBertSentenceTransformer(SentenceTransformer):
         molecules = molecules_from_texts(texts)
         targets = self.targets_from_molecules(molecules)
         molecules['n_target_tokens'] = group_by_index(targets)['n_tokens'].sum()
-        molecules.loc[molecules['n_target_tokens'] > self.max_seq_length - 1, 'n_target_tokens'] = self.max_seq_length - 1
+        molecules.loc[
+            molecules['n_target_tokens'] > self.max_seq_length - 1, 'n_target_tokens'] = self.max_seq_length - 1
         statements = self.statements_from_molecules(molecules)
         encodings = group_by_index(statements).apply(lambda s: self.encode_statements_for_targets(
             targets=targets.loc[[s.name]],
@@ -251,7 +303,7 @@ class KBertSentenceTransformer(SentenceTransformer):
     def encode_statements_for_targets(self, targets: pd.DataFrame, statements: pd.DataFrame):
         """
         Given a target and its neighboring statements, generates inputs for a KBert transformer.
-        :param targets: pandas series representing the target concept to encode, with following fields:
+        :param targets: pandas dataframe containing all target concepts to encode, with following columns:
         # todo: adjust
         - tokens: list of tokens the target concept is encoded to by original transformer's tokenizer
         - n_tokens: number of tokens the target is encoded to by original transformer's tokenizer
@@ -286,10 +338,8 @@ class KBertSentenceTransformer(SentenceTransformer):
         encodings = pd.concat((encodings, targets[encodings.columns]), ignore_index=True)
 
         if n_all_seeing_tokens < self.max_seq_length:
-            statements = self.sample_statements(n_all_seeing_tokens, statements)
+            statements = self.sample_statements_stratified(n_all_seeing_tokens, statements)
             encodings = pd.concat((encodings, statements[encodings.columns]), ignore_index=True)
-        # todo: maybe normalize property names
-        # todo: descriptions are not targets
         seq_padding = np.array([])
         seq_length = self.max_seq_length
 
@@ -389,7 +439,7 @@ class KBertSentenceTransformer(SentenceTransformer):
             'attention_mask': attention_mask[np.newaxis, :, :]
         })
 
-    def sample_statements(self, n_reserved_spaces: int, statements: pd.DataFrame):
+    def sample_statements_stratified(self, n_reserved_spaces: int, statements: pd.DataFrame):
         """
         Given a dataframe of statements and the number of spaces already reserved, samples n statements for each target,
         including as many predicates in the sample as possible while also sampling in a balanced fashion from both
@@ -408,28 +458,11 @@ class KBertSentenceTransformer(SentenceTransformer):
         - n_tokens_cumsum: cumulative sum over column n_tokens
         - n_tokens_cumsum_previous: n_tokens_cumsum from previous row, 0 in row 0
         """
-        # determine which predicates are present in which outer rounds
-        statements_grouped_by_role_and_predicate = statements.groupby(['r', 'p'], as_index=False)
-        n_neighbors_per_role_and_predicate = statements_grouped_by_role_and_predicate.size()
-        predicates_in_outer_rounds = pd.DataFrame(
-            data=get_group_y_in_round_x(n_neighbors_per_role_and_predicate['size']),
-            index=[n_neighbors_per_role_and_predicate['r'], n_neighbors_per_role_and_predicate['p']]
-        )
-        # get offsets for computing positions in each outer round
-        max_predicates_per_role = n_neighbors_per_role_and_predicate.groupby('r').size().max()
-        outer_round_offsets = np.pad(predicates_in_outer_rounds, ((0, 0), (1, 0)))[:, :-1].sum(axis=0).cumsum()
-        global_predicate_positions = predicates_in_outer_rounds.apply(
-            lambda predicates_in_outer_round: get_global_predicate_positions_for_outer_round(
-                predicates=predicates_in_outer_round,
-                max_predicates_per_role=max_predicates_per_role,
-                outer_round_offset=outer_round_offsets[predicates_in_outer_round.name]
-            ))
-        # compute global statement positions
-        statements = statements_grouped_by_role_and_predicate.apply(
-            lambda predicate_df: add_neighbor_positions(
-                predicate_df=predicate_df,
-                neighbor_positions=global_predicate_positions.loc[predicate_df.name].values
-            )).set_index('position').sort_index()
+        if self.sampling_mode == 'stratified':
+            statements = sort_statements_stratified(statements)
+        else:
+            statements = sort_statements_random(statements)
+
         # Drop statements that do not fit into the input
         statements = get_token_offsets(statements, n_reserved_spaces)
         statements = statements[statements['token_offset'] < self.max_seq_length]
