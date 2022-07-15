@@ -1,37 +1,32 @@
+http://www.w3.org/2002/07/owl#someValuesFrom,some values from,true
+http://mouse.owl#MA_0000023,head,true
+http://www.w3.org/2002/07/owl#onProperty,on property,true
+http://mouse.owl#UNDEFINED_part_of,part of,true
+http://mouse.owl#UNDEFINED_part_of,undefined part of,false
+http://www.w3.org/1999/02/22-rdf-syntax-ns#type,type,true
+http://www.w3.org/2002/07/owl#Restriction,restriction,true
+http://mouse.owl#MA_0002435,lymphatic system,false
+http://mouse.owl#MA_0002435,lymphoid system,true
 http://mouse.owl#MA_0000302,metacarpal bone,true
 http://www.w3.org/2000/01/rdf-schema#subClassOf,sub class of,true
 http://mouse.owl#MA_0000619,hand bone,true
 http://mouse.owl#MA_0000301,metacarpal metatarsal bone,true
 http://www.w3.org/2000/01/rdf-schema#label,label,true
 -1084852993,metacarpal bone,true
-http://www.w3.org/1999/02/22-rdf-syntax-ns#type,type,true
 http://www.w3.org/2002/07/owl#Class,class,true
 http://mouse.owl#MA_0001206,scala vestibuli,true
 http://www.w3.org/2002/07/owl#Thing,thing,true
 729376886,scala vestibuli,true
-http://www.w3.org/2002/07/owl#someValuesFrom,some values from,true
-http://mouse.owl#MA_0000171,diencephalon,true
-http://www.w3.org/2002/07/owl#onProperty,on property,true
-http://mouse.owl#UNDEFINED_part_of,part of,true
-http://mouse.owl#UNDEFINED_part_of,undefined part of,false
-http://www.w3.org/2002/07/owl#Restriction,restriction,true
 http://mouse.owl#MA_0000112,nucleus pulposus,true
 http://mouse.owl#MA_0000112,ma:0001517,false
 http://www.geneontology.org/formats/oboInOwl#hasAlternativeId,has alternative id,true
 -100230469,ma:0001517,true
 -1349593953,nucleus pulposus,true
-http://mouse.owl#MA_0000323,alimentary system,false
-http://mouse.owl#MA_0000323,alimentary tract,false
-http://mouse.owl#MA_0000323,gastrointestinal system,true
 http://mouse.owl#MA_0001016,laterodorsal tegmental nucleus,true
 http://mouse.owl#MA_0000821,brainstem nucleus,true
 1968148147,laterodorsal tegmental nucleus,true
-http://mouse.owl#MA_0001331,sternum,true
-http://mouse.owl#MA_0002501,plasma,true
-http://mouse.owl#MA_0001639,right hepatic duct,true
-http://mouse.owl#MA_0001081,vagus x ganglion,true
-http://mouse.owl#MA_0001948,epigastric artery,true
 http://mouse.owl#MA_0000064,artery,true
+http://mouse.owl#MA_0001948,epigastric artery,true
 -1748461955,epigastric artery,true
 http://mouse.owl#MA_0000854,pars glandularis,false
 http://mouse.owl#MA_0000854,pars anterior,true
@@ -51,16 +46,19 @@ http://mouse.owl#MA_0000106,costal cartilage,true
 http://mouse.owl#MA_0000664,hindlimb nerve,true
 http://mouse.owl#MA_0000693,limb nerve,true
 -1536470374,hindlimb nerve,true
+http://mouse.owl#MA_0000025,forelimb,true
 http://mouse.owl#MA_0001568,oesophagus lamina propria,false
 http://mouse.owl#MA_0001568,esophagus lamina propria,true
 http://mouse.owl#genid1962,oesophagus lamina propria,true
 http://mouse.owl#MA_0001899,gastrointestinal system lamina propria,true
 876596629,esophagus lamina propria,true
+http://mouse.owl#MA_0000004,trunk,true
+http://mouse.owl#MA_0000004,body,false
 http://mouse.owl#MA_0002712,barrel cortex,true
 -317994046,barrel cortex,true
 http://mouse.owl#MA_0000474,abdominal aorta,true
 985665737,abdominal aorta,true
-http://mouse.owl#MA_0002473,face,true
+http://mouse.owl#MA_0000043,ankle,true
 http://mouse.owl#MA_0001378,fabella,false
 http://mouse.owl#MA_0001378,sesamoid bone of gastrocnemius,true
 http://mouse.owl#genid101,genid101,false
@@ -68,7 +66,6 @@ http://mouse.owl#genid101,fabella,true
 http://mouse.owl#MA_0001375,sesamoid bone,true
 http://mouse.owl#MA_0000676,lower leg bone,true
 -1699856045,sesamoid bone of gastrocnemius,true
-http://mouse.owl#MA_0000129,thyroid gland,true
 http://mouse.owl#MA_0002522,semen,true
 http://mouse.owl#MA_0002521,male reproductive system fluid secretion,true
 109322091,semen,true
@@ -79,19 +76,20 @@ http://mouse.owl#MA_0001188,endolymphatic sac,true
 http://mouse.owl#MA_0002332,levator ani,true
 http://mouse.owl#MA_0000165,skeletal muscle,true
 -1587185066,levator ani,true
-http://mouse.owl#MA_0000327,respiratory system,true
+http://mouse.owl#MA_0000133,cerebrum,false
+http://mouse.owl#MA_0000133,cerebral hemisphere,true
+http://mouse.owl#MA_0000024,neck,true
 http://mouse.owl#MA_0000094,impulse conducting system,true
 -284239059,impulse conducting system,true
-http://mouse.owl#MA_0002480,uvea,true
 http://mouse.owl#MA_0002142,iliac vein,true
 http://mouse.owl#MA_0000067,vein,true
 276822035,iliac vein,true
 http://mouse.owl#genid1902,superior olive,true
 55517395,superior olive,true
-http://mouse.owl#MA_0001296,lacrimal gland,true
+http://www.geneontology.org/formats/oboInOwl#Synonym,synonym,true
+http://mouse.owl#MA_0001331,sternum,true
 http://mouse.owl#MA_0001790,right lung hilus,true
 648740982,right lung hilus,true
-http://mouse.owl#MA_0000348,tooth,true
 http://mouse.owl#MA_0002694,intestine muscularis mucosa,true
 -1008656344,intestine muscularis mucosa,true
 http://mouse.owl#MA_0000817,brain subventricular zone,true
@@ -99,14 +97,16 @@ http://mouse.owl#MA_0000817,svz,false
 http://mouse.owl#genid358,genid358,false
 http://mouse.owl#genid358,svz,true
 -2133565270,brain subventricular zone,true
+http://mouse.owl#MA_0000353,stomach,true
 http://mouse.owl#MA_0000627,hand interdigit region,true
 -1927005223,hand interdigit region,true
+http://mouse.owl#MA_0000142,thymus,true
 http://mouse.owl#MA_0000437,lobar bronchus,true
 http://mouse.owl#MA_0000436,bronchus,true
 2024560649,lobar bronchus,true
 http://mouse.owl#genid1884,coccygea,true
 -897353443,coccygea,true
-http://mouse.owl#MA_0000379,urethra,true
+http://mouse.owl#MA_0000049,metatarsus,true
 http://mouse.owl#MA_0000247,utricle,true
 -106761875,utricle,true
 http://mouse.owl#genid1694,interatrial septum,true
@@ -118,34 +118,34 @@ http://mouse.owl#MA_0001201,macula of saccule,true
 http://mouse.owl#MA_0001201,saccular maculs,false
 http://mouse.owl#genid1831,saccular maculs,true
 1523779299,macula of saccule,true
+http://mouse.owl#MA_0000326,reproductive system,true
 http://mouse.owl#MA_0002105,ma:0002135,false
 http://mouse.owl#MA_0002105,dorsal metatarsal vein,true
 -100204462,ma:0002135,true
 http://mouse.owl#MA_0002133,hindlimb digital veins,true
 462001876,dorsal metatarsal vein,true
-http://mouse.owl#MA_0001814,respiratory system connective tissue,true
-http://mouse.owl#MA_0002449,heart pericardium,true
+http://mouse.owl#MA_0000051,lower leg,true
 http://mouse.owl#MA_0001011,barrington s nucleus,true
 460108637,barrington s nucleus,true
-http://mouse.owl#MA_0000357,hepatic duct,true
+http://mouse.owl#MA_0000333,large intestine,true
+http://mouse.owl#MA_0002643,penile urethra,true
 http://mouse.owl#MA_0000989,hindbrain dura mater,true
 http://mouse.owl#MA_0000815,brain dura mater,true
 -651423371,hindbrain dura mater,true
-http://mouse.owl#MA_0000425,left lung,true
+http://mouse.owl#MA_0000327,respiratory system,true
 http://mouse.owl#MA_0000799,dermis connective tissue,true
 348413380,dermis connective tissue,true
 http://mouse.owl#MA_0001943,dorsal intercostal artery,true
 -1964431387,dorsal intercostal artery,true
-http://mouse.owl#MA_0000424,terminal bronchiole,true
+http://mouse.owl#MA_0000813,brain meninges,true
 http://mouse.owl#MA_0001753,prepuce epithelium,true
 -527795547,prepuce epithelium,true
-http://mouse.owl#MA_0002703,nail,true
+http://mouse.owl#MA_0000091,heart ventricle,true
 http://mouse.owl#MA_0002657,ureter subluminal urothelium,true
 512731360,ureter subluminal urothelium,true
-http://mouse.owl#MA_0000060,vasculature,false
-http://mouse.owl#MA_0000060,blood vessel,true
 http://mouse.owl#MA_0001563,small intestine villus,true
 627328808,small intestine villus,true
+http://mouse.owl#MA_0001815,respiratory system basement membrane,true
 http://mouse.owl#MA_0002467,periodontal ligament,true
 http://mouse.owl#MA_0002467,periodontium,false
 http://mouse.owl#MA_0002467,periodontal membrane,false
@@ -155,7 +155,6 @@ http://mouse.owl#genid988,periodontium,true
 http://mouse.owl#genid988,genid988,false
 http://mouse.owl#MA_0000113,ligament,true
 645901533,periodontal ligament,true
-http://www.geneontology.org/formats/oboInOwl#Synonym,synonym,true
 http://mouse.owl#MA_0001373,metatarsal bone digit 5,true
 http://mouse.owl#MA_0000303,metatarsal bone,true
 -1927956913,metatarsal bone digit 5,true
@@ -163,18 +162,25 @@ http://mouse.owl#MA_0002277,coccygeus,true
 -2048161072,coccygeus,true
 http://mouse.owl#MA_0001183,osseus cochlear canal,true
 -772506935,osseus cochlear canal,true
-http://mouse.owl#MA_0000961,lateral ventricle choroid plexus,true
-http://mouse.owl#MA_0000813,brain meninges,true
+http://mouse.owl#MA_0000195,hindbrain,true
+http://mouse.owl#MA_0000195,rhombencephalon,false
 http://mouse.owl#MA_0002087,brachial vein,true
 989663165,brachial vein,true
-http://mouse.owl#MA_0000415,lung,true
 http://mouse.owl#genid1657,primal cortex,true
 678881207,primal cortex,true
-http://mouse.owl#MA_0000211,tectum,true
+http://mouse.owl#MA_0002693,intestine wall,true
+http://mouse.owl#MA_0000052,upper leg,true
+http://mouse.owl#MA_0000979,telencephalon meninges,true
+http://mouse.owl#MA_0000245,vestibular labyrinth,true
+http://mouse.owl#MA_0000245,vestibular apparatus,false
+http://mouse.owl#MA_0000037,hand,true
 http://mouse.owl#MA_0001906,lower jaw,true
 -516494936,lower jaw,true
 http://mouse.owl#MA_0000812,brain marginal zone,true
 2033606288,brain marginal zone,true
+http://mouse.owl#MA_0000366,hepatic parenchyma,false
+http://mouse.owl#MA_0000366,liver parenchyma,true
+http://mouse.owl#MA_0000826,diencephalon meninges,true
 http://mouse.owl#MA_0001716,left oviduct,true
 http://mouse.owl#MA_0000385,uterine tube,false
 http://mouse.owl#MA_0000385,oviduct,true
@@ -182,11 +188,11 @@ http://mouse.owl#MA_0000385,fallopian tube,false
 1019063602,left oviduct,true
 http://mouse.owl#MA_0000622,hand digit bone,true
 -1289702577,hand digit bone,true
-http://mouse.owl#MA_0000381,female reproductive tract,false
-http://mouse.owl#MA_0000381,female reproductive system,true
+http://mouse.owl#MA_0000329,anal region,true
 http://mouse.owl#MA_0001526,foregut,true
 http://mouse.owl#MA_0000917,gut,true
 -677675983,foregut,true
+http://mouse.owl#MA_0000128,parathyroid gland,true
 http://mouse.owl#MA_0000432,pharynx,true
 http://mouse.owl#MA_0000589,neck organ,true
 http://mouse.owl#MA_0000581,head organ,true
@@ -200,16 +206,12 @@ http://mouse.owl#MA_0000242,membranous labyrinth,true
 http://mouse.owl#MA_0001146,cholinergic enteric nerve,true
 http://mouse.owl#MA_0001145,enteric nerve,true
 1405715152,cholinergic enteric nerve,true
-http://mouse.owl#MA_0000052,upper leg,true
+http://mouse.owl#MA_0000174,mammillary body,true
+http://mouse.owl#MA_0000202,cerebellar vermis,true
+http://mouse.owl#MA_0002486,eye surface,true
 221537975,upper leg,true
 http://mouse.owl#MA_0002100,deferent duct vein,true
 -1897670990,deferent duct vein,true
-http://mouse.owl#MA_0000152,dermis,true
-http://mouse.owl#MA_0000372,kidney cortex,true
-http://mouse.owl#MA_0000372,renal cortex,false
-http://mouse.owl#MA_0000189,primal cortex,false
-http://mouse.owl#MA_0000189,hippocampal formation,true
-http://mouse.owl#MA_0000189,archipallium,false
 http://mouse.owl#MA_0000984,fourth ventricle choroid plexus epithelium,true
 http://mouse.owl#MA_0000824,choroid plexus epithelium,true
 -2106336658,fourth ventricle choroid plexus epithelium,true
@@ -221,17 +223,15 @@ http://mouse.owl#MA_0001887,adrenal gland cortex zone,true
 http://mouse.owl#MA_0000794,mammary gland sebaceous gland,true
 http://mouse.owl#MA_0002565,sebaceous gland,true
 -2038327335,mammary gland sebaceous gland,true
+http://mouse.owl#MA_0000039,wrist,true
 http://mouse.owl#MA_0001698,urinary bladder detrussor smooth muscle,true
 http://mouse.owl#MA_0001697,urinary bladder smooth muscle,true
 -1915679315,urinary bladder detrussor smooth muscle,true
-http://mouse.owl#MA_0000207,mesencephalon,false
-http://mouse.owl#MA_0000207,midbrain,true
-http://mouse.owl#MA_0002718,vascular system,true
 http://mouse.owl#MA_0002652,ureter adventitia,true
 1032034505,ureter adventitia,true
 http://mouse.owl#MA_0002462,vitreous body,true
 -710868528,vitreous body,true
-http://mouse.owl#MA_0001180,brachial plexus,true
+http://mouse.owl#MA_0002487,spleen pulp,true
 http://mouse.owl#MA_0002272,buccinator,true
 -1578493227,buccinator,true
 http://mouse.owl#MA_0002082,anastomotic vein,true
@@ -239,26 +239,19 @@ http://mouse.owl#MA_0002082,anastomotic vein,true
 http://mouse.owl#genid974,urinary bladder mucosa,true
 http://mouse.owl#genid974,genid974,false
 1833807839,urinary bladder mucosa,true
-http://mouse.owl#MA_0001784,right lung alveolar system,true
 http://mouse.owl#MA_0000205,myelencephalon,true
 -1488998265,myelencephalon,true
-http://mouse.owl#MA_0000408,penis,true
 http://mouse.owl#MA_0001109,vestibulocochlear viii nerve,true
 http://mouse.owl#MA_0000215,cranial nerve,true
 1381576154,vestibulocochlear viii nerve,true
-http://mouse.owl#MA_0000153,epidermis,true
 http://mouse.owl#MA_0000015,muscle,true
 -1062813032,muscle,true
-http://mouse.owl#MA_0000063,arteriole,true
-http://mouse.owl#MA_0000018,skeletal system,true
 http://mouse.owl#genid1272,oesophagus,true
 -908546667,oesophagus,true
-http://mouse.owl#MA_0002720,venous system,true
-http://mouse.owl#MA_0000193,olfactory lobe,false
-http://mouse.owl#MA_0000193,olfactory cortex,true
-http://mouse.owl#MA_0002659,bile duct extrahepatic part,true
+http://mouse.owl#MA_0000544,female reproductive gland organ,true
 http://mouse.owl#MA_0000947,dentate gyrus hilus,true
 382410969,dentate gyrus hilus,true
+http://mouse.owl#MA_0000054,peritoneal cavity,true
 http://mouse.owl#MA_0000757,spleen smooth muscle,true
 1170671273,spleen smooth muscle,true
 http://mouse.owl#MA_0001901,back organ,true
@@ -278,6 +271,7 @@ http://mouse.owl#genid536,genid536,false
 -1926601842,renal tubule,true
 http://mouse.owl#MA_0001521,gastrointestinal system mucosa,true
 -110804679,gastrointestinal system mucosa,true
+http://mouse.owl#MA_0000068,vena cava,true
 http://mouse.owl#MA_0002425,tibialis muscle,true
 582186887,tibialis muscle,true
 http://mouse.owl#MA_0000187,neocortex region,true
@@ -286,26 +280,28 @@ http://mouse.owl#genid1615,cerebral cortex region,true
 1993745826,neocortex region,true
 http://mouse.owl#MA_0000292,pectoral girdle bone,true
 -1893496033,sternum,true
+http://mouse.owl#MA_0002719,arterial system,true
+http://mouse.owl#MA_0000062,aorta,true
 http://mouse.owl#MA_0002235,thoracic vein,true
 1120050344,thoracic vein,true
 http://mouse.owl#MA_0001141,inferior hypogastric nerve plexus,true
 -667314165,inferior hypogastric nerve plexus,true
 http://mouse.owl#MA_0002045,subclavian artery,true
 -1990817416,subclavian artery,true
-http://mouse.owl#MA_0000048,foot digit,true
-http://mouse.owl#MA_0001677,distal straight tubule,false
-http://mouse.owl#MA_0001677,loop of henle ascending limb thick segment,true
 936643626,cerebral cortex region,true
-http://mouse.owl#MA_0000983,fourth ventricle choroid plexus,true
-http://mouse.owl#MA_0000983,4th ventricle choroid plexus,false
+http://mouse.owl#MA_0000910,spinal cord white matter,true
+http://mouse.owl#MA_0000347,tongue,true
 http://mouse.owl#genid557,intercostal muscle,true
 http://mouse.owl#genid557,genid557,false
 206655396,intercostal muscle,true
+http://mouse.owl#MA_0000007,extremity,false
+http://mouse.owl#MA_0000007,limb,true
 http://mouse.owl#genid367,genid367,false
 http://mouse.owl#genid367,vestibular apparatus,true
 -1169913381,vestibular apparatus,true
 http://mouse.owl#MA_0001883,nasal cartilage,true
 -1486758290,nasal cartilage,true
+http://mouse.owl#MA_0000415,lung,true
 http://mouse.owl#MA_0001693,urinary bladder urothelium,true
 http://mouse.owl#MA_0001693,transitional epithelium,false
 http://mouse.owl#genid959,genid959,false
@@ -314,11 +310,9 @@ http://mouse.owl#genid959,transitional epithelium,true
 http://mouse.owl#MA_0002597,outer renal medulla vasa recta,true
 http://mouse.owl#MA_0002595,vasa recta,true
 -1652223260,outer renal medulla vasa recta,true
-http://mouse.owl#MA_0002494,liver lobule,true
-http://mouse.owl#MA_0000318,facial bone,false
-http://mouse.owl#MA_0000318,viscerocranium,true
-http://mouse.owl#MA_0002611,renal proximal tubule,true
 http://mouse.owl#MA_0000380,urinary bladder,true
+http://mouse.owl#MA_0000006,head neck,true
+http://mouse.owl#MA_0000030,pelvis,true
 http://mouse.owl#MA_0000200,cerebellar hemisphere,true
 1429712708,cerebellar hemisphere,true
 http://mouse.owl#MA_0001104,trigeminal v nerve ophthalmic division,true
@@ -331,11 +325,13 @@ http://mouse.owl#genid679,circulatory system,true
 http://mouse.owl#genid679,genid679,false
 http://mouse.owl#MA_0000003,organ system,true
 -124462755,cardiovascular system,true
-http://mouse.owl#MA_0000396,male reproductive system,true
-http://mouse.owl#MA_0000396,male reproductive tract,false
-http://mouse.owl#MA_0000347,tongue,true
+http://mouse.owl#MA_0000381,female reproductive tract,false
+http://mouse.owl#MA_0000381,female reproductive system,true
+http://mouse.owl#MA_0000139,lymph node,true
+http://mouse.owl#MA_0000044,foot,true
 http://mouse.owl#MA_0000942,auditory cortex,true
 1760913549,auditory cortex,true
+http://mouse.owl#MA_0000250,osseus semicircular canal,true
 http://mouse.owl#MA_0001846,main bronchus cartilage,true
 http://mouse.owl#MA_0001845,main bronchus connective tissue,true
 http://mouse.owl#MA_0001835,bronchus cartilage,true
@@ -346,6 +342,7 @@ http://mouse.owl#genid1942,waldeyer s ring,true
 http://mouse.owl#MA_0000140,malt,false
 http://mouse.owl#MA_0000140,mucosa associated lymphoid tissue,true
 -535335187,oropharyngeal lymphoid tissue,true
+http://mouse.owl#MA_0000072,heart,true
 http://mouse.owl#MA_0000562,thorax nerve,true
 http://mouse.owl#MA_0000562,upper body nerve,false
 http://mouse.owl#genid1556,upper body nerve,true
@@ -354,12 +351,14 @@ http://mouse.owl#MA_0000515,trunk nerve,true
 http://mouse.owl#MA_0001466,frontal bone,true
 http://mouse.owl#MA_0001478,chondrocranium bone,true
 -681536393,frontal bone,true
-http://mouse.owl#MA_0002610,renal connecting tubule,true
-http://mouse.owl#MA_0002609,renal cortex tubule,true
--234571006,renal connecting tubule,true
+http://mouse.owl#MA_0000372,kidney cortex,true
+http://mouse.owl#MA_0000372,renal cortex,false
 http://mouse.owl#genid657,renal cortex,true
 http://mouse.owl#genid657,genid657,false
 -570692212,kidney cortex,true
+http://mouse.owl#MA_0002610,renal connecting tubule,true
+http://mouse.owl#MA_0002609,renal cortex tubule,true
+-234571006,renal connecting tubule,true
 http://mouse.owl#MA_0001276,inferior oblique extraocular muscle,true
 http://mouse.owl#MA_0001275,oblique extraocular muscle,true
 341573373,inferior oblique extraocular muscle,true
@@ -379,18 +378,21 @@ http://mouse.owl#MA_0002229,suprarenal vein,true
 581262512,inferior suprarenal vein,true
 http://mouse.owl#MA_0002040,spermatic artery,true
 -1629414784,spermatic artery,true
+http://mouse.owl#MA_0000357,hepatic duct,true
+http://mouse.owl#MA_0000027,lower back,true
 http://mouse.owl#genid1610,prezygapophysis,true
 -1474815714,prezygapophysis,true
-http://mouse.owl#MA_0000091,heart ventricle,true
+http://mouse.owl#MA_0000199,cerebellar cortex,true
+http://mouse.owl#MA_0000762,spleen white pulp,true
 http://mouse.owl#MA_0002592,renal cortex venous system,false
 http://mouse.owl#MA_0002592,renal cortex vein,true
 http://mouse.owl#genid505,renal cortex venous system,true
 http://mouse.owl#genid505,genid505,false
 http://mouse.owl#MA_0002591,kidney venous blood vessel,true
 -144845312,renal cortex vein,true
-http://mouse.owl#MA_0000443,nasopharynx,true
 http://mouse.owl#MA_0000905,frontal cortex,true
 -2092961900,frontal cortex,true
+http://mouse.owl#MA_0000434,respiratory tract,true
 http://mouse.owl#MA_0001809,respiratory system venous blood vessel,true
 http://mouse.owl#MA_0001799,respiratory system blood vessel,true
 -726443590,respiratory system venous blood vessel,true
@@ -401,27 +403,29 @@ http://mouse.owl#MA_0001619,gastro splenic ligament,true
 http://mouse.owl#MA_0000525,abdomen pelvis perineum bone,true
 http://mouse.owl#MA_0000512,trunk bone,true
 1588017583,abdomen pelvis perineum bone,true
+http://mouse.owl#MA_0000916,parietal cortex,true
 http://mouse.owl#MA_0001429,lumbar vertebra 2,true
 http://mouse.owl#MA_0000312,lumbar vertebra,true
 1197829479,lumbar vertebra 2,true
-http://mouse.owl#MA_0001800,respiratory system arterial blood vessel,true
 http://mouse.owl#MA_0000335,colon,true
 94843014,colon,true
-http://mouse.owl#MA_0001638,left hepatic duct,true
 http://mouse.owl#MA_0001239,ciliary stroma,true
 -1801840396,ciliary stroma,true
 http://mouse.owl#MA_0000145,mammary gland,true
 http://mouse.owl#MA_0002564,exocrine gland,true
 http://mouse.owl#MA_0000144,integumental system gland,true
 -1908548467,mammary gland,true
-http://mouse.owl#MA_0000784,vibrissa root sheath,true
 http://mouse.owl#genid1592,urethral epithelium,true
 1809412046,urethral epithelium,true
 http://mouse.owl#MA_0001049,medullary reticular nucleus,true
 -1533904164,medullary reticular nucleus,true
 http://mouse.owl#MA_0002003,mesenteric artery,true
 -1784933927,mesenteric artery,true
-http://mouse.owl#MA_0000261,eye,true
+http://mouse.owl#MA_0000317,neurocranium,false
+http://mouse.owl#MA_0000317,chondrocranium,true
+http://mouse.owl#MA_0000317,calvarium,false
+http://mouse.owl#MA_0000396,male reproductive system,true
+http://mouse.owl#MA_0000396,male reproductive tract,false
 http://mouse.owl#MA_0000887,amygdaloid area,false
 http://mouse.owl#MA_0000887,amygdala,true
 http://mouse.owl#genid770,genid770,false
@@ -430,16 +434,17 @@ http://mouse.owl#genid770,amygdaloid area,true
 http://mouse.owl#MA_0000697,tail connective tissue,true
 http://mouse.owl#MA_0000011,connective tissue,true
 885939950,tail connective tissue,true
-http://mouse.owl#MA_0002692,stomach wall,true
 http://mouse.owl#MA_0001841,lobar bronchus connective tissue,true
 -1477721856,lobar bronchus connective tissue,true
 http://mouse.owl#MA_0002745,middle cerebellar peduncle,true
 http://mouse.owl#MA_0002742,cerebellar peduncle,true
 976816583,middle cerebellar peduncle,true
+http://mouse.owl#MA_0001100,trigeminal v nerve,true
 http://mouse.owl#MA_0001651,renal column,true
 1876426711,renal column,true
 http://mouse.owl#genid1003,clarke s nucleus,true
 -1927127583,clarke s nucleus,true
+http://mouse.owl#MA_0000173,hypothalamus,true
 http://mouse.owl#MA_0002555,scaphoid,true
 http://mouse.owl#MA_0002555,navicular of hand,false
 http://mouse.owl#MA_0002555,radial carpal bone,false
@@ -448,36 +453,33 @@ http://mouse.owl#genid194,navicular of hand,true
 http://mouse.owl#genid193,genid193,false
 http://mouse.owl#genid193,radial carpal bone,true
 -888052600,scaphoid,true
-http://mouse.owl#MA_0000337,small intestine,true
+http://mouse.owl#MA_0000348,tooth,true
 http://mouse.owl#MA_0001461,cortical bone,true
 1399847032,cortical bone,true
 http://mouse.owl#MA_0002365,rectus femoris,true
 579255652,rectus femoris,true
-http://mouse.owl#MA_0000243,cochlear duct,true
 http://mouse.owl#MA_0001271,extraocular skeletal muscle,true
 http://mouse.owl#MA_0000271,eye muscle,true
 253806283,extraocular skeletal muscle,true
-http://mouse.owl#MA_0000762,spleen white pulp,true
 http://mouse.owl#MA_0002175,median vein,true
 358360721,median vein,true
+http://mouse.owl#MA_0001081,vagus x ganglion,true
 http://mouse.owl#MA_0000214,cranial ganglion,true
 -1673206876,vagus x ganglion,true
-http://mouse.owl#MA_0000926,anterior division,true
+http://mouse.owl#MA_0000031,thoracic body wall,false
+http://mouse.owl#MA_0000031,chest,true
 http://mouse.owl#genid1745,pharyngotympanic tube,true
 1618492310,pharyngotympanic tube,true
-http://mouse.owl#MA_0002484,eye anterior segment,true
 http://www.geneontology.org/formats/oboInOwl#hasDefaultNamespace,has default namespace,true
 http://www.w3.org/2002/07/owl#AnnotationProperty,annotation property,true
-http://mouse.owl#MA_0000143,tonsil,true
 http://mouse.owl#MA_0000108,fibrocartilage,true
 http://mouse.owl#MA_0000104,cartilage,true
 185115655,fibrocartilage,true
+http://mouse.owl#MA_0002485,eye posterior segment,true
 http://mouse.owl#genid1175,fallopian tube,true
 -1686112815,fallopian tube,true
-http://mouse.owl#MA_0002643,penile urethra,true
-http://mouse.owl#MA_0000366,hepatic parenchyma,false
-http://mouse.owl#MA_0000366,liver parenchyma,true
-http://mouse.owl#MA_0000274,lacrimal apparatus,true
+http://mouse.owl#MA_0000390,endometrium,true
+http://mouse.owl#MA_0000129,thyroid gland,true
 http://mouse.owl#MA_0000900,cortical layer iv,true
 http://mouse.owl#MA_0000900,internal granular layer,false
 http://mouse.owl#genid1303,internal granular layer,true
@@ -485,14 +487,15 @@ http://mouse.owl#MA_0000186,cerebral cortex layer,false
 http://mouse.owl#MA_0000186,neocortex layer,true
 -566226544,cortical layer iv,true
 http://mouse.owl#MA_0001804,respiratory system artery,true
+http://mouse.owl#MA_0001800,respiratory system arterial blood vessel,true
 1223429963,respiratory system artery,true
 http://mouse.owl#MA_0002708,nail plate,true
 1324417459,nail plate,true
 http://mouse.owl#MA_0000710,blood vessel smooth muscle,true
 1158094662,blood vessel smooth muscle,true
-http://mouse.owl#MA_0000035,upper arm,true
 http://mouse.owl#MA_0001614,stomach glandular region mucous membrane,true
 671110747,stomach glandular region mucous membrane,true
+http://mouse.owl#MA_0002431,digestive system,true
 http://mouse.owl#MA_0000520,abdomen muscle,true
 http://mouse.owl#MA_0000527,abdomen pelvis perineum muscle,true
 -164338290,abdomen muscle,true
@@ -502,39 +505,40 @@ http://mouse.owl#MA_0002516,pancreas secretion,true
 http://mouse.owl#MA_0001424,cervical vertebra 4,true
 http://mouse.owl#MA_0000311,cervical vertebra,true
 1873462157,cervical vertebra 4,true
+http://mouse.owl#MA_0001649,outer renal cortex,true
 http://mouse.owl#MA_0002328,intrinsic tongue muscle transverse component,true
 http://mouse.owl#MA_0002327,intrinsic tongue muscle,true
 973713023,intrinsic tongue muscle transverse component,true
 http://mouse.owl#MA_0000330,anal canal,true
 787119130,anal canal,true
-http://mouse.owl#MA_0000325,renal urinary system,true
-http://mouse.owl#MA_0000325,excretory system,false
 http://mouse.owl#MA_0001234,external acoustic meatus cartilaginous part,true
 1401125834,external acoustic meatus cartilaginous part,true
 http://mouse.owl#MA_0002138,proper plantar vein,true
 1525022159,proper plantar vein,true
 http://mouse.owl#genid1803,malt,true
 -724920322,mucosa associated lymphoid tissue,true
-http://mouse.owl#MA_0000390,endometrium,true
+http://mouse.owl#MA_0000046,knee,true
 http://mouse.owl#MA_0001044,inferior olive medial accessory nucleus,true
 1725533787,inferior olive medial accessory nucleus,true
 -793003445,part of,true
 http://www.w3.org/2002/07/owl#ObjectProperty,object property,true
-http://mouse.owl#MA_0000092,heart left ventricle,true
-http://mouse.owl#MA_0000281,nose,true
-http://mouse.owl#MA_0001815,respiratory system basement membrane,true
+http://mouse.owl#MA_0002688,large intestine mucosa,true
+http://mouse.owl#MA_0000903,anterior medial cortex,true
+http://mouse.owl#MA_0001636,hepatic duct extrahepatic part,true
 http://mouse.owl#MA_0001976,ilio lumbar artery,true
 606252714,ilio lumbar artery,true
+http://mouse.owl#MA_0000351,oropharynx,true
 http://mouse.owl#MA_0000882,third ventricle ependyma,true
 http://mouse.owl#MA_0000882,3rd ventricle ependyma,false
 http://mouse.owl#genid833,genid833,false
 http://mouse.owl#genid833,3rd ventricle ependyma,true
 http://mouse.owl#MA_0000809,brain ependyma,true
 1343286317,third ventricle ependyma,true
-http://mouse.owl#MA_0000181,ventral thalamus,true
-http://mouse.owl#MA_0000181,subthalamus,false
 http://mouse.owl#MA_0001786,right lung alveolus,true
 -1394748458,right lung alveolus,true
+http://mouse.owl#MA_0000323,alimentary system,false
+http://mouse.owl#MA_0000323,alimentary tract,false
+http://mouse.owl#MA_0000323,gastrointestinal system,true
 http://mouse.owl#MA_0000692,limb muscle,true
 1163881126,limb muscle,true
 http://mouse.owl#MA_0001596,tongue skeletal muscle,true
@@ -549,10 +553,12 @@ http://mouse.owl#MA_0002481,fat pad,true
 645086323,epididymal fat pad,true
 http://mouse.owl#MA_0002360,pterygoid lateralis,true
 -2062423213,pterygoid lateralis,true
-http://mouse.owl#MA_0001653,outer renal medulla,true
-http://mouse.owl#MA_0000426,right lung,true
+http://mouse.owl#MA_0000358,liver,true
 http://mouse.owl#genid1930,pinna,true
 106671919,pinna,true
+http://mouse.owl#MA_0000212,tegmentum,true
+http://mouse.owl#MA_0000837,hypothalamus medial zone,true
+http://mouse.owl#MA_0000273,iris,true
 http://mouse.owl#MA_0000103,truncus arteriosus,true
 1835746520,truncus arteriosus,true
 http://mouse.owl#MA_0001007,nodulus,false
@@ -560,21 +566,27 @@ http://mouse.owl#MA_0001007,cerebellum lobule x,true
 http://mouse.owl#genid765,nodulus,true
 http://mouse.owl#genid765,genid765,false
 1784988606,cerebellum lobule x,true
+http://mouse.owl#MA_0000210,substantia nigra,true
+http://mouse.owl#MA_0000008,tail,true
 http://mouse.owl#genid1170,foot distal carpal bone 2,true
 -1870546983,foot distal carpal bone 2,true
+http://mouse.owl#MA_0002696,small intestine wall,true
 http://mouse.owl#MA_0001939,costo cervical trunk,true
 -1730336252,costo cervical trunk,true
-http://mouse.owl#MA_0000051,lower leg,true
 http://mouse.owl#MA_0000845,ventromedial hypothalamic nucleus,true
 -100733515,ventromedial hypothalamic nucleus,true
 http://mouse.owl#MA_0001749,vas deferens epithelium,true
 109676287,vas deferens epithelium,true
 http://mouse.owl#MA_0000660,hindlimb bone,true
 -1493665316,hip bone,true
+http://mouse.owl#MA_0001346,intermedioradial carpal bone,false
+http://mouse.owl#MA_0001346,scapholunate,true
 http://mouse.owl#MA_0001559,small intestine smooth muscle,true
 -41491814,small intestine smooth muscle,true
+http://mouse.owl#MA_0002703,nail,true
 3373885,nail,true
 http://mouse.owl#MA_0000465,foot digit 1,true
+http://mouse.owl#MA_0000048,foot digit,true
 434782579,foot digit 1,true
 http://mouse.owl#MA_0001369,metatarsal bone digit 1,true
 -1927956917,metatarsal bone digit 1,true
@@ -593,34 +605,41 @@ http://mouse.owl#MA_0000085,ventricular septum,true
 http://mouse.owl#genid1718,interventricular septum,true
 http://mouse.owl#MA_0000083,heart septum,true
 1729024918,ventricular septum,true
+http://mouse.owl#MA_0000274,lacrimal apparatus,true
+http://mouse.owl#MA_0000180,dorsal thalamus,true
 -434044185,hindlimb digital veins,true
-http://mouse.owl#MA_0000236,auditory vestibular system,false
-http://mouse.owl#MA_0000236,ear,true
-http://mouse.owl#MA_0000041,hand digit,true
+http://mouse.owl#MA_0000389,uterus,true
 http://mouse.owl#genid455,papillary collecting duct,true
 http://mouse.owl#genid455,genid455,false
 -1057121809,papillary collecting duct,true
+http://mouse.owl#MA_0000204,pons,true
 http://mouse.owl#MA_0001971,iliac artery,true
 -851163608,iliac artery,true
+http://mouse.owl#MA_0001119,spinal cord dorsal horn,true
 http://mouse.owl#MA_0001781,left lung hilus,true
 545706411,left lung hilus,true
+http://mouse.owl#MA_0002636,lower urinary tract,true
 http://mouse.owl#MA_0002685,stomach submucosa,true
 147985424,stomach submucosa,true
 http://mouse.owl#MA_0001591,taste bud,true
 441607311,taste bud,true
 http://mouse.owl#MA_0002495,bile canaliculus,true
 -834452399,bile canaliculus,true
+http://mouse.owl#MA_0000261,eye,true
 http://mouse.owl#MA_0000808,epidermis suprabasal layer,true
 1612491414,epidermis suprabasal layer,true
 http://mouse.owl#MA_0000618,hand blood vessel,true
 http://mouse.owl#MA_0000611,forelimb blood vessel,true
 -596544428,hand blood vessel,true
+http://mouse.owl#MA_0000236,auditory vestibular system,false
+http://mouse.owl#MA_0000236,ear,true
 http://mouse.owl#MA_0000428,right lung caudal lobe,true
 http://mouse.owl#MA_0000428,right lung inferior lobe,false
 http://mouse.owl#genid1063,right lung inferior lobe,true
 http://mouse.owl#MA_0001791,right lung lobe,true
 1862130779,right lung caudal lobe,true
-http://mouse.owl#MA_0000033,arm,true
+http://mouse.owl#MA_0000373,kidney medulla,true
+http://mouse.owl#MA_0000373,renal medulla,false
 http://mouse.owl#MA_0000238,bony labyrinth,true
 http://mouse.owl#MA_0000238,osseus labyrinth,false
 http://mouse.owl#genid939,genid939,false
@@ -628,6 +647,8 @@ http://mouse.owl#genid939,osseus labyrinth,true
 395867806,bony labyrinth,true
 http://mouse.owl#genid1685,centrale,true
 -852049225,centrale,true
+http://mouse.owl#MA_0000034,lower arm,true
+http://mouse.owl#MA_0000034,forearm,false
 http://mouse.owl#MA_0000690,limb digit,true
 -567144414,foot digit,true
 http://mouse.owl#genid1495,kidney interstitium,true
@@ -637,18 +658,22 @@ http://mouse.owl#MA_0001002,cerebellum lobule v,true
 http://mouse.owl#genid962,culmen,true
 http://mouse.owl#genid962,genid962,false
 1784988604,cerebellum lobule v,true
+http://mouse.owl#MA_0001639,right hepatic duct,true
+http://mouse.owl#MA_0000394,vagina,true
 http://mouse.owl#MA_0001934,superior cerebellar artery,true
 http://mouse.owl#MA_0001933,cerebellar artery,true
 -1364431144,superior cerebellar artery,true
+http://mouse.owl#MA_0000839,medial preoptic region,true
 http://mouse.owl#MA_0000840,medial preoptic nucleus,true
 -1535238980,medial preoptic nucleus,true
 http://mouse.owl#MA_0001744,penis foreskin,true
 -1405023011,penis foreskin,true
-http://mouse.owl#MA_0000356,gall bladder,true
+http://mouse.owl#MA_0000171,diencephalon,true
 http://mouse.owl#MA_0002648,urethra mesenchymal layer,true
 -422530709,urethra mesenchymal layer,true
 http://mouse.owl#MA_0000650,foot digit skin,true
 -1020269399,foot digit skin,true
+http://mouse.owl#MA_0000018,skeletal system,true
 http://mouse.owl#MA_0001554,small intestine lamina propria,true
 -1658119230,small intestine lamina propria,true
 http://mouse.owl#MA_0000460,wrist joint,true
@@ -660,9 +685,6 @@ http://mouse.owl#MA_0000248,perilymphatic channel,true
 -1541996111,scala media,true
 http://mouse.owl#MA_0001364,metacarpal bone digit 1,true
 1074765533,metacarpal bone digit 1,true
-http://mouse.owl#MA_0002434,hematopoietic system,true
-http://mouse.owl#MA_0002434,hemopoietic system,false
-http://mouse.owl#MA_0002434,haematopoietic system,false
 http://mouse.owl#MA_0002268,anterior abdominal wall muscle,true
 312506807,anterior abdominal wall muscle,true
 http://mouse.owl#MA_0000270,eyelid tarsus,true
@@ -671,15 +693,16 @@ http://mouse.owl#MA_0001174,ulnar nerve,true
 http://mouse.owl#MA_0000595,arm nerve,true
 http://mouse.owl#MA_0000228,peripheral nerve,true
 -124103751,ulnar nerve,true
+http://mouse.owl#MA_0000029,abdomen,true
 http://mouse.owl#MA_0002078,vesical artery,true
 2124746983,vesical artery,true
 http://mouse.owl#MA_0000080,heart myocardium,true
 http://mouse.owl#MA_0000164,myocardium,true
 http://mouse.owl#MA_0000164,cardiac muscle,false
 1049574223,heart myocardium,true
-http://mouse.owl#MA_0000839,medial preoptic region,true
 http://mouse.owl#genid1648,habenular nucleus,true
 -1418962092,habenular nucleus,true
+http://mouse.owl#MA_0002411,exocrine system,true
 http://mouse.owl#MA_0002680,esophagus mucosa,true
 1137634316,esophagus mucosa,true
 http://mouse.owl#MA_0002490,urinary bladder muscularis mucosa,true
@@ -692,7 +715,6 @@ http://mouse.owl#genid852,genid852,false
 http://mouse.owl#genid851,genid851,false
 http://mouse.owl#genid851,epidermis stratum germinativum,true
 -1507771539,epidermis stratum basale,true
-http://mouse.owl#MA_0000043,ankle,true
 http://mouse.owl#MA_0001707,ovary follicle,true
 687153890,ovary follicle,true
 http://mouse.owl#MA_0000613,forelimb connective tissue,true
@@ -709,9 +731,6 @@ http://mouse.owl#genid579,organ of masera,true
 http://mouse.owl#MA_0000233,spinal nerve,true
 http://mouse.owl#MA_0000217,nerve,true
 1789814974,spinal nerve,true
-http://mouse.owl#MA_0000014,integumental system,true
-http://mouse.owl#MA_0000341,oral region,true
-http://mouse.owl#MA_0000341,mouth,false
 http://mouse.owl#MA_0001137,paraganglia of zuckerkandl,false
 http://mouse.owl#MA_0001137,organ of zuckerkandl,true
 http://mouse.owl#MA_0001137,para aortic body,false
@@ -724,10 +743,9 @@ http://mouse.owl#MA_0000975,olfactory tract,true
 http://mouse.owl#genid603,bowman s space,true
 http://mouse.owl#genid603,genid603,false
 480037744,bowman s space,true
+http://mouse.owl#MA_0000026,hindlimb,true
 http://mouse.owl#MA_0001879,heart ventricle muscular part,true
 1938221104,heart ventricle muscular part,true
-http://mouse.owl#MA_0002731,endometrium epithelium,true
-http://mouse.owl#MA_0002623,inner renal medulla loop of henle,true
 http://mouse.owl#MA_0000785,vibrissa inner root sheath,true
 -608553957,vibrissa inner root sheath,true
 http://mouse.owl#genid413,organ of corti,true
@@ -737,9 +755,10 @@ http://mouse.owl#MA_0001689,urethral lamina propria,false
 http://mouse.owl#MA_0001689,urethra lamina propria,true
 http://mouse.owl#genid1719,urethral lamina propria,true
 918638279,urethra lamina propria,true
+http://mouse.owl#MA_0000021,lower body,false
+http://mouse.owl#MA_0000021,abdomen pelvis perineum,true
 http://mouse.owl#MA_0000616,forelimb nerve,true
 856954861,arm nerve,true
-http://mouse.owl#MA_0001459,bone,true
 http://mouse.owl#MA_0001499,gomphosis,true
 http://mouse.owl#MA_0000320,cartilaginous joint,true
 -46211598,gomphosis,true
@@ -747,23 +766,23 @@ http://mouse.owl#MA_0000320,cartilaginous joint,true
 http://mouse.owl#MA_0002453,coronary artery,true
 http://mouse.owl#MA_0002483,heart blood vessel,true
 774809005,coronary artery,true
-http://mouse.owl#MA_0000192,lateral ventricle,true
-http://mouse.owl#MA_0000190,dentate gyrus,true
 http://mouse.owl#MA_0002263,vesical vein,true
 -926783854,vesical vein,true
 http://mouse.owl#MA_0002073,upper intercostal artery,true
 1213130394,upper intercostal artery,true
-http://mouse.owl#MA_0000391,uterine smooth muscle,false
-http://mouse.owl#MA_0000391,myometrium,true
-http://mouse.owl#MA_0000006,head neck,true
+http://mouse.owl#MA_0000260,external acoustic meatus,true
+http://mouse.owl#MA_0000260,external auditory meatus,false
 http://mouse.owl#MA_0002433,anatomic region,true
 -277129274,head neck,true
-http://mouse.owl#MA_0001618,dorsal mesogastrium,true
+http://mouse.owl#MA_0000206,medulla oblongata,true
 http://mouse.owl#MA_0000938,septofimbrial nucleus,true
 1720458733,septofimbrial nucleus,true
 http://mouse.owl#MA_0000748,afferent lymphatic vessel,true
 http://mouse.owl#MA_0000138,lymphatic vessel,true
 1914570171,afferent lymphatic vessel,true
+http://mouse.owl#MA_0002450,body fluid substance,true
+http://mouse.owl#MA_0000176,hypophysis cerebri,false
+http://mouse.owl#MA_0000176,pituitary gland,true
 http://mouse.owl#MA_0000558,thorax blood vessel,true
 http://mouse.owl#MA_0000558,mgi:terryh,false
 http://mouse.owl#MA_0000558,upper body blood vessel,false
@@ -774,12 +793,10 @@ http://mouse.owl#genid-A0,genid a0,false
 http://mouse.owl#genid-A0,mgi:terryh,true
 http://mouse.owl#MA_0000511,trunk blood vessel,true
 762168661,thorax blood vessel,true
-http://mouse.owl#MA_0000030,pelvis,true
+http://mouse.owl#MA_0000833,hypothalamus lateral zone,true
 http://mouse.owl#MA_0001702,clitoral gland,true
-http://mouse.owl#MA_0000544,female reproductive gland organ,true
 http://mouse.owl#MA_0000383,female reproductive gland,true
 1942429947,clitoral gland,true
-http://mouse.owl#MA_0000309,vertebra,true
 http://mouse.owl#MA_0002606,glomerular mesangium,true
 -1292278847,glomerular mesangium,true
 http://mouse.owl#MA_0000368,kidney,true
@@ -788,6 +805,7 @@ http://mouse.owl#MA_0000522,abdomen organ,true
 http://mouse.owl#MA_0001512,sternocostal joint,true
 http://mouse.owl#MA_0001508,joint of rib,true
 -1277957416,sternocostal joint,true
+http://mouse.owl#MA_0001908,upper jaw,true
 http://mouse.owl#MA_0002416,vertebral column,true
 http://mouse.owl#MA_0000494,back bone,true
 859451886,vertebral column,true
@@ -806,60 +824,47 @@ http://mouse.owl#MA_0002035,renal artery,true
 http://mouse.owl#genid928,mesencephalon,true
 http://mouse.owl#genid928,genid928,false
 1609395471,mesencephalon,true
-http://mouse.owl#MA_0000823,choroid plexus,true
 http://mouse.owl#genid738,genid738,false
 http://mouse.owl#genid738,lymphatic system,true
 -953914159,lymphatic system,true
-http://mouse.owl#MA_0000732,peyer s patch follicle,true
-http://mouse.owl#MA_0000204,pons,true
-http://mouse.owl#MA_0001652,inner renal medulla,true
-http://mouse.owl#MA_0002693,intestine wall,true
+http://mouse.owl#MA_0001653,outer renal medulla,true
 http://mouse.owl#genid1416,biliary smooth muscle,true
 -1781411314,biliary smooth muscle,true
-http://mouse.owl#MA_0000044,foot,true
 http://mouse.owl#MA_0000970,olfactory bulb glomerular layer,true
 470775220,olfactory bulb glomerular layer,true
-http://mouse.owl#MA_0000218,peripheral nervous system,true
 114590,svz,true
 http://mouse.owl#MA_0001874,left ventricle membranous part,true
 http://mouse.owl#MA_0001878,heart ventricle membranous part,true
 1985919190,left ventricle membranous part,true
 http://mouse.owl#MA_0000780,hair outer root sheath,true
 -1545387737,hair outer root sheath,true
-http://mouse.owl#MA_0000102,outflow tract pulmonary component,true
-http://mouse.owl#MA_0001684,left ureter,true
 http://mouse.owl#MA_0000378,ureter,true
+http://mouse.owl#MA_0001684,left ureter,true
 -1046076135,left ureter,true
 http://mouse.owl#MA_0002588,peritubular capillary,true
 http://mouse.owl#MA_0002586,kidney capillary,true
 1374251861,peritubular capillary,true
+http://mouse.owl#MA_0000035,upper arm,true
 http://mouse.owl#MA_0000590,neck skin,true
 http://mouse.owl#MA_0000574,head neck skin,true
 -556355131,neck skin,true
-http://mouse.owl#MA_0000219,autonomic nervous system,true
 http://mouse.owl#MA_0001494,nasal bone,true
 http://mouse.owl#MA_0001482,viscerocranium bone,true
 -1793272416,nasal bone,true
 http://mouse.owl#MA_0002398,trapezius,true
 1097586188,trapezius,true
-http://mouse.owl#MA_0002636,lower urinary tract,true
-http://mouse.owl#MA_0000830,habenular nucleus,false
-http://mouse.owl#MA_0000830,habenula,true
 http://mouse.owl#genid1968,mouth,true
 104087022,mouth,true
 -1146593697,amygdaloid area,true
 http://mouse.owl#MA_0000001,mouse anatomy,true
 -185057817,mouse anatomy,true
-http://mouse.owl#MA_0002754,neocortex,true
-http://mouse.owl#MA_0002754,cerebral cortex,false
-http://mouse.owl#MA_0001657,glomerular tuft,false
-http://mouse.owl#MA_0001657,glomerulus,true
-http://mouse.owl#MA_0001273,biliary tract,true
 http://mouse.owl#MA_0000933,lateral septal complex,true
 -714844479,lateral septal complex,true
 http://mouse.owl#MA_0001837,bronchus submucosa,true
 http://mouse.owl#MA_0001831,bronchus connective tissue,true
 -645356901,bronchus submucosa,true
+http://mouse.owl#MA_0000318,facial bone,false
+http://mouse.owl#MA_0000318,viscerocranium,true
 http://mouse.owl#MA_0000743,lymph node primary follicle,true
 http://mouse.owl#MA_0000742,lymph node follicle,true
 -1930206249,lymph node primary follicle,true
@@ -869,6 +874,7 @@ http://mouse.owl#MA_0000553,chest skin,true
 http://mouse.owl#MA_0000564,upper body skin,false
 http://mouse.owl#MA_0000564,thorax skin,true
 996288611,chest skin,true
+http://mouse.owl#MA_0000298,limb long bone,true
 http://mouse.owl#MA_0001457,vertebral body,true
 http://mouse.owl#MA_0001457,vertebral centrum,false
 http://mouse.owl#genid1545,vertebral centrum,true
@@ -884,24 +890,23 @@ http://mouse.owl#MA_0001267,upper eyelid,true
 http://mouse.owl#MA_0000268,palpebra,false
 http://mouse.owl#MA_0000268,eyelid,true
 -1717594853,upper eyelid,true
-http://mouse.owl#MA_0000173,hypothalamus,true
--448302624,hypothalamus,true
-http://mouse.owl#MA_0002411,exocrine system,true
+http://mouse.owl#MA_0001669,proximal convoluted tubule,true
+http://mouse.owl#MA_0001669,first convoluted tubule,false
 1361278305,exocrine system,true
-http://mouse.owl#MA_0000036,elbow,true
+-448302624,hypothalamus,true
+http://mouse.owl#MA_0000237,inner ear,true
+http://mouse.owl#MA_0000237,labyrinth,false
 http://mouse.owl#MA_0001077,glossopharyngeal ix ganglion,true
 -1691441037,glossopharyngeal ix ganglion,true
 http://mouse.owl#MA_0002221,subclavian vein,true
 -68497565,subclavian vein,true
-http://mouse.owl#MA_0000194,olfactory bulb,true
-http://mouse.owl#MA_0000194,main olfactory bulb,false
 http://mouse.owl#MA_0002031,pulmonary artery,true
 -515591571,pulmonary artery,true
-http://mouse.owl#MA_0000285,nasal septum,true
-http://mouse.owl#MA_0000004,trunk,true
-http://mouse.owl#MA_0000004,body,false
+http://mouse.owl#MA_0000050,tarsus,true
 http://mouse.owl#genid1221,av node,true
 -695276492,av node,true
+http://mouse.owl#MA_0000013,haemolymphoid system,false
+http://mouse.owl#MA_0000013,hemolymphoid system,true
 http://mouse.owl#genid1031,pre botzinger respiratory control center,true
 736446870,pre botzinger respiratory control center,true
 http://mouse.owl#MA_0002583,arcuate artery,true
@@ -910,37 +915,31 @@ http://mouse.owl#MA_0002582,renal cortex artery,true
 -720238783,arcuate artery,true
 http://mouse.owl#MA_0002393,thyrohyoid,true
 1483021310,thyrohyoid,true
-http://mouse.owl#MA_0000210,substantia nigra,true
 http://mouse.owl#MA_0000706,arteriole smooth muscle,true
 http://mouse.owl#MA_0000704,arterial system smooth muscle,true
 -887302567,arteriole smooth muscle,true
-http://mouse.owl#MA_0000034,lower arm,true
-http://mouse.owl#MA_0000034,forearm,false
 -8073780,trunk organ,true
 http://mouse.owl#genid73,genid73,false
 http://mouse.owl#genid73,hepatic sinusoid,true
 -172828741,hepatic sinusoid,true
-http://mouse.owl#MA_0000326,reproductive system,true
 http://mouse.owl#MA_0000019,visceral organ system,true
 1913949178,reproductive system,true
-http://mouse.owl#MA_0000016,nervous system,true
 http://mouse.owl#MA_0000136,gut associated lymphoid tissue,true
 http://mouse.owl#MA_0000136,galt,false
 http://mouse.owl#genid291,galt,true
 http://mouse.owl#genid291,genid291,false
 412803482,gut associated lymphoid tissue,true
-http://mouse.owl#MA_0001058,midbrain meninges,true
-http://mouse.owl#MA_0002714,autopod,true
-http://mouse.owl#MA_0002714,paw,false
-http://mouse.owl#MA_0001040,inferior olive,true
+http://mouse.owl#MA_0000374,renal pelvis,false
+http://mouse.owl#MA_0000374,kidney pelvis,true
+http://mouse.owl#MA_0000216,spinal cord,true
 http://mouse.owl#MA_0000878,zona incerta,true
 -818236057,zona incerta,true
-http://mouse.owl#MA_0000435,lower respiratory tract,true
+http://mouse.owl#MA_0001130,spinal cord meninges,true
 http://mouse.owl#MA_0000688,limb bone,true
 http://mouse.owl#MA_0000688,ma:0000294,false
 -100262898,ma:0000294,true
+http://mouse.owl#MA_0001459,bone,true
 1466797945,limb bone,true
-http://mouse.owl#MA_0000029,abdomen,true
 http://mouse.owl#MA_0001832,bronchus basement membrane,true
 653280541,bronchus basement membrane,true
 http://mouse.owl#MA_0002736,myometrium outer longitudinal layer,true
@@ -956,42 +955,38 @@ http://mouse.owl#MA_0002546,juxtaglomerular complex,true
 http://mouse.owl#genid701,juxtaglomerular apparatus,true
 http://mouse.owl#genid701,genid701,false
 -1612328599,juxtaglomerular complex,true
+http://mouse.owl#MA_0002480,uvea,true
 http://mouse.owl#MA_0001452,prezygapophysis,false
 http://mouse.owl#MA_0001452,vertebra cranial articular process,true
 759125872,vertebra cranial articular process,true
 http://mouse.owl#MA_0002356,peroneus longus,true
 485328122,peroneus longus,true
+http://mouse.owl#MA_0000315,rib,true
 http://mouse.owl#MA_0001262,inner canthus,true
 http://mouse.owl#MA_0001262,medial canthus,false
 http://mouse.owl#genid360,genid360,false
 http://mouse.owl#genid360,medial canthus,true
 -1597792961,inner canthus,true
+http://mouse.owl#MA_0000783,vibrissa hair bulb,true
 http://mouse.owl#MA_0002166,linguofacial vein,true
 -80643201,linguofacial vein,true
 http://mouse.owl#MA_0001072,nucleus of darkschewitsch,true
 -2061037188,nucleus of darkschewitsch,true
-http://mouse.owl#MA_0000071,venule,true
 http://mouse.owl#genid1926,palpebral gland,true
 348411876,palpebral gland,true
-http://mouse.owl#MA_0000062,aorta,true
-http://mouse.owl#MA_0002617,mesangium,true
-http://mouse.owl#MA_0002405,adult mouse,true
-http://mouse.owl#MA_0002405,ts28,false
-http://mouse.owl#MA_0002405,mgi:terryh,false
-http://mouse.owl#MA_0000160,coat hair follicle,true
-http://mouse.owl#MA_0000168,brain,true
-http://mouse.owl#MA_0000833,hypothalamus lateral zone,true
+http://mouse.owl#MA_0000177,adenohypophysis,true
 http://mouse.owl#MA_0000701,aorta endothelium,true
 http://mouse.owl#MA_0000703,arterial system endothelium,true
 1801381450,aorta endothelium,true
-http://mouse.owl#MA_0001807,respiratory system capillary,true
+http://mouse.owl#MA_0000073,heart atrium,true
 http://mouse.owl#MA_0001605,oropharynx epithelium,true
 http://mouse.owl#MA_0002725,pharynx epithelium,true
 http://mouse.owl#MA_0001520,gastrointestinal system epithelium,true
 165882785,oropharynx epithelium,true
 http://mouse.owl#MA_0002509,feces,true
-http://mouse.owl#MA_0002450,body fluid substance,true
 97306713,feces,true
+http://mouse.owl#MA_0000060,vasculature,false
+http://mouse.owl#MA_0000060,blood vessel,true
 -509317329,trunk blood vessel,true
 http://mouse.owl#MA_0001415,rib head,true
 -1646070532,rib head,true
@@ -1002,28 +997,32 @@ http://mouse.owl#MA_0002319,iliocostalis,true
 1524203922,iliocostalis,true
 http://mouse.owl#MA_0001225,tympanic ring,true
 702381032,tympanic ring,true
+http://mouse.owl#MA_0000075,heart right atrium,true
 http://mouse.owl#MA_0002129,gastroepiploic vein,true
 -28494444,gastroepiploic vein,true
 http://mouse.owl#MA_0000131,thyroid gland lobe,true
 1944846494,thyroid gland lobe,true
 http://mouse.owl#MA_0001035,cuneate nucleus,true
 -1628906589,cuneate nucleus,true
-http://mouse.owl#MA_0000072,heart,true
-http://mouse.owl#MA_0000022,upper body,false
-http://mouse.owl#MA_0000022,thorax,true
-http://mouse.owl#MA_0001150,vagus x nerve trunk,true
+http://mouse.owl#MA_0000864,midline thalamic group,true
+http://mouse.owl#MA_0000392,uterine cervix,true
 http://mouse.owl#MA_0001967,hindlimb proper dorsal digital arteries,true
 http://mouse.owl#MA_0001964,hindlimb digital arteries,true
 1247405030,hindlimb proper dorsal digital arteries,true
 http://mouse.owl#MA_0000873,paracentral nucleus,true
 -1647586065,paracentral nucleus,true
+http://mouse.owl#MA_0000028,upper back,true
 http://mouse.owl#MA_0001777,left lung alveolus,true
 3963521,left lung alveolus,true
+http://mouse.owl#MA_0001646,papillary duct,true
+http://mouse.owl#MA_0001646,duct of bellini,false
+http://mouse.owl#MA_0001621,ventral mesogastrium,true
 http://mouse.owl#MA_0000683,upper leg connective tissue,true
 http://mouse.owl#MA_0000671,leg connective tissue,true
 1167769646,upper leg connective tissue,true
 http://mouse.owl#MA_0001587,salivary gland epithelium,true
 1649876448,salivary gland epithelium,true
+http://mouse.owl#MA_0002731,endometrium epithelium,true
 -160838312,endometrium epithelium,true
 http://mouse.owl#MA_0000493,back blood vessel,true
 1226388188,back blood vessel,true
@@ -1036,20 +1035,19 @@ http://mouse.owl#MA_0002351,palatoglossus,true
 -455738866,palatoglossus,true
 http://mouse.owl#MA_0002161,lateral saphenous vein,true
 -476810586,lateral saphenous vein,true
-http://mouse.owl#MA_0002719,arterial system,true
+http://mouse.owl#MA_0000002,spinal cord grey matter,true
+http://mouse.owl#MA_0000356,gall bladder,true
+http://mouse.owl#MA_0000346,salivary gland,true
 http://mouse.owl#genid1541,renal blood vessel,true
 1721546781,renal blood vessel,true
 http://mouse.owl#MA_0000836,perifornical nucleus,true
 1583061584,perifornical nucleus,true
-http://mouse.owl#MA_0000266,tunica cornea,false
-http://mouse.owl#MA_0000266,cornea,true
 http://mouse.owl#MA_0000646,foot digit bone,true
 http://mouse.owl#MA_0000643,foot bone,true
 -1020771856,foot digit bone,true
-http://mouse.owl#MA_0001320,external naris,true
-http://mouse.owl#MA_0000358,liver,true
-http://mouse.owl#MA_0002665,hilar part of hepatic duct,true
+http://mouse.owl#MA_0002686,small intestine mucosa,true
 http://mouse.owl#MA_0000456,hand digit 3,true
+http://mouse.owl#MA_0000041,hand digit,true
 -868522890,hand digit 3,true
 http://mouse.owl#MA_0001600,lower jaw incisor,true
 http://mouse.owl#MA_0001907,lower jaw tooth,true
@@ -1057,10 +1055,11 @@ http://mouse.owl#MA_0000349,incisor,true
 1983407603,lower jaw incisor,true
 http://mouse.owl#MA_0002504,exocrine gland fluid secretion,true
 1240128240,exocrine gland fluid secretion,true
+http://mouse.owl#MA_0000266,tunica cornea,false
+http://mouse.owl#MA_0000266,cornea,true
 http://mouse.owl#genid1278,tunica cornea,true
 -1354665109,cornea,true
 http://mouse.owl#MA_0001410,rib 10,true
-http://mouse.owl#MA_0000315,rib,true
 -931322245,rib 10,true
 http://mouse.owl#MA_0002314,dorsal hand interosseus muscle,true
 http://mouse.owl#MA_0002313,hand interosseous muscle,true
@@ -1068,7 +1067,6 @@ http://mouse.owl#MA_0002313,hand interosseous muscle,true
 http://mouse.owl#MA_0000076,heart endocardium,true
 http://mouse.owl#MA_0000717,cardiovascular system endothelium,true
 976542346,heart endocardium,true
-http://mouse.owl#MA_0002647,membranous urethra,true
 http://mouse.owl#MA_0001220,stapedius,true
 http://mouse.owl#MA_0000256,tympanic cavity muscle,true
 2095038623,stapedius,true
@@ -1076,7 +1074,6 @@ http://mouse.owl#MA_0002124,forelimb proper dorsal digital vein,true
 http://mouse.owl#MA_0002120,forelimb digital veins,true
 1357576846,forelimb proper dorsal digital vein,true
 124441699,trigeminal v sensory nucleus,true
-http://mouse.owl#MA_0002696,small intestine wall,true
 http://mouse.owl#genid446,organ of jacobsen,true
 http://mouse.owl#genid446,genid446,false
 -971216674,organ of jacobsen,true
@@ -1087,55 +1084,53 @@ http://mouse.owl#MA_0001783,lung epithelium,true
 168868700,bronchiole epithelium,true
 http://mouse.owl#genid1124,connecting tubule,true
 1359127196,connecting tubule,true
-http://mouse.owl#MA_0000202,cerebellar vermis,true
 http://mouse.owl#MA_0002676,parathyroid gland capsule,true
 1436680035,parathyroid gland capsule,true
-http://mouse.owl#MA_0001911,ocular refractive media,true
-http://mouse.owl#MA_0000941,temporal cortex,true
-http://mouse.owl#MA_0000941,temporal lobe,false
 http://mouse.owl#MA_0001582,endocrine pancreas,true
 http://mouse.owl#MA_0002563,endocrine gland,true
 596505941,endocrine pancreas,true
-http://mouse.owl#MA_0002486,eye surface,true
+http://mouse.owl#MA_0000258,outer ear,true
+http://mouse.owl#MA_0000258,external ear,false
 1101026021,eye surface,true
-http://mouse.owl#MA_0000333,large intestine,true
 http://mouse.owl#MA_0001392,hand digit 4 phalanx,true
 http://mouse.owl#MA_0000306,hand phalanx,true
 90969919,hand digit 4 phalanx,true
-http://mouse.owl#MA_0000225,sympathetic nervous system,true
 http://mouse.owl#MA_0002296,extrinsic tongue muscle,true
 -2018803573,extrinsic tongue muscle,true
+http://mouse.owl#MA_0002434,hematopoietic system,true
+http://mouse.owl#MA_0002434,hemopoietic system,false
+http://mouse.owl#MA_0002434,haematopoietic system,false
+http://mouse.owl#MA_0000413,ductus deferens,false
+http://mouse.owl#MA_0000413,vas deferens,true
 http://mouse.owl#MA_0000609,elbow connective tissue,true
 http://mouse.owl#MA_0000593,arm connective tissue,true
 -1763168351,elbow connective tissue,true
 http://mouse.owl#MA_0000419,alveolar atrium,true
 -1502714847,alveolar atrium,true
-http://mouse.owl#MA_0000020,back,true
 http://mouse.owl#MA_0002408,nerve trunk,true
 -1527441375,peripheral nerve trunk,true
-http://mouse.owl#MA_0000039,wrist,true
+http://mouse.owl#MA_0000218,peripheral nervous system,true
 113400054,wrist,true
-http://mouse.owl#MA_0000047,leg,true
-http://mouse.owl#MA_0000576,head bone,true
 http://mouse.owl#MA_0001925,carotid artery,true
 315105116,carotid artery,true
-http://mouse.owl#MA_0000197,metencephalon,true
 http://mouse.owl#MA_0000831,lateral habenular nucleus,true
 1412242219,lateral habenular nucleus,true
 http://mouse.owl#MA_0001735,epididymal duct,true
 -1393854039,epididymal duct,true
+http://mouse.owl#MA_0000386,placenta,true
 http://mouse.owl#MA_0002639,female urethral meatus,true
 -248588229,female urethral meatus,true
 http://mouse.owl#MA_0000641,ankle skin,true
 http://mouse.owl#MA_0000665,hindlimb skin,true
 -1345544883,ankle skin,true
+http://mouse.owl#MA_0000042,metacarpus,true
 http://mouse.owl#MA_0001545,large intestine epithelium,true
 938484235,large intestine epithelium,true
 http://mouse.owl#MA_0000451,elbow joint,true
 1840618260,elbow joint,true
+http://mouse.owl#MA_0002449,heart pericardium,true
 http://mouse.owl#MA_0000557,thoracic cavity organ,true
 -1242917998,heart pericardium,true
-http://mouse.owl#MA_0000177,adenohypophysis,true
 http://mouse.owl#MA_0001355,cuboid,true
 http://mouse.owl#MA_0001355,foot distal carpal bone 4 and 5,false
 http://mouse.owl#genid1214,foot distal carpal bone 4 and 5,true
@@ -1150,14 +1145,16 @@ http://mouse.owl#MA_0000227,sympathetic nerve trunk,true
 -35432435,thoracic sympathetic nerve trunk,true
 http://mouse.owl#MA_0002069,ulnar artery,true
 87612744,ulnar artery,true
+http://mouse.owl#MA_0000071,venule,true
 http://mouse.owl#MA_0000066,venous blood vessel,true
 -820058666,venule,true
+http://mouse.owl#MA_0002711,immune system,true
 http://mouse.owl#genid1639,coeliac nerve plexus,true
 -1703355694,coeliac nerve plexus,true
 http://mouse.owl#genid1449,palpebra,true
 1013262696,palpebra,true
-http://mouse.owl#MA_0001676,loop of henle ascending limb,true
-http://mouse.owl#MA_0000397,epididymis,true
+http://mouse.owl#MA_0000408,penis,true
+http://mouse.owl#MA_0002647,membranous urethra,true
 http://mouse.owl#MA_0002671,splenic cord,true
 652738163,splenic cord,true
 -1078684621,fat pad,true
@@ -1167,23 +1164,20 @@ http://mouse.owl#MA_0000930,posterior division,true
 http://mouse.owl#MA_0000604,upper arm bone,true
 http://mouse.owl#MA_0000592,arm bone,true
 -1481709331,upper arm bone,true
+http://mouse.owl#MA_0001088,accessory xi nerve,true
 405168319,joint of rib,true
 http://mouse.owl#MA_0000414,larynx,true
 -1109921171,larynx,true
 http://mouse.owl#MA_0001318,retina lamina,true
 1434850448,retina lamina,true
-http://mouse.owl#MA_0000237,inner ear,true
-http://mouse.owl#MA_0000237,labyrinth,false
 http://mouse.owl#MA_0000224,parasympathetic nerve,true
 2086599270,parasympathetic nerve,true
+http://mouse.owl#MA_0000416,alveolar system,true
 -769692920,trigeminal v chief sensory nucleus,true
 http://mouse.owl#MA_0001128,spinal cord dorsal commissural nucleus,true
 1582733189,spinal cord dorsal commissural nucleus,true
-http://mouse.owl#MA_0000195,hindbrain,true
-http://mouse.owl#MA_0000195,rhombencephalon,false
 http://mouse.owl#genid1636,forearm,true
 -516503068,lower arm,true
-http://mouse.owl#MA_0000384,ovary,true
 http://mouse.owl#MA_0000966,accessory olfactory formation,false
 http://mouse.owl#MA_0000966,accessory olfactory bulb,true
 http://mouse.owl#genid472,genid472,false
@@ -1194,6 +1188,8 @@ http://mouse.owl#MA_0000776,tonsil capsule,true
 605896195,upper body blood vessel,true
 http://mouse.owl#MA_0001920,basilar artery,true
 622935496,basilar artery,true
+http://mouse.owl#MA_0000127,pancreatic islet,true
+http://mouse.owl#MA_0000127,islet of langerhans,false
 http://mouse.owl#MA_0000585,neck connective tissue,true
 -223235966,neck cartilage,true
 http://mouse.owl#MA_0001730,vagina epithelium,true
@@ -1224,23 +1220,21 @@ http://mouse.owl#MA_0002064,thoraco acromial artery,true
 http://mouse.owl#genid956,labyrinth,true
 http://mouse.owl#genid956,genid956,false
 -28981786,labyrinth,true
-http://mouse.owl#MA_0000394,vagina,true
-http://mouse.owl#MA_0001621,ventral mesogastrium,true
+http://mouse.owl#MA_0000253,middle ear,true
+http://mouse.owl#MA_0000253,tympanic cavity,false
+http://mouse.owl#MA_0000337,small intestine,true
 http://mouse.owl#MA_0000929,oval nucleus,true
 -1736206676,oval nucleus,true
 http://mouse.owl#MA_0000739,lymph node capsule,true
 -508724258,lymph node capsule,true
 http://mouse.owl#MA_0000549,chest blood vessel,true
 1179192066,chest blood vessel,true
-http://mouse.owl#MA_0000920,retrohippocampal cortex,true
+http://mouse.owl#MA_0001487,mandible,true
 http://mouse.owl#MA_0000359,liver bare area,true
 -1201759288,liver bare area,true
-http://mouse.owl#MA_0000093,heart right ventricle,true
-http://mouse.owl#MA_0001097,optic ii nerve,true
 http://mouse.owl#MA_0001503,postcranial synchondrosis,true
 http://mouse.owl#MA_0001501,synchondrosis,true
 1801174215,postcranial synchondrosis,true
-http://mouse.owl#MA_0000438,main bronchus,true
 -1968330998,nerve plexus,true
 http://mouse.owl#MA_0000169,brainstem,true
 http://mouse.owl#MA_0000169,brain stem,false
@@ -1256,6 +1250,9 @@ http://mouse.owl#MA_0001123,spinal cord reticular nucleus,true
 1637904366,spinal cord reticular nucleus,true
 http://mouse.owl#MA_0002027,profunda femoris artery,true
 1128072902,profunda femoris artery,true
+http://mouse.owl#MA_0000036,elbow,true
+http://mouse.owl#MA_0000961,lateral ventricle choroid plexus,true
+http://mouse.owl#MA_0000823,choroid plexus,true
 -1985207221,lateral ventricle choroid plexus,true
 http://mouse.owl#MA_0001865,nasopharynx epithelium,true
 http://mouse.owl#MA_0001912,upper respiratory tract epithelium,true
@@ -1271,10 +1268,14 @@ http://mouse.owl#MA_0002578,kidney arterial blood vessel,true
 194395411,afferent arteriole,true
 http://mouse.owl#MA_0000573,head neck organ,true
 232696,head organ,true
+http://mouse.owl#MA_0000322,synovial joint,true
 http://mouse.owl#MA_0001485,incisive bone,true
 791050171,incisive bone,true
+http://mouse.owl#MA_0000391,uterine smooth muscle,false
+http://mouse.owl#MA_0000391,myometrium,true
 http://mouse.owl#genid1337,uterine smooth muscle,true
 1530452591,myometrium,true
+http://mouse.owl#MA_0000016,nervous system,true
 http://mouse.owl#MA_0002389,supraspinatus,true
 1275528823,supraspinatus,true
 http://mouse.owl#MA_0001295,lacrimal duct,true
@@ -1287,9 +1288,8 @@ http://mouse.owl#genid1769,ammon s horn,true
 -1571096841,ammon s horn,true
 http://mouse.owl#genid1389,biliary lamina propria,true
 238951118,biliary lamina propria,true
-http://mouse.owl#MA_0000253,middle ear,true
-http://mouse.owl#MA_0000253,tympanic cavity,false
-http://mouse.owl#MA_0000442,upper respiratory tract,true
+http://mouse.owl#MA_0000281,nose,true
+http://mouse.owl#MA_0001180,brachial plexus,true
 http://mouse.owl#MA_0000924,septal area,false
 http://mouse.owl#MA_0000924,septal nucleus,false
 http://mouse.owl#MA_0000924,septal cortex,true
@@ -1302,8 +1302,9 @@ http://mouse.owl#MA_0001828,respiratory system muscle,true
 1569718419,respiratory system muscle,true
 http://mouse.owl#MA_0000734,peyer s patch germinal center,true
 -187699137,peyer s patch germinal center,true
+http://mouse.owl#MA_0001638,left hepatic duct,true
 1481672546,left hepatic duct,true
-http://mouse.owl#MA_0000026,hindlimb,true
+http://mouse.owl#MA_0001536,intestine epithelium,true
 http://mouse.owl#MA_0000543,pelvis organ,true
 -1932621670,female reproductive gland organ,true
 http://mouse.owl#MA_0001448,thoracic vertebra 11,true
@@ -1313,6 +1314,7 @@ http://mouse.owl#MA_0000354,bile duct,true
 1559922185,bile duct,true
 http://mouse.owl#MA_0001258,medial palpebral ligament,true
 794281065,medial palpebral ligament,true
+http://mouse.owl#MA_0001629,bile duct epithelium,true
 http://mouse.owl#MA_0002402,vastus lateralis,true
 332163474,vastus lateralis,true
 http://mouse.owl#genid853,cardiac muscle,true
@@ -1326,7 +1328,8 @@ http://mouse.owl#MA_0002210,renal vein,true
 http://mouse.owl#MA_0002022,posterior cerebral artery,true
 http://mouse.owl#MA_0002562,cerebral artery,true
 1658774751,posterior cerebral artery,true
-http://mouse.owl#MA_0000937,posterior septal complex,true
+http://mouse.owl#MA_0000032,thoracic cavity,true
+http://mouse.owl#MA_0002567,corpora quadrigemina,true
 http://mouse.owl#MA_0001860,trachea submucosa,true
 http://mouse.owl#MA_0001859,trachea non cartilage connective tissue,true
 1550195597,trachea submucosa,true
@@ -1335,6 +1338,7 @@ http://mouse.owl#MA_0001670,proximal convoluted tubule neck,true
 http://mouse.owl#MA_0002574,anterior tibial artery,true
 http://mouse.owl#MA_0002067,tibial artery,true
 -555601535,anterior tibial artery,true
+http://mouse.owl#MA_0002616,kidney interstitium,true
 http://mouse.owl#MA_0001480,respiratory tract epithelium,true
 http://mouse.owl#MA_0001823,respiratory system epithelium,true
 http://mouse.owl#MA_0001823,respiratory system mucosa,false
@@ -1350,32 +1354,23 @@ http://mouse.owl#MA_0000560,upper body connective tissue,false
 http://mouse.owl#MA_0000560,thorax connective tissue,true
 http://mouse.owl#MA_0000495,back connective tissue,true
 469307651,upper back connective tissue,true
-http://mouse.owl#MA_0000206,medulla oblongata,true
-http://mouse.owl#MA_0000317,neurocranium,false
-http://mouse.owl#MA_0000317,chondrocranium,true
-http://mouse.owl#MA_0000317,calvarium,false
 http://mouse.owl#genid1119,calvarium,true
 http://mouse.owl#genid1118,neurocranium,true
 1228084943,chondrocranium,true
-http://mouse.owl#MA_0000127,pancreatic islet,true
-http://mouse.owl#MA_0000127,islet of langerhans,false
 http://mouse.owl#genid783,genid783,false
 http://mouse.owl#genid783,islet of langerhans,true
 1024835934,pancreatic islet,true
 http://mouse.owl#genid1384,esophagus smooth muscle longitudinal layer,true
 368431934,esophagus smooth muscle longitudinal layer,true
-http://mouse.owl#MA_0000059,blood,true
 http://mouse.owl#MA_0000869,lateral geniculate nucleus,true
 -643759916,lateral geniculate nucleus,true
-http://mouse.owl#MA_0000352,esophagus,true
-http://mouse.owl#MA_0000352,oesophagus,false
-http://mouse.owl#MA_0000025,forelimb,true
 http://mouse.owl#MA_0000679,lower leg nerve,true
 http://mouse.owl#MA_0000673,leg nerve,true
 -1527811136,lower leg nerve,true
 http://mouse.owl#genid338,respiratory system mucosa,true
 http://mouse.owl#genid338,genid338,false
 -207211638,respiratory system epithelium,true
+http://mouse.owl#MA_0000441,trachea,true
 http://mouse.owl#MA_0002727,penis skin,true
 2055668897,penis skin,true
 http://mouse.owl#MA_0000489,outflow tract myocardium,true
@@ -1383,15 +1378,14 @@ http://mouse.owl#MA_0000489,outflow tract myocardium,true
 http://mouse.owl#MA_0001633,biliary lamina propria,false
 http://mouse.owl#MA_0001633,gall bladder lamina propria,true
 1678463668,gall bladder lamina propria,true
-http://mouse.owl#MA_0000273,iris,true
 http://mouse.owl#MA_0002537,skin fluid secretion,true
 1176812806,skin fluid secretion,true
 http://mouse.owl#MA_0000299,forelimb long bone,true
-http://mouse.owl#MA_0000298,limb long bone,true
 589093885,forelimb long bone,true
+http://mouse.owl#MA_0000110,intervertebral disc,true
+http://mouse.owl#MA_0000110,ma:0001515,false
 http://mouse.owl#MA_0001443,thoracic vertebra 6,true
 1298786279,thoracic vertebra 6,true
-http://mouse.owl#MA_0000038,shoulder,true
 http://mouse.owl#MA_0002347,obturator externus,true
 1215658065,obturator externus,true
 http://mouse.owl#MA_0001253,eyelid submuscular connective tissue,true
@@ -1400,27 +1394,20 @@ http://mouse.owl#MA_0001251,eyelid connective tissue,true
 http://mouse.owl#MA_0002157,internal jugular vein,true
 http://mouse.owl#MA_0002154,jugular vein,true
 1528169690,internal jugular vein,true
-http://mouse.owl#MA_0000199,cerebellar cortex,true
 http://mouse.owl#MA_0001063,red nucleus,true
 502031339,red nucleus,true
-http://mouse.owl#MA_0000328,intestine,true
-http://mouse.owl#MA_0000308,axial skeleton,true
-http://mouse.owl#MA_0001106,vagus x nerve,true
-http://mouse.owl#MA_0000141,spleen,true
 http://mouse.owl#genid1347,ganglionic layer,true
 284546977,ganglionic layer,true
-http://mouse.owl#MA_0000167,central nervous system,true
-http://mouse.owl#MA_0000259,auricle,true
-http://mouse.owl#MA_0000259,pinna,false
+http://mouse.owl#MA_0000243,cochlear duct,true
+http://mouse.owl#MA_0000435,lower respiratory tract,true
 http://mouse.owl#MA_0000502,lower back muscle,true
 http://mouse.owl#MA_0000496,back muscle,true
 -1839693486,lower back muscle,true
 http://mouse.owl#MA_0001406,rib 6,true
 108504968,rib 6,true
 http://mouse.owl#MA_0000500,lower back bone,true
+http://mouse.owl#MA_0000309,vertebra,true
 -396518187,lumbar vertebra,true
-http://mouse.owl#MA_0000212,tegmentum,true
-http://mouse.owl#MA_0000846,hypothalamus periventricular zone,true
 http://mouse.owl#MA_0001216,malleus,true
 http://mouse.owl#MA_0000254,auditory bone,true
 http://mouse.owl#MA_0000254,ear bone,false
@@ -1431,20 +1418,19 @@ http://mouse.owl#MA_0000122,pancreas head,true
 http://mouse.owl#MA_0001026,superior olive,false
 http://mouse.owl#MA_0001026,superior olivary nucleus,true
 901140809,superior olivary nucleus,true
-http://mouse.owl#MA_0001113,meninges,true
-http://mouse.owl#MA_0000005,body cavity lining,true
+http://mouse.owl#MA_0000168,brain,true
+http://mouse.owl#MA_0000155,coat hair,true
 http://mouse.owl#MA_0001958,forelimb proper dorsal digital arteries,true
 http://mouse.owl#MA_0001953,forelimb digital arteries,true
 -1020909695,forelimb proper dorsal digital arteries,true
-http://mouse.owl#MA_0000864,midline thalamic group,true
 703571599,midline thalamic group,true
 http://mouse.owl#MA_0001768,larynx muscle,true
 310861490,larynx muscle,true
 http://mouse.owl#MA_0000674,leg skin,true
 1670401398,leg skin,true
+http://mouse.owl#MA_0000141,spleen,true
 http://mouse.owl#MA_0001578,lip skeletal muscle,true
 -871883150,lip skeletal muscle,true
-http://mouse.owl#MA_0000883,forebrain meninges,true
 http://mouse.owl#MA_0002722,anterior commissure,true
 http://mouse.owl#MA_0002721,intercerebral commissure,true
 http://mouse.owl#MA_0002721,interhemispheric commissure,false
@@ -1464,14 +1450,14 @@ http://mouse.owl#MA_0002342,lumbosacrocaudalis,true
 -434742326,lumbosacrocaudalis,true
 http://mouse.owl#MA_0002152,ischiatic vein,true
 249375476,ischiatic vein,true
+http://mouse.owl#MA_0000262,eye anterior chamber,true
 http://mouse.owl#genid22,auerbach s plexus,true
 http://mouse.owl#genid22,genid22,false
 1339576700,auerbach s plexus,true
 264782909,paraganglia of zuckerkandl,true
-http://mouse.owl#MA_0002711,immune system,true
+http://mouse.owl#MA_0002473,face,true
 http://mouse.owl#MA_0001990,lieno gastric artery,true
 -1923811178,lieno gastric artery,true
-http://mouse.owl#MA_0000008,tail,true
 http://mouse.owl#MA_0000827,diencephalon arachnoid mater,true
 http://mouse.owl#MA_0000884,forebrain arachnoid mater,true
 -1487230185,diencephalon arachnoid mater,true
@@ -1479,6 +1465,7 @@ http://mouse.owl#MA_0000637,wrist nerve,true
 -1368927456,wrist nerve,true
 http://mouse.owl#MA_0000447,omental bursa superior recess,true
 468925552,omental bursa superior recess,true
+http://mouse.owl#MA_0001106,vagus x nerve,true
 http://mouse.owl#MA_0000257,tympanic membrane,true
 -664050677,tympanic membrane,true
 http://mouse.owl#MA_0001401,rib 1,true
@@ -1494,18 +1481,17 @@ http://mouse.owl#MA_0002115,facial vein,true
 -1706598769,facial vein,true
 http://mouse.owl#MA_0001021,pontine nucleus,true
 1152395029,pontine nucleus,true
-http://mouse.owl#MA_0000183,telencephalic vesicle,false
-http://mouse.owl#MA_0000183,cerebrum,false
-http://mouse.owl#MA_0000183,telencephalon,true
 http://mouse.owl#MA_0000999,central lobule,false
 http://mouse.owl#MA_0000999,cerebellum lobule ii,true
 http://mouse.owl#genid489,genid489,false
 http://mouse.owl#genid489,central lobule,true
 -499937272,cerebellum lobule ii,true
+http://mouse.owl#MA_0001679,loop of henle descending limb,true
 645888008,forelimb digital arteries,true
 http://mouse.owl#MA_0001763,epiglottic cartilage,true
 http://mouse.owl#MA_0000485,yellow elastic cartilage,true
 1339370313,epiglottic cartilage,true
+http://mouse.owl#MA_0000047,leg,true
 http://mouse.owl#MA_0002667,hilar part of right hepatic duct,true
 -1477728883,hilar part of right hepatic duct,true
 http://mouse.owl#MA_0001573,oesophagus smooth muscle,false
@@ -1520,18 +1506,19 @@ http://mouse.owl#MA_0000305,foot phalanx,true
 -1335552451,foot digit 3 phalanx,true
 http://mouse.owl#MA_0002287,depressor labii inferioris,true
 -162256035,depressor labii inferioris,true
+http://mouse.owl#MA_0002629,outer medulla outer stripe,true
 http://mouse.owl#MA_0001193,organ of corti,false
 http://mouse.owl#MA_0001193,spiral organ,true
 -1143735991,spiral organ,true
-http://mouse.owl#MA_0000216,spinal cord,true
-http://mouse.owl#MA_0000476,dorsal aorta,true
 http://mouse.owl#MA_0002097,inferior cerebral vein,true
 http://mouse.owl#MA_0002096,cerebral vein,true
 1881466793,inferior cerebral vein,true
-http://mouse.owl#MA_0002476,palate,true
+http://mouse.owl#MA_0002619,renal medulla interstitium,true
 -988459333,periodontal membrane,true
 http://mouse.owl#genid1667,unciform,true
 -474058966,unciform,true
+http://mouse.owl#MA_0002659,bile duct extrahepatic part,true
+http://mouse.owl#MA_0000033,arm,true
 http://mouse.owl#MA_0001916,artery of lower lip,true
 -1417654871,artery of lower lip,true
 http://mouse.owl#MA_0000822,brainstem periaqueductal grey,true
@@ -1539,15 +1526,11 @@ http://mouse.owl#MA_0000810,brain grey matter,true
 1258637772,brainstem periaqueductal grey,true
 http://mouse.owl#MA_0001726,uterine gland,true
 -1821304403,uterine gland,true
-http://mouse.owl#MA_0000174,mammillary body,true
 http://mouse.owl#MA_0000632,shoulder connective tissue,true
 259651646,shoulder connective tissue,true
-http://mouse.owl#MA_0001536,intestine epithelium,true
 -1586738618,intestine epithelium,true
-http://mouse.owl#MA_0000434,respiratory tract,true
+http://mouse.owl#MA_0000442,upper respiratory tract,true
 278347623,upper respiratory tract,true
-http://mouse.owl#MA_0001346,intermedioradial carpal bone,false
-http://mouse.owl#MA_0001346,scapholunate,true
 http://mouse.owl#genid1520,intermedioradial carpal bone,true
 http://mouse.owl#MA_0002557,proximal carpal bone,true
 1497391322,scapholunate,true
@@ -1565,17 +1548,17 @@ http://mouse.owl#MA_0000061,arterial blood vessel,true
 93001880,aorta,true
 http://mouse.owl#MA_0002110,dorsal venous arch,true
 1937981862,dorsal venous arch,true
-http://mouse.owl#MA_0000945,cerebral white matter,true
 http://mouse.owl#MA_0000994,cerebellum external granule cell layer,true
 http://mouse.owl#MA_0000993,cerebellum granule cell layer,true
 -711100215,cerebellum external granule cell layer,true
 http://mouse.owl#MA_0001898,zigzag hair,true
 http://mouse.owl#MA_0001897,pelage hair,true
 216526369,zigzag hair,true
+http://mouse.owl#MA_0001854,trachea basement membrane,true
+http://mouse.owl#MA_0000445,omental bursa,true
 http://mouse.owl#genid432,genid432,false
 http://mouse.owl#genid432,ts28,true
 3568172,ts28,true
-http://mouse.owl#MA_0000128,parathyroid gland,true
 http://mouse.owl#MA_0002662,intrahepatic bile duct epithelium,true
 1280222315,intrahepatic bile duct epithelium,true
 http://mouse.owl#MA_0002472,retina photoreceptor layer outer segment,true
@@ -1590,25 +1573,26 @@ http://mouse.owl#MA_0000399,male reproductive gland,true
 -1030853345,vesicular gland,true
 http://mouse.owl#MA_0001309,retina external limiting lamina,true
 247401204,retina external limiting lamina,true
+http://mouse.owl#MA_0000197,metencephalon,true
 -967124855,cranial nerve,true
-http://mouse.owl#MA_0001119,spinal cord dorsal horn,true
 1147375172,spinal cord dorsal horn,true
-http://mouse.owl#MA_0000007,extremity,false
-http://mouse.owl#MA_0000007,limb,true
 467009461,forelimb,true
 http://mouse.owl#genid1472,ulnar carpal bone,true
 -943341780,ulnar carpal bone,true
-http://mouse.owl#MA_0000910,spinal cord white matter,true
+http://mouse.owl#MA_0002640,male urethra,true
 http://mouse.owl#MA_0000957,hippocampus stratum lacunosum,true
 http://mouse.owl#MA_0002427,hippocampus layer,true
 -1391258317,hippocampus stratum lacunosum,true
+http://mouse.owl#MA_0000316,craniofacial bone,false
+http://mouse.owl#MA_0000316,cranium,true
+http://mouse.owl#MA_0000316,cranial bone,false
 http://mouse.owl#MA_0000767,thymus cortex,true
 1348378178,thymus cortex,true
+http://mouse.owl#MA_0001911,ocular refractive media,true
 1340725748,ocular refractive media,true
 http://mouse.owl#MA_0000577,head connective tissue,true
 http://mouse.owl#MA_0000570,head neck connective tissue,true
 1854649470,head connective tissue,true
-http://mouse.owl#MA_0002739,serous pericardium,true
 http://mouse.owl#MA_0001721,oviduct smooth muscle,true
 291889486,oviduct smooth muscle,true
 http://mouse.owl#MA_0002625,loop of henle thin descending limb,true
@@ -1622,8 +1606,6 @@ http://mouse.owl#genid1515,sphincter ani externus,true
 -100202412,ma:0002379,true
 http://mouse.owl#MA_0001530,anal region skeletal muscle,true
 131015170,external anal sphincter,true
-http://mouse.owl#MA_0002435,lymphatic system,false
-http://mouse.owl#MA_0002435,lymphoid system,true
 -896347420,lymphoid system,true
 -187555888,metencephalon,true
 http://mouse.owl#MA_0001341,trapezoid,true
@@ -1641,19 +1623,20 @@ http://mouse.owl#MA_0001151,left vagus x nerve trunk,true
 http://mouse.owl#genid378,genid378,false
 http://mouse.owl#genid378,anterior vagus x nerve trunk,true
 1767080094,left vagus x nerve trunk,true
-http://mouse.owl#MA_0001308,retina photoreceptor layer,true
-http://mouse.owl#MA_0001308,layer of rods and cones,false
+http://mouse.owl#MA_0000846,hypothalamus periventricular zone,true
+http://mouse.owl#MA_0000476,dorsal aorta,true
 http://mouse.owl#genid1815,reissner s membrane,true
 985470882,reissner s membrane,true
-http://mouse.owl#MA_0002683,stomach mucosa,true
+http://mouse.owl#MA_0000325,renal urinary system,true
+http://mouse.owl#MA_0000325,excretory system,false
+http://mouse.owl#MA_0000308,axial skeleton,true
+http://mouse.owl#MA_0000225,sympathetic nervous system,true
 http://mouse.owl#MA_0001893,auchene hair,true
 270173286,auchene hair,true
 http://mouse.owl#genid1055,nucleus accumbens,true
 1891628091,nucleus accumbens,true
-http://mouse.owl#MA_0001229,auricular muscle,true
 http://mouse.owl#MA_0000400,ampullary gland,true
 -1576283408,ampullary gland,true
-http://mouse.owl#MA_0001028,trigeminal v nucleus,true
 http://mouse.owl#MA_0001304,lens fiber,true
 814945393,lens fiber,true
 -222610176,substantia nigra,true
@@ -1664,10 +1647,8 @@ http://mouse.owl#MA_0001114,arachnoid mater,true
 980831525,arachnoid mater,true
 http://mouse.owl#MA_0002018,peroneal artery,true
 -1647032100,peroneal artery,true
+http://mouse.owl#MA_0000020,back,true
 3016206,back,true
-http://mouse.owl#MA_0000142,thymus,true
-http://mouse.owl#MA_0000413,ductus deferens,false
-http://mouse.owl#MA_0000413,vas deferens,true
 http://mouse.owl#MA_0000952,hippocampus ca3,true
 http://mouse.owl#MA_0002428,hippocampus region,true
 1061814857,hippocampus ca3,true
@@ -1681,14 +1662,17 @@ http://mouse.owl#genid561,second convoluted tubule,true
 http://mouse.owl#MA_0002633,renal distal tubule,true
 http://mouse.owl#MA_0001665,renal convoluted tubule,true
 -1189831594,distal convoluted tubule,true
+http://mouse.owl#MA_0000116,adrenal gland,true
+http://mouse.owl#MA_0000116,suprarenal gland,false
 http://mouse.owl#MA_0000572,head neck nerve ganglion,true
 -668436147,head neck nerve ganglion,true
+http://mouse.owl#MA_0002627,outer medulla inner stripe loop of henle,true
 http://mouse.owl#MA_0001476,temporal bone,true
 -1285428695,temporal bone,true
-http://mouse.owl#MA_0000382,clitoris,true
-922290376,clitoris,true
 http://mouse.owl#MA_0002620,inner renal medulla interstitium,true
 -1897694804,inner renal medulla interstitium,true
+http://mouse.owl#MA_0000382,clitoris,true
+922290376,clitoris,true
 http://mouse.owl#MA_0001286,vitreous humour,false
 http://mouse.owl#MA_0001286,vitreous humor,true
 http://mouse.owl#genid1283,vitreous humour,true
@@ -1696,7 +1680,10 @@ http://mouse.owl#genid1283,vitreous humour,true
 http://mouse.owl#MA_0002430,cerebellum white matter,true
 http://mouse.owl#MA_0000820,brain white matter,true
 331601071,cerebellum white matter,true
+http://mouse.owl#MA_0000192,lateral ventricle,true
 -1461274642,lateral ventricle,true
+http://mouse.owl#MA_0001677,distal straight tubule,false
+http://mouse.owl#MA_0001677,loop of henle ascending limb thick segment,true
 http://mouse.owl#MA_0001096,olfactory i nerve,true
 -1770774617,olfactory i nerve,true
 http://mouse.owl#MA_0002240,deep temporal vein,true
@@ -1704,16 +1691,18 @@ http://mouse.owl#MA_0002239,temporal vein,true
 -642777275,deep temporal vein,true
 http://mouse.owl#MA_0002050,subscapular artery,true
 -852153015,subscapular artery,true
-http://mouse.owl#MA_0000045,hip,true
-http://mouse.owl#MA_0000373,kidney medulla,true
-http://mouse.owl#MA_0000373,renal medulla,false
+http://mouse.owl#MA_0002720,venous system,true
+http://mouse.owl#MA_0002418,musculoskeletal system,true
+http://mouse.owl#MA_0000426,right lung,true
+http://mouse.owl#MA_0000341,oral region,true
+http://mouse.owl#MA_0000341,mouth,false
+http://mouse.owl#MA_0001537,intestine mucosa,true
 http://mouse.owl#MA_0000915,secondary visual cortex,true
 -2099983044,secondary visual cortex,true
 http://mouse.owl#MA_0001819,lower respiratory tract cartilage,true
 1347411714,lower respiratory tract cartilage,true
 http://mouse.owl#MA_0000725,foramen caecum,true
 -1321908611,foramen caecum,true
-http://mouse.owl#MA_0001629,bile duct epithelium,true
 759676173,bile duct epithelium,true
 http://mouse.owl#genid92,genid92,false
 http://mouse.owl#genid92,basal nucleus,true
@@ -1723,9 +1712,9 @@ http://mouse.owl#MA_0000534,pelvis muscle,true
 984169132,gluteal muscle,true
 http://mouse.owl#MA_0001439,thoracic vertebra 2,true
 1298786275,thoracic vertebra 2,true
+http://mouse.owl#MA_0001814,respiratory system connective tissue,true
 http://mouse.owl#MA_0000345,oral region cartilage bone,true
 1954026761,oral region cartilage bone,true
--13211937,periotic capsule,true
 http://mouse.owl#MA_0001249,palpebral gland,false
 http://mouse.owl#MA_0001249,meibomian gland,true
 http://mouse.owl#MA_0001249,tarsal gland,false
@@ -1734,7 +1723,8 @@ http://mouse.owl#genid1925,tarsal gland,true
 -100233203,ma:0001261,true
 http://mouse.owl#MA_0000267,eye gland,true
 -622557120,meibomian gland,true
-http://mouse.owl#MA_0000155,coat hair,true
+-13211937,periotic capsule,true
+http://mouse.owl#MA_0002474,mouth,true
 876326634,coat hair,true
 http://mouse.owl#MA_0001059,midbrain arachnoid mater,true
 http://mouse.owl#MA_0000814,brain arachnoid matter,true
@@ -1742,14 +1732,14 @@ http://mouse.owl#MA_0000814,brain arachnoid matter,true
 http://mouse.owl#MA_0002203,inferior external pudendal vein,true
 http://mouse.owl#MA_0002202,pudendal vein,true
 -951831327,inferior external pudendal vein,true
+http://mouse.owl#MA_0000249,semicircular canal,true
 http://mouse.owl#MA_0002013,pancreatico duodenal artery,true
 725951839,pancreatico duodenal artery,true
 http://mouse.owl#MA_0000897,cortical layer i,true
 http://mouse.owl#MA_0000897,plexiform layer,false
 http://mouse.owl#genid1392,plexiform layer,true
 -1403738412,cortical layer i,true
-http://mouse.owl#MA_0000021,lower body,false
-http://mouse.owl#MA_0000021,abdomen pelvis perineum,true
+http://mouse.owl#MA_0000239,osseus cochlea,true
 http://mouse.owl#MA_0001851,terminal bronchus epithelium,true
 -1677917223,terminal bronchus epithelium,true
 http://mouse.owl#MA_0002755,lateral cervical nucleus,true
@@ -1767,24 +1757,23 @@ http://mouse.owl#MA_0001278,rectus extraocular muscle,true
 145053842,medial rectus extraocular muscle,true
 http://mouse.owl#MA_0002185,ophthalmic plexus,true
 -2070712077,ophthalmic plexus,true
+http://mouse.owl#MA_0000438,main bronchus,true
 http://mouse.owl#MA_0001091,facial vii nerve,true
 1055602003,facial vii nerve,true
+http://mouse.owl#MA_0000100,outflow tract,true
 90149751,axial skeleton,true
-http://mouse.owl#MA_0000024,neck,true
 http://mouse.owl#MA_0000118,adrenal gland cortex,true
 -1748163501,adrenal gland cortex,true
 http://mouse.owl#genid1565,central tarsal bone,true
 -1588557977,central tarsal bone,true
-http://mouse.owl#MA_0000374,renal pelvis,false
-http://mouse.owl#MA_0000374,kidney pelvis,true
+http://mouse.owl#MA_0000014,integumental system,true
 http://mouse.owl#genid1375,biliary epithelium,true
 -288422709,biliary epithelium,true
-http://mouse.owl#MA_0000891,striatum,true
-http://mouse.owl#MA_0000891,corpus striatum,false
-http://mouse.owl#MA_0000433,pleura,true
+http://mouse.owl#MA_0001195,spiral sulcus,true
 http://mouse.owl#MA_0001135,white matter,true
 870046606,spinal cord white matter,true
 1775116771,respiratory system connective tissue,true
+http://mouse.owl#MA_0002718,vascular system,true
 307531859,vascular system,true
 http://mouse.owl#MA_0000720,neuroendocrine gland,true
 699182843,neuroendocrine gland,true
@@ -1825,7 +1814,6 @@ http://mouse.owl#MA_0002148,internal mammary vein,true
 http://mouse.owl#MA_0001054,spinal vestibular nucleus,true
 -312100514,spinal vestibular nucleus,true
 1357199730,interventricular septum,true
-http://mouse.owl#MA_0000416,alveolar system,true
 http://mouse.owl#MA_0001986,kidney subcortical arteries,true
 1060397055,kidney subcortical arteries,true
 http://mouse.owl#MA_0000892,accumbens nucleus,true
@@ -1835,10 +1823,12 @@ http://mouse.owl#MA_0001796,hypopharynx,true
 -1208969327,hypopharynx,true
 http://mouse.owl#MA_0002750,spinal cord lateral column,true
 653053205,spinal cord lateral column,true
+http://mouse.owl#MA_0002695,large intestine wall,true
 http://mouse.owl#MA_0002560,pylorus,false
 http://mouse.owl#MA_0002560,stomach pyloric region,true
 http://mouse.owl#genid1500,pylorus,true
 884734228,stomach pyloric region,true
+http://mouse.owl#MA_0000099,pericardium,true
 http://mouse.owl#MA_0002370,scalenus medius,true
 -727061376,scalenus medius,true
 http://mouse.owl#MA_0002180,middle caudal vein,true
@@ -1847,13 +1837,15 @@ http://mouse.owl#MA_0002180,middle caudal vein,true
 http://mouse.owl#genid1750,substantia propria,true
 -1435246836,substantia propria,true
 http://mouse.owl#MA_0001207,anterior semicircular canal,true
-http://mouse.owl#MA_0000250,osseus semicircular canal,true
 -327961161,anterior semicircular canal,true
 985293340,ligament,true
 http://mouse.owl#MA_0001017,locus coeruleus,true
 228352696,locus coeruleus,true
 -399027504,pars distalis,true
-http://mouse.owl#MA_0001140,hypogastric nerve plexus,true
+http://mouse.owl#MA_0000925,bed nucleus of stria terminalis,true
+http://mouse.owl#MA_0000189,primal cortex,false
+http://mouse.owl#MA_0000189,hippocampal formation,true
+http://mouse.owl#MA_0000189,archipallium,false
 http://mouse.owl#MA_0001949,ethmoidal artery,true
 605538383,ethmoidal artery,true
 http://mouse.owl#MA_0000855,pars intermedia,true
@@ -1862,7 +1854,6 @@ http://mouse.owl#MA_0001759,arytenoid cartilage,true
 -1607332456,arytenoid cartilage,true
 http://mouse.owl#MA_0000694,limb skin,true
 -880692837,hindlimb skin,true
-http://mouse.owl#MA_0002619,renal medulla interstitium,true
 http://mouse.owl#MA_0001569,oesophagus mesentery,false
 http://mouse.owl#MA_0001569,esophagus mesentery,true
 http://mouse.owl#genid1947,oesophagus mesentery,true
@@ -1880,6 +1871,7 @@ http://mouse.owl#MA_0000598,lower arm bone,true
 2020028630,ulnar sesamoid bone,true
 http://mouse.owl#MA_0002523,seminal fluid,true
 1689759100,seminal fluid,true
+http://mouse.owl#MA_0000285,nasal septum,true
 -575651190,nasal septum,true
 http://mouse.owl#MA_0001189,inner ear epithelium,true
 1750543651,inner ear epithelium,true
@@ -1888,51 +1880,48 @@ http://mouse.owl#MA_0002333,levator labii superioris,true
 http://mouse.owl#MA_0000095,av node,false
 http://mouse.owl#MA_0000095,atrioventricular node,true
 -714055953,atrioventricular node,true
+http://mouse.owl#MA_0001905,ma:0001479,false
+http://mouse.owl#MA_0001905,jaw,true
 http://mouse.owl#MA_0002143,common iliac vein,true
 -737782424,common iliac vein,true
 http://mouse.owl#MA_0001981,intercostal artery,true
 -139633060,intercostal artery,true
-http://mouse.owl#MA_0002567,corpora quadrigemina,true
 http://mouse.owl#genid1333,esophagus smooth muscle circular layer,true
 975484055,esophagus smooth muscle circular layer,true
+http://mouse.owl#MA_0002484,eye anterior segment,true
 852336007,right lung lobe,true
 http://mouse.owl#genid1143,tuberal region,true
 961419010,tuberal region,true
-http://mouse.owl#MA_0002695,large intestine wall,true
 683226861,large intestine wall,true
-http://mouse.owl#MA_0000151,skin,true
 -529472403,brain ventricle,true
-http://mouse.owl#MA_0001637,hepatic duct intrahepatic part,true
 http://mouse.owl#MA_0000628,hand muscle,true
 http://mouse.owl#MA_0000615,forelimb muscle,true
 -1282941079,hand muscle,true
-http://mouse.owl#MA_0002629,outer medulla outer stripe,true
 543385632,main bronchus,true
 http://mouse.owl#genid442,perilymphatic space,true
 http://mouse.owl#genid442,genid442,false
 -864225629,perilymphatic channel,true
-http://mouse.owl#MA_0001126,spinal cord intermediate grey,true
+http://mouse.owl#MA_0002405,adult mouse,true
+http://mouse.owl#MA_0002405,ts28,false
+http://mouse.owl#MA_0002405,mgi:terryh,false
 http://mouse.owl#MA_0000058,white fat,true
 -1656117303,white fat,true
 http://mouse.owl#MA_0001202,saccule epithelium,true
 -498369425,saccule epithelium,true
-http://mouse.owl#MA_0000837,hypothalamus medial zone,true
-http://mouse.owl#MA_0000239,osseus cochlea,true
 http://mouse.owl#MA_0002106,dorsal nasal vein,true
 -1690031751,dorsal nasal vein,true
 http://mouse.owl#MA_0001012,cochlear viii nucleus,true
 1312350130,cochlear viii nucleus,true
-http://mouse.owl#MA_0000028,upper back,true
+http://mouse.owl#MA_0000038,shoulder,true
 http://mouse.owl#MA_0001944,dorsal metacarpal artery,true
 -1999538501,dorsal metacarpal artery,true
 http://mouse.owl#MA_0000850,lateral mammillary nucleus,true
 1302194614,lateral mammillary nucleus,true
-http://mouse.owl#MA_0000023,head,true
 -307033500,larynx connective tissue,true
 http://mouse.owl#MA_0002658,ureteral valve,true
 1134231355,ureteral valve,true
-http://mouse.owl#MA_0000100,outflow tract,true
 -881195294,hindlimb bone,true
+http://mouse.owl#MA_0000162,hair root sheath,true
 http://mouse.owl#MA_0001564,midgut,true
 -1074338011,midgut,true
 http://mouse.owl#MA_0002468,lobule of auricle,false
@@ -1958,27 +1947,29 @@ http://mouse.owl#MA_0001184,osseus spiral lamina,true
 1557604782,osseus spiral lamina,true
 http://mouse.owl#MA_0002088,bronchial vein,true
 312265307,bronchial vein,true
+http://mouse.owl#MA_0000120,pancreas,true
 http://mouse.owl#MA_0000090,tricuspid valve,true
 http://mouse.owl#MA_0000086,heart valve,true
 1135006700,tricuspid valve,true
+http://mouse.owl#MA_0000937,posterior septal complex,true
 http://mouse.owl#genid1658,archipallium,true
 1478172388,archipallium,true
-http://mouse.owl#MA_0000110,intervertebral disc,true
-http://mouse.owl#MA_0000110,ma:0001515,false
+http://mouse.owl#MA_0000241,endolymphatic duct sac,true
 -1027242767,tunica cornea,true
 http://mouse.owl#genid1088,extremity,true
 -248868772,extremity,true
 http://mouse.owl#MA_0002690,large intestine submucosa,true
 -377802163,large intestine submucosa,true
 731816848,lower jaw tooth,true
+http://mouse.owl#MA_0001113,meninges,true
 81743627,brain meninges,true
 http://mouse.owl#MA_0001717,right oviduct,true
 1851648583,right oviduct,true
 http://mouse.owl#MA_0000623,hand digit connective tissue,true
 -1670642214,hand digit connective tissue,true
-http://mouse.owl#MA_0000049,metatarsus,true
 http://mouse.owl#MA_0001527,hindgut,true
 921832598,hindgut,true
+http://mouse.owl#MA_0000433,pleura,true
 http://mouse.owl#MA_0002448,cavity lining,true
 -985636862,pleura,true
 http://mouse.owl#MA_0001337,ischium,true
@@ -1989,9 +1980,10 @@ http://mouse.owl#MA_0001147,intrinsic nerve plexus,true
 http://mouse.owl#MA_0000053,pericardial cavity,true
 http://mouse.owl#MA_0002447,body cavity,true
 -302480571,pericardial cavity,true
+http://mouse.owl#MA_0000259,auricle,true
+http://mouse.owl#MA_0000259,pinna,false
 http://mouse.owl#MA_0002101,digital vein,true
 73023043,digital vein,true
-http://mouse.owl#MA_0000290,appendicular skeleton,true
 http://mouse.owl#MA_0000985,fourth ventricle choroid plexus stroma,true
 http://mouse.owl#MA_0000825,choroid plexus stroma,true
 -686068104,fourth ventricle choroid plexus stroma,true
@@ -2013,9 +2005,11 @@ http://mouse.owl#MA_0002273,bulboglandular,true
 -363821509,bulboglandular,true
 http://mouse.owl#MA_0002083,anterior auricular vein,true
 -731351453,anterior auricular vein,true
+http://mouse.owl#MA_0000223,parasympathetic nervous system,true
+http://mouse.owl#MA_0001657,glomerular tuft,false
+http://mouse.owl#MA_0001657,glomerulus,true
 -1616266626,medulla oblongata,true
-http://mouse.owl#MA_0000893,caudate putamen,true
-http://mouse.owl#MA_0000440,terminal bronchus,true
+http://mouse.owl#MA_0000230,spinal ganglion nerve,true
 http://mouse.owl#genid595,lateral canthus,true
 http://mouse.owl#genid595,genid595,false
 563263904,lateral canthus,true
@@ -2031,7 +2025,6 @@ http://mouse.owl#MA_0000568,head neck blood vessel,true
 -484414428,head neck blood vessel,true
 http://mouse.owl#MA_0001712,ovary theca,true
 -684180489,ovary theca,true
-http://mouse.owl#MA_0002616,kidney interstitium,true
 -836951328,ureter,true
 http://mouse.owl#MA_0001522,gastrointestinal system serosa,true
 46640756,gastrointestinal system serosa,true
@@ -2049,6 +2042,7 @@ http://mouse.owl#MA_0002046,left subclavian artery,true
 1342577055,left subclavian artery,true
 http://mouse.owl#genid1806,membranous semicircular canal,true
 1488554324,membranous semicircular canal,true
+http://mouse.owl#MA_0000410,seminal vesicle,true
 http://mouse.owl#genid1426,renal cortex arterial system,true
 1534635789,renal cortex arterial system,true
 http://mouse.owl#MA_0000980,telencephalon arachnoid matter,true
@@ -2061,12 +2055,10 @@ http://mouse.owl#MA_0000790,inguinal mammary gland,true
 992939664,inguinal mammary gland,true
 http://mouse.owl#MA_0001694,urinary bladder fundus region,true
 1693387938,urinary bladder fundus region,true
-http://mouse.owl#MA_0000037,hand,true
+http://mouse.owl#MA_0000868,geniculate thalamic group,true
 http://mouse.owl#MA_0002598,papillary collecting duct,false
 http://mouse.owl#MA_0002598,inner renal medulla collecting duct,true
 -2016460763,inner renal medulla collecting duct,true
-http://mouse.owl#MA_0000395,vulva,true
-http://mouse.owl#MA_0001514,joint of vertebral body,true
 http://mouse.owl#genid1598,neural arch,true
 641974078,neural arch,true
 http://mouse.owl#MA_0000201,cerebellar layer,true
@@ -2076,6 +2068,9 @@ http://mouse.owl#MA_0001105,trochlear iv nerve,true
 http://mouse.owl#MA_0002009,occipital artery,true
 622858724,occipital artery,true
 583162558,connective tissue,true
+http://mouse.owl#MA_0000022,upper body,false
+http://mouse.owl#MA_0000022,thorax,true
+http://mouse.owl#MA_0000945,cerebral white matter,true
 http://mouse.owl#MA_0000943,temporal cortex association area,true
 -105316268,temporal cortex association area,true
 http://mouse.owl#MA_0001847,main bronchus epithelium,true
@@ -2091,15 +2086,18 @@ http://mouse.owl#genid1514,upper body organ,true
 1357084262,thorax organ,true
 http://mouse.owl#MA_0001467,interparietal bone,true
 -1587870483,interparietal bone,true
+http://mouse.owl#MA_0002611,renal proximal tubule,true
 2106109632,renal proximal tubule,true
 http://mouse.owl#genid586,renal medulla,true
 http://mouse.owl#genid586,genid586,false
 -525680581,kidney medulla,true
 http://mouse.owl#MA_0001277,superior oblique extraocular muscle,true
 -1356910230,superior oblique extraocular muscle,true
-http://mouse.owl#MA_0000137,peyer s patch,true
 http://mouse.owl#MA_0002421,pancreatic islet mantle,true
 1621439107,pancreatic islet mantle,true
+http://mouse.owl#MA_0000183,telencephalic vesicle,false
+http://mouse.owl#MA_0000183,cerebrum,false
+http://mouse.owl#MA_0000183,telencephalon,true
 http://mouse.owl#genid107,telencephalic vesicle,true
 http://mouse.owl#genid107,genid107,false
 -750667953,telencephalon,true
@@ -2107,9 +2105,11 @@ http://mouse.owl#MA_0001087,abducens vi nerve,true
 -1796553173,abducens vi nerve,true
 http://mouse.owl#MA_0002231,sural vein,true
 -2012447808,sural vein,true
+http://mouse.owl#MA_0000482,dorsal mesocardium,true
 http://mouse.owl#MA_0002041,left spermatic artery,true
 1803250041,left spermatic artery,true
-http://mouse.owl#MA_0000180,dorsal thalamus,true
+http://mouse.owl#MA_0000913,occipital cortex,true
+http://mouse.owl#MA_0002494,liver lobule,true
 http://mouse.owl#genid363,genid363,false
 http://mouse.owl#genid363,gastric fundus,true
 1118051801,gastric fundus,true
@@ -2128,22 +2128,24 @@ http://mouse.owl#MA_0000513,trunk connective tissue,true
 626711418,abdomen pelvis perineum connective tissue,true
 http://mouse.owl#MA_0000336,rectum,true
 -934903645,rectum,true
-http://mouse.owl#MA_0000027,lower back,true
 1213869974,skin gland,true
-http://mouse.owl#MA_0000120,pancreas,true
-http://mouse.owl#MA_0001100,trigeminal v nerve,true
 773289531,trigeminal v nerve,true
+http://mouse.owl#MA_0001040,inferior olive,true
+http://mouse.owl#MA_0002476,palate,true
+http://mouse.owl#MA_0000941,temporal cortex,true
+http://mouse.owl#MA_0000941,temporal lobe,false
 http://mouse.owl#MA_0002004,inferior mesenteric artery,true
 2084712247,inferior mesenteric artery,true
 http://mouse.owl#MA_0000888,claustrum,true
 48518515,claustrum,true
-http://mouse.owl#MA_0001195,spiral sulcus,true
+http://mouse.owl#MA_0000439,segmental bronchus,true
 http://mouse.owl#MA_0000698,tail intervertebral disc,true
 1702658169,tail intervertebral disc,true
 http://mouse.owl#MA_0001842,lobar bronchus epithelium,true
 1117694733,lobar bronchus epithelium,true
 http://mouse.owl#MA_0002746,superior cerebellar peduncle,true
 22691043,superior cerebellar peduncle,true
+http://mouse.owl#MA_0001652,inner renal medulla,true
 1127130843,inner renal medulla,true
 http://mouse.owl#MA_0002556,lunate,true
 http://mouse.owl#MA_0002556,semilunar,false
@@ -2157,13 +2159,15 @@ http://mouse.owl#MA_0001462,basioccipital bone,true
 -1094353004,basioccipital bone,true
 http://mouse.owl#MA_0002366,rectus thoracis,true
 2128615592,rectus thoracis,true
-http://mouse.owl#MA_0001905,ma:0001479,false
-http://mouse.owl#MA_0001905,jaw,true
 http://mouse.owl#MA_0001272,levator palpebrae superioris,true
 http://mouse.owl#MA_0000269,eyelid muscle,true
 293760811,levator palpebrae superioris,true
 http://mouse.owl#MA_0002176,median cubital vein,true
 1108019115,median cubital vein,true
+http://mouse.owl#MA_0000376,renal corpuscle,true
+http://mouse.owl#MA_0000376,ma:0001656,false
+http://mouse.owl#MA_0000376,malphighian corpuscle,false
+http://mouse.owl#MA_0000376,cortical renal corpuscle,false
 http://mouse.owl#MA_0001082,inferior vagus x ganglion,true
 668377734,inferior vagus x ganglion,true
 http://mouse.owl#genid878,genid878,false
@@ -2177,11 +2181,9 @@ http://mouse.owl#MA_0000109,hyaline cartilage,true
 http://mouse.owl#genid498,scalenus posterior,true
 http://mouse.owl#genid498,genid498,false
 -525456344,scalenus posterior,true
-http://mouse.owl#MA_0000903,anterior medial cortex,true
 http://mouse.owl#MA_0000901,ganglionic layer,false
 http://mouse.owl#MA_0000901,cortical layer v,true
 -1403738399,cortical layer v,true
-http://mouse.owl#MA_0000353,stomach,true
 http://mouse.owl#MA_0001805,respiratory system blood vessel endothelium,true
 -1050447184,respiratory system blood vessel endothelium,true
 http://mouse.owl#MA_0002709,proximal nail bed,true
@@ -2215,23 +2217,27 @@ http://mouse.owl#MA_0001045,inferior olive medial nucleus,true
 41407324,juxtaglomerular apparatus,true
 http://mouse.owl#MA_0001977,infraorbital artery,true
 -1733808213,infraorbital artery,true
+http://mouse.owl#MA_0000883,forebrain meninges,true
 925655751,forebrain meninges,true
 http://mouse.owl#MA_0001787,right lung bronchiole,true
 1255132916,right lung bronchiole,true
-http://mouse.owl#MA_0000916,parietal cortex,true
 -1763123997,limb nerve,true
 http://mouse.owl#MA_0001597,dental lamina,true
 995799001,dental lamina,true
+http://mouse.owl#MA_0000065,capillary,true
 http://mouse.owl#MA_0002741,brainstem white matter,true
 1556349824,brainstem white matter,true
 http://mouse.owl#MA_0002551,colostrum,true
 http://mouse.owl#MA_0002505,mammary gland fluid secretion,true
 1982813217,colostrum,true
+http://mouse.owl#MA_0000084,atrial septum,true
+http://mouse.owl#MA_0000084,interatrial septum,false
 http://mouse.owl#MA_0002361,pterygoid medialis,true
 1861933294,pterygoid medialis,true
 http://mouse.owl#MA_0002171,medial marginal vein,true
 -2027249270,medial marginal vein,true
 http://www.geneontology.org/formats/oboInOwl#ObsoleteClass,obsolete class,true
+http://mouse.owl#MA_0002728,larynx submucosa,true
 222015235,cartilage,true
 http://mouse.owl#MA_0001008,lateral cerebellar nucleus,true
 http://mouse.owl#MA_0001008,dentate nucleus,false
@@ -2244,8 +2250,8 @@ http://mouse.owl#genid493,excretory system,true
 -1595998447,excretory system,true
 http://mouse.owl#genid1361,facial vii motor nucleus,true
 1816687729,facial vii motor nucleus,true
-http://mouse.owl#MA_0000170,forebrain,true
-http://mouse.owl#MA_0000170,prosencephalon,false
+http://mouse.owl#MA_0000151,skin,true
+http://mouse.owl#MA_0000152,dermis,true
 1291410055,hypothalamus periventricular zone,true
 http://mouse.owl#MA_0000656,hip connective tissue,true
 http://mouse.owl#MA_0000661,hindlimb connective tissue,true
@@ -2253,6 +2259,7 @@ http://mouse.owl#MA_0000661,hindlimb connective tissue,true
 -116416124,respiratory system arterial blood vessel,true
 http://mouse.owl#MA_0002704,cuticle,true
 1128517244,cuticle,true
+http://mouse.owl#MA_0000161,coat hair bulb,true
 http://mouse.owl#MA_0000466,foot digit 2,true
 434782580,foot digit 2,true
 http://mouse.owl#MA_0001610,gastric epithelium,false
@@ -2269,10 +2276,10 @@ http://mouse.owl#MA_0001420,coccygea,false
 http://mouse.owl#MA_0000310,tail vertebra,false
 http://mouse.owl#MA_0000310,caudal vertebra,true
 1189260046,coccygeal vertebra,true
+-2085565859,heart valve,true
 http://mouse.owl#MA_0002324,intercostales,true
 http://mouse.owl#MA_0002324,intercostal muscle,false
 -404978327,intercostales,true
--2085565859,heart valve,true
 http://mouse.owl#MA_0001230,extrinsic auricular muscle,true
 -639620959,extrinsic auricular muscle,true
 http://mouse.owl#MA_0002134,common plantar vein,true
@@ -2288,23 +2295,21 @@ http://mouse.owl#MA_0001782,lung interstitial tissue,false
 http://mouse.owl#genid740,genid740,false
 http://mouse.owl#genid740,lung interstitial tissue,true
 2120810272,lung connective tissue,true
-http://mouse.owl#MA_0002686,small intestine mucosa,true
 380483385,small intestine mucosa,true
 http://mouse.owl#MA_0001592,tongue epithelium,true
 152866219,tongue epithelium,true
 http://mouse.owl#MA_0002496,liver acinus,true
 -204408026,liver acinus,true
 -56556402,brain ependyma,true
-http://mouse.owl#MA_0001630,bile duct intrahepatic part,true
-http://mouse.owl#MA_0001679,loop of henle descending limb,true
+http://mouse.owl#MA_0000163,vibrissa,true
+http://mouse.owl#MA_0000163,whisker,false
 http://mouse.owl#MA_0000612,forelimb bone,true
 -6137604,hand bone,true
-http://mouse.owl#MA_0000868,geniculate thalamic group,true
 http://mouse.owl#MA_0000429,right lung superior lobe,false
 http://mouse.owl#MA_0000429,right lung cranial lobe,true
 http://mouse.owl#genid1047,right lung superior lobe,true
 2139221679,right lung cranial lobe,true
-http://mouse.owl#MA_0001185,osseus labyrinth vestibule,true
+http://www.geneontology.org/formats/oboInOwl#DbXref,db xref,true
 -1147589646,osseus cochlea,true
 1795710968,metatarsus,true
 http://mouse.owl#MA_0001003,cerebellum lobule vi,true
@@ -2312,10 +2317,12 @@ http://mouse.owl#MA_0001003,declive,false
 http://mouse.owl#genid977,declive,true
 http://mouse.owl#genid977,genid977,false
 -499936869,cerebellum lobule vi,true
+http://mouse.owl#MA_0000328,intestine,true
 http://mouse.owl#MA_0001935,middle cerebral artery,true
 1677760213,middle cerebral artery,true
 http://mouse.owl#MA_0000841,retrochiasmatic area,true
 -644836974,retrochiasmatic area,true
+http://mouse.owl#MA_0000219,autonomic nervous system,true
 http://mouse.owl#MA_0001745,seminal vesicle epithelium,true
 2097221741,seminal vesicle epithelium,true
 http://mouse.owl#MA_0002649,urethra muscle,true
@@ -2330,12 +2337,12 @@ http://mouse.owl#MA_0002459,eye chamber,true
 -601800234,eye chamber,true
 http://mouse.owl#MA_0000461,radio carpal joint,true
 -974141283,radio carpal joint,true
+-828967065,eye muscle,true
 http://mouse.owl#MA_0001365,metacarpal bone digit 2,true
 1074765534,metacarpal bone digit 2,true
-http://mouse.owl#MA_0000032,thoracic cavity,true
--828967065,eye muscle,true
 http://mouse.owl#MA_0002269,biceps brachii,true
 -2117603959,biceps brachii,true
+http://mouse.owl#MA_0001181,lumbosacral plexus,true
 http://mouse.owl#MA_0001175,axillary nerve trunk,true
 http://mouse.owl#MA_0001175,circumflex nerve trunk,false
 http://mouse.owl#genid1304,circumflex nerve trunk,true
@@ -2344,6 +2351,7 @@ http://mouse.owl#MA_0000081,atrium myocardium,true
 -1769799597,atrium myocardium,true
 http://mouse.owl#MA_0002079,inferior vesical artery,true
 -188343,inferior vesical artery,true
+http://mouse.owl#MA_0000404,prostate gland,true
 http://mouse.owl#MA_0002681,esophagus muscularis mucosa,true
 1987639772,esophagus muscularis mucosa,true
 http://mouse.owl#MA_0002491,urinary bladder neck,true
@@ -2356,7 +2364,9 @@ http://mouse.owl#MA_0000691,limb joint,true
 725170591,forelimb joint,true
 http://mouse.owl#MA_0001518,joint articular surface,true
 -1773742109,joint articular surface,true
+http://mouse.owl#MA_0000424,terminal bronchiole,true
 -671284418,terminal bronchiole,true
+http://mouse.owl#MA_0001539,intestine smooth muscle,true
 http://mouse.owl#MA_0001328,vomeronasal organ sensory epithelium,true
 -2147033854,vomeronasal organ sensory epithelium,true
 http://mouse.owl#MA_0000234,segmental spinal nerve,true
@@ -2364,7 +2374,8 @@ http://mouse.owl#MA_0000234,segmental spinal nerve,true
 http://mouse.owl#MA_0001138,cardiac nerve plexus,true
 http://mouse.owl#MA_0000221,autonomic nerve plexus,true
 -784265777,cardiac nerve plexus,true
-http://mouse.owl#MA_0000065,capillary,true
+http://mouse.owl#MA_0002714,autopod,true
+http://mouse.owl#MA_0002714,paw,false
 3149205,foot,true
 http://mouse.owl#MA_0000976,olfactory tubercle,true
 716431176,olfactory tubercle,true
@@ -2381,6 +2392,7 @@ http://mouse.owl#MA_0001738,prostate gland lobe,true
 http://mouse.owl#MA_0002644,penile urethra cavernous portion,true
 -1934387258,penile urethra cavernous portion,true
 http://mouse.owl#MA_0001550,large intestine peyer s patch,true
+http://mouse.owl#MA_0000137,peyer s patch,true
 980101815,large intestine peyer s patch,true
 http://mouse.owl#MA_0002454,left coronary artery,true
 469898132,left coronary artery,true
@@ -2402,7 +2414,6 @@ http://mouse.owl#MA_0000939,septohippocampal nucleus,true
 1522712603,septohippocampal nucleus,true
 http://mouse.owl#MA_0000749,efferent lymphatic vessel,true
 -2099299905,efferent lymphatic vessel,true
-http://mouse.owl#MA_0002691,esophagus wall,true
 http://mouse.owl#MA_0000559,thorax bone,true
 http://mouse.owl#MA_0000559,upper body bone,false
 http://mouse.owl#genid452,genid452,false
@@ -2410,7 +2421,6 @@ http://mouse.owl#genid452,upper body bone,true
 459029245,thorax bone,true
 http://mouse.owl#MA_0001703,female preputial gland,true
 -438630835,female preputial gland,true
-http://mouse.owl#MA_0000389,uterus,true
 http://mouse.owl#MA_0002607,podocyte layer,false
 http://mouse.owl#MA_0002607,glomerular visceral epithelium,true
 http://mouse.owl#genid1698,podocyte layer,true
@@ -2420,7 +2430,6 @@ http://mouse.owl#MA_0000369,renal calyx,false
 http://mouse.owl#genid7,genid7,false
 http://mouse.owl#genid7,renal calyx,true
 -1542852464,kidney calyx,true
-http://mouse.owl#MA_0000871,intralaminar thalamic group,true
 http://mouse.owl#MA_0001513,joint of vertebral arch,true
 -586971519,joint of vertebral arch,true
 http://mouse.owl#MA_0002417,pancreatic acinus,true
@@ -2434,7 +2443,6 @@ http://mouse.owl#MA_0002227,ma:0002265,false
 http://mouse.owl#MA_0002227,superior vesical vein,true
 -100203408,ma:0002265,true
 -1572263007,superior vesical vein,true
-http://mouse.owl#MA_0001477,temporal bone petrous part,true
 http://mouse.owl#MA_0001133,spinal cord pia mater,true
 http://mouse.owl#MA_0001116,pia mater,true
 1794053421,spinal cord pia mater,true
@@ -2459,18 +2467,14 @@ http://mouse.owl#MA_0001495,palatine bone,true
 -678980551,palatine bone,true
 http://mouse.owl#MA_0002399,triceps brachii,true
 1460710637,triceps brachii,true
-http://mouse.owl#MA_0000410,seminal vesicle,true
 http://mouse.owl#genid1969,nucleus prepositus hypoglossus,true
 -618139098,nucleus prepositus hypoglossus,true
 http://mouse.owl#genid1399,biliary serosa,true
 -1310134400,biliary serosa,true
-http://mouse.owl#MA_0000002,spinal cord grey matter,true
 http://mouse.owl#MA_0001112,grey matter,true
 1586802330,spinal cord grey matter,true
-http://mouse.owl#MA_0000376,renal corpuscle,true
-http://mouse.owl#MA_0000376,ma:0001656,false
-http://mouse.owl#MA_0000376,malphighian corpuscle,false
-http://mouse.owl#MA_0000376,cortical renal corpuscle,false
+http://mouse.owl#MA_0001491,maxilla,true
+http://mouse.owl#MA_0000272,hyaloid cavity,true
 http://mouse.owl#MA_0000934,medial septal complex,true
 1658730832,medial septal complex,true
 http://mouse.owl#MA_0001838,bronchus elastic framework,true
@@ -2496,16 +2500,15 @@ http://mouse.owl#MA_0001268,ocular smooth muscle,true
 http://mouse.owl#MA_0002412,soft palate,true
 1431343604,soft palate,true
 349086070,mammillary body,true
-http://mouse.owl#MA_0001547,large intestine smooth muscle,true
 http://mouse.owl#MA_0001078,inferior glossopharyngeal ix ganglion,true
 599729237,inferior glossopharyngeal ix ganglion,true
 http://mouse.owl#MA_0002222,subcostal vein,true
 1561734499,subcostal vein,true
 http://mouse.owl#MA_0002032,left pulmonary artery,true
 -1377894042,left pulmonary artery,true
+http://mouse.owl#MA_0000443,nasopharynx,true
 http://mouse.owl#genid1412,hypophyseal cleft,true
 -1587223649,hypophyseal cleft,true
-http://mouse.owl#MA_0000482,dorsal mesocardium,true
 http://mouse.owl#MA_0001870,right atrium auricular region,true
 -1293176971,right atrium auricular region,true
 http://mouse.owl#MA_0001680,renal tubule basement membrane,true
@@ -2530,6 +2533,8 @@ http://mouse.owl#MA_0000879,3rd ventricle choroid plexus,false
 http://mouse.owl#genid439,3rd ventricle choroid plexus,true
 http://mouse.owl#genid439,genid439,false
 -313835365,third ventricle choroid plexus,true
+http://mouse.owl#MA_0000207,mesencephalon,false
+http://mouse.owl#MA_0000207,midbrain,true
 -79184400,limb connective tissue,true
 http://mouse.owl#MA_0001833,bronchus basal lamina,true
 1050451290,bronchus basal lamina,true
@@ -2548,11 +2553,12 @@ http://mouse.owl#MA_0002547,gonadal fat pad,true
 http://mouse.owl#MA_0001453,vertebra dorsal arch,true
 http://mouse.owl#MA_0001453,neural arch,false
 -651109533,vertebra dorsal arch,true
+http://mouse.owl#MA_0002587,glomerular capillary,true
+http://mouse.owl#MA_0002587,glomerular capillary system,false
 http://mouse.owl#MA_0002357,pronator teres,true
 -321323891,pronator teres,true
 http://mouse.owl#MA_0001263,lower eyelid,true
 1836984796,lower eyelid,true
-http://mouse.owl#MA_0000172,epithalamus,true
 http://mouse.owl#MA_0002167,masseteric vein,true
 -12675087,masseteric vein,true
 http://mouse.owl#MA_0001073,oculomotor iii nucleus,true
@@ -2560,9 +2566,9 @@ http://mouse.owl#MA_0001073,oculomotor iii nucleus,true
 http://mouse.owl#genid869,gastric serosa,true
 http://mouse.owl#genid869,genid869,false
 1475584083,gastric serosa,true
-http://mouse.owl#MA_0000329,anal region,true
 -65176287,circulatory system,true
 1567310657,central lobule,true
+http://mouse.owl#MA_0002571,descending aorta,true
 http://mouse.owl#MA_0000702,aorta smooth muscle,true
 953517787,aorta smooth muscle,true
 http://mouse.owl#MA_0001606,forestomach,true
@@ -2570,14 +2576,15 @@ http://mouse.owl#MA_0001606,forestomach,true
 -1524670761,trunk bone,true
 http://mouse.owl#MA_0001416,rib shaft,true
 521660492,rib shaft,true
-http://mouse.owl#MA_0000322,synovial joint,true
 1678884630,synovial joint,true
 http://mouse.owl#MA_0001226,auricular blood vessel,true
 -1337667837,auricular blood vessel,true
 http://mouse.owl#MA_0000132,thyroid gland medulla,true
 407934766,thyroid gland medulla,true
+http://mouse.owl#MA_0000576,head bone,true
 http://mouse.owl#MA_0001036,dorsal motor nucleus of vagus x nerve,true
 -952893029,dorsal motor nucleus of vagus x nerve,true
+http://mouse.owl#MA_0000153,epidermis,true
 http://mouse.owl#MA_0001968,proper plantar digital arteries,true
 -1500342,proper plantar digital arteries,true
 http://mouse.owl#MA_0000874,parafascicular nucleus,true
@@ -2605,10 +2612,9 @@ http://mouse.owl#genid294,genid294,false
 http://mouse.owl#genid294,pals,true
 3433567,pals,true
 -361219068,hypothalamus medial zone,true
+http://mouse.owl#MA_0000987,hindbrain meninges,true
 http://mouse.owl#MA_0000647,foot digit connective tissue,true
 571933913,foot digit connective tissue,true
-http://mouse.owl#MA_0002587,glomerular capillary,true
-http://mouse.owl#MA_0002587,glomerular capillary system,false
 http://mouse.owl#MA_0000457,hand digit 4,true
 -868522889,hand digit 4,true
 http://mouse.owl#MA_0001601,upper jaw incisor,true
@@ -2618,7 +2624,6 @@ http://mouse.owl#MA_0001909,upper jaw tooth,true
 -1279492790,eye gland,true
 http://mouse.owl#MA_0001411,rib 11,true
 -931322244,rib 11,true
-http://mouse.owl#MA_0000407,prepuce,true
 http://mouse.owl#MA_0002315,palmar hand interosseus muscle,true
 806318492,palmar hand interosseus muscle,true
 http://mouse.owl#MA_0000077,atrium endocardium,true
@@ -2631,15 +2636,12 @@ http://mouse.owl#MA_0001031,nucleus of gudden,false
 http://mouse.owl#MA_0001031,ventral tegmental nucleus,true
 http://mouse.owl#genid1508,nucleus of gudden,true
 1179397153,ventral tegmental nucleus,true
-http://mouse.owl#MA_0002474,mouth,true
 http://mouse.owl#genid827,genid827,false
 http://mouse.owl#genid827,whisker,true
 1316689380,whisker,true
 http://mouse.owl#genid637,nasal mucosa,true
 http://mouse.owl#genid637,genid637,false
 -733041922,nasal mucosa,true
-http://mouse.owl#MA_0000176,hypophysis cerebri,false
-http://mouse.owl#MA_0000176,pituitary gland,true
 http://mouse.owl#MA_0001963,hepatic artery,true
 -1704793264,hepatic artery,true
 http://mouse.owl#genid1315,oesophagus serosa,true
@@ -2650,7 +2652,6 @@ http://mouse.owl#MA_0002677,parathyroid gland parenchyma,true
 1959318838,parathyroid gland parenchyma,true
 http://mouse.owl#MA_0001583,primary palate,true
 -1513540324,primary palate,true
-http://mouse.owl#MA_0002487,spleen pulp,true
 -401250511,spleen pulp,true
 http://mouse.owl#MA_0001393,hand digit 5 phalanx,true
 -1716484544,hand digit 5 phalanx,true
@@ -2665,7 +2666,6 @@ http://mouse.owl#MA_0000832,medial habenular nucleus,true
 252770876,medial habenular nucleus,true
 http://mouse.owl#MA_0001736,epididymal smooth muscle,true
 -686092918,epididymal smooth muscle,true
-http://mouse.owl#MA_0002569,thoracic aorta,true
 http://mouse.owl#MA_0000642,foot blood vessel,true
 http://mouse.owl#MA_0000659,hindlimb blood vessel,true
 147840693,foot blood vessel,true
@@ -2678,7 +2678,6 @@ http://mouse.owl#MA_0000631,shoulder bone,true
 1264499250,humerus,true
 http://mouse.owl#MA_0002500,right pulmonary artery,true
 -633754639,right pulmonary artery,true
-http://mouse.owl#MA_0000262,eye anterior chamber,true
 1532251500,eye anterior chamber,true
 http://mouse.owl#MA_0001166,axillary nerve,true
 396838695,axillary nerve,true
@@ -2686,8 +2685,9 @@ http://mouse.owl#MA_0002310,gluteus medius,true
 -1505628445,gluteus medius,true
 99152237,heart,true
 -1864562196,forelimb digital veins,true
+http://mouse.owl#MA_0000045,hip,true
 -111514901,pylorus,true
-http://mouse.owl#MA_0000346,salivary gland,true
+http://mouse.owl#MA_0001630,bile duct intrahepatic part,true
 398472422,perilymphatic space,true
 http://mouse.owl#MA_0002672,spleen lymphoid nodule,false
 http://mouse.owl#MA_0002672,spleen lymphoid follicle,true
@@ -2697,7 +2697,7 @@ http://mouse.owl#MA_0002482,orbit,true
 106004849,orbit,true
 http://mouse.owl#MA_0002292,extensor carpi ulnaris,true
 -509947694,extensor carpi ulnaris,true
-http://mouse.owl#MA_0000826,diencephalon meninges,true
+http://mouse.owl#MA_0000425,left lung,true
 http://mouse.owl#MA_0000605,upper arm connective tissue,true
 1346265340,upper arm connective tissue,true
 http://mouse.owl#MA_0001509,costochondral joint,true
@@ -2707,6 +2707,7 @@ http://mouse.owl#genid1862,utricular macula,true
 424524813,utricular macula,true
 http://mouse.owl#MA_0001319,retina layer,true
 -1754818125,retina layer,true
+http://mouse.owl#MA_0002569,thoracic aorta,true
 -1827742705,sympathetic nervous system,true
 http://mouse.owl#MA_0001129,spinal cord lateral motor column,true
 320056608,spinal cord lateral motor column,true
@@ -2727,6 +2728,7 @@ http://mouse.owl#MA_0001731,vagina squamous epithelium,true
 -1751332891,vagina squamous epithelium,true
 http://mouse.owl#MA_0002635,renal nerve,true
 1317322775,renal nerve,true
+http://mouse.owl#MA_0000397,epididymis,true
 1025207942,epididymis,true
 http://mouse.owl#MA_0001541,ascending colon,true
 657621310,ascending colon,true
@@ -2742,9 +2744,9 @@ http://mouse.owl#MA_0001161,peripheral nervous system ganglion,true
 -1685345515,peripheral nervous system ganglion,true
 http://mouse.owl#MA_0002065,thoracodorsal artery,true
 -1501678013,thoracodorsal artery,true
+http://mouse.owl#MA_0000920,retrohippocampal cortex,true
 http://mouse.owl#genid1445,renin producing cells,true
 -1496234219,renin producing cells,true
-http://mouse.owl#MA_0002571,descending aorta,true
 http://mouse.owl#MA_0000600,lower arm muscle,true
 http://mouse.owl#MA_0000594,arm muscle,true
 1875149659,lower arm muscle,true
@@ -2760,9 +2762,11 @@ http://mouse.owl#MA_0000220,autonomic ganglion,true
 -284210881,autonomic ganglion,true
 http://mouse.owl#MA_0001124,substantia gelatinosa,true
 1439484320,substantia gelatinosa,true
+http://mouse.owl#MA_0002683,stomach mucosa,true
 -991892272,pelvis,true
 http://mouse.owl#MA_0002028,pudendal artery,true
 1867292905,pudendal artery,true
+http://mouse.owl#MA_0001058,midbrain meninges,true
 http://mouse.owl#MA_0000962,lateral ventricle choroid plexus epithelium,true
 2010382731,lateral ventricle choroid plexus epithelium,true
 http://mouse.owl#MA_0001866,pampiniform plexus,true
@@ -2772,6 +2776,7 @@ http://mouse.owl#MA_0000069,venous plexus,true
 365163648,pampiniform plexus,true
 http://mouse.owl#MA_0000772,hassall s corpuscle,true
 -1512896554,hassall s corpuscle,true
+http://mouse.owl#MA_0001676,loop of henle ascending limb,true
 1060448516,loop of henle ascending limb,true
 http://mouse.owl#genid1028,right lung postcaval lobe,true
 444877220,right lung postcaval lobe,true
@@ -2784,29 +2789,28 @@ http://mouse.owl#genid43,genid43,false
 -1222210312,lacrimal bone,true
 http://mouse.owl#MA_0002630,outer medulla outer stripe loop of henle,true
 1476534435,outer medulla outer stripe loop of henle,true
-http://mouse.owl#MA_0000392,uterine cervix,true
 -746337336,uterine cervix,true
+http://mouse.owl#MA_0001296,lacrimal gland,true
 770693260,lacrimal gland,true
 http://mouse.owl#MA_0002440,smooth muscle tissue,true
 http://mouse.owl#MA_0002437,muscle tissue,true
 631654569,smooth muscle tissue,true
+http://mouse.owl#MA_0000102,outflow tract pulmonary component,true
 http://mouse.owl#MA_0002250,ureteric vein,true
 -48407384,ureteric vein,true
 http://mouse.owl#MA_0002060,superficial sural artery,true
 http://mouse.owl#MA_0002058,sural artery,true
 408646022,superficial sural artery,true
-http://mouse.owl#MA_0002688,large intestine mucosa,true
 http://mouse.owl#genid952,pyramus,true
 http://mouse.owl#genid952,genid952,false
 -106395654,pyramus,true
+http://mouse.owl#MA_0002691,esophagus wall,true
 http://mouse.owl#genid1440,external granular layer,true
 -1015494995,external granular layer,true
-http://mouse.owl#MA_0000925,bed nucleus of stria terminalis,true
 172299009,bed nucleus of stria terminalis,true
 http://mouse.owl#MA_0001829,respiratory system skeletal muscle,true
 -923692444,respiratory system skeletal muscle,true
 http://mouse.owl#MA_0000735,axillary lymph node,true
-http://mouse.owl#MA_0000139,lymph node,true
 2063870235,axillary lymph node,true
 1713647469,right hepatic duct,true
 -202438407,male reproductive gland organ,true
@@ -2819,13 +2823,14 @@ http://mouse.owl#MA_0001259,orbital septum,true
 http://mouse.owl#MA_0002403,vastus medialis,true
 -1108863281,vastus medialis,true
 -339458561,skeletal muscle,true
-http://mouse.owl#MA_0000909,insular cortex,true
 http://mouse.owl#MA_0001069,interpeduncular nucleus,true
 -1539219399,interpeduncular nucleus,true
 http://mouse.owl#MA_0002213,retinal vein,true
 351416266,retinal vein,true
 http://mouse.owl#MA_0002023,posterior communicating artery,true
 -1271307871,posterior communicating artery,true
+http://mouse.owl#MA_0000196,4th ventricle,false
+http://mouse.owl#MA_0000196,fourth ventricle,true
 http://mouse.owl#MA_0001861,trachea elastic framework,true
 983261790,trachea elastic framework,true
 http://mouse.owl#genid155,4th ventricle choroid plexus,true
@@ -2841,26 +2846,25 @@ http://mouse.owl#MA_0002385,sternooccipital,true
 -951309564,sternooccipital,true
 http://mouse.owl#MA_0001291,iris nerve,true
 -734417820,iris nerve,true
+http://mouse.owl#MA_0000160,coat hair follicle,true
 http://mouse.owl#MA_0002195,inferior phrenic vein,true
 535239520,inferior phrenic vein,true
 http://mouse.owl#MA_0000508,upper back muscle,true
 http://mouse.owl#MA_0000561,upper body muscle,false
 http://mouse.owl#MA_0000561,thorax muscle,true
 -723303053,upper back muscle,true
-http://mouse.owl#MA_0001084,vestibulocochlear viii ganglion,true
 -1469551507,viscerocranium,true
 http://mouse.owl#genid1765,layer of rods and cones,true
 -36690924,layer of rods and cones,true
+http://mouse.owl#MA_0001185,osseus labyrinth vestibule,true
 -2095337386,parathyroid gland,true
+http://mouse.owl#MA_0000198,cerebellum,true
 -1099525556,retrohippocampal cortex,true
 http://mouse.owl#MA_0001824,respiratory system lymphatic vessel,true
 -1817879277,respiratory system lymphatic vessel,true
 http://mouse.owl#MA_0000730,thyroid gland parenchyma,true
 2022314326,thyroid gland parenchyma,true
-http://mouse.owl#MA_0002728,larynx submucosa,true
 1048538735,larynx submucosa,true
-http://mouse.owl#MA_0000031,thoracic body wall,false
-http://mouse.owl#MA_0000031,chest,true
 http://mouse.owl#MA_0001634,gall bladder serosa,true
 http://mouse.owl#MA_0001634,biliary serosa,false
 1711762790,gall bladder serosa,true
@@ -2885,17 +2889,17 @@ http://mouse.owl#MA_0000154,hair follicle,true
 -1374676352,coat hair follicle,true
 http://mouse.owl#MA_0002158,kidney subcortical veins,true
 -1188102827,kidney subcortical veins,true
-http://www.geneontology.org/formats/oboInOwl#DbXref,db xref,true
 http://mouse.owl#MA_0001064,substantia nigra pars compacta,true
 -1158400212,substantia nigra pars compacta,true
 http://mouse.owl#genid1728,thoracic body wall,true
 125512546,thoracic body wall,true
-http://mouse.owl#MA_0002436,lymphoid tissue,true
 http://mouse.owl#genid720,genid720,false
 http://mouse.owl#genid720,haematopoietic system,true
 -1398478562,haematopoietic system,true
 http://mouse.owl#MA_0001996,medial femoral circumflex artery,true
 178586540,medial femoral circumflex artery,true
+http://mouse.owl#MA_0002754,neocortex,true
+http://mouse.owl#MA_0002754,cerebral cortex,false
 http://mouse.owl#MA_0002570,ascending aorta,true
 655780176,ascending aorta,true
 http://mouse.owl#MA_0002380,sphincter colli superficialis,true
@@ -2905,6 +2909,7 @@ http://mouse.owl#MA_0002190,pancreatico duodenal vein,true
 http://mouse.owl#MA_0000503,lower back nerve,true
 http://mouse.owl#MA_0000497,back nerve,true
 2019311799,lower back nerve,true
+http://mouse.owl#MA_0000166,smooth muscle,true
 http://mouse.owl#genid1950,gum,true
 103014,gum,true
 http://mouse.owl#MA_0001407,rib 7,true
@@ -2923,9 +2928,6 @@ http://mouse.owl#genid1570,neural spine,true
 -1557079063,neural spine,true
 http://mouse.owl#MA_0001027,superior salivatory nucleus,true
 763353441,superior salivatory nucleus,true
-http://mouse.owl#MA_0002413,olfactory lobe,true
-http://mouse.owl#MA_0000439,segmental bronchus,true
-http://mouse.owl#MA_0000404,prostate gland,true
 http://mouse.owl#MA_0001959,proper palmal digital arteries,true
 2013373129,proper palmal digital arteries,true
 http://mouse.owl#MA_0000865,nucleus reuniens,true
@@ -2952,8 +2954,10 @@ http://mouse.owl#MA_0000295,carpal tarsal bone,true
 -3268807,carpal tarsal bone,true
 http://mouse.owl#MA_0001199,tectorial membrane,true
 13991115,tectorial membrane,true
+http://mouse.owl#MA_0000074,heart left atrium,true
 http://mouse.owl#MA_0002343,masseter,true
 282990519,masseter,true
+http://mouse.owl#MA_0002637,female urethra,true
 http://mouse.owl#MA_0002153,jejunal vein,true
 1069272488,jejunal vein,true
 http://mouse.owl#genid665,lingula,true
@@ -2963,7 +2967,6 @@ http://mouse.owl#genid665,genid665,false
 http://mouse.owl#MA_0001991,lienal artery,true
 -962336065,lienal artery,true
 -779754488,urethral muscle layer,true
-http://mouse.owl#MA_0000185,cerebral cortex,true
 http://mouse.owl#MA_0000828,diencephalon dura mater,true
 http://mouse.owl#MA_0000885,forebrain dura mater,true
 299072610,diencephalon dura mater,true
@@ -2971,26 +2974,20 @@ http://mouse.owl#MA_0000638,wrist skin,true
 -1152382891,wrist skin,true
 http://mouse.owl#MA_0000448,peritoneal cavity greater sac,true
 1518607107,peritoneal cavity greater sac,true
-http://mouse.owl#MA_0000258,outer ear,true
-http://mouse.owl#MA_0000258,external ear,false
 http://mouse.owl#genid1944,external ear,true
 1855487832,outer ear,true
 http://mouse.owl#MA_0001402,rib 2,true
 108504964,rib 2,true
 http://mouse.owl#MA_0002306,gastrocnemius,true
 -1129897085,gastrocnemius,true
-http://mouse.owl#MA_0000068,vena cava,true
 http://mouse.owl#MA_0001903,thoracic cavity vein,true
 -1245260434,vena cava,true
-http://mouse.owl#MA_0000054,peritoneal cavity,true
 http://mouse.owl#MA_0002116,anterior facial vein,true
 211420455,anterior facial vein,true
 http://mouse.owl#MA_0001022,raphe pontis nucleus,false
 http://mouse.owl#MA_0001022,pontine raphe nucleus,true
 http://mouse.owl#genid1958,raphe pontis nucleus,true
 -1695046253,pontine raphe nucleus,true
-http://mouse.owl#MA_0000334,cecum,true
-http://mouse.owl#MA_0000334,caecum,false
 http://mouse.owl#MA_0001954,forelimb common dorsal digital arteries,true
 -1298625252,forelimb common dorsal digital arteries,true
 http://mouse.owl#MA_0000860,pars posterior,true
@@ -3011,12 +3008,14 @@ http://mouse.owl#MA_0001574,esophagus smooth muscle circular layer,true
 138916957,major salivary gland,true
 http://mouse.owl#MA_0000480,inferior vena cava,true
 -405327668,inferior vena cava,true
+http://mouse.owl#MA_0000375,nephron,true
 http://mouse.owl#MA_0001384,foot digit 4 phalanx,true
 1151960382,foot digit 4 phalanx,true
-http://mouse.owl#MA_0000246,saccule,true
 http://mouse.owl#MA_0002288,digastric,true
 2060039027,digastric,true
+http://mouse.owl#MA_0000290,appendicular skeleton,true
 338827352,appendicular skeleton,true
+http://mouse.owl#MA_0000411,testis,true
 http://mouse.owl#MA_0001194,reticular lamina,true
 http://mouse.owl#MA_0001194,reticular membrane,false
 http://mouse.owl#genid283,genid283,false
@@ -3024,19 +3023,23 @@ http://mouse.owl#genid283,reticular membrane,true
 -221773272,reticular lamina,true
 http://mouse.owl#MA_0002098,cutaneous vein,true
 -1234241404,cutaneous vein,true
+http://mouse.owl#MA_0001807,respiratory system capillary,true
+http://mouse.owl#MA_0001618,dorsal mesogastrium,true
 http://mouse.owl#genid1668,hand distal carpal bone 4,true
 507461242,hand distal carpal bone 4,true
 http://mouse.owl#genid1478,ductus deferens,true
 -2048108897,ductus deferens,true
+http://mouse.owl#MA_0000891,striatum,true
+http://mouse.owl#MA_0000891,corpus striatum,false
 http://mouse.owl#MA_0001917,artery of upper lip,true
 -679623990,artery of upper lip,true
 -1815815726,choroid plexus,true
 http://mouse.owl#MA_0001727,left uterine horn,true
 http://mouse.owl#MA_0000393,uterine horn,true
 1683853807,left uterine horn,true
+http://mouse.owl#MA_0001538,intestine serosa,true
 http://mouse.owl#MA_0000633,shoulder muscle,true
 1787467032,shoulder muscle,true
-http://mouse.owl#MA_0001537,intestine mucosa,true
 -1065370304,intestine mucosa,true
 188185138,nasopharynx,true
 http://mouse.owl#genid1890,decidua basalis,true
@@ -3057,9 +3060,8 @@ http://mouse.owl#MA_0000226,sympathetic ganglion,true
 -177967628,cervicothoracic ganglion,true
 http://mouse.owl#MA_0002301,flexor hallucis longus,true
 1553316300,flexor hallucis longus,true
+http://mouse.owl#MA_0000063,arteriole,true
 458767510,arteriole,true
-http://mouse.owl#MA_0000163,vibrissa,true
-http://mouse.owl#MA_0000163,whisker,false
 http://mouse.owl#MA_0002111,ductus venosus,true
 -16257144,ductus venosus,true
 http://mouse.owl#MA_0000995,cerebellum internal granule cell layer,true
@@ -3067,12 +3069,16 @@ http://mouse.owl#MA_0000995,cerebellum internal granule cell layer,true
 -1128749630,gastrointestinal system lamina propria,true
 http://mouse.owl#MA_0002663,intrahepatic part of left hepatic duct,true
 1404765896,intrahepatic part of left hepatic duct,true
+http://mouse.owl#MA_0000246,saccule,true
+http://mouse.owl#MA_0000184,basal ganglia,true
+http://mouse.owl#MA_0000184,basal nucleus,false
 3135364,face,true
-http://mouse.owl#MA_0000412,seminiferous tubule,true
 http://mouse.owl#MA_0002283,cricoarytenoid,true
 1946093846,cricoarytenoid,true
 http://mouse.owl#MA_0002093,cerebellar vein,true
 -1410555854,cerebellar vein,true
+http://mouse.owl#MA_0000181,ventral thalamus,true
+http://mouse.owl#MA_0000181,subthalamus,false
 http://mouse.owl#MA_0000406,os penis,true
 184812526,os penis,true
 -81129192,spinal cord,true
@@ -3099,8 +3105,8 @@ http://mouse.owl#genid1233,oocyte,true
 -222613095,unfertilized egg,true
 http://mouse.owl#MA_0001532,anal region smooth muscle,true
 -1834958042,anal region smooth muscle,true
+http://mouse.owl#MA_0002436,lymphoid tissue,true
 -882495078,lymphoid tissue,true
-http://mouse.owl#MA_0000198,cerebellum,true
 -981543337,cerebellum,true
 http://mouse.owl#MA_0001342,capitate,true
 http://mouse.owl#MA_0001342,hand distal carpal bone 3,false
@@ -3120,19 +3126,21 @@ http://mouse.owl#MA_0001914,adrenal artery,false
 -341641339,inferior suprarenal artery,true
 http://mouse.owl#genid1626,bicuspid valve,true
 1851659400,bicuspid valve,true
+http://mouse.owl#MA_0002655,ureter urothelium,true
+http://mouse.owl#MA_0002655,ureter transitional epithelium,false
 http://mouse.owl#MA_0000990,hindbrain pia mater,true
 http://mouse.owl#MA_0000816,brain pia mater,true
 -1173450085,hindbrain pia mater,true
 -113906481,anterior vagus x nerve trunk,true
 http://mouse.owl#MA_0001894,awl hair,true
 -1382637581,awl hair,true
-http://mouse.owl#MA_0000223,parasympathetic nervous system,true
 http://mouse.owl#MA_0000401,bulbourethral gland,true
 154285536,bulbourethral gland,true
 http://mouse.owl#MA_0001305,choroid fissure,true
 -813930770,choroid fissure,true
 http://mouse.owl#MA_0002209,right hepatico cardiac vein,true
 952840237,right hepatico cardiac vein,true
+http://mouse.owl#MA_0000211,tectum,true
 -877645343,tectum,true
 -1170060908,dura mater,true
 http://mouse.owl#genid138,lower body,true
@@ -3140,6 +3148,7 @@ http://mouse.owl#genid138,genid138,false
 -99025661,abdomen pelvis perineum,true
 http://mouse.owl#MA_0002019,phrenic artery,true
 504871635,phrenic artery,true
+http://mouse.owl#MA_0001140,hypogastric nerve plexus,true
 http://mouse.owl#MA_0000953,hippocampus ca4,true
 1061814858,hippocampus ca4,true
 http://mouse.owl#MA_0001857,trachea cartilage,true
@@ -3150,19 +3159,23 @@ http://mouse.owl#MA_0000763,spleen central arteriole,true
 http://mouse.owl#MA_0001667,distal convoluted tubule convoluted part,true
 -1576845158,distal convoluted tubule convoluted part,true
 -1083437161,lobule of pinna,true
+http://mouse.owl#MA_0000352,esophagus,true
+http://mouse.owl#MA_0000352,oesophagus,false
 -1760671113,head neck organ,true
+http://mouse.owl#MA_0001477,temporal bone petrous part,true
 -727656290,temporal bone petrous part,true
 http://mouse.owl#MA_0002621,outer renal medulla interstitium,true
 1450080359,outer renal medulla interstitium,true
 http://mouse.owl#MA_0001751,reproductive gland,true
 -784225239,female reproductive gland,true
-http://mouse.owl#MA_0001130,spinal cord meninges,true
 http://mouse.owl#MA_0001287,iris muscle,true
 -1305965755,iris muscle,true
-http://mouse.owl#MA_0002431,digestive system,true
 -876980126,digestive system,true
+http://mouse.owl#MA_0000193,olfactory lobe,false
+http://mouse.owl#MA_0000193,olfactory cortex,true
 http://mouse.owl#genid1799,olfactory lobe,true
 -571447045,olfactory cortex,true
+http://mouse.owl#MA_0001097,optic ii nerve,true
 1650502500,optic ii nerve,true
 http://mouse.owl#MA_0002241,middle temporal vein,true
 -765460434,middle temporal vein,true
@@ -3202,6 +3215,7 @@ http://mouse.owl#MA_0001662,glomerular outer capsular wall,true
 1556566203,glomerular outer capsular wall,true
 http://mouse.owl#MA_0002566,sensory ganglion,true
 902530775,sensory ganglion,true
+http://mouse.owl#MA_0000784,vibrissa root sheath,true
 http://mouse.owl#MA_0001472,sphenoid bone,true
 2139407381,sphenoid bone,true
 http://mouse.owl#MA_0002376,serratus posterior inferior,false
@@ -3215,15 +3229,13 @@ http://mouse.owl#MA_0002186,ovarian vein,true
 -234524387,ovarian vein,true
 http://mouse.owl#MA_0001092,facial vii nerve chorda tympani branch,true
 -1610571908,facial vii nerve chorda tympani branch,true
-http://mouse.owl#MA_0000241,endolymphatic duct sac,true
-http://mouse.owl#MA_0001646,papillary duct,true
-http://mouse.owl#MA_0001646,duct of bellini,false
 -1984260764,vertebra,true
-http://mouse.owl#MA_0000084,atrial septum,true
-http://mouse.owl#MA_0000084,interatrial septum,false
 http://mouse.owl#MA_0000119,adrenal gland medulla,true
 1627415124,adrenal gland medulla,true
-http://mouse.owl#MA_0002627,outer medulla inner stripe loop of henle,true
+http://mouse.owl#MA_0002623,inner renal medulla loop of henle,true
+http://mouse.owl#MA_0001273,biliary tract,true
+http://mouse.owl#MA_0001775,left lung alveolar system,true
+http://mouse.owl#MA_0001028,trigeminal v nucleus,true
 http://mouse.owl#MA_0000911,lateral entorhinal cortex,true
 -1143001707,lateral entorhinal cortex,true
 -1095560080,respiratory system basement membrane,true
@@ -3250,22 +3262,21 @@ http://mouse.owl#MA_0002149,internal spermatic vein,true
 http://mouse.owl#MA_0001055,anterior tegmental nucleus,true
 -18404463,anterior tegmental nucleus,true
 -1670779529,tibialis posterior,true
+http://mouse.owl#MA_0000059,blood,true
 -632992687,urethral lamina propria,true
 http://mouse.owl#genid901,central grey,true
 http://mouse.owl#genid901,genid901,false
 -432033839,central grey,true
-http://mouse.owl#MA_0000116,adrenal gland,true
-http://mouse.owl#MA_0000116,suprarenal gland,false
 http://mouse.owl#MA_0001987,labial artery,true
 83456489,labial artery,true
 http://mouse.owl#genid1339,quadriceps femoris,true
 -1849753211,quadriceps femoris,true
+http://mouse.owl#MA_0000893,caudate putamen,true
 -500185744,caudate putamen,true
 http://mouse.owl#MA_0001797,pharynx muscle,true
 696482366,pharynx muscle,true
 http://mouse.owl#genid1149,foot distal carpal bone 1,true
 -1870546984,foot distal carpal bone 1,true
-http://mouse.owl#MA_0000756,spleen red pulp,true
 http://mouse.owl#MA_0002751,spinal cord ventral column,true
 1054826596,spinal cord ventral column,true
 -1002706380,stomach region,true
@@ -3288,6 +3299,7 @@ http://www.geneontology.org/formats/oboInOwl#SynonymType,synonym type,true
 679194792,knee bone,true
 http://mouse.owl#MA_0001810,respiratory system vein,true
 -1531073034,respiratory system vein,true
+http://mouse.owl#MA_0000263,choroid,true
 http://mouse.owl#genid1354,paw,true
 -646298787,autopod,true
 -577141649,dorsal aorta,true
@@ -3309,8 +3321,6 @@ http://mouse.owl#MA_0002144,external iliac vein,true
 818884488,external iliac vein,true
 http://mouse.owl#MA_0001050,nucleus ambiguus,true
 -525032621,nucleus ambiguus,true
-http://mouse.owl#MA_0000324,liver biliary system,false
-http://mouse.owl#MA_0000324,hepatobiliary system,true
 http://mouse.owl#MA_0001982,internal mammary artery,true
 -2055790849,internal mammary artery,true
 http://mouse.owl#MA_0001792,ethmoid sinus,true
@@ -3327,7 +3337,6 @@ http://mouse.owl#genid244,vz,true
 http://mouse.owl#MA_0000629,hand nerve,true
 -179485760,hand nerve,true
 1384608987,segmental bronchus,true
-http://mouse.owl#MA_0000249,semicircular canal,true
 -1908770993,semicircular canal,true
 http://mouse.owl#genid1696,urethral gland,true
 531154906,urethral gland,true
@@ -3339,7 +3348,6 @@ http://mouse.owl#MA_0002107,dorsal penis vein,true
 -2136560191,dorsal penis vein,true
 http://mouse.owl#MA_0001013,dorsal tegmental nucleus,true
 -1513736112,dorsal tegmental nucleus,true
-http://mouse.owl#MA_0000783,vibrissa hair bulb,true
 http://mouse.owl#MA_0001945,dorsal nasal artery,true
 -1212041714,dorsal nasal artery,true
 http://mouse.owl#MA_0000851,medial mammillary nucleus,true
@@ -3364,9 +3372,10 @@ http://mouse.owl#MA_0002279,constrictor muscle of pharynx inferior,true
 1173169597,heart ventricle,true
 http://mouse.owl#MA_0002089,buccal vein,true
 -315990851,buccal vein,true
+http://mouse.owl#MA_0001514,joint of vertebral body,true
+http://mouse.owl#MA_0001308,retina photoreceptor layer,true
+http://mouse.owl#MA_0001308,layer of rods and cones,false
 -432056012,esophagus wall,true
-http://mouse.owl#MA_0000166,smooth muscle,true
-http://mouse.owl#MA_0001908,upper jaw,true
 221535945,upper jaw,true
 -624858111,brain arachnoid matter,true
 http://mouse.owl#MA_0001718,oviduct epithelium,true
@@ -3389,9 +3398,11 @@ http://mouse.owl#MA_0002102,dorsal cerebellar vein,true
 http://mouse.owl#MA_0000986,fourth ventricle ependyma,true
 http://mouse.owl#MA_0000986,4th ventricle ependyma,false
 1178168474,fourth ventricle ependyma,true
+http://mouse.owl#MA_0001126,spinal cord intermediate grey,true
 http://mouse.owl#genid614,vasculature,true
 http://mouse.owl#genid614,genid614,false
 -484287830,vasculature,true
+http://mouse.owl#MA_0000909,insular cortex,true
 http://mouse.owl#MA_0000796,nipple,true
 -1045343013,nipple,true
 http://mouse.owl#MA_0001940,deferent duct artery,true
@@ -3399,6 +3410,7 @@ http://mouse.owl#MA_0001940,deferent duct artery,true
 -114856973,septal area,true
 http://mouse.owl#MA_0001750,vas deferens smooth muscle,true
 -418925734,vas deferens smooth muscle,true
+http://mouse.owl#MA_0000143,tonsil,true
 http://mouse.owl#MA_0002654,ureter muscle layer,true
 -1093331440,ureter muscle layer,true
 http://mouse.owl#MA_0001560,small intestine smooth muscle circular layer,true
@@ -3415,8 +3427,6 @@ http://mouse.owl#MA_0002084,axillary vein,true
 1675607557,axillary vein,true
 -1651682603,midbrain,true
 -1360687145,sensory organ,true
-http://mouse.owl#MA_0000191,hippocampus,true
-http://mouse.owl#MA_0000191,ammon s horn,false
 http://mouse.owl#MA_0000949,fimbria hippocampus,true
 -550231386,fimbria hippocampus,true
 http://mouse.owl#MA_0000759,spleen trabecular artery,true
@@ -3426,7 +3436,9 @@ http://mouse.owl#MA_0000569,head neck bone,true
 1466835148,head neck bone,true
 http://mouse.owl#MA_0001713,ovary theca externa,true
 -968147816,ovary theca externa,true
+http://mouse.owl#MA_0002617,mesangium,true
 -1943326871,mesangium,true
+http://mouse.owl#MA_0000379,urethra,true
 -175693262,urethra,true
 1361057946,gastrointestinal system smooth muscle,true
 -1790039867,hippocampus layer,true
@@ -3439,9 +3451,8 @@ http://mouse.owl#MA_0001143,pulmonary nerve plexus,true
 1666678375,pulmonary nerve plexus,true
 http://mouse.owl#MA_0002047,right subclavian artery,true
 -1358905228,right subclavian artery,true
+http://mouse.owl#MA_0002692,stomach wall,true
 -1434198758,osseus labyrinth,true
-http://mouse.owl#MA_0000245,vestibular labyrinth,true
-http://mouse.owl#MA_0000245,vestibular apparatus,false
 http://mouse.owl#genid1617,hand distal carpal bone 1,true
 507461239,hand distal carpal bone 1,true
 http://mouse.owl#MA_0000981,telencephalon dura mater,true
@@ -3457,6 +3468,9 @@ http://mouse.owl#MA_0001695,urinary bladder lamina propria,true
 783538210,right lung superior lobe,true
 http://mouse.owl#MA_0002599,outer renal medulla collecting duct,true
 -1882160246,outer renal medulla collecting duct,true
+http://mouse.owl#MA_0001101,trigeminal v nerve mandibular division,true
+http://mouse.owl#MA_0000194,olfactory bulb,true
+http://mouse.owl#MA_0000194,main olfactory bulb,false
 http://mouse.owl#genid971,auditory vestibular system,true
 http://mouse.owl#genid971,genid971,false
 -245265472,auditory vestibular system,true
@@ -3485,10 +3499,8 @@ http://mouse.owl#MA_0002432,oculomotor muscle,true
 -293985878,rectus extraocular muscle,true
 http://mouse.owl#MA_0002422,prostate gland anterior lobe,true
 -1686891093,prostate gland anterior lobe,true
-http://mouse.owl#MA_0000184,basal ganglia,true
-http://mouse.owl#MA_0000184,basal nucleus,false
+http://mouse.owl#MA_0001613,stomach glandular region,true
 678640343,basal ganglia,true
-http://mouse.owl#MA_0001088,accessory xi nerve,true
 996511248,accessory xi nerve,true
 http://mouse.owl#MA_0002232,external sural vein,true
 -1470385355,external sural vein,true
@@ -3512,7 +3524,6 @@ http://mouse.owl#MA_0000514,trunk muscle,true
 -1622516073,small intestine,true
 http://mouse.owl#MA_0000147,skin apocrine gland,true
 -101460211,skin apocrine gland,true
-http://mouse.owl#MA_0001101,trigeminal v nerve mandibular division,true
 1277425885,trigeminal v nerve mandibular division,true
 http://mouse.owl#MA_0002005,superior mesenteric artery,true
 69279274,superior mesenteric artery,true
@@ -3523,7 +3534,6 @@ http://mouse.owl#MA_0000699,tail muscle,true
 133397608,tail muscle,true
 http://mouse.owl#MA_0001843,left main bronchus,true
 -1271454777,left main bronchus,true
-http://mouse.owl#MA_0000987,hindbrain meninges,true
 http://mouse.owl#MA_0002747,fornix,true
 -1268777509,fornix,true
 1495618624,outer renal medulla,true
@@ -3533,7 +3543,6 @@ http://mouse.owl#MA_0001463,basisphenoid bone,true
 -631685280,basisphenoid bone,true
 http://mouse.owl#MA_0002367,rhomboid,true
 -2090453021,rhomboid,true
-http://mouse.owl#MA_0002418,musculoskeletal system,true
 651768639,biliary tract,true
 http://mouse.owl#MA_0002177,mesenteric vein,true
 1460206596,mesenteric vein,true
@@ -3542,7 +3551,6 @@ http://mouse.owl#MA_0001083,superior vagus x ganglion,true
 http://mouse.owl#genid879,pancreas corpus,true
 http://mouse.owl#genid879,genid879,false
 771160228,pancreas corpus,true
-http://mouse.owl#MA_0000240,cochlea,true
 http://mouse.owl#genid1177,distal straight tubule,true
 -1806841269,distal straight tubule,true
 http://mouse.owl#MA_0000902,cortical layer vi,true
@@ -3564,14 +3572,13 @@ http://mouse.owl#MA_0000332,ileocaecal junction,true
 http://mouse.owl#genid407,ileocecal junction,true
 http://mouse.owl#genid407,genid407,false
 1174324519,ileocaecal junction,true
-http://mouse.owl#MA_0002655,ureter urothelium,true
-http://mouse.owl#MA_0002655,ureter transitional epithelium,false
 http://mouse.owl#MA_0001236,aqueous humour,true
 -848055706,aqueous humour,true
 -874226099,thymus,true
 http://mouse.owl#MA_0001046,inferior olive principal nucleus,true
 -1269378463,inferior olive principal nucleus,true
-http://mouse.owl#MA_0001292,pupil,true
+http://mouse.owl#MA_0000324,liver biliary system,false
+http://mouse.owl#MA_0000324,hepatobiliary system,true
 http://mouse.owl#MA_0002000,median artery palmar branch,true
 http://mouse.owl#MA_0001999,median artery,true
 -672840635,median artery palmar branch,true
@@ -3580,16 +3587,15 @@ http://mouse.owl#MA_0001978,inferior epigastric artery,true
 -1468520257,forebrain arachnoid mater,true
 http://mouse.owl#MA_0001788,right lung respiratory bronchiole,true
 -310672054,right lung respiratory bronchiole,true
-http://mouse.owl#MA_0000042,metacarpus,true
 1467300402,limb skin,true
 http://mouse.owl#MA_0001598,dental papilla,true
 62805616,dental papilla,true
+http://mouse.owl#MA_0002568,alveolar wall,true
 535232722,cerebellar peduncle,true
 http://mouse.owl#MA_0002552,mammary gland milk,true
 892823996,mammary gland milk,true
 http://mouse.owl#MA_0002362,quadratus lumborum,true
 -1228088892,quadratus lumborum,true
-http://mouse.owl#MA_0000979,telencephalon meninges,true
 http://mouse.owl#MA_0002172,medial plantar vein,true
 -1584111849,medial plantar vein,true
 http://mouse.owl#genid42,genid42,false
@@ -3611,6 +3617,7 @@ http://mouse.owl#MA_0000663,hindlimb muscle,true
 -572962743,hip muscle,true
 http://mouse.owl#MA_0001801,respiratory system arterial endothelium,true
 -971477224,respiratory system arterial endothelium,true
+http://mouse.owl#MA_0000412,seminiferous tubule,true
 http://mouse.owl#MA_0002705,hyponychium,true
 1799220136,hyponychium,true
 http://mouse.owl#MA_0000467,foot digit 3,true
@@ -3634,8 +3641,11 @@ http://mouse.owl#MA_0000087,aortic valve,true
 -1092890847,aortic valve,true
 http://mouse.owl#MA_0001231,intrinsic auricular muscle,true
 -1218284781,intrinsic auricular muscle,true
+http://mouse.owl#MA_0001524,bowel,true
 http://mouse.owl#MA_0001041,inferior olive beta subnucleus,true
 -722740093,inferior olive beta subnucleus,true
+http://mouse.owl#MA_0000093,heart right ventricle,true
+http://mouse.owl#MA_0000871,intralaminar thalamic group,true
 -1269779062,lesser multiangular,true
 1334354715,sphincter ani externus,true
 1000281118,gastric epithelium,true
@@ -3657,13 +3667,11 @@ http://mouse.owl#MA_0001936,cervical artery,true
 http://mouse.owl#MA_0000842,subparaventricular zone,true
 -361503564,subparaventricular zone,true
 http://mouse.owl#MA_0001746,left testis,true
-http://mouse.owl#MA_0000411,testis,true
 -1086293860,left testis,true
 http://mouse.owl#MA_0000652,foot muscle,true
 -132520310,foot muscle,true
 http://mouse.owl#MA_0001556,mesoduodenum,true
 -1882116286,mesoduodenum,true
-http://mouse.owl#MA_0001460,ovary stratum granulosum,true
 http://mouse.owl#MA_0002700,anterior buccal gland,true
 http://mouse.owl#MA_0002479,minor salivary gland,true
 -1890388705,anterior buccal gland,true
@@ -3671,9 +3679,10 @@ http://mouse.owl#MA_0000462,radio ulnar joint,true
 2063728148,radio ulnar joint,true
 http://mouse.owl#MA_0001366,metacarpal bone digit 3,true
 1074765535,metacarpal bone digit 3,true
+http://mouse.owl#MA_0001589,submandibular gland,true
+http://mouse.owl#MA_0001589,submaxillary gland,false
 http://mouse.owl#MA_0002510,female reproductive system fluid secretion,true
 -675092600,female reproductive system fluid secretion,true
-http://mouse.owl#MA_0000272,hyaloid cavity,true
 -738755569,hyaloid cavity,true
 http://mouse.owl#MA_0001176,intercostal nerve trunk,true
 2112551737,intercostal nerve trunk,true
@@ -3681,8 +3690,8 @@ http://mouse.owl#MA_0002320,iliocostalis thoracis,true
 2021985759,iliocostalis thoracis,true
 http://mouse.owl#MA_0000082,ventricle myocardium,true
 459894117,ventricle myocardium,true
+http://mouse.owl#MA_0000440,terminal bronchus,true
 1659781547,upper body bone,true
-http://mouse.owl#MA_0000222,enteric nervous system,true
 http://mouse.owl#MA_0002682,esophagus muscle,true
 1138099227,esophagus muscle,true
 http://mouse.owl#MA_0002492,urinary bladder trigone,true
@@ -3697,7 +3706,6 @@ http://mouse.owl#MA_0001709,ovary mature follicle,true
 1097158762,forelimb muscle,true
 http://mouse.owl#MA_0001519,joint fibrous capsule,true
 1350327224,joint fibrous capsule,true
-http://mouse.owl#MA_0000075,heart right atrium,true
 1683561122,left lung,true
 http://mouse.owl#MA_0001329,clavicle,true
 694911128,clavicle,true
@@ -3706,12 +3714,12 @@ http://mouse.owl#MA_0001139,coeliac nerve plexus,false
 http://mouse.owl#MA_0001139,celiac nerve plexus,true
 1659264777,celiac nerve plexus,true
 103606,hip,true
+http://mouse.owl#MA_0000092,heart left ventricle,true
 http://mouse.owl#MA_0000977,islands of calleja,true
 2007339390,islands of calleja,true
 http://mouse.owl#genid605,innominate artery,true
 http://mouse.owl#genid605,genid605,false
 1093531274,innominate artery,true
-http://mouse.owl#MA_0000162,hair root sheath,true
 http://mouse.owl#MA_0000787,abdominal mammary gland,true
 -65793090,abdominal mammary gland,true
 http://mouse.owl#MA_0001931,celiac artery,true
@@ -3735,13 +3743,18 @@ http://mouse.owl#MA_0001171,radial nerve,true
 -19863184,radial nerve,true
 http://mouse.owl#MA_0002075,ventral intercostal artery,true
 -81678796,ventral intercostal artery,true
+http://mouse.owl#MA_0001320,external naris,true
+http://mouse.owl#MA_0000222,enteric nervous system,true
 3552631,tail,true
 -930075624,gastric juice,true
+http://mouse.owl#MA_0000009,adipose tissue,true
 http://mouse.owl#genid1075,bundle of his,true
 568486990,bundle of his,true
+http://mouse.owl#MA_0002499,portal triad,true
 http://mouse.owl#MA_0000800,dermis papillary layer,true
 1040364508,dermis papillary layer,true
 http://mouse.owl#MA_0001704,left ovary,true
+http://mouse.owl#MA_0000384,ovary,true
 653566703,left ovary,true
 http://mouse.owl#MA_0000610,elbow skin,true
 1860754657,elbow skin,true
@@ -3757,7 +3770,6 @@ http://mouse.owl#MA_0001324,nasal cavity epithelium,true
 854658052,nasal cavity epithelium,true
 http://mouse.owl#MA_0002228,supraorbital vein,true
 1744325123,supraorbital vein,true
-http://mouse.owl#MA_0000230,spinal ganglion nerve,true
 505012883,spinal ganglion nerve,true
 http://mouse.owl#MA_0001134,spinal cord ventral horn,true
 -494841775,spinal cord ventral horn,true
@@ -3778,14 +3790,13 @@ http://mouse.owl#MA_0001686,urethral epithelium,false
 -705599121,semilunar,true
 http://mouse.owl#MA_0001496,vomer bone,true
 -1045076950,vomer bone,true
-http://mouse.owl#MA_0002640,male urethra,true
 821258015,male urethra,true
 120480067,body fluid substance,true
-http://mouse.owl#MA_0001636,hepatic duct extrahepatic part,true
 http://mouse.owl#MA_0002260,ventral labial vein,true
 -356093124,ventral labial vein,true
 http://mouse.owl#MA_0002070,ulnar artery palmar branch,true
 -1248366361,ulnar artery palmar branch,true
+http://mouse.owl#MA_0001604,tooth enamel organ,true
 637404229,organ system,true
 http://mouse.owl#MA_0000935,medial septal nucleus,true
 -1301216269,medial septal nucleus,true
@@ -3793,8 +3804,6 @@ http://mouse.owl#MA_0001839,bronchus epithelium,true
 1234221949,bronchus epithelium,true
 http://mouse.owl#MA_0000745,lymph node medulla,true
 -120136759,lymph node medulla,true
-http://mouse.owl#MA_0001487,mandible,true
-http://mouse.owl#MA_0001649,outer renal cortex,true
 -1752415001,outer renal cortex,true
 http://mouse.owl#MA_0000555,thoracic cavity connective tissue,true
 -599755295,thoracic cavity connective tissue,true
@@ -3805,6 +3814,7 @@ http://mouse.owl#MA_0000365,liver quadrate lobe,true
 2093625964,liver quadrate lobe,true
 http://mouse.owl#MA_0001269,ciliary muscle,true
 -1972673549,ciliary muscle,true
+http://mouse.owl#MA_0002413,olfactory lobe,true
 451069408,olfactory lobe,true
 http://mouse.owl#MA_0000175,epiphysis cerebri,false
 http://mouse.owl#MA_0000175,pineal gland,true
@@ -3830,7 +3840,6 @@ http://mouse.owl#MA_0001681,renal tubule epithelium,true
 -1262048664,renal tubule epithelium,true
 http://mouse.owl#MA_0002585,efferent arteriole,true
 501073295,efferent arteriole,true
-http://mouse.owl#MA_0001491,maxilla,true
 844739171,maxilla,true
 http://mouse.owl#MA_0002395,tibialis anterior,false
 http://mouse.owl#MA_0002395,tibilais cranialis,true
@@ -3842,6 +3851,7 @@ http://mouse.owl#MA_0000518,abdomen blood vessel,true
 -1771566407,abdomen blood vessel,true
 503972464,intestine,true
 -886498088,lymphatic vessel,true
+http://mouse.owl#MA_0000343,lip,true
 1984706869,posterior division,true
 http://mouse.owl#MA_0001834,bronchus reticular lamina,true
 427280406,bronchus reticular lamina,true
@@ -3855,26 +3865,27 @@ http://mouse.owl#MA_0000550,chest connective tissue,true
 1136731999,chest connective tissue,true
 http://mouse.owl#MA_0002548,inguinal fat pad,true
 -35109770,inguinal fat pad,true
-http://mouse.owl#MA_0002358,psoas major,true
-http://mouse.owl#MA_0002553,psoas muscle,true
--2025877442,psoas major,true
 http://mouse.owl#MA_0001454,vertebra neural canal,true
 http://mouse.owl#MA_0001454,vertebral foramen,false
 http://mouse.owl#genid1580,vertebral foramen,true
 295201412,vertebra neural canal,true
+http://mouse.owl#MA_0002358,psoas major,true
+http://mouse.owl#MA_0002553,psoas muscle,true
+-2025877442,psoas major,true
 1680571655,liver lobe,true
+http://mouse.owl#MA_0001292,pupil,true
 http://mouse.owl#MA_0001264,lateral canthus,false
 http://mouse.owl#MA_0001264,outer canthus,true
 -351438236,outer canthus,true
 http://mouse.owl#MA_0002168,maternal placental vein,true
 -2033134313,maternal placental vein,true
+http://mouse.owl#MA_0000170,forebrain,true
+http://mouse.owl#MA_0000170,prosencephalon,false
 http://mouse.owl#genid620,genid620,false
 http://mouse.owl#genid620,prosencephalon,true
 1583404257,forebrain,true
 http://mouse.owl#MA_0001074,parabigeminal nucleus,true
 1392838194,parabigeminal nucleus,true
-http://mouse.owl#MA_0001669,proximal convoluted tubule,true
-http://mouse.owl#MA_0001669,first convoluted tubule,false
 http://mouse.owl#MA_0002580,renin producing cells,false
 http://mouse.owl#MA_0002580,part of afferent arteriole forming juxtaglomerular complex,true
 2130375727,part of afferent arteriole forming juxtaglomerular complex,true
@@ -3893,13 +3904,10 @@ http://mouse.owl#genid945,genid945,false
 731518103,gastrointestinal system,true
 http://mouse.owl#MA_0001227,auricular cartilage,true
 -1664921533,auricular cartilage,true
-http://mouse.owl#MA_0000133,cerebrum,false
-http://mouse.owl#MA_0000133,cerebral hemisphere,true
 http://mouse.owl#genid416,cerebrum,true
 http://mouse.owl#genid416,genid416,false
 -1420819555,cerebral hemisphere,true
 -754315276,vertebral foramen,true
-http://mouse.owl#MA_0000161,coat hair bulb,true
 http://mouse.owl#MA_0001037,gigantocellular reticular nucleus,true
 121268116,gigantocellular reticular nucleus,true
 http://mouse.owl#MA_0001969,hyoid artery,true
@@ -3910,8 +3918,6 @@ http://mouse.owl#MA_0001779,left lung respiratory bronchiole,true
 1355785397,left lung respiratory bronchiole,true
 http://mouse.owl#MA_0000685,upper leg nerve,true
 703515681,upper leg nerve,true
-http://mouse.owl#MA_0001589,submandibular gland,true
-http://mouse.owl#MA_0001589,submaxillary gland,false
 http://mouse.owl#genid936,genid936,false
 http://mouse.owl#genid936,submaxillary gland,true
 -333353404,submandibular gland,true
@@ -3930,8 +3936,10 @@ http://mouse.owl#genid33,genid33,false
 http://mouse.owl#genid33,meissner s plexus,true
 928838487,meissner s plexus,true
 -546920946,posterior lobe,true
+http://mouse.owl#MA_0001229,auricular muscle,true
 http://mouse.owl#genid1543,upper body muscle,true
 1937528920,upper body muscle,true
+http://mouse.owl#MA_0001692,urinary bladder mucosa,true
 http://mouse.owl#MA_0000838,dorsomedial hypothalamic nucleus,true
 -1388487964,dorsomedial hypothalamic nucleus,true
 http://mouse.owl#MA_0000648,foot digit muscle,true
@@ -3940,14 +3948,13 @@ http://mouse.owl#MA_0000458,hand digit 5,true
 -868522888,hand digit 5,true
 http://mouse.owl#MA_0001602,lower jaw molar,true
 725348739,lower jaw molar,true
--1288560675,eyelid,true
 http://mouse.owl#MA_0002506,cerumen,true
 668970680,cerumen,true
+-1288560675,eyelid,true
 http://mouse.owl#MA_0001412,rib 12,true
 -931322243,rib 12,true
 http://mouse.owl#MA_0002316,hand lumbrical muscle,true
 704079888,hand lumbrical muscle,true
-http://mouse.owl#MA_0001775,left lung alveolar system,true
 http://mouse.owl#MA_0000078,endocardial cushion,true
 -436365000,endocardial cushion,true
 http://mouse.owl#MA_0001222,tympanic cavity nerves,true
@@ -3956,7 +3963,6 @@ http://mouse.owl#MA_0002126,proper palmal vein,true
 -1813607474,proper palmal vein,true
 http://mouse.owl#MA_0001032,vestibular viii nucleus,true
 454658364,vestibular viii nucleus,true
-http://mouse.owl#MA_0000046,knee,true
 -1752524499,hindlimb digital arteries,true
 http://mouse.owl#MA_0000870,medial geniculate nucleus,true
 2067334115,medial geniculate nucleus,true
@@ -3984,26 +3990,24 @@ http://mouse.owl#MA_0001927,left common carotid artery,true
 429950883,hypothalamus lateral zone,true
 http://mouse.owl#MA_0001737,prostate gland epithelium,true
 -664012871,prostate gland epithelium,true
+http://mouse.owl#MA_0001822,respiratory system submucosa,true
 -711084963,foot bone,true
+http://mouse.owl#MA_0001547,large intestine smooth muscle,true
 -1168331570,large intestine smooth muscle,true
 http://mouse.owl#MA_0000453,metacarpo phalangeal joint,true
 2002309084,metacarpo phalangeal joint,true
 http://mouse.owl#MA_0001357,radius,true
 -938578503,radius,true
--985758103,plasma,true
-http://mouse.owl#MA_0000263,choroid,true
 752000233,choroid,true
+http://mouse.owl#MA_0002501,plasma,true
+-985758103,plasma,true
 http://mouse.owl#MA_0001167,femoral nerve,true
 1397243757,femoral nerve,true
 http://mouse.owl#MA_0002311,gracilis,true
 88734337,gracilis,true
-http://mouse.owl#MA_0000073,heart atrium,true
 -811539453,heart atrium,true
 http://mouse.owl#MA_0002121,common palmar digital vein,true
 -1678934357,common palmar digital vein,true
-http://mouse.owl#MA_0000844,tuberal nucleus,false
-http://mouse.owl#MA_0000844,tuberal area,true
-http://mouse.owl#MA_0000844,tuberal region,false
 http://mouse.owl#MA_0002673,thymus lymphoid tissue,true
 811810464,thymus lymphoid tissue,true
 1258420701,heart blood vessel,true
@@ -4012,9 +4016,9 @@ http://mouse.owl#MA_0002293,extensor digitorum communis,true
 http://mouse.owl#MA_0000606,upper arm muscle,true
 -1968163046,upper arm muscle,true
 -982732658,alveolar system,true
+1926247457,sympathetic ganglion,true
 http://mouse.owl#genid1673,geniculate ganglion,true
 -129249115,geniculate ganglion,true
-1926247457,sympathetic ganglion,true
 96591082,elbow,true
 http://mouse.owl#MA_0000968,anterior olfactory nucleus,true
 -816282497,anterior olfactory nucleus,true
@@ -4030,7 +4034,6 @@ http://mouse.owl#MA_0001922,innominate artery,false
 -504100938,brachiocephalic trunk,true
 http://mouse.owl#MA_0000588,neck nerve,true
 -71936080,neck nerve,true
-http://mouse.owl#MA_0002443,auditory system,true
 http://mouse.owl#MA_0001732,vagina sebaceous gland,true
 -112200781,vagina sebaceous gland,true
 -492427870,lower urinary tract,true
@@ -4052,6 +4055,8 @@ http://mouse.owl#MA_0002066,thyroid artery,true
 http://mouse.owl#genid1826,4th ventricle,true
 -806603617,4th ventricle,true
 -677681849,forearm,true
+http://mouse.owl#MA_0002739,serous pericardium,true
+http://mouse.owl#MA_0000167,central nervous system,true
 http://mouse.owl#MA_0000601,lower arm nerve,true
 -908895858,lower arm nerve,true
 http://mouse.owl#MA_0001505,joint of girdle,true
@@ -4097,9 +4102,8 @@ http://mouse.owl#MA_0002251,vaginal vein,true
 2020293551,vaginal vein,true
 http://mouse.owl#MA_0002061,temporal artery,true
 1627645966,temporal artery,true
-http://mouse.owl#MA_0001538,intestine serosa,true
 -1634930781,radial carpal bone,true
-http://mouse.owl#MA_0000908,primary somatosensory cortex,true
+http://mouse.owl#MA_0000926,anterior division,true
 -1521102276,anterior division,true
 http://mouse.owl#MA_0000736,cervical lymph node,true
 -1600053978,cervical lymph node,true
@@ -4123,8 +4127,6 @@ http://mouse.owl#genid916,csf,true
 99101,csf,true
 -249913356,fastigial nucleus,true
 -1457156237,uriniferous tubule,true
-http://mouse.owl#MA_0000013,haemolymphoid system,false
-http://mouse.owl#MA_0000013,hemolymphoid system,true
 http://mouse.owl#MA_0001862,trachea epithelium,true
 576872651,trachea epithelium,true
 -2014816025,foot distal carpal bone 4 and 5,true
@@ -4142,11 +4144,10 @@ http://mouse.owl#MA_0002196,pial vein,true
 1053682679,pial vein,true
 http://mouse.owl#MA_0000509,upper back nerve,true
 -1824000906,upper back nerve,true
-http://mouse.owl#MA_0000375,nephron,true
 101304753,joint,true
 667338806,thyroid gland,true
+http://mouse.owl#MA_0000908,primary somatosensory cortex,true
 http://mouse.owl#MA_0000921,lower lip,true
-http://mouse.owl#MA_0000343,lip,true
 -516492773,lower lip,true
 http://mouse.owl#MA_0001825,respiratory system lymphatic vessel endothelium,true
 153569861,respiratory system lymphatic vessel endothelium,true
@@ -4165,7 +4166,6 @@ http://mouse.owl#MA_0001445,thoracic vertebra 8,true
 1298786281,thoracic vertebra 8,true
 http://mouse.owl#MA_0002349,omotransverse,true
 -628576827,omotransverse,true
-http://mouse.owl#MA_0000351,oropharynx,true
 -659395595,oropharynx,true
 http://mouse.owl#MA_0001255,eyelid nerve,true
 -651521849,eyelid nerve,true
@@ -4186,7 +4186,6 @@ http://mouse.owl#MA_0002381,spinalis thoracis,true
 499754483,spinalis thoracis,true
 http://mouse.owl#MA_0002191,inferior pancreatico duodenal vein,true
 1596397672,inferior pancreatico duodenal vein,true
-http://mouse.owl#MA_0000009,adipose tissue,true
 http://mouse.owl#MA_0000504,lower back skin,true
 -488895522,lower back skin,true
 http://mouse.owl#MA_0001408,rib 8,true
@@ -4200,10 +4199,9 @@ http://mouse.owl#MA_0000124,pancreatic duct,true
 545533316,trigeminal v nucleus,true
 http://mouse.owl#genid1191,foor distal carpal bone 3,true
 -2089401700,foor distal carpal bone 3,true
-http://mouse.owl#MA_0000441,trachea,true
-http://mouse.owl#MA_0000913,occipital cortex,true
 http://mouse.owl#MA_0000866,paraventricular thalamic nucleus,true
 -1091177504,paraventricular thalamic nucleus,true
+http://mouse.owl#MA_0000407,prepuce,true
 -1158010628,lower leg bone,true
 http://mouse.owl#MA_0001820,respiratory system elastic framework,true
 1070058175,respiratory system elastic framework,true
@@ -4244,6 +4242,7 @@ http://mouse.owl#MA_0001213,lateral semicircular duct,true
 1522754035,lateral semicircular duct,true
 http://mouse.owl#MA_0002117,posterior facial vein,true
 1051922318,posterior facial vein,true
+http://mouse.owl#MA_0000185,cerebral cortex,true
 http://mouse.owl#MA_0001023,prepositus hypoglossal nucleus,true
 http://mouse.owl#MA_0001023,nucleus prepositus hypoglossus,false
 1814610041,prepositus hypoglossal nucleus,true
@@ -4276,6 +4275,7 @@ http://mouse.owl#MA_0002289,erector spinae,true
 -1795517375,erector spinae,true
 http://mouse.owl#MA_0000291,girdle bone,true
 -1275205346,girdle bone,true
+http://mouse.owl#MA_0000756,spleen red pulp,true
 -978647827,spiral sulcus,true
 http://mouse.owl#MA_0002099,deep iliac circumflex vein,true
 -409745945,deep iliac circumflex vein,true
@@ -4335,7 +4335,6 @@ http://mouse.owl#MA_0002094,inferior cerebellar vein,true
 104709809,nerve,true
 1168278477,lower back,true
 535815934,triangular,true
-http://mouse.owl#MA_0001539,intestine smooth muscle,true
 http://mouse.owl#MA_0000959,hippocampus stratum radiatum,true
 315192221,hippocampus stratum radiatum,true
 http://mouse.owl#MA_0000769,thymus subcapsular epithelium,true
@@ -4361,6 +4360,7 @@ http://mouse.owl#genid1666,uncinate,true
 http://mouse.owl#MA_0002247,transverse facial vein,true
 1394871932,transverse facial vein,true
 -1204268437,cervical ganglion,true
+http://mouse.owl#MA_0000055,pleural cavity,true
 http://mouse.owl#MA_0002057,superior suprarenal artery,true
 1937892984,superior suprarenal artery,true
 http://mouse.owl#genid569,spinal trigeminal nucleus,true
@@ -4381,9 +4381,9 @@ http://mouse.owl#MA_0001306,macula,true
 http://mouse.owl#genid149,upper body,true
 http://mouse.owl#genid149,genid149,false
 -874519819,thorax,true
+http://mouse.owl#MA_0001150,vagus x nerve trunk,true
 http://mouse.owl#MA_0000954,hippocampus granule cell layer,true
 -195952617,hippocampus granule cell layer,true
-http://mouse.owl#MA_0000055,pleural cavity,true
 http://mouse.owl#MA_0001858,trachea lamina propria,true
 1354987214,trachea lamina propria,true
 http://mouse.owl#MA_0000764,spleen germinal center,true
@@ -4444,6 +4444,8 @@ http://mouse.owl#MA_0002377,serratus posterior superior,false
 -410260057,serratus dorsalis cranialis,true
 http://mouse.owl#MA_0001283,hyaloid vascular plexus,true
 -983823393,hyaloid vascular plexus,true
+http://mouse.owl#MA_0000191,hippocampus,true
+http://mouse.owl#MA_0000191,ammon s horn,false
 http://mouse.owl#MA_0002187,pericardiacophrenic vein,true
 -1678063362,pericardiacophrenic vein,true
 http://mouse.owl#MA_0001093,glossopharyngeal ix nerve,true
@@ -4479,6 +4481,7 @@ http://mouse.owl#MA_0002010,ocular angle artery,true
 1459951322,brain stem,true
 http://mouse.owl#MA_0001988,lacrimal artery,true
 -2043997411,lacrimal artery,true
+http://mouse.owl#MA_0000005,body cavity lining,true
 http://mouse.owl#MA_0000894,caudate nucleus,true
 2004394847,caudate nucleus,true
 http://mouse.owl#MA_0001798,pretracheal muscle,true
@@ -4501,9 +4504,6 @@ http://mouse.owl#MA_0000115,tendon,true
 -877333203,tendon,true
 http://mouse.owl#MA_0001019,parabrachial nucleus,true
 1610402456,parabrachial nucleus,true
-http://mouse.owl#MA_0000316,craniofacial bone,false
-http://mouse.owl#MA_0000316,cranium,true
-http://mouse.owl#MA_0000316,cranial bone,false
 http://mouse.owl#MA_0000857,remnant of rathke s pouch,true
 http://mouse.owl#MA_0000857,hypophyseal cleft,false
 1491430830,remnant of rathke s pouch,true
@@ -4559,6 +4559,7 @@ http://mouse.owl#MA_0002108,dorsal spinal vein,true
 -1193247707,dorsal spinal vein,true
 -100230471,ma:0001515,true
 -1503606711,intervertebral disc,true
+http://mouse.owl#MA_0000190,dentate gyrus,true
 http://mouse.owl#MA_0001014,ma:0001015,false
 http://mouse.owl#MA_0001014,facial vii nucleus,true
 http://mouse.owl#MA_0001014,facial vii motor nucleus,false
@@ -4585,16 +4586,15 @@ http://mouse.owl#MA_0002520,lymph,true
 104590256,naris,true
 http://mouse.owl#MA_0001186,vestibular aqueduct,true
 -1636193032,vestibular aqueduct,true
-1711004504,heart left ventricle,true
 http://mouse.owl#MA_0002330,ischiocavernosus,true
 120213735,ischiocavernosus,true
+1711004504,heart left ventricle,true
 http://mouse.owl#MA_0002140,ileal vein,true
 -2141789650,ileal vein,true
 -190216946,tibialis anterior,true
 -12981575,intermedioradial carpal bone,true
 -1968853691,epiphysis cerebri,true
 2117535562,stomach wall,true
-http://mouse.owl#MA_0001181,lumbosacral plexus,true
 -1331823631,upper jaw tooth,true
 1803616510,brain dura mater,true
 http://mouse.owl#MA_0001719,ciliated columnar oviduct epithelium,true
@@ -4645,7 +4645,6 @@ http://mouse.owl#MA_0002085,azygos vein,true
 1542350101,declive,true
 http://mouse.owl#MA_0000208,cerebral aqueduct,true
 -1858052423,cerebral aqueduct,true
-http://mouse.owl#MA_0001247,harderian gland,true
 -163973443,skeletal system,true
 http://mouse.owl#MA_0001904,diaphragm,true
 1449186800,diaphragm,true
@@ -4656,7 +4655,6 @@ http://mouse.owl#MA_0002618,perihilar interstitium,true
 60480336,perihilar interstitium,true
 http://mouse.owl#MA_0000620,hand connective tissue,true
 -10501811,hand connective tissue,true
-http://mouse.owl#MA_0001524,bowel,true
 93929752,bowel,true
 http://mouse.owl#MA_0000430,right lung middle lobe,true
 1134534974,right lung middle lobe,true
@@ -4665,12 +4663,12 @@ http://mouse.owl#MA_0001334,xiphisternum,true
 -209691073,xiphisternum,true
 http://mouse.owl#MA_0002238,thoracodorsal vein,true
 1545417454,thoracodorsal vein,true
+http://mouse.owl#MA_0000240,cochlea,true
 941021118,cochlea,true
 http://mouse.owl#MA_0001144,enteric ganglion,true
 625700420,enteric ganglion,true
 http://mouse.owl#MA_0002048,subcostal artery,true
 1294100344,subcostal artery,true
-http://mouse.owl#MA_0000050,tarsus,true
 -880893517,tarsus,true
 http://mouse.owl#genid1618,greater multiangular,true
 -301170154,greater multiangular,true
@@ -4679,6 +4677,8 @@ http://mouse.owl#MA_0000982,telencephalon pia mater,true
 -2055595990,renal pelvis,true
 http://mouse.owl#MA_0001886,external ear cartilage,true
 -892780764,external ear cartilage,true
+http://mouse.owl#MA_0000983,fourth ventricle choroid plexus,true
+http://mouse.owl#MA_0000983,4th ventricle choroid plexus,false
 http://mouse.owl#MA_0000792,mammary gland epithelium,true
 1229712393,mammary gland epithelium,true
 -806169217,olfactory gland of bowman,true
@@ -4709,7 +4709,6 @@ http://mouse.owl#MA_0001659,glomerular capillary basement membrane,true
 457630073,mesothelium,true
 http://mouse.owl#MA_0001469,parietal bone,true
 437953609,parietal bone,true
-http://mouse.owl#MA_0000386,placenta,true
 http://mouse.owl#MA_0002613,proximal tubule segment 2,true
 -394479745,proximal tubule segment 2,true
 1839347369,nephron,true
@@ -4781,6 +4780,7 @@ http://mouse.owl#MA_0001274,orbitalis muscle,true
 http://mouse.owl#MA_0002178,inferior mesenteric vein,true
 11720930,inferior mesenteric vein,true
 -244475943,dorsal thalamus,true
+http://mouse.owl#MA_0001084,vestibulocochlear viii ganglion,true
 1156943885,vestibulocochlear viii ganglion,true
 849132898,lung interstitial tissue,true
 -1845622287,medial canthus,true
@@ -4869,10 +4869,9 @@ http://mouse.owl#MA_0001042,inferior olive dorsal accessory nucleus,true
 507461240,hand distal carpal bone 2,true
 http://mouse.owl#MA_0001974,internal iliac artery,true
 1018489515,internal iliac artery,true
-http://mouse.owl#MA_0000260,external acoustic meatus,true
-http://mouse.owl#MA_0000260,external auditory meatus,false
 http://mouse.owl#MA_0000880,third ventricle choroid plexus epithelium,true
 -1066462405,third ventricle choroid plexus epithelium,true
+http://mouse.owl#MA_0001784,right lung alveolar system,true
 -1259758348,right lung alveolar system,true
 -817348731,large intestine mucosa,true
 -1772251002,limb digit,true
@@ -4880,12 +4879,12 @@ http://mouse.owl#MA_0001594,circumvallate papilla,true
 -1448823690,circumvallate papilla,true
 http://mouse.owl#MA_0002498,portal lobule,true
 180532330,portal lobule,true
+http://mouse.owl#MA_0002665,hilar part of hepatic duct,true
 http://mouse.owl#MA_0000101,outflow tract aortic component,true
 -1295312386,outflow tract aortic component,true
 http://mouse.owl#MA_0001005,pyramus,false
 http://mouse.owl#MA_0001005,cerebellum lobule viii,true
 596726203,cerebellum lobule viii,true
-http://mouse.owl#MA_0001822,respiratory system submucosa,true
 http://mouse.owl#MA_0001937,cervical trunk,true
 -197576602,cervical trunk,true
 http://mouse.owl#MA_0000843,suprachiasmatic nucleus,true
@@ -4898,7 +4897,6 @@ http://mouse.owl#MA_0001557,small intestine peyer s patch,true
 2106941571,small intestine peyer s patch,true
 http://mouse.owl#MA_0002701,anterior lingual gland,true
 -529851237,anterior lingual gland,true
-http://mouse.owl#MA_0001604,tooth enamel organ,true
 http://mouse.owl#MA_0000463,ankle joint,true
 1229580328,ankle joint,true
 http://mouse.owl#MA_0001367,metacarpal bone digit 4,true
@@ -4983,6 +4981,8 @@ http://mouse.owl#MA_0001877,right ventricle muscular part,true
 http://mouse.owl#MA_0001687,urethra urothelium,true
 1574705776,urethra urothelium,true
 848345594,arm connective tissue,true
+http://mouse.owl#MA_0001660,glomerular capsule,true
+http://mouse.owl#MA_0001660,bowman s capsule,false
 1317195645,intermediate carpal bone,true
 http://mouse.owl#MA_0001497,zygomatic bone,true
 -1479671432,zygomatic bone,true
@@ -5010,9 +5010,9 @@ http://mouse.owl#MA_0000746,lymph node trabeculum,true
 1925789268,thoracic cavity nerve,true
 http://mouse.owl#MA_0001700,urinary bladder trigone smooth muscle,true
 -890832802,urinary bladder trigone smooth muscle,true
-883612415,liver parenchyma,true
 http://mouse.owl#MA_0002604,distal straight tubule macula densa,true
 1328667225,distal straight tubule macula densa,true
+883612415,liver parenchyma,true
 http://mouse.owl#MA_0001510,costovertebral joint,true
 -694475874,costovertebral joint,true
 http://mouse.owl#MA_0002414,cumulus oophorus,true
@@ -5021,11 +5021,15 @@ http://mouse.owl#genid296,genid296,false
 http://mouse.owl#genid296,hypophysis cerebri,true
 -65441540,pituitary gland,true
 -1928650981,external naris,true
+http://mouse.owl#MA_0000844,tuberal nucleus,false
+http://mouse.owl#MA_0000844,tuberal area,true
+http://mouse.owl#MA_0000844,tuberal region,false
 http://mouse.owl#MA_0002224,subscapular vein,true
 -1408093324,subscapular vein,true
 -1630669712,spinal cord meninges,true
 http://mouse.owl#MA_0002034,radial artery,true
 -975896975,radial artery,true
+http://mouse.owl#MA_0001585,parotid gland,true
 http://mouse.owl#MA_0001872,right atrium venous valve,true
 -416857857,right atrium venous valve,true
 http://mouse.owl#MA_0001682,renal blood vessel,false
@@ -5041,6 +5045,7 @@ http://mouse.owl#MA_0000519,abdomen connective tissue,true
 -1301257720,abdomen connective tissue,true
 -936188893,anal region,true
 912054225,lymph node,true
+http://mouse.owl#MA_0001766,larynx mucosa,true
 http://mouse.owl#MA_0000931,principal nucleus,true
 -818270584,principal nucleus,true
 -782591787,bronchus cartilage,true
@@ -5066,7 +5071,6 @@ http://mouse.owl#MA_0002169,maxillary vein,true
 -1890675016,maxillary vein,true
 http://mouse.owl#MA_0001075,trochlear iv nucleus,true
 400286311,trochlear iv nucleus,true
-http://mouse.owl#MA_0001692,urinary bladder mucosa,true
 http://mouse.owl#MA_0002581,rest of afferent arteriole,true
 527018672,rest of afferent arteriole,true
 http://mouse.owl#MA_0002391,tensor fasciae lata,true
@@ -5144,7 +5148,6 @@ http://mouse.owl#MA_0002679,foliate papilla,true
 -345349942,foliate papilla,true
 http://mouse.owl#MA_0000681,upper leg blood vessel,true
 1557720275,upper leg blood vessel,true
-http://mouse.owl#MA_0001585,parotid gland,true
 773332218,parotid gland,true
 http://mouse.owl#MA_0002489,visceral pleura,true
 395130727,visceral pleura,true
@@ -5182,7 +5185,6 @@ http://mouse.owl#MA_0001168,median nerve,true
 -1783107557,median nerve,true
 http://mouse.owl#MA_0002312,hamstring muscle,true
 -627768461,hamstring muscle,true
-http://mouse.owl#MA_0000074,heart left atrium,true
 229674056,heart left atrium,true
 http://mouse.owl#MA_0002122,digital torus vein,true
 1068370766,digital torus vein,true
@@ -5210,18 +5212,16 @@ http://mouse.owl#MA_0000417,alveolar duct,true
 1316151450,sympathetic nerve trunk,true
 1961051594,beta cell islet,true
 3195286,hand,true
-http://mouse.owl#MA_0002415,exocrine pancreas,true
 http://mouse.owl#MA_0000969,olfactory bulb external plexiform layer,true
 1712048837,olfactory bulb external plexiform layer,true
 http://mouse.owl#MA_0000779,hair inner root sheath,true
 2043051650,hair inner root sheath,true
--60949444,ileocecal junction,true
 http://mouse.owl#MA_0001923,bronchial artery,true
 -1149917584,bronchial artery,true
+-60949444,ileocecal junction,true
 -70636489,neck organ,true
 http://mouse.owl#MA_0001733,vagina smooth muscle,true
 -1183103894,vagina smooth muscle,true
-http://mouse.owl#MA_0002637,female urethra,true
 1224953182,female urethra,true
 -1184522296,male reproductive gland,true
 http://mouse.owl#MA_0001543,transverse colon,true
@@ -5250,6 +5250,7 @@ http://mouse.owl#MA_0001316,retina outer plexiform layer,true
 -1573867534,enteric nervous system,true
 -1053357986,spinal cord intermediate grey,true
 2079011626,thoracic cavity,true
+http://mouse.owl#MA_0001637,hepatic duct intrahepatic part,true
 http://mouse.owl#MA_0000964,lateral ventricle ependyma,true
 1897026525,lateral ventricle ependyma,true
 http://mouse.owl#MA_0001868,transverse sinus,true
@@ -5313,6 +5314,7 @@ http://mouse.owl#MA_0000922,medial entorhinal cortex,true
 1992494246,medial entorhinal cortex,true
 http://mouse.owl#MA_0001826,respiratory system lymphatic vessel smooth muscle,true
 -2045454314,respiratory system lymphatic vessel smooth muscle,true
+http://mouse.owl#MA_0000732,peyer s patch follicle,true
 -1162643369,peyer s patch follicle,true
 -1423661748,hepatic duct extrahepatic part,true
 http://mouse.owl#MA_0000542,pelvis nerve,true
@@ -5398,13 +5400,10 @@ http://mouse.owl#MA_0001956,lateral dorsal digital artery for digit 05,true
 886207141,lateral dorsal digital artery for digit 05,true
 http://mouse.owl#MA_0000862,lateral thalamic group,true
 345290676,lateral thalamic group,true
-http://mouse.owl#MA_0001766,larynx mucosa,true
 http://mouse.owl#MA_0001827,respiratory system mucosa,true
 310396579,larynx mucosa,true
 5770961,neurocranium,true
 -1224557334,leg muscle,true
-http://mouse.owl#MA_0001660,glomerular capsule,true
-http://mouse.owl#MA_0001660,bowman s capsule,false
 http://mouse.owl#MA_0001576,gingival epithelium,true
 -2041954660,gingival epithelium,true
 -1259743128,venous system,true
@@ -5433,7 +5432,6 @@ http://mouse.owl#MA_0001729,uterus serosa,true
 http://mouse.owl#MA_0000635,shoulder skin,true
 1038899492,shoulder skin,true
 564811443,intestine smooth muscle,true
-http://mouse.owl#MA_0000445,omental bursa,true
 2145953612,omental bursa,true
 http://mouse.owl#MA_0001349,centrale,false
 http://mouse.owl#MA_0001349,navicular,true
@@ -5449,7 +5447,6 @@ http://mouse.owl#MA_0001159,thoracic ganglion,true
 http://mouse.owl#MA_0002303,dorsal foot interosseus muscle,true
 -1683749487,dorsal foot interosseus muscle,true
 -1865141864,capillary,true
-http://mouse.owl#MA_0002499,portal triad,true
 http://mouse.owl#MA_0002113,dural vein,true
 935254767,dural vein,true
 http://mouse.owl#MA_0000997,cerebellum purkinje cell layer,true
@@ -5471,6 +5468,8 @@ http://mouse.owl#MA_0002475,cheek,true
 94627437,cheek,true
 http://mouse.owl#MA_0001381,foot digit 1 phalanx,true
 -2015610821,foot digit 1 phalanx,true
+http://mouse.owl#MA_0000830,habenular nucleus,false
+http://mouse.owl#MA_0000830,habenula,true
 http://mouse.owl#MA_0002285,cutaneous trunci,true
 -740190611,cutaneous trunci,true
 http://mouse.owl#MA_0001191,limbus lamina spiralis,true
@@ -5481,7 +5480,6 @@ http://mouse.owl#MA_0002095,superior cerebellar vein,true
 -1366645976,peripheral nervous system,true
 -1722567988,upper back,true
 -73042237,cuneiform of hand,true
-http://mouse.owl#MA_0002406,ganglion,true
 -100205361,ma:0002055,true
 83679783,suprarenal artery,true
 641233065,brain white matter,true
@@ -5523,8 +5521,6 @@ http://mouse.owl#MA_0002470,submandibular ganglion,true
 -1782207061,submandibular ganglion,true
 http://mouse.owl#MA_0002280,constrictor muscle of pharynx superior,true
 942134634,constrictor muscle of pharynx superior,true
-http://mouse.owl#MA_0000196,4th ventricle,false
-http://mouse.owl#MA_0000196,fourth ventricle,true
 http://mouse.owl#MA_0002090,caudal auricular vein,true
 1424486595,caudal auricular vein,true
 http://mouse.owl#MA_0000403,male preputial gland,true
@@ -5562,7 +5558,6 @@ http://mouse.owl#genid1809,rhombencephalon,true
 http://mouse.owl#MA_0001099,optic stalk,true
 -338201101,optic stalk,true
 -858767596,tibial vein,true
-http://mouse.owl#MA_0002485,eye posterior segment,true
 http://mouse.owl#MA_0002053,superficial radial artery,true
 -724304480,superficial radial artery,true
 -177029561,alimentary tract,true
@@ -5594,7 +5589,6 @@ http://mouse.owl#MA_0002016,pericardiacoophrenic artery,true
 http://mouse.owl#MA_0000950,hippocampus ca1,true
 1061814855,hippocampus ca1,true
 1569253508,respiratory system mucosa,true
-http://mouse.owl#MA_0001854,trachea basement membrane,true
 -1182356465,trachea basement membrane,true
 http://mouse.owl#genid1206,cranial bone,true
 -308639981,cranial bone,true
@@ -5605,7 +5599,6 @@ http://mouse.owl#MA_0002758,levator auris longus,true
 http://mouse.owl#MA_0001664,urinary space,true
 http://mouse.owl#MA_0001664,bowman s space,false
 646159411,urinary space,true
-http://mouse.owl#MA_0002568,alveolar wall,true
 -1922712023,alveolar wall,true
 -714921091,head neck connective tissue,true
 http://mouse.owl#MA_0001474,supraoccipital bone,true
@@ -5634,6 +5627,7 @@ http://mouse.owl#MA_0000533,pelvis connective tissue,true
 http://mouse.owl#MA_0001437,sacral vertebra 4,true
 1237695792,sacral vertebra 4,true
 107450,lip,true
+http://mouse.owl#MA_0001247,harderian gland,true
 -123531817,harderian gland,true
 1415256171,epidermis,true
 http://mouse.owl#MA_0001057,trigeminal v mesencephalic nucleus,true
@@ -5777,7 +5771,6 @@ http://mouse.owl#MA_0000209,central grey,false
 -100231242,ma:0001479,true
 http://mouse.owl#MA_0000811,brain nucleus,true
 -1848458928,brain nucleus,true
-http://mouse.owl#MA_0000099,pericardium,true
 http://mouse.owl#MA_0001715,zona pellucida,true
 981455602,zona pellucida,true
 -1188760158,renal medulla interstitium,true
@@ -5814,8 +5807,8 @@ http://mouse.owl#MA_0002081,adrenal vein,true
 3447083,pons,true
 http://mouse.owl#MA_0001108,vagus x nerve right recurrent laryngeal branch,true
 2029114672,vagus x nerve right recurrent laryngeal branch,true
-1777874441,integumental system,true
 2034582920,ureter transitional epithelium,true
+1777874441,integumental system,true
 http://mouse.owl#MA_0000946,dentate gyrus granule cell layer,true
 -1094174821,dentate gyrus granule cell layer,true
 -486242080,spleen red pulp,true
@@ -5901,12 +5894,15 @@ http://mouse.owl#MA_0001808,respiratory system capillary endothelium,true
 -2073038329,abdomen pelvis perineum blood vessel,true
 http://mouse.owl#MA_0001428,lumbar vertebra 1,true
 1197829478,lumbar vertebra 1,true
+http://mouse.owl#MA_0000334,cecum,true
+http://mouse.owl#MA_0000334,caecum,false
 94536640,cecum,true
 http://mouse.owl#MA_0001238,ciliary epithelium,true
 -1285495062,ciliary epithelium,true
 -1011179717,integumental system gland,true
 http://mouse.owl#MA_0001048,medial vestibular nucleus,true
 -325180317,medial vestibular nucleus,true
+http://mouse.owl#MA_0002406,ganglion,true
 http://mouse.owl#MA_0002002,mental artery,true
 -1943844025,mental artery,true
 -564235850,forebrain pia mater,true
@@ -5919,6 +5915,7 @@ http://mouse.owl#MA_0001650,cortical arch,true
 1399819786,cortical arch,true
 http://mouse.owl#MA_0002554,popliteus,true
 -879346044,popliteus,true
+http://mouse.owl#MA_0001460,ovary stratum granulosum,true
 157550165,ovary stratum granulosum,true
 http://mouse.owl#MA_0002364,rectus abdominis,true
 -1569693671,rectus abdominis,true
@@ -5939,7 +5936,6 @@ http://mouse.owl#MA_0002707,nail matrix,true
 -1988222414,nail matrix,true
 http://mouse.owl#MA_0000469,foot digit 5,true
 434782583,foot digit 5,true
-http://mouse.owl#MA_0001613,stomach glandular region,true
 1874829050,stomach glandular region,true
 http://mouse.owl#MA_0002517,endocrine pancreas secretion,true
 -270613747,endocrine pancreas secretion,true
@@ -5963,6 +5959,8 @@ http://mouse.owl#MA_0000881,third ventricle choroid plexus stroma,true
 2080708037,third ventricle choroid plexus stroma,true
 http://mouse.owl#MA_0001785,right lung alveolar duct,true
 936784647,right lung alveolar duct,true
+http://mouse.owl#MA_0000289,organ of jacobsen,false
+http://mouse.owl#MA_0000289,vomeronasal organ,true
 -1766529053,limb joint,true
 http://mouse.owl#MA_0002689,large intestine muscularis mucosa,true
 1895100611,large intestine muscularis mucosa,true
@@ -6091,6 +6089,7 @@ http://mouse.owl#MA_0000367,liver sinusoid,true
 -677447787,liver sinusoid,true
 http://mouse.owl#MA_0001511,interchondral joint,true
 1280856042,interchondral joint,true
+http://mouse.owl#MA_0002415,exocrine pancreas,true
 1600931453,exocrine pancreas,true
 -1215498794,adenohypophysis,true
 http://mouse.owl#MA_0001321,external naris epithelium,true
@@ -6126,6 +6125,7 @@ http://mouse.owl#MA_0000362,liver middle lobe,true
 http://mouse.owl#MA_0001266,palpebral fissure,true
 -1140518281,palpebral fissure,true
 -472273463,lower respiratory tract smooth muscle,true
+http://mouse.owl#MA_0000172,epithalamus,true
 -1448889810,epithalamus,true
 http://mouse.owl#MA_0001076,facial vii ganglion,true
 http://mouse.owl#MA_0001076,geniculate ganglion,false
@@ -6193,8 +6193,6 @@ http://mouse.owl#MA_0001414,rib dorsal segment,true
 http://mouse.owl#MA_0002318,iliacus,true
 1890512909,iliacus,true
 -1885761456,cartilaginous joint,true
-http://mouse.owl#MA_0000289,organ of jacobsen,false
-http://mouse.owl#MA_0000289,vomeronasal organ,true
 http://mouse.owl#MA_0001224,tympanic epithelium,true
 798362336,tympanic epithelium,true
 http://mouse.owl#MA_0002128,gastric vein,true
@@ -6213,10 +6211,10 @@ http://mouse.owl#MA_0001776,left lung alveolar duct,true
 http://mouse.owl#MA_0000682,upper leg bone,true
 1684914299,upper leg bone,true
 613842732,salivary duct,true
-http://mouse.owl#MA_0000492,outflow tract smooth muscle,true
--1866832166,outflow tract smooth muscle,true
 http://mouse.owl#MA_0002730,renal papilla,true
 589817860,renal papilla,true
+http://mouse.owl#MA_0000492,outflow tract smooth muscle,true
+-1866832166,outflow tract smooth muscle,true
 http://mouse.owl#MA_0001396,costal arch,true
 -225970203,costal arch,true
 -1282155713,tooth substance,true
@@ -6332,10 +6330,12 @@ http://mouse.owl#MA_0000775,palatine tonsil,true
 http://mouse.owl#MA_0001489,mandible squamous part,true
 -1971247156,mandible squamous part,true
 -1169242551,renal distal tubule,true
+http://mouse.owl#MA_0000395,vulva,true
 112568863,vulva,true
+http://mouse.owl#MA_0002443,auditory system,true
+-2066722341,auditory system,true
 http://mouse.owl#MA_0001299,nasolacrimal duct,true
 623192071,nasolacrimal duct,true
--2066722341,auditory system,true
 http://mouse.owl#MA_0002253,vein of lower lip,true
 -116398178,vein of lower lip,true
 http://mouse.owl#MA_0002063,testicular artery,true
@@ -6432,9 +6432,9 @@ http://mouse.owl#MA_0000488,heart apex,true
 http://mouse.owl#MA_0001632,gall bladder epithelium,true
 http://mouse.owl#MA_0001632,biliary epithelium,false
 1376788401,gall bladder epithelium,true
--254818239,limb long bone,true
 http://mouse.owl#MA_0002536,sputum,true
 -895579525,sputum,true
+-254818239,limb long bone,true
 http://mouse.owl#MA_0001442,thoracic vertebra 5,true
 1298786278,thoracic vertebra 5,true
 http://mouse.owl#MA_0002346,obliquus internus abdominis,true
@@ -6579,10 +6579,10 @@ http://mouse.owl#MA_0001118,spinal cord central grey,true
 http://mouse.owl#MA_0000956,hippocampus stratum pyramidale,false
 http://mouse.owl#MA_0000956,hippocampus pyramidal layer,true
 -1768049248,hippocampus pyramidal layer,true
-http://mouse.owl#MA_0001910,muzzle snout,true
-1438485947,muzzle snout,true
 http://mouse.owl#MA_0000766,thymus capsule,true
 -1552628134,thymus capsule,true
+http://mouse.owl#MA_0001910,muzzle snout,true
+1438485947,muzzle snout,true
 -277476821,head bone,true
 http://mouse.owl#MA_0001720,cuboidal oviduct epithelium,true
 838505030,cuboidal oviduct epithelium,true

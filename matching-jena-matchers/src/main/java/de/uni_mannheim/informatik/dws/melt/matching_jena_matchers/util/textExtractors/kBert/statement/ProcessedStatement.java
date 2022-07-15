@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtra
 import org.apache.jena.rdf.model.Statement;
 
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class ProcessedStatement<T extends ProcessedRDFNode> {
     protected NeighborRole role;
@@ -28,5 +29,28 @@ public abstract class ProcessedStatement<T extends ProcessedRDFNode> {
 
     public ProcessedProperty getPredicate() {
         return predicate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ProcessedStatement<T> other = (ProcessedStatement<T>) obj;
+        return Objects.equals(getNeighbor().getNormalizedLiteral(), other.getNeighbor().getNormalizedLiteral()) &&
+                Objects.equals(getPredicate().getNormalizedLiteral(), other.getPredicate().getNormalizedLiteral());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(neighbor.getNormalized() + predicate.getNormalized());
+        return hash;
     }
 }

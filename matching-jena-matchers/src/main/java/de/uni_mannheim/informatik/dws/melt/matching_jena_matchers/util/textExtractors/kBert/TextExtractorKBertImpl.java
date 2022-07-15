@@ -15,9 +15,9 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtra
 import org.apache.jena.atlas.lib.SetUtils;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -40,6 +40,21 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
 
     @Override
     public Set<String> extract(Resource targetResource) {
+        Map<String, Object> molecule = moleculeFromResource(targetResource);
+
+        String jsonMolecule;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            jsonMolecule = mapper.writer().writeValueAsString(molecule);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        String extracted = escapeCsv(targetResource.getURI()) + "," + escapeCsv(jsonMolecule) + NEWLINE;
+        return Set.of(extracted);
+    }
+
+    @NotNull
+    public Map<String, Object> moleculeFromResource(Resource targetResource) {
         Iterable<Statement> objectStatements = targetResource::listProperties;
         Map<Object, Set<ObjectStatement<? extends ProcessedRDFNode>>> processedObjectStatements = StreamSupport
                 .stream(objectStatements.spliterator(), false)
@@ -86,18 +101,11 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
                 .map(statement -> new SubjectStatement(statement).getRow())
                 .collect(Collectors.toSet());
 
-        String jsonMolecule;
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            jsonMolecule = mapper.writer().writeValueAsString(Map.of(
-                    "t", processedTargetResource.getKey(),
-                    "s", SetUtils.union(subjectStatementRows, objectStatementRows)
-            ));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        String extracted = escapeCsv(targetResource.getURI()) + "," + escapeCsv(jsonMolecule) + NEWLINE;
-        return Set.of(extracted);
+        Map<String, Object> molecule = Map.of(
+                "t", processedTargetResource.getKey(),
+                "s", SetUtils.union(subjectStatementRows, objectStatementRows)
+        );
+        return molecule;
     }
 
     private Set<NormalizedLiteral> getAllTargets(Resource targetResource) {

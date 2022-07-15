@@ -57,8 +57,8 @@ def test_tokenize_long_description():
 
 def test_tokenize():
     # Given
-    source_dir = RESOURCES_DIR / 'kbert' / 'index' / 'one_target'
-    model = KBertSentenceTransformer('paraphrase-albert-small-v2', [source_dir / 'index_queries.csv'], sampling_mode='random')
+    source_dir = RESOURCES_DIR / 'kbert' / 'normalized' / 'one_target'
+    model = KBertSentenceTransformer('paraphrase-albert-small-v2', [source_dir / f'index_{src}.csv' for src in ['queries', 'corpus']], sampling_mode='random')
     corpus_file_name = str(source_dir / 'queries.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
