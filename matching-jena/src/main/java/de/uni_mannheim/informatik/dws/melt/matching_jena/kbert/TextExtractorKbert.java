@@ -1,8 +1,9 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena.kbert;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
-import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntResource;
 
+import java.util.Iterator;
 import java.util.stream.Stream;
 
 /**
@@ -11,5 +12,5 @@ import java.util.stream.Stream;
  */
 public interface TextExtractorKbert extends TextExtractor {
 
-    Stream<String> getIndexStream(OntModel model);
+    Stream<String> getIndexStream(Iterator<? extends OntResource> model);
 }

@@ -26,9 +26,4 @@ public class ProcessedResource<T extends Resource> extends ProcessedRDFNode {
                 .or(() -> Optional.ofNullable(new TextExtractorUrlFragment().extract(resource).iterator().next()))
                 .orElse(null);
     }
-
-    @Override
-    public String getKey() {
-        return this.resource.toString();
-    }
 }

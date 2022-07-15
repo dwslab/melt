@@ -355,6 +355,7 @@ class KBertSentenceTransformer(SentenceTransformer):
         statement_dicts = molecules['s'].explode().dropna()
         statements = pd.DataFrame(statement_dicts.tolist(), index=statement_dicts.index)
         cols = ['text', 'tokens', 'n_tokens']
+        statements[['n', 'p']] = statements[['n', 'p']].astype(int)
         statements = statements.merge(
             self.token_index.loc[self.token_index['is_pref_label'], cols],
             left_on='n',
@@ -373,6 +374,7 @@ class KBertSentenceTransformer(SentenceTransformer):
 
     def targets_from_molecules(self, molecules):
         targets = molecules.explode('t')[['t']]
+        targets['t'] = targets['t'].astype(int)
         targets = targets.merge(self.token_index[['text', 'tokens', 'n_tokens']], left_on='t', right_index=True).drop(columns='t')
         targets['statement_seeing'] = True
         targets['all_seeing'] = False

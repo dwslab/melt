@@ -10,10 +10,10 @@ from matching_ml.python_server_melt import load_file
 # @pytest.mark.skip
 def test_encode_kbert():
     # Given
-    source_dir = RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets' / 'corpus'
+    source_dir = RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets'
     model = KBertSentenceTransformer('paraphrase-albert-small-v2', pooling_mode='mean_target',
-                                     index_files=[source_dir / 'index.csv'])
-    corpus_file_name = str(source_dir / 'molecules.csv')
+                                     index_files=[source_dir / 'index_corpus.csv'])
+    corpus_file_name = str(source_dir / 'corpus.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
     embeddings = model.encode(corpus, batch_size=32, convert_to_tensor=True)
@@ -88,8 +88,9 @@ def test_tokenize_very_short():
 
 def test_tokenize_many_targets():
     # Given
-    model = KBertSentenceTransformer('paraphrase-albert-small-v2')
-    corpus_file_name = str(RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets' / 'queries.csv')
+    root = RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets'
+    model = KBertSentenceTransformer('paraphrase-albert-small-v2', [root / 'index_queries.csv'])
+    corpus_file_name = str(root / 'queries.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
     features = model.tokenize([corpus[2001]])

@@ -1,21 +1,20 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert.KBertSentenceTransformersMatcher;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry.getTransformedObject;
@@ -33,16 +32,14 @@ class TextExtractorKBertTest {
         Properties properties = getTransformedPropertiesOrNewInstance(parameters);
         URL target = testCase.getTarget().toURL();
         OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
+        TextExtractorKBertImpl extractor = new TextExtractorKBertImpl(true, true);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                new TextExtractorKBertImpl(true, true), "paraphrase-MiniLM-L6-v2");
-        TextExtractorMap simpleTextExtractor = matcher.getExtractorMap();
+                extractor, "paraphrase-MiniLM-L6-v2");
         Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
         OntResource resource = StreamSupport.stream(getIterable(resourceIterator).spliterator(), false)
-                .filter(r -> {
-                    return r.isURIResource() && r.getURI().equals("http://human.owl#NCI_C12519");
-                }).findFirst().get();
+                .filter(r -> r.isURIResource() && r.getURI().equals("http://human.owl#NCI_C12519")).findFirst().get();
         // When
-        Map<String, Set<String>> asdf = simpleTextExtractor.extract(resource);
+        Set<String> asdf = extractor.extract(resource);
         // Then
         System.out.println("");
     }
@@ -68,5 +65,28 @@ class TextExtractorKBertTest {
         Map<String, Object> molecule = simpleTextExtractor.moleculeFromResource(resource);
         // Then
         assertThat((Set) molecule.get("s")).hasSize(3);
+    }
+
+    @Test
+    public void testMultipleTargets() throws MalformedURLException, TypeTransformationException {
+        // Given
+        String uriOfResourceWithDuplicateStatements = "http://human.owl#NCI_C12393";
+        TestCase testCase = TrackRepository.Anatomy.Default.getTestCase(0);
+        URL parameters = testCase.getParameters().toURL();
+        Properties properties = getTransformedPropertiesOrNewInstance(parameters);
+        URL target = testCase.getTarget().toURL();
+        OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
+        TextExtractorKBertImpl textExtractor = new TextExtractorKBertImpl(true, true);
+        KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
+                textExtractor, "paraphrase-MiniLM-L6-v2");
+        Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
+        OntResource resource = streamFromIterator(resourceIterator)
+                .filter(r -> r.isURIResource() && r.getURI().equals(uriOfResourceWithDuplicateStatements))
+                .findFirst()
+                .get();
+        // When
+        Map<String, Object> molecule = textExtractor.moleculeFromResource(resource);
+        // Then
+        assertThat((Set) molecule.get("t")).hasSize(2);
     }
 }

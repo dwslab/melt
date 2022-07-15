@@ -13,7 +13,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtra
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.NormalizedLiteral;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.TextExtractorMapSet;
 import org.apache.jena.atlas.lib.SetUtils;
-import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntResource;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
@@ -55,9 +55,8 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
 
     @NotNull
     public Map<String, Object> moleculeFromResource(Resource targetResource) {
-        Iterable<Statement> objectStatements = targetResource::listProperties;
-        Map<Object, Set<ObjectStatement<? extends ProcessedRDFNode>>> processedObjectStatements = StreamSupport
-                .stream(objectStatements.spliterator(), false)
+        Map<Object, Set<ObjectStatement<? extends ProcessedRDFNode>>> processedObjectStatements =
+                getObjectStatementStream(targetResource)
                 .filter(statement -> !statement.getObject().isAnon())
                 .map(statement -> {
                     if (statement.getObject().isLiteral()) return new LiteralObjectStatement(statement);
@@ -71,50 +70,48 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
 
         ProcessedResource<Resource> processedTargetResource = new ProcessedResource<>(targetResource);
         // Get target resource labels
-        final Set<NormalizedLiteral> targets;
+        final Set<? extends ProcessedRDFNode> targets;
         if (this.useAllTargets) {
             targets = getAllTargets(targetResource);
         } else {
             Set<ObjectStatement<? extends ProcessedRDFNode>> literalObjectStatements =
                     processedObjectStatements.get(LiteralObjectStatement.class);
-            final NormalizedLiteral targetNormalizedLiteral;
             if (literalObjectStatements != null) {
                 ObjectStatement<? extends ProcessedRDFNode> targetLiteralStatement = literalObjectStatements.stream()
                         .min(Comparator.comparing(s -> s.getPredicate().getLabelType()))
                         .get();
-                targetNormalizedLiteral = targetLiteralStatement.getNeighbor().getNormalizedLiteral();
+                targets = Set.of(targetLiteralStatement.getNeighbor());
             } else {
-                targetNormalizedLiteral = processedTargetResource.getNormalizedLiteral();
+                targets = Set.of(processedTargetResource);
             }
-            targets = Set.of(targetNormalizedLiteral);
         }
         // skip triples where object has target resource label
         Set<Map<String, String>> objectStatementRows = objectStatementStream
-                .filter(osm -> !targets.contains(osm.getNeighbor().getNormalizedLiteral()))
+                .filter(osm -> !targets.contains(osm.getNeighbor()))
                 .map(ObjectStatement::getRow)
                 .collect(Collectors.toSet());
 
         // get subject statement rows
-        Set<Map<String, String>> subjectStatementRows = streamFromIterator(
-                targetResource.getModel().listStatements(null, null, targetResource)
-        ).filter(statement -> !statement.getSubject().isAnon())
+        Set<Map<String, String>> subjectStatementRows = getSubjectStatementStream(targetResource)
+                .filter(statement -> !statement.getSubject().isAnon())
                 .map(statement -> new SubjectStatement(statement).getRow())
                 .collect(Collectors.toSet());
 
-        Map<String, Object> molecule = Map.of(
-                "t", processedTargetResource.getKey(),
+        return Map.of(
+                "t", targets.stream().map(ProcessedRDFNode::getKey).collect(Collectors.toSet()),
                 "s", SetUtils.union(subjectStatementRows, objectStatementRows)
         );
-        return molecule;
     }
 
-    private Set<NormalizedLiteral> getAllTargets(Resource targetResource) {
-        return new TextExtractorMapSet().getLongAndShortTextNormalizedLiterals(targetResource).get("short");
+    private Set<ProcessedLiteral> getAllTargets(Resource targetResource) {
+        return new TextExtractorMapSet().getLongAndShortTextNormalizedLiterals(targetResource).get("short")
+                .stream().map(nl -> new ProcessedLiteral(nl.getLexical())).collect(Collectors.toSet());
     }
 
     @Override
-    public Stream<String> getIndexStream(OntModel model) {
-        return streamFromIterator(model.listStatements())
+    public Stream<String> getIndexStream(Iterator<? extends OntResource> resourceIterator) {
+        return streamFromIterator(resourceIterator)
+                .flatMap(r -> Stream.concat(getObjectStatementStream(r), getSubjectStatementStream(r)))
                 .flatMap(stmt -> Stream.of(stmt.getSubject(), stmt.getPredicate(), stmt.getObject()))
                 .distinct()
                 .filter(n -> n.isURIResource() || n.isLiteral())
@@ -129,9 +126,9 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
                         if (this.useAllTargets && !(resource instanceof Property)) {
                             values = getAllTargets(resource)
                                     .stream()
-                                    .map(nl -> {
-                                        boolean isPrefLabel = nl.equals(prefLabel);
-                                        String label = this.normalize ? nl.getNormalized() : nl.getLexical();
+                                    .map(pl -> {
+                                        boolean isPrefLabel = pl.getNormalizedLiteral().equals(prefLabel);
+                                        String label = this.normalize ? pl.getNormalized() : pl.getRaw();
                                         return escapeCsv(label) + "," + isPrefLabel;
                                     });
                         } else {
@@ -146,5 +143,15 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
                     }
                     return values.map(v -> escapeCsv(key) + "," + v);
                 });
+    }
+
+    @NotNull
+    private Stream<Statement> getSubjectStatementStream(Resource r) {
+        return streamFromIterator(r.getModel().listStatements(null, null, r));
+    }
+
+    @NotNull
+    private Stream<Statement> getObjectStatementStream(Resource r) {
+        return streamFromIterator(r.listProperties());
     }
 }

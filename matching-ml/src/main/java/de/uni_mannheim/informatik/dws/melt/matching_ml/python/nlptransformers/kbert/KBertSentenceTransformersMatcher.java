@@ -84,7 +84,7 @@ public class KBertSentenceTransformersMatcher extends SentenceTransformersMatche
         File indexOutputFile = new File(file.getParentFile(), "index_" + file.getName());
         Files.createDirectories(indexOutputFile.getParentFile().toPath());
         try (PrintWriter printWriter = new PrintWriter(indexOutputFile)) {
-            textExtractorKbert.getIndexStream(model).forEach(printWriter::println);
+            textExtractorKbert.getIndexStream(extractor.extract(model, parameters)).forEach(printWriter::println);
         }
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8))) {
             if (this.multipleTextsToMultipleExamples) {

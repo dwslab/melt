@@ -43,8 +43,8 @@ public abstract class ProcessedStatement<T extends ProcessedRDFNode> {
             return false;
         }
         final ProcessedStatement<T> other = (ProcessedStatement<T>) obj;
-        return Objects.equals(getNeighbor().getNormalizedLiteral(), other.getNeighbor().getNormalizedLiteral()) &&
-                Objects.equals(getPredicate().getNormalizedLiteral(), other.getPredicate().getNormalizedLiteral());
+        return Objects.equals(getNeighbor(), other.getNeighbor()) &&
+                Objects.equals(getPredicate(), other.getPredicate());
     }
 
     @Override
