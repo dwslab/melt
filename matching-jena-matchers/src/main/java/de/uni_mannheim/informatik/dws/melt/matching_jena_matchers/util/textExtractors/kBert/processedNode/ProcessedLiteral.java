@@ -13,4 +13,9 @@ public class ProcessedLiteral extends ProcessedRDFNode {
     public String getRaw() {
         return literal.getLexicalForm().trim();
     }
+
+    @Override
+    public String getKey() {
+        return String.valueOf(this.getNormalizedLiteral().hashCode());
+    }
 }

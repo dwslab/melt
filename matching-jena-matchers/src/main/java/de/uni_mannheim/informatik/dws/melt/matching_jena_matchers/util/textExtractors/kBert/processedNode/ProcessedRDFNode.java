@@ -19,4 +19,6 @@ public abstract class ProcessedRDFNode {
     }
 
     public abstract String getRaw();
+
+    public abstract String getKey();
 }

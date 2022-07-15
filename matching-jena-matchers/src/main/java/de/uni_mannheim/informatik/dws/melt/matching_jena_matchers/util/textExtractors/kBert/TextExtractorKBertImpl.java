@@ -2,7 +2,8 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtr
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.kbert.TextExtractorKbert;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode.ProcessedLiteral;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode.ProcessedRDFNode;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.processedNode.ProcessedResource;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.statement.LiteralObjectStatement;
@@ -12,26 +13,27 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtra
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.NormalizedLiteral;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractorsMap.TextExtractorMapSet;
 import org.apache.jena.atlas.lib.SetUtils;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher.NEWLINE;
+import static de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert.KBertSentenceTransformersMatcher.streamFromIterator;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeCsv;
 
-public class TextExtractorKBert implements TextExtractor {
+public class TextExtractorKBertImpl implements TextExtractorKbert {
     private final boolean useAllTargets;
     private final boolean normalize;
 
-    public TextExtractorKBert(boolean useAllTargets, boolean normalize) {
+    public TextExtractorKBertImpl(boolean useAllTargets, boolean normalize) {
         this.useAllTargets = useAllTargets;
         this.normalize = normalize;
     }
@@ -52,11 +54,11 @@ public class TextExtractorKBert implements TextExtractor {
                 .stream()
                 .flatMap(Collection::stream);
 
+        ProcessedResource<Resource> processedTargetResource = new ProcessedResource<>(targetResource);
         // Get target resource labels
         final Set<NormalizedLiteral> targets;
         if (this.useAllTargets) {
-            targets = new TextExtractorMapSet()
-                    .getLongAndShortTextNormalizedLiterals(targetResource).get("short");
+            targets = getAllTargets(targetResource);
         } else {
             Set<ObjectStatement<? extends ProcessedRDFNode>> literalObjectStatements =
                     processedObjectStatements.get(LiteralObjectStatement.class);
@@ -67,38 +69,28 @@ public class TextExtractorKBert implements TextExtractor {
                         .get();
                 targetNormalizedLiteral = targetLiteralStatement.getNeighbor().getNormalizedLiteral();
             } else {
-                targetNormalizedLiteral = new ProcessedResource<>(targetResource).getNormalizedLiteral();
+                targetNormalizedLiteral = processedTargetResource.getNormalizedLiteral();
             }
             targets = Set.of(targetNormalizedLiteral);
         }
         // skip triples where object has target resource label
-        Set<Map<String, String>> objectStatementRows = null;
-        try {
-            objectStatementRows = objectStatementStream
-                    .filter(osm -> !targets.contains(osm.getNeighbor().getNormalizedLiteral()))
-                    .map(stmt -> this.normalize ? stmt.getNormalizedRow() : stmt.getRawRow())
-                    .collect(Collectors.toSet());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        Set<Map<String, String>> objectStatementRows = objectStatementStream
+                .filter(osm -> !targets.contains(osm.getNeighbor().getNormalizedLiteral()))
+                .map(ObjectStatement::getRow)
+                .collect(Collectors.toSet());
 
-        Iterable<Statement> subjectStatements = () -> targetResource.getModel().listStatements(null, null, targetResource);
-        Set<Map<String, String>> subjectStatementRows = StreamSupport
-                .stream(subjectStatements.spliterator(), false)
-                .filter(statement -> !statement.getSubject().isAnon())
-                .map(statement -> {
-                    SubjectStatement stmt = new SubjectStatement(statement);
-                    return this.normalize ? stmt.getNormalizedRow() : stmt.getRawRow();
-                })
+        // get subject statement rows
+        Set<Map<String, String>> subjectStatementRows = streamFromIterator(
+                targetResource.getModel().listStatements(null, null, targetResource)
+        ).filter(statement -> !statement.getSubject().isAnon())
+                .map(statement -> new SubjectStatement(statement).getRow())
                 .collect(Collectors.toSet());
 
         String jsonMolecule;
         ObjectMapper mapper = new ObjectMapper();
         try {
             jsonMolecule = mapper.writer().writeValueAsString(Map.of(
-                    "t", targets.stream()
-                            .map(t -> this.normalize ? t.getNormalized() : t.getLexical())
-                            .collect(Collectors.toSet()),
+                    "t", processedTargetResource.getKey(),
                     "s", SetUtils.union(subjectStatementRows, objectStatementRows)
             ));
         } catch (JsonProcessingException e) {
@@ -106,5 +98,45 @@ public class TextExtractorKBert implements TextExtractor {
         }
         String extracted = escapeCsv(targetResource.getURI()) + "," + escapeCsv(jsonMolecule) + NEWLINE;
         return Set.of(extracted);
+    }
+
+    private Set<NormalizedLiteral> getAllTargets(Resource targetResource) {
+        return new TextExtractorMapSet().getLongAndShortTextNormalizedLiterals(targetResource).get("short");
+    }
+
+    @Override
+    public Stream<String> getIndexStream(OntModel model) {
+        return streamFromIterator(model.listStatements())
+                .flatMap(stmt -> Stream.of(stmt.getSubject(), stmt.getPredicate(), stmt.getObject()))
+                .distinct()
+                .filter(n -> n.isURIResource() || n.isLiteral())
+                .flatMap(n -> {
+                    String key;
+                    Stream<String> values;
+                    if (n.isURIResource()) {
+                        Resource resource = n.asResource();
+                        ProcessedResource<Resource> processedResource = new ProcessedResource<>(resource);
+                        NormalizedLiteral prefLabel = processedResource.getNormalizedLiteral();
+                        key = processedResource.getKey();
+                        if (this.useAllTargets && !(resource instanceof Property)) {
+                            values = getAllTargets(resource)
+                                    .stream()
+                                    .map(nl -> {
+                                        boolean isPrefLabel = nl.equals(prefLabel);
+                                        String label = this.normalize ? nl.getNormalized() : nl.getLexical();
+                                        return escapeCsv(label) + "," + isPrefLabel;
+                                    });
+                        } else {
+                            String label = this.normalize ? prefLabel.getNormalized() : prefLabel.getLexical();
+                            values = Stream.of(escapeCsv(label) + "," + true);
+                        }
+                    } else {
+                        ProcessedLiteral processedLiteral = new ProcessedLiteral(n.asLiteral());
+                        key = processedLiteral.getKey();
+                        String label = this.normalize ? processedLiteral.getNormalized() : processedLiteral.getRaw();
+                        values = Stream.of(escapeCsv(label) + "," + true);
+                    }
+                    return values.map(v -> escapeCsv(key) + "," + v);
+                });
     }
 }

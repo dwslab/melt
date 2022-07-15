@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from sentence_transformers import SentenceTransformer
 
-from kbert.KBertSentenceTransformer import KBertSentenceTransformer, get_statement_texts
+from kbert.KBertSentenceTransformer import KBertSentenceTransformer, add_statement_texts
 from kbert.constants import RESOURCES_DIR
 from matching_ml.python_server_melt import load_file
 
@@ -10,8 +10,10 @@ from matching_ml.python_server_melt import load_file
 # @pytest.mark.skip
 def test_encode_kbert():
     # Given
-    model = KBertSentenceTransformer('paraphrase-albert-small-v2', pooling_mode='mean_target')
-    corpus_file_name = str(RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets' / 'corpus.csv')
+    source_dir = RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets' / 'corpus'
+    model = KBertSentenceTransformer('paraphrase-albert-small-v2', pooling_mode='mean_target',
+                                     index_files=[source_dir / 'index.csv'])
+    corpus_file_name = str(source_dir / 'molecules.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
     embeddings = model.encode(corpus, batch_size=32, convert_to_tensor=True)
@@ -55,11 +57,12 @@ def test_tokenize_long_description():
 
 def test_tokenize():
     # Given
-    model = KBertSentenceTransformer('paraphrase-albert-small-v2')
-    corpus_file_name = str(RESOURCES_DIR / 'kbert' / 'normalized' / 'all_targets' / 'queries.csv')
+    source_dir = RESOURCES_DIR / 'kbert' / 'index' / 'one_target'
+    model = KBertSentenceTransformer('paraphrase-albert-small-v2', [source_dir / 'index_queries.csv'], sampling_mode='random')
+    corpus_file_name = str(source_dir / 'queries.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
-    features = model.tokenize(corpus[1859:1861])
+    features = model.tokenize(corpus)
     # Then
     features_1d = ['input_ids', 'position_ids', 'token_type_ids']
     feature_2d = 'attention_mask'
@@ -102,7 +105,7 @@ def test_get_statement_texts():
     # Given
     statements = pd.DataFrame({'p': ['follows', 'precedes'], 'n': ['object', 'subject'], 'r': ['o', 's']})
     # When
-    statements = get_statement_texts(statements)
+    statements = add_statement_texts(statements)
     # Then
     assert statements.at[0, 'text'] == 'follows object'
     assert statements.at[1, 'text'] == 'subject precedes'

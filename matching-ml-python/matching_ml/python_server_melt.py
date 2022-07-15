@@ -110,18 +110,18 @@ class MySentences(object):
                     if file_name[-2:] in "gz":
                         app.logger.info("Gzip file detected! Using gzip.open().")
                         for line in gzip.open(
-                            os.path.join(self.file_or_directory_path, file_name),
-                            mode="rt",
-                            encoding="utf-8",
+                                os.path.join(self.file_or_directory_path, file_name),
+                                mode="rt",
+                                encoding="utf-8",
                         ):
                             line = line.rstrip("\n")
                             words = line.split(" ")
                             yield words
                     else:
                         for line in open(
-                            os.path.join(self.file_or_directory_path, file_name),
-                            mode="rt",
-                            encoding="utf-8",
+                                os.path.join(self.file_or_directory_path, file_name),
+                                mode="rt",
+                                encoding="utf-8",
                         ):
                             line = line.rstrip("\n")
                             words = line.split(" ")
@@ -131,14 +131,14 @@ class MySentences(object):
                 if self.file_or_directory_path[-2:] in "gz":
                     app.logger.info("Gzip file detected! Using gzip.open().")
                     for line in gzip.open(
-                        self.file_or_directory_path, mode="rt", encoding="utf-8"
+                            self.file_or_directory_path, mode="rt", encoding="utf-8"
                     ):
                         line = line.rstrip("\n")
                         words = line.split(" ")
                         yield words
                 else:
                     for line in open(
-                        self.file_or_directory_path, mode="rt", encoding="utf-8"
+                            self.file_or_directory_path, mode="rt", encoding="utf-8"
                     ):
                         line = line.rstrip("\n")
                         words = line.split(" ")
@@ -288,7 +288,6 @@ def get_vectors(model_path=None, vector_path=None):
 
 @app.route("/get-similarity", methods=["GET"])
 def get_similarity_given_model():
-
     concept_1 = request.headers.get("concept_1")
     concept_2 = request.headers.get("concept_2")
     model_path = request.headers.get("model_path")
@@ -508,6 +507,7 @@ def query_vector_space_model_batch():
     except Exception as e:
         return str(e)
 
+
 @app.route("/run-group-shuffle-split", methods=["POST"])
 def run_shuffle_split():
     try:
@@ -525,6 +525,7 @@ def run_shuffle_split():
     except Exception as e:
         import traceback
         return "ERROR " + traceback.format_exc()
+
 
 english_stopwords = {
     "has",
@@ -912,14 +913,14 @@ def __canoncorr(X, Y):
 
 
 def __project_embeddings_to_lexicon_subset(
-    word_vector_source, word_vector_target, lexicon
+        word_vector_source, word_vector_target, lexicon
 ):
     source_subset_vectors = []
     target_subset_vectors = []
     for lang_source_word, lang_target_word in lexicon:
         if (
-            lang_source_word not in word_vector_source
-            or lang_target_word not in word_vector_target
+                lang_source_word not in word_vector_source
+                or lang_target_word not in word_vector_target
         ):
             continue
         source_subset_vectors.append(word_vector_source[lang_source_word])
@@ -2050,6 +2051,11 @@ def transformers_finetuning_hp_search():
         return "ERROR " + traceback.format_exc()
 
 
+def get_index_file_path(corpus_file_path):
+    my_path = pathlib.Path(corpus_file_path)
+    return my_path.parent / f'index_{my_path.name}'
+
+
 def inner_sentencetransformers_prediction(request_headers):
     try:
         transformers_init(request_headers)
@@ -2079,7 +2085,8 @@ def inner_sentencetransformers_prediction(request_headers):
                 model_name,
                 cache_folder=cache_folder_path,
                 sampling_mode=request_headers['sampling-mode'],
-                pooling_mode=request_headers['pooling-mode']
+                pooling_mode=request_headers['pooling-mode'],
+                index_files=[get_index_file_path(p) for p in [corpus_file_name, queries_file_name]]
             )
         else:
             from sentence_transformers import SentenceTransformer

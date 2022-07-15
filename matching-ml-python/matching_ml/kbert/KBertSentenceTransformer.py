@@ -141,7 +141,7 @@ def get_group_y_in_round_x(group_sizes: pd.Series, max_group_size: int = None) -
     return group_y_in_round_x
 
 
-def get_statement_texts(statements: pd.DataFrame) -> pd.DataFrame:
+def add_statement_texts(statements: pd.DataFrame) -> pd.DataFrame:
     """
     For subject statements, computes texts by concatenating subject + ' ' + predicate, for object statements by
     concatenating predicate + ' ' + object
@@ -151,10 +151,17 @@ def get_statement_texts(statements: pd.DataFrame) -> pd.DataFrame:
     - r: 's' if n is a subject, 'o' if it is an object
     :return: statements dataframe with new column 'text' containing textual representation of the statement
     """
-    statements.loc[statements['r'] == 's', 'text'] = \
-        statements.loc[statements['r'] == 's', 'n'] + ' ' + statements.loc[statements['r'] == 's', 'p']
-    statements.loc[statements['r'] == 'o', 'text'] = \
-        statements.loc[statements['r'] == 'o', 'p'] + ' ' + statements.loc[statements['r'] == 'o', 'n']
+    has_statement_subject = statements['r'] == 's'
+    statements.loc[has_statement_subject, 'text'] = \
+        statements.loc[has_statement_subject, 'text_n'] + ' ' + statements.loc[has_statement_subject, 'text_p']
+    statements.loc[has_statement_subject, 'tokens'] = \
+        statements.loc[has_statement_subject, 'tokens_n'] + statements.loc[has_statement_subject, 'tokens_p']
+
+    has_statement_object = statements['r'] == 'o'
+    statements.loc[has_statement_object, 'text'] = \
+        statements.loc[has_statement_object, 'text_p'] + ' ' + statements.loc[has_statement_object, 'text_n']
+    statements.loc[has_statement_object, 'tokens'] = \
+        statements.loc[has_statement_object, 'tokens_p'] + statements.loc[has_statement_object, 'tokens_n']
     return statements
 
 
@@ -256,8 +263,13 @@ def add_position_ids(atoms):
 
 
 class KBertSentenceTransformer(SentenceTransformer):
-    def __init__(self, model_name_or_path, pooling_mode=None, sampling_mode='stratified', **kwargs):
+    def __init__(self, model_name_or_path, index_files=None, pooling_mode=None, sampling_mode='stratified', **kwargs):
         super().__init__(model_name_or_path, **kwargs)
+
+        self.token_index = pd.DataFrame(columns=['text', 'is_pref_label', 'tokens', 'n_tokens'])
+        if index_files is not None:
+            for f in index_files:
+                self.extend_index(f)
 
         self.sampling_mode = sampling_mode
 
@@ -295,6 +307,15 @@ class KBertSentenceTransformer(SentenceTransformer):
             if pooling_mode == 'mean_target':
                 pooling_module.pooling_mode_mean_target = True
 
+    def extend_index(self, index_file):
+        index_extension = pd.read_csv(index_file, index_col=0, names=['text', 'is_pref_label'])
+        index_extension['tokens'] = self.tokenizer.batch_encode_plus(
+            index_extension['text'].tolist(), add_special_tokens=False
+        ).input_ids
+        index_extension['n_tokens'] = index_extension['tokens'].apply(len)
+        new_index = pd.concat([self.token_index, index_extension])
+        self.token_index = new_index[~new_index.index.duplicated()]
+
     def tokenize(self, texts: Union[List[str], List[Dict], List[Tuple[str, str]]]) -> Dict[str, torch.Tensor]:
         molecules = molecules_from_texts(texts)
         n_molecules = molecules.shape[0]
@@ -303,7 +324,7 @@ class KBertSentenceTransformer(SentenceTransformer):
         target_groups = group_by_index(targets)
         molecules['n_target_tokens'] = target_groups['n_tokens'].sum()
         molecules['n_targets'] = target_groups.size()
-
+        # todo make new item to make the apply() calls faster, this is too slow :(
         has_molecule_too_many_target_tokens = molecules['n_target_tokens'] > self.max_seq_length - 1
         molecules.loc[has_molecule_too_many_target_tokens, 'n_target_tokens'] = self.max_seq_length - 1
         statements = self.statements_from_molecules(molecules)
@@ -333,21 +354,26 @@ class KBertSentenceTransformer(SentenceTransformer):
     def statements_from_molecules(self, molecules):
         statement_dicts = molecules['s'].explode().dropna()
         statements = pd.DataFrame(statement_dicts.tolist(), index=statement_dicts.index)
-        statements = get_statement_texts(statements)
-        statements['tokens'] = self.tokenizer.batch_encode_plus(
-            statements['text'].tolist(), add_special_tokens=False
-        ).input_ids
-        statements['n_tokens'] = statements['tokens'].apply(len)
+        cols = ['text', 'tokens', 'n_tokens']
+        statements = statements.merge(
+            self.token_index.loc[self.token_index['is_pref_label'], cols],
+            left_on='n',
+            right_index=True,
+        ).merge(
+            self.token_index.loc[self.token_index['is_pref_label'], cols],
+            left_on='p',
+            right_index=True,
+            suffixes=('_n', '_p')
+        )
+        statements = add_statement_texts(statements)
+        statements['n_tokens'] = statements['n_tokens_n'] + statements['n_tokens_p']
         statements['statement_seeing'] = False
         statements['all_seeing'] = False
         return statements
 
-    # todo: two corpora, two queries for kbert (one with one target, one with multpile)
     def targets_from_molecules(self, molecules):
-        targets = molecules.explode('t')[['t']].rename(columns={'t': 'text'})
-        tokens = self.tokenizer.batch_encode_plus(targets['text'].tolist(), add_special_tokens=False)
-        targets['tokens'] = tokens.input_ids
-        targets['n_tokens'] = targets['tokens'].apply(len)
+        targets = molecules.explode('t')[['t']]
+        targets = targets.merge(self.token_index[['text', 'tokens', 'n_tokens']], left_on='t', right_index=True).drop(columns='t')
         targets['statement_seeing'] = True
         targets['all_seeing'] = False
         targets['r'] = 't'

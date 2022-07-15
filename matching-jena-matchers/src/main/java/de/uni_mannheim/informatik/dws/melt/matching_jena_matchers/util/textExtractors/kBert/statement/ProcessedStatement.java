@@ -18,12 +18,8 @@ public abstract class ProcessedStatement<T extends ProcessedRDFNode> {
         this.role = null;
     }
 
-    public Map<String, String> getRawRow() {
-        return Map.of("p", predicate.getRaw(), "n", neighbor.getRaw(), "r", role.getRole());
-    }
-
-    public Map<String, String> getNormalizedRow() {
-        return Map.of("p", predicate.getNormalized(), "n", neighbor.getNormalized(), "r", role.getRole());
+    public Map<String, String> getRow() {
+        return Map.of("p", predicate.getKey(), "n", neighbor.getKey(), "r", role.getRole());
     }
 
     public T getNeighbor() {
