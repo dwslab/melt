@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformerRegistry.getTransformedObject;
@@ -88,5 +89,24 @@ class TextExtractorKBertTest {
         Map<String, Object> molecule = textExtractor.moleculeFromResource(resource);
         // Then
         assertThat((Set) molecule.get("t")).hasSize(2);
+    }
+
+    @Test
+    public void testGetIndexStream() throws MalformedURLException, TypeTransformationException {
+        // Given
+        String uriOfResourceWithDuplicateStatements = "http://human.owl#NCI_C12499";
+        TestCase testCase = TrackRepository.Anatomy.Default.getTestCase(0);
+        URL parameters = testCase.getParameters().toURL();
+        Properties properties = getTransformedPropertiesOrNewInstance(parameters);
+        URL target = testCase.getTarget().toURL();
+        OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
+        TextExtractorKBertImpl textExtractor = new TextExtractorKBertImpl(true, true);
+        KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
+                textExtractor, "paraphrase-MiniLM-L6-v2");
+        Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
+        // When
+        Stream<String> molecule = textExtractor.getIndexStream(resourceIterator);
+        // Then
+        System.out.println("");
     }
 }

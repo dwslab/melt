@@ -266,7 +266,7 @@ class KBertSentenceTransformer(SentenceTransformer):
     def __init__(self, model_name_or_path, index_files=None, pooling_mode=None, sampling_mode='stratified', **kwargs):
         super().__init__(model_name_or_path, **kwargs)
 
-        self.token_index = pd.DataFrame(columns=['text', 'is_pref_label', 'tokens', 'n_tokens'])
+        self.token_index = pd.DataFrame(columns=['text', 'tokens', 'n_tokens'])
         if index_files is not None:
             for f in index_files:
                 self.extend_index(f)
@@ -308,7 +308,7 @@ class KBertSentenceTransformer(SentenceTransformer):
                 pooling_module.pooling_mode_mean_target = True
 
     def extend_index(self, index_file):
-        index_extension = pd.read_csv(index_file, index_col=0, names=['text', 'is_pref_label'])
+        index_extension = pd.read_csv(index_file, index_col=0, names=['text'])
         index_extension['tokens'] = self.tokenizer.batch_encode_plus(
             index_extension['text'].tolist(), add_special_tokens=False
         ).input_ids
@@ -354,14 +354,13 @@ class KBertSentenceTransformer(SentenceTransformer):
     def statements_from_molecules(self, molecules):
         statement_dicts = molecules['s'].explode().dropna()
         statements = pd.DataFrame(statement_dicts.tolist(), index=statement_dicts.index)
-        cols = ['text', 'tokens', 'n_tokens']
         statements[['n', 'p']] = statements[['n', 'p']].astype(int)
         statements = statements.merge(
-            self.token_index.loc[self.token_index['is_pref_label'], cols],
+            self.token_index,
             left_on='n',
             right_index=True,
         ).merge(
-            self.token_index.loc[self.token_index['is_pref_label'], cols],
+            self.token_index,
             left_on='p',
             right_index=True,
             suffixes=('_n', '_p')

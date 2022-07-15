@@ -57,12 +57,12 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
     public Map<String, Object> moleculeFromResource(Resource targetResource) {
         Map<Object, Set<ObjectStatement<? extends ProcessedRDFNode>>> processedObjectStatements =
                 getObjectStatementStream(targetResource)
-                .filter(statement -> !statement.getObject().isAnon())
-                .map(statement -> {
-                    if (statement.getObject().isLiteral()) return new LiteralObjectStatement(statement);
-                    return new ResourceObjectStatement(statement);
-                })
-                .collect(Collectors.groupingBy(ObjectStatement::getClass, Collectors.mapping(Function.identity(), Collectors.toSet())));
+                        .filter(statement -> !statement.getObject().isAnon())
+                        .map(statement -> {
+                            if (statement.getObject().isLiteral()) return new LiteralObjectStatement(statement);
+                            return new ResourceObjectStatement(statement);
+                        })
+                        .collect(Collectors.groupingBy(ObjectStatement::getClass, Collectors.mapping(Function.identity(), Collectors.toSet())));
 
         Stream<ObjectStatement<? extends ProcessedRDFNode>> objectStatementStream = processedObjectStatements.values()
                 .stream()
@@ -115,34 +115,10 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
                 .flatMap(stmt -> Stream.of(stmt.getSubject(), stmt.getPredicate(), stmt.getObject()))
                 .distinct()
                 .filter(n -> n.isURIResource() || n.isLiteral())
-                .flatMap(n -> {
-                    String key;
-                    Stream<String> values;
-                    if (n.isURIResource()) {
-                        Resource resource = n.asResource();
-                        ProcessedResource<Resource> processedResource = new ProcessedResource<>(resource);
-                        NormalizedLiteral prefLabel = processedResource.getNormalizedLiteral();
-                        key = processedResource.getKey();
-                        if (this.useAllTargets && !(resource instanceof Property)) {
-                            values = getAllTargets(resource)
-                                    .stream()
-                                    .map(pl -> {
-                                        boolean isPrefLabel = pl.getNormalizedLiteral().equals(prefLabel);
-                                        String label = this.normalize ? pl.getNormalized() : pl.getRaw();
-                                        return escapeCsv(label) + "," + isPrefLabel;
-                                    });
-                        } else {
-                            String label = this.normalize ? prefLabel.getNormalized() : prefLabel.getLexical();
-                            values = Stream.of(escapeCsv(label) + "," + true);
-                        }
-                    } else {
-                        ProcessedLiteral processedLiteral = new ProcessedLiteral(n.asLiteral());
-                        key = processedLiteral.getKey();
-                        String label = this.normalize ? processedLiteral.getNormalized() : processedLiteral.getRaw();
-                        values = Stream.of(escapeCsv(label) + "," + true);
-                    }
-                    return values.map(v -> escapeCsv(key) + "," + v);
-                });
+                .map(n -> n.isURIResource() ? new ProcessedResource<>(n.asResource())
+                        : new ProcessedLiteral(n.asLiteral()))
+                .distinct()
+                .map(pn -> pn.getKey() + "," + escapeCsv(normalize ? pn.getNormalized() : pn.getRaw()));
     }
 
     @NotNull
