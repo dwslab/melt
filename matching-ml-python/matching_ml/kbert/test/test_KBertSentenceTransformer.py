@@ -42,8 +42,9 @@ def test_sentence_transformer_queries():
 
 def test_tokenize_long_description():
     # Given
-    model = KBertSentenceTransformer('paraphrase-albert-small-v2')
-    corpus_file_name = str(RESOURCES_DIR / 'kbert' / 'normalized' / 'all_targets' / 'queries.csv')
+    root_dir = RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets'
+    model = KBertSentenceTransformer('paraphrase-albert-small-v2', [root_dir / 'index_queries.csv'])
+    corpus_file_name = str(root_dir / 'queries.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
     features = model.tokenize([corpus[2456]])
@@ -57,7 +58,7 @@ def test_tokenize_long_description():
 
 def test_tokenize():
     # Given
-    source_dir = RESOURCES_DIR / 'kbert' / 'normalized' / 'one_target'
+    source_dir = RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets'
     model = KBertSentenceTransformer('paraphrase-albert-small-v2', [source_dir / f'index_{src}.csv' for src in ['queries', 'corpus']], sampling_mode='random')
     corpus_file_name = str(source_dir / 'queries.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
@@ -71,10 +72,43 @@ def test_tokenize():
     assert features[feature_2d].numpy().shape == (2, model.max_seq_length, model.max_seq_length)
 
 
+def test_tokenize_subject_and_object_statements():
+    # Given
+    root_dir = RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets'
+    model = KBertSentenceTransformer('paraphrase-albert-small-v2', [root_dir / 'index_queries.csv'])
+    corpus_file_name = str(root_dir / 'queries.csv')
+    corpus, corpus_pos_to_id = load_file(corpus_file_name)
+    # When
+    features = model.tokenize([corpus[28]])
+    # Then
+    features_1d = ['input_ids', 'position_ids', 'token_type_ids']
+    feature_2d = 'attention_mask'
+    assert all(k in features.keys() for k in features_1d + [feature_2d])
+    assert all(features[k].numpy().shape == (1, model.max_seq_length) for k in features_1d)
+    assert features[feature_2d].numpy().shape == (1, model.max_seq_length, model.max_seq_length)
+
+
+def test_tokenize_subject_statements():
+    # Given
+    root_dir = RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets'
+    model = KBertSentenceTransformer('paraphrase-albert-small-v2', [root_dir / 'index_queries.csv'])
+    corpus_file_name = str(root_dir / 'queries.csv')
+    corpus, corpus_pos_to_id = load_file(corpus_file_name)
+    # When
+    features = model.tokenize([corpus[80]])
+    # Then
+    features_1d = ['input_ids', 'position_ids', 'token_type_ids']
+    feature_2d = 'attention_mask'
+    assert all(k in features.keys() for k in features_1d + [feature_2d])
+    assert all(features[k].numpy().shape == (1, model.max_seq_length) for k in features_1d)
+    assert features[feature_2d].numpy().shape == (1, model.max_seq_length, model.max_seq_length)
+
+
 def test_tokenize_very_short():
     # Given
-    model = KBertSentenceTransformer('paraphrase-albert-small-v2')
-    corpus_file_name = str(RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets' / 'corpus.csv')
+    root_dir = RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets'
+    model = KBertSentenceTransformer('paraphrase-albert-small-v2', [root_dir / 'index_corpus.csv'])
+    corpus_file_name = str(root_dir / 'corpus.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
     features = model.tokenize([corpus[25]])
