@@ -368,7 +368,7 @@ class KBertSentenceTransformer(SentenceTransformer):
                 (n_molecules, max_targets_per_molecule * max_tokens_per_target)
             ).cumsum(axis=1).reshape(shape_token_by_target_by_molecule), -1)
         fits_token_in_input_by_target_by_molecule = (
-                                                                offset_token_by_target_by_molecule < self.max_seq_length) & target_token_mask
+                                                            offset_token_by_target_by_molecule < self.max_seq_length) & target_token_mask
         offset_token_by_target_by_molecule = np.where(
             fits_token_in_input_by_target_by_molecule,
             offset_token_by_target_by_molecule,
@@ -483,18 +483,20 @@ class KBertSentenceTransformer(SentenceTransformer):
 
         # todo: shuffle
         # todo: object statement positions start at object statement offset (which is target offset + longest target length)
+        # Compute position ids
         position_ids = np.zeros((n_molecules, self.max_seq_length), dtype=int)
 
+        # Add position ids of subject statement tokens
         statement_token_mask = (input_id_by_statement_by_role_by_molecule != -1)
         n_tokens_per_subject_statement_per_molecule = statement_token_mask[:, 1, :, :].sum(2)
         max_subject_statement_tokens_per_molecule = n_tokens_per_subject_statement_per_molecule.max(1)
 
         offset_first_token_per_subject_statement_per_molecule = \
-            max_subject_statement_tokens_per_molecule - n_tokens_per_subject_statement_per_molecule
+            max_subject_statement_tokens_per_molecule[:, np.newaxis] - n_tokens_per_subject_statement_per_molecule
 
         cumsum_token_by_subject_statement_by_molecule = statement_token_mask[:, 1, :, :].cumsum(2)
 
-        subject_statement_positions = np.where(
+        subject_statement_token_positions = np.where(
             statement_token_mask[:, 1, :, :],
             cumsum_token_by_subject_statement_by_molecule + offset_first_token_per_subject_statement_per_molecule[:, :,
                                                             np.newaxis],
@@ -505,28 +507,41 @@ class KBertSentenceTransformer(SentenceTransformer):
         n_statement_tokens_by_role_by_molecule = fits_token_in_input_by_statement_by_role_by_molecule.sum((2, 3))
         y_molecule_per_subject_statement_token = np.concatenate(
             [np.repeat(i, n) for i, n in enumerate(n_statement_tokens_by_role_by_molecule[:, 1])])
-        token_x = np.concatenate(
+        x_subject_statement_tokens = np.concatenate(
             [offsets_tokens_by_statement[offsets_tokens_by_statement != -1] for offsets_tokens_by_statement in
              offset_token_by_statement_by_role_by_molecule[:, 1]])
-        position_ids[y_molecule_per_subject_statement_token, token_x] = np.concatenate(
+        position_ids[y_molecule_per_subject_statement_token, x_subject_statement_tokens] = np.concatenate(
             [p[p != -1] for p in
-             subject_statement_positions])
+             subject_statement_token_positions])
 
         # add positions of target tokens
         cumsum_token_by_target_by_molecule = fits_token_in_input_by_target_by_molecule.cumsum(2)
 
-        target_positions = np.where(
+        target_token_positions = np.where(
             fits_token_in_input_by_target_by_molecule,
-            cumsum_token_by_target_by_molecule + max_subject_statement_tokens_per_molecule,
+            cumsum_token_by_target_by_molecule + max_subject_statement_tokens_per_molecule[:, np.newaxis, np.newaxis],
             -1
         )
 
         position_ids[y_molecule_per_target_token, x_target_tokens] = \
-            np.concatenate([p[p != -1] for p in target_positions])
+            np.concatenate([p[p != -1] for p in target_token_positions])
 
-        # add positions of object statement tokens
+        # add position ids of object statement tokens
+        cumsum_token_by_object_statement_by_molecule = statement_token_mask[:, 0, :, :].cumsum(2)
+        max_target_position_by_molecule = target_token_positions.max((1, 2))
+        object_statement_token_positions = np.where(
+            statement_token_mask[:, 0, :, :],
+            cumsum_token_by_object_statement_by_molecule + max_target_position_by_molecule[:, np.newaxis, np.newaxis],
+            -1)
 
+        y_molecule_per_object_statement_token = np.concatenate(
+            [np.repeat(i, n) for i, n in enumerate(n_statement_tokens_by_role_by_molecule[:, 0])])
+        x_object_statement_tokens = np.concatenate(
+            [offsets_tokens_by_statement[offsets_tokens_by_statement != -1] for offsets_tokens_by_statement in
+             offset_token_by_statement_by_role_by_molecule[:, 0]])
 
+        position_ids[y_molecule_per_object_statement_token, x_object_statement_tokens] = \
+            np.concatenate([p[p != -1] for p in object_statement_token_positions])
         print('')
 
         atoms = statement_groups.apply(
