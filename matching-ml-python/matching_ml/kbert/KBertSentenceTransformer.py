@@ -318,6 +318,7 @@ class KBertSentenceTransformer(SentenceTransformer):
         self.token_index = new_index[~new_index.index.duplicated()]
 
     def tokenize(self, texts: Union[List[str], List[Dict], List[Tuple[str, str]]]) -> Dict[str, torch.Tensor]:
+        # todo: check if I can use numba to make this even faster: http://numba.pydata.org/
         molecules = molecules_from_texts(texts)
         n_molecules = molecules.shape[0]
 
@@ -453,15 +454,15 @@ class KBertSentenceTransformer(SentenceTransformer):
         for r in statement_orders_by_molecule:
             RANDOM_STATE.shuffle(r)
 
+        # todo: check again if I can't make this faster somehow :/ following lines each take > 0.2 seconds
         max_tokens_per_molecule = max_statements_per_molecule * max_tokens_per_statement
-        z_molecule_over_statements_over_tokens = \
-            np.repeat(np.arange(n_molecules), max_tokens_per_molecule)
+        z_molecule_4_statements_4_tokens = np.repeat(np.arange(n_molecules), max_tokens_per_molecule)
         y_statement_over_tokens = np.repeat(statement_orders_by_molecule, max_tokens_per_statement)
         x_tokens = np.tile(np.arange(max_tokens_per_statement),
                            n_molecules * 2 * max_statements_per_role_per_molecule)
 
         mask = mask[
-            z_molecule_over_statements_over_tokens,
+            z_molecule_4_statements_4_tokens,
             y_statement_over_tokens,
             x_tokens
         ].reshape(shape_token_by_statement_by_molecule)
@@ -488,7 +489,7 @@ class KBertSentenceTransformer(SentenceTransformer):
         y_statement_over_tokens = np.repeat(reverse_statement_orders_by_molecule, max_tokens_per_statement)
 
         fits_token_in_input_by_statement_by_molecule = fits_token_in_input_by_statement_by_molecule[
-            z_molecule_over_statements_over_tokens,
+            z_molecule_4_statements_4_tokens,
             y_statement_over_tokens,
             x_tokens
         ].reshape(shape_token_by_statement_by_molecule)
@@ -604,6 +605,129 @@ class KBertSentenceTransformer(SentenceTransformer):
             np.concatenate([p[p != -1] for p in object_statement_token_positions])
 
         # todo: compute attention mask
+        attention_masks = np.zeros((n_molecules, *2 * [self.max_seq_length]), dtype=int)
+
+        # Add holes for cls token
+        seq_length_by_molecule = np.concatenate([
+            a[:, np.newaxis] for a in [
+                offset_token_by_target_by_molecule.max((1,2)),
+                offset_token_by_statement_by_role_by_molecule.max((1, 2, 3))
+            ]
+        ], axis=1).max(1) + 1
+
+        z_molecule_4_tokens_4_tokens = np.concatenate([
+            np.repeat(i, seq_length)
+            for i,seq_length in enumerate(seq_length_by_molecule)
+        ])
+        y_tokens_4_tokens = np.concatenate([
+            np.arange(seq_length) for seq_length in seq_length_by_molecule
+        ])
+        x_tokens = np.zeros(seq_length_by_molecule.sum(), dtype=int)
+        attention_masks[z_molecule_4_tokens_4_tokens, y_tokens_4_tokens, x_tokens] = 1
+        attention_masks[z_molecule_4_tokens_4_tokens, x_tokens, y_tokens_4_tokens] = 1
+
+        # each target sees all statements and is seen by all statements
+        n_statement_seeing_tokens_by_molecule = n_target_tokens_by_molecule + 1
+        n_target_tokens_times_n_statement_tokens_by_molecule = \
+            n_target_tokens_by_molecule * n_statement_tokens_by_molecule
+        z_molecule_4_tokens_4_tokens = np.concatenate([
+            np.repeat(i, n_target_tokens_times_n_statement_tokens)
+            for i, n_target_tokens_times_n_statement_tokens
+            in enumerate(n_target_tokens_times_n_statement_tokens_by_molecule)
+        ])
+        y_tokens_4_tokens = np.concatenate([
+            np.repeat(np.arange(1, n_statement_seeing_tokens), n_statement_tokens)
+            for n_statement_seeing_tokens, n_statement_tokens
+            in zip(n_statement_seeing_tokens_by_molecule, n_statement_tokens_by_molecule)
+        ])
+        x_tokens = np.concatenate([
+            np.tile(np.arange(n_statement_seeing_tokens, seq_length), n_target_tokens)
+            for n_statement_seeing_tokens, seq_length, n_target_tokens
+            in zip(n_statement_seeing_tokens_by_molecule, seq_length_by_molecule, n_target_tokens_by_molecule)
+        ])
+        attention_masks[z_molecule_4_tokens_4_tokens, y_tokens_4_tokens, x_tokens] = 1
+        attention_masks[z_molecule_4_tokens_4_tokens, x_tokens, y_tokens_4_tokens] = 1
+
+        # add holes for targets (target tokens can see tokens of same target)
+        n_tokens_by_target_by_molecule = fits_token_in_input_by_target_by_molecule.sum(2)
+        sum_square_target_tokens_by_molecule = (n_tokens_by_target_by_molecule ** 2).sum(1)
+        z_molecule_4_tokens_4_tokens = np.concatenate([
+            np.repeat(i, sum_square_target_tokens)
+            for i, sum_square_target_tokens in enumerate(sum_square_target_tokens_by_molecule)
+        ])
+        fits_target_in_input_by_molecule = fits_token_in_input_by_target_by_molecule.any(2)
+        offset_by_target_by_molecule = np.where(
+            fits_target_in_input_by_molecule,
+            np.where(
+                fits_token_in_input_by_target_by_molecule,
+                offset_token_by_target_by_molecule,
+                self.max_seq_length
+            ).min(2),
+            -1
+        )
+        offset_next_by_target_by_molecule = np.where(
+            fits_target_in_input_by_molecule,
+            offset_token_by_target_by_molecule.max(2) + 1,
+            -1
+        )
+        y_tokens_4_tokens = np.concatenate([
+            np.repeat(np.arange(offset, offset_next), offset_next - offset)
+            for offset_by_target, offset_next_by_target
+            in zip(offset_by_target_by_molecule, offset_next_by_target_by_molecule)
+            for offset, offset_next
+            in zip(offset_by_target, offset_next_by_target)
+        ])
+        x_tokens = np.concatenate([
+            np.tile(np.arange(offset, offset_next), offset_next - offset)
+            for offset_by_target, offset_next_by_target
+            in zip(offset_by_target_by_molecule, offset_next_by_target_by_molecule)
+            for offset, offset_next
+            in zip(offset_by_target, offset_next_by_target)
+        ])
+        attention_masks[z_molecule_4_tokens_4_tokens, y_tokens_4_tokens, x_tokens] = 1
+
+        # add holes for statements (like in targets, tokens can see each other)
+        fits_token_in_input_by_statement_by_molecule = fits_token_in_input_by_statement_by_role_by_molecule.reshape(
+            shape_token_by_statement_by_molecule)
+        n_tokens_by_statement_by_molecule = fits_token_in_input_by_statement_by_molecule.sum(2)
+        sum_square_statement_tokens_by_molecule = (n_tokens_by_statement_by_molecule ** 2).sum((1))
+        z_molecule_4_tokens_4_tokens = np.concatenate([
+            np.repeat(i, sum_square_statement_tokens)
+            for i, sum_square_statement_tokens in enumerate(sum_square_statement_tokens_by_molecule)
+        ])
+        fits_statement_in_input_by_molecule = fits_token_in_input_by_statement_by_molecule.any(2)
+        offset_token_by_statement_by_molecule = \
+            offset_token_by_statement_by_role_by_molecule.reshape(shape_token_by_statement_by_molecule)
+        offset_by_statement_by_molecule = np.where(
+            fits_statement_in_input_by_molecule,
+            np.where(
+                fits_token_in_input_by_statement_by_molecule,
+                offset_token_by_statement_by_molecule,
+                self.max_seq_length
+            ).min(2),
+            -1
+        )
+        offset_next_by_statement_by_molecule = np.where(
+            fits_statement_in_input_by_molecule,
+            offset_token_by_statement_by_molecule.max(2) + 1,
+            -1
+        )
+        y_tokens_4_tokens = np.concatenate([
+            np.repeat(np.arange(offset, offset_next), offset_next - offset)
+            for offset_by_statement, offset_next_by_statement
+            in zip(offset_by_statement_by_molecule, offset_next_by_statement_by_molecule)
+            for offset, offset_next
+            in zip(offset_by_statement, offset_next_by_statement)
+        ])
+        x_tokens = np.concatenate([
+            np.tile(np.arange(offset, offset_next), offset_next - offset)
+            for offset_by_statement, offset_next_by_statement
+            in zip(offset_by_statement_by_molecule, offset_next_by_statement_by_molecule)
+            for offset, offset_next
+            in zip(offset_by_statement, offset_next_by_statement)
+        ])
+        attention_masks[z_molecule_4_tokens_4_tokens, y_tokens_4_tokens, x_tokens] = 1
+
         print('')
 
         atoms = statement_groups.apply(
