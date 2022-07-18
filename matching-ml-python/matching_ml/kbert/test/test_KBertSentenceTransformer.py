@@ -23,7 +23,7 @@ def test_encode_kbert():
 def test_sentence_transformer():
     # Given
     model = SentenceTransformer('paraphrase-albert-small-v2')
-    corpus_file_name = str(RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets' / 'queries.csv')
+    corpus_file_name = str(RESOURCES_DIR / 'original' / 'queries.txt')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
     embeddings = model.encode(corpus, batch_size=32, convert_to_tensor=True)
