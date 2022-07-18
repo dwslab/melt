@@ -2,7 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtr
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.TextExtractorKBert;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.TextExtractorKBertImpl;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert.KBertSentenceTransformersMatcher;
 import org.apache.jena.ontology.OntModel;
 import org.junit.jupiter.api.Test;
@@ -37,8 +37,11 @@ public class KBertSentenceTransformersMatcherTest {
                     URL source = entry.getValue().toURL();
                     OntModel sourceOntology = getTransformedObject(source, OntModel.class, properties);
                     KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                            new TextExtractorKBert(allTargets, normalized), "paraphrase-MiniLM-L6-v2");
-                    File targetFile = new File(rootFile, KBertSentenceTransformersMatcher.NORMALIZED_MAP.get(normalized) + "/" + KBertSentenceTransformersMatcher.ALL_TARGETS_MAP.get(allTargets) + "/" + entry.getKey() + ".csv");
+                            new TextExtractorKBertImpl(allTargets, normalized), "paraphrase-MiniLM-L6-v2");
+                    File targetFile = new File(rootFile,
+                            KBertSentenceTransformersMatcher.NORMALIZED_MAP.get(normalized) + "/" +
+                                    KBertSentenceTransformersMatcher.ALL_TARGETS_MAP.get(allTargets) + "/" +
+                                    entry.getKey() + ".csv");
 
                     // when
                     matcher.createTextFile(sourceOntology, targetFile, matcher.getResourcesExtractor().get(0), properties);

@@ -64,11 +64,6 @@ public class TextExtractorLongAndShortAnnotationProperties implements TextExtrac
                     RDFNode n = stmt.getObject();
                     if (n.isResource()) {
                         if (recursionDepth < 10) {
-//                            if (PropertyVocabulary.hasPropertyLabelFragment(callingProp)) {
-//                                longOrShort = "short";
-//                            } else if (PropertyVocabulary.hasPropertyCommentFragment(callingProp)) {
-//                                longOrShort = "long";
-//                            }
                             Map<String, Set<String>> nextResult = getAnnotationPropertiesRecursionDeadLockSafe(
                                     n.asResource(), recursionDepth, stmt.getPredicate()
                             );
@@ -79,7 +74,6 @@ public class TextExtractorLongAndShortAnnotationProperties implements TextExtrac
                             return result;
                         }
                     } else if (n.isLiteral()) {
-//                        todo: getString or getLexicalForm??
                         result.get(getLongOrShort(callingProp)).add(n.asLiteral().getLexicalForm().trim());
                     }
                 }

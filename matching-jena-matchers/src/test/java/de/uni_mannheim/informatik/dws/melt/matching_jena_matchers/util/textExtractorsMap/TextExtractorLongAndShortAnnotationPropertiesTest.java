@@ -3,7 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtr
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.TextExtractorKBert;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.kBert.TextExtractorKBertImpl;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert.KBertSentenceTransformersMatcher;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntResource;
@@ -32,7 +32,7 @@ class TextExtractorLongAndShortAnnotationPropertiesTest {
         URL target = testCase.getTarget().toURL();
         OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                new TextExtractorKBert(true, true), "paraphrase-MiniLM-L6-v2");
+                new TextExtractorKBertImpl(true, true), "paraphrase-MiniLM-L6-v2");
         Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
         OntResource resource = StreamSupport.stream(getIterable(resourceIterator).spliterator(), false)
                 .filter(r -> {

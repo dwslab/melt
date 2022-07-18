@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtra
 import org.apache.jena.rdf.model.Statement;
 
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class ProcessedStatement<T extends ProcessedRDFNode> {
     protected NeighborRole role;
@@ -18,12 +19,8 @@ public abstract class ProcessedStatement<T extends ProcessedRDFNode> {
         this.role = null;
     }
 
-    public Map<String, String> getRawRow() {
-        return Map.of("p", predicate.getRaw(), "n", neighbor.getRaw(), "r", role.getRole());
-    }
-
-    public Map<String, String> getNormalizedRow() {
-        return Map.of("p", predicate.getNormalized(), "n", neighbor.getNormalized(), "r", role.getRole());
+    public Map<String, String> getRow() {
+        return Map.of("p", predicate.getKey(), "n", neighbor.getKey(), "r", role.getRole());
     }
 
     public T getNeighbor() {
@@ -32,5 +29,28 @@ public abstract class ProcessedStatement<T extends ProcessedRDFNode> {
 
     public ProcessedProperty getPredicate() {
         return predicate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ProcessedStatement<T> other = (ProcessedStatement<T>) obj;
+        return Objects.equals(getNeighbor(), other.getNeighbor()) &&
+                Objects.equals(getPredicate(), other.getPredicate());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(neighbor.getNormalized() + predicate.getNormalized());
+        return hash;
     }
 }

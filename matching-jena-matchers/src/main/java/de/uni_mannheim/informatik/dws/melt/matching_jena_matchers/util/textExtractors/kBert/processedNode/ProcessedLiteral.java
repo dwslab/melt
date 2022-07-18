@@ -3,14 +3,18 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtr
 import org.apache.jena.rdf.model.Literal;
 
 public class ProcessedLiteral extends ProcessedRDFNode {
-    private final Literal literal;
+    private final String raw;
 
     public ProcessedLiteral(Literal literal) {
-        this.literal = literal;
+        this.raw = literal.getLexicalForm().trim();
+    }
+
+    public ProcessedLiteral(String raw) {
+        this.raw = raw;
     }
 
     @Override
     public String getRaw() {
-        return literal.getLexicalForm().trim();
+        return raw;
     }
 }
