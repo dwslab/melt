@@ -55,6 +55,35 @@ def mask_array_with_minus_1(array, mask):
     return np.where(mask, array, -1)
 
 
+def get_input_ids_by_statement_by_role_by_molecule(molecules, roles,
+                                                   shape_token_by_statement_by_role_by_molecule, statements):
+    # get tensor with input ids of statements by role by molecule
+    input_id_by_statement_by_role_by_molecule = \
+        np.zeros(shape_token_by_statement_by_role_by_molecule, dtype=int) - 1
+    # fill in input ids of statement tokens
+    statement_groups = group_by_index(statements)
+    molecules['n_statement_tokens'] = statement_groups['n_tokens'].sum()
+    z_molecule_4_roles_4_statements_4_tokens = np.concatenate(
+        [np.repeat(i, n_statement_tokens) for i, n_statement_tokens in molecules['n_statement_tokens'].iteritems()])
+    y_role_4_statements_4_tokens = np.concatenate(
+        [np.repeat(i, n_statement_tokens) for i, n_statement_tokens in roles['n_statement_tokens'].iteritems()])
+    statements['position_within_role_within_molecule'] = np.concatenate(
+        [np.arange(i) for i in roles['n_statements'].values])
+    x_statement_4_tokens = np.concatenate([
+        np.repeat(position_within_role_within_molecule, n_tokens)
+        for n_tokens, position_within_role_within_molecule in
+        statements[['n_tokens', 'position_within_role_within_molecule']].values
+    ])
+    w_tokens = np.concatenate([np.arange(n_tokens) for n_tokens in statements['n_tokens'].values])
+    input_id_by_statement_by_role_by_molecule[
+        z_molecule_4_roles_4_statements_4_tokens,
+        y_role_4_statements_4_tokens,
+        x_statement_4_tokens,
+        w_tokens
+    ] = np.concatenate(statements['tokens'].values)
+    return input_id_by_statement_by_role_by_molecule
+
+
 class KBertSentenceTransformer(SentenceTransformer):
     def __init__(self, model_name_or_path, index_files=None, pooling_mode=None, sampling_mode='stratified', **kwargs):
         super().__init__(model_name_or_path, **kwargs)
@@ -110,8 +139,28 @@ class KBertSentenceTransformer(SentenceTransformer):
         self.token_index = new_index[~new_index.index.duplicated()]
 
     def tokenize(self, texts: Union[List[str], List[Dict], List[Tuple[str, str]]]) -> Dict[str, torch.Tensor]:
+        # get molecules
         molecules = molecules_from_texts(texts)
-        n_molecules = molecules.shape[0]
+
+        # get targets
+        targets = self.targets_from_molecules(molecules)
+
+        # get statements
+        statements = self.statements_from_molecules(molecules)
+
+        n_molecules, \
+        input_ids_by_target_by_molecule, \
+        input_ids_by_statement_by_role_by_molecule, \
+        fits_statement_in_input_by_molecule, \
+        fits_token_in_input_by_statement_by_molecule, \
+        fits_token_in_input_by_statement_by_role_by_molecule, \
+        fits_token_in_input_by_target_by_molecule, \
+        max_targets_by_molecule, \
+        max_tokens_by_molecule, \
+        offset_token_by_target_by_molecule, \
+        shape_token_by_statement_by_molecule, \
+        shape_token_by_statement_by_role_by_molecule, \
+        statement_offset_by_molecule = self.get_target_and_statement_token_ids(molecules, statements, targets)
 
         # initialize input id tensor
         shape_molecules_by_max_seq_length = (n_molecules, self.max_seq_length)
@@ -121,52 +170,6 @@ class KBertSentenceTransformer(SentenceTransformer):
         cls_tokens_y = np.arange(n_molecules)
         cls_tokens_x = np.zeros(n_molecules, dtype=int)
         input_ids[cls_tokens_y, cls_tokens_x] = self.tokenizer.cls_token_id
-
-        # get targets
-        targets = self.targets_from_molecules(molecules)
-
-        # initialize target input id tensor
-        target_groups = group_by_index(targets)
-        molecules['n_targets'] = target_groups.size()
-        max_targets_per_molecule = molecules['n_targets'].max()
-        max_tokens_per_target = targets['n_tokens'].max()
-        shape_token_by_target_by_molecule = (n_molecules, max_targets_per_molecule, max_tokens_per_target)
-        input_id_by_target_by_molecule = np.zeros(shape_token_by_target_by_molecule, dtype=int) - 1
-
-        # fill in target input ids
-        molecules['n_target_tokens'] = target_groups['n_tokens'].sum()
-        z_molecule_4_targets_4_tokens = np.concatenate(
-            [np.repeat(i, n_target_tokens) for i, n_target_tokens in molecules['n_target_tokens'].iteritems()])
-        targets['position_within_molecule'] = np.concatenate([np.arange(i) for i in molecules['n_targets'].values])
-        y_target_4_tokens = np.concatenate([
-            np.repeat(position_within_molecule, n_tokens)
-            for n_tokens, position_within_molecule in targets[['n_tokens', 'position_within_molecule']].values
-        ])
-        x_tokens = np.concatenate([np.arange(n_tokens) for n_tokens in targets['n_tokens'].values])
-        input_id_by_target_by_molecule[
-            z_molecule_4_targets_4_tokens,
-            y_target_4_tokens,
-            x_tokens
-        ] = np.concatenate(targets['tokens'].values)
-
-        # compute mask for tokens that fit in input
-        target_token_mask = (input_id_by_target_by_molecule != -1)
-        offset_token_by_target_by_molecule = np.where(
-            target_token_mask,
-            target_token_mask.reshape(
-                (n_molecules, max_targets_per_molecule * max_tokens_per_target)
-            ).cumsum(axis=1).reshape(shape_token_by_target_by_molecule), -1)
-        fits_token_in_input_by_target_by_molecule = \
-            (offset_token_by_target_by_molecule < self.max_seq_length) & target_token_mask
-
-        offset_token_by_target_by_molecule = mask_array_with_minus_1(
-            array=offset_token_by_target_by_molecule,
-            mask=fits_token_in_input_by_target_by_molecule
-        )
-        input_id_by_target_by_molecule = mask_array_with_minus_1(
-            array=input_id_by_target_by_molecule,
-            mask=fits_token_in_input_by_target_by_molecule
-        )
 
         # fill in target token input ids in input ids array
         n_target_tokens_by_molecule = fits_token_in_input_by_target_by_molecule.sum((1, 2))
@@ -179,114 +182,6 @@ class KBertSentenceTransformer(SentenceTransformer):
             [token_by_target[token_by_target != -1] for token_by_target in
              input_id_by_target_by_molecule])
 
-        # get statements
-        statements = self.statements_from_molecules(molecules)
-
-        # get roles (groups of subject/object statements within molecules)
-        role_groups = statements.groupby([statements.index, statements['r']])
-        roles = role_groups.size().rename('n_statements').to_frame()
-        roles['n_statement_tokens'] = role_groups['n_tokens'].sum()
-        roles = roles.reset_index(level=0, drop=True)
-        roles.index = roles.index.map({'o': 0, 's': 1})
-
-        # get tensor with input ids of statements by role by molecule
-        max_statements_per_role_per_molecule = roles['n_statements'].max()
-        max_tokens_per_statement = statements['n_tokens'].max()
-        shape_token_by_statement_by_role_by_molecule = (
-            n_molecules, 2, max_statements_per_role_per_molecule, max_tokens_per_statement)
-        input_id_by_statement_by_role_by_molecule = \
-            np.zeros(shape_token_by_statement_by_role_by_molecule, dtype=int) - 1
-
-        # fill in input ids of statement tokens
-        statement_groups = group_by_index(statements)
-        molecules['n_statement_tokens'] = statement_groups['n_tokens'].sum()
-        z_molecule_4_roles_4_statements_4_tokens = np.concatenate(
-            [np.repeat(i, n_statement_tokens) for i, n_statement_tokens in molecules['n_statement_tokens'].iteritems()])
-        y_role_4_statements_4_tokens = np.concatenate(
-            [np.repeat(i, n_statement_tokens) for i, n_statement_tokens in roles['n_statement_tokens'].iteritems()])
-        statements['position_within_role_within_molecule'] = np.concatenate(
-            [np.arange(i) for i in roles['n_statements'].values])
-        x_statement_4_tokens = np.concatenate([
-            np.repeat(position_within_role_within_molecule, n_tokens)
-            for n_tokens, position_within_role_within_molecule in
-            statements[['n_tokens', 'position_within_role_within_molecule']].values
-        ])
-        w_tokens = np.concatenate([np.arange(n_tokens) for n_tokens in statements['n_tokens'].values])
-        input_id_by_statement_by_role_by_molecule[
-            z_molecule_4_roles_4_statements_4_tokens,
-            y_role_4_statements_4_tokens,
-            x_statement_4_tokens,
-            w_tokens
-        ] = np.concatenate(statements['tokens'].values)
-
-        # Sample statements
-        # 1. flip subject statements so that when a subject statement does not fit, leading tokens are cropped instead
-        # of trailing ones
-        mask = (input_id_by_statement_by_role_by_molecule != -1)
-        mask[:, 1, :, :] = np.flip(mask[:, 1, :, :], axis=2)
-
-        # 2. Flatten roles to sample across both roles
-        max_statements_per_molecule = 2 * max_statements_per_role_per_molecule
-        shape_token_by_statement_by_molecule = (n_molecules, max_statements_per_molecule, max_tokens_per_statement)
-        mask = mask.reshape(shape_token_by_statement_by_molecule)
-
-        # 3. shuffle
-        statement_orders_by_molecule = \
-            np.tile(np.arange(max_statements_per_molecule)[np.newaxis, :], (n_molecules, 1))
-        for r in statement_orders_by_molecule:
-            RANDOM_STATE.shuffle(r)
-        max_tokens_per_molecule = max_statements_per_molecule * max_tokens_per_statement
-        z_molecule_4_statements_4_tokens = np.repeat(np.arange(n_molecules), max_tokens_per_molecule)
-        y_statement_4_tokens = np.repeat(statement_orders_by_molecule, max_tokens_per_statement)
-        x_tokens = np.tile(np.arange(max_tokens_per_statement),
-                           n_molecules * 2 * max_statements_per_role_per_molecule)
-        mask = mask[
-            z_molecule_4_statements_4_tokens,
-            y_statement_4_tokens,
-            x_tokens
-        ].reshape(shape_token_by_statement_by_molecule)
-
-        # 4. Compute flags determining which tokens fit in input and which not
-        # count through all statement tokens within each molecule to figure out which tokens still fit in the input
-        statement_offset_by_molecule = offset_token_by_target_by_molecule.max(axis=(1, 2))
-        offset_token_by_statement_by_molecule = np.where(
-            mask,
-            mask.reshape((n_molecules, max_tokens_per_molecule)).cumsum(
-                axis=1)
-            .reshape(shape_token_by_statement_by_molecule) +
-            statement_offset_by_molecule[:, np.newaxis, np.newaxis],
-            -1
-        )
-        fits_token_in_input_by_statement_by_molecule = \
-            (offset_token_by_statement_by_molecule < self.max_seq_length) & mask
-
-        # 5. Shuffle back
-        reverse_statement_orders_by_molecule = np.zeros(statement_orders_by_molecule.shape, dtype=int)
-        y_molecule_per_statement = np.repeat(np.arange(n_molecules), max_statements_per_molecule)
-        x_statements = statement_orders_by_molecule.ravel()
-        reverse_statement_orders_by_molecule[y_molecule_per_statement, x_statements] = \
-            np.tile(np.arange(max_statements_per_molecule), n_molecules)
-        y_statement_4_tokens = np.repeat(reverse_statement_orders_by_molecule, max_tokens_per_statement)
-        fits_token_in_input_by_statement_by_molecule = fits_token_in_input_by_statement_by_molecule[
-            z_molecule_4_statements_4_tokens,
-            y_statement_4_tokens,
-            x_tokens
-        ].reshape(shape_token_by_statement_by_molecule)
-
-        # 6. unflatten roles
-        fits_token_in_input_by_statement_by_role_by_molecule = \
-            fits_token_in_input_by_statement_by_molecule.reshape(shape_token_by_statement_by_role_by_molecule)
-
-        # 7. flip subject statement tokens back
-        fits_token_in_input_by_statement_by_role_by_molecule[:, 1, :, :] = \
-            np.flip(fits_token_in_input_by_statement_by_role_by_molecule[:, 1, :, :], axis=2)
-
-        # mask statement tokens that do not fit in input
-        input_id_by_statement_by_role_by_molecule = mask_array_with_minus_1(
-            array=input_id_by_statement_by_role_by_molecule,
-            mask=fits_token_in_input_by_statement_by_role_by_molecule
-        )
-
         # fill in input ids of statement tokens into input ids tensor
         n_statement_tokens_by_molecule = fits_token_in_input_by_statement_by_role_by_molecule.sum((1, 2, 3))
         y_molecule_4_statement_tokens = np.concatenate(
@@ -294,7 +189,7 @@ class KBertSentenceTransformer(SentenceTransformer):
         offset_token_by_statement_by_role_by_molecule = np.where(
             fits_token_in_input_by_statement_by_role_by_molecule,
             fits_token_in_input_by_statement_by_role_by_molecule.reshape(
-                (n_molecules, max_tokens_per_molecule)
+                (n_molecules, max_tokens_by_molecule)
             ).cumsum(axis=1).reshape(shape_token_by_statement_by_role_by_molecule) +
             statement_offset_by_molecule[:, np.newaxis, np.newaxis, np.newaxis],
             -1
@@ -304,7 +199,7 @@ class KBertSentenceTransformer(SentenceTransformer):
              offset_token_by_statement_by_role_by_molecule])
         input_ids[y_molecule_4_statement_tokens, x_statement_tokens] = np.concatenate([
             input_id_by_statement[input_id_by_statement != -1]
-            for input_id_by_statement in input_id_by_statement_by_role_by_molecule
+            for input_id_by_statement in input_ids_by_statement_by_role_by_molecule
         ])
 
         # Compute position ids
@@ -314,17 +209,17 @@ class KBertSentenceTransformer(SentenceTransformer):
         # not start at position one, but at a position such that the last token is adjacent to the first target token
         fits_token_in_input_by_subject_statement_by_molecule = \
             fits_token_in_input_by_statement_by_role_by_molecule[:, 1, :, :]
-        n_tokens_per_subject_statement_per_molecule = \
+        n_tokens_by_subject_statement_by_molecule = \
             fits_token_in_input_by_subject_statement_by_molecule.sum(2)
-        max_subject_statement_tokens_per_molecule = n_tokens_per_subject_statement_per_molecule.max(1)
-        offset_first_token_per_subject_statement_per_molecule = \
-            max_subject_statement_tokens_per_molecule[:, np.newaxis] - n_tokens_per_subject_statement_per_molecule
+        max_subject_statement_tokens_by_molecule = n_tokens_by_subject_statement_by_molecule.max(1)
+        offset_first_token_by_subject_statement_by_molecule = \
+            max_subject_statement_tokens_by_molecule[:, np.newaxis] - n_tokens_by_subject_statement_by_molecule
         cumsum_token_by_subject_statement_by_molecule = \
             fits_token_in_input_by_subject_statement_by_molecule.cumsum(2)
         subject_statement_token_positions = np.where(
             fits_token_in_input_by_subject_statement_by_molecule,
             cumsum_token_by_subject_statement_by_molecule +
-            offset_first_token_per_subject_statement_per_molecule[:, :, np.newaxis],
+            offset_first_token_by_subject_statement_by_molecule[:, :, np.newaxis],
             -1
         )
 
@@ -342,7 +237,7 @@ class KBertSentenceTransformer(SentenceTransformer):
         cumsum_token_by_target_by_molecule = fits_token_in_input_by_target_by_molecule.cumsum(2)
         target_token_positions = np.where(
             fits_token_in_input_by_target_by_molecule,
-            cumsum_token_by_target_by_molecule + max_subject_statement_tokens_per_molecule[:, np.newaxis, np.newaxis],
+            cumsum_token_by_target_by_molecule + max_subject_statement_tokens_by_molecule[:, np.newaxis, np.newaxis],
             -1
         )
         position_ids[y_molecule_4_target_tokens, x_target_tokens] = target_token_positions[target_token_positions != -1]
@@ -452,15 +347,12 @@ class KBertSentenceTransformer(SentenceTransformer):
         attention_masks[z_molecule_4_tokens_4_tokens, y_tokens_4_tokens, x_tokens] = 1
 
         # add holes for statements (like in targets, tokens can see each other)
-        fits_token_in_input_by_statement_by_molecule = fits_token_in_input_by_statement_by_role_by_molecule.reshape(
-            shape_token_by_statement_by_molecule)
         n_tokens_by_statement_by_molecule = fits_token_in_input_by_statement_by_molecule.sum(2)
         sum_square_statement_tokens_by_molecule = (n_tokens_by_statement_by_molecule ** 2).sum((1))
         z_molecule_4_tokens_4_tokens = np.concatenate([
             np.repeat(i, sum_square_statement_tokens)
             for i, sum_square_statement_tokens in enumerate(sum_square_statement_tokens_by_molecule)
         ])
-        fits_statement_in_input_by_molecule = fits_token_in_input_by_statement_by_molecule.any(2)
         offset_token_by_statement_by_molecule = \
             offset_token_by_statement_by_role_by_molecule.reshape(shape_token_by_statement_by_molecule)
         offset_by_statement_by_molecule = np.where(
@@ -494,7 +386,7 @@ class KBertSentenceTransformer(SentenceTransformer):
         attention_masks[z_molecule_4_tokens_4_tokens, y_tokens_4_tokens, x_tokens] = 1
 
         # compute targets mask
-        targets_mask = np.zeros((n_molecules, max_targets_per_molecule, self.max_seq_length))
+        targets_mask = np.zeros((n_molecules, max_targets_by_molecule, self.max_seq_length))
         z_molecule_4_targets_4_tokens = np.concatenate([
             np.repeat(i, n_target_tokens) for i, n_target_tokens in enumerate(n_target_tokens_by_molecule)
         ])
@@ -514,6 +406,150 @@ class KBertSentenceTransformer(SentenceTransformer):
             'token_type_ids': torch.IntTensor(np.zeros(shape_molecules_by_max_seq_length)),
             'targets_mask': torch.IntTensor(targets_mask)
         }
+
+    def get_target_and_statement_token_ids(self, molecules, statements, targets):
+        # initialize target input id tensor
+        n_molecules = molecules.shape[0]
+        target_groups = group_by_index(targets)
+        molecules['n_targets'] = target_groups.size()
+        max_targets_by_molecule = molecules['n_targets'].max()
+        max_tokens_by_target = targets['n_tokens'].max()
+        shape_token_by_target_by_molecule = (n_molecules, max_targets_by_molecule, max_tokens_by_target)
+        input_ids_by_target_by_molecule = np.zeros(shape_token_by_target_by_molecule, dtype=int) - 1
+        # fill in target input ids
+        molecules['n_target_tokens'] = target_groups['n_tokens'].sum()
+        z_molecule_4_targets_4_tokens = np.concatenate(
+            [np.repeat(i, n_target_tokens) for i, n_target_tokens in molecules['n_target_tokens'].iteritems()])
+        targets['position_within_molecule'] = np.concatenate([np.arange(i) for i in molecules['n_targets'].values])
+        y_target_4_tokens = np.concatenate([
+            np.repeat(position_within_molecule, n_tokens)
+            for n_tokens, position_within_molecule in targets[['n_tokens', 'position_within_molecule']].values
+        ])
+        x_tokens = np.concatenate([np.arange(n_tokens) for n_tokens in targets['n_tokens'].values])
+        input_ids_by_target_by_molecule[
+            z_molecule_4_targets_4_tokens,
+            y_target_4_tokens,
+            x_tokens
+        ] = np.concatenate(targets['tokens'].values)
+        # compute mask for tokens that fit in input
+        target_token_mask = (input_ids_by_target_by_molecule != -1)
+        offset_token_by_target_by_molecule = np.where(
+            target_token_mask,
+            target_token_mask.reshape(
+                (n_molecules, max_targets_by_molecule * max_tokens_by_target)
+            ).cumsum(axis=1).reshape(shape_token_by_target_by_molecule), -1)
+        fits_token_in_input_by_target_by_molecule = \
+            (offset_token_by_target_by_molecule < self.max_seq_length) & target_token_mask
+        offset_token_by_target_by_molecule = mask_array_with_minus_1(
+            array=offset_token_by_target_by_molecule,
+            mask=fits_token_in_input_by_target_by_molecule
+        )
+        input_ids_by_target_by_molecule = mask_array_with_minus_1(
+            array=input_ids_by_target_by_molecule,
+            mask=fits_token_in_input_by_target_by_molecule
+        )
+        # get roles (groups of subject/object statements within molecules)
+        role_groups = statements.groupby([statements.index, statements['r']])
+        roles = role_groups.size().rename('n_statements').to_frame()
+        roles['n_statement_tokens'] = role_groups['n_tokens'].sum()
+        roles = roles.reset_index(level=0, drop=True)
+        roles.index = roles.index.map({'o': 0, 's': 1})
+        max_statements_by_role_by_molecule = roles['n_statements'].max()
+        max_tokens_by_statement = statements['n_tokens'].max()
+        shape_token_by_statement_by_role_by_molecule = (
+            n_molecules, 2, max_statements_by_role_by_molecule, max_tokens_by_statement)
+        input_ids_by_statement_by_role_by_molecule = get_input_ids_by_statement_by_role_by_molecule(
+            molecules, roles, shape_token_by_statement_by_role_by_molecule, statements)
+        max_statements_by_molecule = 2 * max_statements_by_role_by_molecule
+        max_tokens_by_molecule = max_statements_by_molecule * max_tokens_by_statement
+        shape_token_by_statement_by_molecule = (n_molecules, max_statements_by_molecule, max_tokens_by_statement)
+        statement_offset_by_molecule = offset_token_by_target_by_molecule.max(axis=(1, 2))
+        # Sample statements
+        fits_token_in_input_by_statement_by_role_by_molecule = \
+            self.get_fits_token_in_input_by_statement_by_role_by_molecule(
+                n_molecules, input_ids_by_statement_by_role_by_molecule, shape_token_by_statement_by_molecule,
+                shape_token_by_statement_by_role_by_molecule, max_statements_by_molecule,
+                max_statements_by_role_by_molecule, max_tokens_by_molecule, max_tokens_by_statement,
+                statement_offset_by_molecule)
+        fits_token_in_input_by_statement_by_molecule = \
+            fits_token_in_input_by_statement_by_role_by_molecule.reshape(shape_token_by_statement_by_molecule)
+        fits_statement_in_input_by_molecule = fits_token_in_input_by_statement_by_molecule.any(2)
+        # mask statement tokens that do not fit in input
+        input_ids_by_statement_by_role_by_molecule = mask_array_with_minus_1(
+            array=input_ids_by_statement_by_role_by_molecule,
+            mask=fits_token_in_input_by_statement_by_role_by_molecule
+        )
+        return \
+            n_molecules, \
+            input_ids_by_target_by_molecule, \
+            input_ids_by_statement_by_role_by_molecule, \
+            fits_statement_in_input_by_molecule, \
+            fits_token_in_input_by_statement_by_molecule, \
+            fits_token_in_input_by_statement_by_role_by_molecule, \
+            fits_token_in_input_by_target_by_molecule, \
+            max_targets_by_molecule, \
+            max_tokens_by_molecule, \
+            offset_token_by_target_by_molecule, \
+            shape_token_by_statement_by_molecule, \
+            shape_token_by_statement_by_role_by_molecule, \
+            statement_offset_by_molecule
+
+    def get_fits_token_in_input_by_statement_by_role_by_molecule(
+            self, n_molecules, input_id_by_statement_by_role_by_molecule, shape_token_by_statement_by_molecule,
+            shape_token_by_statement_by_role_by_molecule, max_statements_by_molecule,
+            max_statements_by_role_by_molecule, max_tokens_by_molecule, max_tokens_by_statement,
+            statement_offset_by_molecule):
+        # 1. flip subject statements so that when a subject statement does not fit, leading tokens are cropped instead
+        # of trailing ones
+        mask = (input_id_by_statement_by_role_by_molecule != -1)
+        mask[:, 1, :, :] = np.flip(mask[:, 1, :, :], axis=2)
+        # 2. Flatten roles to sample across both roles
+        mask = mask.reshape(shape_token_by_statement_by_molecule)
+        # 3. shuffle
+        statement_orders_by_molecule = \
+            np.tile(np.arange(max_statements_by_molecule)[np.newaxis, :], (n_molecules, 1))
+        for r in statement_orders_by_molecule:
+            RANDOM_STATE.shuffle(r)
+        z_molecule_4_statements_4_tokens = np.repeat(np.arange(n_molecules), max_tokens_by_molecule)
+        y_statement_4_tokens = np.repeat(statement_orders_by_molecule, max_tokens_by_statement)
+        x_tokens = np.tile(np.arange(max_tokens_by_statement),
+                           n_molecules * 2 * max_statements_by_role_by_molecule)
+        mask = mask[
+            z_molecule_4_statements_4_tokens,
+            y_statement_4_tokens,
+            x_tokens
+        ].reshape(shape_token_by_statement_by_molecule)
+        # 4. Compute flags determining which tokens fit in input and which not
+        # count through all statement tokens within each molecule to figure out which tokens still fit in the input
+        offset_token_by_statement_by_molecule = np.where(
+            mask,
+            mask.reshape((n_molecules, max_tokens_by_molecule)).cumsum(
+                axis=1)
+            .reshape(shape_token_by_statement_by_molecule) +
+            statement_offset_by_molecule[:, np.newaxis, np.newaxis],
+            -1
+        )
+        fits_token_in_input_by_statement_by_molecule = \
+            (offset_token_by_statement_by_molecule < self.max_seq_length) & mask
+        # 5. Shuffle back
+        reverse_statement_orders_by_molecule = np.zeros(statement_orders_by_molecule.shape, dtype=int)
+        y_molecule_4_statements = np.repeat(np.arange(n_molecules), max_statements_by_molecule)
+        x_statements = statement_orders_by_molecule.ravel()
+        reverse_statement_orders_by_molecule[y_molecule_4_statements, x_statements] = \
+            np.tile(np.arange(max_statements_by_molecule), n_molecules)
+        y_statement_4_tokens = np.repeat(reverse_statement_orders_by_molecule, max_tokens_by_statement)
+        fits_token_in_input_by_statement_by_molecule = fits_token_in_input_by_statement_by_molecule[
+            z_molecule_4_statements_4_tokens,
+            y_statement_4_tokens,
+            x_tokens
+        ].reshape(shape_token_by_statement_by_molecule)
+        # 6. unflatten roles
+        fits_token_in_input_by_statement_by_role_by_molecule = \
+            fits_token_in_input_by_statement_by_molecule.reshape(shape_token_by_statement_by_role_by_molecule)
+        # 7. flip subject statement tokens back
+        fits_token_in_input_by_statement_by_role_by_molecule[:, 1, :, :] = \
+            np.flip(fits_token_in_input_by_statement_by_role_by_molecule[:, 1, :, :], axis=2)
+        return fits_token_in_input_by_statement_by_role_by_molecule
 
     def statements_from_molecules(self, molecules):
         statement_dicts = molecules['s'].explode().dropna()
