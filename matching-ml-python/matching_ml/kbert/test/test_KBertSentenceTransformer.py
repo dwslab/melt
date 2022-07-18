@@ -80,6 +80,7 @@ def test_tokenize_subject_and_object_statements():
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
     features = model.tokenize([corpus[28]])
+    # features = model.tokenize(corpus[28:30])
     # Then
     features_1d = ['input_ids', 'position_ids', 'token_type_ids']
     feature_2d = 'attention_mask'
