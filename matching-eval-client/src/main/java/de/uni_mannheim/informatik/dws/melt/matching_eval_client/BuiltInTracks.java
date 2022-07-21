@@ -56,6 +56,23 @@ public class BuiltInTracks {
                 add("knowledgegraph-v1");
             }
         });
+        
+        //commonkg
+        simpleNameToTrackMap.put(TrackRepository.CommonKG.NELL_DBPEDIA_V1, new ArrayList<String>() {
+            {
+                add("commonkg-nd");
+            }
+        });
+        simpleNameToTrackMap.put(TrackRepository.CommonKG.YAGO_WIKIDATA_V1, new ArrayList<String>() {
+            {
+                add("commonkg-yw");
+            }
+        });
+        simpleNameToTrackMap.put(TrackRepository.CommonKG.NELL_DBPEDIA_V1, new ArrayList<String>() {
+            {
+                add("commonkg-yw-small");
+            }
+        });
 
         // largebio
         simpleNameToTrackMap.put(TrackRepository.Largebio.V2016.ALL, new ArrayList<String>() {
@@ -123,6 +140,18 @@ public class BuiltInTracks {
             {
                 add("biodiv");
                 add("biodiversity");
+            }
+        });
+        
+        simpleNameToTrackMap.put(TrackRepository.BioML.V2022.EQUIV_SUPERVISED, new ArrayList<String>() {
+            {
+                add("bioml-equiv-supervised");
+            }
+        });
+        
+        simpleNameToTrackMap.put(TrackRepository.BioML.V2022.EQUIV_UNSUPERVISED, new ArrayList<String>() {
+            {
+                add("bioml-equiv-unsupervised");
             }
         });
 

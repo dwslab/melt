@@ -18,11 +18,23 @@
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-eval</artifactId>
-            <version>3.3-SNAPSHOT</version>
+            <version>3.4-SNAPSHOT</version>
             <!--version>3.1</version-->
             
             <!-- Add exclusions related to matching-jena-matchers to slim down the JAR file -->
             <exclusions>
+                <exclusion>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>openblas-platform</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>de.lmu.ifi.dbs.elki</groupId>
+                    <artifactId>elki-clustering</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>de.lmu.ifi.dbs.elki</groupId>
+                    <artifactId>elki-core-dbids-int</artifactId>
+                </exclusion>
                 <exclusion>
                     <groupId>com.github.haifengl</groupId>
                     <artifactId>smile-core</artifactId>

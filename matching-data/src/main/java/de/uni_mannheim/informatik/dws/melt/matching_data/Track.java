@@ -429,16 +429,16 @@ public abstract class Track implements Comparable<Track> {
      * @return Parsed TestCase list.
      */
     protected List<TestCase> readFromTestCaseLayout(){
-        List<TestCase> testCases = new ArrayList<>();        
+        List<TestCase> collectedTestCases = new ArrayList<>();        
         File file = Paths.get(
                     cacheFolder.getAbsolutePath(),
                     encode(this.remoteLocation),
                     encode(this.name),
                     encode(this.version)).toFile();
         
-        File[] files = file.listFiles();
+        File[] files = file.listFiles(File::isDirectory);
         if(files == null)
-            return testCases;
+            return collectedTestCases;
 
         for(File f : files){
             if(f.getName().equalsIgnoreCase(".DS_Store")) continue; // ignore this file for mac operating systems
@@ -448,15 +448,21 @@ public abstract class Track implements Comparable<Track> {
             File input_file = new File(f, TestCaseType.INPUT.toFileName());
             File parameters_file = new File(f, TestCaseType.PARAMETERS.toFileName());
             
-            if(source_file.exists() == false || target_file.exists() == false){
-                LOGGER.error("Cache is corrupted - source or target file is not there - continue (to solve it, delete the cache folder)");
+            if(source_file.exists() == false ){
+                LOGGER.error("Cache is corrupted (delete the cache folder to initiate a re-download) - source file is not there: {}", source_file);
                 continue;
             }
-            
-            if(reference_file.exists() == false && skipTestsWithoutRefAlign)
+            if(target_file.exists() == false){
+                LOGGER.error("Cache is corrupted (delete the cache folder to initiate a re-download) - target file is not there: {}", target_file);
                 continue;
+            }
+            if(reference_file.exists() == false && skipTestsWithoutRefAlign){
+                LOGGER.error("Cache is corrupted (delete the cache folder to initiate a re-download or set skipTestsWithoutRefAlign ) - reference file is not there: {}", reference_file);
+                continue;
+            }
+                
             
-            testCases.add(new TestCase(
+            collectedTestCases.add(new TestCase(
                     f.getName(),
                     source_file.toURI(),
                     target_file.toURI(),
@@ -466,7 +472,7 @@ public abstract class Track implements Comparable<Track> {
                     this.goldStandardCompleteness,
                     parameters_file.exists() ? parameters_file.toURI() : null));
         }
-        return testCases;
+        return collectedTestCases;
     }
 
     /**
@@ -493,7 +499,7 @@ public abstract class Track implements Comparable<Track> {
         if(skipTestsWithoutRefAlign == false)
             LOGGER.warn("Using DuplicateFreeLayout for storing the testcases. returning testcase without reference alignment is not possible here.");
         
-        List<TestCase> testCases = new ArrayList<>(); 
+        List<TestCase> collectedTestCases = new ArrayList<>(); 
         for(File referenceFile : referenceFiles){
             if(referenceFile.getName().equalsIgnoreCase(".DS_Store")) continue; // ignore this file for mac operating systems
             String fileNameWithoutExtension = removeExtension(referenceFile.getName());
@@ -522,7 +528,7 @@ public abstract class Track implements Comparable<Track> {
                     encode(this.remoteLocation),encode(this.name), encode(this.version),
                     TestCaseType.PARAMETERS.toString(), referenceFile.getName()).toFile();
             
-            testCases.add(new TestCase(fileNameWithoutExtension,
+            collectedTestCases.add(new TestCase(fileNameWithoutExtension,
                     sourceFile.toURI(),
                     targetFile.toURI(),
                     referenceFile.toURI(),
@@ -531,7 +537,7 @@ public abstract class Track implements Comparable<Track> {
                     this.goldStandardCompleteness,
                     parametersFile.exists() ? parametersFile.toURI() : null));
         }
-        return testCases;
+        return collectedTestCases;
     }
     
     private List<TestCase> readFromDefaultLayout(){

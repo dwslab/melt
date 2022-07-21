@@ -114,7 +114,7 @@ public class CopyResultsAndTime extends Evaluator {
                         matcherName = matcherFolder.getName();
                     }
                     try {    
-                        results.add(new ExecutionResult(testcase, matcherName, systemAlignmentFile.toURI().toURL(), runtime, null));
+                        results.add(new ExecutionResult(testcase, matcherName, systemAlignmentFile.toURI().toURL(), runtime, null, null));
                     } catch (MalformedURLException ex) {
                         LOGGER.warn("Could not transform file path to url. Skipping this folder: {}", matcherFolder);
                     }            

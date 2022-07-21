@@ -654,6 +654,30 @@ public class TrackRepository {
         // TODO implement
     }
 
+    /**
+     * This track evaluates the ability of matching systems to map the schema (classes)
+     * of large common knowledge graphs such as DBpedia, YAGO and NELL.
+     */
+    public static class CommonKG {
+        
+        /**
+         * This version matches Nell and DBpedia (originates from the paper <a href="http://disi.unitn.it/~pavel/om2020/papers/om2020_LTpaper3.pdf"> A Gold Standard Dataset for Large Knowledge Graphs Matching</a>).
+         * The <a href="https://github.com/OmaimaFallatah/KG_GoldeStandard">github repro is also available</a>.
+         * This used to be another version of the knowledge graph track but is now its own track.
+         **/
+        public static Track NELL_DBPEDIA_V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "commonkg", "nell-dbpedia-v1", false, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+        
+        /**
+         * This version originates from <a href="https://github.com/OmaimaFallatah/YagoWikiData">https://github.com/OmaimaFallatah/YagoWikiData</a>.
+         */
+        public static Track YAGO_WIKIDATA_V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "commonkg", "yago-wikidata-v1", false, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+        
+        /**
+         * This version originates from <a href="https://github.com/OmaimaFallatah/YagoWikiData">https://github.com/OmaimaFallatah/YagoWikiData</a> 
+         * and is a small version of YAGO_WIKIDATA_V1.
+         */
+        public static Track YAGO_WIKIDATA_V1_SMALL = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "commonkg", "yago-wikidata-v1-small", false, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+    }
 
     /**
      * Knowledgegraph track.
@@ -699,6 +723,7 @@ public class TrackRepository {
         /**
          * This version of the KG track contains test cases from the paper <a href="http://disi.unitn.it/~pavel/om2020/papers/om2020_LTpaper3.pdf"> A Gold Standard Dataset for Large Knowledge Graphs Matching</a>.
          * The <a href="https://github.com/OmaimaFallatah/KG_GoldeStandard">github repro is also available</a>.
+         * @deprecated better use  
          **/
         public static Track CommonKG = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph", "commonkg", false, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
 
