@@ -337,7 +337,7 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-sandbox</artifactId>
-            <version>7.2.0</version>
+            <version>9.3.0</version>
         </dependency>
 
         <!-- Annotations for better code quality -->
