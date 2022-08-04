@@ -17,7 +17,7 @@
         <oaei.copyright>(C) Mannheim, 2019</oaei.copyright> <!--optional copyright appearing in the seals descriptor file -->
         <oaei.license>GNU Lesser General Public License 2.1 or above</oaei.license> <!--optional license appearing in the seals descriptor file -->
 
-        <matching.version>3.0</matching.version> <!-- version for all matching related packages -->
+        <matching.version>3.3</matching.version> <!-- version for all matching related packages -->
     </properties>
     
     <!-- Accessing the resources:
@@ -55,21 +55,21 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.30</version>
+            <version>1.7.36</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.7.2</version>
+            <version>5.9.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.7.2</version>
+            <version>5.9.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -81,7 +81,7 @@
             <!-- the following plugin will generate a seals assembly -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.4.2</version>
                 <dependencies>
                     <dependency>
                         <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
@@ -105,7 +105,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.0.0-M7</version>
             </plugin>
         </plugins>
     </build>
