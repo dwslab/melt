@@ -2,42 +2,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-    <artifactId>simpleSealsMatcher</artifactId><!-- id used as matcher id in descriptor file of seals package -->
+    <artifactId>evaluationExample</artifactId>
     <packaging>jar</packaging>
-    <version>1.0</version><!-- version appearing in descriptor file of seals package -->
-    <description>demo matcher description</description><!-- description appearing in descriptor file of seals package -->
+    <version>1.0</version>
+    <description>Example which shows how to evaluate various matchers</description>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        
-        <oaei.mainClass>de.uni_mannheim.informatik.dws.melt.demomatcher.SimpleStringMatcher</oaei.mainClass><!-- mandatory: this class has to implement IOntologyMatchingToolBridge -->
-        
-        <oaei.copyright>(C) Mannheim, 2019</oaei.copyright> <!--optional copyright appearing in the seals descriptor file -->
-        <oaei.license>GNU Lesser General Public License 2.1 or above</oaei.license> <!--optional license appearing in the seals descriptor file -->
 
-        <matching.version>3.0</matching.version> <!-- version for all matching related packages -->
+        <matching.version>3.3</matching.version> <!-- version for all matching related packages -->
     </properties>
     
-    <!-- Accessing the resources:
-    - all files in "oaei-resources" folder are stored in the current working directory and can be accessed with 
-          Files.readAllLines(Paths.get("oaei-resources", "configuration_oaei.txt"));
-    - all files in "src/main/resources" folder are compiled to the resulting jar and can be accessed with
-          getClass().getClassLoader().getResourceAsStream("configuration_jar.txt");
-    -->
-
     <dependencies>
-
+        
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-eval</artifactId>
-            <version>${matching.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
-            <artifactId>matching-base</artifactId>
             <version>${matching.version}</version>
         </dependency>
 

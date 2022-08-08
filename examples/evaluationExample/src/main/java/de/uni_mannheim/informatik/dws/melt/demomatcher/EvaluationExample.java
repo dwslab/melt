@@ -57,7 +57,7 @@ public class EvaluationExample {
         matchers.put("Docker Matcher", dockerMatcher);
 
         // Let's run the matchers on the tracks:
-        ExecutionResultSet result = Executor.run(TrackRepository.Conference.V1, matchers);
+        ExecutionResultSet result = Executor.runTracks(tracks, matchers);
 
 
         // Step 3: Use your favorite evaluator to interpret the result.
