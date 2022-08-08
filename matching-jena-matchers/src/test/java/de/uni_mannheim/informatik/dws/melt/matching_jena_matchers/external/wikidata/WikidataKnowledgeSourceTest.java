@@ -141,8 +141,8 @@ class WikidataKnowledgeSourceTest {
         //System.out.println(q3);
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {true, false})
+    //@ParameterizedTest
+    //@ValueSource(booleans = {true, false})
     void isHypernym(boolean isBufferEnabled){
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
         wikidata.setDiskBufferEnabled(isBufferEnabled);
@@ -151,7 +151,7 @@ class WikidataKnowledgeSourceTest {
         // check with URIs
         // Q458 -P31-> Q1048835 -P279-> Q15642541 -P279-> Q1496967
         assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1048835", "http://www.wikidata.org/entity/Q458", 1));
-        //assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q15642541", "http://www.wikidata.org/entity/Q458", 2));
+        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q15642541", "http://www.wikidata.org/entity/Q458", 2));
 
         // check with links
         String linkQ1048835 = wikidata.getLinker().linkToSingleConcept("political territorial entity");
