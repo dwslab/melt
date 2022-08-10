@@ -272,6 +272,24 @@ public class TrackRepository {
         public static Track Popconference80 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-80-v1");
         public static Track Popconference100 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-100-v1");
     }
+    
+    
+    /**
+     * Food Nutritional Composition track.
+     * This track consists of finding alignments between food concepts
+     * from CIQUAL, the French food nutritional composition database, and food concepts from SIREN. 
+     * Food concepts from both databases are described in LanguaL, a well-known multilingual thesaurus using faceted classification.
+     */
+    public static class Food {
+        /**
+         * This track consists of finding alignments between food concepts
+         * from CIQUAL, the French food nutritional composition database, and food concepts from SIREN.
+         * Foods from both databases are described in LanguaL, a well-known multilingual thesaurus using faceted classification.
+         * Reference alignment originates from <a href="https://doi.org/10.15454/BVXD7I">https://doi.org/10.15454/BVXD7I</a>.
+         **/
+        public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "food", "v1");
+
+    }
 
     /**
      * Instance Matching
