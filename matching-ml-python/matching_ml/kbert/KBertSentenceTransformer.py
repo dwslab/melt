@@ -2,14 +2,13 @@ import json
 from typing import Union, List, Dict, Tuple
 
 import numpy as np
-import numpy.typing as npt
 import pandas as pd
 import torch
 from numpy.random import RandomState
 from sentence_transformers import SentenceTransformer
+from transformers import AlbertModel
 
 from kbert.monkeypatches import albert_forward, pooling_forward, transformer_forward, bert_get_extended_attention_mask
-from kbert.utils import print_time
 
 SEED = 42
 
@@ -105,15 +104,16 @@ class KBertSentenceTransformer(SentenceTransformer):
         bert_model.get_extended_attention_mask = \
             lambda attention_mask, input_shape: bert_get_extended_attention_mask(bert_model, attention_mask,
                                                                                  input_shape)
-        bert_model.forward = \
-            lambda input_ids, attention_mask, token_type_ids, position_ids, return_dict: albert_forward(
-                self=bert_model,
-                input_ids=input_ids,
-                attention_mask=attention_mask,
-                token_type_ids=token_type_ids,
-                position_ids=position_ids,
-                return_dict=return_dict
-            )
+        if isinstance(bert_model, AlbertModel):
+            bert_model.forward = \
+                lambda input_ids, attention_mask, token_type_ids, position_ids, return_dict: albert_forward(
+                    self=bert_model,
+                    input_ids=input_ids,
+                    attention_mask=attention_mask,
+                    token_type_ids=token_type_ids,
+                    position_ids=position_ids,
+                    return_dict=return_dict
+                )
 
         pooling_module = self._last_module()
         pooling_module.forward = lambda features: pooling_forward(pooling_module, features)
@@ -180,7 +180,7 @@ class KBertSentenceTransformer(SentenceTransformer):
              offset_token_by_target_by_molecule])
         input_ids[y_molecule_4_target_tokens, x_target_tokens] = np.concatenate(
             [token_by_target[token_by_target != -1] for token_by_target in
-             input_id_by_target_by_molecule])
+             input_ids_by_target_by_molecule])
 
         # fill in input ids of statement tokens into input ids tensor
         n_statement_tokens_by_molecule = fits_token_in_input_by_statement_by_role_by_molecule.sum((1, 2, 3))

@@ -16,7 +16,19 @@ def test_encode_kbert():
     corpus_file_name = str(source_dir / 'corpus.csv')
     corpus, corpus_pos_to_id = load_file(corpus_file_name)
     # When
-    embeddings = model.encode(corpus, batch_size=32, convert_to_tensor=True)
+    embeddings = model.encode(corpus[:80], batch_size=32, convert_to_tensor=True)
+
+
+# @pytest.mark.skip
+def test_encode_kbert_tinybert():
+    # Given
+    source_dir = RESOURCES_DIR / 'kbert' / 'raw' / 'all_targets'
+    model = KBertSentenceTransformer('paraphrase-TinyBERT-L6-v2', pooling_mode='mean_target',
+                                     index_files=[source_dir / 'index_corpus.csv'])
+    corpus_file_name = str(source_dir / 'corpus.csv')
+    corpus, corpus_pos_to_id = load_file(corpus_file_name)
+    # When
+    embeddings = model.encode(corpus[:80], batch_size=32, convert_to_tensor=True)
 
 
 @pytest.mark.skip
