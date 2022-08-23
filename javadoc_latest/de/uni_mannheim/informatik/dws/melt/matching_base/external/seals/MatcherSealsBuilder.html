@@ -194,7 +194,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MatcherSealsBuilder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.external.seals">MatcherSealsBuilder</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTmpFolder(java.io.File)" class="member-name-link">setTmpFolder</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;tmpFolder)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the tmp folder where e.g.</div>
+</div>
 </div>
 </div>
 </div>
@@ -309,6 +311,14 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setTmpFolder(java.io.File)">
 <h3>setTmpFolder</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MatcherSealsBuilder.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.external.seals">MatcherSealsBuilder</a></span>&nbsp;<span class="element-name">setTmpFolder</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;tmpFolder)</span></div>
+<div class="block">Sets the tmp folder where e.g. the matcher packages are unzipped etc.
+ Set it in case you default system tmp folder has too less memory.
+ The default is <a href="../../FileUtil.html#getUserTmpFolder()"><code>FileUtil.getUserTmpFolder()</code></a> which is set to the systems default.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>tmpFolder</code> - the new tmp folder to use.</dd>
+<dt>Returns:</dt>
+</dl>
 </section>
 </li>
 <li>
