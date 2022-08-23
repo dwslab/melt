@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.external.seals;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class MatcherSealsBuilder {
     /**
      * Path to a temporary folder. Default is set to the systems tmp.
      */
-    private File tmpFolder = new File(System.getProperty("java.io.tmpdir"));
+    private File tmpFolder = FileUtil.getUserTmpFolder();
 
     /**
      * Time out for the external seals process. The timeout is applied for each testcase and not track.
@@ -65,6 +66,13 @@ public class MatcherSealsBuilder {
         return this;
     }
 
+    /**
+     * Sets the tmp folder where e.g. the matcher packages are unzipped etc.
+     * Set it in case you default system tmp folder has too less memory.
+     * The default is {@link FileUtil#getUserTmpFolder() } which is set to the systems default.
+     * @param tmpFolder the new tmp folder to use.
+     * @return 
+     */
     public MatcherSealsBuilder setTmpFolder(File tmpFolder) {
         this.tmpFolder = tmpFolder;
         return this;
@@ -106,7 +114,7 @@ public class MatcherSealsBuilder {
     }
 
     public MatcherSeals build(File fileOrFolder){
-        File tmpSealsClientJar = this.sealsClientJar == null ? new File(this.tmpFolder, "seals-omt-client-v" + MatcherSeals.getSealsDownloadUrlVersion() + ".jar") : this.sealsClientJar;
+        File tmpSealsClientJar = this.sealsClientJar == null ? new File(this.tmpFolder, MatcherSeals.getSealsFileName()) : this.sealsClientJar;
         return new MatcherSeals(fileOrFolder, 
                 tmpSealsClientJar,
                 this.tmpFolder,

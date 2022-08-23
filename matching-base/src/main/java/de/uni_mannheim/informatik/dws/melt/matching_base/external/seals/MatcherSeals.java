@@ -45,6 +45,10 @@ public class MatcherSeals extends MatcherFile {
     public static String getSealsDownloadUrlVersion() {
         return SEALS_DOWNLOAD_URL_VERSION;
     }
+    
+    public static String getSealsFileName() {
+        return "seals-omt-client-v" + SEALS_DOWNLOAD_URL_VERSION + ".jar";
+    }
 
     private static final String SEALS_DOWNLOAD_URL = "https://github.com/DanFaria/OAEI_SealsClient/releases/download/v" + SEALS_DOWNLOAD_URL_VERSION + "/seals-omt-client.jar";
 
@@ -134,7 +138,7 @@ public class MatcherSeals extends MatcherFile {
     }
 
     public MatcherSeals(File matcherFileOrFolder, File sealsClientJar, long timeout, TimeUnit timeoutTimeUnit, List<String> javaRuntimeParameters, boolean freshMatcherInstance, boolean doNotUseInputAlignment, String javaCommand) {
-        this(matcherFileOrFolder, sealsClientJar, FileUtil.SYSTEM_TMP_FOLDER, timeout, timeoutTimeUnit, javaRuntimeParameters, freshMatcherInstance, doNotUseInputAlignment, javaCommand);
+        this(matcherFileOrFolder, sealsClientJar, FileUtil.getUserTmpFolder(), timeout, timeoutTimeUnit, javaRuntimeParameters, freshMatcherInstance, doNotUseInputAlignment, javaCommand);
     }
 
     /**
@@ -154,7 +158,7 @@ public class MatcherSeals extends MatcherFile {
      * @param matcherFileOrFolder The file (zip file) or folder which represents one matcher.
      */
     public MatcherSeals(File matcherFileOrFolder) {
-        this(matcherFileOrFolder, new File(FileUtil.SYSTEM_TMP_FOLDER, "seals-omt-client-v" + SEALS_DOWNLOAD_URL_VERSION + ".jar"));
+        this(matcherFileOrFolder, new File(FileUtil.getUserTmpFolder(), getSealsFileName()));
     }
 
     /**
@@ -163,8 +167,7 @@ public class MatcherSeals extends MatcherFile {
      * @param matcherFileOrFolderPath The file (zip file) or folder which represents one matcher.
      */
     public MatcherSeals(String matcherFileOrFolderPath) {
-        this(new File(matcherFileOrFolderPath), new File(FileUtil.SYSTEM_TMP_FOLDER,
-                "seals-omt-client-v" + SEALS_DOWNLOAD_URL_VERSION + ".jar"));
+        this(new File(matcherFileOrFolderPath), new File(FileUtil.getUserTmpFolder(), getSealsFileName()));
     }
 
     private static void downloadSealsIfNecessary(File sealsClientJar) {

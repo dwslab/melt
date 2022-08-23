@@ -12,7 +12,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.io.FilenameUtils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -142,14 +141,14 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
 
             if (this.sendContent) {
                 MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-                builder.addBinaryBody("source", source.openStream(), ContentType.DEFAULT_BINARY, FilenameUtils.getName(source.getPath())); //TODO: close stream?
-                builder.addBinaryBody("target", target.openStream(), ContentType.DEFAULT_BINARY, FilenameUtils.getName(target.getPath()));
+                builder.addBinaryBody("source", source.openStream(), ContentType.DEFAULT_BINARY, getFileName(source.getPath())); //TODO: close stream?
+                builder.addBinaryBody("target", target.openStream(), ContentType.DEFAULT_BINARY, getFileName(target.getPath()));
 
                 if (inputAlignment != null)
-                    builder.addBinaryBody("inputAlignment", inputAlignment.openStream(), ContentType.DEFAULT_BINARY, FilenameUtils.getName(inputAlignment.getPath()));
+                    builder.addBinaryBody("inputAlignment", inputAlignment.openStream(), ContentType.DEFAULT_BINARY, getFileName(inputAlignment.getPath()));
 
                 if (parameters != null)
-                    builder.addBinaryBody("parameters", parameters.openStream(), ContentType.DEFAULT_BINARY, FilenameUtils.getName(parameters.getPath()));
+                    builder.addBinaryBody("parameters", parameters.openStream(), ContentType.DEFAULT_BINARY, getFileName(parameters.getPath()));
 
                 request.setEntity(builder.build());
             } else {
@@ -249,5 +248,15 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
 
     public void setSleepTimeInSeconds(int sleepTimeInSeconds) {
         this.sleepTimeInSeconds = sleepTimeInSeconds;
+    }
+    
+    private String getFileName(String fullPath){        
+        if (fullPath == null) {
+            return null;
+        }
+        final int lastUnixPos = fullPath.lastIndexOf('/'); // unix separator 
+        final int lastWindowsPos = fullPath.lastIndexOf('\\'); // windows separator
+        final int index = Math.max(lastUnixPos, lastWindowsPos);        
+        return fullPath.substring(index + 1);
     }
 }
