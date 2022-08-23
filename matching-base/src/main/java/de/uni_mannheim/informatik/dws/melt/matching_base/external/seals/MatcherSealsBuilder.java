@@ -68,10 +68,10 @@ public class MatcherSealsBuilder {
 
     /**
      * Sets the tmp folder where e.g. the matcher packages are unzipped etc.
-     * Set it in case you default system tmp folder has too less memory.
+     * Set it in case your default system tmp folder has too less memory.
      * The default is {@link FileUtil#getUserTmpFolder() } which is set to the systems default.
      * @param tmpFolder the new tmp folder to use.
-     * @return 
+     * @return this builder object
      */
     public MatcherSealsBuilder setTmpFolder(File tmpFolder) {
         this.tmpFolder = tmpFolder;
