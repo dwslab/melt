@@ -2102,9 +2102,9 @@ def inner_sentencetransformers_prediction(request_headers):
         )
 
         app.logger.info("Compute corpus embedding.")
-        corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
+        corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True, batch_size=64)
         app.logger.info("Compute query embedding.")
-        query_embeddings = embedder.encode(queries, convert_to_tensor=True)
+        query_embeddings = embedder.encode(queries, convert_to_tensor=True, batch_size=64)
 
         app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
         if torch.cuda.is_available():
