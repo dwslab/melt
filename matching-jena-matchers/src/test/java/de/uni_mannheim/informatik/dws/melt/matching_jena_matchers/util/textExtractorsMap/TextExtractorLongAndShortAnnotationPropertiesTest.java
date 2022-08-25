@@ -32,7 +32,7 @@ class TextExtractorLongAndShortAnnotationPropertiesTest {
         URL target = testCase.getTarget().toURL();
         OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                new TextExtractorKBertImpl(true, true), "paraphrase-MiniLM-L6-v2");
+                new TextExtractorKBertImpl(true, true, false), "paraphrase-MiniLM-L6-v2");
         Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
         OntResource resource = StreamSupport.stream(getIterable(resourceIterator).spliterator(), false)
                 .filter(r -> {

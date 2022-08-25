@@ -33,18 +33,21 @@ public class KBertSentenceTransformersMatcherTest {
         Properties properties = getTransformedPropertiesOrNewInstance(parameters);
         for (Boolean normalized : Arrays.asList(true, false)) {
             for (Boolean allTargets : Arrays.asList(true, false)) {
-                for (Map.Entry<String, URI> entry : Map.of("corpus", testCase.getSource(), "queries", testCase.getTarget()).entrySet()) {
-                    URL source = entry.getValue().toURL();
-                    OntModel sourceOntology = getTransformedObject(source, OntModel.class, properties);
-                    KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                            new TextExtractorKBertImpl(allTargets, normalized), "paraphrase-MiniLM-L6-v2");
-                    File targetFile = new File(rootFile,
-                            KBertSentenceTransformersMatcher.NORMALIZED_MAP.get(normalized) + "/" +
-                                    KBertSentenceTransformersMatcher.ALL_TARGETS_MAP.get(allTargets) + "/" +
-                                    entry.getKey() + ".csv");
+                for (Boolean multiText : Arrays.asList(true, false)) {
+                    for (Map.Entry<String, URI> entry : Map.of("corpus", testCase.getSource(), "queries", testCase.getTarget()).entrySet()) {
+                        URL source = entry.getValue().toURL();
+                        OntModel sourceOntology = getTransformedObject(source, OntModel.class, properties);
+                        KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
+                                new TextExtractorKBertImpl(allTargets, normalized, multiText), "paraphrase-MiniLM-L6-v2");
+                        File targetFile = new File(rootFile,
+                                KBertSentenceTransformersMatcher.NORMALIZED_MAP.get(normalized) + "/" +
+                                        KBertSentenceTransformersMatcher.ALL_TARGETS_MAP.get(allTargets) + "/" +
+                                        "isMulti_" + multiText + "/" +
+                                        entry.getKey() + ".csv");
 
-                    // when
-                    matcher.createTextFile(sourceOntology, targetFile, matcher.getResourcesExtractor().get(0), properties);
+                        // when
+                        matcher.createTextFile(sourceOntology, targetFile, matcher.getResourcesExtractor().get(0), properties);
+                    }
                 }
             }
         }

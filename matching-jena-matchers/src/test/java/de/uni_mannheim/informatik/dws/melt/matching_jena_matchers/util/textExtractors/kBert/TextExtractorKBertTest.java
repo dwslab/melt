@@ -33,7 +33,7 @@ class TextExtractorKBertTest {
         Properties properties = getTransformedPropertiesOrNewInstance(parameters);
         URL target = testCase.getTarget().toURL();
         OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
-        TextExtractorKBertImpl extractor = new TextExtractorKBertImpl(true, true);
+        TextExtractorKBertImpl extractor = new TextExtractorKBertImpl(true, true, true);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
                 extractor, "paraphrase-MiniLM-L6-v2");
         Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
@@ -55,17 +55,17 @@ class TextExtractorKBertTest {
         URL target = testCase.getTarget().toURL();
         OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
-                new TextExtractorKBertImpl(true, true), "paraphrase-MiniLM-L6-v2");
-        TextExtractorKBertImpl simpleTextExtractor = new TextExtractorKBertImpl(false, true);
+                new TextExtractorKBertImpl(true, true, false), "paraphrase-MiniLM-L6-v2");
+        TextExtractorKBertImpl simpleTextExtractor = new TextExtractorKBertImpl(false, true, false);
         Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
         OntResource resource = streamFromIterator(resourceIterator)
                 .filter(r -> r.isURIResource() && r.getURI().equals(uriOfResourceWithDuplicateStatements))
                 .findFirst()
                 .get();
         // When
-        Map<String, Object> molecule = simpleTextExtractor.moleculeFromResource(resource);
+        Set<Map<String, Set<?>>> molecules = simpleTextExtractor.moleculesFromResource(resource);
         // Then
-        assertThat((Set) molecule.get("s")).hasSize(3);
+        assertThat(molecules.iterator().next().get("s")).hasSize(3);
     }
 
     @Test
@@ -77,7 +77,7 @@ class TextExtractorKBertTest {
         Properties properties = getTransformedPropertiesOrNewInstance(parameters);
         URL target = testCase.getTarget().toURL();
         OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
-        TextExtractorKBertImpl textExtractor = new TextExtractorKBertImpl(true, true);
+        TextExtractorKBertImpl textExtractor = new TextExtractorKBertImpl(true, true, false);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
                 textExtractor, "paraphrase-MiniLM-L6-v2");
         Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
@@ -86,9 +86,32 @@ class TextExtractorKBertTest {
                 .findFirst()
                 .get();
         // When
-        Map<String, Object> molecule = textExtractor.moleculeFromResource(resource);
+        Set<Map<String, Set<?>>> molecules = textExtractor.moleculesFromResource(resource);
         // Then
-        assertThat((Set) molecule.get("t")).hasSize(2);
+        assertThat(molecules.iterator().next().get("t")).hasSize(2);
+    }
+
+    @Test
+    public void testMultiText() throws MalformedURLException, TypeTransformationException {
+        // Given
+        String uriOfResourceWithDuplicateStatements = "http://human.owl#NCI_C12393";
+        TestCase testCase = TrackRepository.Anatomy.Default.getTestCase(0);
+        URL parameters = testCase.getParameters().toURL();
+        Properties properties = getTransformedPropertiesOrNewInstance(parameters);
+        URL target = testCase.getTarget().toURL();
+        OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
+        TextExtractorKBertImpl textExtractor = new TextExtractorKBertImpl(true, true, true);
+        KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
+                textExtractor, "paraphrase-MiniLM-L6-v2");
+        Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
+        OntResource resource = streamFromIterator(resourceIterator)
+                .filter(r -> r.isURIResource() && r.getURI().equals(uriOfResourceWithDuplicateStatements))
+                .findFirst()
+                .get();
+        // When
+        Set<Map<String, Set<?>>> molecules = textExtractor.moleculesFromResource(resource);
+        // Then
+        assertThat(molecules).hasSize(2);
     }
 
     @Test
@@ -100,7 +123,7 @@ class TextExtractorKBertTest {
         Properties properties = getTransformedPropertiesOrNewInstance(parameters);
         URL target = testCase.getTarget().toURL();
         OntModel targetOntology = getTransformedObject(target, OntModel.class, properties);
-        TextExtractorKBertImpl textExtractor = new TextExtractorKBertImpl(true, true);
+        TextExtractorKBertImpl textExtractor = new TextExtractorKBertImpl(true, true, false);
         KBertSentenceTransformersMatcher matcher = new KBertSentenceTransformersMatcher(
                 textExtractor, "paraphrase-MiniLM-L6-v2");
         Iterator<? extends OntResource> resourceIterator = matcher.getResourcesExtractor().get(0).extract(targetOntology, properties);
