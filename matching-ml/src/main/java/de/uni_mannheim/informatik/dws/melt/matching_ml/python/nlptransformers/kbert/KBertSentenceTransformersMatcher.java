@@ -87,23 +87,18 @@ public class KBertSentenceTransformersMatcher extends SentenceTransformersMatche
             textExtractorKbert.getIndexStream(extractor.extract(model, parameters)).forEach(printWriter::println);
         }
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8))) {
-            if (this.multipleTextsToMultipleExamples) {
-                throw (new NotImplementedException(
-                        "K-BERT Sentence Transformer currently only supports generating one example per set of texts"));
-            } else {
-                streamFromIterator(extractor.extract(model, parameters))
-                        .filter(RDFNode::isURIResource)
-                        .forEach(r -> textExtractorKbert.extract(r)
-                                .forEach(line -> {
-                                    try {
-                                        writer.write(line);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                    linesWritten.getAndIncrement();
-                                })
-                        );
-            }
+            streamFromIterator(extractor.extract(model, parameters))
+                    .filter(RDFNode::isURIResource)
+                    .forEach(r -> textExtractorKbert.extract(r)
+                            .forEach(line -> {
+                                try {
+                                    writer.write(line);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                linesWritten.getAndIncrement();
+                            })
+                    );
         }
         return linesWritten.get();
     }

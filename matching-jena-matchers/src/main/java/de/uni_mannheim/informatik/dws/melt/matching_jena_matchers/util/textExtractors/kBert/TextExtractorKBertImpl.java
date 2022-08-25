@@ -29,29 +29,30 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeCsv;
 public class TextExtractorKBertImpl implements TextExtractorKbert {
     private final boolean useAllTargets;
     private final boolean normalize;
+    private final boolean multiText;
 
-    public TextExtractorKBertImpl(boolean useAllTargets, boolean normalize) {
+    public TextExtractorKBertImpl(boolean useAllTargets, boolean normalize, boolean multiText) {
         this.useAllTargets = useAllTargets;
         this.normalize = normalize;
+        this.multiText = multiText;
     }
 
     @Override
     public Set<String> extract(Resource targetResource) {
-        Map<String, Object> molecule = moleculeFromResource(targetResource);
-
-        String jsonMolecule;
+        Set<Map<String, Set<?>>> molecules = moleculesFromResource(targetResource);
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            jsonMolecule = mapper.writer().writeValueAsString(molecule);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        String extracted = escapeCsv(targetResource.getURI()) + "," + escapeCsv(jsonMolecule) + NEWLINE;
-        return Set.of(extracted);
+        return molecules.stream().map(molecule -> {
+            String jsonMolecule;
+            try {
+                jsonMolecule = mapper.writer().writeValueAsString(molecule);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            return escapeCsv(targetResource.getURI()) + "," + escapeCsv(jsonMolecule) + NEWLINE;
+        }).collect(Collectors.toSet());
     }
 
-    @NotNull
-    public Map<String, Object> moleculeFromResource(Resource targetResource) {
+    public Set<Map<String, Set<?>>> moleculesFromResource(Resource targetResource) {
         Map<Object, Set<ObjectStatement<? extends ProcessedRDFNode>>> processedObjectStatements =
                 getObjectStatementStream(targetResource)
                         .filter(statement -> !statement.getObject().isAnon())
@@ -61,11 +62,6 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
                         })
                         .collect(Collectors.groupingBy(ObjectStatement::getClass, Collectors.mapping(Function.identity(), Collectors.toSet())));
 
-        Stream<ObjectStatement<? extends ProcessedRDFNode>> objectStatementStream = processedObjectStatements.values()
-                .stream()
-                .flatMap(Collection::stream);
-
-        ProcessedResource<Resource> processedTargetResource = new ProcessedResource<>(targetResource);
         // Get target resource labels
         final Set<? extends ProcessedRDFNode> targets;
         if (this.useAllTargets) {
@@ -79,14 +75,17 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
                         .get();
                 targets = Set.of(targetLiteralStatement.getNeighbor());
             } else {
-                targets = Set.of(processedTargetResource);
+                targets = Set.of(new ProcessedResource<>(targetResource));
             }
         }
-        // skip triples where object has target resource label
-        Set<Map<String, String>> objectStatementRows = objectStatementStream
-                .filter(osm -> !targets.contains(osm.getNeighbor()))
-                .map(ObjectStatement::getRow)
-                .collect(Collectors.toSet());
+
+        // nest targets for extracting multiple molecules if needed
+        Set<Set<? extends ProcessedRDFNode>> nestedTargets;
+        if (this.multiText) {
+            nestedTargets = targets.stream().map(Set::of).collect(Collectors.toSet());
+        } else {
+            nestedTargets = Set.of(targets);
+        }
 
         // get subject statement rows
         Set<Map<String, String>> subjectStatementRows = getSubjectStatementStream(targetResource)
@@ -94,10 +93,21 @@ public class TextExtractorKBertImpl implements TextExtractorKbert {
                 .map(statement -> new SubjectStatement(statement).getRow())
                 .collect(Collectors.toSet());
 
-        return Map.of(
-                "t", targets.stream().map(ProcessedRDFNode::getKey).collect(Collectors.toSet()),
-                "s", SetUtils.union(subjectStatementRows, objectStatementRows)
-        );
+        return nestedTargets.stream().map(targetSet -> {
+
+            // skip triples where object has target resource label
+            Set<Map<String, String>> objectStatementRows = processedObjectStatements.values()
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .filter(osm -> !targetSet.contains(osm.getNeighbor()))
+                    .map(ObjectStatement::getRow)
+                    .collect(Collectors.toSet());
+
+            return Map.of(
+                    "t", targetSet.stream().map(ProcessedRDFNode::getKey).collect(Collectors.toSet()),
+                    "s", SetUtils.union(subjectStatementRows, objectStatementRows)
+            );
+        }).collect(Collectors.toSet());
     }
 
     private Set<ProcessedLiteral> getAllTargets(Resource targetResource) {
