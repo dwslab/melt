@@ -6,7 +6,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 
+@Disabled("Disabled due to unavailable service.")
 class KGvec2goClientTest {
 
     @Test
