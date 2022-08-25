@@ -1,26 +1,25 @@
 package de.uni_mannheim.informatik.dws.melt.matching_ml.python;
 
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFineTuner;
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBase;
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFilter;
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersFineTunerHpSearch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersFineTuner;
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBaseFineTuner;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.*;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.kbert.KBertSentenceTransformersMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
+import net.lingala.zip4j.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.HttpHostConnectException;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -35,11 +34,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
 
 /**
  * A client class to communicate with python libraries such as <a href="https://radimrehurek.com/gensim/">gensim</a>.
@@ -140,31 +134,33 @@ public class PythonServer {
 
     /**
      * Run a hyperparameter fine tuning.
-     * @param hpsearch the hyper parameter search model to use
+     *
+     * @param hpsearch     the hyper parameter search model to use
      * @param trainingFile path to csv file with three columns (text left, text right, label 1/0).
      * @throws PythonServerException in case something goes wrong.
      */
-    public void transformersFineTuningHpSearch(TransformersFineTunerHpSearch hpsearch, File trainingFile) throws PythonServerException{
+    public void transformersFineTuningHpSearch(TransformersFineTunerHpSearch hpsearch, File trainingFile) throws PythonServerException {
         HttpGet request = new HttpGet(serverUrl + "/transformers-finetuning-hp-search");
         transformersUpdateBaseRequest(hpsearch, request);
         transformersFineTunerUpdateBaseRequest(hpsearch, trainingFile, request);
 
         request.addHeader("number-of-trials", Integer.toString(hpsearch.getNumberOfTrials()));
         request.addHeader("test-size", Float.toString(hpsearch.getTestSize()));
-        request.addHeader("optimizing-metric", hpsearch.getOptimizingMetric().toString());        
+        request.addHeader("optimizing-metric", hpsearch.getOptimizingMetric().toString());
         request.addHeader("hp-space", hpsearch.getHpSpace().toJsonString());
         request.addHeader("hp-mutations", hpsearch.getHpMutations().toJsonString());
-        
+
         runRequest(request);
     }
-    
+
     /**
      * Finetune a transformers model with the given parameters and write this model to a given folder.
-     * @param fineTuner the finetuner to use
+     *
+     * @param fineTuner    the finetuner to use
      * @param trainingFile path to csv file with three columns (text left, text right, label 1/0).
      * @throws PythonServerException in case something goes wrong.
      */
-    public void transformersFineTuning(TransformersFineTuner fineTuner, File trainingFile) throws PythonServerException{
+    public void transformersFineTuning(TransformersFineTuner fineTuner, File trainingFile) throws PythonServerException {
         HttpGet request = new HttpGet(serverUrl + "/transformers-finetuning");
         transformersUpdateBaseRequest(fineTuner, request);
         transformersFineTunerUpdateBaseRequest(fineTuner, trainingFile, request);
@@ -173,10 +169,11 @@ public class PythonServer {
 
     /**
      * Run a transformers model on a CSV file with two columns (text left and text right) to predict if they describe the same concept.
-     * @param filter the filter
+     *
+     * @param filter             the filter
      * @param predictionFilePath path to csv file with two columns (text left and text right).
-     * @throws PythonServerException in case something goes wrong.
      * @return a list of confidences
+     * @throws PythonServerException in case something goes wrong.
      */
     public List<Double> transformersPrediction(TransformersFilter filter, File predictionFilePath) throws PythonServerException {
         //curl http://127.0.0.1:41193/transformers-prediction -H "modelName: bert-base-cased-finetuned-mrpc" -H "usingTF: false" \
@@ -184,7 +181,7 @@ public class PythonServer {
         // -H "predictionFilePath: ./train.txt" -H "changeClass: false" -H "multiProcessing: default_multi_process" 
         HttpGet request = new HttpGet(serverUrl + "/transformers-prediction");
         transformersUpdateBaseRequest(filter, request);
-        
+
         request.addHeader("prediction-file-path", getCanonicalPath(predictionFilePath));
         request.addHeader("change-class", Boolean.toString(filter.isChangeClass()));
 
@@ -195,23 +192,24 @@ public class PythonServer {
             throw new PythonServerException("Could not parse JSON", ex);
         }
     }
-    
+
     /**
      * Run sentence transformers prediction.
-     * @param matcher the matcher
-     * @param corpusFile path to csv file with two columns (url, text representation).
+     *
+     * @param matcher     the matcher
+     * @param corpusFile  path to csv file with two columns (url, text representation).
      * @param queriesFile path to csv file with two columns (url, text representation).
      * @return the newly generated alignment
      * @throws PythonServerException in case something goes wrong.
      */
-    public Alignment sentenceTransformersPrediction(SentenceTransformersMatcher matcher, File corpusFile, File queriesFile) throws PythonServerException{
-        
+    public Alignment sentenceTransformersPrediction(SentenceTransformersMatcher matcher, File corpusFile, File queriesFile) throws PythonServerException {
+
         HttpGet request = new HttpGet(serverUrl + "/sentencetransformers-prediction");
         transformersUpdateBaseRequest(matcher, request);
-        
+
         request.addHeader("corpus-file-name", getCanonicalPath(corpusFile));
         request.addHeader("queries-file-name", getCanonicalPath(queriesFile));
-        
+
         request.addHeader("query-chunk-size", Integer.toString(matcher.getQueryChunkSize()));
         request.addHeader("corpus-chunk-size", Integer.toString(matcher.getCorpusChunkSize()));
         request.addHeader("topk", Integer.toString(matcher.getTopK()));
@@ -228,29 +226,30 @@ public class PythonServer {
             throw new PythonServerException("Could not parse JSON", ex);
         }
     }
-    
+
     /**
      * Run fine tuning for sentence transformers.
-     * @param fineTuner the matcher
-     * @param trainingFile path to csv file with three columns (text left, text right, label 1/0).
+     *
+     * @param fineTuner      the matcher
+     * @param trainingFile   path to csv file with three columns (text left, text right, label 1/0).
      * @param validationFile the path to the validation file - can also be null to use train test split of trainings file.
-     * @throws PythonServerException in case something goes wrong.
      * @return the best score of the validation (using the file or train test split).
+     * @throws PythonServerException in case something goes wrong.
      */
-    public float sentenceTransformersFineTuning(SentenceTransformersFineTuner fineTuner, File trainingFile, File validationFile) throws PythonServerException{
-        
+    public float sentenceTransformersFineTuning(SentenceTransformersFineTuner fineTuner, File trainingFile, File validationFile) throws PythonServerException {
+
         HttpGet request = new HttpGet(serverUrl + "/sentencetransformers-finetuning");
         transformersUpdateBaseRequest(fineTuner, request);
         transformersFineTunerUpdateBaseRequest(fineTuner, trainingFile, request);
-        
+
         request.addHeader("loss", fineTuner.getLoss().name());
         request.addHeader("test-size", Float.toString(fineTuner.getTestSize()));
         request.addHeader("train-batch-size", Integer.toString(fineTuner.getTrainBatchSize()));
         request.addHeader("test-batch-size", Integer.toString(fineTuner.getTestBatchSize()));
         request.addHeader("num-epochs", Integer.toString(fineTuner.getNumberOfEpochs()));
-        if(validationFile != null)
+        if (validationFile != null)
             request.addHeader("validation-file", getCanonicalPath(validationFile));
-        
+
         String resultString = runRequest(request);
         try {
             return JSON_MAPPER.readValue(resultString, Float.class);
@@ -258,34 +257,33 @@ public class PythonServer {
             throw new PythonServerException("Could not parse JSON", ex);
         }
     }
-    
-    private void transformersFineTunerUpdateBaseRequest(TransformersBaseFineTuner fineTuner, File trainingFile,  HttpGet request){
+
+    private void transformersFineTunerUpdateBaseRequest(TransformersBaseFineTuner fineTuner, File trainingFile, HttpGet request) {
         request.addHeader("resulting-model-location", getCanonicalPath(fineTuner.getResultingModelLocation()));
         request.addHeader("training-file", getCanonicalPath(trainingFile));
     }
-    
-    private void transformersUpdateBaseRequest(TransformersBase base, HttpGet request){
+
+    private void transformersUpdateBaseRequest(TransformersBase base, HttpGet request) {
         request.addHeader("model-name", base.getModelName());
         request.addHeader("using-tf", Boolean.toString(base.isUsingTensorflow()));
         request.addHeader("training-arguments", base.getTrainingArguments().toJsonString());
         request.addHeader("tmp-dir", getCanonicalPath(FileUtil.getUserTmpFolder()));
         request.addHeader("multi-processing", base.getMultiProcessing().toString());
-        
+
         String cudaVisibleDevices = base.getCudaVisibleDevices();
-        if(cudaVisibleDevices != null){
+        if (cudaVisibleDevices != null) {
             cudaVisibleDevices = cudaVisibleDevices.trim();
-            if(cudaVisibleDevices.isEmpty() == false){
+            if (cudaVisibleDevices.isEmpty() == false) {
                 request.addHeader("cuda-visible-devices", cudaVisibleDevices);
             }
         }
-        
+
         File transformersCache = base.getTransformersCache();
-        if(transformersCache != null)
+        if (transformersCache != null)
             request.addHeader("transformers-cache", getCanonicalPath(transformersCache));
     }
-    
-    
-    
+
+
     /************************************
      * OpenEA section
      * **********************************/
@@ -979,8 +977,8 @@ public class PythonServer {
             return file.getAbsolutePath();
         }
     }
-    
-    
+
+
     public List<Integer> runGroupShuffleSplit(List<Integer> groups, double trainSize) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("trainSize", trainSize);
@@ -1001,8 +999,8 @@ public class PythonServer {
                     return JSON_MAPPER.readValue(resultString, JSON_MAPPER.getTypeFactory().constructCollectionType(List.class, Integer.class));
             }
         }
-        
-        
+
+
     }
 
     /**
@@ -1020,8 +1018,8 @@ public class PythonServer {
             LOGGER.error("Problem with http request.", ioe);
         }
     }
-    
-    private String runRequest(HttpUriRequest request) throws PythonServerException{
+
+    private String runRequest(HttpUriRequest request) throws PythonServerException {
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             HttpEntity entity = response.getEntity();
             if (entity == null) {
@@ -1168,15 +1166,18 @@ public class PythonServer {
         File serverResourceDirectory = this.resourcesDirectory;
         serverResourceDirectory.mkdirs();
 
-        File sourceDirectory = new File(new File(
-                this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()
-        ).getParentFile().getParentFile().getParentFile(), "matching-ml-python/" + PYTHON_DIRECTORY_NAME);
-        File destination = new File(serverResourceDirectory, PYTHON_DIRECTORY_NAME);
-        try {
-            FileUtils.copyDirectory(sourceDirectory, destination);
+        // export python project, unzip, and rename
+        String pythonResourceName = "matching-ml-3.4-SNAPSHOT";
+        String pythonZipName = pythonResourceName + ".zip";
+        exportResource(serverResourceDirectory, pythonZipName);
+
+        try (ZipFile pythonZip = new ZipFile(serverResourceDirectory + "/"+ pythonZipName)) {
+            pythonZip.extractAll(serverResourceDirectory.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        new File(serverResourceDirectory, pythonResourceName)
+                .renameTo(new File(serverResourceDirectory, PYTHON_DIRECTORY_NAME));
 
         exportResource(serverResourceDirectory, "requirements.txt");
 
