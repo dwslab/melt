@@ -109,6 +109,12 @@ If you want to run the docker image totally without MELT to check if it is worki
    -  to stop the matcher press `Ctrl+C` in the terminal where you executed the `docker run` command
 
 
+- To analyze the content in the container, you can replace step 3 with the following:
+  - Run the container by executing `docker run --rm --publish 8080:8080 -it simplewebmatcher-1.0-web /bin/sh` (replace the image name by the name which appeared during the previous step)
+    - this will start the container without executing any code/program (you get a shell)
+    - you can analyze the setup and all generated files
+    - to start the matcher, run `java -cp "simplewebmatcher-1.0.jar:lib/*" de.uni_mannheim.informatik.dws.melt.receiver_http.Main` (replace `simplewebmatcher-1.0.jar` with the actual file name in the `/maven` directory)
+
 **Common Errors and Problems**
 -  I have the docker tar.gz but I am not sure about the image name.<br/>
 If you package the matcher with MELT and the file name is e.g. `simplewebmatcher-1.0-web-latest.tar.gz` then the image name
