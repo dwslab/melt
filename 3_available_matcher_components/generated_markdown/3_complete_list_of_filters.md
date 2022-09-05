@@ -247,5 +247,40 @@ Filter which makes and alignment coherent. When using this component, please cit
 
 *Keywords: Alcomo Filter*
 
+## LogMapRepairFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_owlapi_matchers/logmap/LogMapRepairFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-owlapi-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_owlapi_matchers/logmap/LogMapRepairFilter.java)
+
+This is the logmap repair filter.
+ More information can be found <a href="https://code.google.com/archive/p/logmap-matcher/wikis/LogMapRepairFromApplications.wiki">at the wiki</a>
+ and in the <a href="https://github.com/ernestojimenezruiz/logmap-matcher">github repository</a>.
+ 
+ In case you want to use this filter, make the dependency of matching-owlapi-matchers to exclude the following:
+ 
+```
+
+ <exclusions>
+    <exclusion>
+        <groupId>com.github.ansell.pellet</groupId>
+        <artifactId>pellet-modularity</artifactId>
+    </exclusion>
+</exclusions>
+ 
+```
+
+ 
+ and also include OWLAPI with version 4.1.3
+ 
+```
+
+ <dependency>
+    <groupId>net.sourceforge.owlapi</groupId>
+    <artifactId>owlapi-distribution</artifactId>
+    <version>4.1.3</version>
+</dependency>
+ 
+```
+
+
+*Keywords: Log Map Repair Filter*
+
 ---
-<sub>automatically generated on 2022-08-26 08:17</sub>
+<sub>automatically generated on 2022-09-05 09:12</sub>
