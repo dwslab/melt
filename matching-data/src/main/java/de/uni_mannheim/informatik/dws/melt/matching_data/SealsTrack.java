@@ -96,4 +96,18 @@ public class SealsTrack extends Track {
         }
         catch(IOException e){ return false; }
     }
+
+    public String getTdrsLocation() {
+        return tdrsLocation;
+    }
+
+    public String getTestDataCollectionName() {
+        return testDataCollectionName;
+    }
+
+    public String getTestDataVersionNumber() {
+        return testDataVersionNumber;
+    }
+    
+    
 }

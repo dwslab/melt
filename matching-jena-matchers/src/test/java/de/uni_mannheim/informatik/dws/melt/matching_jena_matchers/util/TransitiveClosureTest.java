@@ -50,4 +50,30 @@ public class TransitiveClosureTest {
         
     }
     
+    @Test
+    void testAdd() {
+        TransitiveClosure<String> a = new TransitiveClosure<>();
+        a.add("a", "b");
+        a.add("b", "c");
+        a.add("d", "e");
+        
+        TransitiveClosure<String> b = new TransitiveClosure<>();
+        b.add("f", "g");
+        b.add("a", "x");
+        
+        assertEquals(2, a.getClosure().size());
+        assertEquals(2, b.getClosure().size());
+        
+        assertEquals(5, a.countOfAllElements());
+        assertEquals(4, b.countOfAllElements());
+        
+        a.add(b);
+        
+        assertEquals(8, a.countOfAllElements());
+        assertEquals(4, b.countOfAllElements());
+        
+        assertEquals(3, a.getClosure().size()); //a,b,c,x  d,e   f,g   
+        assertTrue(a.getIdentitySetForElement("a").contains("x"));
+    }
+    
 }

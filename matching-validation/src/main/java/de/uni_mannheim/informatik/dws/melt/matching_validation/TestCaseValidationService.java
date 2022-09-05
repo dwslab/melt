@@ -310,6 +310,24 @@ public class TestCaseValidationService {
                     csvPrinter.printRecord(source, target);
                 }
             }
+            
+            if(nSourceMappings.isEmpty() == false){
+                csvPrinter.printRecord();
+                csvPrinter.printRecord("Entities in source matching to multiple in target");
+                for(String s : nSourceMappings){
+                    csvPrinter.printRecord(s);
+                }
+            }
+            
+            if(nTargetMappings.isEmpty() == false){
+                csvPrinter.printRecord();
+                csvPrinter.printRecord("Entities in target matching to multiple in source");
+                for(String s : nTargetMappings){
+                    csvPrinter.printRecord(s);
+                }
+            }
+            
+            
         } catch (IOException ex) {
             LOGGER.warn("Could not write TestCaseValidation CSV file.", ex);
         }

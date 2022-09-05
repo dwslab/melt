@@ -1,5 +1,13 @@
 # Release Notes
 
+## Changes in 3.4
+
+**New**
+- Implemented the LogMap reapir as a filter.
+
+**New Tracks**
+- CommonKG has a new track YAGO-WIKIDATA. [The whole track moved to own suite id `commonkg`](https://github.com/dwslab/melt/commit/5a270d3ea7d7b1472d184e6a26907d009a0fb83e#diff-ee40cc9813aeee76e725d927b47aafaa850ffaadde575b92d66706a454dbf546)
+- Food track (Food Nutritional Composition track)
 
 ## Changes in 3.3
 

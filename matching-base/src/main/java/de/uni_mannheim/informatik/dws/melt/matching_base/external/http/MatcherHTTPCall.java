@@ -259,4 +259,9 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
         final int index = Math.max(lastUnixPos, lastWindowsPos);        
         return fullPath.substring(index + 1);
     }
+
+    @Override
+    public String toString() {
+        return "MatcherHTTPCall{" + uri + '}';
+    }
 }
