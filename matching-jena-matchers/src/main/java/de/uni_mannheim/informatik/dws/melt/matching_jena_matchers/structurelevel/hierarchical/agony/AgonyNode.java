@@ -11,7 +11,7 @@ class AgonyNode <E> {
     private int newrank;
     private int diff;
     
-    private AgonyNode parent;
+    private AgonyNode<E> parent;
     private int parentEdge;
     
     private int count;
@@ -66,11 +66,11 @@ class AgonyNode <E> {
         this.diff = diff;
     }
 
-    public AgonyNode getParent() {
+    public AgonyNode<E> getParent() {
         return parent;
     }
 
-    public void setParent(AgonyNode parent) {
+    public void setParent(AgonyNode<E> parent) {
         this.parent = parent;
     }
 

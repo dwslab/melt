@@ -22,22 +22,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class for computing hierarchy ranks in directed graphs (with cycles).
- * This is an implementation of the paper:<br>
+ * Class for computing hierarchy ranks in directed graphs (with cycles).This is an implementation of the paper:<br>
  * <i>Faster way to agony - Discovering hierarchies in directed graphs by Nikolaj Tatti</i><br>
  * which is an improved version of the paper:<br>
  * <i>Hierarchies in directed networks by Nikolaj Tatti</i><br>
  * Code is available at <a href="https://users.ics.aalto.fi/ntatti/software.shtml">https://users.ics.aalto.fi/ntatti/software.shtml</a>.
  * This implementation has a similar runtime performance than the C++ code and is one to one translated.
  * An evaluation can be found at <a href="https://github.com/zhenv5/breaking_cycles_in_noisy_hierarchies">https://github.com/zhenv5/breaking_cycles_in_noisy_hierarchies</a>.
+ * @param <E> Type of Node
  */
 public class Agony<E> {
     private static final Logger LOGGER = LoggerFactory.getLogger(Agony.class);
     
-    private List<AgonyNode> nodes;
-    private List<AgonyEdge> edges;
+    private final List<AgonyNode<E>> nodes;
+    private final List<AgonyEdge> edges;
     
-    private AgonyGraph graph;
+    private final AgonyGraph graph;
     private AgonyGraph dag;
     private AgonyGraph euler;
     
@@ -67,7 +67,7 @@ public class Agony<E> {
         }
         this.nodes = new ArrayList<>(nodeId);
         for(int i = 0; i < nodeId; i++)
-            this.nodes.add(new AgonyNode(i));
+            this.nodes.add(new AgonyNode<>(i));
         for(Entry<E, Integer> entry : labelmap.entrySet()){
             this.nodes.get(entry.getValue()).setLabel(entry.getKey());
         }
@@ -105,7 +105,7 @@ public class Agony<E> {
         }
         this.nodes = new ArrayList<>(nodeId);
         for(int i = 0; i < nodeId; i++)
-            this.nodes.add(new AgonyNode(i));
+            this.nodes.add(new AgonyNode<>(i));
         for(Entry<E, Integer> entry : labelmap.entrySet()){
             this.nodes.get(entry.getValue()).setLabel(entry.getKey());
         }
@@ -137,7 +137,7 @@ public class Agony<E> {
                     lineNumber++;
                     continue;
                 }
-                adjacencyList.computeIfAbsent(parts[0], l -> new HashSet()).add(parts[1]);                
+                adjacencyList.computeIfAbsent(parts[0], l -> new HashSet<>()).add(parts[1]);                
                 line = reader.readLine();
                 lineNumber++;
             }
@@ -160,7 +160,7 @@ public class Agony<E> {
                     lineNumber++;
                     continue;
                 }
-                edges.add(new SimpleEntry<String, String>(parts[0], parts[1]));   
+                edges.add(new SimpleEntry<>(parts[0], parts[1]));   
                 line = reader.readLine();
                 lineNumber++;
             }
@@ -170,7 +170,11 @@ public class Agony<E> {
         return edges;
     }
     
-    
+    /**
+     * Returns a mapping between each node and its corresponding rank (represented as integers).
+     * The rank starts at 0 and increases with each level.
+     * @return a mapping between each node and its corresponding rank
+     */
     public Map<E, Integer> computeAgony(){
         this.cycledfs();
         this.initagony();
@@ -180,6 +184,19 @@ public class Agony<E> {
         LOGGER.info("computeAgony finished: Dual: {}", dual);
         
         return writeagony();
+    }
+    
+    /**
+     * Returns a mapping between the different ranks/levels and corresponding nodes (of the graph) in these levels.
+     * This is just the reverese mapping of {@link #computeAgony()}.
+     * @return a mapping between the different ranks/levels and corresponding nodes
+     */
+    public TreeMap<Integer, Set<E>> computeAgonyReverseMap(){
+        TreeMap<Integer, Set<E>> map = new TreeMap<>();
+        for(Entry<E, Integer> entry : computeAgony().entrySet()){
+            map.computeIfAbsent(entry.getValue(), __-> new HashSet<>()).add(entry.getKey());
+        }
+        return map;
     }
     
     private Map<E, Integer> writeagony(){
@@ -206,12 +223,12 @@ public class Agony<E> {
     private void cycledfs(){
         AgonyGraph dfs = new AgonyGraph(this.graph);
         
-        AgonyQueue active = new AgonyQueue(this.nodes);  
+        AgonyQueue<E> active = new AgonyQueue<>(this.nodes);  
         //Queue<AgonyNode> active = new LinkedList<>(this.nodes);
         
         while(!active.isEmpty()){
-            AgonyNode seed = active.peek();
-            AgonyNode u = seed;
+            AgonyNode<E> seed = active.peek();
+            AgonyNode<E> u = seed;
             //System.out.println("cycledfs: " + seed.getLabel().toString());
             u.setParent(null);
             while(u != null){
@@ -224,14 +241,14 @@ public class Agony<E> {
                 }else{
                     AgonyGraphEdge e = n.getOut().peek();
                     AgonyGraphNode m = e.getChild();
-                    AgonyNode v = getNode(m.getId());
+                    AgonyNode<E> v = getNode(m.getId());
                     
                     if(v.getParent() == null && v != seed){
                         v.setParent(u);
                         v.setParentEdge(e.getId());
                         u = v;
                     }else{
-                        for(AgonyNode w = u; w != v; w = w.getParent()){
+                        for(AgonyNode<E> w = u; w != v; w = w.getParent()){
                             getEdge(w.getParentEdge()).setEulerian(true);
                             dfs.unbind(dfs.getEdge(w.getParentEdge()));
                         }
@@ -239,8 +256,8 @@ public class Agony<E> {
                         getEdge(e.getId()).setEulerian(true);
                         dfs.unbind(e);
                         
-                        AgonyNode wnext = null;
-                        for(AgonyNode w = u; w != v; w = wnext){
+                        AgonyNode<E> wnext;
+                        for(AgonyNode<E> w = u; w != v; w = wnext){
                             wnext = w.getParent();
                             w.setParent(null);
                         }
@@ -268,10 +285,10 @@ public class Agony<E> {
     }
     
     private void initrank(){
-        Stack<AgonyNode> sources = new Stack<>();
+        Stack<AgonyNode<E>> sources = new Stack<>();
         
         for(int i = 0; i < size(); i++){
-            AgonyNode n = getNode(i);
+            AgonyNode<E> n = getNode(i);
             n.setCount(dag.getNode(i).getInd());
             if(n.getCount() == 0){
                 n.setNewrank(0);
@@ -280,11 +297,11 @@ public class Agony<E> {
             }
         }
         while(!sources.isEmpty()){
-            AgonyNode n = sources.pop();
+            AgonyNode<E> n = sources.pop();
             AgonyGraphNode u = dag.getNode(n.getId());
 
             for(AgonyGraphEdge e : u.getOut()){
-                AgonyNode m = getNode(e.getChild().getId());
+                AgonyNode<E> m = getNode(e.getChild().getId());
                 m.decreaseCount();
                 int max = Math.max(m.getRank(), n.getRank() + 1);
                 m.setRank(max);
@@ -330,23 +347,23 @@ public class Agony<E> {
     
     private void relief(int edge){
         AgonyGraphEdge e = euler.getEdge(edge);
-        AgonyNode p = getNode(e.getParent().getId());
-        AgonyNode s = getNode(e.getChild().getId());
+        AgonyNode<E> p = getNode(e.getParent().getId());
+        AgonyNode<E> s = getNode(e.getChild().getId());
         
         p.setParent(null);
         p.setDiff(slack(p, s));
         assert p.getDiff() > 0;
         
         //add and init queue
-        List<AgonyQueue> q = new ArrayList<>(p.getDiff());//List<Queue<AgonyNode>> q = new ArrayList<>(p.getDiff());
+        List<AgonyQueue<E>> q = new ArrayList<>(p.getDiff());//List<Queue<AgonyNode>> q = new ArrayList<>(p.getDiff());
         for(int i=0; i < p.getDiff(); i++){
-            q.add(new AgonyQueue());//q.add(new LinkedList<>());
+            q.add(new AgonyQueue<>());//q.add(new LinkedList<>());
         }
         q.get(p.getDiff()-1).add(p);
         int curstack = p.getDiff() - 1;
         
-        List<AgonyNode> nl = new LinkedList<>();
-        List<AgonyNode> visited = new LinkedList<>();
+        List<AgonyNode<E>> nl = new LinkedList<>();
+        List<AgonyNode<E>> visited = new LinkedList<>();
         nl.add(p);
         
         int bound = 0;
@@ -359,7 +376,7 @@ public class Agony<E> {
             if(curstack < bound){
                 break;
             }
-            AgonyNode u = q.get(curstack).poll();
+            AgonyNode<E> u = q.get(curstack).poll();
             u.setNewrank(u.getRank() + u.getDiff());
             visited.add(u);
             u.setDiff(0);// diff = 0 means that u is no longer in the stack
@@ -370,7 +387,7 @@ public class Agony<E> {
             
             AgonyGraphNode n = dag.getNode(u.getId());            
             for(AgonyGraphEdge ee : n.getOut()){
-                AgonyNode v = getNode(ee.getChild().getId());
+                AgonyNode<E> v = getNode(ee.getChild().getId());
                 assert u.getRank() < v.getRank();
                 if(v.getNewrank() <= u.getNewrank()){
                     int t = u.getNewrank() + 1 - v.getNewrank();
@@ -395,7 +412,7 @@ public class Agony<E> {
             
             n = euler.getNode(u.getId());
             for(AgonyGraphEdge ee : n.getIn()){
-                AgonyNode v = getNode(ee.getParent().getId());
+                AgonyNode<E> v = getNode(ee.getParent().getId());
                 if(newslack(v, u) > slack(v, u)){
                     int t = newslack(v, u) - slack(v, u);
                     assert t-1 <= curstack;
@@ -431,16 +448,16 @@ public class Agony<E> {
         }
     }
     
-    private void updaterelief(List<AgonyNode> nl){
-        for(AgonyNode n : nl){
+    private void updaterelief(List<AgonyNode<E>> nl){
+        for(AgonyNode<E> n : nl){
             n.setRank(n.getNewrank());
             n.setDiff(0);
         }
         //following is a bit time consuming...
-        for(AgonyNode u : nl){
+        for(AgonyNode<E> u : nl){
             AgonyGraphNode n = euler.getNode(u.getId());
             for(AgonyGraphEdge e : n.getOut()){
-                AgonyNode v = to(e.getId());
+                AgonyNode<E> v = to(e.getId());
                 AgonyEdge f = getEdge(e.getId());
                 if(slack(u,v) != f.getSlack()){
                     deleteslack(e.getId());
@@ -452,17 +469,17 @@ public class Agony<E> {
         
     //public void resetrelief(List<AgonyNode> nl){} //not called
     
-    private void shiftrank(List<AgonyNode> nl, int shift){
-        for(AgonyNode n : nl){
+    private void shiftrank(List<AgonyNode<E>> nl, int shift){
+        for(AgonyNode<E> n : nl){
             n.reduceNewrank(shift);
         }
     }
     
     private void extractcycle(int eid){
         AgonyGraphEdge e = euler.getEdge(eid);
-        AgonyNode p = getNode(e.getParent().getId());
-        AgonyNode s = getNode(e.getChild().getId());
-        for(AgonyNode u = s; u != p; u = u.getParent()){
+        AgonyNode<E> p = getNode(e.getParent().getId());
+        AgonyNode<E> s = getNode(e.getChild().getId());
+        for(AgonyNode<E> u = s; u != p; u = u.getParent()){
             AgonyEdge f = getEdge(u.getParentEdge());
             if(f.isEulerian()){
                 f.setEulerian(false);
@@ -514,7 +531,7 @@ public class Agony<E> {
     private int size(){
         return this.nodes.size();
     }
-    private AgonyNode getNode(int i){
+    private AgonyNode<E> getNode(int i){
         return this.nodes.get(i);
     }
     private AgonyEdge getEdge(int i){
@@ -522,13 +539,13 @@ public class Agony<E> {
     }
     
     
-    private int slack(AgonyNode v, AgonyNode u){
+    private int slack(AgonyNode<E> v, AgonyNode<E> u){
         if(u.getRank() > v.getRank() + 1){
             return u.getRank() - v.getRank() - 1;
         }
         return 0;
     }
-    private int newslack(AgonyNode v, AgonyNode u){
+    private int newslack(AgonyNode<E> v, AgonyNode<E> u){
         if(u.getNewrank() > v.getNewrank() + 1){
             return u.getNewrank() - v.getNewrank() - 1;
         }
@@ -538,10 +555,10 @@ public class Agony<E> {
         return slack(from(eid), to(eid));
     }
     
-    private AgonyNode from(int eid){
+    private AgonyNode<E> from(int eid){
         return getNode(graph.getEdge(eid).getParent().getId());
     }
-    private AgonyNode to(int eid){
+    private AgonyNode<E> to(int eid){
         return getNode(graph.getEdge(eid).getChild().getId());
     }
 }

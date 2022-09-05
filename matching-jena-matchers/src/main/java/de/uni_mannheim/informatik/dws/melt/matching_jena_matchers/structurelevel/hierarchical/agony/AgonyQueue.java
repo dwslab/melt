@@ -7,10 +7,10 @@ import java.util.LinkedList;
 /**
  * Helper class for {@link Agony}.
  */
-class AgonyQueue {
+class AgonyQueue <E>{
     
-    private HashSet<AgonyNode> removed;
-    private LinkedList<AgonyNode> queue;
+    private final HashSet<AgonyNode<E>> removed;
+    private final LinkedList<AgonyNode<E>> queue;
     private int size;
     
     public AgonyQueue(){
@@ -19,13 +19,13 @@ class AgonyQueue {
         this.size = 0;
     }
     
-    public AgonyQueue(Collection<AgonyNode> nodes){
+    public AgonyQueue(Collection<AgonyNode<E>> nodes){
         this.queue = new LinkedList<>(nodes);
         this.removed = new HashSet<>();
         this.size = nodes.size();
     }
     
-    public void add(AgonyNode node){
+    public void add(AgonyNode<E> node){
         this.queue.add(node);
         size++;
     }
@@ -34,9 +34,9 @@ class AgonyQueue {
         return size == 0;
     }
     
-    public AgonyNode poll(){        
+    public AgonyNode<E> poll(){        
         while(true){
-            AgonyNode n = this.queue.poll();
+            AgonyNode<E> n = this.queue.poll();
             if(removed.contains(n)){
                 removed.remove(n);
                 continue;
@@ -46,9 +46,9 @@ class AgonyQueue {
         }
     }
     
-    public AgonyNode peek(){        
+    public AgonyNode<E> peek(){        
         while(true){
-            AgonyNode n = this.queue.peek();
+            AgonyNode<E> n = this.queue.peek();
             if(removed.contains(n)){
                 removed.remove(n);
                 this.queue.poll();
@@ -58,7 +58,7 @@ class AgonyQueue {
         }
     }
     
-    public void remove(AgonyNode node){
+    public void remove(AgonyNode<E> node){
         this.removed.add(node);
         this.size--;
     }

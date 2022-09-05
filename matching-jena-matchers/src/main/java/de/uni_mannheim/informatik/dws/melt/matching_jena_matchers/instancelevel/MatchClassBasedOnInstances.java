@@ -20,16 +20,12 @@ import java.util.Properties;
 import java.util.Set;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntResource;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
-import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.RDFS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,8 +123,8 @@ public class MatchClassBasedOnInstances extends MatcherYAAAJena {
         Map<Correspondence, ClassMatchInfo> classAlignment = new HashMap<>(); // a map from (class source, class target) to number of shared/matched instances
         Map<String, Integer> instanceCounts = new HashMap<>(); // a map from class to number of instances
         
-        Set<String> sourceInstanceMappings = new HashSet();
-        Set<String> targetInstanceMappings = new HashSet(); 
+        Set<String> sourceInstanceMappings = new HashSet<>();
+        Set<String> targetInstanceMappings = new HashSet<>(); 
         for(Correspondence c : inputAlignment){
             if(c.getConfidence() < this.instanceMinConfidence)
                 continue;
@@ -222,7 +218,7 @@ public class MatchClassBasedOnInstances extends MatcherYAAAJena {
             return;
         List<Entry<Correspondence, Integer>> list = new ArrayList<>();
         for(Entry<Correspondence, ClassMatchInfo> entry : classAlignment.entrySet()){
-            list.add(new SimpleEntry(entry.getKey(), entry.getValue().getOverlap()));
+            list.add(new SimpleEntry<>(entry.getKey(), entry.getValue().getOverlap()));
         }
         list.sort(Entry.comparingByValue());
         Collections.reverse(list);
@@ -304,8 +300,8 @@ public class MatchClassBasedOnInstances extends MatcherYAAAJena {
         private final Set<String> targetInstances;
         
         public ClassMatchInfo(){
-            this.sourceInstances = new HashSet();
-            this.targetInstances = new HashSet();
+            this.sourceInstances = new HashSet<>();
+            this.targetInstances = new HashSet<>();
         }
         
         public void addInstanceMatch(String source, String target){
