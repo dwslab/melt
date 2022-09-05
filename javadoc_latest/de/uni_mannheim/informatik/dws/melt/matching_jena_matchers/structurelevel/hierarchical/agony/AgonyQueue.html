@@ -69,14 +69,14 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony</a></div>
-<h1 title="Class AgonyQueue" class="title">Class AgonyQueue</h1>
+<h1 title="Class AgonyQueue" class="title">Class AgonyQueue&lt;E&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyQueue</div>
+<div class="inheritance">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyQueue&lt;E&gt;</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">class </span><span class="element-name type-name-label">AgonyQueue</span>
+<div class="type-signature"><span class="modifiers">class </span><span class="element-name type-name-label">AgonyQueue&lt;E&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Helper class for <a href="Agony.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony"><code>Agony</code></a>.</div>
 </section>
@@ -91,10 +91,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html" title="class or interface in java.util" class="external-link">LinkedList</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>private final <a href="https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html" title="class or interface in java.util" class="external-link">LinkedList</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#queue" class="member-name-link">queue</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;</code></div>
+<div class="col-first odd-row-color"><code>private final <a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#removed" class="member-name-link">removed</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>private int</code></div>
@@ -113,7 +113,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">AgonyQueue</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.util.Collection)" class="member-name-link">AgonyQueue</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;&nbsp;nodes)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.util.Collection)" class="member-name-link">AgonyQueue</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;&gt;&nbsp;nodes)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -130,19 +130,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)" class="member-name-link">add</a><wbr>(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;node)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)" class="member-name-link">add</a><wbr>(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;&nbsp;node)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isEmpty()" class="member-name-link">isEmpty</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#peek()" class="member-name-link">peek</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#poll()" class="member-name-link">poll</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)" class="member-name-link">remove</a><wbr>(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;node)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)" class="member-name-link">remove</a><wbr>(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;&nbsp;node)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -164,13 +164,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="removed">
 <h3>removed</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;</span>&nbsp;<span class="element-name">removed</span></div>
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html" title="class or interface in java.util" class="external-link">HashSet</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;&gt;</span>&nbsp;<span class="element-name">removed</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="queue">
 <h3>queue</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html" title="class or interface in java.util" class="external-link">LinkedList</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;</span>&nbsp;<span class="element-name">queue</span></div>
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html" title="class or interface in java.util" class="external-link">LinkedList</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;&gt;</span>&nbsp;<span class="element-name">queue</span></div>
 </section>
 </li>
 <li>
@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.Collection)">
 <h3>AgonyQueue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AgonyQueue</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;&nbsp;nodes)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AgonyQueue</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;&gt;&nbsp;nodes)</span></div>
 </section>
 </li>
 </ul>
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="add(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;node)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;&nbsp;node)</span></div>
 </section>
 </li>
 <li>
@@ -222,19 +222,19 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="poll()">
 <h3>poll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a></span>&nbsp;<span class="element-name">poll</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;</span>&nbsp;<span class="element-name">poll</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="peek()">
 <h3>peek</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a></span>&nbsp;<span class="element-name">peek</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;</span>&nbsp;<span class="element-name">peek</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="remove(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">remove</span><wbr><span class="parameters">(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;node)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">remove</span><wbr><span class="parameters">(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="AgonyQueue.html" title="type parameter in AgonyQueue">E</a>&gt;&nbsp;node)</span></div>
 </section>
 </li>
 </ul>

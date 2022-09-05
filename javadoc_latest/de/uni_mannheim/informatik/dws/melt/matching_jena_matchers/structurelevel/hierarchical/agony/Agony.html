@@ -75,11 +75,14 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.Agony&lt;E&gt;</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>E</code> - Type of Node</dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Agony&lt;E&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Class for computing hierarchy ranks in directed graphs (with cycles).
- This is an implementation of the paper:<br>
+<div class="block">Class for computing hierarchy ranks in directed graphs (with cycles).This is an implementation of the paper:<br>
  <i>Faster way to agony - Discovering hierarchies in directed graphs by Nikolaj Tatti</i><br>
  which is an improved version of the paper:<br>
  <i>Hierarchies in directed networks by Nikolaj Tatti</i><br>
@@ -107,19 +110,19 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>private int</code></div>
 <div class="col-second even-row-color"><code><a href="#dual" class="member-name-link">dual</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyEdge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyEdge</a>&gt;</code></div>
+<div class="col-first odd-row-color"><code>private final <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyEdge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyEdge</a>&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#edges" class="member-name-link">edges</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>private <a href="AgonyGraph.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyGraph</a></code></div>
 <div class="col-second even-row-color"><code><a href="#euler" class="member-name-link">euler</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="AgonyGraph.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyGraph</a></code></div>
+<div class="col-first odd-row-color"><code>private final <a href="AgonyGraph.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyGraph</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#graph" class="member-name-link">graph</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>private static final org.slf4j.Logger</code></div>
 <div class="col-second even-row-color"><code><a href="#LOGGER" class="member-name-link">LOGGER</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;</code></div>
+<div class="col-first odd-row-color"><code>private final <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#nodes" class="member-name-link">nodes</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>private int</code></div>
@@ -165,70 +168,77 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#computeAgony()" class="member-name-link">computeAgony</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns a mapping between each node and its corresponding rank (represented as integers).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html" title="class or interface in java.util" class="external-link">TreeMap</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#computeAgonyReverseMap()" class="member-name-link">computeAgonyReverseMap</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns a mapping between the different ranks/levels and corresponding nodes (of the graph) in these levels.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cycledfs()" class="member-name-link">cycledfs</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cycledfs()" class="member-name-link">cycledfs</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deleteslack(int)" class="member-name-link">deleteslack</a><wbr>(int&nbsp;eid)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deleteslack(int)" class="member-name-link">deleteslack</a><wbr>(int&nbsp;eid)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractcycle(int)" class="member-name-link">extractcycle</a><wbr>(int&nbsp;eid)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractcycle(int)" class="member-name-link">extractcycle</a><wbr>(int&nbsp;eid)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#from(int)" class="member-name-link">from</a><wbr>(int&nbsp;eid)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#from(int)" class="member-name-link">from</a><wbr>(int&nbsp;eid)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="AgonyEdge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyEdge</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEdge(int)" class="member-name-link">getEdge</a><wbr>(int&nbsp;i)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="AgonyEdge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyEdge</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEdge(int)" class="member-name-link">getEdge</a><wbr>(int&nbsp;i)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNode(int)" class="member-name-link">getNode</a><wbr>(int&nbsp;i)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initagony()" class="member-name-link">initagony</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNode(int)" class="member-name-link">getNode</a><wbr>(int&nbsp;i)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initrank()" class="member-name-link">initrank</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initagony()" class="member-name-link">initagony</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#minagony()" class="member-name-link">minagony</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initrank()" class="member-name-link">initrank</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#newslack(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)" class="member-name-link">newslack</a><wbr>(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;v,
- <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;u)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#minagony()" class="member-name-link">minagony</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#readAdjacenyList(java.io.File)" class="member-name-link">readAdjacenyList</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#readEdges(java.io.File)" class="member-name-link">readEdges</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#newslack(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)" class="member-name-link">newslack</a><wbr>(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&nbsp;v,
+ <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&nbsp;u)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#readAdjacenyList(java.io.File)" class="member-name-link">readAdjacenyList</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relief(int)" class="member-name-link">relief</a><wbr>(int&nbsp;edge)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#readEdges(java.io.File)" class="member-name-link">readEdges</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shiftrank(java.util.List,int)" class="member-name-link">shiftrank</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;&nbsp;nl,
- int&nbsp;shift)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relief(int)" class="member-name-link">relief</a><wbr>(int&nbsp;edge)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#size()" class="member-name-link">size</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shiftrank(java.util.List,int)" class="member-name-link">shiftrank</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&gt;&nbsp;nl,
+ int&nbsp;shift)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#slack(int)" class="member-name-link">slack</a><wbr>(int&nbsp;eid)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#size()" class="member-name-link">size</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#slack(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)" class="member-name-link">slack</a><wbr>(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;v,
- <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;u)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#slack(int)" class="member-name-link">slack</a><wbr>(int&nbsp;eid)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#to(int)" class="member-name-link">to</a><wbr>(int&nbsp;eid)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#slack(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)" class="member-name-link">slack</a><wbr>(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&nbsp;v,
+ <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&nbsp;u)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updaterelief(java.util.List)" class="member-name-link">updaterelief</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;&nbsp;nl)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#to(int)" class="member-name-link">to</a><wbr>(int&nbsp;eid)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeagony()" class="member-name-link">writeagony</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updaterelief(java.util.List)" class="member-name-link">updaterelief</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&gt;&nbsp;nl)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeagony()" class="member-name-link">writeagony</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -255,19 +265,19 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nodes">
 <h3>nodes</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;</span>&nbsp;<span class="element-name">nodes</span></div>
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&gt;</span>&nbsp;<span class="element-name">nodes</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="edges">
 <h3>edges</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyEdge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyEdge</a>&gt;</span>&nbsp;<span class="element-name">edges</span></div>
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyEdge.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyEdge</a>&gt;</span>&nbsp;<span class="element-name">edges</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="graph">
 <h3>graph</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="AgonyGraph.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyGraph</a></span>&nbsp;<span class="element-name">graph</span></div>
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="AgonyGraph.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyGraph</a></span>&nbsp;<span class="element-name">graph</span></div>
 </section>
 </li>
 <li>
@@ -356,6 +366,24 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="computeAgony()">
 <h3>computeAgony</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name">computeAgony</span>()</div>
+<div class="block">Returns a mapping between each node and its corresponding rank (represented as integers).
+ The rank starts at 0 and increases with each level.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a mapping between each node and its corresponding rank</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="computeAgonyReverseMap()">
+<h3>computeAgonyReverseMap</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html" title="class or interface in java.util" class="external-link">TreeMap</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&gt;</span>&nbsp;<span class="element-name">computeAgonyReverseMap</span>()</div>
+<div class="block">Returns a mapping between the different ranks/levels and corresponding nodes (of the graph) in these levels.
+ This is just the reverese mapping of <a href="#computeAgony()"><code>computeAgony()</code></a>.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a mapping between the different ranks/levels and corresponding nodes</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -397,13 +425,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="updaterelief(java.util.List)">
 <h3>updaterelief</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updaterelief</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;&nbsp;nl)</span></div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updaterelief</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&gt;&nbsp;nl)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="shiftrank(java.util.List,int)">
 <h3>shiftrank</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">shiftrank</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&gt;&nbsp;nl,
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">shiftrank</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&gt;&nbsp;nl,
  int&nbsp;shift)</span></div>
 </section>
 </li>
@@ -434,7 +462,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNode(int)">
 <h3>getNode</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a></span>&nbsp;<span class="element-name">getNode</span><wbr><span class="parameters">(int&nbsp;i)</span></div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;</span>&nbsp;<span class="element-name">getNode</span><wbr><span class="parameters">(int&nbsp;i)</span></div>
 </section>
 </li>
 <li>
@@ -446,15 +474,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="slack(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)">
 <h3>slack</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">slack</span><wbr><span class="parameters">(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;v,
- <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;u)</span></div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">slack</span><wbr><span class="parameters">(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&nbsp;v,
+ <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&nbsp;u)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="newslack(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode,de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony.AgonyNode)">
 <h3>newslack</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">newslack</span><wbr><span class="parameters">(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;v,
- <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&nbsp;u)</span></div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">newslack</span><wbr><span class="parameters">(<a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&nbsp;v,
+ <a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;&nbsp;u)</span></div>
 </section>
 </li>
 <li>
@@ -466,13 +494,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="from(int)">
 <h3>from</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a></span>&nbsp;<span class="element-name">from</span><wbr><span class="parameters">(int&nbsp;eid)</span></div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;</span>&nbsp;<span class="element-name">from</span><wbr><span class="parameters">(int&nbsp;eid)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="to(int)">
 <h3>to</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a></span>&nbsp;<span class="element-name">to</span><wbr><span class="parameters">(int&nbsp;eid)</span></div>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="AgonyNode.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony">AgonyNode</a>&lt;<a href="Agony.html" title="type parameter in Agony">E</a>&gt;</span>&nbsp;<span class="element-name">to</span><wbr><span class="parameters">(int&nbsp;eid)</span></div>
 </section>
 </li>
 </ul>

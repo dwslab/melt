@@ -78,7 +78,21 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">TransitiveClosure&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Computes a transitive closure in RAM.</div>
+<div class="block">Computes a transitive closure in RAM.
+ This class is generic and can hold arbitrary classes as elements for the transitive closure.
+ One can add elements which should belong to the same identity set via the add methods.
+ Afterward, the computed identity sets can be retrived by the <a href="#getClosure()"><code>getClosure()</code></a> call.
+ Remove methods are not implemented (just create new instances of TransitiveClosure).
+ Example:
+ <pre><code>
+ TransitiveClosure&lt;String&gt; tc = new TransitiveClosure&lt;&gt;();
+ tc.add("A", "B");
+ tc.add("B", "C", "D");
+ tc.add("E", "F");
+ 
+ tc.getClosure();
+ //returns [ {"A", "B", "C", "D"}, {"E", "F"} ]
+ </code></pre></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -118,7 +132,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">TransitiveClosure</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Initialize an empty transitive closure.</div>
+</div>
 </div>
 </section>
 </li>
@@ -134,28 +150,53 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(java.lang.Iterable)" class="member-name-link">add</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&nbsp;elements)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(T...)" class="member-name-link">add</a><wbr>(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>...&nbsp;elements)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#belongToTheSameCluster(java.lang.Iterable)" class="member-name-link">belongToTheSameCluster</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&nbsp;elements)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#belongToTheSameCluster(T...)" class="member-name-link">belongToTheSameCluster</a><wbr>(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>...&nbsp;elements)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getClosure()" class="member-name-link">getClosure</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.TransitiveClosure)" class="member-name-link">add</a><wbr>(<a href="TransitiveClosure.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">TransitiveClosure</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&nbsp;transitiveClosure)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds another transitive closure to this object.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(java.lang.Iterable)" class="member-name-link">add</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&nbsp;elements)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds elements to this transitive closure.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(T...)" class="member-name-link">add</a><wbr>(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>...&nbsp;elements)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds elements to this transitive closure.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#belongToTheSameCluster(java.lang.Iterable)" class="member-name-link">belongToTheSameCluster</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&nbsp;elements)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Checks if all given elements belong to the same identity set.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#belongToTheSameCluster(T...)" class="member-name-link">belongToTheSameCluster</a><wbr>(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>...&nbsp;elements)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Checks if all given elements belong to the same identity set.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#countOfAllElements()" class="member-name-link">countOfAllElements</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the number of all elements in this transitive closure (regardless of their identity set).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#countOfIdentitySets()" class="member-name-link">countOfIdentitySets</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the number of identity sets in this transitive closure.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getClosure()" class="member-name-link">getClosure</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the transitive closure.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getIdentityID(T)" class="member-name-link">getIdentityID</a><wbr>(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&nbsp;element)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getIdentitySetForElement(T)" class="member-name-link">getIdentitySetForElement</a><wbr>(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&nbsp;element)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getIdentityID(T)" class="member-name-link">getIdentityID</a><wbr>(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&nbsp;element)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the internal id which represents the identity set.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getIdentitySetForElement(T)" class="member-name-link">getIdentitySetForElement</a><wbr>(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&nbsp;element)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the identity set in which the given object is stored.</div>
 </div>
 </div>
@@ -208,6 +249,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>TransitiveClosure</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">TransitiveClosure</span>()</div>
+<div class="block">Initialize an empty transitive closure.</div>
 </section>
 </li>
 </ul>
@@ -222,19 +264,46 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="add(T...)">
 <h3 id="add(java.lang.Object[])">add</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>...&nbsp;elements)</span></div>
+<div class="block">Adds elements to this transitive closure.
+ All items in the elements parameter are assumed to be equal.
+ Usually these are two elements (like A - B)</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>elements</code> - iterable of items which are equal.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="add(de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.TransitiveClosure)">
+<h3>add</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="TransitiveClosure.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util">TransitiveClosure</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&nbsp;transitiveClosure)</span></div>
+<div class="block">Adds another transitive closure to this object.
+ Only this object is modified. The parameter transitiveClosure is not modified.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>transitiveClosure</code> - other transitive closure which is added to this object</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="add(java.lang.Iterable)">
 <h3>add</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&nbsp;elements)</span></div>
+<div class="block">Adds elements to this transitive closure.
+ All items in the elements parameter are assumed to be equal.
+ Usually these are two elements (like A - B)</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>elements</code> - iterable of items which are equal.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getClosure()">
 <h3>getClosure</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&gt;</span>&nbsp;<span class="element-name">getClosure</span>()</div>
-<div class="block">Returns the transitive closure.</div>
+<div class="block">Returns the transitive closure.
+ This means a collections of identity sets auch that all elements in one set belong to one identity.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>transitive closure</dd>
@@ -245,12 +314,28 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="belongToTheSameCluster(T...)">
 <h3 id="belongToTheSameCluster(java.lang.Object[])">belongToTheSameCluster</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">belongToTheSameCluster</span><wbr><span class="parameters">(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>...&nbsp;elements)</span></div>
+<div class="block">Checks if all given elements belong to the same identity set.
+ Returns true if this is the case , false otherwise.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>elements</code> - all elements to check.</dd>
+<dt>Returns:</dt>
+<dd>true if all given elements belong to the same identity set</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="belongToTheSameCluster(java.lang.Iterable)">
 <h3>belongToTheSameCluster</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">belongToTheSameCluster</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&gt;&nbsp;elements)</span></div>
+<div class="block">Checks if all given elements belong to the same identity set.
+ Returns true if this is the case , false otherwise.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>elements</code> - all elements to check.</dd>
+<dt>Returns:</dt>
+<dd>true if all given elements belong to the same identity set</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -270,6 +355,40 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getIdentityID(T)">
 <h3 id="getIdentityID(java.lang.Object)">getIdentityID</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name">getIdentityID</span><wbr><span class="parameters">(<a href="TransitiveClosure.html" title="type parameter in TransitiveClosure">T</a>&nbsp;element)</span></div>
+<div class="block">Returns the internal id which represents the identity set.
+ Only use if an arbitrary id is fine for the caller.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>element</code> - the element to look for the internal id.</dd>
+<dt>Returns:</dt>
+<dd>the internal id which represents the identity set.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="countOfAllElements()">
+<h3>countOfAllElements</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">countOfAllElements</span>()</div>
+<div class="block">Returns the number of all elements in this transitive closure (regardless of their identity set).
+ If it contains more than <code>Integer.MAX_VALUE</code> elements, returns
+ <code>Integer.MAX_VALUE</code>.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the number of all elements in this transitive closure.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="countOfIdentitySets()">
+<h3>countOfIdentitySets</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">countOfIdentitySets</span>()</div>
+<div class="block">Returns the number of identity sets in this transitive closure.
+ If it contains more than <code>Integer.MAX_VALUE</code> elements, returns
+ <code>Integer.MAX_VALUE</code>.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the number of identity sets.</dd>
+</dl>
 </section>
 </li>
 </ul>
