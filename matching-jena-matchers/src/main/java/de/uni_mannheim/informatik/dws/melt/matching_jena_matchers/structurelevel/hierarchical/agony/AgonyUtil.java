@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Helper methods for graph analysis.
- * @deprecated use {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.DotGraphUtil} instead.
+ * @deprecated use {@link de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.graph.DotGraphUtil} instead.
  */
 public class AgonyUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(AgonyUtil.class);

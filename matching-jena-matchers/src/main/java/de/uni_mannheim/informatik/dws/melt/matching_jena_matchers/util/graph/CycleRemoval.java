@@ -31,10 +31,9 @@ public class CycleRemoval <T extends Comparable<T>> {
     
     /**
      * Constructor which accepts the graph and a function which computes cycles.
-     * This can be {@link CycleDetection } or jgrapht algorithms:
-     * 
-     * @param graph
-     * @param cycleDetection 
+     * This can be {@link CycleDetection } or jgrapht algorithms.
+     * @param graph the representation of the graph
+     * @param cycleDetection a function which expects a graph and compute cycles in them.
      */
     public CycleRemoval(Map<T, Set<T>> graph, Function<Map<T, Set<T>>, List<List<T>>> cycleDetection){
         this.graph = graph;
