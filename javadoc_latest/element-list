@@ -24,6 +24,7 @@ de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.dashboard
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.resultspage
 de.uni_mannheim.informatik.dws.melt.matching_eval.hobbit
+de.uni_mannheim.informatik.dws.melt.matching_eval.matchers
 de.uni_mannheim.informatik.dws.melt.matching_eval.multisource
 de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning
 de.uni_mannheim.informatik.dws.melt.matching_eval.profiling
@@ -74,6 +75,7 @@ de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.structurelevel.hierarchical.agony
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.addnegatives
+de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.graph
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.literalExtractors
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.resourcesExtractors
 de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors
