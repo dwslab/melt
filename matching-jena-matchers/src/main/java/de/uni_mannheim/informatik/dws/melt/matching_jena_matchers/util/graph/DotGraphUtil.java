@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util;
+package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.graph;
 
 import java.io.BufferedWriter;
 import java.io.File;
