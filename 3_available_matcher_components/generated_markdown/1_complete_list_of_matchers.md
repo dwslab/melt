@@ -121,6 +121,15 @@ A matcher which tries to detect the testcase and return the reference alignment.
 
 *Keywords: Reference Matcher*
 
+## AddPositivesWithReference [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_eval/matchers/AddPositivesWithReference.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-eval/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_eval/matchers/AddPositivesWithReference.java)
+
+This matcher will detect the test case given in the input and 
+ use the reference (gold standard) to sample from it with the given rate which is added to the input alignment.
+ This matcher is contained in the eval package because it uses the information from the reference.
+ This matcher should not be included in real matching systems.
+
+*Keywords: Add Positives With Reference*
+
 ## MatcherYAAA [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAA.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena/MatcherYAAA.java)
 
 A matcher template for matchers that are based on the YAAA Framework.
@@ -513,4 +522,4 @@ Better use MatcherYAAAPipeline because it can combine matchers which use differe
 *Keywords: MatcherYAAA Owl Api*
 
 ---
-<sub>automatically generated on 2022-09-05 09:12</sub>
+<sub>automatically generated on 2022-09-06 12:37</sub>
