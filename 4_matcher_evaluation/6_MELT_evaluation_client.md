@@ -28,6 +28,13 @@ The results will be printed on the command line.
 java -jar matching-eval-client-3.1-SNAPSHOT.jar --help
 ```
 
+**Types of Systems**
+
+The evaluation client will automatically detect the following types of matchers:
+1. Web package (docker file) - automatically detected by path ending with `.tar.gz`
+1. SEALS package - automatically detected by path ending with `.zip`
+1. Web package (URL) - in all other cases an URL is assumed
+
 ### Advanced Features
 
 #### Java 8
