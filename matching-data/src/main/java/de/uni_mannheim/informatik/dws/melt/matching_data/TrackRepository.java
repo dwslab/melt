@@ -288,6 +288,15 @@ public class TrackRepository {
          * Reference alignment originates from <a href="https://doi.org/10.15454/BVXD7I">https://doi.org/10.15454/BVXD7I</a>.
          **/
         public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "food", "v1");
+        
+        
+        /**
+         * This track consists of finding alignments between food concepts
+         * from CIQUAL, the French food nutritional composition database, and food concepts from SIREN.
+         * Foods from both databases are described in LanguaL, a well-known multilingual thesaurus using faceted classification.
+         * Reference alignment originates from <a href="https://doi.org/10.15454/BVXD7I">https://doi.org/10.15454/BVXD7I</a>.
+         **/
+        public static Track SUBSUMPTION_V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "food", "subsumtion-v1");
 
     }
 
@@ -625,6 +634,27 @@ public class TrackRepository {
          * The new Biodiv track used in OAEI 2021. 
          */
         public static Track V2021OWL = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "biodiv", "2021owl");
+        
+        /**
+         * The new Biodiv track used in OAEI 2022. 
+         */
+        public static Track V2022 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "biodiv", "2022");
+    }
+    
+    
+    /**
+     * Material Sciences and Engineering track.
+     * The Material Sciences and Engineering (MSE) track contains the first benchmark for the evaluation of
+     * (semi-)automatic ontology matching techniques. In this emerging ontological domain, small to mid-sized upper and domain level ontologies
+     * are used that contain concepts described in natural language and are implemented by heterogeneous design principles
+     * with only partial overlap to each other.
+     */
+    public static class MSE {
+        /**
+         * 2021 Version
+         */
+        public static Track V2021 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "mse", "2021");
+        
     }
 
     /**
