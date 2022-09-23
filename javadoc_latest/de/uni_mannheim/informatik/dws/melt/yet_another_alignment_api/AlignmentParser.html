@@ -185,8 +185,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Parse alignment from CSV (comma separated file) without header.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseTSV(java.io.File)" class="member-name-link">parseTSV</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseFromText(java.lang.String)" class="member-name-link">parseFromText</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Parses an alignment based on the textual representation.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseTSV(java.io.File)" class="member-name-link">parseTSV</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Parse alignment from TSV (tab separated file) without header.The columns are source \t target \t confidence \t relation.</div>
 </div>
 </div>
@@ -241,6 +246,24 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="parseFromText(java.lang.String)">
+<h3>parseFromText</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">parseFromText</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
+                               throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax" class="external-link">SAXException</a>,
+<a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Parses an alignment based on the textual representation.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>text</code> - the xml as string</dd>
+<dt>Returns:</dt>
+<dd>Parsed alignment instance.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax" class="external-link">SAXException</a></code> - Parsing exception.</dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - IO exception.</dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="parse(java.lang.String)">
 <h3>parse</h3>

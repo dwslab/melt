@@ -2884,71 +2884,76 @@ loadScripts(document, 'script');</script>
 <div class="block">Parse alignment from CSV (comma separated file) without header.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AlignmentParser.</span><code><a href="../AlignmentParser.html#parseTSV(java.io.File)" class="member-name-link">parseTSV</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AlignmentParser.</span><code><a href="../AlignmentParser.html#parseFromText(java.lang.String)" class="member-name-link">parseFromText</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Parse alignment from TSV (tab separated file) without header.The columns are source \t target \t confidence \t relation.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#reverse()" class="member-name-link">reverse</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Reverse the alignment (switches sources with targets) and adjust(reverse) the relation.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#reverseWithoutRelationChange()" class="member-name-link">reverseWithoutRelationChange</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Reverse the alignment (switches sources with targets) and does not change the relation.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sample(int)" class="member-name-link">sample</a><wbr>(int&nbsp;n)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Returns a random sample of correspondences.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sample(int,long)" class="member-name-link">sample</a><wbr>(int&nbsp;n,
- long&nbsp;seed)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Returns a random sample of correspondences.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sample(int,java.util.Random)" class="member-name-link">sample</a><wbr>(int&nbsp;n,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Random.html" title="class or interface in java.util" class="external-link">Random</a>&nbsp;rnd)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Returns a random sample of correspondences.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sampleByFraction(double)" class="member-name-link">sampleByFraction</a><wbr>(double&nbsp;fraction)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Returns a random sample of correspondences.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sampleByFraction(double,long)" class="member-name-link">sampleByFraction</a><wbr>(double&nbsp;fraction,
- long&nbsp;seed)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Returns a random sample of correspondences.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sampleByFraction(double,java.util.Random)" class="member-name-link">sampleByFraction</a><wbr>(double&nbsp;fraction,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Random.html" title="class or interface in java.util" class="external-link">Random</a>&nbsp;rnd)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Returns a random sample of correspondences.</div>
+<div class="block">Parses an alignment based on the textual representation.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#subtraction(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)" class="member-name-link">subtraction</a><wbr>(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment_1,
- <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment_2)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AlignmentParser.</span><code><a href="../AlignmentParser.html#parseTSV(java.io.File)" class="member-name-link">parseTSV</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Create the subtraction between the two given alignments.</div>
+<div class="block">Parse alignment from TSV (tab separated file) without header.The columns are source \t target \t confidence \t relation.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#reverse()" class="member-name-link">reverse</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Reverse the alignment (switches sources with targets) and adjust(reverse) the relation.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#reverseWithoutRelationChange()" class="member-name-link">reverseWithoutRelationChange</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Reverse the alignment (switches sources with targets) and does not change the relation.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sample(int)" class="member-name-link">sample</a><wbr>(int&nbsp;n)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns a random sample of correspondences.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sample(int,long)" class="member-name-link">sample</a><wbr>(int&nbsp;n,
+ long&nbsp;seed)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns a random sample of correspondences.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sample(int,java.util.Random)" class="member-name-link">sample</a><wbr>(int&nbsp;n,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Random.html" title="class or interface in java.util" class="external-link">Random</a>&nbsp;rnd)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns a random sample of correspondences.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sampleByFraction(double)" class="member-name-link">sampleByFraction</a><wbr>(double&nbsp;fraction)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns a random sample of correspondences.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sampleByFraction(double,long)" class="member-name-link">sampleByFraction</a><wbr>(double&nbsp;fraction,
+ long&nbsp;seed)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns a random sample of correspondences.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#sampleByFraction(double,java.util.Random)" class="member-name-link">sampleByFraction</a><wbr>(double&nbsp;fraction,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Random.html" title="class or interface in java.util" class="external-link">Random</a>&nbsp;rnd)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns a random sample of correspondences.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#switchSourceWithTarget(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)" class="member-name-link">switchSourceWithTarget</a><wbr>(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#subtraction(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)" class="member-name-link">subtraction</a><wbr>(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment_1,
+ <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment_2)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Create the subtraction between the two given alignments.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#switchSourceWithTarget(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)" class="member-name-link">switchSourceWithTarget</a><wbr>(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment)</code></div>
+<div class="col-last odd-row-color">
 <div class="block"><span class="deprecated-label">Deprecated.</span>
 <div class="deprecation-comment">use function reverse</div>
 </div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#union(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)" class="member-name-link">union</a><wbr>(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment_1,
+<div class="col-first even-row-color"><code>static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#union(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)" class="member-name-link">union</a><wbr>(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment_1,
  <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment_2)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Create the union between the two given alignments.</div>
 </div>
 </div>
