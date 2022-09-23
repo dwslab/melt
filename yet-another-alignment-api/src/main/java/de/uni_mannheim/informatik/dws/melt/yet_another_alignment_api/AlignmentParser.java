@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import org.xml.sax.SAXException;
@@ -52,6 +53,17 @@ public class AlignmentParser {
             return parser;
         }
     };
+    
+    /**
+     * Parses an alignment based on the textual representation.
+     * @param text the xml as string
+     * @return Parsed alignment instance.
+     * @throws SAXException Parsing exception.
+     * @throws IOException IO exception.
+     */
+    public static Alignment parseFromText(String text) throws SAXException, IOException{
+        return parse(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)));
+    }
 
     /**
      * Reference the alignment file to be parsed using a String URI.

@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,5 +62,19 @@ class AlignmentSerializerTest {
         });
     }
     
+    
+    @Test
+    public void testAllRelationsParsing() throws Exception {
+        for(CorrespondenceRelation relation : CorrespondenceRelation.values()){
+            Correspondence c = new Correspondence("http://source.com/one", "http://target.com/one", 1.0, relation);
 
+            String xml = AlignmentSerializer.serialize(new Alignment(Arrays.asList(c)));
+            System.out.println(relation.toString());
+            System.out.println(xml);
+            Alignment a = AlignmentParser.parseFromText(xml);
+            assertEquals(1, a.size());
+            assertNotNull(a.getCorrespondence(c.getEntityOne(), c.getEntityTwo(), relation));
+        }
+
+    }
 }
