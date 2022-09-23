@@ -36,7 +36,7 @@ permalink: /matcher-packaging/hobbit
       - `groupId` and `artifactId` (only artifactId is used to identify the matcher -> make it unique)
       - `oaei.mainClass`: set it to the fully qualified path to the matcher (the class implementing ```IOntologyMatchingToolBridge``` or any subclass like ```MatcherURL``` or ```MatcherYAAAJena```)
       - benchmarks: change the benchmarks to the ones your system can deal with
-      - create a settings file with username, password and access_token (see an example at the bottom of the [simpleJavaMatcher pom file](/examples/simpleJavaMatcher/pom.xml))
+      - create a settings file with username, password and access_token (see an example at the bottom of the [externalPythonMatcherHobbit pom file](https://github.com/dwslab/melt/blob/b1a34274f9368b5f07224b159b619710a6af3043/examples/externalPythonMatcherHobbit/pom.xml#L151))
 - implement your matcher (see Matcher development)
 - build your matcher
   - execute maven goals from command line or from any IDE
