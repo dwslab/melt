@@ -213,8 +213,7 @@ loadScripts(document, 'script');</script>
  <a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Aligns two ontologies specified via a Jena OntModel, with an input alignment
- as Alignment object, and returns the mapping of the resulting alignment.</div>
+<div class="block">This method does only fine tune the model and does not match any entities.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setAdditionallySwitchSourceTarget(boolean)" class="member-name-link">setAdditionallySwitchSourceTarget</a><wbr>(boolean&nbsp;additionallySwitchSourceTarget)</code></div>
@@ -370,12 +369,7 @@ loadScripts(document, 'script');</script>
  <a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;properties)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../matching_jena/MatcherYAAAJena.html#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)">MatcherYAAAJena</a></code></span></div>
-<div class="block">Aligns two ontologies specified via a Jena OntModel, with an input alignment
- as Alignment object, and returns the mapping of the resulting alignment.
-
- Note: This method might be called multiple times in a row when using the evaluation framework.
- Make sure to return a mapping which is specific to the given inputs.</div>
+<div class="block">This method does only fine tune the model and does not match any entities.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../../../matching_base/IMatcher.html#match(ModelClass,ModelClass,AlignmentClass,ParameterClass)">match</a></code>&nbsp;in interface&nbsp;<code><a href="../../../matching_base/IMatcher.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IMatcher</a>&lt;org.apache.jena.ontology.OntModel,<wbr><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&gt;</code></dd>
@@ -387,9 +381,9 @@ loadScripts(document, 'script');</script>
 <dd><code>inputAlignment</code> - This mapping represents the input alignment.</dd>
 <dd><code>properties</code> - Additional properties.</dd>
 <dt>Returns:</dt>
-<dd>The resulting alignment of the matching process.</dd>
+<dd>the resulting alignment - in this special case the unmodified input alignment.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - Any exception which occurs during matching.</dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - in case something goes wrong</dd>
 </dl>
 </section>
 </li>
