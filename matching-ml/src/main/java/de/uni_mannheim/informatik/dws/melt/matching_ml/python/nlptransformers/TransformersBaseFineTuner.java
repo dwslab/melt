@@ -70,6 +70,15 @@ public abstract class TransformersBaseFineTuner extends TransformersBase {
         this(TextExtractorMap.wrapTextExtractor(extractor), initialModelName, resultingModelLocation);
     }
     
+    /**
+     * This method does only fine tune the model and does not match any entities.
+     * @param source This OntModel represents the source ontology.
+     * @param target This OntModel represents the target ontology.
+     * @param inputAlignment This mapping represents the input alignment.
+     * @param properties Additional properties.
+     * @return the resulting alignment - in this special case the unmodified input alignment.
+     * @throws Exception in case something goes wrong
+     */
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties properties) throws Exception {
         LOGGER.info("Append text to training file: {}", this.trainingFile);
