@@ -62,6 +62,20 @@ public class TestCase {
     private Alignment parsedInputAlignment;
     
     /**
+     * Alignment of correspondences which should be removed from the matcher during evaluation.
+     * This could be used to create a test case with a sampled reference alignment and complete mapping
+     * which does not evaluate correspondences which are sampled to be in the input alignment.
+     */
+    private URI evaluationExclusionAlignment;
+    
+    /**
+     * The parsed version of the alignment of correspondences which should be removed from the matcher during evaluation.
+     * This could be used to create a test case with a sampled reference alignment and complete mapping
+     * which does not evaluate correspondences which are sampled to be in the input alignment.
+     */
+    private Alignment parsedEvaluationExclusionAlignment;
+    
+    /**
      * How complete is the gold standard for this test case.
      */
     private GoldStandardCompleteness goldStandardCompleteness;
@@ -82,8 +96,9 @@ public class TestCase {
      * @param inputAlignment The input alignment for the matcher.
      * @param goldStandardCompleteness How complete is the gold standard for this test case.
      * @param parameters the parameters which the matcher get.
+     * @param evaluationExclusionAlignment the alignment which should be removed from system alignment during eval.
      */
-    public TestCase(String name, URI source, URI target, URI reference, Track track, URI inputAlignment, GoldStandardCompleteness goldStandardCompleteness, URI parameters) {
+    public TestCase(String name, URI source, URI target, URI reference, Track track, URI inputAlignment, GoldStandardCompleteness goldStandardCompleteness, URI parameters, URI evaluationExclusionAlignment) {
         this.name = name;
         this.track = track;
         this.source = source;
@@ -92,7 +107,9 @@ public class TestCase {
         this.inputAlignment = inputAlignment;
         this.goldStandardCompleteness = goldStandardCompleteness;
         this.parameters = parameters;
+        this.evaluationExclusionAlignment = evaluationExclusionAlignment;
     }
+    
 
     /**
      * Constructor with a complete gold standard and no input alignment.
@@ -103,7 +120,7 @@ public class TestCase {
      * @param track The track to which the test case belongs.
      */
     public TestCase(String name, URI source, URI target, URI reference, Track track) {
-        this(name, source, target, reference, track, null, GoldStandardCompleteness.COMPLETE, null);
+        this(name, source, target, reference, track, null, GoldStandardCompleteness.COMPLETE, null, null);
     }
 
     void setTrack(Track track){
@@ -141,6 +158,12 @@ public class TestCase {
     public URI getParameters() {
         return parameters;
     }
+
+    public URI getEvaluationExclusionAlignment() {
+        return evaluationExclusionAlignment;
+    }
+    
+    
     
     @Override
     public String toString() {
@@ -220,12 +243,12 @@ public class TestCase {
     /**
      * This method parses the input alignment and returns it.
      * If called again, a cached parsed instance will be returned.
-     * @return Parsed input {@link Alignment}.
+     * @return Parsed input {@link Alignment} (this is not null - but maybe an empty alignment).
      */
     public Alignment getParsedInputAlignment() {
         if(parsedInputAlignment == null){
             if(getInputAlignment() == null){
-                parsedInputAlignment =  new Alignment();
+                parsedInputAlignment = new Alignment();
             }else{
                 try {
                     parsedInputAlignment = new Alignment(getInputAlignment().toURL());
@@ -235,6 +258,25 @@ public class TestCase {
             }
         }
         return parsedInputAlignment;
+    }
+    
+    /**
+     * Returns the parsed version of the alignment of correspondences which should be removed from the matcher during evaluation.
+     * @return the alignment which should be removed from system during eval (this is not null - but maybe an empty alignment).
+     */
+    public Alignment getParsedEvaluationExclusionAlignment(){
+        if(parsedEvaluationExclusionAlignment == null){
+            if(getEvaluationExclusionAlignment() == null){
+                parsedEvaluationExclusionAlignment = new Alignment();
+            }else{
+                try {
+                    parsedEvaluationExclusionAlignment = new Alignment(getEvaluationExclusionAlignment().toURL());
+                } catch (SAXException | IOException ex) {
+                    LOGGER.error("Could not parse reference alignment file. Return null.", ex);
+                }
+            }
+        }
+        return parsedEvaluationExclusionAlignment;
     }
     
     

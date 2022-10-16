@@ -31,13 +31,25 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
 
     @Override
     public ConfusionMatrix compute(ExecutionResult executionResult) {
-        if (executionResult.getTestCase().getGoldStandardCompleteness().isGoldStandardComplete()) {
-            return computeForCompleteGoldStandard(executionResult);
-        } else {
-            return computeForPartialGoldStandard(executionResult);
-        }
+        return compute(executionResult.getReferenceAlignment(), executionResult.getSystemAlignment(), 
+                executionResult.getTestCase().getGoldStandardCompleteness(), 
+                executionResult.getTestCase().getParsedEvaluationExclusionAlignment());
     }
-
+    
+    public ConfusionMatrix compute(Alignment referenceAlignment,
+                                   Alignment systemAlignment,
+                                   GoldStandardCompleteness gsCompleteness,
+                                   Alignment evaluationExclusionAlignment){
+        if(evaluationExclusionAlignment == null || evaluationExclusionAlignment.isEmpty()){
+            //faster and no need to copy system alignment.
+            compute(referenceAlignment, systemAlignment, gsCompleteness);
+        }
+        //compute system alignment where evaluationExclusionAlignment is removed:
+        Alignment systemAlignmentForEval = new Alignment(systemAlignment);
+        systemAlignmentForEval.removeAll(evaluationExclusionAlignment);
+        return compute(referenceAlignment, systemAlignmentForEval, gsCompleteness);
+    }
+    
     public ConfusionMatrix compute(Alignment referenceAlignment,
                                    Alignment systemAlignment,
                                    GoldStandardCompleteness gsCompleteness){
@@ -50,16 +62,11 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
 
     /**
      * Calculate the confusion matrix under the premises that the gold standard is incomplete, i.e., partial.
-     *
-     * @param executionResult The execution result for which the gold standard shall be calculated.
+     * @param referenceAlignment reference alignment
+     * @param systemAlignment system alignment 
+     * @param gsCompleteness gold standard completeness
      * @return The confusion matrix.
      */
-    private ConfusionMatrix computeForPartialGoldStandard(ExecutionResult executionResult) {
-        return computeForPartialGoldStandard(executionResult.getReferenceAlignment(),
-                executionResult.getSystemAlignment(),
-                executionResult.getTestCase().getGoldStandardCompleteness());
-    }
-
     private ConfusionMatrix computeForPartialGoldStandard(Alignment referenceAlignment,
                                                           Alignment systemAlignment,
                                                           GoldStandardCompleteness gsCompleteness) {
@@ -75,7 +82,7 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                 //don't add it to falsePositive because it should be silently ignored
             } else if (referenceCell.getRelation() == CorrespondenceRelation.INCOMPAT) {
                 //mapping like <"null", "http://.....", =, 1.0> or <"http://.....", "null", =, 1.0>
-                //to express than one resource has no correspondence
+                //to express than one resource has no correspondence ( should not be mapped to any entity)
                 if (referenceCell.getEntityTwo().equals("null") || referenceCell.getEntityTwo().trim().isEmpty()) {
                     for (Correspondence c : systemAlignment.getCorrespondencesSourceRelation(referenceCell.getEntityOne(),
                             CorrespondenceRelation.EQUIVALENCE))
@@ -140,16 +147,10 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
 
     /**
      * Calculate the confusion matrix under the premises that the gold standard is complete.
-     *
-     * @param executionResult The execution result for which the gold standard shall be calculated.
+     * @param referenceAlignment reference alignment
+     * @param systemAlignment system alignment
      * @return The confusion matrix.
      */
-    private ConfusionMatrix computeForCompleteGoldStandard(ExecutionResult executionResult) {
-        return computeForCompleteGoldStandard(executionResult.getReferenceAlignment(),
-                executionResult.getSystemAlignment());
-    }
-
-
     private ConfusionMatrix computeForCompleteGoldStandard(Alignment referenceAlignment,
                                                            Alignment systemAlignment) {
         //TODO: what happens when referenceAlignment is empty and systemAlignment contains 200 mappings?

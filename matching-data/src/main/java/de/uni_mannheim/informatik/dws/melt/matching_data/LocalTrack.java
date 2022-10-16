@@ -144,13 +144,13 @@ public class LocalTrack extends Track {
         return tc;
     }
     
-    public TestCase addTestCase(String name, URI source, URI target, URI reference, URI inputAlignment, GoldStandardCompleteness goldStandardCompleteness, URI parameters){
-        TestCase tc = new TestCase(name,source,target,reference,this, inputAlignment, goldStandardCompleteness, parameters);
+    public TestCase addTestCase(String name, URI source, URI target, URI reference, URI inputAlignment, GoldStandardCompleteness goldStandardCompleteness, URI parameters, URI evaluationExclusionAlignment){
+        TestCase tc = new TestCase(name,source,target,reference,this, inputAlignment, goldStandardCompleteness, parameters, evaluationExclusionAlignment);
         this.testCases.add(tc);
         return tc;
     }
     
-    public TestCase addTestCase(String name, File source, File target, File reference, File inputAlignment, GoldStandardCompleteness goldStandardCompleteness, File parameters){
+    public TestCase addTestCase(String name, File source, File target, File reference, File inputAlignment, GoldStandardCompleteness goldStandardCompleteness, File parameters, File evaluationExclusionAlignment){
         TestCase tc = new TestCase(name,
                 source.toURI(),
                 target.toURI(),
@@ -158,13 +158,14 @@ public class LocalTrack extends Track {
                 this, 
                 inputAlignment == null ? null : inputAlignment.toURI(), 
                 goldStandardCompleteness, 
-                parameters == null ? null : parameters.toURI());
+                parameters == null ? null : parameters.toURI(),
+                evaluationExclusionAlignment == null ? null : evaluationExclusionAlignment.toURI());
         this.testCases.add(tc);
         return tc;
     }
     
     public TestCase addTestCase(String name, File source, File target, File reference){
-        return addTestCase(name, source,target, reference, null, this.goldStandardCompleteness, null);
+        return addTestCase(name, source,target, reference, null, this.goldStandardCompleteness, null, null);
     }
     
     
@@ -186,6 +187,7 @@ public class LocalTrack extends Track {
             File target_file = new File(f, TestCaseType.TARGET.toFileName());
             File reference_file = new File(f, TestCaseType.REFERENCE.toFileName());
             File parameters_file = new File(f, TestCaseType.PARAMETERS.toFileName());
+            File evalExclusion_file = new File(f, TestCaseType.EVALUATIONEXCLUSION.toFileName());
 
             if(!source_file.exists() || !target_file.exists()){
                 LOGGER.error("There was a problem reading local test case: " + f.getName() + ". Files " +
@@ -206,7 +208,8 @@ public class LocalTrack extends Track {
                     this,
                     null,
                     this.goldStandardCompleteness,
-                    parameters_file.exists() ? parameters_file.toURI() : null
+                    parameters_file.exists() ? parameters_file.toURI() : null,
+                    evalExclusion_file.exists() ? evalExclusion_file.toURI() : null
                     ));
         }
         return testCases;

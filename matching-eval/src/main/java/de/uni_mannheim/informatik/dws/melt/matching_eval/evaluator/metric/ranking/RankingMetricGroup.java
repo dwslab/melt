@@ -53,7 +53,8 @@ public class RankingMetricGroup extends Metric<RankingResult> {
                     executionResultTestCase.getTrack(),
                     executionResultTestCase.getInputAlignment(),
                     executionResultTestCase.getGoldStandardCompleteness(),
-                    executionResultTestCase.getParameters()
+                    executionResultTestCase.getParameters(),
+                    executionResultTestCase.getEvaluationExclusionAlignment()
             );
 
             ExecutionResult executionResultSubset = new ExecutionResult(localSubsetTestCase, executionResult.getMatcherName(),

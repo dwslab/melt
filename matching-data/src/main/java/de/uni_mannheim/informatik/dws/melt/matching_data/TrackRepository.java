@@ -919,7 +919,8 @@ public class TrackRepository {
         try {
             File inputAlignmentFile = File.createTempFile("alignment_input_from_reference", ".rdf");
             inputAlignment.serialize(inputAlignmentFile);
-
+            
+            URI evaluationExclusionAlignment = null;
             //build updated reference alignment if needed
             URI referenceAlignmentURI = tc.getReference();
             if (removeSamplesFromReference) {
@@ -928,9 +929,11 @@ public class TrackRepository {
                 File referenceAlignmentFile = File.createTempFile("alignment_reference_rest", ".rdf");
                 referenceAlignment.serialize(referenceAlignmentFile);
                 referenceAlignmentURI = referenceAlignmentFile.toURI();
+                evaluationExclusionAlignment = inputAlignmentFile.toURI();
             }
 
-            return new TestCase(tc.getName(), tc.getSource(), tc.getTarget(), referenceAlignmentURI, tc.getTrack(), inputAlignmentFile.toURI(), tc.getGoldStandardCompleteness(), tc.getParameters());
+            return new TestCase(tc.getName(), tc.getSource(), tc.getTarget(), referenceAlignmentURI, tc.getTrack(),
+                    inputAlignmentFile.toURI(), tc.getGoldStandardCompleteness(), tc.getParameters(), evaluationExclusionAlignment);
 
         } catch (IOException ex) {
             LOGGER.error("Could not write alignment to file. Returning initial testcase", ex);

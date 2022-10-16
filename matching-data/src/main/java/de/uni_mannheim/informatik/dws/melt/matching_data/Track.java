@@ -447,6 +447,7 @@ public abstract class Track implements Comparable<Track> {
             File reference_file = new File(f, TestCaseType.REFERENCE.toFileName());
             File input_file = new File(f, TestCaseType.INPUT.toFileName());
             File parameters_file = new File(f, TestCaseType.PARAMETERS.toFileName());
+            File evalExclusion_file = new File(f, TestCaseType.EVALUATIONEXCLUSION.toFileName());
             
             if(source_file.exists() == false ){
                 LOGGER.error("Cache is corrupted (delete the cache folder to initiate a re-download) - source file is not there: {}", source_file);
@@ -470,7 +471,8 @@ public abstract class Track implements Comparable<Track> {
                     this,
                     input_file.exists() ? input_file.toURI() : null,
                     this.goldStandardCompleteness,
-                    parameters_file.exists() ? parameters_file.toURI() : null));
+                    parameters_file.exists() ? parameters_file.toURI() : null,
+                    evalExclusion_file.exists() ? evalExclusion_file.toURI() : null));
         }
         return collectedTestCases;
     }
@@ -528,6 +530,10 @@ public abstract class Track implements Comparable<Track> {
                     encode(this.remoteLocation),encode(this.name), encode(this.version),
                     TestCaseType.PARAMETERS.toString(), referenceFile.getName()).toFile();
             
+            File evalExclusionFile = Paths.get(cacheFolder.getAbsolutePath(),
+                    encode(this.remoteLocation),encode(this.name), encode(this.version),
+                    TestCaseType.EVALUATIONEXCLUSION.toString(), referenceFile.getName()).toFile();
+            
             collectedTestCases.add(new TestCase(fileNameWithoutExtension,
                     sourceFile.toURI(),
                     targetFile.toURI(),
@@ -535,7 +541,8 @@ public abstract class Track implements Comparable<Track> {
                     this,
                     inputFile.exists() ? inputFile.toURI() : null,
                     this.goldStandardCompleteness,
-                    parametersFile.exists() ? parametersFile.toURI() : null));
+                    parametersFile.exists() ? parametersFile.toURI() : null,
+                    evalExclusionFile.exists() ? evalExclusionFile.toURI() : null));
         }
         return collectedTestCases;
     }

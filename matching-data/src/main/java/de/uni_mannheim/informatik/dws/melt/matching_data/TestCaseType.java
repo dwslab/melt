@@ -8,7 +8,8 @@ public enum TestCaseType {
     TARGET,
     REFERENCE,
     INPUT,
-    PARAMETERS;
+    PARAMETERS,
+    EVALUATIONEXCLUSION;
 
     @Override
     public String toString() {
