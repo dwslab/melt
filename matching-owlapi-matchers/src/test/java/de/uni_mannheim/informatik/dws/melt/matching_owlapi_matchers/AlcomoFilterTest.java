@@ -73,7 +73,7 @@ class AlcomoFilterTest {
             systemAlignment.addExtensionValue("http://www.jan-portisch.eu/example", "myValue");
 
             TestCase tc = new TestCase("TEST_CMT_EKAW", sourceFile.toURI(), targetFile.toURI(), referenceFile.toURI(),
-                    null, systemFile.toURI(), GoldStandardCompleteness.COMPLETE, null);
+                    null, systemFile.toURI(), GoldStandardCompleteness.COMPLETE, null, null);
 
             int alignmentSizeBefore = systemAlignment.size();
 
