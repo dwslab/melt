@@ -316,7 +316,7 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
-            <version>8.9.0</version>
+            <version>9.5.0</version>
         </dependency>
 
         <!-- BabelNet Lib Dependency -->
