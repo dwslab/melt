@@ -91,28 +91,38 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>private <a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a></code></div>
-<div class="col-second even-row-color"><code><a href="#goldStandardCompleteness" class="member-name-link">goldStandardCompleteness</a></code></div>
+<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
+<div class="col-second even-row-color"><code><a href="#evaluationExclusionAlignment" class="member-name-link">evaluationExclusionAlignment</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Alignment of correspondences which should be removed from the matcher during evaluation.</div>
+</div>
+<div class="col-first odd-row-color"><code>private <a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#goldStandardCompleteness" class="member-name-link">goldStandardCompleteness</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">How complete is the gold standard for this test case.</div>
 </div>
-<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#inputAlignment" class="member-name-link">inputAlignment</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
+<div class="col-second even-row-color"><code><a href="#inputAlignment" class="member-name-link">inputAlignment</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Input alignment for the matcher.</div>
 </div>
-<div class="col-first even-row-color"><code>private static final org.slf4j.Logger</code></div>
-<div class="col-second even-row-color"><code><a href="#LOGGER" class="member-name-link">LOGGER</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#name" class="member-name-link">name</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first odd-row-color"><code>private static final org.slf4j.Logger</code></div>
+<div class="col-second odd-row-color"><code><a href="#LOGGER" class="member-name-link">LOGGER</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>private final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#name" class="member-name-link">name</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">This is the identifier for the test case</div>
 </div>
-<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
-<div class="col-second even-row-color"><code><a href="#parameters" class="member-name-link">parameters</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#parameters" class="member-name-link">parameters</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">URI pointing to the parameter file.</div>
+</div>
+<div class="col-first even-row-color"><code>private <a href="../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second even-row-color"><code><a href="#parsedEvaluationExclusionAlignment" class="member-name-link">parsedEvaluationExclusionAlignment</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The parsed version of the alignment of correspondences which should be removed from the matcher during evaluation.</div>
 </div>
 <div class="col-first odd-row-color"><code>private <a href="../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#parsedInputAlignment" class="member-name-link">parsedInputAlignment</a></code></div>
@@ -163,14 +173,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Constructor with a complete gold standard and no input alignment.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.net.URI,java.net.URI,java.net.URI,de.uni_mannheim.informatik.dws.melt.matching_data.Track,java.net.URI,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,java.net.URI)" class="member-name-link">TestCase</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.net.URI,java.net.URI,java.net.URI,de.uni_mannheim.informatik.dws.melt.matching_data.Track,java.net.URI,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,java.net.URI,java.net.URI)" class="member-name-link">TestCase</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;source,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;target,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;reference,
  <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;inputAlignment,
  <a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;parameters)</code></div>
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;parameters,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;evaluationExclusionAlignment)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructor</div>
 </div>
@@ -191,18 +202,26 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGoldStandardCompleteness()" class="member-name-link">getGoldStandardCompleteness</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEvaluationExclusionAlignment()" class="member-name-link">getEvaluationExclusionAlignment</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInputAlignment()" class="member-name-link">getInputAlignment</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGoldStandardCompleteness()" class="member-name-link">getGoldStandardCompleteness</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInputAlignment()" class="member-name-link">getInputAlignment</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getParameters()" class="member-name-link">getParameters</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getParameters()" class="member-name-link">getParameters</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getParsedEvaluationExclusionAlignment()" class="member-name-link">getParsedEvaluationExclusionAlignment</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the parsed version of the alignment of correspondences which should be removed from the matcher during evaluation.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getParsedInputAlignment()" class="member-name-link">getParsedInputAlignment</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -341,6 +360,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="evaluationExclusionAlignment">
+<h3>evaluationExclusionAlignment</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name">evaluationExclusionAlignment</span></div>
+<div class="block">Alignment of correspondences which should be removed from the matcher during evaluation.
+ This could be used to create a test case with a sampled reference alignment and complete mapping
+ which does not evaluate correspondences which are sampled to be in the input alignment.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="parsedEvaluationExclusionAlignment">
+<h3>parsedEvaluationExclusionAlignment</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">parsedEvaluationExclusionAlignment</span></div>
+<div class="block">The parsed version of the alignment of correspondences which should be removed from the matcher during evaluation.
+ This could be used to create a test case with a sampled reference alignment and complete mapping
+ which does not evaluate correspondences which are sampled to be in the input alignment.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="goldStandardCompleteness">
 <h3>goldStandardCompleteness</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a></span>&nbsp;<span class="element-name">goldStandardCompleteness</span></div>
@@ -364,7 +401,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,java.net.URI,java.net.URI,java.net.URI,de.uni_mannheim.informatik.dws.melt.matching_data.Track,java.net.URI,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,java.net.URI)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.net.URI,java.net.URI,java.net.URI,de.uni_mannheim.informatik.dws.melt.matching_data.Track,java.net.URI,de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness,java.net.URI,java.net.URI)">
 <h3>TestCase</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">TestCase</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;source,
@@ -373,7 +410,8 @@ loadScripts(document, 'script');</script>
  <a href="Track.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">Track</a>&nbsp;track,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;inputAlignment,
  <a href="GoldStandardCompleteness.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_data">GoldStandardCompleteness</a>&nbsp;goldStandardCompleteness,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;parameters)</span></div>
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;parameters,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;evaluationExclusionAlignment)</span></div>
 <div class="block">Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -385,6 +423,7 @@ loadScripts(document, 'script');</script>
 <dd><code>inputAlignment</code> - The input alignment for the matcher.</dd>
 <dd><code>goldStandardCompleteness</code> - How complete is the gold standard for this test case.</dd>
 <dd><code>parameters</code> - the parameters which the matcher get.</dd>
+<dd><code>evaluationExclusionAlignment</code> - the alignment which should be removed from system alignment during eval.</dd>
 </dl>
 </section>
 </li>
@@ -467,6 +506,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getParameters()">
 <h3>getParameters</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name">getParameters</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getEvaluationExclusionAlignment()">
+<h3>getEvaluationExclusionAlignment</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name">getEvaluationExclusionAlignment</span>()</div>
 </section>
 </li>
 <li>
@@ -563,7 +608,18 @@ loadScripts(document, 'script');</script>
  If called again, a cached parsed instance will be returned.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>Parsed input <a href="../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api"><code>Alignment</code></a>.</dd>
+<dd>Parsed input <a href="../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api"><code>Alignment</code></a> (this is not null - but maybe an empty alignment).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getParsedEvaluationExclusionAlignment()">
+<h3>getParsedEvaluationExclusionAlignment</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">getParsedEvaluationExclusionAlignment</span>()</div>
+<div class="block">Returns the parsed version of the alignment of correspondences which should be removed from the matcher during evaluation.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the alignment which should be removed from system during eval (this is not null - but maybe an empty alignment).</dd>
 </dl>
 </section>
 </li>
