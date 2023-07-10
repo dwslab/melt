@@ -11,7 +11,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../../../../../script-dir/jquery-ui.min.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../../../../jquery-ui.overrides.css" title="Style">
 <script type="text/javascript" src="../../../../../../../../script.js"></script>
-<script type="text/javascript" src="../../../../../../../../script-dir/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../script-dir/jquery-3.6.1.min.js"></script>
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
@@ -240,7 +240,7 @@ implements <a href="../../IMatcher.html" title="interface in de.uni_mannheim.inf
 <code>getId, getVersion, setId, setVersion</code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone--" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals-java.lang.Object-" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#finalize--" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#getClass--" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#hashCode--" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#notify--" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#notifyAll--" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait--" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait-long-" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait-long-int-" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-eu.sealsproject.platform.res.tool.api.IPlugin">Methods inherited from interface&nbsp;eu.sealsproject.platform.res.tool.api.IPlugin</h3>
 <code>getId, getVersion</code></div>
@@ -328,7 +328,7 @@ implements <a href="../../IMatcher.html" title="interface in de.uni_mannheim.inf
 <div class="block">Creates a matcher which wraps a matching service available at the given URI with timeout options.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>uri</code> - URI where the matching service is located. URI can be created from string with <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html#create(java.lang.String)" title="class or interface in java.net" class="external-link"><code>URI.create(java.lang.String)</code></a>.</dd>
+<dd><code>uri</code> - URI where the matching service is located. URI can be created from string with <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html#create-java.lang.String-" title="class or interface in java.net" class="external-link"><code>URI.create(java.lang.String)</code></a>.</dd>
 <dd><code>sendContent</code> - If true, then the content of the file URI is read and transferred.
                                  If false, then only the URI is tranferred but then the matching system needs to have access to the URI.</dd>
 <dd><code>socketTimeout</code> - the time in milliseconds waiting for data – after the connection is established;
@@ -349,7 +349,7 @@ implements <a href="../../IMatcher.html" title="interface in de.uni_mannheim.inf
  No timeout is applied.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>uri</code> - URI where the matching service is located. URI can be created from string with <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html#create(java.lang.String)" title="class or interface in java.net" class="external-link"><code>URI.create(java.lang.String)</code></a>.</dd>
+<dd><code>uri</code> - URI where the matching service is located. URI can be created from string with <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html#create-java.lang.String-" title="class or interface in java.net" class="external-link"><code>URI.create(java.lang.String)</code></a>.</dd>
 <dd><code>sendContent</code> - If true, then the content of the file URI is read and transferred.
                     If false, then only the URI is transferred but then the matching system needs to have access to the URI.</dd>
 </dl>
@@ -363,7 +363,7 @@ implements <a href="../../IMatcher.html" title="interface in de.uni_mannheim.inf
  Only the URIs of the test case are transferred to the system and no timeout is applied.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>uri</code> - URI where the matching service is located. URI can be created from string with <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html#create(java.lang.String)" title="class or interface in java.net" class="external-link"><code>URI.create(java.lang.String)</code></a>.</dd>
+<dd><code>uri</code> - URI where the matching service is located. URI can be created from string with <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html#create-java.lang.String-" title="class or interface in java.net" class="external-link"><code>URI.create(java.lang.String)</code></a>.</dd>
 </dl>
 </section>
 </li>
@@ -514,7 +514,7 @@ implements <a href="../../IMatcher.html" title="interface in de.uni_mannheim.inf
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#toString--" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
 </dl>
 </section>
 </li>
@@ -527,7 +527,7 @@ implements <a href="../../IMatcher.html" title="interface in de.uni_mannheim.inf
 </main>
 <footer role="contentinfo">
 <hr>
-<p class="legal-copy"><small>Copyright &#169; 2022. All rights reserved.</small></p>
+<p class="legal-copy"><small>Copyright &#169; 2023. All rights reserved.</small></p>
 </footer>
 </div>
 </div>
