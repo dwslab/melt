@@ -288,7 +288,16 @@ public class TrackRepository {
          * Reference alignment originates from <a href="https://doi.org/10.15454/BVXD7I">https://doi.org/10.15454/BVXD7I</a>.
          **/
         public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "food", "v1");
-
+        
+        /**
+         * This track consists of finding alignments between food concepts
+         * from CIQUAL, the French food nutritional composition database, and food concepts from SIREN.
+         * Foods from both databases are described in LanguaL, a well-known multilingual thesaurus using faceted classification.
+         * Source from <a href="https://doi.org/10.15454/6CEYU3">https://doi.org/10.15454/6CEYU3</a>.
+         * Target from <a href="https://doi.org/10.15454/5LLGVY">https://doi.org/10.15454/5LLGVY</a>.
+         * Reference alignment originates from <a href="https://doi.org/10.15454/BVXD7I">https://doi.org/10.15454/BVXD7I</a> (file reference.xml).
+         **/
+        public static Track V2 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "food", "v2");
     }
 
     /**
