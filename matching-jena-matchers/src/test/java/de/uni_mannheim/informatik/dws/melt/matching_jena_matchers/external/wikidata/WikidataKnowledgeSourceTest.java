@@ -147,28 +147,29 @@ class WikidataKnowledgeSourceTest {
         WikidataKnowledgeSource wikidata = new WikidataKnowledgeSource();
         wikidata.setDiskBufferEnabled(isBufferEnabled);
         assertEquals(isBufferEnabled, wikidata.isDiskBufferEnabled());
-
+        
         // check with URIs
+        // replace Q1048835 with Q4120211
         // Q458 -P31-> Q1048835 -P279-> Q15642541 -P279-> Q1496967
         // http://www.wikidata.org/entity/Q458 -> European Union
         // https://www.wikidata.org/wiki/Q1048835 -> political territorial entity
         // https://www.wikidata.org/wiki/Q56061 -> administrative territorial entity
-        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1048835", "http://www.wikidata.org/entity/Q458", 1));
+        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q4120211", "http://www.wikidata.org/entity/Q458", 1));
         assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q56061", "http://www.wikidata.org/entity/Q458", 2));
 
         // check with links
-        String linkQ1048835 = wikidata.getLinker().linkToSingleConcept("political territorial entity");
+        String linkQ4120211 = wikidata.getLinker().linkToSingleConcept("regional organization");
         String linkQ458 = wikidata.getLinker().linkToSingleConcept("European Union");
         String linkQ56061 = wikidata.getLinker().linkToSingleConcept("administrative territorial entity");
-        assertTrue(wikidata.isHypernym(linkQ1048835, linkQ458, 1));
+        assertTrue(wikidata.isHypernym(linkQ4120211, linkQ458, 1));
         assertTrue(wikidata.isHypernym(linkQ56061, linkQ458, 2));
-        assertTrue(wikidata.isHypernym(linkQ1048835, linkQ458, 3));
+        assertTrue(wikidata.isHypernym(linkQ4120211, linkQ458, 3));
 
         // run again to see whether buffer works
-        assertTrue(wikidata.isHypernym(linkQ1048835, linkQ458, 3));
+        assertTrue(wikidata.isHypernym(linkQ4120211, linkQ458, 3));
 
         // combinations
-        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q1048835", linkQ458, 1));
+        assertTrue(wikidata.isHypernym("http://www.wikidata.org/entity/Q4120211", linkQ458, 1));
         assertTrue(wikidata.isHypernym(linkQ56061, "http://www.wikidata.org/entity/Q458", 2));
 
         // check false

@@ -93,11 +93,11 @@ public class VectorOperations {
             return false;
         }
         if(textModelFile.isDirectory()){
-            LOGGER.error("The specified file is actually a directory. Cannot read the vector file.");
+            LOGGER.error("The specified file (" + textModelFile + ") is actually a directory. Cannot read the vector file.");
             return false;
         }
         if(!textModelFile.exists()){
-            LOGGER.error("The specified file does not exist. Cannot read the vector file.");
+            LOGGER.error("The specified file (" + textModelFile + ") does not exist. Cannot read the vector file.");
             return false;
         }
         return true;
