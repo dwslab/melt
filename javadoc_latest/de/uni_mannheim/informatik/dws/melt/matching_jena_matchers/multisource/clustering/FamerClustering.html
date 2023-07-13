@@ -115,9 +115,12 @@ implements <a href="../../../matching_base/multisource/IMatcherMultiSource.html"
 <div class="col-first even-row-color"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a></code></div>
 <div class="col-second even-row-color"><code><a href="#NON_DIGIT" class="member-name-link">NON_DIGIT</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#removeCorrespondences" class="member-name-link">removeCorrespondences</a></code></div>
+<div class="col-first odd-row-color"><code>private int</code></div>
+<div class="col-second odd-row-color"><code><a href="#parallelism" class="member-name-link">parallelism</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>private boolean</code></div>
+<div class="col-second even-row-color"><code><a href="#removeCorrespondences" class="member-name-link">removeCorrespondences</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -169,10 +172,22 @@ implements <a href="../../../matching_base/multisource/IMatcherMultiSource.html"
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes a map between uris and correspoding clusterId.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static <a href="LogicalGraphAndSourceIds.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.clustering">LogicalGraphAndSourceIds</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getLogicalGraphFromAlignment(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)" class="member-name-link">getLogicalGraphFromAlignment</a><wbr>(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
- <a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;datsetIdExtractor)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getClusters(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor,int)" class="member-name-link">getClusters</a><wbr>(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+ org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering&nbsp;clusteringAlgorithm,
+ <a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;datsetIdExtractor,
+ int&nbsp;parallelism)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Computes a map between uris and correspoding clusterId.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static <a href="LogicalGraphAndSourceIds.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.clustering">LogicalGraphAndSourceIds</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getLogicalGraphFromAlignment(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor,int)" class="member-name-link">getLogicalGraphFromAlignment</a><wbr>(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
+ <a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;datsetIdExtractor,
+ int&nbsp;parallelism)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getParallelism()" class="member-name-link">getParallelism</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#instanceOfOne(java.lang.Object,java.lang.Class...)" class="member-name-link">instanceOfOne</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;classes)</code></div>
@@ -187,6 +202,9 @@ implements <a href="../../../matching_base/multisource/IMatcherMultiSource.html"
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#processAlignment(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)" class="member-name-link">processAlignment</a><wbr>(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setParallelism(int)" class="member-name-link">setParallelism</a><wbr>(int&nbsp;parallelism)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -235,6 +253,12 @@ implements <a href="../../../matching_base/multisource/IMatcherMultiSource.html"
 <section class="detail" id="removeCorrespondences">
 <h3>removeCorrespondences</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">removeCorrespondences</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="parallelism">
+<h3>parallelism</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">parallelism</span></div>
 </section>
 </li>
 <li>
@@ -315,6 +339,18 @@ implements <a href="../../../matching_base/multisource/IMatcherMultiSource.html"
 </section>
 </li>
 <li>
+<section class="detail" id="getParallelism()">
+<h3>getParallelism</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getParallelism</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setParallelism(int)">
+<h3>setParallelism</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setParallelism</span><wbr><span class="parameters">(int&nbsp;parallelism)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="getClusters(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">
 <h3>getClusters</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&gt;</span>&nbsp;<span class="element-name">getClusters</span><wbr><span class="parameters">(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
@@ -326,6 +362,25 @@ implements <a href="../../../matching_base/multisource/IMatcherMultiSource.html"
 <dd><code>alignment</code> - alignment</dd>
 <dd><code>clusteringAlgorithm</code> - the cluster algorithm to use. The <code>ClusteringOutputType</code> doesn't matter but for best performance choose <code>ClusteringOutputType.GRAPH</code>.</dd>
 <dd><code>datsetIdExtractor</code> - the dataset id extractor to use. It gets an URI and returns the corresponding data source id.</dd>
+<dt>Returns:</dt>
+<dd>a map between uris and correspoding clusterId</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getClusters(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor,int)">
+<h3>getClusters</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&gt;</span>&nbsp;<span class="element-name">getClusters</span><wbr><span class="parameters">(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment,
+ org.gradoop.famer.clustering.parallelClustering.AbstractParallelClustering&nbsp;clusteringAlgorithm,
+ <a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;datsetIdExtractor,
+ int&nbsp;parallelism)</span></div>
+<div class="block">Computes a map between uris and correspoding clusterId.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>alignment</code> - alignment</dd>
+<dd><code>clusteringAlgorithm</code> - the cluster algorithm to use. The <code>ClusteringOutputType</code> doesn't matter but for best performance choose <code>ClusteringOutputType.GRAPH</code>.</dd>
+<dd><code>datsetIdExtractor</code> - the dataset id extractor to use. It gets an URI and returns the corresponding data source id.</dd>
+<dd><code>parallelism</code> - The parallelism for the local flink environment (can be set to -1 for default which is number of processors).</dd>
 <dt>Returns:</dt>
 <dd>a map between uris and correspoding clusterId</dd>
 </dl>
@@ -372,10 +427,11 @@ implements <a href="../../../matching_base/multisource/IMatcherMultiSource.html"
 </section>
 </li>
 <li>
-<section class="detail" id="getLogicalGraphFromAlignment(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor)">
+<section class="detail" id="getLogicalGraphFromAlignment(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor,int)">
 <h3>getLogicalGraphFromAlignment</h3>
 <div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="LogicalGraphAndSourceIds.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.clustering">LogicalGraphAndSourceIds</a></span>&nbsp;<span class="element-name">getLogicalGraphFromAlignment</span><wbr><span class="parameters">(<a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;a,
- <a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;datsetIdExtractor)</span></div>
+ <a href="../../../matching_base/multisource/DatasetIDExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base.multisource">DatasetIDExtractor</a>&nbsp;datsetIdExtractor,
+ int&nbsp;parallelism)</span></div>
 </section>
 </li>
 </ul>
