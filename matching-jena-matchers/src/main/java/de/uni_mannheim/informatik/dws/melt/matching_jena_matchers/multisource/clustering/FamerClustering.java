@@ -54,6 +54,7 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
     private AbstractParallelClustering clusteringAlgorithm;
     private boolean addCorrespondences;
     private boolean removeCorrespondences;
+    private int parallelism;
 
     
     public FamerClustering(DatasetIDExtractor datsetIdExtractor, AbstractParallelClustering clusteringAlgorithm, boolean addCorrespondences, boolean removeCorrespondences) {
@@ -61,6 +62,7 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
         this.clusteringAlgorithm = clusteringAlgorithm;
         this.addCorrespondences = addCorrespondences;
         this.removeCorrespondences = removeCorrespondences;
+        this.parallelism = -1; //default which uses the number of processors 
     }
     
     public FamerClustering(DatasetIDExtractor datsetIdExtractor, AbstractParallelClustering clusteringAlgorithm) {
@@ -77,7 +79,7 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
     }
     
     public Alignment processAlignment(Alignment inputAlignment){
-        Map<String, Set<Long>> clusters = getClusters(inputAlignment, this.clusteringAlgorithm, this.datsetIdExtractor);
+        Map<String, Set<Long>> clusters = getClusters(inputAlignment, this.clusteringAlgorithm, this.datsetIdExtractor, this.parallelism);
         if(this.removeCorrespondences){
             inputAlignment = ClusterUtil.removeCorrespondencesMultiCluster(inputAlignment, clusters);
         }
@@ -85,6 +87,14 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
             inputAlignment = ClusterUtil.addCorrespondencesMultiCluster(inputAlignment, clusters);
         }
         return inputAlignment;
+    }
+
+    public int getParallelism() {
+        return parallelism;
+    }
+
+    public void setParallelism(int parallelism) {
+        this.parallelism = parallelism;
     }
     
     /**
@@ -95,11 +105,22 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
      * @return a map between uris and correspoding clusterId
      */
     public static Map<String, Set<Long>> getClusters(Alignment alignment, AbstractParallelClustering clusteringAlgorithm, DatasetIDExtractor datsetIdExtractor){
+        return getClusters(alignment, clusteringAlgorithm, datsetIdExtractor, -1);
+    }
+    /**
+     * Computes a map between uris and correspoding clusterId.
+     * @param alignment alignment
+     * @param clusteringAlgorithm the cluster algorithm to use. The <code>ClusteringOutputType</code> doesn't matter but for best performance choose <code>ClusteringOutputType.GRAPH</code>.
+     * @param datsetIdExtractor the dataset id extractor to use. It gets an URI and returns the corresponding data source id.
+     * @param parallelism The parallelism for the local flink environment (can be set to -1 for default which is number of processors).
+     * @return a map between uris and correspoding clusterId
+     */
+    public static Map<String, Set<Long>> getClusters(Alignment alignment, AbstractParallelClustering clusteringAlgorithm, DatasetIDExtractor datsetIdExtractor, int parallelism){
         if(clusteringAlgorithm == null){
             LOGGER.warn("Clustering algorithmn is null. Thus no clustering can be executed. Returning empty map which can result in wrong filtering.");
             return new HashMap<>();
         }
-        LogicalGraphAndSourceIds l = getLogicalGraphFromAlignment(alignment, datsetIdExtractor);
+        LogicalGraphAndSourceIds l = getLogicalGraphFromAlignment(alignment, datsetIdExtractor, parallelism);
         LogicalGraph inputGraph = l.getGraph();
         
         if(clusteringAlgorithm instanceof CLIP){
@@ -220,7 +241,7 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
         return vertexToClusterId;
     }
     
-    private static LogicalGraphAndSourceIds getLogicalGraphFromAlignment(Alignment a, DatasetIDExtractor datsetIdExtractor){
+    private static LogicalGraphAndSourceIds getLogicalGraphFromAlignment(Alignment a, DatasetIDExtractor datsetIdExtractor, int parallelism){
         Collection<ImportEdge<String>> edges = new ArrayList<>(a.size());
         Set<String> elements = new HashSet<>();
         long artificialEdgeId = 0;
@@ -242,7 +263,7 @@ public class FamerClustering implements IMatcherMultiSource<Object, Alignment, O
             vertices.add(new ImportVertex<>(element, element, properties));
         }
         
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = parallelism > 0 ? ExecutionEnvironment.createLocalEnvironment(parallelism) : ExecutionEnvironment.createLocalEnvironment();
         GradoopFlinkConfig config = GradoopFlinkConfig.createConfig(env);
         
         return new LogicalGraphAndSourceIds(

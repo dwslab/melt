@@ -2,11 +2,9 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.multisource.c
 
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_base.multisource.DatasetIDExtractorUrlPattern;
-import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -28,11 +26,8 @@ import org.gradoop.flink.util.FlinkAsciiGraphLoader;
 import org.gradoop.flink.util.GradoopFlinkConfig;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 @EnabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_11)
@@ -78,7 +73,8 @@ public class TestFamerClustering {
     private void testClusteringApproach(AbstractParallelClustering clustering, int numClusters){
         Alignment alignment = getTestAlignment();
         
-        Map<String, Set<Long>> actual = FamerClustering.getClusters(alignment, clustering, getTestExtractor());
+        // for testing 2 threads are enough
+        Map<String, Set<Long>> actual = FamerClustering.getClusters(alignment, clustering, getTestExtractor(), 2); 
             
         Set<Long> actualClusterIds = getAllClusterIds(actual);
 
@@ -101,13 +97,14 @@ public class TestFamerClustering {
     @Test
     public void testDifferentClusteringOutputType(){
         Alignment alignment = getTestAlignment();
-                
+        
+        //// for testing 2 threads are enough
         Map<String, Set<Long>> one = FamerClustering.getClusters(alignment, 
-                new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), getTestExtractor());
+                new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH, Integer.MAX_VALUE), getTestExtractor(), 2);
         Map<String, Set<Long>> two = FamerClustering.getClusters(alignment, 
-                new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH_COLLECTION, Integer.MAX_VALUE), getTestExtractor());
+                new Center(PrioritySelection.MIN, false, ClusteringOutputType.GRAPH_COLLECTION, Integer.MAX_VALUE), getTestExtractor(), 2);
         Map<String, Set<Long>> three = FamerClustering.getClusters(alignment, 
-                new Center(PrioritySelection.MIN, false, ClusteringOutputType.VERTEX_SET, Integer.MAX_VALUE), getTestExtractor());
+                new Center(PrioritySelection.MIN, false, ClusteringOutputType.VERTEX_SET, Integer.MAX_VALUE), getTestExtractor(), 2);
         
         assertEquals(one, two);
         assertEquals(two, three);
