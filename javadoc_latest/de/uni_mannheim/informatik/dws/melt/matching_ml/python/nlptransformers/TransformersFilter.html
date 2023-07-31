@@ -91,6 +91,10 @@ loadScripts(document, 'script');</script>
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="../../../matching_base/Filter.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">Filter</a></code>, <code><a href="../../../matching_base/IMatcher.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IMatcher</a>&lt;org.apache.jena.ontology.OntModel,<wbr><a href="../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&gt;</code>, <code>eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge</code>, <code>eu.sealsproject.platform.res.tool.api.IPlugin</code>, <code>eu.sealsproject.platform.res.tool.api.IToolBridge</code></dd>
 </dl>
+<dl class="notes">
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="relationprediction/RelationTypePredictor.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.relationprediction">RelationTypePredictor</a></code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">TransformersFilter</span>
 <span class="extends-implements">extends <a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a>
@@ -110,10 +114,10 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>private <a href="BatchSizeOptimization.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">BatchSizeOptimization</a></code></div>
+<div class="col-first even-row-color"><code>protected <a href="BatchSizeOptimization.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">BatchSizeOptimization</a></code></div>
 <div class="col-second even-row-color"><code><a href="#batchSizeOptimization" class="member-name-link">batchSizeOptimization</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private boolean</code></div>
+<div class="col-first odd-row-color"><code>protected boolean</code></div>
 <div class="col-second odd-row-color"><code><a href="#changeClass" class="member-name-link">changeClass</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>private static final org.slf4j.Logger</code></div>
@@ -288,13 +292,13 @@ implements <a href="../../../matching_base/Filter.html" title="interface in de.u
 <li>
 <section class="detail" id="changeClass">
 <h3>changeClass</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">changeClass</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">changeClass</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="batchSizeOptimization">
 <h3>batchSizeOptimization</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="BatchSizeOptimization.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">BatchSizeOptimization</a></span>&nbsp;<span class="element-name">batchSizeOptimization</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BatchSizeOptimization.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">BatchSizeOptimization</a></span>&nbsp;<span class="element-name">batchSizeOptimization</span></div>
 </section>
 </li>
 </ul>

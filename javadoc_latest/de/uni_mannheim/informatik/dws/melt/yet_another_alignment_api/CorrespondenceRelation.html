@@ -109,18 +109,25 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Enum Constant</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="#EQUIVALENCE" class="member-name-link">EQUIVALENCE</a></code></div>
+<div class="col-first even-row-color"><code><a href="#CLOSE" class="member-name-link">CLOSE</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Close match relation meaning that two concepts are close to each other and can be used in <b>some</b> cases interchangeably.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#EQUIVALENCE" class="member-name-link">EQUIVALENCE</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Equivalence relation, when two concepts are exactly the same (has the same intension/semantic).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#HAS_A" class="member-name-link">HAS_A</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Has a relation which connects two classes.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="#HAS_INSTANCE" class="member-name-link">HAS_INSTANCE</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Has instance relation which connects a class (source/left) to its instances (target/right)
- Use the following symbol for textual representation: HasInstance</div>
+<div class="block">Has instance relation which connects a class (source/left) to its instance (target/right).</div>
 </div>
 <div class="col-first even-row-color"><code><a href="#INCOMPAT" class="member-name-link">INCOMPAT</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Incompatiple relation mening that two concepts should not be matched.</div>
+<div class="block">Incompatiple relation meaning that two concepts should not be matched.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="#INSTANCE_OF" class="member-name-link">INSTANCE_OF</a></code></div>
 <div class="col-last odd-row-color">
@@ -130,13 +137,21 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Non transitive implication relation (see work of C-OWL and others).</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="#PART_OF" class="member-name-link">PART_OF</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Part of relation which connects two classes.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#RELATED" class="member-name-link">RELATED</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Related relation which connects two classes/instances.</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="#SUBSUME" class="member-name-link">SUBSUME</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Represents a subsumption relation.</div>
+<div class="block">Represents a subsume / superclass of relation.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="#SUBSUMED" class="member-name-link">SUBSUMED</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Represents a subsumption relation.</div>
+<div class="block">Represents a subsumed/rdfs:subClassOf relation.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="#UNKNOWN" class="member-name-link">UNKNOWN</a></code></div>
 <div class="col-last odd-row-color">
@@ -165,6 +180,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#prettyLabel" class="member-name-link">prettyLabel</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#rdfRepresentations" class="member-name-link">rdfRepresentations</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -178,8 +196,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>private </code></div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String)" class="member-name-link">CorrespondenceRelation</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prettyLabel,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;className)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String...)" class="member-name-link">CorrespondenceRelation</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prettyLabel,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;className,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;rdfRepresentations)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor</div>
 </div>
@@ -202,27 +221,46 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Generates the <a href="#mapping"><code>mapping</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parse(java.lang.String)" class="member-name-link">parse</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Get a CorrespondenceRelation using a String representation (a.k.a.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reverse()" class="member-name-link">reverse</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Reverses the current relation.</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getClassName()" class="member-name-link">getClassName</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPrettyLabel()" class="member-name-link">getPrettyLabel</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRdfRepresentation()" class="member-name-link">getRdfRepresentation</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Return the most representative RDF relation or null if no relation is available.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRdfRepresentations()" class="member-name-link">getRdfRepresentations</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSSSOMRepresentation()" class="member-name-link">getSSSOMRepresentation</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#valueOf(java.lang.String)" class="member-name-link">valueOf</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parse(java.lang.String)" class="member-name-link">parse</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Get a CorrespondenceRelation using a String representation (a.k.a.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reverse()" class="member-name-link">reverse</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Reverses the current relation.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the pretty printed label.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#valueOf(java.lang.String)" class="member-name-link">valueOf</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a>[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a>[]</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared.</div>
 </div>
@@ -251,14 +289,17 @@ the order they are declared.</div>
 <h3>EQUIVALENCE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></span>&nbsp;<span class="element-name">EQUIVALENCE</span></div>
 <div class="block">Equivalence relation, when two concepts are exactly the same (has the same intension/semantic).
- Represents an OWL equivalence relation. Use the following symbol for textual representation: =</div>
+ Represents an OWL equivalence relation. Use the following symbol for textual representation: =.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="SUBSUME">
 <h3>SUBSUME</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></span>&nbsp;<span class="element-name">SUBSUME</span></div>
-<div class="block">Represents a subsumption relation. Entity one (source/left) is "greater" than entity two (target/right).
+<div class="block">Represents a subsume / superclass of relation. Entity one (source/left) is "greater" than entity two (target/right).
+ The source/left element is the super-class. The target/right element is the sub-class.
+ Example: Person -subsume-&gt; Student.
+ This is the inverse relation of <a href="#SUBSUMED"><code>SUBSUMED</code></a>.
  Use the following symbol for textual representation: &gt;</div>
 </section>
 </li>
@@ -266,7 +307,10 @@ the order they are declared.</div>
 <section class="detail" id="SUBSUMED">
 <h3>SUBSUMED</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></span>&nbsp;<span class="element-name">SUBSUMED</span></div>
-<div class="block">Represents a subsumption relation. Entity one (source/left) is "smaller" than entity two (target/right).
+<div class="block">Represents a subsumed/rdfs:subClassOf relation. Entity one (source/left) is "smaller" than entity two (target/right).
+ The source/left element is the sub-class. The target/right element is the super-class.
+ Example: Student -subsumed-&gt; Person.
+ This is the inverse relation of <a href="#SUBSUME"><code>SUBSUME</code></a>.
  Use the following symbol for textual representation: &lt;</div>
 </section>
 </li>
@@ -283,7 +327,8 @@ the order they are declared.</div>
 <h3>INSTANCE_OF</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></span>&nbsp;<span class="element-name">INSTANCE_OF</span></div>
 <div class="block">The relation between an instance and class.
- Entity one (source/left) is the instance than entity two (target/right) is the class.
+ Entity one (source/left) is the instance and entity two (target/right) is the class.
+ This is the inverse relation of <a href="#INSTANCE_OF"><code>INSTANCE_OF</code></a>.
  Use the following symbol for textual representation: InstanceOf</div>
 </section>
 </li>
@@ -291,15 +336,58 @@ the order they are declared.</div>
 <section class="detail" id="HAS_INSTANCE">
 <h3>HAS_INSTANCE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></span>&nbsp;<span class="element-name">HAS_INSTANCE</span></div>
-<div class="block">Has instance relation which connects a class (source/left) to its instances (target/right)
+<div class="block">Has instance relation which connects a class (source/left) to its instance (target/right).
+ This is the inverse relation of <a href="#INSTANCE_OF"><code>INSTANCE_OF</code></a>.
  Use the following symbol for textual representation: HasInstance</div>
+</section>
+</li>
+<li>
+<section class="detail" id="PART_OF">
+<h3>PART_OF</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></span>&nbsp;<span class="element-name">PART_OF</span></div>
+<div class="block">Part of relation which connects two classes.
+ The source/left class is a part of the target/right class.
+ The source class is the part class whereas target is the whole class.
+ Example: tire -partof-&gt; car
+ This is the inverse relation of <a href="#HAS_A"><code>HAS_A</code></a>.
+ Use the following symbol for textual representation: PartOf</div>
+</section>
+</li>
+<li>
+<section class="detail" id="HAS_A">
+<h3>HAS_A</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></span>&nbsp;<span class="element-name">HAS_A</span></div>
+<div class="block">Has a relation which connects two classes.
+ The target/right class is a part of the source/left class.
+ The source class is the whole class whereas target is the part class.
+ Example: car -has a-&gt; tire 
+ This is the inverse relation of <a href="#PART_OF"><code>PART_OF</code></a>.
+ Use the following symbol for textual representation: HasA</div>
+</section>
+</li>
+<li>
+<section class="detail" id="RELATED">
+<h3>RELATED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></span>&nbsp;<span class="element-name">RELATED</span></div>
+<div class="block">Related relation which connects two classes/instances.
+ This relation is highly underspecified.
+ The source/left class is somehow related to the target/right class.
+ Use the following symbol for textual representation: Related</div>
+</section>
+</li>
+<li>
+<section class="detail" id="CLOSE">
+<h3>CLOSE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></span>&nbsp;<span class="element-name">CLOSE</span></div>
+<div class="block">Close match relation meaning that two concepts are close to each other and can be used in <b>some</b> cases interchangeably.
+ Use the following symbol for textual representation: Close</div>
 </section>
 </li>
 <li>
 <section class="detail" id="INCOMPAT">
 <h3>INCOMPAT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a></span>&nbsp;<span class="element-name">INCOMPAT</span></div>
-<div class="block">Incompatiple relation mening that two concepts should not be matched.
+<div class="block">Incompatiple relation meaning that two concepts should not be matched.
  Use the following symbol for textual representation: %</div>
 </section>
 </li>
@@ -332,6 +420,12 @@ the order they are declared.</div>
 </section>
 </li>
 <li>
+<section class="detail" id="rdfRepresentations">
+<h3>rdfRepresentations</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">rdfRepresentations</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="mapping">
 <h3>mapping</h3>
 <div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a>&gt;</span>&nbsp;<span class="element-name">mapping</span></div>
@@ -347,10 +441,11 @@ the order they are declared.</div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String...)">
 <h3>CorrespondenceRelation</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="element-name">CorrespondenceRelation</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prettyLabel,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;className)</span></div>
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;className,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;rdfRepresentations)</span></div>
 <div class="block">Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -429,17 +524,56 @@ not permitted.)</div>
 <dt>Parameters:</dt>
 <dd><code>label</code> - String representation fo the relation.</dd>
 <dt>Returns:</dt>
-<dd>CorrespondenceRelation if found.</dd>
+<dd>CorrespondenceRelation if found - otherwise return <a href="#UNKNOWN"><code>UNKNOWN</code></a>.</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getPrettyLabel()">
+<h3>getPrettyLabel</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getPrettyLabel</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getClassName()">
+<h3>getClassName</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getClassName</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getRdfRepresentations()">
+<h3>getRdfRepresentations</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getRdfRepresentations</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getRdfRepresentation()">
+<h3>getRdfRepresentation</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getRdfRepresentation</span>()</div>
+<div class="block">Return the most representative RDF relation or null if no relation is available.
+ Favors skos relations which are mainly used in SSSOM format.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>most representative RDF relation or null if no relation is available.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getSSSOMRepresentation()">
+<h3>getSSSOMRepresentation</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getSSSOMRepresentation</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
+<div class="block">Returns the pretty printed label. This is used when serializing the mapping.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html#toString--" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>the pretty printed label</dd>
 </dl>
 </section>
 </li>

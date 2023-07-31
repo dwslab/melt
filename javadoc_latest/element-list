@@ -87,6 +87,7 @@ de.uni_mannheim.informatik.dws.melt.matching_maven_plugin
 de.uni_mannheim.informatik.dws.melt.matching_ml.kgvec2go
 de.uni_mannheim.informatik.dws.melt.matching_ml.python
 de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers
+de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.relationprediction
 de.uni_mannheim.informatik.dws.melt.matching_ml.python.openea
 de.uni_mannheim.informatik.dws.melt.matching_ml.util
 de.uni_mannheim.informatik.dws.melt.matching_owlapi

@@ -113,12 +113,16 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Use the longest texts in the dataset to determine the highest batch size.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#USE_MAX_WORDS" class="member-name-link">USE_MAX_WORDS</a></code></div>
+<div class="col-first even-row-color"><code><a href="#USE_LONGEST_TEXTS_PESSIMISTIC" class="member-name-link">USE_LONGEST_TEXTS_PESSIMISTIC</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Use the longest texts in the dataset to determine the highest batch size but reduce the may batch size two times.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#USE_MAX_WORDS" class="member-name-link">USE_MAX_WORDS</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Use the texts with the highest number of words to determine the highest batch size.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#USE_THEORETICAL_MAX" class="member-name-link">USE_THEORETICAL_MAX</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#USE_THEORETICAL_MAX" class="member-name-link">USE_THEORETICAL_MAX</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Use a long lorem ipsum text to determine the highest batch size.</div>
 </div>
 </div>
@@ -186,6 +190,13 @@ the order they are declared.</div>
 <h3>USE_LONGEST_TEXTS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BatchSizeOptimization.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">BatchSizeOptimization</a></span>&nbsp;<span class="element-name">USE_LONGEST_TEXTS</span></div>
 <div class="block">Use the longest texts in the dataset to determine the highest batch size.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="USE_LONGEST_TEXTS_PESSIMISTIC">
+<h3>USE_LONGEST_TEXTS_PESSIMISTIC</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BatchSizeOptimization.html" title="enum in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">BatchSizeOptimization</a></span>&nbsp;<span class="element-name">USE_LONGEST_TEXTS_PESSIMISTIC</span></div>
+<div class="block">Use the longest texts in the dataset to determine the highest batch size but reduce the may batch size two times.</div>
 </section>
 </li>
 <li>
