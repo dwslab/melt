@@ -1,6 +1,7 @@
 
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors;
 
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.*;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
@@ -24,8 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.jena.ontology.AnnotationProperty;
 import org.apache.jena.ontology.OntModel;
@@ -38,13 +37,14 @@ import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * This class allows to manually inspect the output of a {@link TextExtractor} by writing the results to a file or stdout.
  */
 public class ManualInspection {
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ManualInspection.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ManualInspection.class);
     
     private TextExtractor extractor;
 
