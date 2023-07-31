@@ -255,16 +255,12 @@ public enum CorrespondenceRelation {
         return this.rdfRepresentations.get(0);
     }
     
-    public String getSSSOMRepresentation() {
-        return prettyLabel;
-    }
-
     /**
      * Returns the pretty printed label. This is used when serializing the mapping.
      * @return the pretty printed label
      */
     @Override
     public String toString() {
-        return rdfRepresentations.get(0);  // prettyLabel;
+        return prettyLabel;
     }
 }
