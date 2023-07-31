@@ -298,6 +298,16 @@ public class TrackRepository {
          * Reference alignment originates from <a href="https://doi.org/10.15454/BVXD7I">https://doi.org/10.15454/BVXD7I</a> (file reference.xml).
          **/
         public static Track V2 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "food", "v2");
+        
+        /**
+         * This track consists of finding alignments between food concepts
+         * from CIQUAL, the French food nutritional composition database, and food concepts from SIREN.
+         * This version contains subsumption relation in the reference alignemnt
+         * Foods from both databases are described in LanguaL, a well-known multilingual thesaurus using faceted classification.
+         * Source from <a href="https://doi.org/10.15454/6CEYU3">https://doi.org/10.15454/6CEYU3</a>.
+         * Target from <a href="https://doi.org/10.15454/5LLGVY">https://doi.org/10.15454/5LLGVY</a>.
+         **/
+        public static Track V2SUB = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "food", "v2sub");
     }
 
     /**
@@ -785,6 +795,21 @@ public class TrackRepository {
          * Version V1 of Laboratory Track
          */
         public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "laboratory", "laboratory-v1");
+    }
+    
+    
+    /**
+     * <a href="http://oaei.ontologymatching.org/2023/pharmacogenomics/index.html">Pharmacogenomics (pgx)</a>.
+     * The Pharmacogenomics Track involves n-ary tuples representing so-called "pharmacogenomic relationships"
+     * and their components of three distinct types: drugs, genetic factors, and phenotypes.
+     */
+    public static class Pharmacogenomics {
+        /**
+         * Version V1 of the <a href="http://oaei.ontologymatching.org/2023/pharmacogenomics/index.html">Pharmacogenomics (pgx)</a>.
+         * The Pharmacogenomics Track involves n-ary tuples representing so-called "pharmacogenomic relationships"
+         * and their components of three distinct types: drugs, genetic factors, and phenotypes.
+         */
+        public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "pharmacogenomics", "v1");
     }
 
     public static class SystematicBenchmark {

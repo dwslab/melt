@@ -178,7 +178,7 @@ public class LocalTrack extends Track {
     protected List<TestCase> readFromCache(){
         List<TestCase> testCases = new ArrayList<>();
 
-        File[] files = folderToTestCases.listFiles();
+        File[] files = folderToTestCases.listFiles(File::isDirectory);
         if(files == null)
             return testCases;
 
@@ -186,6 +186,7 @@ public class LocalTrack extends Track {
             File source_file = new File(f, TestCaseType.SOURCE.toFileName());
             File target_file = new File(f, TestCaseType.TARGET.toFileName());
             File reference_file = new File(f, TestCaseType.REFERENCE.toFileName());
+            File input_file = new File(f, TestCaseType.INPUT.toFileName());
             File parameters_file = new File(f, TestCaseType.PARAMETERS.toFileName());
             File evalExclusion_file = new File(f, TestCaseType.EVALUATIONEXCLUSION.toFileName());
 
@@ -206,7 +207,7 @@ public class LocalTrack extends Track {
                     target_file.toURI(),
                     reference_file.exists() ? reference_file.toURI() : null, 
                     this,
-                    null,
+                    input_file.exists() ? input_file.toURI() : null,
                     this.goldStandardCompleteness,
                     parameters_file.exists() ? parameters_file.toURI() : null,
                     evalExclusion_file.exists() ? evalExclusion_file.toURI() : null
