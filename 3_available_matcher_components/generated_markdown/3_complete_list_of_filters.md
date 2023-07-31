@@ -238,6 +238,20 @@ This class is used to fine-tune a transformer model based on a generated dataset
 
 *Keywords: Transformers Fine Tuner*
 
+## RelationTypeFineTuner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/relationprediction/RelationTypeFineTuner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/relationprediction/RelationTypeFineTuner.java)
+
+This matcher predicts the relation type given a transformer model.
+ This component do not create new correspondences but refine the relation of given class correspondences.
+
+*Keywords: Relation Type Fine Tuner*
+
+## RelationTypePredictor [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/relationprediction/RelationTypePredictor.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/relationprediction/RelationTypePredictor.java)
+
+This matcher predicts the relation type given a transformer model.
+ This component do not create new correspondences but refine the relation of given class correspondences.
+
+*Keywords: Relation Type Predictor*
+
 ## AlcomoFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_owlapi_matchers/AlcomoFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-owlapi-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_owlapi_matchers/AlcomoFilter.java)
 
 Filter which makes and alignment coherent. When using this component, please cite:
@@ -283,4 +297,4 @@ This is the logmap repair filter.
 *Keywords: Log Map Repair Filter*
 
 ---
-<sub>automatically generated on 2023-07-31 12:20</sub>
+<sub>automatically generated on 2023-07-31 14:26</sub>
