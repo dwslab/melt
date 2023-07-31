@@ -228,8 +228,8 @@ def train_word_2_vec():
         return "True"
 
     except Exception as exception:
-        app.logger.exception("An exception occurred.")
-        return "False"
+        import traceback
+        return "ERROR " + traceback.format_exc()
 
 
 @app.route("/is-in-vocabulary", methods=["GET"])
@@ -288,62 +288,69 @@ def get_vectors(model_path=None, vector_path=None):
 
 @app.route("/get-similarity", methods=["GET"])
 def get_similarity_given_model():
+    try:
+        concept_1 = request.headers.get("concept_1")
+        concept_2 = request.headers.get("concept_2")
+        model_path = request.headers.get("model_path")
+        vector_path = request.headers.get("vector_path")
+        vectors = get_vectors(model_path=model_path, vector_path=vector_path)
 
-    concept_1 = request.headers.get("concept_1")
-    concept_2 = request.headers.get("concept_2")
-    model_path = request.headers.get("model_path")
-    vector_path = request.headers.get("vector_path")
-    vectors = get_vectors(model_path=model_path, vector_path=vector_path)
+        if vectors is None:
+            app.logger.error("Could not instantiate vectors.")
+            return 0.0
 
-    if vectors is None:
-        app.logger.error("Could not instantiate vectors.")
-        return 0.0
+        if concept_1 is None or concept_2 is None:
+            message = (
+                "ERROR! concept_1 and/or concept_2 not found in header. "
+                "Similarity cannot be calculated."
+            )
+            app.logger.error(message)
+            return message
 
-    if concept_1 is None or concept_2 is None:
-        message = (
-            "ERROR! concept_1 and/or concept_2 not found in header. "
-            "Similarity cannot be calculated."
-        )
-        app.logger.error(message)
-        return message
-
-    if concept_1 not in vectors.key_to_index:
-        message = "ERROR! concept_1 not in the vocabulary."
-        app.logger.error(message)
-        return message
-    if concept_2 not in vectors.key_to_index:
-        message = "ERROR! concept_2 not in the vocabulary."
-        app.logger.error(message)
-        return message
-    similarity = vectors.similarity(concept_1, concept_2)
-    return str(similarity)
-
+        if concept_1 not in vectors.key_to_index:
+            message = "ERROR! concept_1 not in the vocabulary."
+            app.logger.error(message)
+            return message
+        if concept_2 not in vectors.key_to_index:
+            message = "ERROR! concept_2 not in the vocabulary."
+            app.logger.error(message)
+            return message
+        similarity = vectors.similarity(concept_1, concept_2)
+        return str(similarity)
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
 
 @app.route("/get-vector", methods=["GET"])
 def get_vector_given_model():
-    concept = request.headers.get("concept")
-    model_path = request.headers.get("model_path")
-    vector_path = request.headers.get("vector_path")
-    vectors = get_vectors(model_path=model_path, vector_path=vector_path)
+    try:
+        concept = request.headers.get("concept")
+        model_path = request.headers.get("model_path")
+        vector_path = request.headers.get("vector_path")
+        app.logger.info("get-vector from file: model path: " + str(model_path) + " vector path: " + str(vector_path))
+        vectors = get_vectors(model_path=model_path, vector_path=vector_path)
 
-    if vectors is None:
-        app.logger.error("Could not instantiate vectors.")
-        return 0.0
+        if vectors is None:
+            app.logger.error("Could not instantiate vectors.")
+            return 0.0
 
-    if concept is None:
-        message = "ERROR! concept not found in header. " "Vector cannot be retrieved."
-        app.logger.error(message)
-        return message
+        if concept is None:
+            message = "ERROR! concept not found in header. " "Vector cannot be retrieved."
+            app.logger.error(message)
+            return message
 
-    if concept not in vectors.key_to_index:
-        message = "ERROR! Concept '" + str(concept) + "' not in the vocabulary."
-        app.logger.error(message)
-        return message
+        if concept not in vectors.key_to_index:
+            message = "ERROR! Concept '" + str(concept) + "' not in the vocabulary."
+            app.logger.error(message)
+            return message
 
-    result = ""
-    for element in vectors.word_vec(concept):
-        result += " " + str(element)
-    return result[1:]
+        result = ""
+        for element in vectors.word_vec(concept):
+            result += " " + str(element)
+        return result[1:]
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
 
 
 # Doc2vec models
@@ -410,7 +417,8 @@ def query_doc2vec_model_batch():
                 result_list.append(-2.0)
         return jsonify(result_list)
     except Exception as e:
-        return str(e)
+        import traceback
+        return "ERROR " + traceback.format_exc()
 
 
 # TF-IDF and LSI models
@@ -461,7 +469,8 @@ def query_vector_space_model():
             test = sims[pos_two]
             return str(test)
     except Exception as e:
-        return str(e)
+        import traceback
+        return "ERROR " + traceback.format_exc()
 
 
 @app.route("/query-vector-space-model-batch", methods=["POST"])
@@ -506,7 +515,8 @@ def query_vector_space_model_batch():
             result_list.append(resulting_sim)
         return jsonify(result_list)
     except Exception as e:
-        return str(e)
+        import traceback
+        return "ERROR " + traceback.format_exc()
 
 @app.route("/run-group-shuffle-split", methods=["POST"])
 def run_shuffle_split():
