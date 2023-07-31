@@ -1539,6 +1539,7 @@ def inner_transformers_prediction(request_headers):
         tmp_dir = request_headers["tmp-dir"]
         using_tensorflow = request_headers["using-tf"].lower() == "true"
         change_class = request_headers["change-class"].lower() == "true"
+        multi_class = request_headers["multi-class"].lower() == "true"
         training_arguments = json.loads(request_headers["training-arguments"])
 
         from transformers import AutoTokenizer
@@ -1575,9 +1576,7 @@ def inner_transformers_prediction(request_headers):
                 from transformers import TFTrainer, TFAutoModelForSequenceClassification
 
                 with training_args.strategy.scope():
-                    model = TFAutoModelForSequenceClassification.from_pretrained(
-                        model_name, num_labels=2
-                    )
+                    model = TFAutoModelForSequenceClassification.from_pretrained(model_name)
 
                 trainer = TFTrainer(
                     model=model, tokenizer=tokenizer, args=training_args
@@ -1588,20 +1587,23 @@ def inner_transformers_prediction(request_headers):
                 app.logger.info("Is gpu used: " + str(torch.cuda.is_available()))
                 from transformers import Trainer, AutoModelForSequenceClassification
 
-                model = AutoModelForSequenceClassification.from_pretrained(
-                    model_name, num_labels=2
-                )
+                model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
                 trainer = Trainer(model=model, tokenizer=tokenizer, args=training_args)
 
             app.logger.info("Run prediction")
             pred_out = trainer.predict(predict_dataset)
             app.logger.info(pred_out.metrics)
-        class_index = 0 if change_class else 1
-        # sigmoid: scores = 1 / (1 + np.exp(-pred_out.predictions, axis=1[:, class_index]))
-        # compute softmax to get class probabilities (scores between 0 and 1)
-        scores = softmax(pred_out.predictions, axis=1)[:, class_index]
-        return scores.tolist()
+        
+        if multi_class:
+            scores = softmax(pred_out.predictions, axis=1)
+            return scores.tolist()
+        else:
+            class_index = 0 if change_class else 1
+            # sigmoid: scores = 1 / (1 + np.exp(-pred_out.predictions, axis=1[:, class_index]))
+            # compute softmax to get class probabilities (scores between 0 and 1)
+            scores = softmax(pred_out.predictions, axis=1)[:, class_index]
+            return scores.tolist()
     except Exception as e:
         import traceback
 
@@ -1633,6 +1635,9 @@ def inner_transformers_finetuning(request_headers):
 
         weight_of_positive_class = training_arguments.get("weight_of_positive_class", -1.0)
         training_arguments.pop("weight_of_positive_class", None)  # delete if existent
+        
+        number_labels = training_arguments.get("num_labels", 2)
+        training_arguments.pop("num_labels", None)  # delete if existent
 
         from transformers import AutoTokenizer
 
@@ -1674,7 +1679,7 @@ def inner_transformers_finetuning(request_headers):
 
                 with training_args.strategy.scope():
                     model = TFAutoModelForSequenceClassification.from_pretrained(
-                        initial_model_name, num_labels=2
+                        initial_model_name, num_labels=number_labels
                     )
 
                 trainer = TFTrainer(
@@ -1690,7 +1695,7 @@ def inner_transformers_finetuning(request_headers):
                 from transformers import Trainer, AutoModelForSequenceClassification
 
                 model = AutoModelForSequenceClassification.from_pretrained(
-                    initial_model_name, num_labels=2
+                    initial_model_name, num_labels=number_labels
                 )
 
                 # tokenizer is added to the trainer because only in this case the tokenizer will be saved along the model to be reused.
@@ -1777,15 +1782,18 @@ def transformers_finetuning_hp_search():
 
         hp_space = json.loads(request.headers["hp-space"])
         hp_mutations = json.loads(request.headers["hp-mutations"])
+        
+        number_labels = training_arguments.get("num_labels", 2)
+        training_arguments.pop("num_labels", None)  # delete if existent
 
         if optimizing_metric not in set(
-            ["loss", "accuracy", "f1", "precision", "recall", "auc", "aucf1"]
+            ["loss", "accuracy", "f1", "precision", "recall", "auc", "aucf1", "logloss"]
         ):
             raise ValueError(
-                "optimize_metric is not one of loss, accuracy, f1, precision, recall, auc, aucf1."
+                "optimize_metric is not one of loss, accuracy, f1, precision, recall, auc, aucf1, logloss."
             )
-
-        optimize_direction = "minimize" if optimizing_metric == "loss" else "maximize"
+        metrics_to_minimize = set(["loss", "logloss"])
+        optimize_direction = "minimize" if optimizing_metric in metrics_to_minimize else "maximize"
 
         from transformers import AutoTokenizer
 
@@ -1842,25 +1850,49 @@ def transformers_finetuning_hp_search():
                 accuracy_score,
                 roc_auc_score,
                 precision_recall_fscore_support,
+                log_loss,
             )
-
-            def compute_metrics(pred):
-                labels = pred.label_ids
-                preds = pred.predictions.argmax(-1)
-                acc = accuracy_score(labels, preds)
-                precision, recall, f1, _ = precision_recall_fscore_support(
-                    labels, preds, average="binary", pos_label=1, zero_division=0
-                )
-                preds_proba = softmax(pred.predictions, axis=1)[:, 1]
-                auc = roc_auc_score(labels, preds_proba)
-                return {
-                    "accuracy": acc,
-                    "f1": f1,
-                    "precision": precision,
-                    "recall": recall,
-                    "auc": auc,
-                    "aucf1": auc + f1,
-                }
+            
+            if number_labels > 2:
+                def compute_metrics(pred):
+                    labels = pred.label_ids
+                    preds = pred.predictions.argmax(-1)
+                    acc = accuracy_score(labels, preds)
+                    precision, recall, f1, _ = precision_recall_fscore_support(
+                        labels, preds, average="micro", zero_division=0
+                    )
+                    preds_proba = softmax(pred.predictions, axis=1)
+                    auc = roc_auc_score(labels, preds_proba, multi_class='ovo', average='macro', labels=list(range(number_labels)))
+                    log_loss_com = log_loss(labels, preds_proba, labels=list(range(number_labels)))
+                    return {
+                        "accuracy": acc,
+                        "f1": f1,
+                        "precision": precision,
+                        "recall": recall,
+                        "auc": auc,
+                        "aucf1": auc + f1,
+                        "logloss": log_loss_com,
+                    }
+            else:
+                def compute_metrics(pred):
+                    labels = pred.label_ids
+                    preds = pred.predictions.argmax(-1)
+                    acc = accuracy_score(labels, preds)
+                    precision, recall, f1, _ = precision_recall_fscore_support(
+                        labels, preds, average="binary", pos_label=1, zero_division=0
+                    )
+                    preds_proba = softmax(pred.predictions, axis=1)[:, 1]
+                    auc = roc_auc_score(labels, preds_proba)
+                    log_loss_com = log_loss(labels, preds_proba)
+                    return {
+                        "accuracy": acc,
+                        "f1": f1,
+                        "precision": precision,
+                        "recall": recall,
+                        "auc": auc,
+                        "aucf1": auc + f1,
+                        "logloss": log_loss_com,
+                    }
 
             app.logger.info("Loading transformers model")
             if using_tensorflow:
@@ -1874,7 +1906,7 @@ def transformers_finetuning_hp_search():
                 def model_init():
                     # TODO: check if necessary with training_args.strategy.scope():
                     return TFAutoModelForSequenceClassification.from_pretrained(
-                        initial_model_name, num_labels=2
+                        initial_model_name, num_labels=number_labels
                     )
 
                 trainer = TFTrainer(
@@ -1893,7 +1925,7 @@ def transformers_finetuning_hp_search():
 
                 def model_init():
                     return AutoModelForSequenceClassification.from_pretrained(
-                        initial_model_name, num_labels=2
+                        initial_model_name, num_labels=number_labels
                     )
 
                 # tokenizer is added to the trainer because only in this case the tokenizer will be saved along the model to be reused.
@@ -2018,7 +2050,7 @@ def transformers_finetuning_hp_search():
             if using_tensorflow:
                 with training_args.strategy.scope():
                     model = TFAutoModelForSequenceClassification.from_pretrained(
-                        highest_step_folder, num_labels=2
+                        highest_step_folder, num_labels=number_labels
                     )
                 tokenizer = AutoTokenizer.from_pretrained(highest_step_folder)
                 trainer = TFTrainer(
@@ -2030,7 +2062,7 @@ def transformers_finetuning_hp_search():
                 )
             else:
                 model = AutoModelForSequenceClassification.from_pretrained(
-                    highest_step_folder, num_labels=2
+                    highest_step_folder, num_labels=number_labels
                 )
                 tokenizer = AutoTokenizer.from_pretrained(highest_step_folder)
                 trainer = Trainer(

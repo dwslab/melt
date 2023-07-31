@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersFineTuner;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
@@ -184,11 +185,37 @@ public class PythonServer {
         transformersUpdateBaseRequest(filter, request);
         
         request.addHeader("prediction-file-path", getCanonicalPath(predictionFilePath));
+        request.addHeader("multi-class", "false");
         request.addHeader("change-class", Boolean.toString(filter.isChangeClass()));
 
         String resultString = runRequest(request);
         try {
             return JSON_MAPPER.readValue(resultString, JSON_MAPPER.getTypeFactory().constructCollectionType(List.class, Double.class));
+        } catch (JsonProcessingException ex) {
+            throw new PythonServerException("Could not parse JSON", ex);
+        }
+    }
+    
+    /**
+     * Run a transformers model on a CSV file with two columns (text left and text right) for multi class prediction.
+     * The number of class is underspecified.
+     * @param filter the filter
+     * @param predictionFilePath path to csv file with two columns (text left and text right).
+     * @throws PythonServerException in case something goes wrong.
+     * @return a list of list which contains confidences for each class.
+     */
+    public List<List<Double>> transformersMultiClassPrediction(TransformersFilter filter, File predictionFilePath) throws PythonServerException {
+        HttpGet request = new HttpGet(serverUrl + "/transformers-prediction");
+        transformersUpdateBaseRequest(filter, request);
+        
+        request.addHeader("prediction-file-path", getCanonicalPath(predictionFilePath));
+        request.addHeader("change-class", "false");
+        request.addHeader("multi-class", "true");
+
+        String resultString = runRequest(request);
+        TypeFactory tf = JSON_MAPPER.getTypeFactory();
+        try {
+            return JSON_MAPPER.readValue(resultString, tf.constructCollectionType(List.class, tf.constructCollectionType(List.class, Double.class)));
         } catch (JsonProcessingException ex) {
             throw new PythonServerException("Could not parse JSON", ex);
         }
