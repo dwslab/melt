@@ -170,6 +170,7 @@ public class Main {
         if(useJena){
             LOGGER.info("RUN Jena");
             for(TestCase tc : testCases){
+                LOGGER.info("RUN Jena Testcase {}", tc.getName());
                 TestCaseValidationService validationService = new TestCaseValidationService(tc, SemanticWebLibrary.JENA);
                 String encodedVersion = URLEncoder.encode(validationService.getSourceOntologyValidationService().getLibVersion(), "UTF-8");
                 File testCaseFolder = getResultsFolderTrackTestcase(baseDirectory, tc);
@@ -179,12 +180,14 @@ public class Main {
 
                 File aggregationFile = new File(getResultsFolderTrack(baseDirectory, tc), "aggregated.csv");
                 appendToOverviewFile(validationService, aggregationFile);
+                validationService.close();
             }
         }
         
         if(useOwlApi){
             LOGGER.info("RUN OWLAPI");
             for(TestCase tc : testCases){
+                LOGGER.info("RUN OWLAPI Testcase {}", tc.getName());
                 TestCaseValidationService validationService = new TestCaseValidationService(tc, SemanticWebLibrary.OWLAPI);
                 String encodedVersion = URLEncoder.encode(validationService.getSourceOntologyValidationService().getLibVersion(), "UTF-8");
                 File testCaseFolder = getResultsFolderTrackTestcase(baseDirectory, tc);
@@ -194,6 +197,7 @@ public class Main {
 
                 File aggregationFile = new File(getResultsFolderTrack(baseDirectory, tc), "aggregated.csv");
                 appendToOverviewFile(validationService, aggregationFile);
+                validationService.close();
             }
         }
     }

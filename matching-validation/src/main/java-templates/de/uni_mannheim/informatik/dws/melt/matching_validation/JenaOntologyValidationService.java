@@ -44,6 +44,11 @@ public class JenaOntologyValidationService extends OntologyValidationService<Ont
     public JenaOntologyValidationService(URI ontologyUri){
         super(ontologyUri);
     }
+    
+    @Override
+    public void close() {
+        this.ontology.close();
+    }
 
     @Override
     protected OntModel parseOntology(URI ontUri) throws Exception {

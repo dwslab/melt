@@ -40,6 +40,7 @@ public class TrackValidationService {
             if(!service.isOK()){
                 return false;
             }
+            service.close();
         }
         return true;
     }

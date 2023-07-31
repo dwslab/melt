@@ -82,6 +82,14 @@ public abstract class OntologyValidationService<T> {
             LOGGER.warn("Ontology not parsable", ex);
         }
     }
+    
+    /**
+     * Free all resources which are attached to this validation service.
+     */
+    public void close(){
+        //left unimplemented
+        //can be overriden by subclasses if they need to.
+    }
 
 
     /**

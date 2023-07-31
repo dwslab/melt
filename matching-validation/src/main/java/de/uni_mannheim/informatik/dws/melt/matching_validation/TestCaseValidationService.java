@@ -492,7 +492,10 @@ public class TestCaseValidationService {
         return targetOntologyValidationService;
     }
     
-    
+    public void close(){
+        sourceOntologyValidationService.close();
+        targetOntologyValidationService.close();
+    }
 
     /**
      * Perform an analysis on the level of a test case.
