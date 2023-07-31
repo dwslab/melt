@@ -11,6 +11,11 @@ public enum BatchSizeOptimization {
     USE_LONGEST_TEXTS,
     
     /**
+     * Use the longest texts in the dataset to determine the highest batch size but reduce the may batch size two times.
+     */
+    USE_LONGEST_TEXTS_PESSIMISTIC,
+    
+    /**
      * Use the texts with the highest number of words to determine the highest batch size.
      */
     USE_MAX_WORDS,

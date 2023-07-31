@@ -43,7 +43,12 @@ public enum TransformersOptimizingMetric {
     /**
      * The sum of AUC and F1 will be optimized.
      */
-    AUCF1;
+    AUCF1,
+    
+    /**
+     * Log loss.
+     */
+    LOGLOSS;
     
     @Override
     public String toString() {

@@ -40,8 +40,8 @@ public class TransformersFilter extends TransformersBase implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransformersFilter.class);
     private static final String NEWLINE = System.getProperty("line.separator");
     
-    private boolean changeClass;
-    private BatchSizeOptimization batchSizeOptimization;
+    protected boolean changeClass;
+    protected BatchSizeOptimization batchSizeOptimization;
 
     /**
      * Constructor with all required parameters and default values for optional parameters (can be changed by setters).
@@ -212,6 +212,8 @@ public class TransformersFilter extends TransformersBase implements Filter {
                 //CPU  ERROR: RuntimeError: [enforce fail at ..\c10\core\CPUAllocator.cpp:79] data. DefaultCPUAllocator: not enough memory: you tried to allocate 50878464 bytes.
                 if(ex.getMessage().contains("not enough memory") || ex.getMessage().contains("out of memory")){
                     int batchSizeWhichWorks = batchSize / 2;
+                    if(this.batchSizeOptimization == BatchSizeOptimization.USE_LONGEST_TEXTS_PESSIMISTIC)
+                        batchSizeWhichWorks = batchSize / 4;
                     LOGGER.info("Found memory error, thus returning batchsize of {}", batchSizeWhichWorks);
                     this.trainingArguments = backupArguments;
                     this.cudaVisibleDevices = backupCudaString;

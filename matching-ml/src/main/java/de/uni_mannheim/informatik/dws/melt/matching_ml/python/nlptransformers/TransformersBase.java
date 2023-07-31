@@ -376,6 +376,7 @@ public abstract class TransformersBase extends MatcherYAAAJena {
         
     protected List<String> getExamplesForBatchSizeOptimization(File trainingFile, int numberOfExamples, BatchSizeOptimization optimization) {        
         switch(optimization){
+            case USE_LONGEST_TEXTS_PESSIMISTIC:
             case USE_LONGEST_TEXTS:{
                 return getExamplesForBatchSizeOptimizationGivenComparator(trainingFile, numberOfExamples, new Comparator<List<String>>() {
                     @Override

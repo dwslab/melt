@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers;
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.Filter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServerException;
 import java.io.File;
@@ -44,14 +45,17 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
     private TransformersHpSearchSpace hpMutations;
     
     
-    
-    public TransformersFineTunerHpSearch(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
+    public TransformersFineTunerHpSearch(TextExtractorMap extractor, String initialModelName, File resultingModelLocation) {
         super(extractor, initialModelName, resultingModelLocation);
         this.numberOfTrials = 10;
         this.testSize = 0.33f;
         this.optimizingMetric = TransformersOptimizingMetric.AUC;
         this.hpSpace = TransformersHpSearchSpace.getDefaultHpSpace();
         this.hpMutations = TransformersHpSearchSpace.getDefaultHpSpaceMutations();
+    }
+    
+    public TransformersFineTunerHpSearch(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
+        this(TextExtractorMap.wrapTextExtractor(extractor), initialModelName, resultingModelLocation);
     }
 
 
@@ -64,7 +68,7 @@ public class TransformersFineTunerHpSearch extends TransformersFineTuner impleme
     @Override
     public File finetuneModel(File trainingFile) throws Exception{
         if(this.isAdjustMaxBatchSize()){
-            int maxBatchSize = getMaximumPerDeviceTrainBatchSize();
+            int maxBatchSize = getMaximumPerDeviceTrainBatchSize(trainingFile);
             List<Object> list = new ArrayList<>();
             if(maxBatchSize < 4){
                 int i = 1;

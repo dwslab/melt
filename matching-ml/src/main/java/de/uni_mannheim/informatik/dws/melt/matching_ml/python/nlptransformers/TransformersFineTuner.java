@@ -42,19 +42,6 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
     
     protected BatchSizeOptimization batchSizeOptimization;
 
-    /**
-     * Run the training of a NLP transformer.
-     * @param extractor used to extract text from a given resource. This is the text which represents a resource.
-     * @param initialModelName the initial model name for fine tuning which can be downloaded or a path to a directory containing model weights
-     *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
-     *   see first parameter pretrained_model_name_or_path of the from_pretrained
-     *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
-     * @param resultingModelLocation the final location where the fine-tuned model should be stored.
-     */
-    public TransformersFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
-        super(extractor, initialModelName, resultingModelLocation);
-        this.batchSizeOptimization = BatchSizeOptimization.NONE;
-    }
     
     /**
      * Run the training of a NLP transformer.
@@ -68,6 +55,19 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
     public TransformersFineTuner(TextExtractorMap extractor, String initialModelName, File resultingModelLocation) {
         super(extractor, initialModelName, resultingModelLocation);
         this.batchSizeOptimization = BatchSizeOptimization.NONE;
+    }
+    
+    /**
+     * Run the training of a NLP transformer.
+     * @param extractor used to extract text from a given resource. This is the text which represents a resource.
+     * @param initialModelName the initial model name for fine tuning which can be downloaded or a path to a directory containing model weights
+     *   (<a href="https://huggingface.co/transformers/main_classes/model.html#transformers.PreTrainedModel.from_pretrained">
+     *   see first parameter pretrained_model_name_or_path of the from_pretrained
+     *   function in huggingface library</a>). This value can be also changed by {@link #setModelName(java.lang.String) }.
+     * @param resultingModelLocation the final location where the fine-tuned model should be stored.
+     */
+    public TransformersFineTuner(TextExtractor extractor, String initialModelName, File resultingModelLocation) {
+        this(TextExtractorMap.wrapTextExtractor(extractor), initialModelName, resultingModelLocation);
     }
     
     
@@ -131,6 +131,8 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
                 //CPU  ERROR: RuntimeError: [enforce fail at ..\c10\core\CPUAllocator.cpp:79] data. DefaultCPUAllocator: not enough memory: you tried to allocate 50878464 bytes.
                 if(ex.getMessage().contains("not enough memory") || ex.getMessage().contains("out of memory")){
                     int batchSizeWhichWorks = batchSize / 2;
+                    if(this.batchSizeOptimization == BatchSizeOptimization.USE_LONGEST_TEXTS_PESSIMISTIC)
+                        batchSizeWhichWorks = batchSize / 4;
                     LOGGER.info("Found memory error, thus returning batchsize of {}", batchSizeWhichWorks);
                     this.trainingArguments = backupArguments;
                     this.cudaVisibleDevices = backupCudaString;
