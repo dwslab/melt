@@ -75,6 +75,10 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrix</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="ConfusionMatrixMacroAveraged.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm">ConfusionMatrixMacroAveraged</a></code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ConfusionMatrix</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
@@ -95,24 +99,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>private <a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-first even-row-color"><code>protected <a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
 <div class="col-second even-row-color"><code><a href="#falseNegative" class="member-name-link">falseNegative</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-first odd-row-color"><code>protected <a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#falsePositive" class="member-name-link">falsePositive</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private int</code></div>
+<div class="col-first even-row-color"><code>protected int</code></div>
 <div class="col-second even-row-color"><code><a href="#numberOfCorrespondences" class="member-name-link">numberOfCorrespondences</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">The number of correspondences.</div>
 </div>
-<div class="col-first odd-row-color"><code>private double</code></div>
+<div class="col-first odd-row-color"><code>protected double</code></div>
 <div class="col-second odd-row-color"><code><a href="#precision" class="member-name-link">precision</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private double</code></div>
+<div class="col-first even-row-color"><code>protected double</code></div>
 <div class="col-second even-row-color"><code><a href="#recall" class="member-name-link">recall</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-first odd-row-color"><code>protected <a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#truePositive" class="member-name-link">truePositive</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
@@ -227,37 +231,37 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="truePositive">
 <h3>truePositive</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">truePositive</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">truePositive</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="falsePositive">
 <h3>falsePositive</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">falsePositive</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">falsePositive</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="falseNegative">
 <h3>falseNegative</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">falseNegative</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">falseNegative</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="precision">
 <h3>precision</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">precision</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">precision</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="recall">
 <h3>recall</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">recall</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">recall</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="numberOfCorrespondences">
 <h3>numberOfCorrespondences</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">numberOfCorrespondences</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">numberOfCorrespondences</span></div>
 <div class="block">The number of correspondences. Typically, this number is <code>truePositive + falsePositive</code> but this is not
  the case for partial gold standards!</div>
 </section>

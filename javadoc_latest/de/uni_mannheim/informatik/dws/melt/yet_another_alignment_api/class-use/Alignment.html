@@ -204,14 +204,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ExecutionResult.</span><code><a href="../../matching_eval/ExecutionResult.html#getReferenceAlignment()" class="member-name-link">getReferenceAlignment</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ExecutionResult.</span><code><a href="../../matching_eval/ExecutionResult.html#getSystemAlignment()" class="member-name-link">getSystemAlignment</a>()</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ExecutionResult.</span><code><a href="../../matching_eval/ExecutionResult.html#silentlyParseAlignment(java.net.URL)" class="member-name-link">silentlyParseAlignment</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;url)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ExecutionResult.</span><code><a href="../../matching_eval/ExecutionResult.html#getInputAlignment()" class="member-name-link">getInputAlignment</a>()</code></div>
 <div class="col-last even-row-color">
+<div class="block">Returns the input alignment from the testcase for this execution result.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ExecutionResult.</span><code><a href="../../matching_eval/ExecutionResult.html#getReferenceAlignment()" class="member-name-link">getReferenceAlignment</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ExecutionResult.</span><code><a href="../../matching_eval/ExecutionResult.html#getSystemAlignment()" class="member-name-link">getSystemAlignment</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private static <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ExecutionResult.</span><code><a href="../../matching_eval/ExecutionResult.html#silentlyParseAlignment(java.net.URL)" class="member-name-link">silentlyParseAlignment</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;url)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Helper method to parse an alignment from an URL and log a possible error.</div>
 </div>
 </div>
@@ -287,13 +292,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>private <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-first even-row-color"><code>protected <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">ConfusionMatrix.</span><code><a href="../../matching_eval/evaluator/metric/cm/ConfusionMatrix.html#falseNegative" class="member-name-link">falseNegative</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-first odd-row-color"><code>protected <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">ConfusionMatrix.</span><code><a href="../../matching_eval/evaluator/metric/cm/ConfusionMatrix.html#falsePositive" class="member-name-link">falsePositive</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-first even-row-color"><code>protected <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">ConfusionMatrix.</span><code><a href="../../matching_eval/evaluator/metric/cm/ConfusionMatrix.html#truePositive" class="member-name-link">truePositive</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -380,6 +385,23 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Constructor to fill confusion matrix.</div>
 </div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_eval/evaluator/metric/cm/ConfusionMatrixMacroAveraged.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,double,double,double)" class="member-name-link">ConfusionMatrixMacroAveraged</a><wbr>(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;truePositive,
+ <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;falsePositive,
+ <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;falseNegative,
+ double&nbsp;precision,
+ double&nbsp;recall,
+ double&nbsp;fmeasure)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_eval/evaluator/metric/cm/ConfusionMatrixMacroAveraged.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,int,double,double,double)" class="member-name-link">ConfusionMatrixMacroAveraged</a><wbr>(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;truePositive,
+ <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;falsePositive,
+ <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;falseNegative,
+ int&nbsp;numberOfCorrespondences,
+ double&nbsp;precision,
+ double&nbsp;recall,
+ double&nbsp;fmeasure)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
