@@ -455,7 +455,7 @@ public class EvaluatorCSV extends Evaluator {
 
         // write alignment file
         if (!onlyCalculateCube) {
-            File targetFileForCopyAction = new File(getResultsFolderTrackTestcaseMatcher(baseDirectory,
+            File targetFileForCopyAction = new File(getResultsDirectoryTrackTestcaseMatcher(baseDirectory,
                     results.get(testCase, matcher)), "systemAlignment.rdf");
             targetFileForCopyAction.getParentFile().mkdirs();
             EvaluatorUtil.copySystemAlignment(results.get(testCase, matcher), targetFileForCopyAction);
@@ -510,7 +510,7 @@ public class EvaluatorCSV extends Evaluator {
                 } else extensionValues = new String[0];
 
                 File fileToBeWritten = new File(
-                        super.getResultsFolderTrackTestcaseMatcher(baseDirectory, allExecutionResult),
+                        super.getResultsDirectoryTrackTestcaseMatcher(baseDirectory, allExecutionResult),
                         "performance.csv");
                 fileToBeWritten.getParentFile().mkdirs();
                 CSVPrinter printer = csvFormat.print(fileToBeWritten, StandardCharsets.UTF_8);

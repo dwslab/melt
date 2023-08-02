@@ -125,7 +125,7 @@ public abstract class Evaluator {
      * @param executionResult Execution result whose evaluation shall be persisted.
      * @return Directory where evaluation result can be persisted.
      */
-    protected File getResultsFolderTrackTestcaseMatcher(File baseDirectory, ExecutionResult executionResult){
+    protected File getResultsDirectoryTrackTestcaseMatcher(File baseDirectory, ExecutionResult executionResult){
         try {
             return Paths.get(baseDirectory.getAbsolutePath(),
                             URLEncoder.encode(executionResult.getTestCase().getTrack().getName(), "UTF-8") + "_" + URLEncoder.encode(executionResult.getTestCase().getTrack().getVersion(), "UTF-8"),
@@ -143,7 +143,7 @@ public abstract class Evaluator {
      * @param track Track
      * @return Directory where aggregated evaluation results can be persisted.
      */
-    protected File getResultsDirectoryTrackMatcher(File baseDirectory, Track track){
+    protected File getResultsDirectoryTrack(File baseDirectory, Track track){
         try {
             return Paths.get(baseDirectory.getAbsolutePath(),
                     URLEncoder.encode(track.getName(), "UTF-8") + "_" + URLEncoder.encode(track.getVersion(), "UTF-8"),

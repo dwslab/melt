@@ -339,15 +339,18 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
                 recall = divideWithTwoDenominators(tpSize, tpSize, fnSize);
                 break;
             case MACRO:
-                double aggregatedPrecision = 0;
-                double aggregatedRecall = 0;
+                double aggregatedPrecision = 0.0;
+                double aggregatedRecall = 0.0;
+                double aggregatedF1 = 0.0;
                 for (ConfusionMatrix individualConfusionMatrix : confusionMatrices) {
                     aggregatedPrecision = aggregatedPrecision + individualConfusionMatrix.getPrecision();
                     aggregatedRecall = aggregatedRecall + individualConfusionMatrix.getRecall();
+                    aggregatedF1 = aggregatedF1 + individualConfusionMatrix.getF1measure();
                 }
                 precision = aggregatedPrecision / numberOfElementsInConfusionMatrices;
                 recall = aggregatedRecall / numberOfElementsInConfusionMatrices;
-                break;
+                double f1 = aggregatedF1 / numberOfElementsInConfusionMatrices;
+                return new ConfusionMatrixMacroAveraged(truePositive, falsePositive, falseNegative, numberOfCorrespondences, precision, recall, f1);
             case NONE:
                 LOGGER.error("Aggregation mode NONE not supported. Fallback: Micro-Avverage.");
                 precision = divideWithTwoDenominators(tpSize, tpSize, fpSize);

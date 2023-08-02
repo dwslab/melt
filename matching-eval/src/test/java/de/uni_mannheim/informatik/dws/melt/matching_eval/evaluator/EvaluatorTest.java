@@ -26,7 +26,7 @@ class EvaluatorTest {
             results.add(result);
             EvaluatorCSV evaluatorCSV = new EvaluatorCSV(results);
             File solution = new File("./results/conference_conference-v1/aggregated");
-            assertEquals(evaluatorCSV.getResultsDirectoryTrackMatcher(new File("./results"), TrackRepository.Conference.V1).getCanonicalPath(), solution.getCanonicalPath());
+            assertEquals(evaluatorCSV.getResultsDirectoryTrack(new File("./results"), TrackRepository.Conference.V1).getCanonicalPath(), solution.getCanonicalPath());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException ioe){

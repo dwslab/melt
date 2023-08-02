@@ -10,18 +10,18 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 public class ConfusionMatrix {
 
     
-    private Alignment truePositive;
-    private Alignment falsePositive;
-    private Alignment falseNegative;
+    protected Alignment truePositive;
+    protected Alignment falsePositive;
+    protected Alignment falseNegative;
     
-    private double precision;
-    private double recall;
+    protected double precision;
+    protected double recall;
 
     /**
      * The number of correspondences. Typically, this number is {@code truePositive + falsePositive} but this is not
      * the case for partial gold standards!
      */
-    private int numberOfCorrespondences;
+    protected int numberOfCorrespondences;
 
 
     /**
@@ -33,12 +33,7 @@ public class ConfusionMatrix {
      * @param recall Recall as double [0, 1].
      */
     public ConfusionMatrix(Alignment truePositive, Alignment falsePositive, Alignment falseNegative, double precision, double recall){
-        this.truePositive = truePositive;
-        this.falsePositive = falsePositive;
-        this.falseNegative = falseNegative;
-        this.precision = precision;
-        this.recall = recall;
-        this.numberOfCorrespondences = truePositive.size() + falsePositive.size();
+        this(truePositive, falsePositive, falseNegative, truePositive.size() + falsePositive.size(), precision, recall);
     }
 
     /**

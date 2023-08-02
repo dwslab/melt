@@ -36,7 +36,7 @@ public class EvaluatorAlignmentAnalyzer extends Evaluator {
         AlignmentAnalyzerMetric metric = new AlignmentAnalyzerMetric();
         for (ExecutionResult r : this.results) {
             AlignmentAnalyzerResult analyzerResult = metric.compute(r);
-            File analyzeFile = new File(getResultsFolderTrackTestcaseMatcher(baseDirectory, r), "alignmentAnalysis.txt");
+            File analyzeFile = new File(getResultsDirectoryTrackTestcaseMatcher(baseDirectory, r), "alignmentAnalysis.txt");
             analyzeFile.getParentFile().mkdirs();
             try(BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(analyzeFile), StandardCharsets.UTF_8))){
                 out.write(analyzerResult.getReportForAlignment());

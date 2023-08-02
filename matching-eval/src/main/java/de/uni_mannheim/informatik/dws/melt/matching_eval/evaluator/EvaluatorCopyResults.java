@@ -27,7 +27,7 @@ public class EvaluatorCopyResults extends Evaluator {
     @Override
     public void writeResultsToDirectory(File baseDirectory) {
         for (ExecutionResult r : this.results) {
-            EvaluatorUtil.copySystemAlignment(r, new File(getResultsFolderTrackTestcaseMatcher(baseDirectory, r), "systemAlignment.rdf"));
+            EvaluatorUtil.copySystemAlignment(r, new File(getResultsDirectoryTrackTestcaseMatcher(baseDirectory, r), "systemAlignment.rdf"));
         }
     }
 }

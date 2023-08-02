@@ -271,6 +271,14 @@ public class ExecutionResult {
     public <T> T getTargetOntology(Class<T> clazz){
         return testCase.getTargetOntology(clazz);
     }
+    
+    /**
+     * Returns the input alignment from the testcase for this execution result.
+     * @return the input alignment parsed as an alignment object.
+     */
+    public Alignment getInputAlignment(){
+        return testCase.getParsedInputAlignment();
+    }
 
     /**
      * Convenience getter which returns the track to which the test case of the ExecutionResult belongs to.
