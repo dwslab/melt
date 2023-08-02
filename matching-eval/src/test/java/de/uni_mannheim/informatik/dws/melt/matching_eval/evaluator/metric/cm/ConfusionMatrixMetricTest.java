@@ -207,7 +207,7 @@ class ConfusionMatrixMetricTest {
         confusionMatrices.add(confusionMatrix2);
         double precisionMacro = (precision_1 + precision_2) / 2.0;
         double recallMacro = (recall_1 + recall_2) / 2.0;
-        double f1Macro = (2 * precisionMacro * recallMacro) / (precisionMacro + recallMacro);
+        double f1Macro = (confusionMatrix1.getF1measure() + confusionMatrix2.getF1measure()) / 2.0d;
 
         ConfusionMatrix confusionMatrixMicro = metric.getMacroAverages(confusionMatrices);
         assertEquals(precisionMacro, confusionMatrixMicro.getPrecision());
