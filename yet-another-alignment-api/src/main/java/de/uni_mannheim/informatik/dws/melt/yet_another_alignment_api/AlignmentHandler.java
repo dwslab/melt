@@ -1,5 +1,7 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -181,13 +183,22 @@ class AlignmentHandler extends DefaultHandler {
         } else {
             // we are parsing an extension
             if(inCorrespondence) {
-                this.cell.addExtensionValue(namespaceURI + pName, content.toString());
+                this.cell.addExtensionValue(namespaceURI + pName, parseJSON(content.toString()));
             } else {
-                this.alignment.addExtensionValue(namespaceURI + pName, content.toString());
+                this.alignment.addExtensionValue(namespaceURI + pName, parseJSON(content.toString()));
             }
         }
         //uncommented because it is initialised in start element.
         //content = null; // set it for the character patch
+    }
+    
+    private static final Gson GSON = new Gson();
+    private Object parseJSON(String jsonText){
+        try{
+            return GSON.fromJson(jsonText, Object.class);
+        }catch(JsonSyntaxException e){
+            return jsonText;
+        }
     }
     
     public Alignment getAlignment(){

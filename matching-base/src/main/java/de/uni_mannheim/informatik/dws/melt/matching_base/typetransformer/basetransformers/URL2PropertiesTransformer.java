@@ -1,14 +1,14 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AbstractTypeTransformer;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.logging.Level;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -19,7 +19,8 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class URL2PropertiesTransformer extends AbstractTypeTransformer<URL, Properties>  {
     private static final Logger LOGGER = LoggerFactory.getLogger(URL2PropertiesTransformer.class);
-
+    private static final Gson GSON = new Gson();
+    
     public URL2PropertiesTransformer() {
         super(URL.class, Properties.class);
     }
@@ -46,9 +47,9 @@ public class URL2PropertiesTransformer extends AbstractTypeTransformer<URL, Prop
         
         try{
             Properties p = new Properties();
-            p.putAll(new JSONObject(content).toMap());
+            p.putAll(GSON.fromJson(content, Map.class));
             return p;
-        }catch(JSONException ex){
+        }catch(JsonSyntaxException ex){
             LOGGER.debug("Could not parse JSON - continue...");
         }
         
@@ -56,7 +57,7 @@ public class URL2PropertiesTransformer extends AbstractTypeTransformer<URL, Prop
             Properties p = new Properties();
             p.putAll(new Yaml().load(content));
             return p;
-        }catch(JSONException ex){
+        }catch(Exception ex){
             LOGGER.debug("Could not parse YAML - continue...");
         }
         

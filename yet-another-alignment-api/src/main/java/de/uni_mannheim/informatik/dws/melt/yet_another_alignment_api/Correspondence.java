@@ -223,6 +223,18 @@ public class Correspondence implements Comparable<Correspondence> {
         if(extensions == null) return null;
         return (T) extensions.get(extensionUri);
     }
+    
+    /**
+     * Obtain the value of an extension.
+     * @param extensionUri The URI identifying the extension.
+     * @param <T> Extension value type.
+     * @return The value of the extension as String, null if there is no value.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getExtensionValueCasted(Object extensionUri){
+        if(extensions == null) return null;
+        return (T) extensions.get(extensionUri.toString());
+    }
 
     /**
      * Set the value for an extension.
@@ -233,6 +245,17 @@ public class Correspondence implements Comparable<Correspondence> {
     public void addExtensionValue(String extensionUri, Object extensionValue){
         if(extensions == null) extensions = new HashMap<>();
         extensions.put(extensionUri, extensionValue);
+    }
+    
+    /**
+     * Set the value for an extension.
+     * Possible keys are defined in class {@link DefaultExtensions}.
+     * @param extensionUri The URI identifying the extension. Possible keys are defined in class {@link DefaultExtensions}.
+     * @param extensionValue The value of the extension to be set.
+     */
+    public void addExtensionValue(Object extensionUri, Object extensionValue){
+        if(extensions == null) extensions = new HashMap<>();
+        extensions.put(extensionUri.toString(), extensionValue);
     }
     
 

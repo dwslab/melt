@@ -5,7 +5,9 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -133,6 +135,94 @@ class AlignmentParserTest {
         assertEquals("correspondence extension value 2", correspondence.getExtensionValue("http://www.correspondence_extension_2.com#extensionLabel_2"));
 
 
+    }
+    
+    
+    @Test
+    public void testCorrespondenceExtensionSerializingAndParsing() throws Exception {        
+        Correspondence c = new Correspondence("one", "two");
+        c.addAdditionalConfidence(Alignment.class, 0.5);
+        c.addAdditionalExplanation(Alignment.class, "hello");        
+        Map<String, String> map = new HashMap<>();
+        map.put("foo", "bar");
+        c.addExtensionValue("bla#myextension", map);
+                
+        
+        Alignment alignment = new Alignment(Arrays.asList(c));
+        
+        String s = alignment.serialize();
+        
+        Alignment newAlign = Alignment.parse(s);
+        
+        Correspondence newC = newAlign.getCorrespondence("one", "two", CorrespondenceRelation.EQUIVALENCE);
+        assertNotNull(newC);
+        
+        assertEquals(0.5, newC.getAdditionalConfidence(Alignment.class));
+        assertEquals("hello", newC.getAdditionalExplanation(Alignment.class));
+        Map<String, String> newMap = newC.getExtensionValueCasted("bla#myextension");
+        assertEquals("bar", newMap.getOrDefault("foo", ""));
+    }
+    
+    @Test
+    public void testAlignmentExtensionSerializingAndParsing() throws Exception {
+        
+        Alignment alignment = new Alignment();
+        
+        alignment.addExtensionValue("one#two", 0.5);
+        alignment.addExtensionValue("three#four", "five");
+        
+        Map<String, String> map = new HashMap<>();
+        map.put("foo", "bar");
+        alignment.addExtensionValue("bla#myextension", map);
+        
+        List<Integer> list = Arrays.asList(5,9,3,8);
+        alignment.addExtensionValue("bla#myList", list);
+        
+        String s = alignment.serialize();
+        
+        Alignment newAlign = Alignment.parse(s);
+        
+        double d = newAlign.getExtensionValueCasted("one#two");
+        assertEquals(0.5, d);
+        
+        String text = newAlign.getExtensionValueCasted("three#four");
+        assertEquals("five", text);
+        
+        Map<String, String> newMap = newAlign.getExtensionValueCasted("bla#myextension");
+        assertEquals("bar", newMap.get("foo"));
+        
+        List<Double> newList = newAlign.getExtensionValueCasted("bla#myList");
+        assertEquals(9.0, newList.get(1));
+    }
+    
+    
+    @Test
+    public void testAlignmentExtensionParsingNoJson() throws Exception {
+        String s = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+"<rdf:RDF xmlns=\"http://knowledgeweb.semanticweb.org/heterogeneity/alignment\"\n" +
+"  xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n" +
+"  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\">\n" +
+"<Alignment>\n" +
+"  <map>\n" +
+"    <Cell>\n" +
+"      <entity1 rdf:resource=\"one\"/>\n" +
+"      <entity2 rdf:resource=\"two\"/>\n" +
+"      <relation>=</relation>\n" +
+"      <measure rdf:datatype=\"xsd:float\">1.0</measure>\n" +
+"      <alignapilocalns:Alignment_explanation xmlns:alignapilocalns=\"http://melt.dws.uni-mannheim.de/configuration#\">hello</alignapilocalns:Alignment_explanation>\n" +
+"    </Cell>\n" +
+"  </map>\n" +
+"</Alignment>\n" +
+"</rdf:RDF>";
+        
+        Alignment newAlign = Alignment.parse(s);
+        String explanation = newAlign.getCorrespondence("one", "two", CorrespondenceRelation.EQUIVALENCE).getAdditionalExplanation(Alignment.class);
+        assertEquals("hello", explanation);
+        
+        s = s.replace("hello", "{\"foo:"); // introducing a json parser error
+        newAlign = Alignment.parse(s);
+        explanation = newAlign.getCorrespondence("one", "two", CorrespondenceRelation.EQUIVALENCE).getAdditionalExplanation(Alignment.class);
+        assertEquals("{\"foo:", explanation);
     }
 
     public static Alignment getOneMapping() throws SAXException, IOException{

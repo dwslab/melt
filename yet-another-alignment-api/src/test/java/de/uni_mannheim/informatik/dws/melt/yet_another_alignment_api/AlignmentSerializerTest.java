@@ -20,7 +20,7 @@ class AlignmentSerializerTest {
         alignment.add(cell);
         String result = AlignmentSerializer.serialize(alignment);
         //System.out.println(result);
-        assertTrue(result.contains("<alignapilocalns:extensionLabel xmlns:alignapilocalns=\"http://www.extension.com#\">MyExtensionValue</alignapilocalns:extensionLabel>"));
+        assertTrue(result.contains("<alignapilocalns:extensionLabel xmlns:alignapilocalns=\"http://www.extension.com#\">\"MyExtensionValue\"</alignapilocalns:extensionLabel>"));
         assertTrue(result.contains("<entity1 rdf:resource=\"http://cmt#assignExternalReviewer\"/>"));
         assertTrue(result.contains("<entity2 rdf:resource=\"http://conference#invites_co-reviewers\"/>"));
         assertTrue(result.contains("<relation>=</relation>"));
@@ -36,7 +36,7 @@ class AlignmentSerializerTest {
         cell.addExtensionValue("http://www.extension.com/extensionLabel", "MyExtensionValue");
         alignment.add(cell);
         result = AlignmentSerializer.serialize(alignment);
-        assertTrue(result.contains("<alignapilocalns:extensionLabel xmlns:alignapilocalns=\"http://www.extension.com/\">MyExtensionValue</alignapilocalns:extensionLabel>"));
+        assertTrue(result.contains("<alignapilocalns:extensionLabel xmlns:alignapilocalns=\"http://www.extension.com/\">\"MyExtensionValue\"</alignapilocalns:extensionLabel>"));
         assertTrue(result.contains("<entity1 rdf:resource=\"http://cmt#assignExternalReviewer\"/>"));
         assertTrue(result.contains("<entity2 rdf:resource=\"http://conference#invites_co-reviewers\"/>"));
         assertTrue(result.contains("<relation>=</relation>"));
@@ -69,8 +69,6 @@ class AlignmentSerializerTest {
             Correspondence c = new Correspondence("http://source.com/one", "http://target.com/one", 1.0, relation);
 
             String xml = AlignmentSerializer.serialize(new Alignment(Arrays.asList(c)));
-            System.out.println(relation.toString());
-            System.out.println(xml);
             Alignment a = AlignmentParser.parseFromText(xml);
             assertEquals(1, a.size());
             assertNotNull(a.getCorrespondence(c.getEntityOne(), c.getEntityTwo(), relation));

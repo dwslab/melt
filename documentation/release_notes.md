@@ -1,5 +1,28 @@
 # Release Notes
 
+
+## Changes in 3.5
+
+**New**
+- YAAA (Yet Another Alignment Api) is now supporting [SSSOM format](https://mapping-commons.github.io/sssom/)
+
+**Improvements**
+- YAAA (Yet Another Alignment Api) extensions are serialized and parsed as json which allows to have same types even after a serialization.
+- YAAA (Yet Another Alignment Api) supports [more relations types](https://github.com/dwslab/melt/blob/master/yet-another-alignment-api/src/main/java/de/uni_mannheim/informatik/dws/melt/yet_another_alignment_api/CorrespondenceRelation.java) (e.g. `closeMatch` and `relatedMatch`)
+- matching-ml: transformer models can do multi label prediction
+- famer clustering allows to set the number of threads used to compute the clustering
+
+**Fixed**
+- matching-ml: requires a python environment with `Werkzeug<=2.2.3` because starting from `2.3.0` the webserver do not get the request headers 
+- [Wikidata tests are fixed](https://github.com/dwslab/melt/commit/ae824d9#diff-471d5bfa39673c940c5c7c2f7450ffe61545c052efd6ccf85080e0e589cbd7c9) because Wikidata entry for `EU` changed 
+- [Testcasevalidation is more memory friendly](https://github.com/dwslab/melt/commit/fe6915287637895c3fee63eec2e28934218ba0bd)
+
+**New Tracks**
+- [pgx Track](http://oaei.ontologymatching.org/2023/pharmacogenomics/index.html)
+- Food track with subsumption relations
+
+
+
 ## Changes in 3.4
 
 **New**

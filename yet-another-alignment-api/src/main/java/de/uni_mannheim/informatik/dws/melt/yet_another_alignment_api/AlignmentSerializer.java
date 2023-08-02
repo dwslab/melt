@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
+import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,12 +8,21 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.lang3.StringUtils;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.apache.commons.text.translate.AggregateTranslator;
+import org.apache.commons.text.translate.CharSequenceTranslator;
+import org.apache.commons.text.translate.EntityArrays;
+import org.apache.commons.text.translate.LookupTranslator;
+import org.apache.commons.text.translate.NumericEntityEscaper;
+import org.apache.commons.text.translate.UnicodeUnpairedSurrogateRemover;
 
 
 /**
@@ -108,7 +118,7 @@ public class AlignmentSerializer {
         if(alignment.getExtensions() != null) {
             for (HashMap.Entry<String, Object> extension : alignment.getExtensions().entrySet()) {
                 String extensionLabel = getExtensionLabel(extension.getKey());
-                sb.append("      <alignapilocalns:" + extensionLabel + " xmlns:alignapilocalns=\"" + getExtensionBaseUri(extension.getKey()) + "\">")
+                sb.append("  <alignapilocalns:" + extensionLabel + " xmlns:alignapilocalns=\"" + getExtensionBaseUri(extension.getKey()) + "\">")
                         .append(extension.getValue().toString() + "</alignapilocalns:" + extensionLabel + ">\n");
             }
         }
@@ -118,6 +128,7 @@ public class AlignmentSerializer {
         return sb.toString();
     }
     
+    private static final Gson GSON = new Gson();
     private static String getXmlMappingCellMultiLine(Correspondence cell){
         StringBuilder sb = new StringBuilder();
         sb.append("  <map>\n");
@@ -131,7 +142,7 @@ public class AlignmentSerializer {
             for(HashMap.Entry<String, Object> extension : cell.getExtensions().entrySet()){
                 String extensionLabel = getExtensionLabel(extension.getKey());
                 sb.append("      <alignapilocalns:" + extensionLabel + " xmlns:alignapilocalns=\"" + getExtensionBaseUri(extension.getKey()) + "\">")
-                        .append(StringEscapeUtils.ESCAPE_XML10.translate(extension.getValue().toString()) + "</alignapilocalns:" + extensionLabel + ">\n");
+                        .append(ESCAPE_XML_TEXT.translate(GSON.toJson(extension.getValue())) + "</alignapilocalns:" + extensionLabel + ">\n");//
             }
         }
         sb.append("    </Cell>\n");
@@ -282,5 +293,35 @@ public class AlignmentSerializer {
                 parent.mkdirs();
             }
         }
+    }
+    
+    /**
+     * XML Text escaper which do no escape double-quotes (heavily used by JSON serializations.
+     */
+    private static final CharSequenceTranslator ESCAPE_XML_TEXT;
+
+    static {
+        Map<CharSequence, CharSequence> reducedBasicEscape = new HashMap<>();
+        // double-quote does not need to be replaced 
+        reducedBasicEscape.put("&", "&amp;");   // & - ampersand
+        reducedBasicEscape.put("<", "&lt;");    // < - less-than
+        reducedBasicEscape.put(">", "&gt;");    // > - greater-than
+        
+        final Map<CharSequence, CharSequence> escapeXml11Map = new HashMap<>();
+        escapeXml11Map.put("\u0000", StringUtils.EMPTY);
+        escapeXml11Map.put("\u000b", "&#11;");
+        escapeXml11Map.put("\u000c", "&#12;");
+        escapeXml11Map.put("\ufffe", StringUtils.EMPTY);
+        escapeXml11Map.put("\uffff", StringUtils.EMPTY);
+        ESCAPE_XML_TEXT = new AggregateTranslator(
+                new LookupTranslator(Collections.unmodifiableMap(reducedBasicEscape)),
+                new LookupTranslator(EntityArrays.APOS_ESCAPE),
+                new LookupTranslator(Collections.unmodifiableMap(escapeXml11Map)),
+                NumericEntityEscaper.between(0x1, 0x8),
+                NumericEntityEscaper.between(0xe, 0x1f),
+                NumericEntityEscaper.between(0x7f, 0x84),
+                NumericEntityEscaper.between(0x86, 0x9f),
+                new UnicodeUnpairedSurrogateRemover()
+        );
     }
 }

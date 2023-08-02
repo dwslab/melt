@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.basetransformers;
 
+import com.google.gson.Gson;
 import de.uni_mannheim.informatik.dws.melt.matching_base.ParameterConfigKeys;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.AbstractTypeTransformer;
 import de.uni_mannheim.informatik.dws.melt.matching_base.typetransformer.TypeTransformationException;
@@ -9,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
-import org.json.JSONObject;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -18,7 +18,7 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class Properties2URLTransformer extends AbstractTypeTransformer<Properties, URL>  {
     private static final String FILE_PREFIX = "params";
-
+    private static final Gson GSON = new Gson();
     public Properties2URLTransformer() {
         super(Properties.class, URL.class);
     }
@@ -30,7 +30,7 @@ public class Properties2URLTransformer extends AbstractTypeTransformer<Propertie
             if(parameters.getOrDefault(ParameterConfigKeys.DEFAULT_PARAMETERS_SERIALIZATION_FORMAT, "json").toString().toLowerCase().equals("json")){
                 f = TypeTransformerHelper.getRandomSerializationFile(parameters, FILE_PREFIX, ".json");
                 try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))){
-                    bw.write(new JSONObject(value).toString());
+                    bw.write(GSON.toJson(value));
                 }
             }else{
                 f = TypeTransformerHelper.getRandomSerializationFile(parameters, FILE_PREFIX, ".yaml");

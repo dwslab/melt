@@ -6,6 +6,7 @@ import com.googlecode.cqengine.index.navigable.NavigableIndex;
 import com.googlecode.cqengine.query.QueryFactory;
 import static com.googlecode.cqengine.query.QueryFactory.noQueryOptions;
 import com.googlecode.cqengine.resultset.ResultSet;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -90,6 +91,14 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     
     public Alignment(File f, boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence) throws SAXException, IOException{
 	this(new FileInputStream(f), indexSource, indexTarget, indexRelation, indexConfidence);
+    }
+    
+     public Alignment(String text) throws SAXException, IOException{
+	this(new ByteArrayInputStream(text.getBytes()), true, true, true, true);
+    }
+    
+    public Alignment(String text, boolean indexSource, boolean indexTarget, boolean indexRelation, boolean indexConfidence) throws SAXException, IOException{
+	this(new ByteArrayInputStream(text.getBytes()), indexSource, indexTarget, indexRelation, indexConfidence);
     }
     
     public Alignment(InputStream s) throws SAXException, IOException{
@@ -699,92 +708,6 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     }
 
     /**
-     * Create the subtraction between the two given alignments. Only copies the alignment and not further infos like
-     * onto or extensions.
-     * @param alignment_1 Set 1.
-     * @param alignment_2 Set 2.
-     * @return Subtraction alignment.
-     */
-    public static Alignment subtraction(Alignment alignment_1, Alignment alignment_2) {
-        Alignment result = new Alignment();
-        result.addAll(alignment_1);
-        result.removeAll(alignment_2);
-        return result;
-    }
-    
-    /**
-     * Create the intersection between the two given alignments. Only copies the alignment and not further infos like
-     * onto or extensions.
-     * @param alignment_1 Set 1.
-     * @param alignment_2 Set 2.
-     * @return Intersection alignment.
-     */
-    public static Alignment intersection(Alignment alignment_1, Alignment alignment_2) {
-        Alignment result = new Alignment();
-        result.addAll(alignment_1);
-        result.addAll(alignment_2);
-        result.retainAll(alignment_1);
-        result.retainAll(alignment_2);
-        return result;
-    }
-
-    /**
-     * Create the union between the two given alignments. Only copies the alignment and not further infos like onto or
-     * extensions.
-     * @param alignment_1 Set 1.
-     * @param alignment_2 Set 2.
-     * @return Union alignment.
-     */
-    public static Alignment union(Alignment alignment_1, Alignment alignment_2) {
-        Alignment result = new Alignment();
-        result.addAll(alignment_1);
-        result.addAll(alignment_2);
-        return result;
-    }
-
-    /**
-     * Switches sources with targets. Does not change the relation.
-     * This method is only for erroneous alignments where a matcher switched the source with the target ontology.
-     * @deprecated use function reverse
-     * @param alignment The alignment where the source shall be switched with the target.
-     * @return Edited alignment.
-     */
-    public static Alignment switchSourceWithTarget(Alignment alignment){
-        return alignment.reverseWithoutRelationChange();
-    }
-
-    /**
-     * This method creates a deep copy of {@code targetAlignment} and further copies extension values from the {@code
-     * sourceAlignment}. The confidence is never overwritten.
-     * @param sourceAlignment The alignment from which the extension values shall be transferred to the {@code
-     * targetAlignment}.
-     * @param targetAlignment The alignment which will be copied and to which are the extension values are copied.
-     * @param isOverwriteValues If the {@code targetAlignment} alignment already contains an extension key available in
-     *                         the {@code sourceAlignment}, it will be overwritten with the value of the {@code
-     *                         sourceAlignment}. If false, the value will not be overwritten.
-     * @return A new alignment instance.
-     */
-    public static Alignment copyExtensionsToAlignment(Alignment sourceAlignment, Alignment targetAlignment,
-                                                      boolean isOverwriteValues){
-        Alignment result = new Alignment(targetAlignment, true);
-        result.copyExtensionsToThisAlignment(sourceAlignment, isOverwriteValues);
-        return result;
-    }
-
-    /**
-     * This method creates a deep copy of {@code targetAlignment} and further copies extension values from the {@code
-     * sourceAlignment}. The confidence is never overwritten. If the {@code targetAlignment} already contains
-     * the extension key, no value will be copied from the {@code sourceAlignment}.
-     * @param sourceAlignment The alignment from which the extension values shall be transferred to the {@code
-     * targetAlignment}.
-     * @param targetAlignment The alignment which will be copied and to which are the extension values are copied.
-     * @return A new alignment instance.
-     */
-    public static Alignment copyExtensionsToAlignment(Alignment sourceAlignment, Alignment targetAlignment){
-        return copyExtensionsToAlignment(sourceAlignment, targetAlignment, false);
-    }
-
-    /**
      * Copies extensions from correspondences in the {@code otherAlignment} to this alignment.
      * If this alignment already has an extension for the key in question, the extension will not be overwritten.
      * The confidence is never overwritten.
@@ -1110,9 +1033,31 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      *                     Note that many default extension URIs are contained in {@link DefaultExtensions}.
      * @return The value of the extension as String, null if there is no value.
      */
+    public Object getExtensionValue(Object extensionUri){
+        if(extensions == null) return null;
+        return extensions.get(extensionUri.toString());
+    }
+    
+    /**
+     * Obtain the value of an extension.
+     * @param extensionUri The URI identifying the extension.
+     *                     Note that many default extension URIs are contained in {@link DefaultExtensions}.
+     * @return The value of the extension as String, null if there is no value.
+     */
     public String getExtensionValueAsString(String extensionUri){
         if(extensions == null) return null;
         return extensions.get(extensionUri).toString();
+    }
+    
+    /**
+     * Obtain the value of an extension.
+     * @param extensionUri The URI identifying the extension.
+     *                     Note that many default extension URIs are contained in {@link DefaultExtensions}.
+     * @return The value of the extension as String, null if there is no value.
+     */
+    public String getExtensionValueAsString(Object extensionUri){
+        if(extensions == null) return null;
+        return extensions.get(extensionUri.toString()).toString();
     }
     
     /**
@@ -1126,6 +1071,18 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         if(extensions == null) return null;
         return (T) extensions.get(extensionUri);
     }
+    
+    /**
+     * Obtain the value of an extension.
+     * @param extensionUri The URI identifying the extension.
+     * @param <T> Extension value type.
+     * @return The value of the extension as String, null if there is no value.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getExtensionValueCasted(Object extensionUri){
+        if(extensions == null) return null;
+        return (T) extensions.get(extensionUri.toString());
+    }
 
     /**
      * Set the value for an extension.
@@ -1136,6 +1093,17 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     public void addExtensionValue(String extensionUri, Object extensionValue){
         if(extensions == null) extensions = new HashMap<>();
         extensions.put(extensionUri, extensionValue);
+    }
+    
+    /**
+     * Set the value for an extension.
+     * @param extensionUri The URI identifying the extension.
+     *                     Note that many default extension URIs are contained in {@link DefaultExtensions}.
+     * @param extensionValue The value of the extension to be set.
+     */
+    public void addExtensionValue(Object extensionUri, Object extensionValue){
+        if(extensions == null) extensions = new HashMap<>();
+        extensions.put(extensionUri.toString(), extensionValue);
     }
 
     /**
@@ -1237,5 +1205,134 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     @Override
     public String toString() {
         return toStringMultiline();
+    }
+    
+    
+    
+    /**************************
+     * Static Methods
+     ***************************/
+    
+    
+    /**
+     * Parse a file and returns the corresponding Alignment object.More options are available when using constructors.
+     * @param f the file to be pasred
+     * @return alignment object
+     * @throws org.xml.sax.SAXException in case of an parser error
+     * @throws java.io.IOException in case of an parser error
+     */
+    public static Alignment parse(File f) throws SAXException, IOException {
+        return new Alignment(f);
+    }
+    
+    /**
+     * Parse a text and returns the corresponding Alignment object.
+     * More options are available when using constructors.
+     * @param text the text to be pasred
+     * @return alignment object
+     * @throws org.xml.sax.SAXException in case of an parser error
+     * @throws java.io.IOException in case of an parser error
+     */
+    public static Alignment parse(String text) throws SAXException, IOException {
+        return new Alignment(text);
+    }
+    
+    /**
+     * Parse a stream and returns the corresponding Alignment object.
+     * More options are available when using constructors.
+     * @param stream the stream to be pasred
+     * @return alignment object
+     * @throws org.xml.sax.SAXException in case of an parser error
+     * @throws java.io.IOException in case of an parser error
+     */
+    public static Alignment parse(InputStream stream) throws SAXException, IOException {
+        return new Alignment(stream);
+    }
+    
+    
+    /**
+     * Create the subtraction between the two given alignments. Only copies the alignment and not further infos like
+     * onto or extensions.
+     * @param alignment_1 Set 1.
+     * @param alignment_2 Set 2.
+     * @return Subtraction alignment.
+     */
+    public static Alignment subtraction(Alignment alignment_1, Alignment alignment_2) {
+        Alignment result = new Alignment();
+        result.addAll(alignment_1);
+        result.removeAll(alignment_2);
+        return result;
+    }
+    
+    /**
+     * Create the intersection between the two given alignments. Only copies the alignment and not further infos like
+     * onto or extensions.
+     * @param alignment_1 Set 1.
+     * @param alignment_2 Set 2.
+     * @return Intersection alignment.
+     */
+    public static Alignment intersection(Alignment alignment_1, Alignment alignment_2) {
+        Alignment result = new Alignment();
+        result.addAll(alignment_1);
+        result.addAll(alignment_2);
+        result.retainAll(alignment_1);
+        result.retainAll(alignment_2);
+        return result;
+    }
+
+    /**
+     * Create the union between the two given alignments. Only copies the alignment and not further infos like onto or
+     * extensions.
+     * @param alignment_1 Set 1.
+     * @param alignment_2 Set 2.
+     * @return Union alignment.
+     */
+    public static Alignment union(Alignment alignment_1, Alignment alignment_2) {
+        Alignment result = new Alignment();
+        result.addAll(alignment_1);
+        result.addAll(alignment_2);
+        return result;
+    }
+
+    /**
+     * Switches sources with targets. Does not change the relation.
+     * This method is only for erroneous alignments where a matcher switched the source with the target ontology.
+     * @deprecated use function reverse
+     * @param alignment The alignment where the source shall be switched with the target.
+     * @return Edited alignment.
+     */
+    public static Alignment switchSourceWithTarget(Alignment alignment){
+        return alignment.reverseWithoutRelationChange();
+    }
+
+    /**
+     * This method creates a deep copy of {@code targetAlignment} and further copies extension values from the {@code
+     * sourceAlignment}. The confidence is never overwritten.
+     * @param sourceAlignment The alignment from which the extension values shall be transferred to the {@code
+     * targetAlignment}.
+     * @param targetAlignment The alignment which will be copied and to which are the extension values are copied.
+     * @param isOverwriteValues If the {@code targetAlignment} alignment already contains an extension key available in
+     *                         the {@code sourceAlignment}, it will be overwritten with the value of the {@code
+     *                         sourceAlignment}. If false, the value will not be overwritten.
+     * @return A new alignment instance.
+     */
+    public static Alignment copyExtensionsToAlignment(Alignment sourceAlignment, Alignment targetAlignment,
+                                                      boolean isOverwriteValues){
+        Alignment result = new Alignment(targetAlignment, true);
+        result.copyExtensionsToThisAlignment(sourceAlignment, isOverwriteValues);
+        return result;
+    }
+
+    /**
+     * This method creates a deep copy of {@code targetAlignment} and further copies extension values from the {@code
+     * sourceAlignment}. The confidence is never overwritten. If the {@code targetAlignment} already contains
+     * the extension key, no value will be copied from the {@code sourceAlignment}.
+     * @param sourceAlignment The alignment from which the extension values shall be transferred to the {@code
+     * targetAlignment}.
+     * @param targetAlignment The alignment which will be copied and to which are the extension values are copied.
+     * @return A new alignment instance.
+     */
+    public static Alignment copyExtensionsToAlignment(Alignment sourceAlignment, Alignment targetAlignment){
+        return copyExtensionsToAlignment(sourceAlignment, targetAlignment, false);
     }
 }
