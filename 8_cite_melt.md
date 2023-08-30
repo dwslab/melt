@@ -44,13 +44,13 @@ The accompanying presentation can be found in the <a href="https://github.com/dw
 @inproceedings{hertling2020supervised,
 {% raw %}
   title     = {Supervised ontology and instance matching with {MELT}},
-{% endraw %}
   author    = {Sven Hertling and Jan Portisch and Heiko Paulheim},
   year      = {2020}
   booktitle = {Ontology Matching Workshop @ ISWC},
   series    = {{CEUR} Workshop Proceedings},
   volume    = {2788},
   pages     = {60--71},
+{% endraw %}
 }
 ``` 
 The accompanying presentation can be found in the <a href="https://github.com/dwslab/melt/blob/master/documentation/supervised_ontology_and_instance_matching_with_melt.pdf">documentation directory</a>.<br/>
