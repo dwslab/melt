@@ -13,7 +13,9 @@ Please cite MELT if you use the framework in academic work. Publications related
 
 ```
 @inproceedings{hertling2019melt,
+{% raw %}
   title     = {{MELT} - Matching EvaLuation Toolkit},
+{% endraw %}
   author    = {Sven Hertling and Jan Portisch and Heiko Paulheim},
   year      = {2019},
   booktitle = {International conference on semantic systems (SEMANTICS)},
@@ -40,7 +42,9 @@ The accompanying presentation can be found in the <a href="https://github.com/dw
 [Supervised Ontology and Instance Matching with MELT](https://arxiv.org/pdf/2009.11102.pdf)
 ```
 @inproceedings{hertling2020supervised,
+{% raw %}
   title     = {Supervised ontology and instance matching with {MELT}},
+{% endraw %}
   author    = {Sven Hertling and Jan Portisch and Heiko Paulheim},
   year      = {2020}
   booktitle = {Ontology Matching Workshop @ ISWC},
