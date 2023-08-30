@@ -140,5 +140,5 @@ And because `Adrenal Glands` appears in `mynamespace:description` it is also not
 Those `TextExtractor`s are often used in matching components where a textual description of a resource is necessary.
 This is the case for e.g. transformer-based components like [`TransformersFilter`](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFilter.java).
 
-For testing the extractors on real world data, you can use class [`ManualInspection`](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/test/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/textExtractors/ManualInspection.java)
+For testing the extractors on real world data, you can use class [`ManualInspection`](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/textExtractors/ManualInspection.java)
 which is contained in the **test** scope of the jena-matchers project. A usage example of of this class can be found in [`ManualInspectionMain`](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/test/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/util/textExtractors/ManualInspectionMain.java).
