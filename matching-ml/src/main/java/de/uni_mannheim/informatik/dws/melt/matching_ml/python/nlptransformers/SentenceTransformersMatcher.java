@@ -25,8 +25,11 @@ import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Corresponde
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import org.apache.jena.atlas.iterator.WrapperIterator;
 import org.apache.jena.ontology.OntProperty;
 import org.apache.jena.ontology.OntResource;
+import org.apache.jena.util.iterator.FilterIterator;
+import org.apache.jena.util.iterator.NiceIterator;
 
 /**
  * This matcher uses the <a href="https://github.com/UKPLab/sentence-transformers">Sentence Transformers library</a> to build an embedding space for each resource given a textual representation of it.
@@ -43,6 +46,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
     private int topK;
     private boolean bothDirections;
     private boolean topkPerResource;
+    private List<Class<? extends SentenceTransformersPredicate>> resourceFilters;
     
     public SentenceTransformersMatcher(TextExtractorMap extractor, String modelName){
         super(extractor, modelName);
@@ -52,6 +56,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
         this.topK = 10;
         this.bothDirections = true;
         this.topkPerResource = true;
+        this.resourceFilters = new ArrayList<>();
     }
     
     public SentenceTransformersMatcher(TextExtractor extractor, String modelName){
@@ -63,12 +68,29 @@ public class SentenceTransformersMatcher extends TransformersBase {
         
         if(inputAlignment == null)
             inputAlignment = new Alignment();
+        //init filters
+        List<SentenceTransformersPredicate> filters = new ArrayList<>();
+        for(Class<? extends SentenceTransformersPredicate> filterClass : resourceFilters){
+            SentenceTransformersPredicate f = filterClass.newInstance();
+            f.init(source, target, inputAlignment, parameters);
+            filters.add(f);
+        }
         for(ResourcesExtractor resExtractor : resourcesExtractor){
             File corpus = FileUtil.createFileWithRandomNumber("corpus", ".txt");
             File queries = FileUtil.createFileWithRandomNumber("queries", ".txt");
             try{
-                int linesWrittenSource = createTextFile(source, corpus, resExtractor, parameters);
-                int linesWrittenTarget = createTextFile(target, queries, resExtractor, parameters);
+                Iterator<? extends OntResource> sourceIterator = resExtractor.extract(source, parameters);
+                for(SentenceTransformersPredicate f : filters){
+                    sourceIterator = new FilterIterator<>((x)-> f.keepSourceEntity(x), sourceIterator);
+                }
+                int linesWrittenSource = createTextFile(sourceIterator, corpus);
+                
+                Iterator<? extends OntResource> targetIterator = resExtractor.extract(target, parameters);
+                for(SentenceTransformersPredicate f : filters){
+                    targetIterator = new FilterIterator<>((x)-> f.keepTargetEntity(x), targetIterator);
+                }
+                int linesWrittenTarget = createTextFile(targetIterator, queries);
+                
                 if(linesWrittenSource == 0 || linesWrittenTarget == 0){
                     continue; // nothing to match. skip it.
                 }
@@ -91,12 +113,11 @@ public class SentenceTransformersMatcher extends TransformersBase {
     }
     
     
-    private int createTextFile(OntModel model, File file, ResourcesExtractor extractor, Properties parameters) throws IOException {
+    private int createTextFile(Iterator<? extends OntResource> resourceIterator, File file) throws IOException {
         //LOGGER.info("Write text to file {}", file);
         int linesWritten = 0;
         TextExtractor simpleTextExtractor = this.getExtractor();
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))){
-            Iterator<? extends OntResource> resourceIterator = extractor.extract(model, parameters);
             if(this.multipleTextsToMultipleExamples){
                 while(resourceIterator.hasNext()){
                     OntResource r = resourceIterator.next();
@@ -132,8 +153,9 @@ public class SentenceTransformersMatcher extends TransformersBase {
     
     
     //getter setter
+    
     /**
-     * Initialises the resource extractors such that classes, datatypeproperties, objectproperties, all other properties,
+     * Initialises the resource extractors such that classes, datatypeproperties, objectproperties, all other properties (rdf properties - not owl),
      * and instances are matched if the properties suggests to do so.
      */
     public void initialiseResourceExtractor() {
@@ -158,7 +180,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
         });
         this.resourcesExtractor.add((model, parameters) -> {
                 if(TypeTransformerHelper.shouldMatchObjectProperties(parameters)){
-                    return model.listObjectProperties() ;
+                    return model.listObjectProperties();
                 }else{
                     return Collections.emptyIterator();
                 }
@@ -286,7 +308,20 @@ public class SentenceTransformersMatcher extends TransformersBase {
     public void setTopkPerResource(boolean topkPerResource) {
         this.topkPerResource = topkPerResource;
     }
+
+    public List<Class<? extends SentenceTransformersPredicate>> getResourceFilters() {
+        return resourceFilters;
+    }
+
+    public void setResourceFilters(List<Class<? extends SentenceTransformersPredicate>> resourceFilters) {
+        if(resourceFilters == null)
+            throw new IllegalArgumentException("resourceFilters cannot be null");
+        this.resourceFilters = resourceFilters;
+    }
     
+    public void addResourceFilter(Class<? extends SentenceTransformersPredicate> resourceFilter){
+        this.resourceFilters.add(resourceFilter);
+    }
     
     
     //override setters which are not needed
@@ -296,7 +331,7 @@ public class SentenceTransformersMatcher extends TransformersBase {
      * @param trainingArguments training arguments
      */
     @Override
-    public void setTrainingArguments(TransformersTrainerArguments trainingArguments) {
+    public void setTrainingArguments(TransformersArguments trainingArguments) {
         throw new IllegalArgumentException("Training arguments are not used in SentenceTransformersMatcher.");
     }
 

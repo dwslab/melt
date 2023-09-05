@@ -1629,6 +1629,172 @@ def transformers_prediction():
         return jsonify(result)
 
 
+def inner_text_generation_prediction(request_headers):
+    try:
+        transformers_init(request_headers)
+
+        model_name = request_headers["model-name"]
+        prediction_file_path = request_headers["prediction-file-path"]
+        debug_file = request_headers["debug-file"] if "debug-file" in request_headers else None
+        word_stopper = request_headers["word-stopper"].lower() == "true"
+        word_forcer = request_headers["word-forcer"].lower() == "true"
+        detect_words = json.loads(request_headers["detect-words"])
+        promt = request_headers["promt"]
+        generation_arguments = json.loads(request_headers["training-arguments"])
+        loading_arguments = json.loads(request_headers["loading-arguments"])
+
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer, StoppingCriteria, StoppingCriteriaList
+        
+        class StopOnWords(StoppingCriteria):
+            def __init__(self, tokenizer, stop_words):
+                #self.tokenizer = tokenizer
+                self.list_of_word_ids = []
+                self.word_id_set = set()
+                for word_variations in stop_words:
+                    variation_ids = set()
+                    for text in word_variations:
+                        word_id = tokenizer(text, return_tensors="pt").input_ids[0][-1].item()
+                        variation_ids.add(word_id)
+                        self.word_id_set.add(word_id)
+                    self.list_of_word_ids.append(variation_ids)
+
+                for i, word_ids in enumerate(self.list_of_word_ids):
+                    app.logger.info("text_generation_prediction: stop words class %s: %s (%s)", 
+                        i,
+                        tokenizer.batch_decode(word_ids),
+                        word_ids
+                    )
+
+            def __call__(self, input_ids, scores, **kwargs):
+                return input_ids[0][-1].item() in self.word_id_set
+
+            def get_confidence_at_last_token(self, scores):
+                return self.get_confidence_for_position(scores, -1)
+
+            def get_confidence_at_found_token(self, sequences, scores):
+                """ Returns confidence at the detected token poition if found otherwise at position zero"""
+                position = self.get_position(sequences, scores)
+                if position == -1:
+                    return (self.get_confidence_for_position(scores, 0), False)
+                else:
+                    return (self.get_confidence_for_position(scores, position), True)
+            
+            def get_position(self, sequences, scores):
+                # sequences[0][-len(scores):]) -> get last tokens (those which are generated)
+                for i, token in enumerate(sequences[0][-len(scores):]):
+                    if token.item() in self.word_id_set:
+                        return i
+                return -1
+            
+            def get_confidence_for_position(self, scores, position):
+                normalized_scores = torch.nn.functional.softmax(scores[position], dim=1)
+                result_list = []
+                for word_variations in self.list_of_word_ids:
+                    #sum - not useful, as it can be the case that e.g. "yes" is predicted but sum of "no"s is higher
+                    maximum_value = 0.0
+                    for word_id in word_variations:
+                        score = normalized_scores[0][word_id].item()
+                        #print(self.tokenizer.decode(word_id) + " -> " + str(score))
+                        if score > maximum_value:
+                            maximum_value = score
+                    result_list.append(maximum_value)
+                return result_list
+
+        data_left, data_right, _ = transformers_read_file(prediction_file_path, False)
+        assert len(data_left) == len(data_right)
+        
+        used_loading_arguments = {}
+        used_loading_arguments["device_map"] = "auto"
+        used_loading_arguments.update(**loading_arguments)
+        
+        #update dtype
+        dtype_value = used_loading_arguments.get("torch_dtype")
+        if dtype_value:
+            used_loading_arguments["torch_dtype"] = getattr(torch, dtype_value.strip().replace("torch.", ""))
+
+        
+        app.logger.info("text_generation_prediction: load tokenizer / model: %s with arguments: %s", model_name, used_loading_arguments)
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            **used_loading_arguments
+            #torch_dtype=getattr(torch, torch_dtype),
+            #load_in_8bit=load_in_8bit,
+            #device_map=device_map,
+            #offload_folder="./offload",
+            #device_map="auto"
+        )
+        app.logger.info("text_generation_prediction: start prediction with device map: %s", model.hf_device_map)
+        
+        stopper = StopOnWords(tokenizer, detect_words)
+        used_generation_arguments = {}
+        if word_stopper:
+            used_generation_arguments["stopping_criteria"] = StoppingCriteriaList([stopper])
+        if word_forcer:
+            used_generation_arguments["force_words_ids"] = [[[stop_id] for stop_id in stopper.stop_ids]]
+        
+        used_generation_arguments.update(**generation_arguments)
+        
+        app.logger.info("text_generation_prediction: generation arguments: %s", used_generation_arguments)
+        
+        results_list = []
+        
+        if debug_file:
+            debug_file_writer = open(debug_file, "w", encoding='utf8')
+            writer = csv.writer(debug_file_writer, delimiter=';')
+            header = ["Sentence", "found_stop_word"]
+            for i, word_variations in enumerate(stopper.list_of_word_ids):
+                reduced_word_variation = set()
+                for word_variation in word_variations:
+                    reduced_word_variation.add(tokenizer.decode(word_variation).lower())
+                header.append(str(i) + "(" + "|".join(reduced_word_variation) + ")")
+            writer.writerow(header)
+
+        for i, (left_text, right_text) in enumerate(zip(data_left, data_right)):
+            if i % 100 == 0:
+                app.logger.info("processed %s examples", i)
+            
+            #app.logger.debug("tokenize")
+            text = promt.replace("{left}", left_text).replace("{right}", right_text)
+            model_inputs = tokenizer(text, return_tensors="pt")
+            model_inputs.to(model.device)
+            
+            input_ids = model_inputs["input_ids"]
+            attention_mask = model_inputs.get("attention_mask", None)
+            
+            #app.logger.debug("generate")
+            generated_sequence = model.generate(input_ids=input_ids, attention_mask=attention_mask,
+                output_scores=True, return_dict_in_generate=True,
+                **used_generation_arguments
+            )
+            #app.logger.debug("conf extraction")
+            list_of_conf, found = stopper.get_confidence_at_found_token(generated_sequence.sequences, generated_sequence.scores)
+            #combined_confidence = conf_positive / (conf_positive + conf_negative)
+            results_list.append(list_of_conf)
+            
+            if debug_file:
+                writer.writerow([
+                    tokenizer.decode(generated_sequence.sequences[0], skip_special_tokens=True).replace("\n", "\\n"),
+                    found, *list_of_conf
+                ])
+                debug_file_writer.flush()
+        if debug_file:
+            debug_file_writer.close()
+        return results_list
+    except Exception as e:
+        import traceback
+        return "ERROR " + traceback.format_exc()
+
+
+@app.route("/text-generation-prediction", methods=["GET"])
+def text_generation_prediction():
+    result = run_function_multi_process(request, inner_text_generation_prediction)
+    if isinstance(result, str):
+        return result
+    else:
+        return jsonify(result)
+
 def inner_transformers_finetuning(request_headers):
     try:
         transformers_init(request_headers)

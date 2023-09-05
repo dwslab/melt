@@ -11,8 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 /**
- * This filter removes correspondences where the source or target has not the same host of the OntModels.
- * E.g. it removes rdf:type=rdf:type or foaf:knows=foaf:knows
+ * This filter removes correspondences where the source or target is a blank node.
  */
 public class AnonymousNodeFilter extends MatcherYAAAJena implements Filter {
 

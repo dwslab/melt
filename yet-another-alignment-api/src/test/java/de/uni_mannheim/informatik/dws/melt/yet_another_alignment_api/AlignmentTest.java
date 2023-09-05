@@ -1,10 +1,12 @@
 package de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.junit.jupiter.api.Test;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
@@ -437,5 +439,29 @@ public class AlignmentTest {
             assertEquals(new HashSet<>(Arrays.asList("D", "E", "F")), a.getDistinctTargetsAsSet());
             assertEquals(new HashSet<>(Arrays.asList("A", "B", "C", "D", "E", "F")), a.getDistinctSourceAndTargetsAsSet());
         }
+    }
+    
+    @Test
+    void createOrderTest(){        
+        List<Correspondence> expected = new ArrayList<>();
+        expected.add(new Correspondence("A", "B"));
+        expected.add(new Correspondence("A", "D"));
+        expected.add(new Correspondence("A", "E"));
+        expected.add(new Correspondence("C", "D"));
+        
+        Alignment a = new Alignment();
+        a.add("A", "B");
+        a.add("A", "E");
+        a.add("A", "D");
+        a.add("C", "D");
+        assertEquals(expected, Alignment.createOrder(a));
+        
+        
+        a = new Alignment();
+        a.add("C", "D");
+        a.add("A", "B");
+        a.add("A", "D");
+        a.add("A", "E");
+        assertEquals(expected, Alignment.createOrder(a));
     }
 }

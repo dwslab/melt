@@ -11,6 +11,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.LLMBase;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.LLMBinaryFilter;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.LLMChooseGivenCorrespondenceFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersFineTuner;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBaseFineTuner;
@@ -191,6 +194,39 @@ public class PythonServer {
         String resultString = runRequest(request);
         try {
             return JSON_MAPPER.readValue(resultString, JSON_MAPPER.getTypeFactory().constructCollectionType(List.class, Double.class));
+        } catch (JsonProcessingException ex) {
+            throw new PythonServerException("Could not parse JSON", ex);
+        }
+    }
+    
+    
+    /**
+     * Run text generation model (like a  large language model llm) given a file with left and right value which are replaced .
+     * Each line needs to be completed and the prediction for "yes" and "no" are evaluated.
+     * @param filter the filter with information about cudaVisibleDevices, transformersCache, etc
+     * @param predictionFilePath path to csv file with two columns (text left and text right).
+     * @param wordsToDetect the words which should be detected
+     * @throws PythonServerException in case something goes wrong.
+     * @return a list of list of confidences (for each class one confidence) it corresponds to the probability that the generated
+     * token is predicted
+     */
+    public List<List<Double>> textGenerationPrediction(LLMBase filter, File predictionFilePath, List<Set<String>> wordsToDetect) throws PythonServerException {
+        HttpGet request = new HttpGet(serverUrl + "/text-generation-prediction");
+        transformersUpdateBaseRequest(filter, request);
+        
+        request.addHeader("loading-arguments", filter.getLoadingArguments().toJsonString());
+        request.addHeader("prediction-file-path", getCanonicalPath(predictionFilePath));
+        request.addHeader("promt", filter.getPromt());
+        request.addHeader("word-stopper", Boolean.toString(filter.isWordStopper()));
+        request.addHeader("word-forcer", Boolean.toString(filter.isWordForcer()));
+        if(filter.getDebugFile() != null){
+            request.addHeader("debug-file", getCanonicalPathNonExistent(filter.getDebugFile()));
+        }
+        try {
+            request.addHeader("detect-words", JSON_MAPPER.writeValueAsString(wordsToDetect));
+            String resultString = runRequest(request);
+            TypeFactory tf = JSON_MAPPER.getTypeFactory();
+            return JSON_MAPPER.readValue(resultString, tf.constructCollectionType(List.class, tf.constructCollectionType(List.class, Double.class)));
         } catch (JsonProcessingException ex) {
             throw new PythonServerException("Could not parse JSON", ex);
         }
@@ -994,6 +1030,21 @@ public class PythonServer {
         if (!file.exists()) {
             LOGGER.warn("The specified path does not exist: {}", file);
         }
+        try {
+            return file.getCanonicalPath();
+        } catch (IOException e) {
+            LOGGER.warn("Could not retrieve canonical path of file. Use absolute path instead");
+            return file.getAbsolutePath();
+        }
+    }
+    
+    /**
+     * Obtain the canonical model path.
+     *
+     * @param file the file to get the canonical path from
+     * @return The canonical path as String.
+     */
+    private String getCanonicalPathNonExistent(File file) {
         try {
             return file.getCanonicalPath();
         } catch (IOException e) {

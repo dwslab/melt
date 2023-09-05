@@ -1,20 +1,17 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.stringOperations.StringOperations;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class StringProcessing {
 
 
-    private static final Pattern CAMEL_CASE = Pattern.compile("(?<!^)(?<!\\s)(?=[A-Z][a-z])");
+    private static final Pattern CAMEL_CASE = Pattern.compile("(?<!^)(?<!\\s|\")(?=[A-Z][a-z])");
     private static final Pattern NON_ALPHA = Pattern.compile("[^a-zA-Z\\d\\s:_]");// regex: [^a-zA-Z\d\s:]
     private static final Pattern ENGLISH_GENITIVE_S = Pattern.compile("'s");
     private static final Pattern MULTIPLE_UNDERSCORES = Pattern.compile("_+");
@@ -90,6 +87,20 @@ public class StringProcessing {
 
         //remove all multi whitespaces
         stringToBeNormalized = MULTIPLE_WHITESPACE.matcher(stringToBeNormalized).replaceAll(" ");
+        return stringToBeNormalized;
+    }
+    
+    public static String normalizeOnlyCamelCaseUnderscoreAndHyphen(String stringToBeNormalized) {
+        if (stringToBeNormalized == null) return "";
+        
+        stringToBeNormalized = stringToBeNormalized.trim();
+        stringToBeNormalized = CAMEL_CASE.matcher(stringToBeNormalized).replaceAll(" ");// convert camelCase to under_score_case
+        stringToBeNormalized = stringToBeNormalized.replace('_', ' ');
+        stringToBeNormalized = stringToBeNormalized.replace('-', ' ');
+
+        //remove all multi whitespaces
+        stringToBeNormalized = MULTIPLE_WHITESPACE.matcher(stringToBeNormalized).replaceAll(" ");
+        stringToBeNormalized = stringToBeNormalized.trim();
         return stringToBeNormalized;
     }
 }

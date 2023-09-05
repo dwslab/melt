@@ -104,7 +104,7 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
      */
     public int getMaximumPerDeviceTrainBatchSize (File trainingFile){
         //save variables for restoring afterwards
-        TransformersTrainerArguments backupArguments = this.trainingArguments;
+        TransformersArguments backupArguments = this.trainingArguments;
         String backupCudaString = this.cudaVisibleDevices;
                 
         this.cudaVisibleDevices = getCudaVisibleDevicesButOnlyOneGPU();
@@ -121,7 +121,7 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
                     LOGGER.info("File contains too few lines to further increase batch size. Thus use now {}", batchSizeWhichWorks);
                     return batchSizeWhichWorks;
                 }
-                this.trainingArguments = new TransformersTrainerArguments(backupArguments);
+                this.trainingArguments = new TransformersArguments(backupArguments);
                 this.trainingArguments.addParameter("per_device_train_batch_size", batchSize);
                 this.trainingArguments.addParameter("save_at_end", false);
                 this.trainingArguments.addParameter("max_steps", 1);

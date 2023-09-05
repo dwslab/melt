@@ -1,9 +1,11 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.graph;
 
+import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.logging.Level;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +40,7 @@ public class DotGraphUtil {
     }
     
     public static <T> void writeDirectedGraphToDotFile(File dotFile, Map<T, Set<T>> edges, Function<T, String> nodeToId, String... graphAttributes){
-        try(BufferedWriter w = new BufferedWriter(new FileWriter(dotFile))){
+        try(BufferedWriter w = Files.newBufferedWriter(dotFile.toPath())){
             w.write("digraph D {");
             w.newLine();
             for(String graphAttr : graphAttributes){
@@ -64,6 +67,34 @@ public class DotGraphUtil {
     
     public static <T> void writeDirectedGraphToDotFile(File dotFile, Map<T, Set<T>> edges){
         writeDirectedGraphToDotFile(dotFile, edges, x -> makeQuotedNodeID(x.toString()));
+    }
+    
+    
+    public static <T> void renderGraph(Map<T, Set<T>> edges, File imageFile){
+        File dotFile = FileUtil.createFileWithRandomNumberInUserTmp("graph", ".dot");
+        writeDirectedGraphToDotFile(dotFile, edges);
+        try {
+            renderFilePng(dotFile, imageFile);
+        } catch (IOException ex) {
+            LOGGER.info("Cannot render graph", ex);
+        }
+        dotFile.delete();
+    }
+    
+    
+    public static <T> void renderFilePng(File dotFile, File imageFile) throws IOException{        
+        renderFile(dotFile, imageFile, "dot", "png");
+    }
+    
+    public static <T> void renderFile(File dotFile, File imageFile, String dotCommand, String type) throws IOException{       
+        String[] args = {dotCommand, "-T"+type, dotFile.getAbsolutePath(), "-o", imageFile.getAbsolutePath()};
+        
+        Process p = Runtime.getRuntime().exec(args);
+        try {
+            p.waitFor();
+        } catch (InterruptedException ex) {
+            throw new IOException(ex);
+        }
     }
         
     public static String makeQuotedNodeID(String nodeId){

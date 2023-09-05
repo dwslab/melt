@@ -8,34 +8,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class represents the arguments for the huggingface trainer.
- * Any of the training arguments which are <a href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">listed on the documentation</a>
- * can be used.
+ * This class represents the arguments for the transformers library.
  * <pre>{@code 
- * TransformerConfiguration config = new TransformerConfiguration("do_train", true, "warmup_ratio", 0.2, ...);
+ * TransformersArguments config = new TransformersArguments("do_train", true, "warmup_ratio", 0.2, ...);
  * config.addParameter("logging_strategy", "no");
  * }</pre>
  */
-public class TransformersTrainerArguments {
+public class TransformersArguments {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(TransformersTrainerArguments.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransformersArguments.class);
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     
     private final Map<String, Object> config;
     
-    public TransformersTrainerArguments(){
+    public TransformersArguments(){
         this.config = new HashMap<>();
     }
     
-    public TransformersTrainerArguments(TransformersTrainerArguments copyArguments){
+    public TransformersArguments(TransformersArguments copyArguments){
         this.config = new HashMap<>(copyArguments.config);
     }
     
-    public TransformersTrainerArguments(Map<String, Object> config){
+    public TransformersArguments(Map<String, Object> config){
         this.config = config;
     }
     
-    public TransformersTrainerArguments(Object... config){
+    public TransformersArguments(Object... config){
         this.config = parseExtensions(config);
     }
     
@@ -52,7 +50,17 @@ public class TransformersTrainerArguments {
         return map;
     }
 
-    public TransformersTrainerArguments addParameter(String key, Object value){
+    public TransformersArguments addAll(TransformersArguments arguments){
+        this.config.putAll(arguments.config);
+        return this;
+    }
+    
+    public TransformersArguments addAll(Map<String, Object> map){
+        this.config.putAll(map);
+        return this;
+    }
+    
+    public TransformersArguments addParameter(String key, Object value){
         this.config.put(key, value);
         return this;
     }

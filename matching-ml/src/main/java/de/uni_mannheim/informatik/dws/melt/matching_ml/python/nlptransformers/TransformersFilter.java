@@ -186,7 +186,7 @@ public class TransformersFilter extends TransformersBase implements Filter {
      */
     protected int getMaximumPerDeviceEvalBatchSize(File trainingFile){
         //save variables for restoring afterwards
-        TransformersTrainerArguments backupArguments = this.trainingArguments;
+        TransformersArguments backupArguments = this.trainingArguments;
         String backupCudaString = this.cudaVisibleDevices;
         
         this.cudaVisibleDevices = getCudaVisibleDevicesButOnlyOneGPU();
@@ -203,7 +203,7 @@ public class TransformersFilter extends TransformersBase implements Filter {
                     LOGGER.info("File contains too few lines to further increase batch size. Thus use now {}", batchSizeWhichWorks);
                     return batchSizeWhichWorks;
                 }
-                this.trainingArguments = new TransformersTrainerArguments(backupArguments);
+                this.trainingArguments = new TransformersArguments(backupArguments);
                 this.trainingArguments.addParameter("per_device_eval_batch_size", batchSize);
 
                 PythonServer.getInstance().transformersPrediction(this, tmpTrainingFile);

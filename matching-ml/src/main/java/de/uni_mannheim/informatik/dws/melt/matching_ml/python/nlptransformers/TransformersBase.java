@@ -45,7 +45,7 @@ public abstract class TransformersBase extends MatcherYAAAJena {
     protected TextExtractorMap extractor;
     protected String modelName;
     
-    protected TransformersTrainerArguments trainingArguments;
+    protected TransformersArguments trainingArguments;
     protected boolean usingTensorflow;
     protected String cudaVisibleDevices;
     protected File transformersCache;
@@ -66,7 +66,7 @@ public abstract class TransformersBase extends MatcherYAAAJena {
         this.modelName = modelName;
         
         //set useful defaults
-        this.trainingArguments = new TransformersTrainerArguments();
+        this.trainingArguments = new TransformersArguments();
         this.usingTensorflow = false;
         this.cudaVisibleDevices = ""; //use all GPUs
         this.transformersCache = null; //use default
@@ -146,19 +146,21 @@ public abstract class TransformersBase extends MatcherYAAAJena {
 
     /**
      * Returns the training arguments of the huggingface trainer.
-     * Any of the training arguments can be used. For further documentation, see{@link TransformersTrainerArguments}
+     * Any of the training arguments which are <a href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">listed on the documentation</a>
+     * can be used.
      * @return the transformer location
      */
-    public TransformersTrainerArguments getTrainingArguments() {
+    public TransformersArguments getTrainingArguments() {
         return trainingArguments;
     }
 
     /**
      * Sets the training arguments of the huggingface trainer.
-     * Any of the training arguments can be used. For further documentation, see{@link TransformersTrainerArguments}
+     * Any of the training arguments which are <a href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">listed on the documentation</a>
+     * can be used.
      * @param configuration the trainer configuration
      */
-    public void setTrainingArguments(TransformersTrainerArguments configuration) {
+    public void setTrainingArguments(TransformersArguments configuration) {
         if(configuration == null)
             throw new IllegalArgumentException("training arguments cannot be set to null");
         this.trainingArguments = configuration;
@@ -166,7 +168,8 @@ public abstract class TransformersBase extends MatcherYAAAJena {
     
     /**
      * Adds a training argument for the transformers trainer.
-     * Any of the trainer arguments can be used. For further documentation, see{@link TransformersTrainerArguments}.
+     * Any of the training arguments which are <a href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">listed on the documentation</a>
+     * can be used.
      * @param key The key of the training argument like warmup_ratio
      * @param value the corresponding value like 0.2
      */

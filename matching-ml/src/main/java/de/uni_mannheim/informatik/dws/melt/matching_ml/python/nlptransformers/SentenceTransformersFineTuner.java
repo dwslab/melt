@@ -191,7 +191,7 @@ public class SentenceTransformersFineTuner extends TransformersBaseFineTuner {
      * @param trainingArguments training arguments
      */
     @Override
-    public void setTrainingArguments(TransformersTrainerArguments trainingArguments) {
+    public void setTrainingArguments(TransformersArguments trainingArguments) {
         throw new IllegalArgumentException("Training arguments are not used in SentenceTransformersFineTuner.");
     }
 

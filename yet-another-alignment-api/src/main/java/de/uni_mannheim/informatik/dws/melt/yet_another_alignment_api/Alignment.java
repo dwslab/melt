@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -562,6 +563,17 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
             m.add(c);
         }
         return m;
+    }
+    
+    /**
+     * Returns only the size of the new alignment which contains only correspondences above or equal the given threshold (it will not modify the current object).
+     * This is faster than creating the cutted alignment in case you are only interested in the size of it (e.g. for best confidence search). 
+     * @param threshold Threshold for cutting (correspondences greater than or equal the threshold will be added).
+     * @return the size of the cutted alignment.
+     */
+    public int cutSize(double threshold){
+        assertIndexOnConfidence();
+        return this.retrieve(QueryFactory.greaterThanOrEqualTo(Correspondence.CONFIDENCE, threshold)).size();
     }
 
     /**
@@ -1334,5 +1346,29 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      */
     public static Alignment copyExtensionsToAlignment(Alignment sourceAlignment, Alignment targetAlignment){
         return copyExtensionsToAlignment(sourceAlignment, targetAlignment, false);
+    }
+    
+    /**
+     * Creates a deterministic order of correspondences.
+     * @param alignment the alignemtn to create the order
+     * @return an ordered alignment as list.
+     */
+    public static List<Correspondence> createOrder(Alignment alignment){
+        return createOrder(new ArrayList<>(alignment));
+    }
+    
+    /**
+     * Creates a deterministic order of correspondences.
+     * @param alignment the alignemtn to create the order
+     * @return an ordered alignment as list.
+     */
+    public static List<Correspondence> createOrder(List<Correspondence> alignment){
+        //make it deterministic
+        alignment.sort(
+                Comparator.comparing(Correspondence::getEntityOne)
+                        .thenComparing(Correspondence::getEntityTwo)
+                        .thenComparing(Correspondence::getRelation)
+        );
+        return alignment;
     }
 }

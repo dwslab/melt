@@ -723,30 +723,42 @@ public class Executor {
      * Runs a matcher on top of another. This means that the previous matchings do not need to be recalculated.
      * @param oldResults the results from the previous runs already containing result from the oldMatcherName.
      * @param oldMatcherName the matcher name which should exist in previous results
+     * @param newMatcher the actual matcher
      * @param newMatcherName the new matcher name
-     * @param matcher the actual matcher
      * @return the execution results together with the new matcher
      */
-    public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet oldResults, String oldMatcherName, Object matcher, String newMatcherName){
-        return runMatcherOnTop(oldResults, oldMatcherName, getMatcherMapWithName(matcher, newMatcherName));
+    public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet oldResults, String oldMatcherName, Object newMatcher, String newMatcherName){
+        return runMatcherOnTop(oldResults, oldMatcherName, getMatcherMapWithName(newMatcher, newMatcherName));
     }
     
     public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet oldResults, String oldMatcherName, Map<String, Object> newMatchers){
         ExecutionResultSet newResultSet = new ExecutionResultSet();
         for(ExecutionResult oldResult : oldResults.getGroup(oldMatcherName)){
             for(Entry<String, Object> newMatcher : newMatchers.entrySet()){
-                ExecutionResult newResult = ExecutionRunner.runMatcher(
-                    oldResult.getTestCase(),
-                    newMatcher.getValue(),
-                    newMatcher.getKey(),
-                    new Alignment(oldResult.getSystemAlignment()),
-                    oldResult.getParameters()
-                );
-                newResult.addRuntime(oldResult.getRuntime());
-                newResultSet.add(newResult);
+                newResultSet.add(runMatcherOnTop(oldResult, newMatcher.getValue(), newMatcher.getKey()));
             }
         }
         oldResults.addAll(newResultSet);
         return oldResults;
+    }
+    
+    public static ExecutionResultSet runMatcherOnTop(ExecutionResult oldResult, Map<String, Object> newMatchers){
+        ExecutionResultSet newResultSet = new ExecutionResultSet();
+        for(Entry<String, Object> newMatcher : newMatchers.entrySet()){
+            newResultSet.add(runMatcherOnTop(oldResult, newMatcher.getValue(), newMatcher.getKey()));
+        }
+        return newResultSet;
+    }
+    
+    public static ExecutionResult runMatcherOnTop(ExecutionResult oldResult, Object newMatcher, String newMatcherName){
+        ExecutionResult newResult = ExecutionRunner.runMatcher(
+                oldResult.getTestCase(),
+                newMatcher,
+                newMatcherName,
+                new Alignment(oldResult.getSystemAlignment()),
+                oldResult.getParameters()
+            );
+        newResult.addRuntime(oldResult.getRuntime());
+        return newResult;
     }
 }

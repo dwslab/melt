@@ -1,0 +1,4 @@
+@prefix : <http://target.org/>
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+:one  rdfs:subClassOf :two.
+:three  a rdfs:Class.

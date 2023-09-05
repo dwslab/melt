@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d %highlight{%-5p}{noConsoleNoAnsi=true,WARN=yellow bright} %-25.-25c{1} - %m%n" />
+    </Console>
+    
+    <!--<File name="File" fileName="log.txt" append="False">
+      <PatternLayout>
+        <Pattern>%p %d %t %c - %m%n</Pattern>
+      </PatternLayout>
+    </File>-->
+  </Appenders>
+  <Loggers>
+    <Root level="all">
+      <AppenderRef ref="Console" level="INFO"/>
+      <!--AppenderRef ref="File" /-->
+    </Root>
+  </Loggers>
+</Configuration>

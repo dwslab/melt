@@ -552,7 +552,27 @@ public class Counter<T> {
     }
     
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-     
+    
+    
+    
+    /**
+     * ToString method which returns the given entries well formatted in multiple lines.
+     * @param entries the values which should be nicely formatted
+     * @return a string which contains the entries information in multiple lines.
+     */      
+    public String toStringMultiline(Collection<Entry<T, Double>> entries){
+        LinkedHashMap<T, Double> lhm = new LinkedHashMap<>();
+        entries.stream()
+                .sorted(this.mapComparator)
+                .forEach(e -> lhm.put(e.getKey(), e.getValue()));
+        try{
+            return JSON_MAPPER.writeValueAsString(lhm);
+        } catch (IOException ex) {
+            LOGGER.error("Could not serialize Counter to string", ex);
+            return "";
+        }
+    }    
+    
     /**
      * ToString method which returns the counter well formatted in multiple lines to have a better overview.
      * @return a string which contains the counter information in multiple lines.

@@ -149,8 +149,8 @@ public class ConfidenceFinder {
         double bestConf = 1.0;
         double bestValue = 0.0d;
         for(Double conf : systemConfidences){
-            int tpSize = m.getTruePositive().cut(conf).size();
-            int fpSize = m.getFalsePositive().cut(conf).size();
+            int tpSize = m.getTruePositive().cutSize(conf); //.cut(conf).size();
+            int fpSize = m.getFalsePositive().cutSize(conf); //.cut(conf).size();
             int fnSize = m.getFalseNegativeSize() + (m.getTruePositiveSize() - tpSize);
 
             /*
@@ -182,8 +182,8 @@ public class ConfidenceFinder {
                 bestValue = f1measure;
             }
         }
-        int tpSize = m.getTruePositive().cut(bestConf).size();
-        int fpSize = m.getFalsePositive().cut(bestConf).size();
+        int tpSize = m.getTruePositive().cutSize(bestConf); //.cut(bestConf).size();
+        int fpSize = m.getFalsePositive().cutSize(bestConf); //.cut(bestConf).size();
         int fnSize = m.getFalseNegativeSize() + (m.getTruePositiveSize() - tpSize);
         LOGGER.info("Found best confidence of {} which leads to F-Measure of {} (tp: {} fp: {} fn: {})",
             bestConf, bestValue, tpSize, fpSize, fnSize);
@@ -236,8 +236,8 @@ public class ConfidenceFinder {
         double bestConf = 1.0d;
         double bestValue = 0.0d;
         for(Double conf : systemConfidences){
-            int tpSize = m.getTruePositive().cut(conf).size();
-            int fpSize = m.getFalsePositive().cut(conf).size();
+            int tpSize = m.getTruePositive().cutSize(conf); // .cut(conf).size();
+            int fpSize = m.getFalsePositive().cutSize(conf); // .cut(conf).size();
             int fnSize = m.getFalseNegativeSize() + (m.getTruePositiveSize() - tpSize);
             
             double precision = divideWithTwoDenominators(tpSize, tpSize, fpSize);
@@ -249,8 +249,8 @@ public class ConfidenceFinder {
                 bestValue = fbeta;
             }
         }
-        int tpSize = m.getTruePositive().cut(bestConf).size();
-        int fpSize = m.getFalsePositive().cut(bestConf).size();
+        int tpSize = m.getTruePositive().cutSize(bestConf); // .cut(bestConf).size();
+        int fpSize = m.getFalsePositive().cutSize(bestConf); // .cut(bestConf).size();
         int fnSize = m.getFalseNegativeSize() + (m.getTruePositiveSize() - tpSize);
         LOGGER.info("Found best confidence of {} which leads to F_{} of {} (tp: {} fp: {} fn: {})",
             bestConf, beta, bestValue, tpSize, fpSize, fnSize);
@@ -300,8 +300,8 @@ public class ConfidenceFinder {
         double bestConf = 1.0d;
         double bestValue = 0.0d;
         for(Double conf : systemConfidences){
-            int tpSize = m.getTruePositive().cut(conf).size();
-            int fpSize = m.getFalsePositive().cut(conf).size();
+            int tpSize = m.getTruePositive().cutSize(conf); // .cut(conf).size();
+            int fpSize = m.getFalsePositive().cutSize(conf); // .cut(conf).size();
             double precision = divideWithTwoDenominators(tpSize, tpSize, fpSize);
 
             if(precision >= bestValue){
@@ -309,8 +309,8 @@ public class ConfidenceFinder {
                 bestValue = precision;
             }
         }
-        int tpSize = m.getTruePositive().cut(bestConf).size();
-        int fpSize = m.getFalsePositive().cut(bestConf).size();
+        int tpSize = m.getTruePositive().cutSize(bestConf); // .cut(bestConf).size();
+        int fpSize = m.getFalsePositive().cutSize(bestConf); // .cut(bestConf).size();
         LOGGER.info("Found best confidence of {} which leads to precision of {} (tp: {} fp: {})",
                 bestConf, bestValue, tpSize, fpSize);
         return bestConf;
