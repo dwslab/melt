@@ -10,7 +10,7 @@ To run all examples, first MELT needs to be build and then the correct python en
 ### Build MELT
 In the main directory of MELT execute
 ```
-mvn clean install
+mvn clean install -DskipTests -Dmaven.javadoc.skip=true
 ```
 
 
