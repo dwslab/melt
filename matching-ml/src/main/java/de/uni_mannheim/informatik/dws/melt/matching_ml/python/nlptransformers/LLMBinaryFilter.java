@@ -39,12 +39,12 @@ public class LLMBinaryFilter extends LLMBase implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(LLMBinaryFilter.class);
         
     /**
-     * Set of positive words to use. Default is "yes" (and some variations of it (generated with {@link #includeMoreVariations(java.util.Set))
+     * Set of positive words to use. Default is "yes" (and some variations of it (generated with {@link #includeMoreVariations(java.util.Set)})
      */
     protected Set<String> positiveWords;
     
     /**
-     * Set of negative words to use. Default is "no" (and some variations of it (generated with {@link #includeMoreVariations(java.util.Set))
+     * Set of negative words to use. Default is "no" (and some variations of it (generated with {@link #includeMoreVariations(java.util.Set)})
      */
     protected Set<String> negativeWords;
         

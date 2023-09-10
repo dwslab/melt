@@ -163,7 +163,7 @@ public class TransformersFineTuner extends TransformersBaseFineTuner implements 
     /**
      * This will add (potencially multiple) training parameters to the current {@link TransformersBase#trainingArguments trainingArguments}
      * to make the training faster. Thus do not change the trainingArguments object afterwards 
-     * (with {@link TransformersBase#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments) setTrainingArguments} ).
+     * (with {@link TransformersBase#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersArguments)  setTrainingArguments} ).
      * What you can do is to add more training arguments via getTrainingArguments.addParameter (as long as you do not modify any parameters added by this method).
      * The following parameters are set:
      * <ul>
