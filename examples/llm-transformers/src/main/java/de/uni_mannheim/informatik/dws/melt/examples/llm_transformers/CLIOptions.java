@@ -45,29 +45,29 @@ import org.slf4j.LoggerFactory;
 public class CLIOptions {
     private static final Logger LOGGER = LoggerFactory.getLogger(CLIOptions.class);
     
-    private static final List<String> PREDEFINED_PROMTS = createPredefinedPromts();
-    private static List<String> createPredefinedPromts(){
-        List<String> promts = new ArrayList<>();
+    private static final List<String> PREDEFINED_PROMPTS = createPredefinedPrompts();
+    private static List<String> createPredefinedPrompts(){
+        List<String> prompts = new ArrayList<>();
         
         /********************
          * zero shot
          ********************/        
         //0
-        promts.add("Classify if the following two concepts are the same.\n### First concept:\n{left}\n### Second concept:\n{right}\n### Answer:\n");
+        prompts.add("Classify if the following two concepts are the same.\n### First concept:\n{left}\n### Second concept:\n{right}\n### Answer:\n");
         //1 - adding more context for anatomy
-        promts.add("Classify if two concepts refer to the same real word entiy. This is an ontology matching task between the anatomy of human and mouse. \n"
+        prompts.add("Classify if two concepts refer to the same real word entiy. This is an ontology matching task between the anatomy of human and mouse. \n"
                 + "First concept: {left}\n"
                 + "Second concept: {right}\n"
                 + "Answer:");
         //2 - very simple
-        promts.add("Is {left} and {right} the same? The answer which can be yes or no is ");
+        prompts.add("Is {left} and {right} the same? The answer which can be yes or no is ");
         //3 - more context in general
-        promts.add("The task is ontology matching. Given two concepts, the task is to classify if they are the same or not.\n "
+        prompts.add("The task is ontology matching. Given two concepts, the task is to classify if they are the same or not.\n "
                 + "The first concept is: {left}\n"
                 + "The second concept is: {right}\n"
                 + "The answer which can be yes or no is:");
         //4 - another test
-        promts.add("Given two concepts decide if they match or not.\n"
+        prompts.add("Given two concepts decide if they match or not.\n"
                 + "First concept: {left}\n"
                 + "Second concept: {right}\n"
                 + "Answer(yes or no):");
@@ -77,12 +77,12 @@ public class CLIOptions {
          * Few shot
          ********************/
         // 5 - 2 shot
-        promts.add("### Concept one: endocrine pancreas secretion ### Concept two: Pancreatic Endocrine Secretion ### Answer: yes\n"
+        prompts.add("### Concept one: endocrine pancreas secretion ### Concept two: Pancreatic Endocrine Secretion ### Answer: yes\n"
                 + "### Concept one: urinary bladder urothelium ### Concept two: Transitional Epithelium ### Answer: no\n"
                 + "### Concept one: {left} ### Concept two: {right} ### Answer: ");
         
         // 6 - 6 shot        
-        promts.add("### Concept one: endocrine pancreas secretion ### Concept two: Pancreatic Endocrine Secretion ### Answer: yes\n"
+        prompts.add("### Concept one: endocrine pancreas secretion ### Concept two: Pancreatic Endocrine Secretion ### Answer: yes\n"
                 + "### Concept one: urinary bladder urothelium ### Concept two: Transitional Epithelium ### Answer: no\n"
                 + "### Concept one: trigeminal V nerve ophthalmic division ### Concept two: Ophthalmic Nerve ### Answer: yes\n"
                 + "### Concept one: foot digit 1 phalanx ### Concept two: Foot Digit 2 Phalanx ### Answer: no\n"
@@ -92,7 +92,7 @@ public class CLIOptions {
         
         
         // 7 - 6 shot with   
-        promts.add("Classify if two descriptions refer to the same real world entity (ontology matching).\n" 
+        prompts.add("Classify if two descriptions refer to the same real world entity (ontology matching).\n" 
                 + "### Concept one: endocrine pancreas secretion ### Concept two: Pancreatic Endocrine Secretion ### Answer: yes\n"
                 + "### Concept one: urinary bladder urothelium ### Concept two: Transitional Epithelium ### Answer: no\n"
                 + "### Concept one: trigeminal V nerve ophthalmic division ### Concept two: Ophthalmic Nerve ### Answer: yes\n"
@@ -102,20 +102,20 @@ public class CLIOptions {
                 + "### Concept one: {left} ### Concept two: {right} ### Answer: ");
         
         // 8 - zero shot chain of thought
-        promts.add("Classify if two descriptions refer to the same real world entity (ontology matching).\n"
+        prompts.add("Classify if two descriptions refer to the same real world entity (ontology matching).\n"
                 + "First concept: {left}\n"
                 + "Second concept: {right}\n"
                 + "Answer can be yes or no. Let's think step by step.\n");
         
         // 9 - few shot chain of thought
-        promts.add("Classify if two descriptions refer to the same real world entity (ontology matching).\n"
+        prompts.add("Classify if two descriptions refer to the same real world entity (ontology matching).\n"
                 + "### Concept one: endocrine pancreas secretion ### Concept two: Pancreatic Endocrine Secretion ### Explanation: Both describe the process of the pancreas releasing hormones into the bloodstream ### Answer: yes\n"
                 + "### Concept one: foot digit 1 phalanx ### Concept two: Foot Digit 2 Phalanx ### Explanation: The concepts refer to different bones in the toes of the foot ### Answer: no\n"
                 + "### Concept one: {left} ### Concept two: {right} ### Explanation: "
         );
         
         //10 - which is number 7 plus rdf info
-        promts.add("Classify if two descriptions (given as RDF) refer to the same real world entity (ontology matching).\n" 
+        prompts.add("Classify if two descriptions (given as RDF) refer to the same real world entity (ontology matching).\n" 
                 + "### Concept one: endocrine pancreas secretion ### Concept two: Pancreatic Endocrine Secretion ### Answer: yes\n"
                 + "### Concept one: urinary bladder urothelium ### Concept two: Transitional Epithelium ### Answer: no\n"
                 + "### Concept one: trigeminal V nerve ophthalmic division ### Concept two: Ophthalmic Nerve ### Answer: yes\n"
@@ -133,14 +133,14 @@ public class CLIOptions {
         //zero shot 
         
         //11 - 
-        promts.add("The task is ontology matching (find the description which refer to the same real world entity). "
+        prompts.add("The task is ontology matching (find the description which refer to the same real world entity). "
                 + "Which of the following descriptions fits best to this description: {left}?\n" 
                 + "{right}"
                 + "Answer with the corresponding letter or \"none\" if no description fits. Answer: ");
         
         //few shot
         //12
-        promts.add("The task is ontology matching and to find the description which refer to the same real world entity. "
+        prompts.add("The task is ontology matching and to find the description which refer to the same real world entity. "
                 + "Which of the following descriptions fits best to this description: endocrine pancreas secretion?\n" 
                 + "\t a) Islet of Langerhans\n"
                 + "\t b) Pancreatic Secretion\n"
@@ -150,7 +150,7 @@ public class CLIOptions {
                 + "Which of the following descriptions fits best to this description: {left}?\n"
                 + "{right}\n"
                 + "Answer with the corresponding letter or \"none\" if no description fits. Answer:" );
-        return promts;
+        return prompts;
     }
     
     
@@ -265,8 +265,8 @@ public class CLIOptions {
                 .build());
         
         options.addOption(Option.builder("isp")
-                .longOpt("includesystempromt")
-                .desc("Include the systempromt for the specific models.")
+                .longOpt("includesystemprompt")
+                .desc("Include the systemprompt for the specific models.")
                 .build());
         
         options.addOption(Option.builder("ila")
@@ -303,16 +303,16 @@ public class CLIOptions {
                 .build());
         
         options.addOption(Option.builder("pr")
-                .longOpt("promt")
+                .longOpt("prompt")
                 .required()
                 .hasArgs()
-                .desc("The promts to use - the texts of the resources are inserted by replacing the text {left} and {right}."
-                    + "Can also be a number which then uses a predefined promt. The number can range from 0 to " + (PREDEFINED_PROMTS.size() - 1))
+                .desc("The prompts to use - the texts of the resources are inserted by replacing the text {left} and {right}."
+                    + "Can also be a number which then uses a predefined prompt. The number can range from 0 to " + (PREDEFINED_PROMPTS.size() - 1))
                 .build());
         
         options.addOption(Option.builder("r")
                 .longOpt("replace")
-                .desc("Replace the user promt")
+                .desc("Replace the user prompt")
                 .build()
         );
         
@@ -410,7 +410,7 @@ public class CLIOptions {
         }
     }
     
-    public boolean isIncludeSystemPromt(){
+    public boolean isIncludeSystemPrompt(){
         return cmd.hasOption("isp");
     }
     
@@ -422,7 +422,7 @@ public class CLIOptions {
         return cmd.hasOption("ila");
     }
     
-    public boolean isReplacePromt(){
+    public boolean isReplacePrompt(){
         return cmd.hasOption("r");
     }
     
@@ -457,50 +457,45 @@ public class CLIOptions {
         }
     }
     
-    public List<Entry<String, String>> getPromts(TextExtractorMap textExtractorMap){
-        List<String> promts = Arrays.asList(cmd.getOptionValues("pr"));
-        if (promts.isEmpty()) {
-            LOGGER.warn("No promts specified. ABORTING program.");
+    public List<Entry<String, String>> getPrompts(TextExtractorMap textExtractorMap){
+        List<String> prompts = Arrays.asList(cmd.getOptionValues("pr"));
+        if (prompts.isEmpty()) {
+            LOGGER.warn("No prompts specified. ABORTING program.");
             System.exit(1);
         }
-        //process promts
-        List<Entry<String, String>> finalPromts = new ArrayList<>();
-        for(String promt : promts){
-            if(promt.equals("7auto")){
-                finalPromts.add(new SimpleEntry<>("7auto", getAutoPromt(textExtractorMap, "Classify if two descriptions refer to the same real world entity (ontology matching).\n"))); 
+        //process prompts
+        List<Entry<String, String>> finalPrompts = new ArrayList<>();
+        for(String prompt : prompts){
+            if(prompt.equals("7auto")){
+                finalPrompts.add(new SimpleEntry<>("7auto", getAutoPrompt(textExtractorMap, "Classify if two descriptions refer to the same real world entity (ontology matching).\n"))); 
                 continue;
             }
-            if(promt.equals("9auto")){
-                finalPromts.add(new SimpleEntry<>("9auto", getAutoPromt(textExtractorMap, "Classify if two descriptions (given as RDF) refer to the same real world entity (ontology matching).\n"))); 
+            if(prompt.equals("9auto")){
+                finalPrompts.add(new SimpleEntry<>("9auto", getAutoPrompt(textExtractorMap, "Classify if two descriptions (given as RDF) refer to the same real world entity (ontology matching).\n"))); 
                 continue;
             }
-            if(promt.equals("12auto")){
-                finalPromts.add(new SimpleEntry<>("12auto", getAutoPromtChooser(textExtractorMap))); 
+            if(prompt.equals("12auto")){
+                finalPrompts.add(new SimpleEntry<>("12auto", getAutoPromptChooser(textExtractorMap))); 
                 continue;
             }
             try{
-                int promtNumber = Integer.parseInt(promt);
+                int promptNumber = Integer.parseInt(prompt);
                 //range check
-                if(promtNumber < 0 || promtNumber >= PREDEFINED_PROMTS.size()){
-                    LOGGER.warn("Argument promts (-pr) which is set to \"{}\" is not in the range 0-{}.", promt, PREDEFINED_PROMTS.size()-1);
+                if(promptNumber < 0 || promptNumber >= PREDEFINED_PROMPTS.size()){
+                    LOGGER.warn("Argument prompts (-pr) which is set to \"{}\" is not in the range 0-{}.", prompt, PREDEFINED_PROMPTS.size()-1);
                     System.exit(1);
                     return null;
                 }
-                finalPromts.add(new SimpleEntry<>(Integer.toString(promtNumber), PREDEFINED_PROMTS.get(promtNumber))); 
+                finalPrompts.add(new SimpleEntry<>(Integer.toString(promptNumber), PREDEFINED_PROMPTS.get(promptNumber))); 
             } catch(NumberFormatException e){
-                finalPromts.add(new SimpleEntry<>(getPromtIdentification(promt), promt)); 
+                finalPrompts.add(new SimpleEntry<>(getPromptIdentification(prompt), prompt)); 
             }
-            
-            //if(cmd.hasOption("r")){
-            //    finalPromt = finalPromt.replace("###", "~~~");
-            //}
-            
         }
         
-        return finalPromts;
+        return finalPrompts;
     }
     
-    private String getAutoPromt(TextExtractorMap extractor, String initialText){
+    private String getAutoPrompt(TextExtractorMap extractor, String initialText){
         List<Correspondence> list = new ArrayList<>();
         list.add(new Correspondence("http://mouse.owl#MA_0002517", "http://human.owl#NCI_C33255", 1.0, CorrespondenceRelation.EQUIVALENCE));
         list.add(new Correspondence("http://mouse.owl#MA_0001693", "http://human.owl#NCI_C13318", 1.0, CorrespondenceRelation.INCOMPAT));
@@ -526,7 +521,7 @@ public class CLIOptions {
         return sb.toString();
     }
     
-    private String getAutoPromtChooser(TextExtractorMap extractor){
+    private String getAutoPromptChooser(TextExtractorMap extractor){
         TestCase tc = TrackRepository.Anatomy.Default.getFirstTestCase();
         OntModel source = tc.getSourceOntology(OntModel.class);
         OntModel target = tc.getTargetOntology(OntModel.class);
@@ -549,10 +544,10 @@ public class CLIOptions {
         //return StringProcessing.normalizeOnlyCamelCaseAndUnderscore(oneValue);
     }
     
-    private String getPromtIdentification(String promt){
-        //promt identification is the first word plus a short hash of the promt.
-        int i = promt.indexOf(' ');
-        String firstWord = promt;
+    private String getPromptIdentification(String prompt){
+        //prompt identification is the first word plus a short hash of the prompt.
+        int i = prompt.indexOf(' ');
+        String firstWord = prompt;
         if(i >= 0){
             firstWord = firstWord.substring(0, i);
         }
@@ -561,7 +556,7 @@ public class CLIOptions {
             firstWord = firstWord.substring(0, 15);
         }
         
-        return firstWord+DigestUtils.sha256Hex(promt).substring(0, 7);
+        return firstWord+DigestUtils.sha256Hex(prompt).substring(0, 7);
     }
     
     

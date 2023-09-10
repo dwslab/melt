@@ -4,7 +4,6 @@ import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherPipelineSequenti
 import de.uni_mannheim.informatik.dws.melt.matching_base.MeltUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_data.GoldStandardCompleteness;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
@@ -25,21 +24,15 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.AddA
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.ConfidenceCombiner;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.ForwardAlwaysMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.StringProcessing;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllAnnotationProperties;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorAllLiterals;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorOnlyLabel;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorSet;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.LLMBase;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.LLMBinaryFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.LLMChooseGivenEntityFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersPredicateInputAlignment;
-import de.uni_mannheim.informatik.dws.melt.matching_owlapi_matchers.AlcomoFilter;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -174,9 +167,9 @@ public class Main {
             for(Entry<String, TextExtractorMap> textExtractor : cliOptions.getTextExtractors()){
                 for(String model : cliOptions.getTransformerModels()) {
                     LLMConfiguration modelConfig = LLMConfiguration.getConfiguration(model);
-                    for(Entry<String, String> promt : cliOptions.getPromts(textExtractor.getValue())) {
+                    for(Entry<String, String> promt : cliOptions.getPrompts(textExtractor.getValue())) {
 
-                        String configurationName = processModelName(model) + "promt" + promt.getKey() + cliOptions.isReplacePromt() + cliOptions.isIncludeSystemPromt() + 
+                        String configurationName = processModelName(model) + "promt" + promt.getKey() + cliOptions.isReplacePrompt() + cliOptions.isIncludeSystemPrompt() + 
                                 "_loading" + cliOptions.isIncludeLoadingArguments() + "_" + textExtractor.getKey() +
                                 "_isChoose" + cliOptions.isChoose() + "_" + recallGenerationName;
                         configurationName = configurationName.replaceAll(" ", "_");
@@ -185,10 +178,10 @@ public class Main {
                         //TextExtractorMap modifiedTextExtractor = TextExtractorMap.appendStringPostProcessing(textExtractor.getValue(), StringProcessing::normalizeOnlyCamelCaseAndUnderscore);
 
                         String finalPromt = promt.getValue();
-                        if(cliOptions.isReplacePromt()){
+                        if(cliOptions.isReplacePrompt()){
                             finalPromt = finalPromt.replace("###", "~~~");
                         }
-                        if(cliOptions.isIncludeSystemPromt()){
+                        if(cliOptions.isIncludeSystemPrompt()){
                             finalPromt = modelConfig.processPromt(finalPromt);
                         }
 
