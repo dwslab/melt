@@ -123,15 +123,18 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>private int</code></div>
 <div class="col-second even-row-color"><code><a href="#queryChunkSize" class="member-name-link">queryChunkSize</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../matching_jena/ResourcesExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">ResourcesExtractor</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#resourcesExtractor" class="member-name-link">resourcesExtractor</a></code></div>
+<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="SentenceTransformersPredicate.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersPredicate</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#resourceFilters" class="member-name-link">resourceFilters</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private int</code></div>
-<div class="col-second even-row-color"><code><a href="#topK" class="member-name-link">topK</a></code></div>
+<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../matching_jena/ResourcesExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">ResourcesExtractor</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#resourcesExtractor" class="member-name-link">resourcesExtractor</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#topkPerResource" class="member-name-link">topkPerResource</a></code></div>
+<div class="col-first odd-row-color"><code>private int</code></div>
+<div class="col-second odd-row-color"><code><a href="#topK" class="member-name-link">topK</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>private boolean</code></div>
+<div class="col-second even-row-color"><code><a href="#topkPerResource" class="member-name-link">topkPerResource</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersBase">Fields inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.<a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></h3>
@@ -169,22 +172,26 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createTextFile(org.apache.jena.ontology.OntModel,java.io.File,de.uni_mannheim.informatik.dws.melt.matching_jena.ResourcesExtractor,java.util.Properties)" class="member-name-link">createTextFile</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;model,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file,
- <a href="../../../matching_jena/ResourcesExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">ResourcesExtractor</a>&nbsp;extractor,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;parameters)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addResourceFilter(java.lang.Class)" class="member-name-link">addResourceFilter</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="SentenceTransformersPredicate.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersPredicate</a>&gt;&nbsp;resourceFilter)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCorpusChunkSize()" class="member-name-link">getCorpusChunkSize</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createTextFile(java.util.Iterator,java.io.File)" class="member-name-link">createTextFile</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&lt;? extends org.apache.jena.ontology.OntResource&gt;&nbsp;resourceIterator,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCorpusChunkSize()" class="member-name-link">getCorpusChunkSize</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the number of enties which are scaned at a time.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getQueryChunkSize()" class="member-name-link">getQueryChunkSize</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getQueryChunkSize()" class="member-name-link">getQueryChunkSize</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the number of queries which are processed simultaneously.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="SentenceTransformersPredicate.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersPredicate</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getResourceFilters()" class="member-name-link">getResourceFilters</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../matching_jena/ResourcesExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">ResourcesExtractor</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getResourcesExtractor()" class="member-name-link">getResourcesExtractor</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -199,7 +206,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initialiseResourceExtractor()" class="member-name-link">initialiseResourceExtractor</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Initialises the resource extractors such that classes, datatypeproperties, objectproperties, all other properties,
+<div class="block">Initialises the resource extractors such that classes, datatypeproperties, objectproperties, all other properties (rdf properties - not owl),
  and instances are matched if the properties suggests to do so.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
@@ -237,26 +244,29 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the number of queries which are processed simultaneously.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResourcesExtractor(java.util.List)" class="member-name-link">setResourcesExtractor</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../matching_jena/ResourcesExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">ResourcesExtractor</a>&gt;&nbsp;resourcesExtractor)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResourceFilters(java.util.List)" class="member-name-link">setResourceFilters</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="SentenceTransformersPredicate.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersPredicate</a>&gt;&gt;&nbsp;resourceFilters)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTopK(int)" class="member-name-link">setTopK</a><wbr>(int&nbsp;topK)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResourcesExtractor(java.util.List)" class="member-name-link">setResourcesExtractor</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../matching_jena/ResourcesExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">ResourcesExtractor</a>&gt;&nbsp;resourcesExtractor)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTopK(int)" class="member-name-link">setTopK</a><wbr>(int&nbsp;topK)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the number which represents how many correspondences should be created per resource.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTopkPerResource(boolean)" class="member-name-link">setTopkPerResource</a><wbr>(boolean&nbsp;topkPerResource)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTopkPerResource(boolean)" class="member-name-link">setTopkPerResource</a><wbr>(boolean&nbsp;topkPerResource)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">If set to true, the topk parameter applies to number of resources and not to number of extracted texts.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)" class="member-name-link">setTrainingArguments</a><wbr>(<a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a>&nbsp;trainingArguments)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersArguments)" class="member-name-link">setTrainingArguments</a><wbr>(<a href="TransformersArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersArguments</a>&nbsp;trainingArguments)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">No training arguments can be used for SentenceTransformersMatcher - do NOT call this method.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUsingTensorflow(boolean)" class="member-name-link">setUsingTensorflow</a><wbr>(boolean&nbsp;usingTensorflow)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUsingTensorflow(boolean)" class="member-name-link">setUsingTensorflow</a><wbr>(boolean&nbsp;usingTensorflow)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">SentenceTransformersMatcher only supports PyTorch - thus setting tensorflow to true, will result in an error.</div>
 </div>
 </div>
@@ -345,6 +355,12 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">topkPerResource</span></div>
 </section>
 </li>
+<li>
+<section class="detail" id="resourceFilters">
+<h3>resourceFilters</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="SentenceTransformersPredicate.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersPredicate</a>&gt;&gt;</span>&nbsp;<span class="element-name">resourceFilters</span></div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -407,12 +423,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="createTextFile(org.apache.jena.ontology.OntModel,java.io.File,de.uni_mannheim.informatik.dws.melt.matching_jena.ResourcesExtractor,java.util.Properties)">
+<section class="detail" id="createTextFile(java.util.Iterator,java.io.File)">
 <h3>createTextFile</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">createTextFile</span><wbr><span class="parameters">(org.apache.jena.ontology.OntModel&nbsp;model,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file,
- <a href="../../../matching_jena/ResourcesExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">ResourcesExtractor</a>&nbsp;extractor,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link">Properties</a>&nbsp;parameters)</span>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">createTextFile</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&lt;? extends org.apache.jena.ontology.OntResource&gt;&nbsp;resourceIterator,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
@@ -424,7 +438,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="initialiseResourceExtractor()">
 <h3>initialiseResourceExtractor</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">initialiseResourceExtractor</span>()</div>
-<div class="block">Initialises the resource extractors such that classes, datatypeproperties, objectproperties, all other properties,
+<div class="block">Initialises the resource extractors such that classes, datatypeproperties, objectproperties, all other properties (rdf properties - not owl),
  and instances are matched if the properties suggests to do so.</div>
 </section>
 </li>
@@ -574,13 +588,31 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">
+<section class="detail" id="getResourceFilters()">
+<h3>getResourceFilters</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="SentenceTransformersPredicate.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersPredicate</a>&gt;&gt;</span>&nbsp;<span class="element-name">getResourceFilters</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setResourceFilters(java.util.List)">
+<h3>setResourceFilters</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setResourceFilters</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="SentenceTransformersPredicate.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersPredicate</a>&gt;&gt;&nbsp;resourceFilters)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addResourceFilter(java.lang.Class)">
+<h3>addResourceFilter</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addResourceFilter</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="SentenceTransformersPredicate.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersPredicate</a>&gt;&nbsp;resourceFilter)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersArguments)">
 <h3>setTrainingArguments</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setTrainingArguments</span><wbr><span class="parameters">(<a href="TransformersTrainerArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersTrainerArguments</a>&nbsp;trainingArguments)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setTrainingArguments</span><wbr><span class="parameters">(<a href="TransformersArguments.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersArguments</a>&nbsp;trainingArguments)</span></div>
 <div class="block">No training arguments can be used for SentenceTransformersMatcher - do NOT call this method.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="TransformersBase.html#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersTrainerArguments)">setTrainingArguments</a></code>&nbsp;in class&nbsp;<code><a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></code></dd>
+<dd><code><a href="TransformersBase.html#setTrainingArguments(de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.TransformersArguments)">setTrainingArguments</a></code>&nbsp;in class&nbsp;<code><a href="TransformersBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>trainingArguments</code> - training arguments</dd>
 </dl>

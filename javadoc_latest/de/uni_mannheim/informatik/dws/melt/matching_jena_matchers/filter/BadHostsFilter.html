@@ -107,14 +107,19 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>private static final org.slf4j.Logger</code></div>
-<div class="col-second even-row-color"><code><a href="#LOGGER" class="member-name-link">LOGGER</a></code></div>
+<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;org.apache.jena.ontology.OntModel,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#hostOfModelFunction" class="member-name-link">hostOfModelFunction</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">the function to extract the host URI of a model.</div>
+</div>
+<div class="col-first odd-row-color"><code>private static final org.slf4j.Logger</code></div>
+<div class="col-second odd-row-color"><code><a href="#LOGGER" class="member-name-link">LOGGER</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Default logger</div>
 </div>
-<div class="col-first odd-row-color"><code>private boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#strict" class="member-name-link">strict</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>private boolean</code></div>
+<div class="col-second even-row-color"><code><a href="#strict" class="member-name-link">strict</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">if true, filter all correspondences where the host can not be determined</div>
 </div>
 </div>
@@ -139,6 +144,11 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <div class="col-last odd-row-color">
 <div class="block">Constructor</div>
 </div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(boolean,java.util.function.Function)" class="member-name-link">BadHostsFilter</a><wbr>(boolean&nbsp;strict,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;org.apache.jena.ontology.OntModel,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;hostOfModelFunction)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Constructor</div>
+</div>
 </div>
 </section>
 </li>
@@ -154,18 +164,35 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#filter(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)" class="member-name-link">filter</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;source,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#filter(java.lang.String,java.lang.String,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,boolean)" class="member-name-link">filter</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedSourceHost,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedTargetHost,
+ <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
+ boolean&nbsp;strict)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Filters the alignment based on similar hosts.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#filter(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)" class="member-name-link">filter</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;source,
  org.apache.jena.ontology.OntModel&nbsp;target,
  <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Filters the alignment based on similar hosts in a non strict mode
  (if the host of source or target in a correspondence can not be determined, then the correspondence is added to the filtered alignment).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#filter(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,boolean)" class="member-name-link">filter</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;source,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#filter(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,boolean)" class="member-name-link">filter</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;source,
  org.apache.jena.ontology.OntModel&nbsp;target,
  <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
  boolean&nbsp;strict)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Filters the alignment based on similar hosts.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#filter(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,boolean,java.util.function.Function)" class="member-name-link">filter</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;source,
+ org.apache.jena.ontology.OntModel&nbsp;target,
+ <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
+ boolean&nbsp;strict,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;org.apache.jena.ontology.OntModel,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;hostOfModelFunction)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Filters the alignment based on similar hosts.</div>
 </div>
@@ -174,6 +201,30 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getHostURIOfModel(org.apache.jena.ontology.OntModel)" class="member-name-link">getHostURIOfModel</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;m)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Extracts the host URI of the model.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getHostURIOfModelByFullAnalysis(org.apache.jena.ontology.OntModel)" class="member-name-link">getHostURIOfModelByFullAnalysis</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;m)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getHostURIOfModelByPrefixOrFirstURI(org.apache.jena.ontology.OntModel)" class="member-name-link">getHostURIOfModelByPrefixOrFirstURI</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;m)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Extracts the host URI of the model by using the prefix of <code>:</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getHostURIOfModelBySampling(org.apache.jena.ontology.OntModel)" class="member-name-link">getHostURIOfModelBySampling</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;m)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getHostURIOfModelBySampling(org.apache.jena.ontology.OntModel,int)" class="member-name-link">getHostURIOfModelBySampling</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;m,
+ int&nbsp;sampleSize)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getURIHosts(java.util.Iterator)" class="member-name-link">getURIHosts</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&lt;? extends org.apache.jena.ontology.OntResource&gt;&nbsp;i)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getURIHostSample(java.util.Iterator,int)" class="member-name-link">getURIHostSample</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&lt;? extends org.apache.jena.ontology.OntResource&gt;&nbsp;i,
+ int&nbsp;sampleSize)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#match(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.util.Properties)" class="member-name-link">match</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;source,
@@ -233,6 +284,13 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <div class="block">if true, filter all correspondences where the host can not be determined</div>
 </section>
 </li>
+<li>
+<section class="detail" id="hostOfModelFunction">
+<h3>hostOfModelFunction</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;org.apache.jena.ontology.OntModel,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">hostOfModelFunction</span></div>
+<div class="block">the function to extract the host URI of a model. Possibilities: BadHostsFilter::getHostURIOfModel, BadHostsFilter::getHostURIOfModelBySampling etc.</div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -258,6 +316,20 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <dt>Parameters:</dt>
 <dd><code>strict</code> - if true, filter all correspondences where the host can not be determined. 
  If false, also include correspondences where the host could not be determined.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(boolean,java.util.function.Function)">
+<h3>BadHostsFilter</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BadHostsFilter</span><wbr><span class="parameters">(boolean&nbsp;strict,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;org.apache.jena.ontology.OntModel,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;hostOfModelFunction)</span></div>
+<div class="block">Constructor</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>strict</code> - if true, filter all correspondences where the host can not be determined. 
+ If false, also include correspondences where the host could not be determined.</dd>
+<dd><code>hostOfModelFunction</code> - the function to extract the host URI of a model. Possibilities: BadHostsFilter::getHostURIOfModel, BadHostsFilter::getHostURIOfModelBySampling etc.</dd>
 </dl>
 </section>
 </li>
@@ -338,6 +410,46 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 </section>
 </li>
 <li>
+<section class="detail" id="filter(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,boolean,java.util.function.Function)">
+<h3>filter</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">filter</span><wbr><span class="parameters">(org.apache.jena.ontology.OntModel&nbsp;source,
+ org.apache.jena.ontology.OntModel&nbsp;target,
+ <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
+ boolean&nbsp;strict,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;org.apache.jena.ontology.OntModel,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;hostOfModelFunction)</span></div>
+<div class="block">Filters the alignment based on similar hosts.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>source</code> - the source ontology</dd>
+<dd><code>target</code> - the target ontology</dd>
+<dd><code>inputAlignment</code> - the alignment to be filtered</dd>
+<dd><code>strict</code> - if true, filter all correspondences where the host can not be determined</dd>
+<dd><code>hostOfModelFunction</code> - the function to extract the host URI of a model. Possibilities: BadHostsFilter::getHostURIOfModel, BadHostsFilter::getHostURIOfModelBySampling etc.</dd>
+<dt>Returns:</dt>
+<dd>the filtered alignment.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="filter(java.lang.String,java.lang.String,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,boolean)">
+<h3>filter</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a></span>&nbsp;<span class="element-name">filter</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedSourceHost,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedTargetHost,
+ <a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;inputAlignment,
+ boolean&nbsp;strict)</span></div>
+<div class="block">Filters the alignment based on similar hosts.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>expectedSourceHost</code> - the expected source host (can be extracted from an ontModel with getHostURIOfModel).</dd>
+<dd><code>expectedTargetHost</code> - the expected target host (can be extracted from an ontModel with getHostURIOfModel).</dd>
+<dd><code>inputAlignment</code> - the alignment to be filtered</dd>
+<dd><code>strict</code> - if true, filter all correspondences where the host can not be determined</dd>
+<dt>Returns:</dt>
+<dd>the filtered alignment.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getHostOfURI(java.lang.String)">
 <h3>getHostOfURI</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getHostOfURI</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span></div>
@@ -347,6 +459,59 @@ implements <a href="../../matching_base/Filter.html" title="interface in de.uni_
 <section class="detail" id="getHostURIOfModel(org.apache.jena.ontology.OntModel)">
 <h3>getHostURIOfModel</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getHostURIOfModel</span><wbr><span class="parameters">(org.apache.jena.ontology.OntModel&nbsp;m)</span></div>
+<div class="block">Extracts the host URI of the model.
+ This implementation defaults to <a href="#getHostURIOfModelByPrefixOrFirstURI(org.apache.jena.ontology.OntModel)"><code>getHostURIOfModelByPrefixOrFirstURI(org.apache.jena.ontology.OntModel)</code></a>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>m</code> - the model</dd>
+<dt>Returns:</dt>
+<dd>the hostURI of most resources in this model.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getHostURIOfModelByPrefixOrFirstURI(org.apache.jena.ontology.OntModel)">
+<h3>getHostURIOfModelByPrefixOrFirstURI</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getHostURIOfModelByPrefixOrFirstURI</span><wbr><span class="parameters">(org.apache.jena.ontology.OntModel&nbsp;m)</span></div>
+<div class="block">Extracts the host URI of the model by using the prefix of <code>:</code>.
+ Or search for the first class and extracts the host of this URL.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>m</code> - </dd>
+<dt>Returns:</dt>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getHostURIOfModelBySampling(org.apache.jena.ontology.OntModel)">
+<h3>getHostURIOfModelBySampling</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getHostURIOfModelBySampling</span><wbr><span class="parameters">(org.apache.jena.ontology.OntModel&nbsp;m)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getHostURIOfModelBySampling(org.apache.jena.ontology.OntModel,int)">
+<h3>getHostURIOfModelBySampling</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getHostURIOfModelBySampling</span><wbr><span class="parameters">(org.apache.jena.ontology.OntModel&nbsp;m,
+ int&nbsp;sampleSize)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getURIHostSample(java.util.Iterator,int)">
+<h3>getURIHostSample</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getURIHostSample</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&lt;? extends org.apache.jena.ontology.OntResource&gt;&nbsp;i,
+ int&nbsp;sampleSize)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getHostURIOfModelByFullAnalysis(org.apache.jena.ontology.OntModel)">
+<h3>getHostURIOfModelByFullAnalysis</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getHostURIOfModelByFullAnalysis</span><wbr><span class="parameters">(org.apache.jena.ontology.OntModel&nbsp;m)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getURIHosts(java.util.Iterator)">
+<h3>getURIHosts</h3>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getURIHosts</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&lt;? extends org.apache.jena.ontology.OntResource&gt;&nbsp;i)</span></div>
 </section>
 </li>
 </ul>

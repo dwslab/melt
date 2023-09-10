@@ -307,7 +307,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/filter/AnonymousNodeFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">AnonymousNodeFilter</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">This filter removes correspondences where the source or target has not the same host of the OntModels.</div>
+<div class="block">This filter removes correspondences where the source or target is a blank node.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/filter/BadHostsFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter">BadHostsFilter</a></code></div>
@@ -463,55 +463,60 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/AdditionalConfidenceByFunction.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">AdditionalConfidenceByFunction</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/AddAlignmentMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">AddAlignmentMatcher</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Adds an additional confidence by a user chosen function which gets a ontResource and has to return a double.</div>
+<div class="block">This is a simple matcher that adds a given alignment to the inputAlignment.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/metalevel/AlignmentSaveMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">AlignmentSaveMatcher</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/metalevel/AdditionalConfidenceByFunction.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">AdditionalConfidenceByFunction</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Just saves the ontologies in a specific format.</div>
+<div class="block">Adds an additional confidence by a user chosen function which gets a ontResource and has to return a double.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/ConfidenceCombiner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ConfidenceCombiner</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/AlignmentSaveMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">AlignmentSaveMatcher</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Just saves the ontologies in a specific format.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/metalevel/ConfidenceCombiner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ConfidenceCombiner</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Combines the additional confidences and set the overall correspondence confidence to be the mean of the selected
  confidences.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/metalevel/FileSaveMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">FileSaveMatcher</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/FileSaveMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">FileSaveMatcher</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Just saves the ontologies in a specific format.</div>
 </div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/ForwardAlwaysMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ForwardAlwaysMatcher</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/metalevel/ForwardAlwaysMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ForwardAlwaysMatcher</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">This is a simple matcher that forwards a given alignment always (even if the input alignment is available).</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/metalevel/ForwardMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ForwardMatcher</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/ForwardMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ForwardMatcher</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">This is a simple matcher that forwards a given alignment if the input alignment is not available.</div>
 </div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/MachineLearningWEKAFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">MachineLearningWEKAFilter</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/metalevel/MachineLearningWEKAFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">MachineLearningWEKAFilter</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Non functional code.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/metalevel/NoOpMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">NoOpMatcher</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/NoOpMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">NoOpMatcher</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Matcher which does nothing but returning a valid empty alignment.</div>
 </div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/ScaleAdditionalConfidence.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ScaleAdditionalConfidence</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/metalevel/ScaleAdditionalConfidence.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ScaleAdditionalConfidence</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Scales the additional correspondence confidence values (that were produced by other filters/matchers) linearly to a
  given interval (by default [0,1]).</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_jena_matchers/metalevel/ScaleConfidence.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ScaleConfidence</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_jena_matchers/metalevel/ScaleConfidence.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel">ScaleConfidence</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Scales the correspondence confidence values linearly to an given interval (by default [0,1]).</div>
 </div>
 </div>
@@ -638,43 +643,53 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/SentenceTransformersFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersFineTuner</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/LLMBase.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">LLMBase</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">This matcher uses the <a href="https://github.com/UKPLab/sentence-transformers">Sentence Transformers library</a> to build an embedding space for each resource given a textual representation of it.</div>
+<div class="block">This filter asks a LLM which entity of the source fits best to an entity of the target.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/SentenceTransformersMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersMatcher</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/LLMBinaryFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">LLMBinaryFilter</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">This filter asks a LLM if a given correspondence is correct or not.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/LLMChooseGivenEntityFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">LLMChooseGivenEntityFilter</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">This filter asks the LLM given a source entity which is the best target entity (out of the ones in the alignment).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/SentenceTransformersFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersFineTuner</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">This matcher uses the <a href="https://github.com/UKPLab/sentence-transformers">Sentence Transformers library</a> to build an embedding space for each resource given a textual representation of it.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersBase.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/SentenceTransformersMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersMatcher</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">This matcher uses the <a href="https://github.com/UKPLab/sentence-transformers">Sentence Transformers library</a> to build an embedding space for each resource given a textual representation of it.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersBase.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBase</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">This is a base class for all Transformers.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersBaseFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBaseFineTuner</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersBaseFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBaseFineTuner</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">This is a base class for all Transformers fine tuners.</div>
 </div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">This filter extracts the corresponding text for a resource (with the specified and customizable extractor) given all correspondences in the input alignment.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">This class is used to fine-tune a transformer model based on a generated dataset.</div>
 </div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTunerHpSearch</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersMatcher</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">This matcher uses the <a href="https://github.com/UKPLab/sentence-transformers">Sentence Transformers library</a> to build an embedding space for each resource given a textual representation of it.</div>
-</div>
+<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTunerHpSearch</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
