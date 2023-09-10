@@ -76,7 +76,7 @@ public class TextExtractorVerbalizedRDF implements TextExtractor {
             }
         }
         if(lineByLineTranslation){
-            if(sb.isEmpty()){
+            if(sb.length() == 0){
                 sb.append(subjectLabel);
             }
         }else{
