@@ -173,8 +173,8 @@ public class BadHostsFilter extends MatcherYAAAJena implements Filter {
     /**
      * Extracts the host URI of the model by using the prefix of <code>:</code>.
      * Or search for the first class and extracts the host of this URL.
-     * @param m
-     * @return 
+     * @param m the model
+     * @return the hostURI of prefix or first URI in this model.
      */
     public static String getHostURIOfModelByPrefixOrFirstURI(OntModel m){
         String prefix = m.getNsPrefixURI("");
