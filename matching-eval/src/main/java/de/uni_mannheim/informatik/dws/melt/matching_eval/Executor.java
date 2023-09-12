@@ -721,9 +721,10 @@ public class Executor {
     
     /**
      * Runs a matcher on top of another. This means that the previous matchings do not need to be recalculated.
+     * This will run the matcher on all testcases.
      * @param oldResults the results from the previous runs already containing result from the oldMatcherName.
      * @param oldMatcherName the matcher name which should exist in previous results
-     * @param newMatcher the actual matcher
+     * @param newMatcher the new matcher
      * @param newMatcherName the new matcher name
      * @return the execution results together with the new matcher
      */
@@ -731,6 +732,14 @@ public class Executor {
         return runMatcherOnTop(oldResults, oldMatcherName, getMatcherMapWithName(newMatcher, newMatcherName));
     }
     
+    /**
+     * Runs a matcher on top of another. This means that the previous matchings do not need to be recalculated.
+     * This will run the matcher on all testcases.
+     * @param oldResults the results from the previous runs already containing result from the oldMatcherName.
+     * @param oldMatcherName the matcher name which should exist in previous results
+     * @param newMatchers the new matchers as a map where the key is the matcher name and value the actual matcher
+     * @return the execution results together with the new matcher
+     */
     public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet oldResults, String oldMatcherName, Map<String, Object> newMatchers){
         ExecutionResultSet newResultSet = new ExecutionResultSet();
         for(ExecutionResult oldResult : oldResults.getGroup(oldMatcherName)){
@@ -742,6 +751,47 @@ public class Executor {
         return oldResults;
     }
     
+    
+    /**
+     * Runs a matcher on top of another. This means that the previous matchings do not need to be recalculated.
+     * This will run the matcher only on the specified test case.
+     * @param oldResults the results from the previous runs already containing result from the oldMatcherName.
+     * @param testCase the testcase on which the matchers should be executed.
+     * @param oldMatcherName the matcher name which should exist in previous results
+     * @param newMatcher the new matcher
+     * @param newMatcherName the new matcher name
+     * @return the execution results together with the new matcher
+     */
+    public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet oldResults, TestCase testCase, String oldMatcherName, Object newMatcher, String newMatcherName){
+        return runMatcherOnTop(oldResults, testCase, oldMatcherName, getMatcherMapWithName(newMatcher, newMatcherName));
+    }
+    
+    /**
+     * Runs a matcher on top of another. This means that the previous matchings do not need to be recalculated.
+     * This will run the matcher only on the specified test case.
+     * @param oldResults the results from the previous runs already containing result from the oldMatcherName.
+     * @param testCase the testcase on which the matchers should be executed.
+     * @param oldMatcherName the matcher name which should exist in previous results
+     * @param newMatchers the new matchers as a map where the key is the matcher name and value the actual matcher
+     * @return the execution results together with the new matcher
+     */
+    public static ExecutionResultSet runMatcherOnTop(ExecutionResultSet oldResults, TestCase testCase, String oldMatcherName, Map<String, Object> newMatchers){
+        ExecutionResultSet newResultSet = new ExecutionResultSet();
+        ExecutionResult oldResult = oldResults.get(testCase, oldMatcherName);
+        for(Entry<String, Object> newMatcher : newMatchers.entrySet()){
+            newResultSet.add(runMatcherOnTop(oldResult, newMatcher.getValue(), newMatcher.getKey()));
+        }
+        oldResults.addAll(newResultSet);
+        return oldResults;
+    }
+    
+    /**
+     * Runs a matcher on top of another. This means that the previous matchings do not need to be recalculated.
+     * This will run the matcher on exactly one execution result.
+     * @param oldResult the old result
+     * @param newMatchers the new matchers as a map where the key is the matcher name and value the actual matcher
+     * @return the execution results together with the new matcher
+     */
     public static ExecutionResultSet runMatcherOnTop(ExecutionResult oldResult, Map<String, Object> newMatchers){
         ExecutionResultSet newResultSet = new ExecutionResultSet();
         for(Entry<String, Object> newMatcher : newMatchers.entrySet()){
@@ -750,6 +800,14 @@ public class Executor {
         return newResultSet;
     }
     
+    /**
+     * Runs a matcher on top of another. This means that the previous matchings do not need to be recalculated.
+     * This will run the matcher on exactly one execution result.
+     * @param oldResult the old result
+     * @param newMatcher the new matcher
+     * @param newMatcherName the new matcher name
+     * @return the execution results together with the new matcher
+     */
     public static ExecutionResult runMatcherOnTop(ExecutionResult oldResult, Object newMatcher, String newMatcherName){
         ExecutionResult newResult = ExecutionRunner.runMatcher(
                 oldResult.getTestCase(),

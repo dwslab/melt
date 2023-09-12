@@ -332,8 +332,8 @@ public class EvaluatorCSV extends Evaluator {
             String[] extensionValues;
             if (isPrintAlignmentExtensions && this.alignmentExtensions != null && this.alignmentExtensions.size() > 0) {
                 Set<ExecutionResult> temporaryExecutionResult = results.getGroup(track, matcher);
-                if (temporaryExecutionResult.iterator().hasNext()) {
-                    extensionValues = determineAlignmentExtensionValuesToWriteForCSV(temporaryExecutionResult.iterator().next().getSystemAlignment().getExtensions());
+                if (temporaryExecutionResult.isEmpty() == false) {
+                    extensionValues = determineAggregatedAlignmentExtensionValuesToWriteForCSV(temporaryExecutionResult);
                 } else extensionValues = new String[0];
             } else extensionValues = new String[0];
 
@@ -587,7 +587,22 @@ public class EvaluatorCSV extends Evaluator {
         return result;
     }
 
-
+    
+    private String[] determineAggregatedAlignmentExtensionValuesToWriteForCSV(Set<ExecutionResult> results) {
+        String[] result = new String[this.alignmentExtensions.size()];
+        for (int i = 0; i < this.alignmentExtensions.size(); i++) {
+            String extensionUri = alignmentExtensions.get(i);
+            Set<String> distinctValues = new HashSet<>();
+            for(ExecutionResult r : results){
+                String s = r.getSystemAlignment().getExtensionValueAsString(extensionUri);
+                if(s != null)
+                    distinctValues.add(s);
+            }
+            result[i] = "{" + String.join(",", distinctValues) + "}";
+        }
+        return result;
+    }
+    
     //-------------------------------------------------------------------------------------------
     // Formatting Output
     //-------------------------------------------------------------------------------------------

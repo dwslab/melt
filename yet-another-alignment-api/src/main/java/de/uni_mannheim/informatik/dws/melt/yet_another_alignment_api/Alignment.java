@@ -1036,6 +1036,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      */
     public Object getExtensionValue(String extensionUri){
         if(extensions == null) return null;
+        if(extensionUri == null) return null;
         return extensions.get(extensionUri);
     }
     
@@ -1047,6 +1048,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      */
     public Object getExtensionValue(Object extensionUri){
         if(extensions == null) return null;
+        if(extensionUri == null) return null;
         return extensions.get(extensionUri.toString());
     }
     
@@ -1057,8 +1059,10 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @return The value of the extension as String, null if there is no value.
      */
     public String getExtensionValueAsString(String extensionUri){
-        if(extensions == null) return null;
-        return extensions.get(extensionUri).toString();
+        Object o = getExtensionValue(extensionUri);
+        if(o == null)
+            return null;
+        return o.toString();
     }
     
     /**
@@ -1068,8 +1072,10 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
      * @return The value of the extension as String, null if there is no value.
      */
     public String getExtensionValueAsString(Object extensionUri){
-        if(extensions == null) return null;
-        return extensions.get(extensionUri.toString()).toString();
+        Object o = getExtensionValue(extensionUri);
+        if(o == null)
+            return null;
+        return o.toString();
     }
     
     /**
@@ -1093,6 +1099,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
     @SuppressWarnings("unchecked")
     public <T> T getExtensionValueCasted(Object extensionUri){
         if(extensions == null) return null;
+        if(extensionUri == null) return null;
         return (T) extensions.get(extensionUri.toString());
     }
 
