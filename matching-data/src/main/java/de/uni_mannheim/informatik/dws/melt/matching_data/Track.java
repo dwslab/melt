@@ -458,7 +458,6 @@ public abstract class Track implements Comparable<Track> {
                 continue;
             }
             if(reference_file.exists() == false && skipTestsWithoutRefAlign){
-                LOGGER.error("Cache is corrupted (delete the cache folder to initiate a re-download or set skipTestsWithoutRefAlign ) - reference file is not there: {}", reference_file);
                 continue;
             }
                 
