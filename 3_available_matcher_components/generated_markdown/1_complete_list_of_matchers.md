@@ -303,6 +303,12 @@ Matcher which does nothing but returning a valid empty alignment.
 
 *Keywords: No Op Matcher*
 
+## AddAlignmentExtensions [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/AddAlignmentExtensions.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/AddAlignmentExtensions.java)
+
+Adds the provided extensions to the alignment when the matcher is executed.
+
+*Keywords: Add Alignment Extensions*
+
 ## AdditionalConfidenceByFunction [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/AdditionalConfidenceByFunction.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/metalevel/AdditionalConfidenceByFunction.java)
 
 Adds an additional confidence by a user chosen function which gets a ontResource and has to return a double.
@@ -522,4 +528,4 @@ Better use MatcherYAAAPipeline because it can combine matchers which use differe
 *Keywords: MatcherYAAA Owl Api*
 
 ---
-<sub>automatically generated on 2023-09-12 09:48</sub>
+<sub>automatically generated on 2023-09-12 14:30</sub>
