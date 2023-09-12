@@ -171,7 +171,9 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runMatcherOnTop(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,java.lang.Object,java.lang.String)" class="member-name-link">runMatcherOnTop</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;oldResult,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;newMatcher,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;newMatcherName)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Runs a matcher on top of another.</div>
+</div>
 <div class="col-first odd-row-color"><code>static <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runSingle(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.lang.Object)" class="member-name-link">runSingle</a><wbr>(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;matcher)</code></div>
@@ -285,11 +287,15 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runMatcherOnTop(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,java.lang.Object,java.lang.String)" class="member-name-link">runMatcherOnTop</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;oldResult,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;newMatcher,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;newMatcherName)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Runs a matcher on top of another.</div>
+</div>
 <div class="col-first even-row-color"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runMatcherOnTop(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,java.util.Map)" class="member-name-link">runMatcherOnTop</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;oldResult,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;newMatchers)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Runs a matcher on top of another.</div>
+</div>
 </div>
 <div class="caption"><span>Method parameters in <a href="../package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_eval</a> with type arguments of type <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></span></div>
 <div class="summary-table three-column-summary">
@@ -368,9 +374,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static long</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">EvaluatorCSV.</span><code><a href="../evaluator/EvaluatorCSV.html#getSummedRuntimeOfResults(java.util.Set)" class="member-name-link">getSummedRuntimeOfResults</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&gt;&nbsp;results)</code></div>
+<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">EvaluatorCSV.</span><code><a href="../evaluator/EvaluatorCSV.html#determineAggregatedAlignmentExtensionValuesToWriteForCSV(java.util.Set)" class="member-name-link">determineAggregatedAlignmentExtensionValuesToWriteForCSV</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&gt;&nbsp;results)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static long</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">EvaluatorCSV.</span><code><a href="../evaluator/EvaluatorCSV.html#getSummedRuntimeOfResults(java.util.Set)" class="member-name-link">getSummedRuntimeOfResults</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&gt;&nbsp;results)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
