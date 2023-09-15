@@ -231,6 +231,8 @@ public class TestCase {
      */
     public Alignment getParsedReferenceAlignment() {
         if(parsedReference == null){
+            if(getReference() == null)
+                return new Alignment();
             try {
                 parsedReference = new Alignment(getReference().toURL());
             } catch (SAXException | IOException ex) {

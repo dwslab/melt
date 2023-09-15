@@ -73,12 +73,12 @@ public class TrackRepository {
         /**
          * Conference Testsuite V1 which is used all the time.
          */
-        public static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1");//new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1");
+        public final static Track V1 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1");//new SealsTrack("http://repositories.seals-project.eu/tdrs/", "conference", "conference-v1");
 
         /**
          * Conference Testsuite V1 with all test cases ( even without reference alignment
          */
-        public static Track V1_ALL_TESTCASES = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1-all");
+        public final static Track V1_ALL_TESTCASES = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "conference", "conference-v1-all");
 
         static {
             V1_ALL_TESTCASES.setSkipTestCasesWithoutRefAlign(false);
@@ -265,12 +265,21 @@ public class TrackRepository {
         /**
          * Popconference
          **/
-        public static Track Popconference0 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-0-v1");
-        public static Track Popconference20 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-20-v1");
-        public static Track Popconference40 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-40-v1");
-        public static Track Popconference60 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-60-v1");
-        public static Track Popconference80 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-80-v1");
-        public static Track Popconference100 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-100-v1");
+        public final static Track Popconference0 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-0-v1");
+        public final static Track Popconference20 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-20-v1");
+        public final static Track Popconference40 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-40-v1");
+        public final static Track Popconference60 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-60-v1");
+        public final static Track Popconference80 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-80-v1");
+        public final static Track Popconference100 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "popconference", "popconference-100-v1");
+        
+        static {
+            Popconference0.setSkipTestCasesWithoutRefAlign(false);
+            Popconference20.setSkipTestCasesWithoutRefAlign(false);
+            Popconference40.setSkipTestCasesWithoutRefAlign(false);
+            Popconference60.setSkipTestCasesWithoutRefAlign(false);
+            Popconference80.setSkipTestCasesWithoutRefAlign(false);
+            Popconference100.setSkipTestCasesWithoutRefAlign(false);
+        }
     }
     
     
