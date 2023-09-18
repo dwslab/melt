@@ -19,13 +19,13 @@ You can download the [latest version of the command line tool on GitHub](https:/
 ## Using the Command Line Tool
 The most straight forward way to use the tool is as follows:
 ```bash
-java -jar matching-eval-client-3.1-SNAPSHOT.jar --systems <system-1-path> <system-2-path> <...> --track <location-URI> <collection-name> <version>
+java -jar matching-eval-client-latest.jar --systems <system-1-path> <system-2-path> <...> --track <location-URI> <collection-name> <version>
 ```
 The results will be printed on the command line.
 
 **Help/Documentation**
 ```bash
-java -jar matching-eval-client-3.1-SNAPSHOT.jar --help
+java -jar matching-eval-client-latest.jar --help
 ```
 
 **Types of Systems**
