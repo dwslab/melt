@@ -64,22 +64,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking</a></div>
+<div class="col-first odd-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cmrelation">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cmrelation</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity</a></div>
+<div class="col-first even-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.significance">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.significance</a></div>
+<div class="col-first odd-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util</a></div>
+<div class="col-first even-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.significance">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.significance</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.resultspage">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.resultspage</a></div>
+<div class="col-first odd-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.util</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning">de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning</a></div>
+<div class="col-first even-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.resultspage">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.visualization.resultspage</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.refinement">de.uni_mannheim.informatik.dws.melt.matching_eval.refinement</a></div>
+<div class="col-first odd-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning">de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.visualization">de.uni_mannheim.informatik.dws.melt.matching_eval.visualization</a></div>
+<div class="col-first even-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.refinement">de.uni_mannheim.informatik.dws.melt.matching_eval.refinement</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="#de.uni_mannheim.informatik.dws.melt.matching_eval.visualization">de.uni_mannheim.informatik.dws.melt.matching_eval.visualization</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -166,29 +168,36 @@ loadScripts(document, 'script');</script>
 <div class="block">Run an individual matcher on an individual test case.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runSingle(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.lang.Object)" class="member-name-link">runSingle</a><wbr>(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;matcher)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runMatcherOnTop(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,java.lang.Object,java.lang.String)" class="member-name-link">runMatcherOnTop</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;oldResult,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;newMatcher,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;newMatcherName)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Run a single test case with one matcher.</div>
+<div class="block">Runs a matcher on top of another.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runSingle(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.lang.Object,java.lang.String)" class="member-name-link">runSingle</a><wbr>(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;matcher,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;matcherName)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runSingle(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.lang.Object)" class="member-name-link">runSingle</a><wbr>(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;matcher)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Run a single test case with one matcher.</div>
 </div>
-<div class="col-first even-row-color"><code>protected <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ExecutorSeals.</span><code><a href="../ExecutorSeals.html#runUnzippedMatcher(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.io.File)" class="member-name-link">runUnzippedMatcher</a><wbr>(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;matcherDirectory)</code></div>
+<div class="col-first even-row-color"><code>static <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runSingle(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.lang.Object,java.lang.String)" class="member-name-link">runSingle</a><wbr>(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;matcher,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;matcherName)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Evaluate a single matcher using the local SEALS client.</div>
+<div class="block">Run a single test case with one matcher.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ExecutorSeals.</span><code><a href="../ExecutorSeals.html#runUnzippedMatcher(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.io.File,java.lang.String)" class="member-name-link">runUnzippedMatcher</a><wbr>(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
+<div class="col-second odd-row-color"><span class="type-name-label">ExecutorSeals.</span><code><a href="../ExecutorSeals.html#runUnzippedMatcher(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.io.File)" class="member-name-link">runUnzippedMatcher</a><wbr>(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;matcherDirectory)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Evaluate a single matcher using the local SEALS client.</div>
+</div>
+<div class="col-first even-row-color"><code>protected <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ExecutorSeals.</span><code><a href="../ExecutorSeals.html#runUnzippedMatcher(de.uni_mannheim.informatik.dws.melt.matching_data.TestCase,java.io.File,java.lang.String)" class="member-name-link">runUnzippedMatcher</a><wbr>(<a href="../../matching_data/TestCase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_data">TestCase</a>&nbsp;testCase,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;matcherDirectory,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;matcherName)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Evaluate a single matcher using the local SEALS client.</div>
 </div>
 </div>
@@ -274,6 +283,19 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">ExecutionResultSet.</span><code><a href="../ExecutionResultSet.html#get(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.Refiner...)" class="member-name-link">get</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;basisResult,
  <a href="../refinement/Refiner.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_eval.refinement">Refiner</a>...&nbsp;refinements)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runMatcherOnTop(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,java.lang.Object,java.lang.String)" class="member-name-link">runMatcherOnTop</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;oldResult,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;newMatcher,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;newMatcherName)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Runs a matcher on top of another.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../ExecutionResultSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResultSet</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Executor.</span><code><a href="../Executor.html#runMatcherOnTop(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,java.util.Map)" class="member-name-link">runMatcherOnTop</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;oldResult,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;newMatchers)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Runs a matcher on top of another.</div>
+</div>
 </div>
 <div class="caption"><span>Method parameters in <a href="../package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_eval</a> with type arguments of type <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></span></div>
 <div class="summary-table three-column-summary">
@@ -309,13 +331,23 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Evaluator.</span><code><a href="../evaluator/Evaluator.html#getResultsDirectoryTrackTestcaseMatcher(java.io.File,de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">getResultsDirectoryTrackTestcaseMatcher</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;baseDirectory,
+<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="../../yet_another_alignment_api/CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a>,<wbr><a href="../../yet_another_alignment_api/CorrespondenceRelation.html" title="enum in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">CorrespondenceRelation</a>&gt;,<wbr><a href="../../yet_another_alignment_api/Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">EvaluatorRelationTypePrediction.</span><code><a href="../evaluator/EvaluatorRelationTypePrediction.html#getConfusionMap(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">getConfusionMap</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;r)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>protected <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Evaluator.</span><code><a href="../evaluator/Evaluator.html#getResultsDirectoryTrackTestcaseMatcher(java.io.File,de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">getResultsDirectoryTrackTestcaseMatcher</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;baseDirectory,
  <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Given a base directory and an <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval"><code>ExecutionResult</code></a>, the target directory will be returned to which results can
  be persisted.</div>
 </div>
+<div class="col-first even-row-color"><code>private void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">EvaluatorRelationTypePrediction.</span><code><a href="../evaluator/EvaluatorRelationTypePrediction.html#printCM(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.ConfusionMatrix,java.lang.String,java.lang.String,org.apache.commons.csv.CSVPrinter)" class="member-name-link">printCM</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;r,
+ <a href="../evaluator/metric/cm/ConfusionMatrix.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm">ConfusionMatrix</a>&nbsp;cm,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;closure,
+ org.apache.commons.csv.CSVPrinter&nbsp;printer)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>private void</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">EvaluatorRank.</span><code><a href="../evaluator/EvaluatorRank.html#runMetricAndPrintToFile(de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking.RankingMetric%5B%5D,de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,java.lang.String,org.apache.commons.csv.CSVPrinter)" class="member-name-link">runMetricAndPrintToFile</a><wbr>(<a href="../evaluator/metric/ranking/RankingMetric.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking">RankingMetric</a>[]&nbsp;metrics,
  <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult,
@@ -332,15 +364,22 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Runs the metric on the given result and prints a line to the CSV file.</div>
 </div>
+<div class="col-first odd-row-color"><code>private void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">EvaluatorRelationTypePrediction.</span><code><a href="../evaluator/EvaluatorRelationTypePrediction.html#writeConfusionMatrixMultiClass(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult,java.io.File)" class="member-name-link">writeConfusionMatrixMultiClass</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;r,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outFile)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Method parameters in <a href="../evaluator/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator</a> with type arguments of type <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static long</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">EvaluatorCSV.</span><code><a href="../evaluator/EvaluatorCSV.html#getSummedRuntimeOfResults(java.util.Set)" class="member-name-link">getSummedRuntimeOfResults</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&gt;&nbsp;results)</code></div>
+<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">EvaluatorCSV.</span><code><a href="../evaluator/EvaluatorCSV.html#determineAggregatedAlignmentExtensionValuesToWriteForCSV(java.util.Set)" class="member-name-link">determineAggregatedAlignmentExtensionValuesToWriteForCSV</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&gt;&nbsp;results)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static long</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">EvaluatorCSV.</span><code><a href="../evaluator/EvaluatorCSV.html#getSummedRuntimeOfResults(java.util.Set)" class="member-name-link">getSummedRuntimeOfResults</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&gt;&nbsp;results)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -461,6 +500,23 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Returns aggregated confusion matrices according to the micro average.</div>
 </div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cmrelation">
+<h2>Uses of <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a> in <a href="../evaluator/metric/cmrelation/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cmrelation</a></h2>
+<div class="caption"><span>Methods in <a href="../evaluator/metric/cmrelation/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cmrelation</a> with parameters of type <a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">CMRelation.</span><code><a href="../evaluator/metric/cmrelation/CMRelation.html#bla(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">bla</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;r)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../evaluator/metric/cmrelation/CMRelation.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cmrelation">CMRelation</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">CMRelationMetric.</span><code><a href="../evaluator/metric/cmrelation/CMRelationMetric.html#compute(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">compute</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;executionResult)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -704,13 +760,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ConfidenceRefiner.</span><code><a href="../refinement/ConfidenceRefiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AlignmentClosureRefiner.</span><code><a href="../refinement/AlignmentClosureRefiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Refiner.</span><code><a href="../refinement/Refiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-second odd-row-color"><span class="type-name-label">ConfidenceRefiner.</span><code><a href="../refinement/ConfidenceRefiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Refiner.</span><code><a href="../refinement/Refiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Create a new refined ExecutionResult from an ExecutionResult.</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RelationTypeRefiner.</span><code><a href="../refinement/RelationTypeRefiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">ResidualRefiner.</span><code><a href="../refinement/ResidualRefiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
@@ -724,13 +786,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ConfidenceRefiner.</span><code><a href="../refinement/ConfidenceRefiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AlignmentClosureRefiner.</span><code><a href="../refinement/AlignmentClosureRefiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Refiner.</span><code><a href="../refinement/Refiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-second odd-row-color"><span class="type-name-label">ConfidenceRefiner.</span><code><a href="../refinement/ConfidenceRefiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Refiner.</span><code><a href="../refinement/Refiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Create a new refined ExecutionResult from an ExecutionResult.</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RelationTypeRefiner.</span><code><a href="../refinement/RelationTypeRefiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">ResidualRefiner.</span><code><a href="../refinement/ResidualRefiner.html#refine(de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResult)" class="member-name-link">refine</a><wbr>(<a href="../ExecutionResult.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_eval">ExecutionResult</a>&nbsp;toBeRefined)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>

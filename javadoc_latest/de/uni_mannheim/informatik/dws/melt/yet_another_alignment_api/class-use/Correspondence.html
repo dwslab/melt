@@ -391,7 +391,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TransformersFilter.</span><code><a href="../../matching_ml/python/nlptransformers/TransformersFilter.html#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)" class="member-name-link">createPredictionFile</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;source,
+<div class="col-second even-row-color"><span class="type-name-label">LLMBinaryFilter.</span><code><a href="../../matching_ml/python/nlptransformers/LLMBinaryFilter.html#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)" class="member-name-link">createPredictionFile</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;source,
  org.apache.jena.ontology.OntModel&nbsp;target,
  <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;predictionAlignment,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputFile,
@@ -399,6 +399,27 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Create the prediction file which is a CSV file with two columns.The first column is the text from the left resource and the second column is the text from the right resource.</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TransformersFilter.</span><code><a href="../../matching_ml/python/nlptransformers/TransformersFilter.html#createPredictionFile(org.apache.jena.ontology.OntModel,org.apache.jena.ontology.OntModel,de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment,java.io.File,boolean)" class="member-name-link">createPredictionFile</a><wbr>(org.apache.jena.ontology.OntModel&nbsp;source,
+ org.apache.jena.ontology.OntModel&nbsp;target,
+ <a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;predictionAlignment,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputFile,
+ boolean&nbsp;append)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Create the prediction file which is a CSV file with two columns.The first column is the text from the left resource and the second column is the text from the right resource.</div>
+</div>
+<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">LLMChooseGivenEntityFilter.</span><code><a href="../../matching_ml/python/nlptransformers/LLMChooseGivenEntityFilter.html#getList(java.lang.Iterable)" class="member-name-link">getList</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;a)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+<div class="caption"><span>Method parameters in <a href="../../matching_ml/python/nlptransformers/package-summary.html">de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers</a> with type arguments of type <a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">LLMChooseGivenEntityFilter.</span><code><a href="../../matching_ml/python/nlptransformers/LLMChooseGivenEntityFilter.html#getList(java.lang.Iterable)" class="member-name-link">getList</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;a)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -650,6 +671,16 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html" title="class or interface in java.util" class="external-link">Comparator</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Correspondence.</span><code><a href="../Correspondence.html#comparingByConfidence()" class="member-name-link">comparingByConfidence</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#createOrder(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment)" class="member-name-link">createOrder</a><wbr>(<a href="../Alignment.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Alignment</a>&nbsp;alignment)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates a deterministic order of correspondences.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#createOrder(java.util.List)" class="member-name-link">createOrder</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;alignment)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates a deterministic order of correspondences.</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#getConfidenceOrderedMapping()" class="member-name-link">getConfidenceOrderedMapping</a>()</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
@@ -710,6 +741,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">AlignmentSerializer.</span><code><a href="../AlignmentSerializer.html#getXmlMappingCellMultiLine(de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence)" class="member-name-link">getXmlMappingCellMultiLine</a><wbr>(<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&nbsp;cell)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+</div>
+<div class="caption"><span>Method parameters in <a href="../package-summary.html">de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api</a> with type arguments of type <a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Alignment.</span><code><a href="../Alignment.html#createOrder(java.util.List)" class="member-name-link">createOrder</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a>&gt;&nbsp;alignment)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates a deterministic order of correspondences.</div>
+</div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api</a> with parameters of type <a href="../Correspondence.html" title="class in de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api">Correspondence</a></span></div>
 <div class="summary-table three-column-summary">

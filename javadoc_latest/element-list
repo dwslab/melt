@@ -17,6 +17,7 @@ de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.explainer
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.alignmentanalyzer
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm
+de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cmrelation
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.ranking
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.resultsSimilarity
 de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.significance

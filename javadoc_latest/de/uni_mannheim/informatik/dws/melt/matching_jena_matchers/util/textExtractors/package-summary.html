@@ -128,39 +128,52 @@ loadScripts(document, 'script');</script>
  based matchers like <a href="../../../matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFilter</code></a>
  or <a href="../../../matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFineTuner</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TextExtractorMultipleProperties.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorMultipleProperties</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TextExtractorLabelAndDirectSuperclass.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorLabelAndDirectSuperclass</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Extracts a label for the given resource and also creates a text for the superclass such that more context is provided.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TextExtractorMultipleProperties.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorMultipleProperties</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Extracts all values from specific properties as long as it is a literal.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TextExtractorOnlyLabel.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorOnlyLabel</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Extracts only one speaking label (language can be set in constructor) which can be (in decreasing importance):
+ skos:prefLabel, rdfs:label, fragment (only if more than 50 percent are not numbers), skos:altLabel, skos:hiddenLabel.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TextExtractorProperty.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorProperty</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Extracts all values from a specific property as long as it is a literal.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TextExtractorSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorSet</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">A <a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena"><code>TextExtractor</code></a> which extracts texts from a resource which can be used by transformer
- based matchers like <a href="../../../matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFilter</code></a>
- or <a href="../../../matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFineTuner</code></a>.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TextExtractorShortAndLongTexts.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorShortAndLongTexts</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TextExtractorSet.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorSet</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A <a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena"><code>TextExtractor</code></a> which extracts texts from a resource which can be used by transformer
  based matchers like <a href="../../../matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFilter</code></a>
  or <a href="../../../matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFineTuner</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TextExtractorUrlFragment.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUrlFragment</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TextExtractorShortAndLongTexts.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorShortAndLongTexts</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">A <a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena"><code>TextExtractor</code></a> which extracts texts from a resource which can be used by transformer
+ based matchers like <a href="../../../matching_ml/python/nlptransformers/TransformersFilter.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFilter</code></a>
+ or <a href="../../../matching_ml/python/nlptransformers/TransformersFineTuner.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers"><code>TransformersFineTuner</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TextExtractorUrlFragment.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUrlFragment</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Extracts the fragment of the URL, e.g.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TextExtractorUrlLocalName.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUrlLocalName</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TextExtractorUrlLocalName.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUrlLocalName</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Extracts the local name from the URI.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TextExtractorUseLongestLiteralOrFragment.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUseLongestLiteralOrFragment</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TextExtractorUseLongestLiteralOrFragment.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorUseLongestLiteralOrFragment</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A text textractor which extracts texts from a resource which can be used by transformer 
  based matchers like TransformersFilter or TransformersFilterFineTuner.</div>
 </div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TextExtractorVerbalizedRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorVerbalizedRDF</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">&nbsp;</div>
 </div>
 </div>
 </div>

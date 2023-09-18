@@ -87,33 +87,48 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../SentenceTransformersFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersFineTuner</a></code></div>
+<div class="col-second even-row-color"><code><a href="../LLMBase.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">LLMBase</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">This matcher uses the <a href="https://github.com/UKPLab/sentence-transformers">Sentence Transformers library</a> to build an embedding space for each resource given a textual representation of it.</div>
+<div class="block">This filter asks a LLM which entity of the source fits best to an entity of the target.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../SentenceTransformersMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersMatcher</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../LLMBinaryFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">LLMBinaryFilter</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">This filter asks a LLM if a given correspondence is correct or not.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../LLMChooseGivenEntityFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">LLMChooseGivenEntityFilter</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">This filter asks the LLM given a source entity which is the best target entity (out of the ones in the alignment).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../SentenceTransformersFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersFineTuner</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">This matcher uses the <a href="https://github.com/UKPLab/sentence-transformers">Sentence Transformers library</a> to build an embedding space for each resource given a textual representation of it.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../TransformersBaseFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBaseFineTuner</a></code></div>
+<div class="col-second even-row-color"><code><a href="../SentenceTransformersMatcher.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">SentenceTransformersMatcher</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">This matcher uses the <a href="https://github.com/UKPLab/sentence-transformers">Sentence Transformers library</a> to build an embedding space for each resource given a textual representation of it.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../TransformersBaseFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersBaseFineTuner</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">This is a base class for all Transformers fine tuners.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../TransformersFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../TransformersFilter.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFilter</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">This filter extracts the corresponding text for a resource (with the specified and customizable extractor) given all correspondences in the input alignment.</div>
 </div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../TransformersFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../TransformersFineTuner.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTuner</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">This class is used to fine-tune a transformer model based on a generated dataset.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../TransformersFineTunerHpSearch.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTunerHpSearch</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../TransformersFineTunerHpSearch.html" class="type-name-link" title="class in de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers">TransformersFineTunerHpSearch</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>

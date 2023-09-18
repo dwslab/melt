@@ -157,47 +157,68 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/SentenceTransformersFineTuner.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.io.File)" class="member-name-link">SentenceTransformersFineTuner</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Run the training of a NLP sentence transformers.</div>
-</div>
-<div class="col-first odd-row-color"><code>&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/SentenceTransformersMatcher.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String)" class="member-name-link">SentenceTransformersMatcher</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersBase.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String)" class="member-name-link">TransformersBase</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Constructor with all required parameters.</div>
-</div>
-<div class="col-first odd-row-color"><code>&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersBaseFineTuner.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.io.File)" class="member-name-link">TransformersBaseFineTuner</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Run the training of a NLP transformer.</div>
-</div>
-<div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFilter.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String)" class="member-name-link">TransformersFilter</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/LLMBase.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.lang.String)" class="member-name-link">LLMBase</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;promt)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor with all required parameters and default values for optional parameters (can be changed by setters).</div>
 </div>
 <div class="col-first odd-row-color"><code>&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFineTuner.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.io.File)" class="member-name-link">TransformersFineTuner</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
+<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/LLMBinaryFilter.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.lang.String)" class="member-name-link">LLMBinaryFilter</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;promt)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor with all required parameters and default values for optional parameters (can be changed by setters).</div>
+</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/LLMChooseGivenEntityFilter.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.lang.String)" class="member-name-link">LLMChooseGivenEntityFilter</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;promt)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Constructor with all required parameters and default values for optional parameters (can be changed by setters).</div>
+</div>
+<div class="col-first odd-row-color"><code>&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/SentenceTransformersFineTuner.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.io.File)" class="member-name-link">SentenceTransformersFineTuner</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Run the training of a NLP transformer.</div>
+<div class="block">Run the training of a NLP sentence transformers.</div>
 </div>
 <div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.io.File)" class="member-name-link">TransformersFineTunerHpSearch</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
+<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/SentenceTransformersMatcher.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String)" class="member-name-link">SentenceTransformersMatcher</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersBase.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String)" class="member-name-link">TransformersBase</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor with all required parameters.</div>
+</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersBaseFineTuner.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.io.File)" class="member-name-link">TransformersBaseFineTuner</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
  <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Run the training of a NLP transformer.</div>
+</div>
+<div class="col-first odd-row-color"><code>&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFilter.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String)" class="member-name-link">TransformersFilter</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modelName)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor with all required parameters and default values for optional parameters (can be changed by setters).</div>
+</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFineTuner.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.io.File)" class="member-name-link">TransformersFineTuner</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Run the training of a NLP transformer.</div>
+</div>
+<div class="col-first odd-row-color"><code>&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../matching_ml/python/nlptransformers/TransformersFineTunerHpSearch.html#%3Cinit%3E(de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap,java.lang.String,java.io.File)" class="member-name-link">TransformersFineTunerHpSearch</a><wbr>(<a href="../TextExtractorMap.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractorMap</a>&nbsp;extractor,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialModelName,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;resultingModelLocation)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
