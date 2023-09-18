@@ -17,6 +17,7 @@
 - [Wikidata tests are fixed](https://github.com/dwslab/melt/commit/ae824d9#diff-471d5bfa39673c940c5c7c2f7450ffe61545c052efd6ccf85080e0e589cbd7c9) because Wikidata entry for `EU` changed 
 - [Testcasevalidation is more memory friendly](https://github.com/dwslab/melt/commit/fe6915287637895c3fee63eec2e28934218ba0bd)
 - fixed macro F1 computation (it is **not** the harmonic mean of macro averaged precision and recall but now the macro averaged f1 scores)
+- track `Popconference[0-100]` works now because this track has no reference alignments (see [commit 1f9b601](https://github.com/dwslab/melt/commit/1f9b60102c14131a97228f6d84cf84ffe29df024) )
 
 **New Tracks**
 - [pgx Track](http://oaei.ontologymatching.org/2023/pharmacogenomics/index.html)

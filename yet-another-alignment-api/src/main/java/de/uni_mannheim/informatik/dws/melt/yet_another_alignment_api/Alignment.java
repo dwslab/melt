@@ -560,7 +560,7 @@ public class Alignment extends ConcurrentIndexedCollection<Correspondence> {
         Alignment m = new Alignment(this, false);
         ResultSet<Correspondence> result = this.retrieve(QueryFactory.greaterThanOrEqualTo(Correspondence.CONFIDENCE, threshold));
         for(Correspondence c : result){
-            m.add(c);
+            m.add(new Correspondence(c));
         }
         return m;
     }

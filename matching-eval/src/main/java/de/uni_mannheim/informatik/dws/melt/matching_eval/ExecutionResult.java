@@ -8,12 +8,15 @@ import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.refinement.Refiner;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.AlignmentParser;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.SSSOMFormatException;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.SSSOMParser;
 import java.io.*;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -152,14 +155,22 @@ public class ExecutionResult {
      * @param url url which represents the alignment
      * @return Parsed alignment.
      */
-    private static Alignment silentlyParseAlignment(URL url){
+    private static Alignment silentlyParseAlignment(URL url) {
         try {
             return AlignmentParser.parse(url);
         }catch(FileNotFoundException ex){
             LOGGER.error("The system alignment file with URL {} does not exist. Returning empty system alignment.", url);
-        }
-        catch (SAXException | IOException | NullPointerException ex) {
-            LOGGER.error("The system alignment given by following URL could not be parsed: " + url.toString(), ex);
+        }catch(IOException | NullPointerException ex){
+            LOGGER.error("The system alignment given by following URL could not be parsed with Alignment Format: " + url.toString(), ex);
+        }catch(SAXException ex){
+            try {
+                return SSSOMParser.parse(AlignmentParser.getInputStreamFromURL(url));
+            } catch (IOException ex1) {
+                LOGGER.error("The system alignment given by following URL could not be parsed with SSSOM: " + url.toString(), ex);
+            } catch (SSSOMFormatException ex1) {
+                LOGGER.error("The system alignment given by URL {} could not be parsed as alignemntFormat and SSSOM: error from alignment: {} error from SSSOM: {} ",
+                        url.toString(), ex.getMessage(), ex1.getMessage());
+            }
         }
         return new Alignment();
     }

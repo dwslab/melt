@@ -34,7 +34,7 @@ public class SSSOMParser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SSSOMParser.class);
     
-    public static Alignment parse(InputStream s) throws IOException {
+    public static Alignment parse(InputStream s) throws IOException, SSSOMFormatException {
         
         Alignment a = new Alignment();        
         BufferedReader reader = new BufferedReader(new InputStreamReader(s, StandardCharsets.UTF_8));
@@ -69,6 +69,10 @@ public class SSSOMParser {
         } // else no metadata found and skipping it
         
         try(CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter('\t').withFirstRecordAsHeader().parse(reader)){
+            if(csvParser.getHeaderNames().contains("subject_id") == false || csvParser.getHeaderNames().contains("object_id") == false){
+                throw new SSSOMFormatException("SSSOM header does not contain subject_id and/or object_id");
+            }
+            
             Set<String> usedKeys = new HashSet<>(Arrays.asList("subject_id", "object_id", "predicate_id", "confidence"));
             for (CSVRecord record : csvParser) {
                 String source;

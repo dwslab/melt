@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SSSOMParserTest {
 
     @Test
-    public void SSSOMParserTest() throws IOException{
+    public void SSSOMParserTest() throws IOException, SSSOMFormatException{
         InputStream i = this.getClass().getClassLoader().getResourceAsStream("mp_hp_mgi_all.sssom.tsv");
         Alignment a = SSSOMParser.parse(i);
         
@@ -42,6 +42,15 @@ class SSSOMParserTest {
         
         LocalDate mappingDate = c.getExtensionValueCasted(DefaultExtensions.SSSOM.MAPPING_DATE);
         assertEquals(LocalDate.parse("2022-09-02"), mappingDate);
+    }
+    
+    
+    @Test
+    public void SSSOMParserWithInvalidInput() throws IOException{
+        InputStream i = this.getClass().getClassLoader().getResourceAsStream("LogMap-cmt-conference.rdf");
+        assertThrows(SSSOMFormatException.class, ()->{
+            Alignment a = SSSOMParser.parse(i);
+        });
     }
     
 }

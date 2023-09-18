@@ -51,7 +51,7 @@ public class Main {
         // help option
         if (cmd.hasOption(HELP_OPTION_STRING)) {
             HelpFormatter helpFormatter = new HelpFormatter();
-            helpFormatter.printHelp("ant", options);
+            helpFormatter.printHelp("java -jar matching-eval-client-latest.jar", options);
             return;
         }
 

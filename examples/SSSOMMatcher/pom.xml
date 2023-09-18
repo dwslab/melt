@@ -1,0 +1,113 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+    <artifactId>SSSOMMatcher</artifactId><!-- id used as matcher id in descriptor file of seals package -->
+    <packaging>jar</packaging>
+    <version>1.0</version><!-- version appearing in descriptor file of seals package -->
+    <description>simple SSSOM Matcher</description><!-- description appearing in descriptor file of seals package -->
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <oaei.mainClass>de.uni_mannheim.informatik.dws.melt.demomatcher.SSSOMMatcher</oaei.mainClass><!-- mandatory: this class has to implement IOntologyMatchingToolBridge -->
+        
+        <oaei.copyright>(C) Mannheim, 2019</oaei.copyright> <!--optional copyright appearing in the seals descriptor file -->
+        <oaei.license>GNU Lesser General Public License 2.1 or above</oaei.license> <!--optional license appearing in the seals descriptor file -->
+
+        <matching.version>3.4-SNAPSHOT</matching.version> <!-- version for all matching related packages -->
+    </properties>
+    
+    <!-- Accessing the resources:
+    - all files in "oaei-resources" folder are stored in the current working directory and can be accessed with 
+          Files.readAllLines(Paths.get("oaei-resources", "configuration_oaei.txt"));
+    - all files in "src/main/resources" folder are compiled to the resulting jar and can be accessed with
+          getClass().getClassLoader().getResourceAsStream("configuration_jar.txt");
+    -->
+    
+    <dependencies>
+        <!-- dependency for jena matchers - for other matchers you can replace it with artifactId: matching-base -->
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>matching-jena</artifactId>
+            <version>${matching.version}</version>
+        </dependency>
+        
+        <!-- This dependency is necessary for seals_external. It contains the cli wrapper. -->
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>receiver-cli</artifactId>
+            <version>${matching.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>matching-eval</artifactId>
+            <version>${matching.version}</version>
+            <scope>test</scope>
+            <!-- only in test scope, can only be used when running tests. 
+                 You can also remove the scope but then remove the whole dependency when packaging the matcher.
+                 Otherwise you get a lot of unused dependencies in your matcher.-->
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- the following plugin will generate a seals assembly -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.4.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+                        <artifactId>matching-assembly</artifactId>
+                        <version>${matching.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>single</goal></goals>
+                        <!-- there exists three descriptors:
+                        1) "seals" - removes all dependencies available in seals client regardless of their version.
+                        2) "seals_all_deps" - adds all dependencies of your project (please note that this can cause problems when using jena for example)
+                        3) "seals_external" - creates a wrapper around the matcher so that no inference with seals happens(the matcher has to log to std err only).-->
+                        <configuration><descriptorRefs><descriptorRef>seals_external</descriptorRef></descriptorRefs></configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M7</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
