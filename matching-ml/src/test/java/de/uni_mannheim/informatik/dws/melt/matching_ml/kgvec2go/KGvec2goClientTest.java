@@ -8,7 +8,7 @@ import java.net.URISyntaxException;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Disabled;
 
-
+@Disabled("Disabled because KGvec2go is currently offline.")
 class KGvec2goClientTest {
 
     @Test
