@@ -11,7 +11,9 @@ import java.io.File;
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 
+@Disabled("Disabled because bwcloud is offline.")
 class WebIsAlodXLLinkerTest {
 
 

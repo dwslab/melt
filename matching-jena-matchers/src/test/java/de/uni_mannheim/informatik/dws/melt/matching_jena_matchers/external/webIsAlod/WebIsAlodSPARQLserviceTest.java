@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * This test requires a working internet connection.
  */
+@Disabled("Disabled because bwcloud is offline.")
 class WebIsAlodSPARQLserviceTest {
 
 
