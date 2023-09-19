@@ -10,7 +10,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <oaei.mainClass>de.uni_mannheim.informatik.dws.melt.examples.llm_transformers.OLaLaForOAEI</oaei.mainClass><!-- mandatory: this class has to implement IOntologyMatchingToolBridge -->
+        <oaei.copyright>(C) Mannheim, 2021</oaei.copyright> <!--optional copyright appearing in the seals descriptor file -->
+        <oaei.license>GNU Lesser General Public License 2.1 or above</oaei.license> <!--optional license appearing in the seals descriptor file -->
 
+        
         <maven.deploy.skip>true</maven.deploy.skip><!-- needed to call mvn deploy without having a distributionManagement -->
         <matching.version>3.4-SNAPSHOT</matching.version> <!-- version for all matching related packages -->
     </properties>
@@ -20,6 +25,13 @@
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
             <artifactId>matching-ml</artifactId>
+            <version>${matching.version}</version>
+        </dependency>
+        
+        <!-- This dependency is necessary for web submission. It contains the server wrapper. -->
+        <dependency>
+            <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+            <artifactId>receiver-http</artifactId>
             <version>${matching.version}</version>
         </dependency>
         
@@ -199,6 +211,61 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            
+             
+            <!-- the following plugin will generate a docker image and save it into the target folder -->
+            <!-- to work with podman instead of docker, execute (replace {dashdash} with two dashes):
+            podman system service {dashdash}time=0 unix:/run/user/$(id -u)/podman/podman.sock
+            and then export DOCKER_HOST="unix:/run/user/$(id -u)/podman/podman.sock"            
+            https://github.com/fabric8io/docker-maven-plugin/issues/1330 -->
+            <!--uncomment this if you want to build the docker image
+                you also need to replace {dash}{dash}no-install-recommends with the corresponding real dashes
+            
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.43.4</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>%a-%v-web</name>
+                            <build>
+                                <from>nvidia/cuda:11.6.2-base-ubuntu20.04</from>
+                                <runCmds>
+                                    <run>apt update</run>
+                                    <run>apt install default-jre python3 python3-pip python-is-python3 {dash}{dash}no-install-recommends -y</run>
+                                    <run>pip install torch numpy scikit-learn pandas gensim flask "Werkzeug==2.2.3" sentencepiece "protobuf==3.20.1" accelerate bitsandbytes transformers sentence-transformers</run>
+                                    <run>apt remove python3-pip -y</run>
+                                    <run>rm -rf /var/lib/apt/lists/*</run>
+                                </runCmds>
+                                <optimise>true</optimise>
+                                <assembly><descriptorRef>web</descriptorRef></assembly>
+                                <cmd><shell>java -cp "${project.build.finalName}.${project.packaging}:lib/*" de.uni_mannheim.informatik.dws.melt.receiver_http.Main</shell></cmd>
+                                <workdir>/maven</workdir>
+                                <ports><port>8080</port></ports>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
+                        <artifactId>matching-assembly</artifactId>
+                        <version>${matching.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>save</goal>
+                        </goals>
+                        <phase>install</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
         </plugins>
     </build>
     

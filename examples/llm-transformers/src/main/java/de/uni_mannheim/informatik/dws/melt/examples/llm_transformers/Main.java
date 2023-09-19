@@ -13,6 +13,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCopyResults;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorRank;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.paramtuning.ConfidenceFinder;
+import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherPipelineYAAAJenaConstructor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.elementlevel.HighPrecisionMatcher;
@@ -20,6 +21,8 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.Additio
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.BadHostsFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.MaxWeightBipartiteExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.NaiveDescendingExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.AddAlignmentExtensions;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.AddAlignmentMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.ConfidenceCombiner;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.ForwardAlwaysMatcher;
@@ -32,6 +35,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.LL
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Correspondence;
+import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.DefaultExtensions;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -224,13 +228,8 @@ public class Main {
                                 configurationName + "addhighprec"
                         );
                         
-                        if(testCase.getTrack().getName().equals("conference")){
-                            addFixedConfidenceAndOneToOne(testCaseResults, testCase, configurationName);
-                            addFixedConfidenceAndOneToOne(testCaseResults, testCase, configurationName + "addhighprec");
-                        }else{
-                            addConfidenceAndOneToOne(testCaseResults, testCase, configurationName);
-                            addConfidenceAndOneToOne(testCaseResults, testCase, configurationName + "addhighprec");
-                        }
+                        addConfidenceAndOneToOne(testCaseResults, testCase, configurationName);
+                        addConfidenceAndOneToOne(testCaseResults, testCase, configurationName + "addhighprec");
                         
                         
                         if(cliOptions.isChoose()){
@@ -263,23 +262,6 @@ public class Main {
                             
                         }
                         
-                        /*
-                        Executor.runMatcherOnTop(testCaseResults, configurationName,
-                                new ConfidenceFilter(0.5),
-                                configurationName + "_CutConfidence0.5"
-                        );
-
-                        Executor.runMatcherOnTop(testCaseResults, configurationName + "_CutConfidence0.5",
-                                new MaxWeightBipartiteExtractor(),
-                                configurationName + "_CutConfidence0.5_OneOne"
-                        );
-
-                        Executor.runMatcherOnTop(testCaseResults, configurationName, 
-                                    new AlcomoFilter(), configurationName + "_Alcomo");
-
-                        Executor.runMatcherOnTop(testCaseResults, configurationName + "_Alcomo", 
-                                    new MaxWeightBipartiteExtractor(), configurationName + "_Alcomo_OneOne");
-                        */
                         ers.addAll(testCaseResults);
                     }
                 }
@@ -298,61 +280,48 @@ public class Main {
         new EvaluatorCSV(ers).writeToDirectory(resultsDir);
         LOGGER.info("Finish evaluating");
     }
-
-    
-    private static void addFixedConfidenceAndOneToOne(ExecutionResultSet testCaseResults, TestCase testCase, String oldMatcherName){
-        Executor.runMatcherOnTop(testCaseResults, oldMatcherName,
-                new MaxWeightBipartiteExtractor(),
-                oldMatcherName + "_OneOne"
-        );
-        for(double d : Arrays.asList(0.5, 0.6, 0.7, 0.8, 0.9)){
-            Executor.runMatcherOnTop(testCaseResults, oldMatcherName + "_OneOne",
-                    new ConfidenceFilter(d),
-                    oldMatcherName + "_OneOne_CutConfidence" + d
-            );
-        }
-    }
     
     private static void addConfidenceAndOneToOne(ExecutionResultSet testCaseResults, TestCase testCase, String oldMatcherName){
-        
-        double bestConfidenceCrossEncoderF1 = ConfidenceFinder.getBestConfidenceForFmeasure(testCase.getParsedReferenceAlignment(),
-                testCaseResults.get(testCase, oldMatcherName).getSystemAlignment(),
-                GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+        findBestConfidence(testCaseResults, testCase, oldMatcherName);
 
-        Executor.runMatcherOnTop(testCaseResults, oldMatcherName,
-                new ConfidenceFilter(bestConfidenceCrossEncoderF1),
-                oldMatcherName + "_CutBestConfidence" + bestConfidenceCrossEncoderF1
-        );
-
-        Executor.runMatcherOnTop(testCaseResults, oldMatcherName,
+        Executor.runMatcherOnTop(testCaseResults, testCase, oldMatcherName,
                 new MaxWeightBipartiteExtractor(),
                 oldMatcherName + "_OneOne"
         );
-
-        double bestConfidence = ConfidenceFinder.getBestConfidenceForFmeasure(testCase.getParsedReferenceAlignment(),
-                testCaseResults.get(testCase, oldMatcherName + "_OneOne").getSystemAlignment(),
-                GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
-
-        Executor.runMatcherOnTop(testCaseResults, oldMatcherName + "_OneOne",
-                new ConfidenceFilter(bestConfidence),
-                oldMatcherName + "_OneOne_CutBestConfidence" + bestConfidence
+        
+        Executor.runMatcherOnTop(testCaseResults, testCase, oldMatcherName,
+                new NaiveDescendingExtractor(),
+                oldMatcherName + "_OneOneNaive"
         );
         
-        double bestConfidenceComplete = ConfidenceFinder.getBestConfidenceForFmeasure(testCase.getParsedReferenceAlignment(),
-                testCaseResults.get(testCase, oldMatcherName + "_OneOne").getSystemAlignment(),
-                GoldStandardCompleteness.COMPLETE);
+        findBestConfidence(testCaseResults, testCase, oldMatcherName + "_OneOne");
+        findBestConfidence(testCaseResults, testCase, oldMatcherName + "_OneOneNaive");
 
-        Executor.runMatcherOnTop(testCaseResults, oldMatcherName + "_OneOne",
-                new ConfidenceFilter(bestConfidence),
-                oldMatcherName + "_OneOne_CutBestCompleteConfidence" + bestConfidenceComplete
-        );
         
-        Executor.runMatcherOnTop(testCaseResults, oldMatcherName + "_OneOne",
+        Executor.runMatcherOnTop(testCaseResults, testCase, oldMatcherName + "_OneOne",
                 new ConfidenceFilter(0.5),
                 oldMatcherName + "_OneOne_CutConfidence0.5"
         );
+        
+        Executor.runMatcherOnTop(testCaseResults, testCase, oldMatcherName + "_OneOneNaive",
+                new ConfidenceFilter(0.5),
+                oldMatcherName + "_OneOneNaive_CutConfidence0.5"
+        );
     }
     
+    private static void findBestConfidence(ExecutionResultSet testCaseResults, TestCase testCase, String oldMatcherName){
+        double bestConfidenceComplete = ConfidenceFinder.getBestConfidenceForFmeasure(testCase.getParsedReferenceAlignment(),
+                testCaseResults.get(testCase, oldMatcherName).getSystemAlignment(),
+                GoldStandardCompleteness.COMPLETE);
+
+        Executor.runMatcherOnTop(testCaseResults, testCase, oldMatcherName,
+                new MatcherPipelineYAAAJenaConstructor(
+                    new ConfidenceFilter(bestConfidenceComplete),
+                    new AddAlignmentExtensions(DefaultExtensions.MeltExtensions.CONFIGURATION_BASE + "bestConfidence", bestConfidenceComplete)
+                ),
+                oldMatcherName + "_CutBestConfidence"
+        );
+    }
     
     
     private static void runRecallOnly(CLIOptions cliOptions) throws Exception {

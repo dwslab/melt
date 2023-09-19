@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 public class CLIOptions {
     private static final Logger LOGGER = LoggerFactory.getLogger(CLIOptions.class);
     
-    private static final List<String> PREDEFINED_PROMPTS = createPredefinedPrompts();
+    public static final List<String> PREDEFINED_PROMPTS = createPredefinedPrompts();
     private static List<String> createPredefinedPrompts(){
         List<String> prompts = new ArrayList<>();
         
@@ -196,6 +196,29 @@ public class CLIOptions {
                 wrap(false, new TextExtractorVerbalizedRDF(true, false)))); //15
         extractors.add(new SimpleEntry<>("TE16VerbalizedRDFtruetrue", 
                 wrap(false, new TextExtractorVerbalizedRDF(true, true)))); //16
+        
+        
+        //more "resource description" text extractors:
+        extractors.add(new SimpleEntry<>("TE17", //17
+                wrap(false, new TextExtractorResourceDescriptionInRDF()
+                        .setStatementProcessor(TextExtractorResourceDescriptionInRDF.SKIP_DEFINITIONS)))); 
+        extractors.add(new SimpleEntry<>("TE18", //18
+                wrap(false, new TextExtractorResourceDescriptionInRDF()
+                        .setStatementProcessor(TextExtractorResourceDescriptionInRDF.SKIP_DEFINITIONS_AND_LONG_LITERALS)))); 
+        extractors.add(new SimpleEntry<>("TE19", //19
+                wrap(false, new TextExtractorResourceDescriptionInRDF()
+                        .setStatementProcessor(TextExtractorResourceDescriptionInRDF.SKIP_DEFINITIONS_AND_SHORTEN_LONG_LITERALS)))); 
+        
+        extractors.add(new SimpleEntry<>("TE20", //20
+                wrap(false, new TextExtractorResourceDescriptionInRDF(true, RDFFormat.TURTLE)
+                        .setStatementProcessor(TextExtractorResourceDescriptionInRDF.SKIP_DEFINITIONS)))); 
+        extractors.add(new SimpleEntry<>("TE21", //21
+                wrap(false, new TextExtractorResourceDescriptionInRDF(true, RDFFormat.TURTLE)
+                        .setStatementProcessor(TextExtractorResourceDescriptionInRDF.SKIP_DEFINITIONS_AND_LONG_LITERALS)))); 
+        extractors.add(new SimpleEntry<>("TE22", //22
+                wrap(false, new TextExtractorResourceDescriptionInRDF(true, RDFFormat.TURTLE)
+                        .setStatementProcessor(TextExtractorResourceDescriptionInRDF.SKIP_DEFINITIONS_AND_SHORTEN_LONG_LITERALS)))); 
+        
         
         return extractors;
     }
