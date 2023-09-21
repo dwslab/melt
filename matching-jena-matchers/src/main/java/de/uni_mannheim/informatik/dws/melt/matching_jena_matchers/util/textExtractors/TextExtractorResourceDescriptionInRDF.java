@@ -2,18 +2,23 @@
 package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors;
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.StringProcessing;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.RDFWriter;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.riot.Lang;
@@ -28,10 +33,12 @@ import org.slf4j.LoggerFactory;
 /**
  * 
  */
-public class TextExtractorResourceDescriptionInRDF implements TextExtractor {
+public class TextExtractorResourceDescriptionInRDF extends TextExtractorRDFBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(TextExtractorResourceDescriptionInRDF.class);
+    private static final Pattern MULTIPLE_WHITESPACE = Pattern.compile("[ \t]+");
     
     protected boolean removeNewlines;
+    protected boolean removeMultipleSpaces;
     protected boolean useLabelInsteadOfResource;
     
     protected boolean includePrefixesInModel;
@@ -42,7 +49,9 @@ public class TextExtractorResourceDescriptionInRDF implements TextExtractor {
     protected RDFFormat serializationFormat;
 
     public TextExtractorResourceDescriptionInRDF(boolean useLabelInsteadOfResource, RDFFormat serializationFormat) {
+        super();
         this.removeNewlines = true;
+        this.removeMultipleSpaces = true;
         this.useLabelInsteadOfResource = useLabelInsteadOfResource;
         this.includePrefixesInModel = true;
         this.removePrefixDefition = true;
@@ -90,38 +99,48 @@ public class TextExtractorResourceDescriptionInRDF implements TextExtractor {
                 finalLines = Arrays.asList(lines);
             }
             
-            if(this.removeNewlines){
-                return new HashSet<>(Arrays.asList(String.join(" ", finalLines)));
-            }else{
-                return new HashSet<>(Arrays.asList(String.join("\n", finalLines)));
+            String result = this.removeNewlines ? String.join(" ", finalLines) : String.join("\n", finalLines);
+            if(this.removeMultipleSpaces){
+                result = MULTIPLE_WHITESPACE.matcher(result).replaceAll(" ");
             }
-            
+            return new HashSet<>(Arrays.asList(result));
         } catch (IOException ex) {
             LOGGER.info("Exception for StringWriter.", ex);
             return new HashSet<>();
         }
     }
     
+    private static final Set<Property> LABEL_PROP = new HashSet<>(Arrays.asList(
+            SKOS.prefLabel, RDFS.label, SKOS.altLabel
+    ));
     
     protected Model getModelWithResource(Resource r){
-        Model m = createEmptyModel(r);
+        List<Statement> statements = new ArrayList<>();
         StmtIterator i = r.listProperties();
         while(i.hasNext()){
             Statement s = i.next();
-            m.add(s);
+            statements.add(s);
             if(s.getObject().isResource()){
                 Resource neighbour = s.getObject().asResource();
-                m.add(neighbour.listProperties(SKOS.prefLabel));
-                m.add(neighbour.listProperties(RDFS.label));
-                m.add(neighbour.listProperties(SKOS.altLabel));
+                for(Property p : LABEL_PROP){
+                    StmtIterator neighbourLabelIterator = neighbour.listProperties(p);
+                    while(neighbourLabelIterator.hasNext()){
+                        Statement neighbourLabel = neighbourLabelIterator.next();
+                        String processed = StringProcessing.normalizeOnlyCamelCaseAndUnderscore(neighbourLabel.getObject().asLiteral().getLexicalForm());
+                        statements.add(ResourceFactory.createStatement(
+                            neighbourLabel.getSubject(), neighbourLabel.getPredicate(), ResourceFactory.createStringLiteral(processed)));
+                    }
+                }
             }
         }
+        Model m = createEmptyModel(r);
+        m.add(this.statementProcessor.apply(statements));
         return m;
     }
     
     private static final TextExtractorOnlyLabel labelExtractor = new TextExtractorOnlyLabel();
     protected Model getModelWithLabel(Resource r){
-        Model m = createEmptyModel(r);
+        List<Statement> statements = new ArrayList<>();
         StmtIterator i = r.listProperties();
         while(i.hasNext()){
             Statement s = i.next();
@@ -129,16 +148,27 @@ public class TextExtractorResourceDescriptionInRDF implements TextExtractor {
                 String neighbourLabel = labelExtractor.extractOne(s.getObject().asResource());
                 if(neighbourLabel.isEmpty()){
                     if(s.getObject().isURIResource())
-                        m.add(s); // only add if it is a URIResource - otherwise it is a blank node which has no information (also no labels etc).
+                        statements.add(s); // only add if it is a URIResource - otherwise it is a blank node which has no information (also no labels etc).
                 }else{
-                    m.add(s.getSubject(), s.getPredicate(), neighbourLabel);
+                    statements.add(ResourceFactory.createStatement(
+                            s.getSubject(), s.getPredicate(), ResourceFactory.createStringLiteral(neighbourLabel)));
                 }
             }else{
-                m.add(s);
+                if(LABEL_PROP.contains(s.getPredicate())){
+                    //process labels
+                    String processed = StringProcessing.normalizeOnlyCamelCaseAndUnderscore(s.getObject().asLiteral().getLexicalForm());
+                    statements.add(ResourceFactory.createStatement(
+                            s.getSubject(), s.getPredicate(), ResourceFactory.createStringLiteral(processed)));
+                }else{
+                    statements.add(s);
+                }
             }
         }
+        Model m = createEmptyModel(r);
+        m.add(this.statementProcessor.apply(statements));
         return m;
     }
+    
     
     private static Set<Lang> noPrefixLang = new HashSet<>(Arrays.asList(
             Lang.NTRIPLES, Lang.NT, Lang.NQUADS, Lang.NQ));
@@ -202,39 +232,53 @@ public class TextExtractorResourceDescriptionInRDF implements TextExtractor {
         return removeNewlines;
     }
 
-    public void setRemoveNewlines(boolean removeNewlines) {
+    public TextExtractorResourceDescriptionInRDF setRemoveNewlines(boolean removeNewlines) {
         this.removeNewlines = removeNewlines;
+        return this;
     }
 
     public boolean isUseLabelInsteadOfResource() {
         return useLabelInsteadOfResource;
     }
 
-    public void setUseLabelInsteadOfResource(boolean useLabelInsteadOfResource) {
+    public TextExtractorResourceDescriptionInRDF setUseLabelInsteadOfResource(boolean useLabelInsteadOfResource) {
         this.useLabelInsteadOfResource = useLabelInsteadOfResource;
+        return this;
     }
 
     public boolean isIncludePrefixesInModel() {
         return includePrefixesInModel;
     }
 
-    public void setIncludePrefixesInModel(boolean includePrefixesInModel) {
+    public TextExtractorResourceDescriptionInRDF setIncludePrefixesInModel(boolean includePrefixesInModel) {
         this.includePrefixesInModel = includePrefixesInModel;
+        return this;
     }
 
     public boolean isRemovePrefixDefition() {
         return removePrefixDefition;
     }
 
-    public void setRemovePrefixDefition(boolean removePrefixDefition) {
+    public TextExtractorResourceDescriptionInRDF setRemovePrefixDefition(boolean removePrefixDefition) {
         this.removePrefixDefition = removePrefixDefition;
+        return this;
     }
 
     public RDFFormat getSerializationFormat() {
         return serializationFormat;
     }
 
-    public void setSerializationFormat(RDFFormat serializationFormat) {
+    public TextExtractorResourceDescriptionInRDF setSerializationFormat(RDFFormat serializationFormat) {
         this.serializationFormat = serializationFormat;
+        return this;
+    }
+
+    public boolean isRemoveMultipleSpaces() {
+        return removeMultipleSpaces;
+    }
+
+    public TextExtractorResourceDescriptionInRDF setRemoveMultipleSpaces(boolean removeMultipleSpaces) {
+        this.removeMultipleSpaces = removeMultipleSpaces;
+        return this;
     }
 }
