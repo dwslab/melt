@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.melt.matching_eval_client;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackNameLookup;
 import de.uni_mannheim.informatik.dws.melt.matching_base.FileUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MeltUtil;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.docker.MatcherDockerFile;
@@ -60,7 +61,7 @@ public class Main {
             System.out.println("The following built-in tracks are available in MELT.");
             System.out.println("You can directly use them with the track option -t <built-in track>");
             System.out.println("(You do not need to specify further information.)\n");
-            for(String s : BuiltInTracks.getTrackOptions()){
+            for(String s : TrackNameLookup.getTrackOptions()){
                 System.out.println(s);
             }
             return;
@@ -89,7 +90,7 @@ public class Main {
         if (cmd.hasOption(TRACK_OPTION)) {
             String[] trackData = cmd.getOptionValues(TRACK_OPTION);
             if (trackData.length == 1){
-                track = BuiltInTracks.getTrackByString(trackData[0]);
+                track = TrackNameLookup.getTrackByString(trackData[0]);
                 if(track == null){
                     System.out.println("Could not find track '" + trackData[0] + "'.");
                 }

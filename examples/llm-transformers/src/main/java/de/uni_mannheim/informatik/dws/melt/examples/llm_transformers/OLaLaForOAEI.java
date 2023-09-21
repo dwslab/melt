@@ -15,6 +15,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtra
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.LLMBinaryFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_ml.python.nlptransformers.SentenceTransformersMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
+import java.io.File;
 import java.util.Properties;
 import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
@@ -25,6 +26,12 @@ import org.slf4j.LoggerFactory;
  */
 public class OLaLaForOAEI implements IMatcher<OntModel,Alignment,Properties> {
     
+    private File transformersCache = null;
+    private String gpus = null;
+    
+    
+    
+    
     @Override
     public Alignment match(OntModel source, OntModel target, Alignment inputAlignment, Properties parameters) throws Exception {
         
@@ -34,7 +41,10 @@ public class OLaLaForOAEI implements IMatcher<OntModel,Alignment,Properties> {
         );
         biEncoder.setMultipleTextsToMultipleExamples(true);
         biEncoder.setTopK(5); 
-        //biEncoder.setTransformersCache(transformersCache);
+        if(this.transformersCache != null)
+            biEncoder.setTransformersCache(this.transformersCache);
+        if(this.gpus != null)
+            biEncoder.setCudaVisibleDevices(this.gpus);
         biEncoder.addResourceFilter(SentenceTransformersPredicateBadHosts.class);
         
         
@@ -46,7 +56,11 @@ public class OLaLaForOAEI implements IMatcher<OntModel,Alignment,Properties> {
                 model,
                 CLIOptions.PREDEFINED_PROMPTS.get(7));
         llmTransformersFilter.setMultipleTextsToMultipleExamples(true);
-        //llmTransformersFilter.setTransformersCache(transformersCache);
+        if(this.transformersCache != null)
+            llmTransformersFilter.setTransformersCache(this.transformersCache);
+        if(this.gpus != null)
+            llmTransformersFilter.setCudaVisibleDevices(this.gpus);
+        
         llmTransformersFilter
                 .addGenerationArgument("max_new_tokens", 10)
                 .addGenerationArgument("temperature", 0.0);
@@ -68,5 +82,21 @@ public class OLaLaForOAEI implements IMatcher<OntModel,Alignment,Properties> {
         );
         
         return matcher.match(source, target, inputAlignment, parameters);
+    }
+
+    public File getTransformersCache() {
+        return transformersCache;
+    }
+
+    public void setTransformersCache(File transformersCache) {
+        this.transformersCache = transformersCache;
+    }
+
+    public String getGpus() {
+        return gpus;
+    }
+
+    public void setGpus(String gpus) {
+        this.gpus = gpus;
     }
 }

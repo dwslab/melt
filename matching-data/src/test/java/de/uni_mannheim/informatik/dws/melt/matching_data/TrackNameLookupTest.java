@@ -1,5 +1,6 @@
-package de.uni_mannheim.informatik.dws.melt.matching_eval_client;
+package de.uni_mannheim.informatik.dws.melt.matching_data;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackNameLookup;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import org.junit.jupiter.api.Test;
 
@@ -7,18 +8,18 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BuiltInTracksTest {
+class TrackNameLookupTest {
 
 
     @Test
     public void getTestByString(){
-        assertEquals(TrackRepository.Anatomy.Default, BuiltInTracks.getTrackByString("anatomy"));
-        assertNull(BuiltInTracks.getTrackByString("does-not-exist"));
+        assertEquals(TrackRepository.Anatomy.Default, TrackNameLookup.getTrackByString("anatomy"));
+        assertNull(TrackNameLookup.getTrackByString("does-not-exist"));
     }
 
     @Test
     public void getTrackOptions(){
-        List<String> result = BuiltInTracks.getTrackOptions();
+        List<String> result = TrackNameLookup.getTrackOptions();
         assertNotNull(result);
         assertTrue(result.size() > 3);
 

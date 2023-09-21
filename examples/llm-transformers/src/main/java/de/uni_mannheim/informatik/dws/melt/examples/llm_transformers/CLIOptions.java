@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.melt.examples.llm_transformers;
 
 import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
 import de.uni_mannheim.informatik.dws.melt.matching_data.Track;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackNameLookup;
 import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.TextExtractorMap;
@@ -631,47 +632,12 @@ public class CLIOptions {
         if (cmd.hasOption("tracks")) {
             for (String trackString : cmd.getOptionValues("tracks")) {
                 trackString = trackString.toLowerCase(Locale.ROOT).trim();
-                switch (trackString) {
-                    case "conference":
-                        tracks.add(TrackRepository.Conference.V1);
-                        break;
-                    case "anatomy":
-                        tracks.add(TrackRepository.Anatomy.Default);
-                        break;
-                    case "kg":
-                    case "knowledge-graphs":
-                    case "knowledgegraphs":
-                    case "knowledgegraph":
-                        tracks.add(TrackRepository.Knowledgegraph.V4);
-                        break;
-                    case "largebio":
-                    case "largebio-all":
-                        TrackRepository.Largebio.unlimitEntityExpansion();
-                        tracks.add(TrackRepository.Largebio.V2016.ALL);
-                        break;
-                    case "largebio-small":
-                        TrackRepository.Largebio.unlimitEntityExpansion();
-                        tracks.add(TrackRepository.Largebio.V2016.ONLY_SMALL);
-                        break;
-                    case "largebio-whole":
-                        TrackRepository.Largebio.unlimitEntityExpansion();
-                        tracks.add(TrackRepository.Largebio.V2016.ONLY_WHOLE);
-                        break;
-                    case "commonkg":
-                        TrackRepository.Largebio.unlimitEntityExpansion();
-                        tracks.add(TrackRepository.CommonKG.NELL_DBPEDIA_V1);
-                        tracks.add(TrackRepository.CommonKG.YAGO_WIKIDATA_V1);
-                        break;
-                    case "biodiv":
-                        tracks.add(TrackRepository.Biodiv.V2022);
-                        break;
-                    case "phenotype":
-                        tracks.add(TrackRepository.Phenotype.V2017.DOID_ORDO);
-                        tracks.add(TrackRepository.Phenotype.V2017.HP_MP);
-                        break;
-                    default:
-                        LOGGER.warn("Could not map track: " + trackString);
-                        System.exit(1);
+                Track track = TrackNameLookup.getTrackByString(trackString);
+                if(track == null){
+                    LOGGER.warn("Could not map track: " + trackString);
+                    System.exit(1);
+                }else{
+                    tracks.add(track);
                 }
             }
         }
