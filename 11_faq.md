@@ -1,7 +1,7 @@
 ---
 layout: default
 title: FAQ
-nav_order: 10
+nav_order: 11
 permalink: /faq
 ---
 
@@ -218,6 +218,26 @@ END
 # let's write a new .tar.gz file
 docker save alod2vecmatcher-1.0-web | gzip > alod2vecmatcher-1.0-web-latest.tar.gz
 ```
+
+## SSLHandshakeException while executing MatcherHTTPCall
+
+Depending on the SSL encryption of the matcher (URL) the following error might be thrown:
+
+```
+javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+```
+
+Which usually means that the certificate cannot be validated with the locally installed certificates.
+There are two ways out:
+
+1) Install the required certificates (recommended):
+    - You need to find out which certificate is required by the sever (of the matcher). Usually you can browse to the matcher page and open the developer tools and [click on the security tab to see the used certificate](https://www.thesslstore.com/blog/how-to-view-ssl-certificate-details-in-chrome-56/).
+    - Download the necessary certificate (e.g. for [Let's Encypt](https://letsencrypt.org/certificates/) the required certificate is [ISRG Root X1](https://letsencrypt.org/certs/isrgrootx1.der)).
+    - Install the certificate with command (see pages of [IBM](https://www.ibm.com/docs/en/cognos-tm1/10.2.2?topic=ictocyoiatwas-add-certificates-jre-keystore) and [Oracle](https://docs.oracle.com/cd/E19830-01/819-4712/ablqw/index.html))
+        ```keytool -import -noprompt -trustcacerts -alias {an_arbitrary_alias} -file {absolute_path_to_certificate_fiel} -keystore {path_to_key_store} -storepass changeit```
+        - The `{path_to_key_store}` can be determined by checking the `JAVA_HOME` environment variable  `"{JAVA_HOME}/jre/lib/security/cacerts"` (don't forget the `""` around the path in case there are whitespaces contained).
+2) OR: Disable the SSL certificate validation:
+    - Disable SSL validation with `MatcherHTTPCall.setSSLValidation(false);` which is available in MELT 3.4-SNAPSHOT.
 
 
 ## Find dependencies in maven central with full class name
