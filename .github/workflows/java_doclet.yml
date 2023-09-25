@@ -36,4 +36,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages # The branch the action should deploy to.
           folder: target/site/apidocs/generated_markdown
-          target-folder: 3_available_matcher_components/generated_markdown
+          target-folder: 4_available_matcher_components/generated_markdown
