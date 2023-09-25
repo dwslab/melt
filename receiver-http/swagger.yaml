@@ -14,31 +14,24 @@ servers:
 paths:
   /match:
     post:
-      summary: Computes the alignment between the given ontologies/knowledge graphs as URLs
+      summary: Computes the alignment between two given ontologies/knowledge graphs. 
+      description: >-
+        The ontologies can either be uploaded via files (multipart/form-data) which is the default or
+        via public URLs (application/x-www-form-urlencoded) which means that the ontologies need to be provided on a public server and only the URL is transmitted to the matcher.
+        <br><br>
+        Switch between them via the drop down list at the `request body` level.
+        <br><br>
+        To try out the `multipart/form-data` you can use the following curl command (`cmt-rdf` and `conference.rdf` are local paths to ontology files):
+        <br><br>
+        ```
+        curl -F 'source=@cmt.rdf' -F 'target=@conference.rdf' {URL_of_the_matcher}
+        ```
+        
       tags:
         - match
       requestBody:
         required: true
         content:
-            application/x-www-form-urlencoded:
-              schema:
-                required:
-                  - source
-                  - target
-                type: object
-                properties:
-                  source:
-                    type: string
-                    description: The URI of the source ontology/knowledge graph. The format of the file depends on the matcher. Possible formats rdf/xml, turtle, n3. The URI can be a file URI pointing to a local file or an external URI.
-                  target:
-                    type: string
-                    description: The URI of the target ontology/knowledge graph. The format of the file depends on the matcher. Possible formats rdf/xml, turtle, n3. The URI can be a file URI pointing to a local file or an external URI.
-                  inputAlignment:
-                    type: string
-                    description: The URI of the input alignment which is optional. The format needs to be the [alignment format](https://moex.gitlabpages.inria.fr/alignapi/format.html). The URI can be a file URI pointing to a local file or an external URI.
-                  parameters:
-                    type: string
-                    description: The URI of the parameters which is optional. Currently supported formats are JSON and YAML. The parameters are usually only key value pairs. Some keys are already defined in [MELT](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/ParameterConfigKeys.java). The URI can be a file URI pointing to a local file or an external URI.
             multipart/form-data:
               schema:
                 required:
@@ -62,6 +55,26 @@ paths:
                     type: string
                     format: binary
                     description: The parameters as a file(upload) which is optional. Currently supported formats are JSON and YAML. The parameters are usually only key value pairs. Some keys are already defined in [MELT](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/ParameterConfigKeys.java).
+            application/x-www-form-urlencoded:
+              schema:
+                required:
+                  - source
+                  - target
+                type: object
+                properties:
+                  source:
+                    type: string
+                    description: The URI of the source ontology/knowledge graph. The format of the file depends on the matcher. Possible formats rdf/xml, turtle, n3. The URI can be a file URI pointing to a local file or an external URI.
+                  target:
+                    type: string
+                    description: The URI of the target ontology/knowledge graph. The format of the file depends on the matcher. Possible formats rdf/xml, turtle, n3. The URI can be a file URI pointing to a local file or an external URI.
+                  inputAlignment:
+                    type: string
+                    description: The URI of the input alignment which is optional. The format needs to be the [alignment format](https://moex.gitlabpages.inria.fr/alignapi/format.html). The URI can be a file URI pointing to a local file or an external URI.
+                  parameters:
+                    type: string
+                    description: The URI of the parameters which is optional. Currently supported formats are JSON and YAML. The parameters are usually only key value pairs. Some keys are already defined in [MELT](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/ParameterConfigKeys.java). The URI can be a file URI pointing to a local file or an external URI.
+            
       responses:
         '200':
           description: The alignment in the [alignment format](https://moex.gitlabpages.inria.fr/alignapi/format.html) either as file (application/xml in case of multipart request) or as file URL (represented as a string in case of form-urlencoded request)
