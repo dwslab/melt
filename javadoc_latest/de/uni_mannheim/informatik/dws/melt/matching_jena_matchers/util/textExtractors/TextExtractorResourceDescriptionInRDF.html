@@ -72,7 +72,9 @@ loadScripts(document, 'script');</script>
 <h1 title="Class TextExtractorResourceDescriptionInRDF" class="title">Class TextExtractorResourceDescriptionInRDF</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
+<div class="inheritance"><a href="TextExtractorRDFBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorRDFBase</a>
 <div class="inheritance">de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorResourceDescriptionInRDF</div>
+</div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
@@ -81,8 +83,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">TextExtractorResourceDescriptionInRDF</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a></span></div>
+<span class="extends-implements">extends <a href="TextExtractorRDFBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorRDFBase</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -98,30 +99,42 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <div class="col-first even-row-color"><code>protected boolean</code></div>
 <div class="col-second even-row-color"><code><a href="#includePrefixesInModel" class="member-name-link">includePrefixesInModel</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private static final <a href="TextExtractorOnlyLabel.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorOnlyLabel</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#labelExtractor" class="member-name-link">labelExtractor</a></code></div>
+<div class="col-first odd-row-color"><code>private static final <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;org.apache.jena.rdf.model.Property&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#LABEL_PROP" class="member-name-link">LABEL_PROP</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private static final org.slf4j.Logger</code></div>
-<div class="col-second even-row-color"><code><a href="#LOGGER" class="member-name-link">LOGGER</a></code></div>
+<div class="col-first even-row-color"><code>private static final <a href="TextExtractorOnlyLabel.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorOnlyLabel</a></code></div>
+<div class="col-second even-row-color"><code><a href="#labelExtractor" class="member-name-link">labelExtractor</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private static final org.slf4j.Logger</code></div>
+<div class="col-second odd-row-color"><code><a href="#LOGGER" class="member-name-link">LOGGER</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>private static final <a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a></code></div>
+<div class="col-second even-row-color"><code><a href="#MULTIPLE_WHITESPACE" class="member-name-link">MULTIPLE_WHITESPACE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>private static <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;org.apache.jena.riot.Lang&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#noPrefixLang" class="member-name-link">noPrefixLang</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected boolean</code></div>
-<div class="col-second even-row-color"><code><a href="#removeNewlines" class="member-name-link">removeNewlines</a></code></div>
+<div class="col-second even-row-color"><code><a href="#removeMultipleSpaces" class="member-name-link">removeMultipleSpaces</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#removePrefixDefition" class="member-name-link">removePrefixDefition</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#removeNewlines" class="member-name-link">removeNewlines</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected org.apache.jena.riot.RDFFormat</code></div>
-<div class="col-second even-row-color"><code><a href="#serializationFormat" class="member-name-link">serializationFormat</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first even-row-color"><code>protected boolean</code></div>
+<div class="col-second even-row-color"><code><a href="#removePrefixDefition" class="member-name-link">removePrefixDefition</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>protected org.apache.jena.riot.RDFFormat</code></div>
+<div class="col-second odd-row-color"><code><a href="#serializationFormat" class="member-name-link">serializationFormat</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">The serialization format to use - more info at <a href="https://jena.apache.org/documentation/io/rdf-output.html">the corresponding jena page</a>.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#useLabelInsteadOfResource" class="member-name-link">useLabelInsteadOfResource</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>protected boolean</code></div>
+<div class="col-second even-row-color"><code><a href="#useLabelInsteadOfResource" class="member-name-link">useLabelInsteadOfResource</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
+<div class="inherited-list">
+<h3 id="fields-inherited-from-class-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorRDFBase">Fields inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.<a href="TextExtractorRDFBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorRDFBase</a></h3>
+<code><a href="TextExtractorRDFBase.html#SKIP_DEFINITIONS">SKIP_DEFINITIONS</a>, <a href="TextExtractorRDFBase.html#SKIP_DEFINITIONS_AND_LONG_LITERALS">SKIP_DEFINITIONS_AND_LONG_LITERALS</a>, <a href="TextExtractorRDFBase.html#SKIP_DEFINITIONS_AND_SHORTEN_LONG_LITERALS">SKIP_DEFINITIONS_AND_SHORTEN_LONG_LITERALS</a>, <a href="TextExtractorRDFBase.html#statementProcessor">statementProcessor</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -178,35 +191,44 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isIncludePrefixesInModel()" class="member-name-link">isIncludePrefixesInModel</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRemoveNewlines()" class="member-name-link">isRemoveNewlines</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRemoveMultipleSpaces()" class="member-name-link">isRemoveMultipleSpaces</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRemovePrefixDefition()" class="member-name-link">isRemovePrefixDefition</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRemoveNewlines()" class="member-name-link">isRemoveNewlines</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUseLabelInsteadOfResource()" class="member-name-link">isUseLabelInsteadOfResource</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRemovePrefixDefition()" class="member-name-link">isRemovePrefixDefition</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private org.apache.jena.rdf.model.Model</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeUnusedPrefixes(org.apache.jena.rdf.model.Model)" class="member-name-link">removeUnusedPrefixes</a><wbr>(org.apache.jena.rdf.model.Model&nbsp;m)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUseLabelInsteadOfResource()" class="member-name-link">isUseLabelInsteadOfResource</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setIncludePrefixesInModel(boolean)" class="member-name-link">setIncludePrefixesInModel</a><wbr>(boolean&nbsp;includePrefixesInModel)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private org.apache.jena.rdf.model.Model</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeUnusedPrefixes(org.apache.jena.rdf.model.Model)" class="member-name-link">removeUnusedPrefixes</a><wbr>(org.apache.jena.rdf.model.Model&nbsp;m)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setIncludePrefixesInModel(boolean)" class="member-name-link">setIncludePrefixesInModel</a><wbr>(boolean&nbsp;includePrefixesInModel)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRemoveMultipleSpaces(boolean)" class="member-name-link">setRemoveMultipleSpaces</a><wbr>(boolean&nbsp;removeMultipleSpaces)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRemoveNewlines(boolean)" class="member-name-link">setRemoveNewlines</a><wbr>(boolean&nbsp;removeNewlines)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRemovePrefixDefition(boolean)" class="member-name-link">setRemovePrefixDefition</a><wbr>(boolean&nbsp;removePrefixDefition)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSerializationFormat(org.apache.jena.riot.RDFFormat)" class="member-name-link">setSerializationFormat</a><wbr>(org.apache.jena.riot.RDFFormat&nbsp;serializationFormat)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUseLabelInsteadOfResource(boolean)" class="member-name-link">setUseLabelInsteadOfResource</a><wbr>(boolean&nbsp;useLabelInsteadOfResource)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.TextExtractorRDFBase">Methods inherited from class&nbsp;de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors.<a href="TextExtractorRDFBase.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorRDFBase</a></h3>
+<code><a href="TextExtractorRDFBase.html#getStatementProcessor()">getStatementProcessor</a>, <a href="TextExtractorRDFBase.html#setStatementProcessor(java.util.function.Function)">setStatementProcessor</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#clone--" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#equals-java.lang.Object-" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#finalize--" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#getClass--" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#hashCode--" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#notify--" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#notifyAll--" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#toString--" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait--" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait-long-" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait-long-int-" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -228,9 +250,21 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 </section>
 </li>
 <li>
+<section class="detail" id="MULTIPLE_WHITESPACE">
+<h3>MULTIPLE_WHITESPACE</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a></span>&nbsp;<span class="element-name">MULTIPLE_WHITESPACE</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="removeNewlines">
 <h3>removeNewlines</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">removeNewlines</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="removeMultipleSpaces">
+<h3>removeMultipleSpaces</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">removeMultipleSpaces</span></div>
 </section>
 </li>
 <li>
@@ -256,6 +290,12 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <h3>serializationFormat</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">org.apache.jena.riot.RDFFormat</span>&nbsp;<span class="element-name">serializationFormat</span></div>
 <div class="block">The serialization format to use - more info at <a href="https://jena.apache.org/documentation/io/rdf-output.html">the corresponding jena page</a>.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="LABEL_PROP">
+<h3>LABEL_PROP</h3>
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;org.apache.jena.rdf.model.Property&gt;</span>&nbsp;<span class="element-name">LABEL_PROP</span></div>
 </section>
 </li>
 <li>
@@ -312,8 +352,6 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../matching_jena/TextExtractor.html#extract(org.apache.jena.rdf.model.Resource)">TextExtractor</a></code></span></div>
 <div class="block">Given a Jena resource this method extracts textual/string representations from it.</div>
 <dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../../../matching_jena/TextExtractor.html#extract(org.apache.jena.rdf.model.Resource)">extract</a></code>&nbsp;in interface&nbsp;<code><a href="../../../matching_jena/TextExtractor.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_jena">TextExtractor</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>r</code> - the jena resource which also allows to traverse the whole rdf graph</dd>
 <dt>Returns:</dt>
@@ -361,7 +399,7 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <li>
 <section class="detail" id="setRemoveNewlines(boolean)">
 <h3>setRemoveNewlines</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setRemoveNewlines</span><wbr><span class="parameters">(boolean&nbsp;removeNewlines)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></span>&nbsp;<span class="element-name">setRemoveNewlines</span><wbr><span class="parameters">(boolean&nbsp;removeNewlines)</span></div>
 </section>
 </li>
 <li>
@@ -373,7 +411,7 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <li>
 <section class="detail" id="setUseLabelInsteadOfResource(boolean)">
 <h3>setUseLabelInsteadOfResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setUseLabelInsteadOfResource</span><wbr><span class="parameters">(boolean&nbsp;useLabelInsteadOfResource)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></span>&nbsp;<span class="element-name">setUseLabelInsteadOfResource</span><wbr><span class="parameters">(boolean&nbsp;useLabelInsteadOfResource)</span></div>
 </section>
 </li>
 <li>
@@ -385,7 +423,7 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <li>
 <section class="detail" id="setIncludePrefixesInModel(boolean)">
 <h3>setIncludePrefixesInModel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setIncludePrefixesInModel</span><wbr><span class="parameters">(boolean&nbsp;includePrefixesInModel)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></span>&nbsp;<span class="element-name">setIncludePrefixesInModel</span><wbr><span class="parameters">(boolean&nbsp;includePrefixesInModel)</span></div>
 </section>
 </li>
 <li>
@@ -397,7 +435,7 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <li>
 <section class="detail" id="setRemovePrefixDefition(boolean)">
 <h3>setRemovePrefixDefition</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setRemovePrefixDefition</span><wbr><span class="parameters">(boolean&nbsp;removePrefixDefition)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></span>&nbsp;<span class="element-name">setRemovePrefixDefition</span><wbr><span class="parameters">(boolean&nbsp;removePrefixDefition)</span></div>
 </section>
 </li>
 <li>
@@ -409,7 +447,19 @@ implements <a href="../../../matching_jena/TextExtractor.html" title="interface 
 <li>
 <section class="detail" id="setSerializationFormat(org.apache.jena.riot.RDFFormat)">
 <h3>setSerializationFormat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setSerializationFormat</span><wbr><span class="parameters">(org.apache.jena.riot.RDFFormat&nbsp;serializationFormat)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></span>&nbsp;<span class="element-name">setSerializationFormat</span><wbr><span class="parameters">(org.apache.jena.riot.RDFFormat&nbsp;serializationFormat)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="isRemoveMultipleSpaces()">
+<h3>isRemoveMultipleSpaces</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isRemoveMultipleSpaces</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setRemoveMultipleSpaces(boolean)">
+<h3>setRemoveMultipleSpaces</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TextExtractorResourceDescriptionInRDF.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.util.textExtractors">TextExtractorResourceDescriptionInRDF</a></span>&nbsp;<span class="element-name">setRemoveMultipleSpaces</span><wbr><span class="parameters">(boolean&nbsp;removeMultipleSpaces)</span></div>
 </section>
 </li>
 </ul>
