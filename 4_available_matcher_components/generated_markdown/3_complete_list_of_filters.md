@@ -57,8 +57,7 @@ This filter removes correspondences where the source or target has not the same 
 
 ## AnonymousNodeFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AnonymousNodeFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-jena-matchers/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_jena_matchers/filter/AnonymousNodeFilter.java)
 
-This filter removes correspondences where the source or target has not the same host of the OntModels.
- E.g. it removes rdf:type=rdf:type or foaf:knows=foaf:knows
+This filter removes correspondences where the source or target is a blank node.
 
 *Keywords: Anonymous Node Filter*
 
@@ -229,6 +228,19 @@ This filter extracts the corresponding text for a resource (with the specified a
 
 *Keywords: Transformers Fine Tuner Hp Search*
 
+## LLMBase [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/LLMBase.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/LLMBase.java)
+
+This filter asks a LLM which entity of the source fits best to an entity of the target.
+ Correspondences needs to be provided such that candidates are available.
+ It will only keep correspondences which are stated to be useful.
+ The difference to 
+```
+#LLMBinaryFilter
+```
+ is that all possible matches arte given to the LLM model.
+
+*Keywords: LLM Base*
+
 ## TransformersFineTuner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/TransformersFineTuner.java)
 
 This class is used to fine-tune a transformer model based on a generated dataset.
@@ -237,6 +249,21 @@ This class is used to fine-tune a transformer model based on a generated dataset
  training file is deleted.
 
 *Keywords: Transformers Fine Tuner*
+
+## LLMChooseGivenEntityFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/LLMChooseGivenEntityFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/LLMChooseGivenEntityFilter.java)
+
+This filter asks the LLM given a source entity which is the best target entity (out of the ones in the alignment).
+ Afterwards the same is done in the reversed direction.
+
+*Keywords: LLM Choose Given Entity Filter*
+
+## LLMBinaryFilter [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/LLMBinaryFilter.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/LLMBinaryFilter.java)
+
+This filter asks a LLM if a given correspondence is correct or not.
+ It has no information about the other correspondences and each correspondence becomes a prediction example for the LLM.
+ It will add the corresponding confidence to the correspondence such that a filtering afterwards is possible.
+
+*Keywords: LLM Binary Filter*
 
 ## RelationTypeFineTuner [Javadoc](https://dwslab.github.io/melt/javadoc_latest/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/relationprediction/RelationTypeFineTuner.html) / [Source Code](https://github.com/dwslab/melt/blob/master/matching-ml/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_ml/python/nlptransformers/relationprediction/RelationTypeFineTuner.java)
 
@@ -297,4 +324,4 @@ This is the logmap repair filter.
 *Keywords: Log Map Repair Filter*
 
 ---
-<sub>automatically generated on 2023-08-02 17:59</sub>
+<sub>automatically generated on 2023-09-25 12:00</sub>
