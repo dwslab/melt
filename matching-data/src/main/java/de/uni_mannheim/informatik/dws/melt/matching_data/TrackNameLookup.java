@@ -90,6 +90,7 @@ public class TrackNameLookup {
         add(TrackRepository.Biodiv.V2021, "biodiv-2021", "biodiversity-2021");
         add(TrackRepository.Biodiv.V2021OWL, "biodiv-2021owl", "biodiversity-2021owl");
         add(TrackRepository.Biodiv.V2022, "biodiv-2022", "biodiversity-2022");
+        add(TrackRepository.Biodiv.V2023, "biodiv-2023", "biodiversity-2023");
         
         //MSE
         add(TrackRepository.MSE.V2021, "mse-2021");

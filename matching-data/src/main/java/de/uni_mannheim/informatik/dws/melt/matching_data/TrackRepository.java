@@ -658,6 +658,11 @@ public class TrackRepository {
          * The new Biodiv track used in OAEI 2022. 
          */
         public static Track V2022 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "biodiv", "2022");
+        
+        /**
+         * The new Biodiv track used in OAEI 2023. 
+         */
+        public static Track V2023 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "biodiv", "2023");
     }
     
     
