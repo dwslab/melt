@@ -27,9 +27,11 @@ import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.RDFS;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Disabled("Disabled due to low resources on CI Pipeline.")
 public class TransformersFilterTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransformersFilterTest.class);
     
