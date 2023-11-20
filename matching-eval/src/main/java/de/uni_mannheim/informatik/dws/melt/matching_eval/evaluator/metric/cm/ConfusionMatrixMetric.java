@@ -245,27 +245,27 @@ public class ConfusionMatrixMetric extends Metric<ConfusionMatrix> {
         Alignment truePositive = new Alignment();
         Alignment falsePositive = new Alignment();
         Alignment falseNegative = new Alignment();
-
-        double precision = 0.0; // dummy init
-        double recall = 0.0; // dummy init
-
-        // for aggregation:
+        int numberOfCorrespondences = 0;
+        double aggregatedPrecision = 0.0;
+        double aggregatedRecall = 0.0;
+        double aggregatedF1 = 0.0;
+        
         for (ConfusionMatrix individualConfusionMatrix : confusionMatrices) {
             truePositive.addAll(individualConfusionMatrix.getTruePositive());
             falsePositive.addAll(individualConfusionMatrix.getFalsePositive());
             falseNegative.addAll(individualConfusionMatrix.getFalseNegative());
-        }
-
-        double aggregatedPrecision = 0.0;
-        double aggregatedRecall = 0.0;
-        for (ConfusionMatrix individualConfusionMatrix : confusionMatrices) {
+            
+            numberOfCorrespondences += individualConfusionMatrix.getNumberOfCorrespondences();
+            
             aggregatedPrecision = aggregatedPrecision + individualConfusionMatrix.getPrecision();
             aggregatedRecall = aggregatedRecall + individualConfusionMatrix.getRecall();
+            aggregatedF1 = aggregatedF1 + individualConfusionMatrix.getF1measure();
         }
-        precision = aggregatedPrecision / numberOfTestCases;
-        recall = aggregatedRecall / numberOfTestCases;
-
-        return new ConfusionMatrix(truePositive, falsePositive, falseNegative, precision, recall);
+        double precision = aggregatedPrecision / numberOfTestCases;
+        double recall = aggregatedRecall / numberOfTestCases;
+        double f1 = aggregatedF1 / numberOfTestCases;
+        
+        return new ConfusionMatrixMacroAveraged(truePositive, falsePositive, falseNegative, numberOfCorrespondences, precision, recall, f1);
     }
 
 
