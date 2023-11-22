@@ -1,22 +1,18 @@
 package de.uni_mannheim.informatik.dws.melt.demomatcher;
 
+import de.uni_mannheim.informatik.dws.melt.matching_data.TestCase;
+import de.uni_mannheim.informatik.dws.melt.matching_data.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.ExecutionResultSet;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.Executor;
 import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.EvaluatorCSV;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.evaluator.metric.cm.GoldStandardCompleteness;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TestCase;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.Track;
-import de.uni_mannheim.informatik.dws.melt.matching_eval.tracks.TrackRepository;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherPipelineYAAAJenaConstructor;
-import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.AnnonymousNodeFilter;
+import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.AnonymousNodeFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.BadHostsFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.ConfidenceFilter;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.filter.extraction.NaiveDescendingExtractor;
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.metalevel.ForwardMatcher;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge;
-
-import java.io.File;
 import java.util.*;
 
 import org.junit.jupiter.api.Test;
@@ -60,7 +56,7 @@ class RDF2VecMatcherTest {
         matchers.put("ReferenceSample", new ForwardMatcher());
         //matchers.put("RDF2Vec", new MatcherPipelineYAAAJenaConstructor(new ExactStringMatcher(), new ReferenceSampleMatcher(sample)));
         matchers.put("RDF2VecPostProcessed", new MatcherPipelineYAAAJenaConstructor(new RDF2VecMatcher(sample),
-                new BadHostsFilter(true), new AnnonymousNodeFilter(), new ConfidenceFilter(0.9), new NaiveDescendingExtractor()));
+                new BadHostsFilter(true), new AnonymousNodeFilter(), new ConfidenceFilter(0.9), new NaiveDescendingExtractor()));
 
         ExecutionResultSet results = Executor.run(TrackRepository.Anatomy.Default, matchers);
 

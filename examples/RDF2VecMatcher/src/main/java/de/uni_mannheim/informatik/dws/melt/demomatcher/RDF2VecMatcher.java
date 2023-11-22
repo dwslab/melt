@@ -1,13 +1,14 @@
 package de.uni_mannheim.informatik.dws.melt.demomatcher;
 
 import de.uni_mannheim.informatik.dws.jrdf2vec.RDF2Vec;
+import de.uni_mannheim.informatik.dws.jrdf2vec.training.Gensim;
 import de.uni_mannheim.informatik.dws.jrdf2vec.training.Word2VecConfiguration;
 import de.uni_mannheim.informatik.dws.melt.matching_jena.MatcherYAAAJena;
+import de.uni_mannheim.informatik.dws.melt.matching_ml.python.PythonServer;
 
 import java.io.File;
 import java.util.Properties;
 
-import de.uni_mannheim.informatik.dws.melt.matching_ml.python.Gensim;
 import de.uni_mannheim.informatik.dws.melt.yet_another_alignment_api.Alignment;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.ontology.OntModel;
@@ -53,9 +54,9 @@ public class RDF2VecMatcher extends MatcherYAAAJena {
         // trigger target training
         String targetModel = rdf2Vec.trainNew(target, targetWalks);
 
-        de.uni_mannheim.informatik.dws.jrdf2vec.training.Gensim.shutDown();
+        Gensim.shutDown();
 
-        Alignment alignment = Gensim.getInstance().alignModel("./sourceDirectory/model.kv", "./targetDirectory/model.kv", "linear_projection", usedAlignment);
+        Alignment alignment = PythonServer.getInstance().alignModel("./sourceDirectory/model.kv", "./targetDirectory/model.kv", "linear_projection", usedAlignment);
         
         FileUtils.deleteDirectory(sourceWalkDirectory);
         FileUtils.deleteDirectory(targetWalks);

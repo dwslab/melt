@@ -13,7 +13,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <maven.deploy.skip>true</maven.deploy.skip><!-- needed to call mvn deploy without having a distributionManagement -->
-        <matching.version>2.6</matching.version> <!-- version for all matching related packages -->
+        <matching.version>3.3</matching.version> <!-- version for all matching related packages -->
     </properties>
     
     <!-- Accessing the resources:
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws</groupId>
             <artifactId>jrdf2vec</artifactId>
-            <version>1.0</version>
+            <version>1.2</version>
         </dependency>
 
 
