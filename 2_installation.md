@@ -22,7 +22,7 @@ MELT is available in [maven central](https://repo1.maven.org/maven2/de/uni-mannh
 </dependency>
 ```
 
-## Development Version
+## Development Version - via Maven Dependency
 If you want to use the bleeding edge, but don't want to build it yourself 
 (by cloning the repository and execute `mvn install` in the main directory),
 you can use [jitpack.io](https://jitpack.io/#dwslab/melt/) :
@@ -47,3 +47,13 @@ Furthermore, you need to add the jitpack repository in your pom file:
 </repositories>
 ```
 
+## Development Version - via Local Installation
+
+You can also clone the repository by executing
+```
+git clone https://github.com/dwslab/melt.git
+```
+and in the top level directory (`melt`) you can install all artifacts via
+```
+mvn install -DskipTests -Dmaven.javadoc.skip=true
+```
