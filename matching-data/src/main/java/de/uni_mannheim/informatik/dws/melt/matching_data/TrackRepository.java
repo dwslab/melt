@@ -847,6 +847,23 @@ public class TrackRepository {
             }
         }
     }
+    
+    
+    
+    /**
+     * ML Datasets
+     */
+    public static class MLDatasets {
+        
+        public static Track AnatomyDefault = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "anatomy_track-ml", "anatomy_track-default");
+        
+        public static Track Biodiv_V2023 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "biodiv-ml", "2023");
+        
+        public static Track BioML_2022 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "bio-ml-equiv-supervised-ml", "2022"); //this track has also the exclude alignemnts
+        
+        public static Track KG_V4 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "knowledgegraph-ml", "v4", false, GoldStandardCompleteness.PARTIAL_SOURCE_COMPLETE_TARGET_COMPLETE);
+
+    }
 
 
     private static Set<Track> definedTracks = null;
