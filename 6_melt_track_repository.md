@@ -65,6 +65,18 @@ Available multifarm language pairs:<br/>
 `fr-nl`, `fr-pt`, `fr-ru`, `nl-pt`, `nl-ru`, `pt-ru`
 
 
+
+## ML-based Tracks
+Following tracks with dedicated training and validation data (note the `-ml` at the end of the suite-id):
+
+Name | Suite-ID | Version-ID 
+---- | -------- | ---------- 
+anatomy | `anatomy_track-ml` | `anatomy_track-default` [<i class="fa fa-arrow-circle-down"></i>](https://oaei.webdatacommons.org/tdrs/testdata/persistent/anatomy_track-ml/anatomy_track-default/anatomy_track-ml_anatomy_track-default.zip)
+biodiv | `biodiv-ml` | `2023` [<i class="fa fa-arrow-circle-down"></i>](https://oaei.webdatacommons.org/tdrs/testdata/persistent/biodiv-ml/2023/biodiv-ml_2023.zip) |
+knowledgegraph | `knowledgegraph-ml` | `v4` [<i class="fa fa-arrow-circle-down"></i>](https://oaei.webdatacommons.org/tdrs/testdata/persistent/knowledgegraph-ml/v4/knowledgegraph-ml_v4.zip)
+bio-ml | `bio-ml-equiv-supervised-ml` | `2022` [<i class="fa fa-arrow-circle-down"></i>](https://oaei.webdatacommons.org/tdrs/testdata/persistent/bio-ml-equiv-supervised-ml/2022/bio-ml-equiv-supervised-ml_2022.zip)
+
+
 ## Further Services
 
 ### TestCase/Track Validation Service
