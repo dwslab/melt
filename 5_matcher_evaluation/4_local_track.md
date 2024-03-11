@@ -20,7 +20,8 @@ track-name
 ├── test-case-name-two
 │   ├── source.rdf
 │   ├── target.rdf
-│   ├── reference.rdf 
+│   ├── reference.rdf
+│   ├── parameters.rdf (optionally)
 ```
 You can add as many test cases you want.
 The root folder represents the track whereas the child folders of it represents the test cases.
@@ -29,7 +30,7 @@ In each of the test case folders, the following files can exist:
 - a source file which needs to be called `source.rdf`
 - a target file which needs to be called `target.rdf`
 - a reference alignment file (in [alignment format](https://moex.gitlabpages.inria.fr/alignapi/format.html)) which needs to be called `reference.rdf`
-- a parameters file file which needs to be called `parameters.rdf`
+- a parameters file file which needs to be called `parameters.rdf` (json or yaml formatted with keys specified in [ParameterConfigKeys](https://github.com/dwslab/melt/blob/master/matching-base/src/main/java/de/uni_mannheim/informatik/dws/melt/matching_base/ParameterConfigKeys.java). Examples can be found in many tracks from the [Track Repository](https://dwslab.github.io/melt/track-repository) or [an example here](../media/parameters.rdf))
 
 The source and target files are neccessary whereas the reference alignment and parameters files are optional.
 For a proper evaluation the reference alignment should be specified.

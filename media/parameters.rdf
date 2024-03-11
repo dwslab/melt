@@ -1,0 +1,7 @@
+{
+  "http://oaei.ontologymatching.org/matchingClasses": true,
+  "http://oaei.ontologymatching.org/matchingDataProperties": false,
+  "http://oaei.ontologymatching.org/matchingObjectProperties": false,
+  "http://oaei.ontologymatching.org/matchingRDFProperties": false,
+  "http://oaei.ontologymatching.org/matchingInstances": false
+}
