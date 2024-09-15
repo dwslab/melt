@@ -1,4 +1,5 @@
 gensim==4.3.1
+scipy<1.13 # because of gensim -> see https://stackoverflow.com/questions/78279136/importerror-cannot-import-name-triu-from-scipy-linalg-when-importing-gens
 flask>=2.0
 Werkzeug<=2.2.3 # necessary because starting from 2.3.0 the webserver do not get the request headers
 numpy>=1.11.3
