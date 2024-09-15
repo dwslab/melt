@@ -25,7 +25,7 @@ jobs:
           mvn clean install -Pjava8-tests
           mv ./matching-eval-client/target/matching-eval-client-*-SNAPSHOT.jar ./matching-eval-client-latest.jar
       - name: Upload evaluation client 🚀
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: evaluation-client
           path: matching-eval-client-latest.jar
