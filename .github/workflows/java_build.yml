@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest] # exclude macos-latest for now (because of problem with numpy)
         java: ['8', '11', '17']
         include:
         - os: ubuntu-latest
