@@ -7,11 +7,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest-large, ubuntu-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
         java: ['8', '11', '17']
         include:
         - os: ubuntu-latest
           pipcache: ~/.cache/pip
+          architecture: 
         - os: macos-latest
           pipcache: ~/Library/Caches/pip
         - os: windows-latest
@@ -54,7 +55,7 @@ jobs:
       with:
         # TODO: the latest pytorch version is only available for 3.9 and not yet in 3.10 - replace it with 3.x if it is available
         python-version: '3.11' 
-        architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+        #architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
     - name: Install python dependencies
       run: pip install -r ./matching-ml/src/main/resources/requirements.txt
     - name: Build with Maven
