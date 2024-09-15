@@ -13,8 +13,8 @@ jobs:
         - os: ubuntu-latest
           pipcache: ~/.cache/pip
           architecture: 
-        - os: macos-latest
-          pipcache: ~/Library/Caches/pip
+        #- os: macos-latest
+        #  pipcache: ~/Library/Caches/pip
         - os: windows-latest
           pipcache: ~\AppData\Local\pip\Cache
     name: Build on ${{ matrix.os }} with Java ${{ matrix.java }}
