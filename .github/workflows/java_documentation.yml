@@ -10,7 +10,7 @@ jobs:
         with:
           persist-credentials: false # this is required for the javadoc deploy plugin
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
