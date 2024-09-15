@@ -10,6 +10,9 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +22,14 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +42,26 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherHTTPCall.class);
 
-    private static CloseableHttpClient httpClient = HttpClients.createDefault();
     public static boolean CHECK_URL = true;
-
+    
+    private static CloseableHttpClient httpClient = HttpClients.createDefault();
+    
+    public static void setSSLValidation(boolean checkSSLCertificates){
+        if(checkSSLCertificates){
+            httpClient = HttpClients.createDefault();
+        }else{
+            try {
+                httpClient = HttpClients.custom()
+                        .setSSLContext(SSLContextBuilder.create().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build())
+                        .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
+                        .build();
+            } catch (NoSuchAlgorithmException|KeyStoreException|KeyManagementException ex) {
+                LOGGER.error("Could not create SSLContext while disabeling ssl validation. It will still check ssl certificates. Error Message: {}", ex.getMessage());
+                httpClient = HttpClients.createDefault();
+            }
+        }
+    }
+    
     /**
      * The number of retry operations to perform when an exception occurs.
      */
@@ -144,21 +167,29 @@ public class MatcherHTTPCall extends MatcherURL implements IMatcher<URL, URL, UR
                 builder.addBinaryBody("source", source.openStream(), ContentType.DEFAULT_BINARY, getFileName(source.getPath())); //TODO: close stream?
                 builder.addBinaryBody("target", target.openStream(), ContentType.DEFAULT_BINARY, getFileName(target.getPath()));
 
-                if (inputAlignment != null)
-                    builder.addBinaryBody("inputAlignment", inputAlignment.openStream(), ContentType.DEFAULT_BINARY, getFileName(inputAlignment.getPath()));
-
-                if (parameters != null)
-                    builder.addBinaryBody("parameters", parameters.openStream(), ContentType.DEFAULT_BINARY, getFileName(parameters.getPath()));
-
+                if (inputAlignment != null){
+                    String filename = getFileName(inputAlignment.getPath());
+                    LOGGER.info("Add input alignment to HTTP request: {}", filename);
+                    builder.addBinaryBody("inputAlignment", inputAlignment.openStream(), ContentType.DEFAULT_BINARY, filename);
+                }
+                if (parameters != null){
+                    String filename = getFileName(parameters.getPath());
+                    LOGGER.info("Add parameters to HTTP request: {}", filename);
+                    builder.addBinaryBody("parameters", parameters.openStream(), ContentType.DEFAULT_BINARY, filename);
+                }
                 request.setEntity(builder.build());
             } else {
                 List<NameValuePair> params = new ArrayList<>();
                 params.add(new BasicNameValuePair("source", source.toString()));
                 params.add(new BasicNameValuePair("target", target.toString()));
-                if (inputAlignment != null)
+                if (inputAlignment != null){
+                    LOGGER.info("Add iinput alignment to HTTP request");
                     params.add(new BasicNameValuePair("inputAlignment", inputAlignment.toString()));
-                if (parameters != null)
+                }
+                if (parameters != null){
+                    LOGGER.info("Add parameters to HTTP request");
                     params.add(new BasicNameValuePair("parameters", parameters.toString()));
+                }
 
                 request.setEntity(new UrlEncodedFormEntity(params));
             }
