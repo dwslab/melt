@@ -849,6 +849,50 @@ public class TrackRepository {
     }
     
     
+    /**
+     * The Circular Economy track is about matching relevant Circular Economy ontologies.
+     */
+    public static class CircularEconomy {
+        
+        /**
+         * This is the default version of the track which is added in 2024.
+         * The Circular Economy track is about matching relevant Circular Economy ontologies.
+         */
+        public static Track Default = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "ce_track", "ce_track");
+    }
+    
+    /**
+     * The goal of the Digital Humanities track is to evaluate matching system performance
+     * when dealing with small datasets in different languages and specialist terms from archaeology, 
+     * cultural history and the interlink of DH and computer science.
+     * The track offers manually compiled gold standard reference alignments for all the test cases,
+     * ensuring semantic, lexical and part-of-speech similartiy.
+     */
+    public static class DigitalHumanities {
+        
+        /**
+         * This is the track which covers all testcases.
+         */
+        public static Track All2024 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "dh", "2024all");
+        
+        /**
+         * This is the track which covers archaeology testcases.
+         */
+        public static Track Arch2024 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "dh", "2024arch");
+        
+        /**
+         * This is the track which covers cultural history testcases.
+         */
+        public static Track Cult2024 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "dh", "2024cult");
+        
+        /**
+         * This is the track which covers dh and computer science testcases.
+         */
+        public static Track Dhcs2024 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "dh", "2024dhcs");
+        
+        
+    }
+    
     
     /**
      * ML Datasets
