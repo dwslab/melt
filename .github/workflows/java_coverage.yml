@@ -10,26 +10,26 @@ jobs:
         with:
           persist-credentials: false # this is required for the javadoc deploy plugin
       - name: Set up JDK 8
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '8'
       - name: Print maven version
         run: mvn -version
       - name: Cache Maven packages
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-1
       - name: Cache Python packages
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/pip
           key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}-1
       - name: Cache Transformers models
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/huggingface

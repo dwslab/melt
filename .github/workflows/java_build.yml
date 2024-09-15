@@ -21,31 +21,31 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ matrix.java }}
         distribution: 'temurin'
     - name: Cache Maven packages
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: |
           ~/.m2
         key: ${{ matrix.os }}-m2-${{ hashFiles('**/pom.xml') }}-1
     # can be further improved: https://medium.com/ai2-blog/python-caching-in-github-actions-e9452698e98d
     - name: Cache Python packages 
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: |
           ${{ matrix.pipcache }}
         key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}-pipcache
     - name: Cache Transformers models
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: |
           ~/.cache/huggingface
         key: ${{ runner.os }}-transformers-models
     - name: Cache OAEI files # The check if the download server works as expected is in java_coverage where this cache is not enabled
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: |
           ~/oaei_track_cache
