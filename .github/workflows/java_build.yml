@@ -18,7 +18,7 @@ jobs:
           pipcache: ~\AppData\Local\pip\Cache
     name: Build on ${{ matrix.os }} with Java ${{ matrix.java }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
@@ -50,10 +50,10 @@ jobs:
           ~/oaei_track_cache
         key: ${{ runner.os }}-oaei
     - name: Setup Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v5
       with:
         # TODO: the latest pytorch version is only available for 3.9 and not yet in 3.10 - replace it with 3.x if it is available
-        python-version: '3.10' 
+        python-version: '3.11' 
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
     - name: Install python dependencies
       run: pip install -r ./matching-ml/src/main/resources/requirements.txt
