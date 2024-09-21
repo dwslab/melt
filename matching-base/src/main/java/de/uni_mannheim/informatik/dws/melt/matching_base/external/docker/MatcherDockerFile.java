@@ -5,9 +5,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
+import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectImageResponse;
 import com.github.dockerjava.api.exception.NotFoundException;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Binds;
 import com.github.dockerjava.api.model.ContainerConfig;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Frame;
@@ -19,6 +22,7 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
+import de.uni_mannheim.informatik.dws.melt.matching_base.IMatcher;
 import de.uni_mannheim.informatik.dws.melt.matching_base.MatcherURL;
 import de.uni_mannheim.informatik.dws.melt.matching_base.external.http.MatcherHTTPCall;
 import java.io.BufferedInputStream;
@@ -30,7 +34,9 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
@@ -38,7 +44,7 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,17 +57,17 @@ import org.slf4j.LoggerFactory;
  *<dependency>
     <groupId>com.github.docker-java</groupId>
     <artifactId>docker-java-core</artifactId>
-    <version>3.2.7</version><!--maybe update version-->
+    <version>3.3.3</version><!--maybe update version-->
 </dependency>
 <dependency>
     <groupId>com.github.docker-java</groupId>
     <artifactId>docker-java-transport-httpclient5</artifactId>
-    <version>3.2.7</version><!--maybe update version-->
+    <version>3.3.3</version><!--maybe update version-->
 </dependency>
  * }</pre>
 With this in place everything should work.
 */
-public class MatcherDockerFile extends MatcherURL implements Closeable {
+public class MatcherDockerFile extends MatcherURL implements Closeable, IMatcher<URL, URL, URL> {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MatcherDockerFile.class);
@@ -95,6 +101,9 @@ public class MatcherDockerFile extends MatcherURL implements Closeable {
     private String containerId;
     private int hostPort;
     
+    private List<Bind> volumeMounted;
+    private List<String> environmentVariables;
+    
     private boolean freshInstance = false;
     
     //timeout for the inner MatcherHTTPCall
@@ -115,6 +124,8 @@ public class MatcherDockerFile extends MatcherURL implements Closeable {
         this.imageName = imageName;
         this.runOnlyLocalhost = runOnlyLocalhost;
         this.freshInstance = freshInstance;
+        this.volumeMounted = new ArrayList<>();
+        this.environmentVariables = new ArrayList<>();
         this.dockerClient = DockerClientImpl.getInstance(config, new ApacheDockerHttpClient.Builder()
                 .dockerHost(config.getDockerHost())
                 .sslConfig(config.getSSLConfig())
@@ -203,16 +214,36 @@ public class MatcherDockerFile extends MatcherURL implements Closeable {
             bindingHostIp = "127.0.0.1"; // bind only on localhost - access only from the same machine
         }
         
+
+        LOGGER.info("Starting container from image {} with configuration", this.imageName);
+        LOGGER.info("\tport {} from container is mapped to port {} in host", containerPort, this.hostPort);
+
         PortBinding binding = new PortBinding(new Binding(bindingHostIp, "" + this.hostPort), new ExposedPort(containerPort));
         
         //HostConfig hostConfig = HostConfig.newHostConfig().withPortBindings(new PortBinding(new Binding(null, "8080"), new ExposedPort(8080)));
         //HostConfig hostConfig = HostConfig.newHostConfig().withPortBindings(PortBinding.parse("8080:8080"));
-        HostConfig hostConfig = HostConfig.newHostConfig().withPortBindings(binding);
+        HostConfig hostConfig = HostConfig.newHostConfig()
+                .withPortBindings(binding);
+        if(this.volumeMounted != null && this.volumeMounted.isEmpty() == false){
+            //create array
+            Bind[] bindArr = new Bind[this.volumeMounted.size()];
+            bindArr = this.volumeMounted.toArray(bindArr);
+            hostConfig.withBinds(new Binds(bindArr));
+            for(Bind bind : this.volumeMounted){
+                LOGGER.info("\tvolume from host: {} is mapped to path in container {}", bind.getPath(), bind.getVolume().getPath());
+            }
+        }
         
-        LOGGER.info("Starting container from image {} (port {} from container is mapped to port {} in host)", this.imageName, containerPort, this.hostPort);
-        CreateContainerResponse r = dockerClient.createContainerCmd(this.imageName)
-                .withHostConfig(hostConfig)
-                .exec();
+        CreateContainerCmd createCmd = dockerClient.createContainerCmd(this.imageName)
+                .withHostConfig(hostConfig);
+        
+        if(this.environmentVariables != null && this.environmentVariables.isEmpty() == false){
+            createCmd = createCmd.withEnv(this.environmentVariables);
+            for(String envVariable : this.environmentVariables){
+                LOGGER.info("\tenvironment variable is set: {}", envVariable);
+            }
+        }
+        CreateContainerResponse r = createCmd.exec();
         
         this.containerId = r.getId();
         if(this.containerId == null){
@@ -260,6 +291,11 @@ public class MatcherDockerFile extends MatcherURL implements Closeable {
 
     @Override
     public URL match(URL source, URL target, URL inputAlignment) throws Exception {
+        return match(source, target, inputAlignment, null);
+    }
+    
+    @Override
+    public URL match(URL source, URL target, URL inputAlignment, URL parameters) throws Exception {
         if(freshInstance){
             startContainer();
         }
@@ -276,7 +312,7 @@ public class MatcherDockerFile extends MatcherURL implements Closeable {
                 }
             }
             MatcherHTTPCall httpCall = new MatcherHTTPCall(uri, true, this.socketTimeout, this.connectTimeout, this.connectionRequestTimeout);
-            URL result = httpCall.match(source, target, inputAlignment);
+            URL result = httpCall.match(source, target, inputAlignment, parameters);
             return result;
         }finally{
             if(freshInstance){
@@ -399,6 +435,80 @@ public class MatcherDockerFile extends MatcherURL implements Closeable {
     public boolean isFreshInstance() {
         return freshInstance;
     }
+
+    /**
+     * Return all mounted volumes as a list of Bind objects.
+     * @return a list of Bind objects.
+     */
+    public List<Bind> getVolumeMounted() {
+        return volumeMounted;
+    }
+
+    /**
+     * Set the list of bindings. This will override all previous bindings.
+     * @param volumeMounted the list of bindings which should not be null.
+     */
+    public void setVolumeMounted(List<Bind> volumeMounted) {
+        if(volumeMounted == null){
+            throw new IllegalArgumentException("environmentVariables should not be null");
+        }
+        this.volumeMounted = volumeMounted;
+    }
+    
+    /**
+     * Adds a volume mount specification represented by the corresponding object.
+     * @param volume the corresponding bin object
+     */
+    public void addVolumeMounted(Bind volume) {
+        this.volumeMounted.add(volume);
+    }
+    
+    /**
+     * Adds a volume mount specification represented as string e.g. <code>/host:/container:ro</code>.
+     * @param volume the specification, e.g. <code>/host:/container:ro</code>
+     */
+    public void addVolumeMounted(String volume) {
+        this.volumeMounted.add(Bind.parse(volume));
+    }
+
+    /**
+     * Return the environment variables which are set for the container.
+     * @return the environment variables which are set for the container.
+     */
+    public List<String> getEnvironmentVariables() {
+        return environmentVariables;
+    }
+
+    /**
+     * Set the environment variables which are used for the container.
+     * This is a list of environemtn variables in form of e.g. "CUDA_VISIBLE_DEVICES=1"
+     * @param environmentVariables a list of environemtn variables in form of e.g. "CUDA_VISIBLE_DEVICES=1"
+     */
+    public void setEnvironmentVariables(List<String> environmentVariables) {
+        if(environmentVariables == null){
+            throw new IllegalArgumentException("environmentVariables should not be null");
+        }
+        this.environmentVariables = environmentVariables;
+    }
+    
+    /**
+     * This method will add one environment variable in form of e.g. "CUDA_VISIBLE_DEVICES=1".
+     * @param environmentVariable one environment variable in form of e.g. "CUDA_VISIBLE_DEVICES=1".
+     */
+    public void addEnvironmentVariable(String environmentVariable) {
+        this.environmentVariables.add(environmentVariable);
+    }
+    
+    /**
+     * This method will add one environment variable where the key is "CUDA_VISIBLE_DEVICES".
+     * The key does not need to be repreat. Just provide the value which can either be one number e.g. 2 (0-based)
+     * or a list of numbers (gpus) like "1,2,3".
+     * @param visibleDevicesValue provide the value which can either be one number e.g. 2 (0-based) or a list of numbers (gpus) like "1,2,3".
+     */
+    public void addEnvironmentVariableCudaVisibleDevices(String visibleDevicesValue) {
+        this.environmentVariables.add("CUDA_VISIBLE_DEVICES="+visibleDevicesValue.trim());
+    }
+    
 
     @Override
     public String toString() {
