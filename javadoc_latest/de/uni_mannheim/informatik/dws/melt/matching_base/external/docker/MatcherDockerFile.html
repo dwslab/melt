@@ -81,12 +81,12 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge</code>, <code>eu.sealsproject.platform.res.tool.api.IPlugin</code>, <code>eu.sealsproject.platform.res.tool.api.IToolBridge</code>, <code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
+<dd><code><a href="../../IMatcher.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IMatcher</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&gt;</code>, <code>eu.sealsproject.platform.res.domain.omt.IOntologyMatchingToolBridge</code>, <code>eu.sealsproject.platform.res.tool.api.IPlugin</code>, <code>eu.sealsproject.platform.res.tool.api.IToolBridge</code>, <code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">MatcherDockerFile</span>
 <span class="extends-implements">extends <a href="../../MatcherURL.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base">MatcherURL</a>
-implements <a href="https://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></span></div>
+implements <a href="https://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a>, <a href="../../IMatcher.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IMatcher</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&gt;</span></div>
 <div class="block">This matcher creates a docker container based on a given docker image name.
  Within this container a matcher server should be started.
  Therefore it will use the MatcherHTTPCall internally to run the matcher.
@@ -95,12 +95,12 @@ implements <a href="https://docs.oracle.com/javase/8/docs/api/java/io/Closeable.
 &lt;dependency&gt;
     &lt;groupId&gt;com.github.docker-java&lt;/groupId&gt;
     &lt;artifactId&gt;docker-java-core&lt;/artifactId&gt;
-    &lt;version&gt;3.2.7&lt;/version&gt;&lt;!--maybe update version--&gt;
+    &lt;version&gt;3.3.3&lt;/version&gt;&lt;!--maybe update version--&gt;
 &lt;/dependency&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;com.github.docker-java&lt;/groupId&gt;
     &lt;artifactId&gt;docker-java-transport-httpclient5&lt;/artifactId&gt;
-    &lt;version&gt;3.2.7&lt;/version&gt;&lt;!--maybe update version--&gt;
+    &lt;version&gt;3.3.3&lt;/version&gt;&lt;!--maybe update version--&gt;
 &lt;/dependency&gt;
  </code></pre>
 With this in place everything should work.</div>
@@ -133,42 +133,48 @@ With this in place everything should work.</div>
 <div class="col-first even-row-color"><code>private com.github.dockerjava.api.DockerClient</code></div>
 <div class="col-second even-row-color"><code><a href="#dockerClient" class="member-name-link">dockerClient</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#freshInstance" class="member-name-link">freshInstance</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private int</code></div>
-<div class="col-second even-row-color"><code><a href="#hostPort" class="member-name-link">hostPort</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#imageName" class="member-name-link">imageName</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private int</code></div>
-<div class="col-second even-row-color"><code><a href="#initialWaitingTimeInSeconds" class="member-name-link">initialWaitingTimeInSeconds</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private static final boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#IS_WINDOWS" class="member-name-link">IS_WINDOWS</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private <a href="DockerLogCallback.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.external.docker">DockerLogCallback</a></code></div>
-<div class="col-second even-row-color"><code><a href="#logCallback" class="member-name-link">logCallback</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">The callback for log entries.</div>
-</div>
-<div class="col-first odd-row-color"><code>private static final org.slf4j.Logger</code></div>
-<div class="col-second odd-row-color"><code><a href="#LOGGER" class="member-name-link">LOGGER</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private static final com.fasterxml.jackson.databind.ObjectMapper</code></div>
-<div class="col-second even-row-color"><code><a href="#mapper" class="member-name-link">mapper</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private static final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#OS_NAME" class="member-name-link">OS_NAME</a></code></div>
+<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#environmentVariables" class="member-name-link">environmentVariables</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>private boolean</code></div>
-<div class="col-second even-row-color"><code><a href="#runOnlyLocalhost" class="member-name-link">runOnlyLocalhost</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-second even-row-color"><code><a href="#freshInstance" class="member-name-link">freshInstance</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private int</code></div>
+<div class="col-second odd-row-color"><code><a href="#hostPort" class="member-name-link">hostPort</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#imageName" class="member-name-link">imageName</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private int</code></div>
+<div class="col-second odd-row-color"><code><a href="#initialWaitingTimeInSeconds" class="member-name-link">initialWaitingTimeInSeconds</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>private static final boolean</code></div>
+<div class="col-second even-row-color"><code><a href="#IS_WINDOWS" class="member-name-link">IS_WINDOWS</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private <a href="DockerLogCallback.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base.external.docker">DockerLogCallback</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#logCallback" class="member-name-link">logCallback</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">The callback for log entries.</div>
+</div>
+<div class="col-first even-row-color"><code>private static final org.slf4j.Logger</code></div>
+<div class="col-second even-row-color"><code><a href="#LOGGER" class="member-name-link">LOGGER</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private static final com.fasterxml.jackson.databind.ObjectMapper</code></div>
+<div class="col-second odd-row-color"><code><a href="#mapper" class="member-name-link">mapper</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>private static final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#OS_NAME" class="member-name-link">OS_NAME</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private boolean</code></div>
+<div class="col-second odd-row-color"><code><a href="#runOnlyLocalhost" class="member-name-link">runOnlyLocalhost</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">If true, the container binds only on localhost instead of all interfaces.</div>
 </div>
-<div class="col-first odd-row-color"><code>private int</code></div>
-<div class="col-second odd-row-color"><code><a href="#socketTimeout" class="member-name-link">socketTimeout</a></code></div>
+<div class="col-first even-row-color"><code>private int</code></div>
+<div class="col-second even-row-color"><code><a href="#socketTimeout" class="member-name-link">socketTimeout</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.github.dockerjava.api.model.Bind&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#volumeMounted" class="member-name-link">volumeMounted</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -221,6 +227,26 @@ With this in place everything should work.</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEnvironmentVariable(java.lang.String)" class="member-name-link">addEnvironmentVariable</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;environmentVariable)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">This method will add one environment variable in form of e.g.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEnvironmentVariableCudaVisibleDevices(java.lang.String)" class="member-name-link">addEnvironmentVariableCudaVisibleDevices</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;visibleDevicesValue)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">This method will add one environment variable where the key is "CUDA_VISIBLE_DEVICES".</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addVolumeMounted(com.github.dockerjava.api.model.Bind)" class="member-name-link">addVolumeMounted</a><wbr>(com.github.dockerjava.api.model.Bind&nbsp;volume)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds a volume mount specification represented by the corresponding object.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addVolumeMounted(java.lang.String)" class="member-name-link">addVolumeMounted</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;volume)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds a volume mount specification represented as string e.g.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#close()" class="member-name-link">close</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -243,38 +269,48 @@ With this in place everything should work.</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static com.github.dockerjava.core.DefaultDockerClientConfig.Builder</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getDockerConfigBuilder()" class="member-name-link">getDockerConfigBuilder</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFreePortOnHost()" class="member-name-link">getFreePortOnHost</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEnvironmentVariables()" class="member-name-link">getEnvironmentVariables</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Return the environment variables which are set for the container.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFreePortOnHost()" class="member-name-link">getFreePortOnHost</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a free port number on localhost.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHostPort()" class="member-name-link">getHostPort</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHostPort()" class="member-name-link">getHostPort</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The port on which the matching service is avilable.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getImageName()" class="member-name-link">getImageName</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getImageName()" class="member-name-link">getImageName</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Retunrs the image name which is used by this matcher.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getImageNameFromFileContent(java.io.File)" class="member-name-link">getImageNameFromFileContent</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerFile)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getImageNameFromFileContent(java.io.File)" class="member-name-link">getImageNameFromFileContent</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerFile)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Extracts the image name from the docker file content.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getImageNameFromFileName(java.io.File)" class="member-name-link">getImageNameFromFileName</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerFile)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getImageNameFromFileName(java.io.File)" class="member-name-link">getImageNameFromFileName</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerFile)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">The naming convention of the MELT Web Docker files is such that the files carry the name of the image
  with an optional postfix of '-latest' such as 'my_image-latest.tar.gz'</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInitialWaitingTimeInSeconds()" class="member-name-link">getInitialWaitingTimeInSeconds</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static org.apache.commons.compress.archivers.ArchiveInputStream</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getUncompressedStream(java.io.InputStream)" class="member-name-link">getUncompressedStream</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>&nbsp;inputStream)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInitialWaitingTimeInSeconds()" class="member-name-link">getInitialWaitingTimeInSeconds</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static org.apache.commons.compress.archivers.ArchiveInputStream</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getUncompressedStream(java.io.InputStream)" class="member-name-link">getUncompressedStream</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>&nbsp;inputStream)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.github.dockerjava.api.model.Bind&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getVolumeMounted()" class="member-name-link">getVolumeMounted</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Return all mounted volumes as a list of Bind objects.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFreshInstance()" class="member-name-link">isFreshInstance</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -312,6 +348,19 @@ With this in place everything should work.</div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Match two ontologies / knowledge graphs together and returns an alignment.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#match(java.net.URL,java.net.URL,java.net.URL,java.net.URL)" class="member-name-link">match</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;source,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;target,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;inputAlignment,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;parameters)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Aligns two ontologies/knowledge graphs given as the first and second parameter.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEnvironmentVariables(java.util.List)" class="member-name-link">setEnvironmentVariables</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;environmentVariables)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Set the environment variables which are used for the container.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setInitialWaitingTimeInSeconds(int)" class="member-name-link">setInitialWaitingTimeInSeconds</a><wbr>(int&nbsp;initialWaitingTimeInSeconds)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -322,15 +371,20 @@ With this in place everything should work.</div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the timeouts for the HTTP call which happens when the docker container is started and the call to the service is executed.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startContainer()" class="member-name-link">startContainer</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVolumeMounted(java.util.List)" class="member-name-link">setVolumeMounted</a><wbr>(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.github.dockerjava.api.model.Bind&gt;&nbsp;volumeMounted)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Set the list of bindings.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stopContainer()" class="member-name-link">stopContainer</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startContainer()" class="member-name-link">startContainer</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stopContainer()" class="member-name-link">stopContainer</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -435,6 +489,18 @@ With this in place everything should work.</div>
 <section class="detail" id="hostPort">
 <h3>hostPort</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hostPort</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="volumeMounted">
+<h3>volumeMounted</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.github.dockerjava.api.model.Bind&gt;</span>&nbsp;<span class="element-name">volumeMounted</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="environmentVariables">
+<h3>environmentVariables</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">environmentVariables</span></div>
 </section>
 </li>
 <li>
@@ -603,6 +669,38 @@ With this in place everything should work.</div>
 </section>
 </li>
 <li>
+<section class="detail" id="match(java.net.URL,java.net.URL,java.net.URL,java.net.URL)">
+<h3>match</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a></span>&nbsp;<span class="element-name">match</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;source,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;target,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;inputAlignment,
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&nbsp;parameters)</span>
+          throws <span class="exceptions"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../IMatcher.html#match(ModelClass,ModelClass,AlignmentClass,ParameterClass)">IMatcher</a></code></span></div>
+<div class="block">Aligns two ontologies/knowledge graphs given as the first and second parameter.
+ An additional input alignment can be given as well as parameters which further define how and what to match.
+ In case inputAlignment or parameters is not used, making them to the Object class, 
+ will required no additional transformations of these objects (no overhead).</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../../IMatcher.html#match(ModelClass,ModelClass,AlignmentClass,ParameterClass)">match</a></code>&nbsp;in interface&nbsp;<code><a href="../../IMatcher.html" title="interface in de.uni_mannheim.informatik.dws.melt.matching_base">IMatcher</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>,<wbr><a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link">URL</a>&gt;</code></dd>
+<dt>Parameters:</dt>
+<dd><code>source</code> - this object represents the source ontology/knowledge graph</dd>
+<dd><code>target</code> - this object represents the target ontology/knowledge graph</dd>
+<dd><code>inputAlignment</code> - this object represents the input alignment.</dd>
+<dd><code>parameters</code> - object representing additional parameters.
+      Only add to this object and do not create a new Object like <code>parameters= new ...()</code> 
+      because otherwise the parameters are lost (<a href="https://stackoverflow.com/questions/40480/is-java-pass-by-reference-or-pass-by-value">java ist call by value</a>).
+      Sensible classes are <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html" title="class or interface in java.util" class="external-link"><code>Properties</code></a> (preferred), <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map&lt;String, Object&gt;</code></a> or any similar data structure.
+      Some already specified keys (strings) can be found at <a href="../../ParameterConfigKeys.html" title="class in de.uni_mannheim.informatik.dws.melt.matching_base"><code>ParameterConfigKeys</code></a>.</dd>
+<dt>Returns:</dt>
+<dd>the resulting alignment of the matching process.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - any exception which occurs during matching</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getContainerPort()">
 <h3>getContainerPort</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getContainerPort</span>()</div>
@@ -715,6 +813,97 @@ With this in place everything should work.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>true, if for each call to the match function, a new docker container should be created. False otherwise.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getVolumeMounted()">
+<h3>getVolumeMounted</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.github.dockerjava.api.model.Bind&gt;</span>&nbsp;<span class="element-name">getVolumeMounted</span>()</div>
+<div class="block">Return all mounted volumes as a list of Bind objects.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a list of Bind objects.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setVolumeMounted(java.util.List)">
+<h3>setVolumeMounted</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setVolumeMounted</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.github.dockerjava.api.model.Bind&gt;&nbsp;volumeMounted)</span></div>
+<div class="block">Set the list of bindings. This will override all previous bindings.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>volumeMounted</code> - the list of bindings which should not be null.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addVolumeMounted(com.github.dockerjava.api.model.Bind)">
+<h3>addVolumeMounted</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addVolumeMounted</span><wbr><span class="parameters">(com.github.dockerjava.api.model.Bind&nbsp;volume)</span></div>
+<div class="block">Adds a volume mount specification represented by the corresponding object.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>volume</code> - the corresponding bin object</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addVolumeMounted(java.lang.String)">
+<h3>addVolumeMounted</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addVolumeMounted</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;volume)</span></div>
+<div class="block">Adds a volume mount specification represented as string e.g. <code>/host:/container:ro</code>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>volume</code> - the specification, e.g. <code>/host:/container:ro</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getEnvironmentVariables()">
+<h3>getEnvironmentVariables</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getEnvironmentVariables</span>()</div>
+<div class="block">Return the environment variables which are set for the container.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the environment variables which are set for the container.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setEnvironmentVariables(java.util.List)">
+<h3>setEnvironmentVariables</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setEnvironmentVariables</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;environmentVariables)</span></div>
+<div class="block">Set the environment variables which are used for the container.
+ This is a list of environemtn variables in form of e.g. "CUDA_VISIBLE_DEVICES=1"</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>environmentVariables</code> - a list of environemtn variables in form of e.g. "CUDA_VISIBLE_DEVICES=1"</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addEnvironmentVariable(java.lang.String)">
+<h3>addEnvironmentVariable</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addEnvironmentVariable</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;environmentVariable)</span></div>
+<div class="block">This method will add one environment variable in form of e.g. "CUDA_VISIBLE_DEVICES=1".</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>environmentVariable</code> - one environment variable in form of e.g. "CUDA_VISIBLE_DEVICES=1".</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addEnvironmentVariableCudaVisibleDevices(java.lang.String)">
+<h3>addEnvironmentVariableCudaVisibleDevices</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addEnvironmentVariableCudaVisibleDevices</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;visibleDevicesValue)</span></div>
+<div class="block">This method will add one environment variable where the key is "CUDA_VISIBLE_DEVICES".
+ The key does not need to be repreat. Just provide the value which can either be one number e.g. 2 (0-based)
+ or a list of numbers (gpus) like "1,2,3".</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>visibleDevicesValue</code> - provide the value which can either be one number e.g. 2 (0-based) or a list of numbers (gpus) like "1,2,3".</dd>
 </dl>
 </section>
 </li>
