@@ -74,12 +74,12 @@ This matcher creates a docker container based on a given docker image name.
 <dependency>
     <groupId>com.github.docker-java</groupId>
     <artifactId>docker-java-core</artifactId>
-    <version>3.2.7</version><!--maybe update version-->
+    <version>3.3.3</version><!--maybe update version-->
 </dependency>
 <dependency>
     <groupId>com.github.docker-java</groupId>
     <artifactId>docker-java-transport-httpclient5</artifactId>
-    <version>3.2.7</version><!--maybe update version-->
+    <version>3.3.3</version><!--maybe update version-->
 </dependency>
  
 ```
@@ -528,4 +528,4 @@ Better use MatcherYAAAPipeline because it can combine matchers which use differe
 *Keywords: MatcherYAAA Owl Api*
 
 ---
-<sub>automatically generated on 2024-09-15 16:57</sub>
+<sub>automatically generated on 2024-09-21 08:42</sub>
