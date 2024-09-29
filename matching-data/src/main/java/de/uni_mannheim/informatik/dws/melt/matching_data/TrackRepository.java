@@ -893,6 +893,24 @@ public class TrackRepository {
         
     }
     
+    /**
+     * The multilingual archaeology track is newly established for OAEI 2024.
+     * It aims at the alignment of multilingual domain specific vocabularies.
+     * The high quality reference is compiled manually, ensuring semantic, lexical and part-of-speech similarity.
+     * It offers different test cases from the archaeology domain.
+     * Each source and target ontology is monolingual in one of the following languages:
+     * English, German, French, Italian. The goal is to evaluate the matching system perfomance when
+     * dealing with small datasets in different languages and specialist terms.
+     */
+    public static class Archaeology {
+        
+        /**
+         * This is the 2024 version of the track with all test cases.
+         */
+        public static Track All2024 = new SealsTrack("http://oaei.webdatacommons.org/tdrs/", "archaeology", "2024all");
+        
+    }
+    
     
     /**
      * ML Datasets
