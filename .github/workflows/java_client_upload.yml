@@ -1,6 +1,8 @@
 name: Push Evaluation Client
 
-on: [push]
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
