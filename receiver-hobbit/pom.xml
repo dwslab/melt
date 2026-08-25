@@ -33,11 +33,22 @@
         </dependency>
     </dependencies>
 
-    <repositories>
+	<repositories>
         <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+		<!--this repository is not available anymore and thus also the hobbit core library is gone - we thus host it at breda -->
+		<repository>
             <id>maven.aksw.internal</id>
             <name>University Leipzig, AKSW Maven2 Repository</name>
             <url>https://maven.aksw.org/repository/internal</url>
         </repository>
+        <!-- hobbit core library -->
+        <repository>
+            <id>thirdparty</id>
+            <url>https://breda.informatik.uni-mannheim.de/nexus/content/repositories/thirdparty/</url>
+        </repository>
     </repositories>
+
 </project>
