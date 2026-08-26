@@ -3,12 +3,14 @@ package de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.stat
 
 import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIsAlod.classic.WebIsAlodClassicLinker;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled("Endpoint not always ready.")
 class CoverageTest {
 
 

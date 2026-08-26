@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIs
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * This Test tests class {@link WebIsAlodClassicKnowledgeSource}
  *
  */
+@Disabled("Endpoint not always ready.")
 class WebIsAlodClassicKnowledgeSourceTest {
 
 

@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.webIs
 import it.uniroma1.lcl.jlt.util.Files;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test the WebIsAlodLinker.
  * Requires a working internet connection.
  */
+@Disabled("Endpoint not always ready.")
 class WebIsAlodClassicLinkerTest {
 
 

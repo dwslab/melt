@@ -15,10 +15,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import org.junit.jupiter.api.Disabled;
 
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations.deletePersistenceDirectory;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled("Disbale because of: QueryExceptionHTTP Too many requests")
 class WikidataLinkerTest {
 
 
