@@ -60,7 +60,7 @@ jobs:
       run: pip install -r ./matching-ml/src/main/resources/requirements.txt
     - name: Build with Maven
       #run: mvn -B package --file pom.xml
-      run: mvn clean install
+      run: mvn -U clean install
     # https://github.com/actions/virtual-environments/issues/712
     - name: Workaround 8.3 on windows
       if: matrix.os == 'windows-latest'
