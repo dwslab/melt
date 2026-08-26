@@ -11,3 +11,4 @@ accelerate>=0.20.1
 ray[default]>=1.4.0
 ray[tune]>=1.4.0
 sentence-transformers>=2.0.0
+setuptools>=65
