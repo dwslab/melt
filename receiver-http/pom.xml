@@ -25,7 +25,7 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlets</artifactId>
-            <version>9.4.41.v20210516</version>
+            <version>9.4.52.v20230823</version>
         </dependency>
         <!--jetty versions with java versions: https://www.eclipse.org/jetty/documentation/jetty-9/index.html -->
     </dependencies>
