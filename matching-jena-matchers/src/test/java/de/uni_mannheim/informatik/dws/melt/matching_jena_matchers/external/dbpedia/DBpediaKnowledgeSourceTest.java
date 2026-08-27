@@ -5,6 +5,7 @@ import de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.servi
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.Set;
 import static de.uni_mannheim.informatik.dws.melt.matching_jena_matchers.external.services.testTools.TestOperations.deletePersistenceDirectory;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled("Disabled because of: QueryExceptionHTTP SPARQL Request Failed")
 class DBpediaKnowledgeSourceTest {
 
 
