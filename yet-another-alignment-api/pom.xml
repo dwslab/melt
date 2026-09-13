@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.googlecode.cqengine</groupId>
             <artifactId>cqengine</artifactId>
-            <version>3.4.0</version>
+            <version>3.6.0</version>
         </dependency>
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws.melt</groupId>
