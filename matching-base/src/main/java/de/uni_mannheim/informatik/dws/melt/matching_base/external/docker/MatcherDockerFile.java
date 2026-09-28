@@ -45,6 +45,7 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -556,7 +557,7 @@ public class MatcherDockerFile extends MatcherURL implements Closeable, IMatcher
 				JsonNode rootNode;
 				try {
 					// readTree(InputStream) would close the stream and with it the whole archive
-					rootNode = mapper.readTree(archiveStream.readAllBytes());
+					rootNode = mapper.readTree(IOUtils.toByteArray(archiveStream));
 				} catch (JsonProcessingException ex) {
 					LOGGER.info("Could not parse json file '{}' within docker file {}.", entryName, dockerFile, ex);
 					continue;
