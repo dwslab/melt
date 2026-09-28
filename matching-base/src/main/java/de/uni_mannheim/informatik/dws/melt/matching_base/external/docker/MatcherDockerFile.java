@@ -544,46 +544,65 @@ public class MatcherDockerFile extends MatcherURL implements Closeable, IMatcher
      * @return the image name contained in the docker file.
      */
     public static String getImageNameFromFileContent(File dockerFile){
-        try(ArchiveInputStream archiveStream  = getUncompressedStream(new BufferedInputStream(new FileInputStream(dockerFile)))){
-            ArchiveEntry archiveEntry;
-            while ((archiveEntry = archiveStream.getNextEntry()) != null) {
-                if(archiveEntry.getName().equals("repositories")){
-                    JsonNode rootNode = mapper.readTree(archiveStream);
-                    if(rootNode == null){
-                        LOGGER.warn("File 'repositories' within docker file {} could not be parsed because it is empty.", dockerFile);
-                        return null;
-                    }
-                    Iterator<String> fields = rootNode.fieldNames();
-                    if(fields.hasNext() == false){
-                        LOGGER.warn("Could not extract image name from file. Repositories file has no elements.");
-                        return null;
-                    }
-                    String imageName = fields.next();
-                    if(StringUtils.isBlank(imageName)){
-                        LOGGER.warn("Extracted image name is blank.");
-                        return null;
-                    }
-                    
-                    if(fields.hasNext()){
-                        LOGGER.warn("Multiple images names exists in 'repositories' file within docker file {}. Choosing the first one.", dockerFile);
-                    }
-                    return imageName;
-                }
-            }
-            LOGGER.warn("Did not find the 'repositories' file within docker file {}.", dockerFile);
-            return null;
-        } catch(JsonParseException ex){
-            LOGGER.info("Could not parse json file 'repositories' within docker file " + dockerFile.getPath(), ex);
-            return null;
-        }
-        catch (IOException ex) {
-            LOGGER.warn("IOException occured during extraction of docker image name. Return null.", ex);
-            return null;
-        } catch (ArchiveException ex) {
-            LOGGER.warn("Docker file is not a archive (e.g. tar etc)", ex);
-            return null;
-        }
-    }
+		String nameFromRepositories = null;
+		try(ArchiveInputStream archiveStream = getUncompressedStream(new BufferedInputStream(new FileInputStream(dockerFile)))){
+			ArchiveEntry archiveEntry;
+			while ((archiveEntry = archiveStream.getNextEntry()) != null) {
+				String entryName = archiveEntry.getName();
+				if(!entryName.equals("manifest.json") && !entryName.equals("repositories")){
+					continue;
+				}
+				JsonNode rootNode;
+				try {
+					// readTree(InputStream) would close the stream and with it the whole archive
+					rootNode = mapper.readTree(archiveStream.readAllBytes());
+				} catch (JsonProcessingException ex) {
+					LOGGER.info("Could not parse json file '{}' within docker file {}.", entryName, dockerFile, ex);
+					continue;
+				}
+				if(rootNode == null){
+					continue;
+				}
+				if(rootNode.size() > 1){
+					LOGGER.warn("Multiple images exist in '{}' within docker file {}. Choosing the first one.", entryName, dockerFile);
+				}
+				if(entryName.equals("manifest.json")){
+					String imageName = nameFromManifest(rootNode);
+					if(imageName != null){
+						return imageName;
+					}
+				} else {
+					nameFromRepositories = nameFromRepositories(rootNode);
+				}
+			}
+		} catch (IOException ex) {
+			LOGGER.warn("IOException occured during extraction of docker image name. Return null.", ex);
+			return null;
+		} catch (ArchiveException ex) {
+			LOGGER.warn("Docker file is not a archive (e.g. tar etc)", ex);
+			return null;
+		}
+		if(nameFromRepositories == null){
+			LOGGER.warn("Could not find an image name in 'manifest.json' or 'repositories' within docker file {}.", dockerFile);
+		}
+		return nameFromRepositories;
+	}
+	private static String nameFromManifest(JsonNode rootNode){
+		// [{"Config": "...", "RepoTags": ["busybox:latest"], "Layers": [...]}], RepoTags is null for images saved by id
+		String repoTag = rootNode.path(0).path("RepoTags").path(0).textValue();
+		if(StringUtils.isBlank(repoTag)){
+			return null;
+		}
+		// a colon before the last '/' is a registry port, not a tag
+		int tagStart = repoTag.lastIndexOf(':');
+		return tagStart > repoTag.lastIndexOf('/') ? repoTag.substring(0, tagStart) : repoTag;
+	}
+	private static String nameFromRepositories(JsonNode rootNode){
+		// {"busybox": {"latest": "<layer id>"}}
+		Iterator<String> names = rootNode.fieldNames();
+		String imageName = names.hasNext() ? names.next() : null;
+		return StringUtils.isBlank(imageName) ? null : imageName;
+	}
     
     private static ArchiveInputStream getUncompressedStream(InputStream inputStream) throws ArchiveException{
         try{
