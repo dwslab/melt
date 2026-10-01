@@ -25,15 +25,14 @@ class MatcherDockerFileTest {
     void getImageNameFromFileContent(){
         //just tar file
         File file = new File(getClass().getClassLoader().getResource("getImageNameTest.tar").getFile());
-        assertEquals("simplewebmatcher-1.0-web", MatcherDockerFile.getImageNameFromFileContent(file));
+        assertEquals("simplewebmatcher-1.0-web:latest", MatcherDockerFile.getImageNameFromFileContent(file));
         
         //tar gz file
         File fileTarGz = new File(getClass().getClassLoader().getResource("getImageNameTest.tar.gz").getFile());
-        assertEquals("simplewebmatcher-1.0-web", MatcherDockerFile.getImageNameFromFileContent(fileTarGz));
+        assertEquals("simplewebmatcher-1.0-web:latest", MatcherDockerFile.getImageNameFromFileContent(fileTarGz));
         
         //no fiel ending but tar gz
         File noFileExtension = new File(getClass().getClassLoader().getResource("getImageNameTest.foo_bar").getFile());
-        assertEquals("simplewebmatcher-1.0-web", MatcherDockerFile.getImageNameFromFileContent(noFileExtension));
+        assertEquals("simplewebmatcher-1.0-web:latest", MatcherDockerFile.getImageNameFromFileContent(noFileExtension));
     }
-
 }
