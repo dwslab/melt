@@ -539,7 +539,8 @@ public class MatcherDockerFile extends MatcherURL implements Closeable, IMatcher
     
     /**
      * Extracts the image name from the docker file content.
-     * In more detail, it analyzes the 'repositories' file and returns the key of the corresponding json.
+     * In more detail, it analyzes the 'manifest.json' (or as a fallback the 'repositories') file and returns the image name.
+     * The tag is included (e.g. 'my_image:latest').
      * If something goes wrong, null is returned.
      * If multiple images are contained in the file, only the first one is returned.
      * @param dockerFile the docker file to extract the image name from. This file is usally created from a docker save command.
@@ -592,18 +593,17 @@ public class MatcherDockerFile extends MatcherURL implements Closeable, IMatcher
 	private static String nameFromManifest(JsonNode rootNode){
 		// [{"Config": "...", "RepoTags": ["busybox:latest"], "Layers": [...]}], RepoTags is null for images saved by id
 		String repoTag = rootNode.path(0).path("RepoTags").path(0).textValue();
-		if(StringUtils.isBlank(repoTag)){
-			return null;
-		}
-		// a colon before the last '/' is a registry port, not a tag
-		int tagStart = repoTag.lastIndexOf(':');
-		return tagStart > repoTag.lastIndexOf('/') ? repoTag.substring(0, tagStart) : repoTag;
+		return StringUtils.isBlank(repoTag) ? null : repoTag;
 	}
 	private static String nameFromRepositories(JsonNode rootNode){
 		// {"busybox": {"latest": "<layer id>"}}
 		Iterator<String> names = rootNode.fieldNames();
 		String imageName = names.hasNext() ? names.next() : null;
-		return StringUtils.isBlank(imageName) ? null : imageName;
+		if(StringUtils.isBlank(imageName)){
+			return null;
+		}
+		Iterator<String> tags = rootNode.path(imageName).fieldNames();
+		return tags.hasNext() ? imageName + ":" + tags.next() : imageName;
 	}
     
     private static ArchiveInputStream getUncompressedStream(InputStream inputStream) throws ArchiveException{
