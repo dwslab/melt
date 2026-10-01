@@ -942,7 +942,8 @@ With this in place everything should work.</div>
 <h3>getImageNameFromFileContent</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getImageNameFromFileContent</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;dockerFile)</span></div>
 <div class="block">Extracts the image name from the docker file content.
- In more detail, it analyzes the 'repositories' file and returns the key of the corresponding json.
+ In more detail, it analyzes the 'manifest.json' (or as a fallback the 'repositories') file and returns the image name.
+ The tag is included (e.g. 'my_image:latest').
  If something goes wrong, null is returned.
  If multiple images are contained in the file, only the first one is returned.</div>
 <dl class="notes">
